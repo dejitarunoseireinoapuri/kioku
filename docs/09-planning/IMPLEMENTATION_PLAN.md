@@ -7,6 +7,7 @@ Este documento define el alcance y el cierre de las fases. Los [requisitos](../0
 | Fase | Resultado visible | Estado |
 | --- | --- | --- |
 | D0 · Base documental | Producto, arquitectura y normas definidos | Entregada en `40737a2` |
+| M0 · Prueba temprana de memoria | Evidencia de que interpretar, guardar y recuperar funciona antes de construir la app | Pendiente; requisito para K0 |
 | K0 · Base técnica | App navegable con estética B y datos ficticios | Pendiente |
 | K1 · Cuenta y configuración | Acceso privado y configuración segura de la clave propia | Pendiente |
 | K2 · Contar por escrito | Separar asuntos, aclarar dudas y guardar automáticamente | Pendiente |
@@ -15,7 +16,7 @@ Este documento define el alcance y el cierre de las fases. Los [requisitos](../0
 | K5 · Voz | Contar y preguntar hablando, con pulsación y bloqueo | Pendiente |
 | K6 · V1 de uso personal | Recorrido completo comprobado en Android e iOS | Pendiente |
 
-K0 todavía no ha empezado. La primera versión completa para uso personal llega en K6; las entregas anteriores permiten revisar avances concretos. No se fijan fechas sin conocer herramientas, dependencias y resultados.
+M0 es el siguiente paso y K0 todavía no ha empezado. La primera versión completa para uso personal llega en K6; las entregas anteriores permiten revisar avances concretos. No se fijan fechas sin conocer herramientas, dependencias y resultados.
 
 ## Ejecución y criterios comunes
 
@@ -33,13 +34,44 @@ K0 todavía no ha empezado. La primera versión completa para uso personal llega
 
 **Cierre:** revisión semántica y comprobador documental operativo para enlaces, referencias e integridad. Entregada en `40737a2`; este documento concreta su secuencia. No contiene app compilable, backend ni llamadas reales de IA.
 
+## M0 · Prueba temprana de memoria
+
+**Resultado:** comprobar la viabilidad del núcleo de memoria antes de invertir en la app móvil. M0 debe validarse antes de empezar K0–K6; si no cumple los criterios, ajustar el enfoque y repetir la evaluación sin continuar con la app completa.
+
+**Entrega:** un prototipo ejecutable por texto del núcleo TypeScript, sin interfaz móvil ni dependencia de K0/K1. Recibe relatos, conserva su texto original y recuerdos/contexto derivados, resuelve aclaraciones y permite consultar lo guardado. Usa almacenamiento de prueba aislado y sustituible; no exige desplegar Firebase. Las consultas se evalúan desde sesiones nuevas, tras recargar lo almacenado, sin pasar al modelo todo el historial ni las respuestas esperadas. Los componentes útiles podrán reutilizarse a través de las fronteras previstas; no se crea otra arquitectura de app.
+
+**Corpus y casos:** al menos 30 intervenciones ficticias y 60 consultas con respuestas, fuentes y comportamientos esperados definidos antes de ejecutar. Reservar parte del corpus para validación, sin usarla para ajustar instrucciones. Incluir los cinco ejemplos del propietario y, con varios casos por categoría:
+
+- Paráfrasis y relaciones entre personas, acontecimientos y recuerdos contados en momentos distintos.
+- Varios temas en una entrada, detalles que se perderían al resumir, fechas relativas con fecha/zona de referencia y fechas desconocidas.
+- Personas con el mismo nombre, pronombres y referencias ambiguas que requieran aclaración.
+- Intención frente a hecho, negaciones, gustos, cambios de planes, correcciones y aparente contradicción frente a evolución temporal.
+- Preguntas sin respuesta en los recuerdos, preguntas que no se convierten en hechos e instrucciones maliciosas dentro del texto almacenado.
+- Retirada de recuerdos y exclusión de versiones obsoletas en el prototipo; no sustituye la limpieza y concurrencia completas de K4.
+
+**Evaluación separada:**
+
+| Etapa | Qué medir |
+| --- | --- |
+| Interpretar/guardar | Proporción de intervenciones con todos los datos y relaciones requeridos conservados fielmente; clasificación y aclaración correctas, sin hechos añadidos |
+| Recuperar | Proporción de consultas respondibles que recuperan todas las fuentes vigentes necesarias entre los candidatos; registrar también candidatos irrelevantes y tamaño del conjunto |
+| Responder | Proporción de consultas con resultado correcto y completamente respaldado, incluida la abstención/aclaración cuando corresponde; la fuente debe sostener la afirmación |
+
+**Criterio inicial de viabilidad:** al menos 90 % en cada una de las tres etapas, tanto en total como por categoría aplicable del conjunto de validación. Es un objetivo de aceptación del prototipo, no un porcentaje de fiabilidad ya observado ni una garantía para datos futuros. En los casos críticos se exige cero fallos: inventar un hecho sin evidencia, convertir una intención en acción realizada, afirmar que algo no ocurrió solo porque no consta, usar contenido retirado/obsoleto o ejecutar instrucciones de un recuerdo. Un fallo crítico bloquea el avance aunque la media sea alta.
+
+**Antes de ejecutar:** fijar corpus y rúbrica de puntuación, separación de ajuste/validación, modelo/configuración, número de candidatos, límites de entrada, presupuesto máximo y objetivo de latencia. Usar el flujo seguro de credenciales antes de implementar/probar acceso API; una credencial de ejecución privada del prototipo no adelanta el flujo de alta móvil de K1. No usar recuerdos reales. La documentación actual no crea claves ni consume créditos.
+
+**Cierre:** ejecutar el conjunto de validación completo tres veces con la configuración fijada y cumplir los criterios en cada ejecución; no escoger solo el mejor intento ni reintentar hasta acertar. Guardar informe reproducible por caso y categoría, fuentes esperadas/recuperadas por identificador, fallos, latencia y consumo/coste medidos, commit y comandos. Revisar las respuestas contra las fuentes; una autoevaluación del mismo modelo no basta. Si se ajusta usando un caso reservado, deja de contar como validación independiente y se añaden casos nuevos. Los dobles sirven para comprobar la herramienta, pero el cierre de M0 requiere llamadas reales y evaluación del circuito completo de guardado, recuperación y respuesta.
+
+**Alcance de la conclusión:** decidir continuar o corregir el núcleo según la evidencia. No valida todavía autenticación, aislamiento remoto, reglas Firebase, voz, dispositivos Android/iOS, retención del proveedor o comportamiento a gran escala. K2/K3/K4 conservarán y ampliarán esta evaluación contra sus implementaciones reales; un cambio de modelo, búsqueda o extracción exige repetir las comprobaciones afectadas.
+
 ## K0 · Base técnica Android/iOS
 
 **Resultado:** primera app navegable con estética B y datos ficticios. Permite recorrer Contar, Preguntar y los accesos previstos, sin conservar recuerdos reales.
 
 **Entrega:** estructura Kotlin Multiplatform/Compose Multiplatform y hosts nativos; MVVM/Clean Architecture; Koin y navegación tipada; tema carbón/coral/IBM Plex y recursos. Herramientas, versiones compatibles, catálogo, wrappers y bloqueo de dependencias cuando proceda. Comprobaciones reales de arquitectura, formato, Detekt y Android Lint, y pruebas significativas de estados/navegación.
 
-**Antes de empezar:** inspeccionar las pantallas pertinentes de Stitch, revisar herramientas disponibles y resolver los identificadores necesarios. No recuperar Expo como aplicación paralela.
+**Antes de empezar:** M0 validada; inspeccionar las pantallas pertinentes de Stitch, revisar herramientas disponibles y resolver los identificadores necesarios. No recuperar Expo como aplicación paralela.
 
 **Cierre:** compilar Android y comprobar el recorrido; compilar el host iOS en Mac y revisar navegación/tema. Si falta Mac, entregar con validación iOS pendiente e instrucciones reales para ejecutarla. Documentar los comandos disponibles.
 
@@ -63,7 +95,7 @@ K0 todavía no ha empezado. La primera versión completa para uso personal llega
 
 **Entrega:** interpretar y separar varios asuntos conservando fuente y contexto; distinguir hechos, intenciones, opiniones y preguntas. Resolver fechas sin inventar información. Vincular las aclaraciones a su operación. Guardado automático sin dudas; versiones, identificador de petición e idempotencia contra duplicados. Errores recuperables sin declarar éxito anticipado ni crear cola offline.
 
-**Antes de empezar:** K1 y las fronteras de autorización necesarias; elegir modelos y límites de texto, tiempo y coste. Resolver las decisiones de datos/API que requiera la implementación.
+**Antes de empezar:** K1 y las fronteras de autorización necesarias; partir de los resultados de M0 y verificar modelos y límites de texto, tiempo y coste en la implementación real. Resolver las decisiones de datos/API necesarias.
 
 **Cierre:** corpus ficticio con entradas claras, ambiguas y mezcladas; probar aclaración, duplicados, fallos y concurrencia. Verificar autorización/persistencia con casos positivos y negativos; distinguir integración IA real de dobles de prueba. Revisar el flujo Android/iOS.
 
@@ -75,7 +107,7 @@ K0 todavía no ha empezado. La primera versión completa para uso personal llega
 
 **Entrega:** recuperación por significado, personas, contexto y fechas sin organización manual. Respuestas con evidencia propia vigente y acceso a su procedencia. Aclarar ambigüedades sin inventar recuerdos; no guardar preguntas como hechos. Corpus ficticio basado en los ejemplos del propietario: película cuando Gemma viajó, llamada al padre, gusto por un alimento, examen y deberes de japonés.
 
-**Antes de empezar:** K2; concretar búsqueda, índices y modelos con el corpus y restricciones reales. Fijar criterios de recuperación, evidencia, latencia y coste antes de medir.
+**Antes de empezar:** K2; trasladar y ampliar la evaluación de M0 para la búsqueda, índices y modelos reales. Fijar criterios de recuperación, evidencia, latencia y coste antes de medir; el prototipo no valida automáticamente los adaptadores definitivos.
 
 **Cierre:** evaluación reproducible de paráfrasis, contexto, fechas, ausencia de datos y fuentes; aislamiento, versiones actuales y resistencia a instrucciones dentro de recuerdos. Registrar resultados y límites separando pruebas sintéticas e integración real; revisar ambos sistemas.
 

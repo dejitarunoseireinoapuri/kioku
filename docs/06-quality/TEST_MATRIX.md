@@ -4,6 +4,7 @@ Todos los casos están **pendientes de implementación/ejecución**. No se inclu
 
 | Caso | Cubre | Evidencia requerida |
 | --- | --- | --- |
+| TEST-EVAL-001 | FR-005, FR-007, FR-008, FR-009, FR-011, FR-012, AC-005, AC-007, AC-008, AC-009, AC-011, AC-012, AC-016 | Evaluación temprana M0 de interpretación, recuperación y respuesta, corpus reservado y tres ejecuciones reales; umbrales y bloqueos definidos en el plan |
 | TEST-AUTH-001 | FR-001, AC-001 | Misma cuenta recupera datos en segunda instalación; otra identidad no |
 | TEST-KEY-001 | FR-002, AC-002 | Alta/reemplazo inválido/válido; secreto ausente de lecturas, memoria y logs |
 | TEST-AUD-001 | FR-003, FR-004, AC-003, AC-004 | Hold/release/lock, silencio, Terminar una vez y Cancelar |
@@ -27,3 +28,5 @@ Todos los casos están **pendientes de implementación/ejecución**. No se inclu
 | TEST-API-002 | BR-013 | Admisión, límites y rechazo de clave/entorno/destino incorrectos |
 
 La recuperación del ejemplo de una película y la corrección a otra son ramas de fixture distintas. No usar datos reales del propietario como corpus por conveniencia.
+
+TEST-EVAL-001 se ejecuta antes de K0 según [M0](../09-planning/IMPLEMENTATION_PLAN.md#m0--prueba-temprana-de-memoria). Su resultado prueba viabilidad del prototipo, no completa los casos de integración, seguridad, concurrencia, limpieza ni voz de esta matriz. K2/K3/K4 reutilizan y amplían el corpus contra la implementación final.

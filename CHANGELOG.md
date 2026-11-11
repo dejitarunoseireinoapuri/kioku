@@ -10,3 +10,4 @@
 - Documentación y políticas iniciales; no se declara implementada ni validada ninguna funcionalidad de la app.
 - Fases D0–K6 detalladas con alcance, dependencias, entregables y criterios de cierre; comprobaciones Android/backend/iOS separadas y validaciones en Mac explícitas.
 - Integraciones y distribución posteriores separadas de la V1 personal. K0 continúa pendiente; documentar el plan no inicia implementación ni configuración remota.
+- M0 añadida antes de K0 como prueba obligatoria de viabilidad de memoria: corpus ficticio reservado, evaluación separada de guardado/recuperación/respuesta, tres ejecuciones reales y criterios de avance o corrección. Matriz, estrategia y estado actualizados; prueba todavía no implementada ni ejecutada.

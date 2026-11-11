@@ -10,6 +10,8 @@ Máquinas de estado de hold/lock/cancel, intención, aclaración, propuesta, cor
 
 Probar evidencia, fechas relativas, paráfrasis, ambigüedades, deseo frente a hecho y ausencia de información. Usar un corpus sintético representativo de las preguntas del propietario. Medir calidad de recuperación y fidelidad a fuentes antes de elegir índice/modelos; no conformarse con un ejemplo literal que funcione.
 
+La primera evaluación es [M0](../09-planning/IMPLEMENTATION_PLAN.md#m0--prueba-temprana-de-memoria), previa a K0: prototipo por texto con relatos persistidos, consultas desde sesiones nuevas y conjunto reservado de validación. Separar interpretación/guardado, recuperación y respuesta; aplicar los umbrales y bloqueos críticos del plan. Registrar todas las ejecuciones, coste/latencia y fallos; no usar únicamente el modelo evaluado como juez ni ajustar con los casos reservados sin renovar la validación. Repetir las comprobaciones afectadas al cambiar modelos o integrar los adaptadores reales en K2/K3/K4.
+
 Contratos de repositorio contra adapters Android/iOS. Emulator Suite para autorización, versiones, atomicidad, idempotencia y limpieza. Dobles de OpenAI por defecto; separar de pruebas live, que requieren credencial y uso real autorizados. Emulator no prueba atestación de App Check ni retención real de OpenAI.
 
 ## UI y dispositivo

@@ -20,7 +20,9 @@ El [índice documental](docs/README.md) indica dónde vive cada decisión. [AGEN
 
 ## Fases acordadas
 
-D0 (documentación) entregada. El siguiente paso es K0 (base técnica y navegación con datos ficticios), seguido de K1 (cuenta y clave), K2 (guardar por texto), K3 (preguntar por texto), K4 (control de memoria), K5 (voz) y K6 (validación para uso personal). K0 todavía no ha empezado.
+D0 (documentación) entregada. El siguiente paso es **M0: probar el núcleo de memoria por texto antes de construir la app**. Debe demostrar que interpreta, guarda, encuentra y responde con evidencia usando datos ficticios; si falla, se ajusta antes de avanzar.
+
+Tras validar M0: K0 (base técnica y navegación), K1 (cuenta y clave), K2 (guardar por texto), K3 (preguntar por texto), K4 (control de memoria), K5 (voz) y K6 (validación para uso personal). Ni M0 ni K0 han empezado.
 
 El [plan de fases](docs/09-planning/IMPLEMENTATION_PLAN.md) define qué entrega cada una, qué necesita y cómo se valida en Android/iOS. Integraciones y publicación quedan para una decisión posterior.
 
