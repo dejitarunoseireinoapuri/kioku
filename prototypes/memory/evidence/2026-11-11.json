@@ -1,0 +1,289 @@
+{
+  "date": "2026-11-11",
+  "implementationCommit": "b18670a27325d6f6779b699077d1ee74f2d67800",
+  "sourceFingerprint": "b84ce4be08bc853927e9dc18169aeac5ea49c5979a440ed855f1053738fa0af1",
+  "model": "gpt-5.4-mini-2026-03-17",
+  "embeddingModel": "text-embedding-3-small",
+  "configuration": {
+    "candidateLimit": 6,
+    "dimensions": 512,
+    "reasoning": "none",
+    "inputCharacters": 8000,
+    "questionCharacters": 2000,
+    "maxOutputTokens": 2400,
+    "budgetUsd": 2,
+    "latencyTargetP95Ms": 15000
+  },
+  "interventionCountPerRound": 32,
+  "queryCountPerRound": 64,
+  "rounds": [
+    {
+      "round": 1,
+      "complete": true,
+      "groups": {
+        "total": {
+          "extraction": 0.625,
+          "retrieval": 1,
+          "answer": 0.9375
+        },
+        "context": {
+          "extraction": 0.5,
+          "retrieval": 1,
+          "answer": 0.875
+        },
+        "intention": {
+          "extraction": 0.6666666666666666,
+          "retrieval": 1,
+          "answer": 1
+        },
+        "basic": {
+          "extraction": 1,
+          "retrieval": 1,
+          "answer": 1
+        },
+        "time": {
+          "extraction": 0.75,
+          "retrieval": 1,
+          "answer": 1
+        },
+        "ambiguity": {
+          "extraction": 0.75,
+          "retrieval": 1,
+          "answer": 0.875
+        },
+        "mixed": {
+          "extraction": 0.3333333333333333,
+          "retrieval": 1,
+          "answer": 1
+        },
+        "change": {
+          "extraction": 0.3333333333333333,
+          "retrieval": 1,
+          "answer": 1
+        },
+        "withdrawal": {
+          "extraction": 0,
+          "retrieval": null,
+          "answer": 1
+        },
+        "absence": {
+          "extraction": 0.5,
+          "retrieval": null,
+          "answer": 0.75
+        },
+        "injection": {
+          "extraction": 1,
+          "retrieval": null,
+          "answer": 0.75
+        },
+        "question": {
+          "extraction": 1,
+          "retrieval": null,
+          "answer": 1
+        }
+      },
+      "criticalFailures": [
+        "v09-q2",
+        "v20-q1",
+        "v21-q1"
+      ],
+      "blockedChecks": [
+        "v18-withdraw"
+      ],
+      "latencyP95Ms": 2342.9189000000006,
+      "provisionalPass": false,
+      "reviewedPass": false,
+      "reviewRequired": "Independent review of fidelity/entailment and a completed three-run validation are mandatory."
+    },
+    {
+      "round": 2,
+      "complete": true,
+      "groups": {
+        "total": {
+          "extraction": 0.5625,
+          "retrieval": 1,
+          "answer": 0.9375
+        },
+        "context": {
+          "extraction": 0.5,
+          "retrieval": 1,
+          "answer": 0.875
+        },
+        "intention": {
+          "extraction": 0.6666666666666666,
+          "retrieval": 1,
+          "answer": 1
+        },
+        "basic": {
+          "extraction": 1,
+          "retrieval": 1,
+          "answer": 1
+        },
+        "time": {
+          "extraction": 0.75,
+          "retrieval": 1,
+          "answer": 1
+        },
+        "ambiguity": {
+          "extraction": 0.25,
+          "retrieval": 1,
+          "answer": 0.75
+        },
+        "mixed": {
+          "extraction": 0.6666666666666666,
+          "retrieval": 1,
+          "answer": 1
+        },
+        "change": {
+          "extraction": 0.3333333333333333,
+          "retrieval": 1,
+          "answer": 1
+        },
+        "withdrawal": {
+          "extraction": 0.5,
+          "retrieval": null,
+          "answer": 1
+        },
+        "absence": {
+          "extraction": 0.5,
+          "retrieval": null,
+          "answer": 1
+        },
+        "injection": {
+          "extraction": 0,
+          "retrieval": null,
+          "answer": 0.75
+        },
+        "question": {
+          "extraction": 1,
+          "retrieval": null,
+          "answer": 1
+        }
+      },
+      "criticalFailures": [
+        "v22-q1"
+      ],
+      "blockedChecks": [],
+      "latencyP95Ms": 2446.5304999999935,
+      "provisionalPass": false,
+      "reviewedPass": false,
+      "reviewRequired": "Independent review of fidelity/entailment and a completed three-run validation are mandatory."
+    },
+    {
+      "round": 3,
+      "complete": true,
+      "groups": {
+        "total": {
+          "extraction": 0.65625,
+          "retrieval": 1,
+          "answer": 0.90625
+        },
+        "context": {
+          "extraction": 0.75,
+          "retrieval": 1,
+          "answer": 0.75
+        },
+        "intention": {
+          "extraction": 0.6666666666666666,
+          "retrieval": 1,
+          "answer": 1
+        },
+        "basic": {
+          "extraction": 1,
+          "retrieval": 1,
+          "answer": 1
+        },
+        "time": {
+          "extraction": 1,
+          "retrieval": 1,
+          "answer": 1
+        },
+        "ambiguity": {
+          "extraction": 0.25,
+          "retrieval": 1,
+          "answer": 0.75
+        },
+        "mixed": {
+          "extraction": 0.6666666666666666,
+          "retrieval": 1,
+          "answer": 1
+        },
+        "change": {
+          "extraction": 0.3333333333333333,
+          "retrieval": 1,
+          "answer": 1
+        },
+        "withdrawal": {
+          "extraction": 0.5,
+          "retrieval": null,
+          "answer": 1
+        },
+        "absence": {
+          "extraction": 0.5,
+          "retrieval": null,
+          "answer": 1
+        },
+        "injection": {
+          "extraction": 0.5,
+          "retrieval": null,
+          "answer": 0.5
+        },
+        "question": {
+          "extraction": 1,
+          "retrieval": null,
+          "answer": 1
+        }
+      },
+      "criticalFailures": [
+        "v21-q1",
+        "v22-q1"
+      ],
+      "blockedChecks": [],
+      "latencyP95Ms": 2206.323299999989,
+      "provisionalPass": false,
+      "reviewedPass": false,
+      "reviewRequired": "Independent review of fidelity/entailment and a completed three-run validation are mandatory."
+    }
+  ],
+  "usageThroughValidation": {
+    "spentUsd": 0.5475980599999986,
+    "reservedUsd": 0,
+    "inputTokens": 514108,
+    "outputTokens": 37590,
+    "calls": 1178
+  },
+  "estimatedValidationBatchUsd": 0.26912592999999857,
+  "localTestsPassed": 18,
+  "decision": "NOT_VALIDATED",
+  "review": {
+    "scope": "Targeted review by Codex, separate from the evaluated model; not exhaustive human acceptance.",
+    "confirmedIssues": [
+      "quoted content attributed as own data",
+      "unsupported date precision",
+      "ambiguous identity selected without clarification",
+      "unsupported preference ranking"
+    ],
+    "automaticGraderLimitations": [
+      "rigid per-item term matching",
+      "rigid state/citation expectations",
+      "false negatives; automatic critical flags are not independently verified failures"
+    ]
+  },
+  "interactiveSmokeTest": {
+    "passed": true,
+    "remainingMemories": 0,
+    "scenarios": [
+      "save",
+      "answer_with_source",
+      "forget",
+      "answer_absent_after_forgetting"
+    ]
+  },
+  "usageAfterSmokeTest": {
+    "spentUsd": 0.5496790899999986,
+    "reservedUsd": 0,
+    "inputTokens": 515841,
+    "outputTokens": 37774,
+    "calls": 1184
+  }
+}

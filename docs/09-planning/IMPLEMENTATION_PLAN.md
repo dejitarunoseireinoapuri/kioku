@@ -7,7 +7,7 @@ Este documento define el alcance y el cierre de las fases. Los [requisitos](../0
 | Fase | Resultado visible | Estado |
 | --- | --- | --- |
 | D0 · Base documental | Producto, arquitectura y normas definidos | Entregada en `40737a2` |
-| M0 · Prueba temprana de memoria | Evidencia de que interpretar, guardar y recuperar funciona antes de construir la app | En curso; requisito para K0 |
+| M0 · Prueba temprana de memoria | Evidencia de que interpretar, guardar y recuperar funciona antes de construir la app | En curso; primera evaluación no superada |
 | K0 · Base técnica | App navegable con estética B y datos ficticios | Pendiente |
 | K1 · Cuenta y configuración | Acceso privado y configuración segura de la clave propia | Pendiente |
 | K2 · Contar por escrito | Separar asuntos, aclarar dudas y guardar automáticamente | Pendiente |
@@ -19,6 +19,8 @@ Este documento define el alcance y el cierre de las fases. Los [requisitos](../0
 M0 está en curso y K0 todavía no ha empezado. La primera versión completa para uso personal llega en K6; las entregas anteriores permiten revisar avances concretos. No se fijan fechas sin conocer herramientas, dependencias y resultados.
 
 Implementación y comandos de M0: [guía del prototipo](../../prototypes/memory/README.md). Su estado de validación y límites se mantienen en [KNOWN_LIMITATIONS](KNOWN_LIMITATIONS.md).
+
+Primera evaluación: [informe del 11 de noviembre de 2026](../../prototypes/memory/evidence/2026-11-11.md). Prototipo y pruebas preparados, 18 pruebas locales superadas y tres rondas reales completadas con la versión corregida del evaluador; se conservan intentos anteriores. Hay fallos semánticos confirmados y discrepancias de rúbrica. M0 no está validada y K0 no puede empezar. Si los casos revisados se usan para ajustar el núcleo o la rúbrica, pasan a regresión y se prepara una nueva reserva de validación.
 
 ## Ejecución y criterios comunes
 

@@ -2,6 +2,8 @@
 
 Herramienta local por texto para comprobar interpretación, persistencia, recuperación y respuesta antes de construir la app. Solo datos ficticios. No es un backend desplegado ni una implementación móvil/offline de Kioku. El criterio de avance está en [M0](../../docs/09-planning/IMPLEMENTATION_PLAN.md#m0--prueba-temprana-de-memoria).
 
+Primera evaluación ejecutada: [informe y decisión](evidence/2026-11-11.md). **M0 no está validada**: hay errores semánticos confirmados y la puntuación automática tiene limitaciones. K0 no ha empezado.
+
 ## Preparar y comprobar
 
 Desde la raíz, con Node 24.12 o posterior de la serie 24:

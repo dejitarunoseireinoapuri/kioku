@@ -30,3 +30,5 @@ Los casos de aceptación siguen **pendientes de validación**. M0 dispone de pro
 La recuperación del ejemplo de una película y la corrección a otra son ramas de fixture distintas. No usar datos reales del propietario como corpus por conveniencia.
 
 TEST-EVAL-001 se ejecuta antes de K0 según [M0](../09-planning/IMPLEMENTATION_PLAN.md#m0--prueba-temprana-de-memoria). Su resultado prueba viabilidad del prototipo, no completa los casos de integración, seguridad, concurrencia, limpieza ni voz de esta matriz. K2/K3/K4 reutilizan y amplían el corpus contra la implementación final.
+
+Primera ejecución de TEST-EVAL-001: [evidencia](../../prototypes/memory/evidence/2026-11-11.md), **no superada**. Tres rondas completas con el evaluador corregido; fallos semánticos confirmados y limitaciones de puntuación identificadas. Las 18 pruebas locales verifican código/barreras y no sustituyen esta aceptación.
