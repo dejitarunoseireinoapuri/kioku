@@ -1,0 +1,47 @@
+# Policy ported from Wonderdrop. Wire to a verified compatible Detekt version during K0.
+config:
+  validation: true
+  warningsAsErrors: true
+
+complexity:
+  CyclomaticComplexMethod:
+    active: true
+    allowedComplexity: 12
+  LargeClass:
+    active: true
+    allowedLines: 400
+  LongMethod:
+    active: true
+    allowedLines: 50
+  LongParameterList:
+    active: true
+    allowedFunctionParameters: 6
+    allowedConstructorParameters: 8
+    ignoreDefaultParameters: false
+    ignoreDataClasses: true
+  NestedBlockDepth:
+    active: true
+    allowedDepth: 4
+  TooManyFunctions:
+    active: true
+    allowedFunctionsPerFile: 15
+    allowedFunctionsPerClass: 15
+    allowedFunctionsPerInterface: 15
+    allowedFunctionsPerObject: 15
+    allowedFunctionsPerEnum: 15
+    ignoreDeprecated: false
+    ignorePrivate: false
+    ignoreInternal: false
+    ignoreOverridden: true
+
+naming:
+  FunctionNaming:
+    ignoreAnnotated:
+      - 'Composable'
+
+style:
+  ForbiddenImport:
+    active: true
+    forbiddenImports:
+      - value: 'com.google.firebase.admin.*'
+        reason: 'Server Admin SDK must never ship in the mobile client.'

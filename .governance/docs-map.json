@@ -1,0 +1,12 @@
+{
+  "constitution": "AGENTS.md",
+  "agents": "AGENTS.md",
+  "map": "docs/README.md",
+  "status": "docs/09-planning/KNOWN_LIMITATIONS.md",
+  "history": "CHANGELOG.md",
+  "context": "docs/00-product/GLOSSARY.md",
+  "contract": "docs/04-api/API_CONTRACT.md",
+  "tests": "docs/06-quality/TEST_MATRIX.md",
+  "adr_dir": "docs/02-architecture/ADR",
+  "adr_index": "docs/02-architecture/ADR/README.md"
+}
