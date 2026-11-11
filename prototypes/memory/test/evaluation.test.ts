@@ -81,6 +81,27 @@ test("a perfect automatic score alone never closes M0", () => {
   assert.equal(summary.reviewedPass, false);
 });
 
+test("an untested withdrawal blocks the automatic gate even when other scores pass", () => {
+  const summary = summarize([
+    {
+      id: "ok",
+      category: "basic",
+      answer: true,
+      extraction: true,
+      retrieval: true,
+      latencyMs: 1,
+    },
+    {
+      id: "missing-withdrawal",
+      category: "withdrawal",
+      blocked: true,
+      latencyMs: 0,
+    },
+  ]);
+  assert.equal(summary.provisionalPass, false);
+  assert.deepEqual(summary.blockedChecks, ["missing-withdrawal"]);
+});
+
 test("a grounded abstention about an uncompleted plan is not a factual error", () => {
   const query: QuerySpec = {
     question: "Synthetic",

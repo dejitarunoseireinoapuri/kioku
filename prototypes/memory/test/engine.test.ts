@@ -10,6 +10,7 @@ import type {
   Turn,
 } from "../src/domain.ts";
 import { cosine } from "../src/search.ts";
+import { withdrawForEvaluation } from "../src/evaluation/withdraw.ts";
 
 const turn: Turn = {
   id: "source-1",
@@ -209,4 +210,23 @@ test("invalid vector dimensions fail instead of silently distorting retrieval", 
   assert.throws(() => cosine([1, 2], [1]), /VECTOR_DIMENSIONS/);
   assert.throws(() => cosine([NaN], [1]), /VECTOR_INVALID/);
   assert.equal(cosine([1, 0], [1, 0]), 1);
+});
+
+test("evaluation records a withdrawal as untested when its source was never saved", async () => {
+  const f = await fixture();
+  try {
+    const engine = new MemoryEngine(f.repository, fake());
+    assert.deepEqual(await withdrawForEvaluation(engine, "missing"), {
+      performed: false,
+      reason: "SOURCE_NEVER_SAVED",
+    });
+    await engine.tell(turn);
+    assert.deepEqual(await withdrawForEvaluation(engine, turn.id), {
+      performed: true,
+      reason: null,
+    });
+    assert.equal((await f.repository.load()).sources.length, 0);
+  } finally {
+    await f.close();
+  }
 });

@@ -68,6 +68,7 @@ export type Observation = {
   retrieval?: boolean | null;
   answer?: boolean;
   criticalFailure?: boolean;
+  blocked?: boolean;
   latencyMs: number;
 };
 
@@ -104,17 +105,20 @@ export function summarize(rows: Observation[]) {
   const criticalFailures = rows
     .filter((row) => row.criticalFailure)
     .map((row) => row.id);
+  const blockedChecks = rows.filter((row) => row.blocked).map((row) => row.id);
   const latencies = rows.map((row) => row.latencyMs).sort((a, b) => a - b);
   const latencyP95Ms =
     latencies[Math.max(0, Math.ceil(latencies.length * 0.95) - 1)] ?? null;
   const provisionalPass =
     criticalFailures.length === 0 &&
+    blockedChecks.length === 0 &&
     Object.values(groups).every((group) =>
       Object.values(group).every((value) => value === null || value >= 0.9),
     );
   return {
     groups,
     criticalFailures,
+    blockedChecks,
     latencyP95Ms,
     provisionalPass,
     reviewedPass: false,

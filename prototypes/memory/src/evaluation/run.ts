@@ -9,6 +9,7 @@ import { JsonMemoryRepository } from "../repository.ts";
 import { openRuntime, reportError } from "../runtime.ts";
 import { model, embeddingModel } from "../openai.ts";
 import { rates } from "../budget.ts";
+import { withdrawForEvaluation } from "./withdraw.ts";
 
 async function fingerprint(): Promise<string> {
   const files = [
@@ -19,6 +20,7 @@ async function fingerprint(): Promise<string> {
     "validation-b.ts",
     "score.ts",
     "run.ts",
+    "withdraw.ts",
   ].map((file) => new URL(file, import.meta.url));
   files.push(
     ...[
@@ -91,8 +93,17 @@ async function executeRun(
     await checkpoint();
     console.log(`Entrada ${scenario.turn.id}: ${passed ? "OK" : "REVISAR"}`);
   }
-  for (const scenario of selected.filter((entry) => entry.withdraw))
-    await engine.forget(scenario.turn.id);
+  for (const scenario of selected.filter((entry) => entry.withdraw)) {
+    const result = await withdrawForEvaluation(engine, scenario.turn.id);
+    observations.push({
+      id: `${scenario.turn.id}-withdraw`,
+      category: scenario.category,
+      blocked: !result.performed,
+      latencyMs: 0,
+    });
+    detail.push({ id: `${scenario.turn.id}-withdraw`, ...result });
+    await checkpoint();
+  }
   for (const scenario of selected) {
     for (const [index, expected] of scenario.queries.entries()) {
       const start = performance.now();
