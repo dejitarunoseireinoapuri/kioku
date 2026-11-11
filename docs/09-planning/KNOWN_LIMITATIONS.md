@@ -2,9 +2,11 @@
 
 ## Disponible
 
-Nombre Kioku, definición funcional del propietario, estética B en Stitch y base documental adaptada de Wonderdrop. No hay todavía build KMP, backend, reglas desplegadas, configuración de cuenta, secreto creado ni prueba de IA real. La plantilla Expo local está retirada como dirección, no borrada.
+Nombre Kioku, definición funcional del propietario, estética B en Stitch y base documental adaptada de Wonderdrop. M0 incorpora un [prototipo TypeScript por texto](../../prototypes/memory/README.md), persistencia sintética local, extracción/recuperación/respuesta OpenAI y corpus separado de preparación/validación. Hay comprobación de tipos y pruebas locales ejecutables; la evaluación de viabilidad sigue en curso. No hay todavía build KMP, backend/reglas desplegados ni configuración de cuenta móvil. La plantilla Expo local está retirada como dirección, no borrada.
 
-D0 se entregó en `40737a2`. El [plan de fases](IMPLEMENTATION_PLAN.md) concreta entregables, dependencias y criterios de cierre. M0, la prueba temprana de memoria, es el siguiente paso y debe validarse antes de K0–K6. Ni M0 ni K0 han empezado: aún no hay resultados ni porcentajes de fiabilidad medidos. Esta planificación no configura servicios ni implementa funciones.
+D0 se entregó en `40737a2`. El [plan de fases](IMPLEMENTATION_PLAN.md) concreta entregables, dependencias y criterios de cierre. M0 está en curso y debe validarse antes de K0–K6. Su conexión real ya se ha probado con casos de preparación; no equivale a validar el conjunto reservado ni demostrar fiabilidad. K0 no ha empezado.
+
+La clave local de prueba se configuró mediante el flujo seguro y está fuera de Git; no es el gestor de secretos ni el alta móvil de K1. La primera clave creada no pudo guardarse por pérdida del archivo temporal y quedó sin uso: debe revocarse en Platform. La sustitución se creó y guardó con autorización explícita. No se registran aquí sus identificadores ni valores. Límite acumulado estimado de M0: 2 USD, con contador/reservas persistentes y llamadas reales explícitas; no confirma saldo o cobertura de los créditos.
 
 El propietario ya ha creado un proyecto Firebase. Antes de conectarlo se verificará su identidad, región y papel como entorno; no se presupone que esté configurado ni se crean otros proyectos por documentar el plan.
 

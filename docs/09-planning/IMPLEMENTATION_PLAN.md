@@ -7,7 +7,7 @@ Este documento define el alcance y el cierre de las fases. Los [requisitos](../0
 | Fase | Resultado visible | Estado |
 | --- | --- | --- |
 | D0 · Base documental | Producto, arquitectura y normas definidos | Entregada en `40737a2` |
-| M0 · Prueba temprana de memoria | Evidencia de que interpretar, guardar y recuperar funciona antes de construir la app | Pendiente; requisito para K0 |
+| M0 · Prueba temprana de memoria | Evidencia de que interpretar, guardar y recuperar funciona antes de construir la app | En curso; requisito para K0 |
 | K0 · Base técnica | App navegable con estética B y datos ficticios | Pendiente |
 | K1 · Cuenta y configuración | Acceso privado y configuración segura de la clave propia | Pendiente |
 | K2 · Contar por escrito | Separar asuntos, aclarar dudas y guardar automáticamente | Pendiente |
@@ -16,7 +16,9 @@ Este documento define el alcance y el cierre de las fases. Los [requisitos](../0
 | K5 · Voz | Contar y preguntar hablando, con pulsación y bloqueo | Pendiente |
 | K6 · V1 de uso personal | Recorrido completo comprobado en Android e iOS | Pendiente |
 
-M0 es el siguiente paso y K0 todavía no ha empezado. La primera versión completa para uso personal llega en K6; las entregas anteriores permiten revisar avances concretos. No se fijan fechas sin conocer herramientas, dependencias y resultados.
+M0 está en curso y K0 todavía no ha empezado. La primera versión completa para uso personal llega en K6; las entregas anteriores permiten revisar avances concretos. No se fijan fechas sin conocer herramientas, dependencias y resultados.
+
+Implementación y comandos de M0: [guía del prototipo](../../prototypes/memory/README.md). Su estado de validación y límites se mantienen en [KNOWN_LIMITATIONS](KNOWN_LIMITATIONS.md).
 
 ## Ejecución y criterios comunes
 

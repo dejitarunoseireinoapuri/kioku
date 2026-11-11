@@ -4,7 +4,7 @@ Memoria personal por voz y texto para Android e iOS. Cuenta algo, deja que Kioku
 
 ## Estado real
 
-Esta entrega establece la documentación y las reglas de desarrollo antes de implementar la aplicación. No hay todavía una app KMP compilable, backend desplegado, Firebase conectado ni llamadas de IA implementadas. La arquitectura elegida, por indicación del propietario, sigue Wonderdrop: **Kotlin Multiplatform + Compose Multiplatform, MVVM y Clean Architecture pragmática**. El experimento Expo local de `mobile/` está retirado como dirección técnica; no debe convertirse en una segunda aplicación.
+La documentación y las reglas de desarrollo están preparadas. M0 incorpora un [prototipo local de memoria por texto](prototypes/memory/README.md) con pruebas, corpus ficticio y conexión OpenAI; su evaluación está en curso. No hay todavía una app KMP compilable, backend desplegado ni Firebase conectado. La arquitectura móvil elegida, por indicación del propietario, sigue Wonderdrop: **Kotlin Multiplatform + Compose Multiplatform, MVVM y Clean Architecture pragmática**. El experimento Expo local de `mobile/` está retirado como dirección técnica; no debe convertirse en una segunda aplicación.
 
 Repositorio: https://github.com/dejitarunoseireinoapuri/kioku
 
@@ -22,7 +22,7 @@ El [índice documental](docs/README.md) indica dónde vive cada decisión. [AGEN
 
 D0 (documentación) entregada. El siguiente paso es **M0: probar el núcleo de memoria por texto antes de construir la app**. Debe demostrar que interpreta, guarda, encuentra y responde con evidencia usando datos ficticios; si falla, se ajusta antes de avanzar.
 
-Tras validar M0: K0 (base técnica y navegación), K1 (cuenta y clave), K2 (guardar por texto), K3 (preguntar por texto), K4 (control de memoria), K5 (voz) y K6 (validación para uso personal). Ni M0 ni K0 han empezado.
+Tras validar M0: K0 (base técnica y navegación), K1 (cuenta y clave), K2 (guardar por texto), K3 (preguntar por texto), K4 (control de memoria), K5 (voz) y K6 (validación para uso personal). M0 está en curso y K0 no ha empezado.
 
 El [plan de fases](docs/09-planning/IMPLEMENTATION_PLAN.md) define qué entrega cada una, qué necesita y cómo se valida en Android/iOS. Integraciones y publicación quedan para una decisión posterior.
 
@@ -32,6 +32,6 @@ Se conserva la estética B: carbón, coral e IBM Plex. [Stitch](https://stitch.g
 
 ## Trabajo local
 
-Los comandos de compilación se incorporarán al crear la base KMP. No ejecutar comandos Gradle o npm de Wonderdrop como si ya existieran aquí. La validación disponible en esta fase es la revisión documental descrita en [DEVELOPMENT_GUIDE.md](docs/07-development/DEVELOPMENT_GUIDE.md).
+Los comandos reales de tipos, pruebas y formato del prototipo están en su [guía M0](prototypes/memory/README.md), con acceso API explícito y separado. Los comandos KMP se incorporarán en K0. Véase [DEVELOPMENT_GUIDE.md](docs/07-development/DEVELOPMENT_GUIDE.md) para la comprobación documental.
 
 Nunca subir claves, recuerdos reales, grabaciones, configuraciones privadas, certificados o material de firma.

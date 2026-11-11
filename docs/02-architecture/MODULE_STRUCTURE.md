@@ -21,7 +21,7 @@ config/                        políticas de calidad
 docs/                          contrato y evidencia
 ```
 
-Es un mapa objetivo: estas carpetas de aplicación aún no están creadas. Evitar una arquitectura de micro-módulos vacíos. Separar un módulo Gradle solo por aislamiento comprobable, propiedad o tiempo de compilación.
+Es un mapa objetivo: estas carpetas de aplicación aún no están creadas. M0 vive en `prototypes/memory/`: núcleo TypeScript con contratos de dominio, adaptadores locales/OpenAI, CLI y evaluación separados. Es un experimento sintético previo al cliente móvil y a Functions; no otro backend público. Se reutilizarán los componentes adecuados tras validar su viabilidad, sin convertir el almacén local en persistencia móvil. Evitar una arquitectura de micro-módulos vacíos. Separar un módulo Gradle solo por aislamiento comprobable, propiedad o tiempo de compilación.
 
 Cada feature mantiene juntas sus capas cuando las necesita. Los contratos compartidos de plataforma no conocen Compose, Firebase ni clases Swift/Android. Los hosts ensamblan la app; los puentes implementan interfaces compartidas.
 

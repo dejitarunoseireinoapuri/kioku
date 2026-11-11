@@ -10,6 +10,6 @@ Adoptada de Wonderdrop: corrección, privacidad, arquitectura, legibilidad, prue
 - Dependencias y herramientas fijadas en catálogo/wrappers/lockfiles; no instalar versiones a ciegas ni añadir una librería por un helper trivial.
 - Tests de reglas/Functions positivos y negativos para cambios de autorización o persistencia. Voz y adaptadores se validan en ambas plataformas.
 
-**Estado actual:** la configuración de política Detekt y EditorConfig se prepara como base; todavía no existe un build KMP que ejecute sus tareas. No anunciar Detekt, Lint, pruebas nativas o backend en verde hasta que estén conectados y se hayan ejecutado.
+**Estado actual:** M0 tiene comprobación TypeScript strict, formato Prettier y pruebas ejecutables Node. La configuración Detekt/EditorConfig sigue como base; todavía no existe un build KMP que ejecute sus tareas. No anunciar Detekt, Lint, pruebas nativas, reglas Firebase o integración móvil en verde hasta que estén conectados y se hayan ejecutado.
 
 Para cambios documentales basta la comprobación de enlaces/consistencia y revisión semántica correspondiente. No compilar la app o llamar a OpenAI para verificar documentación.

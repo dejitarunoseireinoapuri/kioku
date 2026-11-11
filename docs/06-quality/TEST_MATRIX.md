@@ -1,6 +1,6 @@
 # Matriz de aceptación y evidencia prevista
 
-Todos los casos están **pendientes de implementación/ejecución**. No se incluyen porcentajes ni checks ficticios. Registrar comando, commit, plataforma/entorno, resultado y límites al ejecutar.
+Los casos de aceptación siguen **pendientes de validación**. M0 dispone de prototipo y pruebas locales; sus evaluaciones reales se registran por separado y no cierran los casos de la app. Registrar comando, commit, plataforma/entorno, resultado y límites al ejecutar. Véase el [estado actual](../09-planning/KNOWN_LIMITATIONS.md).
 
 | Caso | Cubre | Evidencia requerida |
 | --- | --- | --- |

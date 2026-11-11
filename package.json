@@ -1,0 +1,25 @@
+{
+  "name": "kioku",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.12.0 <25"
+  },
+  "scripts": {
+    "check": "tsc --noEmit",
+    "test": "node --test prototypes/memory/test/*.test.ts",
+    "format": "prettier --write prototypes/memory tooling/m0.mjs package.json tsconfig.json",
+    "format:check": "prettier --check prototypes/memory tooling/m0.mjs package.json tsconfig.json",
+    "m0": "node --env-file-if-exists=.env.local prototypes/memory/src/cli.ts",
+    "m0:eval": "node --env-file-if-exists=.env.local prototypes/memory/src/evaluation/run.ts"
+  },
+  "dependencies": {
+    "zod": "4.1.12"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1",
+    "prettier": "3.6.2",
+    "typescript": "5.9.3"
+  }
+}
