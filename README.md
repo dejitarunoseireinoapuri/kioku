@@ -18,6 +18,12 @@ Repositorio: https://github.com/dejitarunoseireinoapuri/kioku
 
 El [índice documental](docs/README.md) indica dónde vive cada decisión. [AGENTS.md](AGENTS.md) contiene las instrucciones para agentes.
 
+## Fases acordadas
+
+D0 (documentación) entregada. El siguiente paso es K0 (base técnica y navegación con datos ficticios), seguido de K1 (cuenta y clave), K2 (guardar por texto), K3 (preguntar por texto), K4 (control de memoria), K5 (voz) y K6 (validación para uso personal). K0 todavía no ha empezado.
+
+El [plan de fases](docs/09-planning/IMPLEMENTATION_PLAN.md) define qué entrega cada una, qué necesita y cómo se valida en Android/iOS. Integraciones y publicación quedan para una decisión posterior.
+
 ## Diseño
 
 Se conserva la estética B: carbón, coral e IBM Plex. [Stitch](https://stitch.google.com/projects/11852641719392883248) es una referencia visual; el comportamiento y el nombre **Kioku** los gobierna esta documentación. Algunas capturas históricas todavía muestran «Memoria».

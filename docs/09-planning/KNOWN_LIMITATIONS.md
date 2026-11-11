@@ -4,6 +4,10 @@
 
 Nombre Kioku, definición funcional del propietario, estética B en Stitch y base documental adaptada de Wonderdrop. No hay todavía build KMP, backend, reglas desplegadas, configuración de cuenta, secreto creado ni prueba de IA real. La plantilla Expo local está retirada como dirección, no borrada.
 
+D0 se entregó en `40737a2`. El [plan de fases](IMPLEMENTATION_PLAN.md) concreta entregables, dependencias y criterios de cierre; K0 todavía no ha empezado. Esta planificación no configura servicios ni implementa funciones.
+
+El propietario ya ha creado un proyecto Firebase. Antes de conectarlo se verificará su identidad, región y papel como entorno; no se presupone que esté configurado ni se crean otros proyectos por documentar el plan.
+
 ## Antes de cada fase
 
 | Pendiente | Cuándo resolver | Opciones/impacto |
