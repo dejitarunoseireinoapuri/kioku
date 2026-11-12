@@ -287,3 +287,15 @@ test("a model's wrong tomorrow is canonicalized from the source time zone across
     "2026-11-12",
   );
 });
+
+test("an explicit ISO date retains day precision instead of degrading to its year", () => {
+  const source = "La entrega es 2026-12-18.";
+  const time = canonicalTime(
+    { precision: "day", value: "2026-12-18", end: null, quote: "2026-12-18" },
+    source,
+    source,
+    { receivedAt: "2026-11-11T10:00:00Z", zone: "Europe/Madrid" },
+  );
+  assert.equal(time.precision, "day");
+  assert.equal(time.value, "2026-12-18");
+});

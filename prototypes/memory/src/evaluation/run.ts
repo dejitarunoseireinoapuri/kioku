@@ -42,6 +42,7 @@ async function fingerprint(): Promise<string> {
       "budget.ts",
       "repository.ts",
       "temporal.ts",
+      "calendar.ts",
       "evidence.ts",
       "answer-guard.ts",
       "literal.ts",

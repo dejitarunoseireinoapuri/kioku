@@ -5,7 +5,7 @@
 - M0 v2: fechas con precisión explícita y evidencia literal, descriptores de identidad/contexto completo de fuentes seleccionadas, procedencia personal/relatada/citada y verificación de respuestas.
 - Protección de credenciales en relatos, aclaraciones y preguntas; snapshots v2 aislados y escrituras locales atómicas con reintento acotado solo ante bloqueo de archivos.
 - Una ronda reservada nueva completa, no superada; segunda interrumpida por conexión. Se conservan todos los intentos y los resultados históricos.
-- Correcciones posteriores: impedir que una fecha de otro tema date un recuerdo y que una abstención ascienda a dato encontrado; 49 pruebas locales superadas. Los casos v2 pasan a regresión y se bloquea la aceptación hasta renovar la reserva.
+- Correcciones posteriores: impedir que una fecha de otro tema date un recuerdo y que una abstención ascienda a dato encontrado; 52 pruebas locales superadas. Los casos v2 pasan a regresión y se bloquea la aceptación hasta renovar la reserva.
 - M0 continúa sin validar y K0 pendiente; sin configuración Firebase ni cambios de interfaz.
 
 ## Sin versión publicada · 2026-11-11

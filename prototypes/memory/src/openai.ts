@@ -2,6 +2,7 @@ import { z } from "zod";
 import { extractionSchema, MemoryError } from "./domain.ts";
 import type { Candidate, MemoryIntelligence, Turn, Source } from "./domain.ts";
 import { Budget, rates } from "./budget.ts";
+import { calendarContext } from "./calendar.ts";
 import {
   extractionInstructions,
   answerInstructions,
@@ -75,6 +76,7 @@ export class OpenAiMemory implements MemoryIntelligence {
     sources: Source[] = [],
   ) {
     this.lastCheck = null;
+    const calendar = calendarContext(at, sources);
     const evidence = candidates.map(({ memory }) => ({
       sourceId: memory.sourceId,
       text: memory.text,
@@ -92,7 +94,7 @@ export class OpenAiMemory implements MemoryIntelligence {
     const generated = normalizeAnswerStatus(
       await this.structured(
         answerInstructions,
-        { question, at, candidates: evidence, sources },
+        { question, at, calendar, candidates: evidence, sources },
         providerProposalSchema,
         "memory_answer",
       ),
@@ -118,6 +120,7 @@ export class OpenAiMemory implements MemoryIntelligence {
       {
         question,
         at,
+        calendar,
         proposal: answer,
         sources: sources.filter((source) =>
           answer.sourceIds.includes(source.id),

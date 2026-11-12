@@ -128,11 +128,17 @@ function dateParts(quote: string) {
     `(\\d{1,2})\\s+de\\s+(${monthNames})(?:\\s+(?:de\\s+)?((?:19|20)\\d{2}))?`,
     "giu",
   );
-  return [...quote.matchAll(named)].map((match) => ({
+  const parts = [...quote.matchAll(named)].map((match) => ({
     day: match[1]!.padStart(2, "0"),
     month: String(months.indexOf(match[2]!.toLowerCase()) + 1).padStart(2, "0"),
     year: match[3] ?? null,
   }));
+  for (const match of quote.matchAll(
+    /\b((?:19|20)\d{2})-(\d{2})-(\d{2})\b/gu,
+  )) {
+    parts.push({ year: match[1]!, month: match[2]!, day: match[3]! });
+  }
+  return parts;
 }
 
 /** Partial dates remain partial. This guard is deliberately conservative about unsupported precision. */
