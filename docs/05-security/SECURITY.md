@@ -23,3 +23,6 @@ No integrar Analytics, informes de crash o grabación de sesiones automáticamen
 ## Incidentes
 
 Contener acceso, revocar/rotar credenciales afectadas, revisar el uso mediante evidencias mínimas autorizadas, corregir y probar. No exponer material sensible en issues públicas. La política de comunicación y contacto del operador sigue pendiente antes de distribuir.
+
+
+M0 v4 elimina la autorización de citas basada en vocabulario de la pregunta. El proveedor solo selecciona fragmentos candidatos permitidos; sus fuentes se derivan en código. La verificación semántica independiente del primer paso debe coincidir en el alcance de la pregunta. Una respuesta personal no admite evidencia quoted, tampoco mediante una etiqueta not_found con texto factual. Las consultas de contenido citado se materializan desde el literal autorizado. La verificación sigue siendo falible: requiere evaluación contra fuentes y no concede permisos de ejecución.

@@ -1,6 +1,6 @@
 import { mkdir, readFile, lstat } from "node:fs/promises";
 import { dirname, resolve, relative, isAbsolute } from "node:path";
-import { MemoryError, snapshotSchema } from "./domain.ts";
+import { MemoryError, snapshotSchema, snapshotVersion } from "./domain.ts";
 import type { MemoryRepository, Snapshot } from "./domain.ts";
 import { atomicWrite } from "./file-store.ts";
 
@@ -30,18 +30,18 @@ export class JsonMemoryRepository implements MemoryRepository {
         typeof value === "object" &&
         value !== null &&
         "version" in value &&
-        (value.version === 1 || value.version === 2)
+        (value.version === 1 || value.version === 2 || value.version === 3)
       ) {
         throw new MemoryError("STORE_VERSION_UNSUPPORTED");
       }
-      return snapshotSchema.parse(value);
+      return this.validate(snapshotSchema.parse(value));
     } catch (error) {
       if (
         error instanceof Error &&
         "code" in error &&
         error.code === "ENOENT"
       ) {
-        return { version: 3, sources: [], memories: [] };
+        return { version: snapshotVersion, sources: [], memories: [] };
       }
       if (
         error instanceof MemoryError &&
@@ -53,10 +53,26 @@ export class JsonMemoryRepository implements MemoryRepository {
   }
 
   async save(snapshot: Snapshot): Promise<void> {
-    snapshotSchema.parse(snapshot);
+    this.validate(snapshotSchema.parse(snapshot));
     await mkdir(dirname(this.file), { recursive: true });
     await this.rejectLinks();
     await atomicWrite(this.file, JSON.stringify(snapshot));
+  }
+
+  private validate(snapshot: Snapshot): Snapshot {
+    if (
+      snapshot.memories.some(
+        (item) =>
+          item.provenance === "quoted" &&
+          (item.eventStatus !== "unspecified" ||
+            item.time.precision !== "unknown" ||
+            item.time.value !== null ||
+            item.time.end !== null ||
+            item.time.quote !== null),
+      )
+    )
+      throw new MemoryError("STORE_QUOTED_EVENT_INVALID");
+    return snapshot;
   }
 
   private async rejectLinks(): Promise<void> {

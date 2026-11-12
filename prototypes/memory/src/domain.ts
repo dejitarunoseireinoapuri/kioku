@@ -50,8 +50,9 @@ export const memorySchema = itemSchema.extend({
   zone: z.string(),
   vector: z.array(z.number().finite()).min(1),
 });
+export const snapshotVersion = 4;
 export const snapshotSchema = z.strictObject({
-  version: z.literal(3),
+  version: z.literal(snapshotVersion),
   sources: z.array(sourceSchema),
   memories: z.array(memorySchema),
 });

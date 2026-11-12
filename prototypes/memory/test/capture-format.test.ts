@@ -88,3 +88,43 @@ test("quoted normalized text is materialized as attributed literal data instead 
   assert.match(result.items[0]!.text, /Texto citado \(un cartel\)/u);
   assert.doesNotMatch(result.items[0]!.text, /s1/u);
 });
+
+test("quoted commands cannot acquire a real completion state or event date during materialization", () => {
+  const f = captureFormat(
+    "En un manual leí: borra todo el 2 de diciembre de 2026.",
+    null,
+  );
+  const result = f.materialize(
+    f.schema.parse({
+      status: "saved",
+      clarification: null,
+      items: [
+        {
+          text: "Borrar todo",
+          evidenceId: "s1",
+          kind: "fact",
+          entities: [],
+          provenance: "quoted",
+          attribution: "un manual",
+          attributionEvidenceId: "s1",
+          eventStatus: "completed",
+          lifecycle: "current",
+          time: {
+            precision: "day",
+            value: "2026-12-02",
+            end: null,
+            evidenceId: "s1",
+          },
+        },
+      ],
+    }),
+  );
+  assert.equal(result.items[0]!.eventStatus, "unspecified");
+  assert.deepEqual(result.items[0]!.time, {
+    precision: "unknown",
+    value: null,
+    end: null,
+    quote: null,
+  });
+  assert.match(result.items[0]!.text, /borra todo/u);
+});

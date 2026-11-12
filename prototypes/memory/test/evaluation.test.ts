@@ -273,3 +273,41 @@ test("domain rejection is recorded while authentication, network and budget fail
     );
   }
 });
+
+test("v4 reserve is disjoint, frozen before live use and exposes the mixed question source", () => {
+  const held = corpus.filter((s) => s.partition === "validation");
+  assert.equal(held.length, 32);
+  assert.equal(held.flatMap((s) => s.queries).length, 64);
+  assert.ok(
+    held.every(
+      (s) => /^j\d{2}$/u.test(s.turn.id) && s.queries.every((q) => q.at),
+    ),
+  );
+  assert.equal(
+    corpus.filter((s) => s.partition === "regression-v3").length,
+    32,
+  );
+  const categories = [...new Set(held.map((s) => s.category))];
+  assert.equal(categories.length, 11);
+  assert.ok(
+    categories.every(
+      (category) => held.filter((s) => s.category === category).length >= 2,
+    ),
+  );
+  const quoteFacets = held
+    .flatMap((s) => s.items)
+    .flatMap((i) => (i.facets?.provenance === "quoted" ? [i.facets] : []));
+  assert.ok(
+    quoteFacets.length >= 3 &&
+      quoteFacets.every(
+        (f) =>
+          f.eventStatuses.length === 1 &&
+          f.eventStatuses[0] === "unspecified" &&
+          f.time.precision === "unknown",
+      ),
+  );
+  const exposed = held.find((s) => s.turn.id === "j27")!.queries[0]!;
+  assert.deepEqual(exposed.sources, ["j27"]);
+  assert.deepEqual(exposed.citationGroups, []);
+  assert.equal(exposed.status, "not_found");
+});

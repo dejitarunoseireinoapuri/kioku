@@ -4,6 +4,7 @@ import type { Candidate, MemoryIntelligence, Turn, Source } from "./domain.ts";
 import { Budget, rates } from "./budget.ts";
 import { calendarContext } from "./calendar.ts";
 import { captureFormat } from "./capture-format.ts";
+import { answerFormat, constrainScope } from "./answer-format.ts";
 import { modelProfile } from "./model-config.ts";
 import {
   extractionInstructions,
@@ -12,11 +13,8 @@ import {
   verificationInstructions,
 } from "./prompts.ts";
 import {
-  providerProposalSchema,
-  attachSelectedMemories,
-  verificationSchema,
+  scopedVerificationSchema,
   validateProposal,
-  constrainAnswer,
   normalizeAnswerStatus,
   verifiedAnswer,
 } from "./answer-guard.ts";
@@ -69,8 +67,14 @@ const captureChangesSchema = z
 export class OpenAiMemory implements MemoryIntelligence {
   resolvedModel: string | null = null;
   lastCaptureReview: string[] | null = null;
-  lastCheck: { supported: boolean; problem: string; status: string } | null =
-    null;
+  lastCaptureReviewDecision: "accept" | "replace" | null = null;
+  lastEvidenceIds: string[] = [];
+  lastCheck: {
+    supported: boolean;
+    problem: string;
+    status: string;
+    scope?: string;
+  } | null = null;
   readonly #key: string;
   readonly budget: Budget;
   readonly transport: typeof fetch;
@@ -85,26 +89,51 @@ export class OpenAiMemory implements MemoryIntelligence {
 
   async extract(turn: Turn, clarification: string | null) {
     this.lastCaptureReview = null;
+    this.lastCaptureReviewDecision = null;
     const format = captureFormat(turn.text, clarification);
+    const input = {
+      receivedAt: turn.receivedAt,
+      zone: turn.zone,
+      parts: format.parts,
+    };
     const draft = await this.structured(
       extractionInstructions,
-      { ...turn, clarification, parts: format.parts },
+      input,
       format.schema,
       "memory_extraction",
       4000,
     );
+    if (draft.status !== "saved") {
+      if (
+        draft.items.length ||
+        (draft.status === "needs_clarification") !==
+          Boolean(draft.clarification)
+      )
+        throw new MemoryError("EXTRACTION_STATE_INVALID");
+      return format.materialize(draft);
+    }
     const reviewed = await this.structured(
       captureReviewInstructions,
-      { ...turn, clarification, parts: format.parts, draft },
+      { ...input, draft },
       z.strictObject({
-        extraction: format.schema,
+        decision: z.enum(["accept", "replace"]),
+        extraction: format.schema.nullable(),
         changes: captureChangesSchema,
       }),
       "memory_capture_review",
       4000,
     );
+    if (
+      (reviewed.decision === "accept" &&
+        (reviewed.extraction !== null || reviewed.changes.length)) ||
+      (reviewed.decision === "replace" && reviewed.extraction === null)
+    )
+      throw new MemoryError("MODEL_OUTPUT_INVALID");
     this.lastCaptureReview = reviewed.changes;
-    return format.materialize(reviewed.extraction);
+    this.lastCaptureReviewDecision = reviewed.decision;
+    return format.materialize(
+      reviewed.decision === "accept" ? draft : reviewed.extraction!,
+    );
   }
 
   async answer(
@@ -114,6 +143,7 @@ export class OpenAiMemory implements MemoryIntelligence {
     sources: Source[] = [],
   ) {
     this.lastCheck = null;
+    this.lastEvidenceIds = [];
     const calendar = calendarContext(at, sources);
     const evidence = candidates.map(({ memory }) => ({
       sourceId: memory.sourceId,
@@ -131,30 +161,18 @@ export class OpenAiMemory implements MemoryIntelligence {
       receivedAt: memory.receivedAt,
       zone: memory.zone,
     }));
-    const generated = normalizeAnswerStatus(
+    const format = answerFormat(candidates);
+    const generated = format.materialize(
       await this.structured(
         answerInstructions,
         { question, at, calendar, candidates: evidence, sources },
-        providerProposalSchema,
+        format.schema,
         "memory_answer",
       ),
     );
-    const proposal = attachSelectedMemories(generated, candidates);
+    const proposal = normalizeAnswerStatus(generated.proposal);
+    this.lastEvidenceIds = proposal.memoryIds;
     const answer = validateProposal(proposal, candidates);
-    const constrained = constrainAnswer(
-      proposal,
-      candidates,
-      sources,
-      question,
-    );
-    if (constrained) {
-      this.lastCheck = {
-        supported: constrained.status === "answered",
-        problem: "deterministic_scope_guard",
-        status: constrained.status,
-      };
-      return constrained;
-    }
     const verified = await this.structured(
       verificationInstructions,
       {
@@ -162,17 +180,34 @@ export class OpenAiMemory implements MemoryIntelligence {
         at,
         calendar,
         proposal: answer,
+        proposedScope: generated.scope,
+        selectedEvidenceIds: proposal.memoryIds,
         sources: sources.filter((source) =>
           answer.sourceIds.includes(source.id),
         ),
         candidates: evidence,
       },
-      verificationSchema,
+      scopedVerificationSchema,
       "memory_verification",
       2400,
     );
     this.lastCheck = verified;
-    return verifiedAnswer(answer, verified);
+    const checked = verifiedAnswer(answer, verified);
+    if (!verified.supported) return checked;
+    const constrained = constrainScope(
+      { ...proposal, status: checked.status },
+      candidates,
+      generated.scope,
+      verified.scope,
+    );
+    if (constrained)
+      this.lastCheck = {
+        ...verified,
+        supported: constrained.status === "answered",
+        status: constrained.status,
+        problem: "scope_boundary",
+      };
+    return constrained ?? checked;
   }
 
   async embed(texts: string[]): Promise<number[][]> {

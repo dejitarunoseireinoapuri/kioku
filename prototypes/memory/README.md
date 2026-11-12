@@ -4,7 +4,7 @@ Herramienta local por texto para comprobar interpretación, persistencia, recupe
 
 Primera evaluación ejecutada: [informe y decisión](evidence/2026-11-11.md). **M0 no está validada**: hay errores semánticos confirmados y la puntuación automática tiene limitaciones. K0 no ha empezado.
 
-Comparación v3 completada: [5.4 low frente a Sol medium](evidence/2026-11-12-v3.md), con tres rondas desde cero por configuración y revisión de todas las salidas. Se recomienda Sol; M0 sigue abierta por los fallos documentados. 62 pruebas locales superadas. El perfil por defecto permanece en 5.4 hasta la decisión del propietario.
+Comparación v3 completada: [5.4 low frente a Sol medium](evidence/2026-11-12-v3.md), con tres rondas desde cero por configuración y revisión de todas las salidas. Se recomienda Sol; M0 sigue abierta por los fallos documentados. 62 pruebas locales superadas. El propietario ha elegido Sol medio como predeterminado; la [iteración v4](evidence/2026-11-12-v4.md) corrige citas y evalúa una reserva nueva.
 
 Evidencia histórica de la segunda iteración: [correcciones y evidencia](evidence/2026-11-12.md). Fechas parciales, procedencia, contexto de identidad y verificación de respuestas incorporados; validación v2 todavía no declarada superada.
 
@@ -38,7 +38,7 @@ Perfiles v3 evaluados: `gpt-5.4-2026-03-05` con `low` y `gpt-6.1-sol` con `mediu
 node tooling/m0.mjs m0 --live
 ```
 
-Comandos: `/contar texto`, `/preguntar texto`, `/aclarar texto`, `/olvidar ID`, `/salir`. La terminal muestra respuestas y referencias; los diagnósticos no registran contenido. Datos ficticios v3 en `local-data/m0/interactive-v3`; snapshots v1/v2 preservados y rechazados sin alterarlos.
+Comandos: `/contar texto`, `/preguntar texto`, `/aclarar texto`, `/olvidar ID`, `/salir`. La terminal muestra respuestas y referencias; los diagnósticos no registran contenido. Datos ficticios v4 en `local-data/m0/interactive-v4`; snapshots v1/v2/v3 preservados y rechazados sin alterarlos.
 
 Olvidar exige un ID explícito y retira la fuente completa y sus recuerdos/vectores. No resuelve objetivos por lenguaje natural ni elimina un solo tema de una fuente mixta: corresponde a K4. IDs repetidos se rechazan; no es el protocolo remoto de idempotencia de K2. Un bloqueo admite un solo proceso escritor, sin concurrencia distribuida.
 
@@ -48,10 +48,11 @@ Olvidar exige un ID explícito y retira la fuente completa y sus recuerdos/vecto
 node tooling/m0.mjs m0:eval --live --partition tuning
 node tooling/m0.mjs m0:eval --live --partition regression
 node tooling/m0.mjs m0:eval --live --partition regression-v2
+node tooling/m0.mjs m0:eval --live --partition regression-v3
 node tooling/m0.mjs m0:eval --live --partition validation
 ```
 
-Preparación: ocho intervenciones/16 consultas. Regresión: los 32 relatos/64 consultas originales, en una ronda. `regression-v2`: los 32 relatos/64 consultas n01–n32, usados en la segunda evaluación y después para corregir el núcleo. Ya no son reserva independiente. La nueva reserva h01–h32 es `validation`, con metadatos esperados y 64 consultas; se ejecuta tres veces con la misma configuración. No se ha usado para ajustar el modelo. Las expectativas nunca se pasan al núcleo ni al proveedor. Las consultas usan una instancia nueva y recargan de disco; reciben únicamente las fuentes seleccionadas, no todo el historial.
+Preparación: ocho intervenciones/16 consultas. Regresión: los 32 relatos/64 consultas originales, en una ronda. `regression-v2`: los 32 relatos/64 consultas n01–n32, usados en la segunda evaluación y después para corregir el núcleo. Ya no son reserva independiente. h01–h32 pasa a `regression-v3`. La nueva reserva j01–j32 es `validation`, con metadatos esperados y 64 consultas; se ejecuta tres veces con la misma configuración. No se ha usado para ajustar el modelo. Las expectativas nunca se pasan al núcleo ni al proveedor. Las consultas usan una instancia nueva y recargan de disco; reciben únicamente las fuentes seleccionadas, no todo el historial.
 
 El manifiesto fija huella de código/corpus, configuración, presupuesto, latencia objetivo, commit y cambios locales. Informes privados/checkpoints en `local-data/m0/evaluation/`. Una interrupción deja `complete: false` y no cuenta como ronda superada. Registrar todos los intentos; no ajustar con validación sin renovar los casos reservados.
 

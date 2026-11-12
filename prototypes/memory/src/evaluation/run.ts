@@ -11,7 +11,7 @@ import {
 } from "./score.ts";
 import type { Observation } from "./score.ts";
 import { MemoryEngine } from "../engine.ts";
-import { MemoryError } from "../domain.ts";
+import { MemoryError, snapshotVersion } from "../domain.ts";
 import { JsonMemoryRepository } from "../repository.ts";
 import { openRuntime, reportError } from "../runtime.ts";
 import { model, embeddingModel } from "../openai.ts";
@@ -34,6 +34,11 @@ async function fingerprint(): Promise<string> {
     "fresh-b.ts",
     "fresh-c.ts",
     "fresh-d.ts",
+    "reserve4-fixture.ts",
+    "reserve4-a.ts",
+    "reserve4-b.ts",
+    "reserve4-c.ts",
+    "reserve4-d.ts",
     "score.ts",
     "run.ts",
     "withdraw.ts",
@@ -55,6 +60,7 @@ async function fingerprint(): Promise<string> {
       "capture-format.ts",
       "evidence.ts",
       "answer-guard.ts",
+      "answer-format.ts",
       "literal.ts",
       "file-store.ts",
       "clarification.ts",
@@ -194,6 +200,7 @@ async function executeRun(
       passed,
       legacyScore: legacyExtractionScore(scenario, initial, final),
       captureReview: runtime.intelligence.lastCaptureReview,
+      captureReviewDecision: runtime.intelligence.lastCaptureReviewDecision,
     });
     await checkpoint();
     console.log(`Entrada ${scenario.turn.id}: ${passed ? "OK" : "REVISAR"}`);
@@ -250,6 +257,7 @@ async function executeRun(
         expected,
         answer: result.answer,
         guardCheck: runtime.intelligence.lastCheck,
+        selectedEvidenceIds: runtime.intelligence.lastEvidenceIds,
         score,
         candidateSources: result.candidates.map(
           ({ memory }) => memory.sourceId,
@@ -267,7 +275,7 @@ async function main(): Promise<void> {
   const args = process.argv.slice(2);
   if (!args.includes("--live")) {
     console.log(
-      `M0: usa --live --partition tuning|regression|regression-v2|validation. Validación h01–h32: tres rondas, máximo acumulado ${maximumBudgetUsd} USD.`,
+      `M0: usa --live --partition tuning|regression|regression-v2|regression-v3|validation. Validación j01–j32: tres rondas, máximo acumulado ${maximumBudgetUsd} USD.`,
     );
     return;
   }
@@ -277,6 +285,7 @@ async function main(): Promise<void> {
     partition !== "validation" &&
     partition !== "regression" &&
     partition !== "regression-v2" &&
+    partition !== "regression-v3" &&
     partition !== "regression-focus" &&
     partition !== "regression-capture"
   )
@@ -306,7 +315,12 @@ async function main(): Promise<void> {
   const manifest = {
     partition,
     acceptanceEligible: partition === "validation",
-    corpusVersion: "v3-h01-h32",
+    corpusVersion:
+      partition === "validation"
+        ? "v4-j01-j32"
+        : partition === "regression-v3"
+          ? "v3-h01-h32"
+          : partition,
     runCount,
     hash,
     model,
@@ -314,13 +328,18 @@ async function main(): Promise<void> {
     embeddingModel,
     rates,
     candidateLimit: 6,
-    protocol: "m0-v3",
+    protocol: "m0-v4",
     reasoning: modelProfile.reasoning,
     verificationReasoning: modelProfile.reasoning,
     verificationMaxOutputTokens: 2400,
-    captureReview: { reasoning: modelProfile.reasoning, maxOutputTokens: 4000 },
+    captureReview: {
+      reasoning: modelProfile.reasoning,
+      maxOutputTokens: 4000,
+      requiredForSavedCapture: true,
+      nonPersistingOutcomes: "empty_state_validation",
+    },
     extractionMaxOutputTokens: 4000,
-    snapshotVersion: 3,
+    snapshotVersion,
     checkpointEveryOperations: 8,
     budgetUsd: maximumBudgetUsd,
     latencyTargetP95Ms: 15_000,

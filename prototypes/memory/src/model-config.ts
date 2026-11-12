@@ -24,8 +24,7 @@ const profiles = new Map([
   ],
 ]);
 const position = process.argv.indexOf("--model");
-const requested =
-  position < 0 ? "gpt-5.4-2026-03-05" : process.argv[position + 1];
+const requested = position < 0 ? "gpt-6.1-sol" : process.argv[position + 1];
 const selected = profiles.get(requested ?? "");
 if (!selected) throw new MemoryError("MODEL_PROFILE_INVALID");
 export const modelProfile = Object.freeze(selected);

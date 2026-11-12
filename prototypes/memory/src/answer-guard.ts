@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { Answer, Candidate, Source } from "./domain.ts";
+import type { Answer, Candidate } from "./domain.ts";
 import { MemoryError } from "./domain.ts";
 
 export const proposalSchema = z.strictObject({
@@ -20,21 +20,32 @@ export const verificationSchema = z.strictObject({
   ]),
 });
 export type Proposal = z.infer<typeof proposalSchema>;
-export const providerProposalSchema = proposalSchema.omit({ memoryIds: true });
+export const answerScopes = ["memory", "quotation", "mixed"] as const;
+export type AnswerScope = (typeof answerScopes)[number];
+export const scopedVerificationSchema = verificationSchema.extend({
+  scope: z.enum(answerScopes),
+});
+export const providerProposalSchema = proposalSchema
+  .omit({ memoryIds: true, sourceIds: true })
+  .extend({
+    scope: z.enum(answerScopes),
+    evidenceIds: z.array(z.string().max(100)).max(8),
+  });
 
-/** Source IDs are the citation boundary; the server derives their selected fragments. */
+/** The model selects current evidence once; application code derives its source citations. */
 export function attachSelectedMemories(
   proposal: z.infer<typeof providerProposalSchema>,
   candidates: Candidate[],
 ): Proposal {
-  const allowed = new Set(candidates.map(({ memory }) => memory.sourceId));
-  if (proposal.sourceIds.some((id) => !allowed.has(id)))
-    throw new MemoryError("ANSWER_CITATION_INVALID");
+  const allowed = new Map(candidates.map(({ memory }) => [memory.id, memory]));
+  if (proposal.evidenceIds.some((id) => !allowed.has(id)))
+    throw new MemoryError("ANSWER_MEMORY_INVALID");
+  const memoryIds = [...new Set(proposal.evidenceIds)];
   return {
-    ...proposal,
-    memoryIds: candidates
-      .filter(({ memory }) => proposal.sourceIds.includes(memory.sourceId))
-      .map(({ memory }) => memory.id),
+    status: proposal.status,
+    answer: proposal.answer,
+    sourceIds: [...new Set(memoryIds.map((id) => allowed.get(id)!.sourceId))],
+    memoryIds,
   };
 }
 
@@ -102,52 +113,4 @@ export function unsupportedAnswer(problem: string): Answer {
     answer: "No tengo evidencia suficiente para responder con ese dato.",
     sourceIds: [],
   };
-}
-
-/** Quoted content has no authority to establish the owner's personal facts. */
-export function constrainAnswer(
-  proposal: Proposal,
-  candidates: Candidate[],
-  sources: Source[],
-  question: string,
-): Answer | null {
-  const selected = candidates
-    .filter(({ memory }) => proposal.memoryIds.includes(memory.id))
-    .map(({ memory }) => memory);
-  if (proposal.status !== "answered") return null;
-  const words = question
-    .normalize("NFD")
-    .replace(/\p{Diacritic}/gu, "")
-    .toLowerCase();
-  const asksQuote =
-    /\b(texto|cartel|nota|foro|anuncio|lei|leido|decia|citaba|ponia|citado|documento)\b/u.test(
-      words,
-    );
-  if (selected.some((memory) => memory.provenance === "quoted")) {
-    if (!asksQuote) return unsupportedAnswer("quoted_as_personal");
-    if (selected.every((memory) => memory.provenance === "quoted")) {
-      const quotes = [...new Set(selected.map((memory) => memory.quote))]
-        .slice(0, 2)
-        .join(" / ")
-        .slice(0, 2000);
-      return {
-        status: "answered",
-        answer: `El texto citado decía: «${quotes}». Es contenido citado, no un dato personal confirmado.`,
-        sourceIds: [...new Set(selected.map((memory) => memory.sourceId))],
-      };
-    }
-  }
-  if (/favorit|preferid|prefier|mas te gusta|mas me gusta/u.test(words)) {
-    const cited = sources.filter((source) =>
-      proposal.sourceIds.includes(source.id),
-    );
-    if (
-      !cited.some((source) =>
-        /favorit|preferid|prefier|preferi|preferí/iu.test(source.text),
-      )
-    ) {
-      return unsupportedAnswer("unsupported_claim");
-    }
-  }
-  return null;
 }

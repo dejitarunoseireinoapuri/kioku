@@ -3,6 +3,7 @@ import {
   extractionSchema,
   sourceSchema,
   MemoryError,
+  snapshotVersion,
 } from "./domain.ts";
 import type {
   Answer,
@@ -13,7 +14,7 @@ import type {
   Turn,
 } from "./domain.ts";
 import { retrieve } from "./search.ts";
-import { validateTime, canonicalTime } from "./temporal.ts";
+import { validateTime, canonicalTime, unknownTime } from "./temporal.ts";
 import { selectEvidence } from "./evidence.ts";
 import { literalQuote } from "./literal.ts";
 import { requiredClarification } from "./clarification.ts";
@@ -91,13 +92,20 @@ export class MemoryEngine {
       ...parsed,
       items: parsed.items.map((item) => {
         const quote = literalQuote(item.quote, sourceText);
-        const time = canonicalTime(item.time, quote, sourceText, {
-          receivedAt: turn.receivedAt,
-          zone: turn.zone,
-          clarification,
-        });
+        const time =
+          item.provenance === "quoted"
+            ? unknownTime
+            : canonicalTime(item.time, quote, sourceText, {
+                receivedAt: turn.receivedAt,
+                zone: turn.zone,
+                clarification,
+              });
         return {
           ...item,
+          eventStatus:
+            item.provenance === "quoted"
+              ? ("unspecified" as const)
+              : item.eventStatus,
           quote,
           time,
           text:
@@ -175,7 +183,7 @@ export class MemoryEngine {
     if (!snapshot.sources.some((source) => source.id === sourceId))
       throw new MemoryError("SOURCE_NOT_FOUND");
     await this.repository.save({
-      version: 3,
+      version: snapshotVersion,
       sources: snapshot.sources.filter((source) => source.id !== sourceId),
       memories: snapshot.memories.filter(
         (memory) => memory.sourceId !== sourceId,

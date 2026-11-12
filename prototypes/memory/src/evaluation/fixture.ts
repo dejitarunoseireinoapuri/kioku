@@ -26,7 +26,12 @@ export type QuerySpec = {
 };
 export type Scenario = {
   turn: Turn;
-  partition: "tuning" | "regression" | "regression-v2" | "validation";
+  partition:
+    | "tuning"
+    | "regression"
+    | "regression-v2"
+    | "regression-v3"
+    | "validation";
   category: string;
   status: "saved" | "needs_clarification" | "ignored";
   clarification: string | null;

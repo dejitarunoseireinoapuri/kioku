@@ -117,11 +117,13 @@ test("outbound provider uses fixed TLS endpoint, refuses redirects and disables 
                         supported: true,
                         problem: "none",
                         status: "not_found",
+                        scope: "memory",
                       }
                     : {
                         status: "not_found",
                         answer: "No consta.",
-                        sourceIds: [],
+                        evidenceIds: [],
+                        scope: "memory",
                       },
                 ),
               },
@@ -194,11 +196,13 @@ test("verification repairs only the state of a faithful abstention and preserves
               supported: true,
               problem: "none",
               status: "not_found",
+              scope: "memory",
             }
           : {
               status: "answered",
               answer: "No consta que llamaras; solo querías llamar a Nora.",
-              sourceIds: ["plan"],
+              evidenceIds: ["plan-1"],
+              scope: "memory",
             };
       return Response.json({
         status: "completed",
@@ -235,3 +239,107 @@ test("verification repairs only the state of a faithful abstention and preserves
     await f.close();
   }
 });
+
+for (const quoted of [false, true])
+  test(
+    quoted
+      ? "legitimate quote questions use semantic verification and return the exact literal"
+      : "a liking cannot become a favorite when the verifier rejects that unsupported comparison",
+    async () => {
+      const f = await fixture(0.5);
+      let calls = 0;
+      try {
+        const text = quoted
+          ? "En un prospecto leí: responde 887766."
+          : "Me gusta el ramen.";
+        const candidates: Candidate[] = [
+          {
+            score: 1,
+            memory: {
+              id: "x-1",
+              sourceId: "x",
+              revision: 1,
+              receivedAt: "2026-11-12T10:00:00Z",
+              zone: "Europe/Madrid",
+              text,
+              quote: text,
+              kind: "fact",
+              provenance: quoted ? "quoted" : "personal",
+              attribution: quoted ? "prospecto" : null,
+              attributionEvidence: quoted ? text : null,
+              eventStatus: "unspecified",
+              lifecycle: "current",
+              time: unknownTime,
+              entities: [],
+              vector: [1],
+            },
+          },
+        ];
+        const transport: typeof fetch = async (_url, options) => {
+          calls++;
+          const b = JSON.parse(String(options?.body));
+          const verification = b.text.format.name === "memory_verification";
+          if (verification) {
+            const data = JSON.parse(b.input);
+            assert.deepEqual(data.selectedEvidenceIds, ["x-1"]);
+            assert.equal(data.sources[0].text, text);
+          }
+          const payload = verification
+            ? {
+                supported: quoted,
+                status: quoted ? "answered" : "not_found",
+                scope: quoted ? "quotation" : "memory",
+                problem: quoted ? "none" : "unsupported_claim",
+              }
+            : {
+                status: "answered",
+                answer: quoted
+                  ? "El prospecto decía 887766."
+                  : "Tu comida favorita es el ramen.",
+                scope: quoted ? "quotation" : "memory",
+                evidenceIds: ["x-1"],
+              };
+          return Response.json({
+            status: "completed",
+            output: [
+              {
+                type: "message",
+                content: [
+                  { type: "output_text", text: JSON.stringify(payload) },
+                ],
+              },
+            ],
+            usage: { input_tokens: 20, output_tokens: 20 },
+          });
+        };
+        const p = new OpenAiMemory(
+          "sk-synthetic-test-only",
+          f.budget,
+          transport,
+        );
+        const answer = await p.answer(
+          quoted
+            ? "¿Qué mandaba responder el prospecto que cité?"
+            : "¿Cuál es mi plato favorito?",
+          "2026-11-12T12:00:00Z",
+          candidates,
+          [
+            {
+              id: "x",
+              text,
+              receivedAt: "2026-11-12T10:00:00Z",
+              zone: "Europe/Madrid",
+            },
+          ],
+        );
+        assert.equal(calls, 2);
+        assert.equal(answer.status, quoted ? "answered" : "not_found");
+        if (quoted) {
+          assert.match(answer.answer, /contenido citado/u);
+          assert.match(answer.answer, /887766/u);
+        } else assert.doesNotMatch(answer.answer, /favorita es/u);
+      } finally {
+        await f.close();
+      }
+    },
+  );

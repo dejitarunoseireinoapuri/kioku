@@ -60,13 +60,18 @@ export function captureFormat(text: string, clarification: string | null) {
           const { evidenceId: timeId, ...date } = time;
           return {
             ...item,
+            eventStatus:
+              item.provenance === "quoted" ? "unspecified" : item.eventStatus,
             text:
               item.provenance === "quoted"
                 ? `Texto citado${item.attribution ? ` (${item.attribution})` : ""}: «${literal(evidenceId)}»`
                 : item.text,
             quote: literal(evidenceId),
             attributionEvidence: literal(attributionEvidenceId),
-            time: { ...date, quote: literal(timeId) },
+            time:
+              item.provenance === "quoted"
+                ? { precision: "unknown", value: null, end: null, quote: null }
+                : { ...date, quote: literal(timeId) },
           };
         },
       ),

@@ -203,7 +203,7 @@ test("storage rejects traversal, corrupt snapshots and unknown fields", async ()
   try {
     await writeFile(
       f.repository.file,
-      '{"version":3,"sources":[],"memories":[],"secret":"synthetic"}',
+      '{"version":4,"sources":[],"memories":[],"secret":"synthetic"}',
     );
     await assert.rejects(f.repository.load(), /STORE_READ_FAILED/);
   } finally {
@@ -260,10 +260,10 @@ test("API credentials cannot be sent to the memory model or persisted as a sourc
   }
 });
 
-test("version-one and version-two snapshots are preserved and rejected instead of silently reinterpreted", async () => {
+test("version-one, version-two and version-three snapshots are preserved and rejected instead of silently reinterpreted", async () => {
   const f = await fixture();
   try {
-    for (const version of [1, 2]) {
+    for (const version of [1, 2, 3]) {
       const original = JSON.stringify({ version, sources: [], memories: [] });
       await writeFile(f.repository.file, original);
       await assert.rejects(f.repository.load(), /STORE_VERSION_UNSUPPORTED/);
@@ -331,6 +331,50 @@ test("a generated wrong date cannot survive in normalized text after canonical c
     assert.equal(memory.time.value, "2026-11-16");
     assert.equal(memory.text, literal);
     assert.doesNotMatch(memory.text, /17 de noviembre/u);
+  } finally {
+    await f.close();
+  }
+});
+
+test("current snapshots reject quoted completion/date states and preserve the original invalid file", async () => {
+  const f = await fixture();
+  try {
+    const initial = await f.repository.load();
+    const memory = {
+      ...saved.items[0]!,
+      id: "q-1",
+      sourceId: "q",
+      revision: 1,
+      receivedAt: turn.receivedAt,
+      zone: turn.zone,
+      vector: [1],
+      provenance: "quoted" as const,
+      attribution: "manual",
+      attributionEvidence: "manual",
+      eventStatus: "completed" as const,
+    };
+    const invalid = {
+      ...initial,
+      sources: [{ ...turn, id: "q" }],
+      memories: [memory],
+    };
+    await assert.rejects(
+      f.repository.save(invalid),
+      /STORE_QUOTED_EVENT_INVALID/,
+    );
+    const text = JSON.stringify(invalid);
+    await writeFile(f.repository.file, text);
+    await assert.rejects(f.repository.load(), /STORE_READ_FAILED/);
+    assert.equal(await readFile(f.repository.file, "utf8"), text);
+    const valid = {
+      ...invalid,
+      memories: [{ ...memory, eventStatus: "unspecified" as const }],
+    };
+    await f.repository.save(valid);
+    assert.equal(
+      (await f.repository.load()).memories[0]!.eventStatus,
+      "unspecified",
+    );
   } finally {
     await f.close();
   }

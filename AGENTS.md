@@ -57,6 +57,7 @@ Documentation-only changes use the actual documentation checker and semantic rev
 - Use scoped local validation and Conventional Commits; follow the documented empty-repository bootstrap exception.
 - No GitHub Actions, deployments, paid provisioning or store publication by default. Obtain action-specific authorization where required; do not re-ask for already-authorized reversible work.
 - Do not introduce a model-selection approval gate for every task. The prompting guide applies when asked to prepare a separate Codex prompt.
+- Standing owner choice: GPT-6.1 Sol with medium reasoning for Kioku and project coding work when selectable. The API defaults to that profile. Preserve explicitly pinned historical benchmarks; do not silently switch models or reasoning effort.
 - Before implementation requiring API access, follow the active secure credential workflow. Documentation and static design do not require creating a key.
 
 Ask when an unresolved product decision actually blocks the requested behavior; continue independent authorized work and mark non-blocking decisions explicitly. Do not silently invent behavior. Final responses and progress updates are in Spanish and state the changed behavior, validation, limitations and documentation actually consulted.

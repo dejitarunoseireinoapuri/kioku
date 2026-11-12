@@ -1,9 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { constrainAnswer } from "../src/answer-guard.ts";
+import { answerFormat, constrainScope } from "../src/answer-format.ts";
 import type { Candidate } from "../src/domain.ts";
 import { unknownTime } from "../src/temporal.ts";
-
 const candidates: Candidate[] = [
   {
     score: 1,
@@ -13,12 +12,12 @@ const candidates: Candidate[] = [
       revision: 1,
       receivedAt: "2026-11-12T10:00:00Z",
       zone: "Europe/Madrid",
-      text: "Un texto decía responder 887766.",
-      quote: "responder 887766",
+      text: "Texto citado: responde 887766.",
+      quote: "responde 887766",
       kind: "fact",
       provenance: "quoted",
-      attribution: "foro",
-      attributionEvidence: "foro",
+      attribution: "folleto",
+      attributionEvidence: "folleto",
       eventStatus: "unspecified",
       lifecycle: "current",
       entities: [],
@@ -33,55 +32,96 @@ const proposal = {
   sourceIds: ["note"],
   memoryIds: ["note-1"],
 };
-
-test("a number in a quoted instruction may be quoted but cannot establish a personal code", () => {
+test("quoted instructions cannot establish personal facts even when generation and verification agree on memory scope", () => {
   assert.equal(
-    constrainAnswer(proposal, candidates, [], "¿Cuál es mi código postal?")
-      ?.status,
+    constrainScope(proposal, candidates, "memory", "memory")?.status,
     "not_found",
   );
-  const quoted = constrainAnswer(
-    proposal,
-    candidates,
-    [],
-    "¿Qué decía el texto?",
+  assert.equal(
+    constrainScope(proposal, candidates, "quotation", "memory")?.status,
+    "not_found",
   );
-  assert.equal(quoted?.status, "answered");
-  assert.match(quoted!.answer, /contenido citado/u);
 });
-
-test("liking a dish cannot establish that it is the favorite without explicit evidence", () => {
-  const memories: Candidate[] = candidates.map((entry) => ({
-    ...entry,
-    memory: {
-      ...entry.memory,
-      provenance: "personal",
-      text: "Me encantó el ramen.",
-      quote: "Me encantó el ramen.",
+test("verified quotation scope materializes literal evidence without a vocabulary-dependent question filter", () => {
+  const result = constrainScope(proposal, candidates, "quotation", "quotation");
+  assert.equal(result?.status, "answered");
+  assert.match(result!.answer, /contenido citado/u);
+  assert.match(result!.answer, /responde 887766/u);
+});
+test("evidence is selected once and sources are derived; another fragment of the same source is not attached automatically", () => {
+  const both: Candidate[] = [
+    ...candidates,
+    {
+      ...candidates[0]!,
+      memory: {
+        ...candidates[0]!.memory,
+        id: "note-2",
+        provenance: "personal",
+        attribution: null,
+        attributionEvidence: null,
+        text: "Mi bebida favorita es el té.",
+        quote: "Mi bebida favorita es el té.",
+      },
     },
-  }));
-  const source = {
-    id: "note",
-    text: "Me encantó el ramen.",
-    receivedAt: "2026-11-12T10:00:00Z",
-    zone: "Europe/Madrid",
-  };
+  ];
+  const f = answerFormat(both);
+  const selected = f.materialize({
+    status: "answered",
+    answer: "El té.",
+    scope: "memory",
+    evidenceIds: ["note-2"],
+  });
+  assert.deepEqual(selected.proposal.memoryIds, ["note-2"]);
+  assert.deepEqual(selected.proposal.sourceIds, ["note"]);
   assert.equal(
-    constrainAnswer(
-      proposal,
-      memories,
-      [source],
-      "¿Cuál es mi comida favorita?",
-    )?.status,
+    constrainScope(selected.proposal, both, "memory", "memory"),
+    null,
+  );
+  assert.throws(() =>
+    f.materialize({
+      status: "answered",
+      answer: "Dato",
+      scope: "memory",
+      evidenceIds: ["foreign"],
+    }),
+  );
+  assert.throws(() =>
+    f.materialize({
+      status: "answered",
+      answer: "Dato",
+      scope: "memory",
+      evidenceIds: ["note-2"],
+      sourceIds: ["foreign"],
+    }),
+  );
+});
+test("mixed scope needs both kinds of current evidence and independent verifier agreement", () => {
+  assert.equal(
+    constrainScope(proposal, candidates, "mixed", "mixed")?.status,
     "not_found",
   );
+  const both: Candidate[] = [
+    ...candidates,
+    {
+      ...candidates[0]!,
+      memory: {
+        ...candidates[0]!.memory,
+        id: "fact-1",
+        sourceId: "fact",
+        provenance: "personal",
+        attribution: null,
+        attributionEvidence: null,
+      },
+    },
+  ];
+  const p = {
+    ...proposal,
+    memoryIds: ["note-1", "fact-1"],
+    sourceIds: ["note", "fact"],
+  };
+  assert.equal(constrainScope(p, both, "mixed", "mixed"), null);
   assert.equal(
-    constrainAnswer(
-      proposal,
-      memories,
-      [{ ...source, text: "El ramen es mi comida favorita." }],
-      "¿Cuál es mi comida favorita?",
-    ),
-    null,
+    constrainScope(p, both, "mixed", "quotation")?.status,
+    "not_found",
   );
 });

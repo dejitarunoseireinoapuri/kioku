@@ -36,3 +36,10 @@ Cada atribución identificada incluye `attributionEvidence`, un fragmento litera
 `eventStatus` distingue `unspecified`, `planned`, `completed` y `not_completed`, separado de `kind` y `lifecycle`. El hecho de que haya una cita/examen agendados no prueba su celebración. El estado de no realizado requiere una negación explícita, no ausencia de evidencia.
 
 Los snapshots sintéticos actuales son versión 3, en una carpeta interactiva nueva. Las versiones 1/2 permanecen intactas y se rechazan antes de reinterpretarse; todavía no se necesita ni se ejecuta una migración de datos personales.
+
+
+## Contrato de citas M0 v4
+
+Un recuerdo quoted describe contenido textual, nunca la ejecución de una orden ni la veracidad de lo que afirma. El código materializa su literal con eventStatus unspecified y time unknown (valor, final y evidencia temporal nulos). Si se conserva una lectura realizada en una fecha, ese es otro hecho personal y mantiene su propia evidencia. No se proyecta la fecha mencionada por un texto citado como fecha de un evento real.
+
+Snapshot 4 y carpeta interactiva nueva; se rechazan y preservan versiones 1/2/3 sin migración de datos personales. El repositorio valida estas invariantes al cargar y guardar. Las respuestas seleccionan evidenceIds de candidatos vigentes permitidos; el servidor deriva sourceIds, sin adjuntar automáticamente todos los recuerdos de la fuente. El alcance memory/quotation/mixed es metadato efímero de generación/verificación, no un nuevo modo de usuario ni un dato de la memoria.

@@ -113,7 +113,8 @@ test("citation fragments are derived from authorized sources and never from fore
     {
       status: "answered",
       answer: "El texto decía 887766.",
-      sourceIds: ["note"],
+      evidenceIds: ["note-1"],
+      scope: "quotation",
     },
     candidates,
   );
@@ -121,9 +122,14 @@ test("citation fragments are derived from authorized sources and never from fore
   assert.throws(
     () =>
       attachSelectedMemories(
-        { status: "answered", answer: "Otro dato", sourceIds: ["foreign"] },
+        {
+          status: "answered",
+          answer: "Otro dato",
+          evidenceIds: ["foreign"],
+          scope: "memory",
+        },
         candidates,
       ),
-    /ANSWER_CITATION_INVALID/,
+    /ANSWER_MEMORY_INVALID/,
   );
 });
