@@ -7,7 +7,7 @@ Este documento define el alcance y el cierre de las fases. Los [requisitos](../0
 | Fase | Resultado visible | Estado |
 | --- | --- | --- |
 | D0 · Base documental | Producto, arquitectura y normas definidos | Entregada en `40737a2` |
-| M0 · Prueba temprana de memoria | Evidencia de que interpretar, guardar y recuperar funciona antes de construir la app | En curso; segunda iteración implementada, aceptación pendiente |
+| M0 · Prueba temprana de memoria | Evidencia de que interpretar, guardar y recuperar funciona antes de construir la app | En curso; tercera iteración y nueva reserva preparadas, aceptación pendiente |
 | K0 · Base técnica | App navegable con estética B y datos ficticios | Pendiente |
 | K1 · Cuenta y configuración | Acceso privado y configuración segura de la clave propia | Pendiente |
 | K2 · Contar por escrito | Separar asuntos, aclarar dudas y guardar automáticamente | Pendiente |
@@ -163,3 +163,5 @@ Segunda iteración: [evidencia del 12 de noviembre de 2026](../../prototypes/mem
 | F2 · Distribución | Si decide compartir o publicar | Firma, acceso, privacidad, licencia y requisitos de distribución/tiendas |
 
 Estas opciones no comprometen fechas ni autorizan conexiones, escrituras externas o publicación.
+
+Actualización M0 v3: [configuración y protocolo](../../prototypes/memory/evidence/2026-11-12-v3.md), 60 pruebas locales y reserva nueva h01–h32 con facetas de metadatos. El cierre conserva tres rondas completas y revisión independiente por caso, con métricas semánticas separadas del diagnóstico automático. K0 continúa pendiente.

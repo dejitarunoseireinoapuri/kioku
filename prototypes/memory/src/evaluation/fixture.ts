@@ -1,10 +1,17 @@
-import type { Turn } from "../domain.ts";
+import type { Turn, Item, MemoryTime } from "../domain.ts";
 
 // Entirely synthetic. Expectations stay in the evaluator and never enter model prompts.
 export type ExpectedItem = {
   terms: string[];
   kind: "fact" | "intention" | "opinion" | "thought";
   date: string | null;
+  facets?: {
+    kinds: Item["kind"][];
+    provenance: Item["provenance"];
+    attribution: string | null | string[];
+    eventStatuses: Item["eventStatus"][];
+    time: MemoryTime;
+  };
 };
 export type QuerySpec = {
   question: string;
@@ -19,7 +26,7 @@ export type QuerySpec = {
 };
 export type Scenario = {
   turn: Turn;
-  partition: "tuning" | "regression" | "validation";
+  partition: "tuning" | "regression" | "regression-v2" | "validation";
   category: string;
   status: "saved" | "needs_clarification" | "ignored";
   clarification: string | null;

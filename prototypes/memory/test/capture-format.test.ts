@@ -11,7 +11,7 @@ test("source references preserve original text, decimal prices and clarification
     assert.ok(
       (part.channel === "original" ? text : clarification).includes(part.text),
     );
-  const result = format.materialize({
+  const input = format.schema.parse({
     status: "saved",
     clarification: null,
     items: [
@@ -34,13 +34,13 @@ test("source references preserve original text, decimal prices and clarification
       },
     ],
   });
+  const result = format.materialize(input);
   assert.equal(result.items[0]?.quote, "Ella me prestó un libro.");
   assert.equal(result.items[0]?.text, "Yuri, mi prima, me prestó un libro.");
   assert.equal(
     format.schema.safeParse({
-      status: "saved",
-      clarification: null,
-      items: [{ ...result.items[0], evidenceId: "foreign" }],
+      ...input,
+      items: input.items.map((item) => ({ ...item, evidenceId: "foreign" })),
     }).success,
     false,
   );

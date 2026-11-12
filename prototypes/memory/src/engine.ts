@@ -112,7 +112,9 @@ export class MemoryEngine {
     this.validateExtraction(extracted, sourceText, turn);
     if (extracted.status !== "saved") return extracted;
     const vectors = await this.intelligence.embed(
-      extracted.items.map((item) => item.text),
+      extracted.items.map(
+        (item) => `${item.text}\n${item.quote}\n${item.entities.join(" ")}`,
+      ),
     );
     if (vectors.length !== extracted.items.length)
       throw new MemoryError("EMBEDDING_COUNT");

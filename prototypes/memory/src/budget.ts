@@ -13,7 +13,7 @@ const ledgerSchema = z.strictObject({
 export type Ledger = z.infer<typeof ledgerSchema>;
 
 // GPT-5.4 public standard-processing tariffs verified 2026-11-12; prior ledger costs are preserved.
-export const maximumBudgetUsd = 5;
+export const maximumBudgetUsd = 8;
 export const rates = {
   input: 2.5 / 1e6,
   output: 15 / 1e6,

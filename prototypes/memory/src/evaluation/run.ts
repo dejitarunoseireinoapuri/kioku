@@ -11,6 +11,7 @@ import {
 } from "./score.ts";
 import type { Observation } from "./score.ts";
 import { MemoryEngine } from "../engine.ts";
+import { MemoryError } from "../domain.ts";
 import { JsonMemoryRepository } from "../repository.ts";
 import { openRuntime, reportError } from "../runtime.ts";
 import { model, embeddingModel } from "../openai.ts";
@@ -27,6 +28,11 @@ async function fingerprint(): Promise<string> {
     "validation-b.ts",
     "reserved-a.ts",
     "reserved-b.ts",
+    "fresh-fixture.ts",
+    "fresh-a.ts",
+    "fresh-b.ts",
+    "fresh-c.ts",
+    "fresh-d.ts",
     "score.ts",
     "run.ts",
     "withdraw.ts",
@@ -64,10 +70,21 @@ async function executeRun(
   runtime: Awaited<ReturnType<typeof openRuntime>>,
 ) {
   await mkdir(directory, { recursive: true });
-  const selected = corpus.filter(
-    (scenario) =>
-      scenario.partition ===
-      (partition === "regression-v2" ? "validation" : partition),
+  const focusedIds = new Set([
+    "n01",
+    "n06",
+    "n10",
+    "n12",
+    "n21",
+    "n22",
+    "n25",
+    "n26",
+    "n31",
+  ]);
+  const selected = corpus.filter((scenario) =>
+    partition === "regression-focus"
+      ? focusedIds.has(scenario.turn.id)
+      : scenario.partition === partition,
   );
   const repository = new JsonMemoryRepository(directory);
   const engine = new MemoryEngine(repository, runtime.intelligence);
@@ -214,7 +231,7 @@ async function main(): Promise<void> {
   const args = process.argv.slice(2);
   if (!args.includes("--live")) {
     console.log(
-      `M0: usa --live --partition tuning|regression|regression-v2. Validación pendiente de reserva nueva; máximo acumulado ${maximumBudgetUsd} USD.`,
+      `M0: usa --live --partition tuning|regression|regression-v2|validation. Validación h01–h32: tres rondas, máximo acumulado ${maximumBudgetUsd} USD.`,
     );
     return;
   }
@@ -223,23 +240,23 @@ async function main(): Promise<void> {
     partition !== "tuning" &&
     partition !== "validation" &&
     partition !== "regression" &&
-    partition !== "regression-v2"
+    partition !== "regression-v2" &&
+    partition !== "regression-focus"
   )
     throw new Error("Partition required");
   const runCount = partition === "validation" ? 3 : 1;
-  if (partition === "validation") {
-    console.error(
-      "VALIDATION_CORPUS_RENEWAL_REQUIRED: los casos n01–n32 ya se usaron para corregir el núcleo; ejecuta regression-v2.",
-    );
-    process.exitCode = 1;
-    return;
-  }
+  const dirty =
+    execFileSync("git", ["status", "--porcelain"], { encoding: "utf8" }).trim()
+      .length > 0;
+  if (partition === "validation" && dirty)
+    throw new MemoryError("EVALUATION_REQUIRES_CLEAN_TREE");
   const hash = await fingerprint();
   const directory = `local-data/m0/evaluation/${Date.now()}-${randomUUID().slice(0, 8)}`;
   await mkdir(directory, { recursive: true });
   const manifest = {
     partition,
-    acceptanceEligible: false,
+    acceptanceEligible: partition === "validation",
+    corpusVersion: "v3-h01-h32",
     runCount,
     hash,
     model,
@@ -262,10 +279,7 @@ async function main(): Promise<void> {
     commit: execFileSync("git", ["rev-parse", "HEAD"], {
       encoding: "utf8",
     }).trim(),
-    dirty:
-      execFileSync("git", ["status", "--porcelain"], {
-        encoding: "utf8",
-      }).trim().length > 0,
+    dirty,
   };
   await atomicWrite(
     `${directory}/manifest.json`,

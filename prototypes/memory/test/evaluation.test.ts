@@ -235,6 +235,18 @@ test("new reserved corpus is disjoint from the promoted regression corpus", () =
       (entry) => !old.some((prior) => prior.turn.text === entry.turn.text),
     ),
   );
+  const v2 = corpus.filter((entry) => entry.partition === "regression-v2");
+  assert.equal(v2.length, 32);
+  assert.ok(
+    reserved.every(
+      (entry) => !v2.some((prior) => prior.turn.text === entry.turn.text),
+    ),
+  );
+  assert.ok(
+    reserved.every((entry) =>
+      entry.items.every((item) => item.facets !== undefined),
+    ),
+  );
 });
 
 test("domain rejection is recorded while authentication, network and budget failures stop evaluation", async () => {

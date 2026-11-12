@@ -10,10 +10,18 @@ export function validateAttribution(item: Item, source: string): void {
   if (item.attributionEvidence !== null) {
     if (!source.includes(item.attributionEvidence))
       throw new MemoryError("EXTRACTION_ATTRIBUTION_QUOTE_INVALID");
-    if (
-      !item.attributionEvidence
+    const tokens = (value: string) =>
+      value
         .toLocaleLowerCase("es")
-        .includes(item.attribution!.toLocaleLowerCase("es"))
+        .match(/[\p{L}\p{N}]+/gu)
+        ?.join(" ") ?? "";
+    const identity = tokens(item.attribution!).replace(
+      /^(?:el|la|los|las|un|una|unos|unas) /u,
+      "",
+    );
+    if (
+      !identity ||
+      !` ${tokens(item.attributionEvidence)} `.includes(` ${identity} `)
     )
       throw new MemoryError("EXTRACTION_ATTRIBUTION_NOT_IN_EVIDENCE");
   }

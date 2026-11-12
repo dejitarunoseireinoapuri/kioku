@@ -45,6 +45,26 @@ export function scoreExtraction(
   );
   const together = coverage.join(" ");
   return scenario.items.every((expected) => {
+    if (expected.facets) {
+      const facets = expected.facets;
+      return final.items.some((actual) => {
+        const text = normalize(
+          `${actual.text} ${actual.entities.join(" ")} ${actual.provenance === "quoted" ? actual.quote : ""}`,
+        );
+        return (
+          expected.terms.every((term) => text.includes(normalize(term))) &&
+          facets.kinds.includes(actual.kind) &&
+          actual.provenance === facets.provenance &&
+          (Array.isArray(facets.attribution)
+            ? facets.attribution.includes(actual.attribution ?? "")
+            : actual.attribution === facets.attribution) &&
+          facets.eventStatuses.includes(actual.eventStatus) &&
+          actual.time.precision === facets.time.precision &&
+          actual.time.value === facets.time.value &&
+          actual.time.end === facets.time.end
+        );
+      });
+    }
     const terms = expected.terms.map(normalize);
     if (!terms.every((term) => together.includes(term))) return false;
     if (

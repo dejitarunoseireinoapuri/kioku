@@ -49,3 +49,27 @@ test("a reported attribution needs its literal source evidence and cannot become
     item.quote,
   );
 });
+
+test("article variation preserves an identified document while a substring cannot fabricate a person", () => {
+  validateAttribution(
+    {
+      ...item,
+      provenance: "quoted",
+      attribution: "el folleto",
+      attributionEvidence: "Leí un folleto.",
+    },
+    "Leí un folleto.",
+  );
+  assert.throws(
+    () =>
+      validateAttribution(
+        {
+          ...item,
+          attribution: "Ren",
+          attributionEvidence: "Se renovó la puerta.",
+        },
+        "Se renovó la puerta.",
+      ),
+    /NOT_IN_EVIDENCE/,
+  );
+});
