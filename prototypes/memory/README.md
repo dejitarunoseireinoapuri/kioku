@@ -4,6 +4,8 @@ Herramienta local por texto para comprobar interpretación, persistencia, recupe
 
 Primera evaluación ejecutada: [informe y decisión](evidence/2026-11-11.md). **M0 no está validada**: hay errores semánticos confirmados y la puntuación automática tiene limitaciones. K0 no ha empezado.
 
+Comparación v3 completada: [5.4 low frente a Sol medium](evidence/2026-11-12-v3.md), con tres rondas desde cero por configuración y revisión de todas las salidas. Se recomienda Sol; M0 sigue abierta por los fallos documentados. 62 pruebas locales superadas. El perfil por defecto permanece en 5.4 hasta la decisión del propietario.
+
 Evidencia histórica de la segunda iteración: [correcciones y evidencia](evidence/2026-11-12.md). Fechas parciales, procedencia, contexto de identidad y verificación de respuestas incorporados; validación v2 todavía no declarada superada.
 
 ## Preparar y comprobar
@@ -26,7 +28,7 @@ Configurar mediante el flujo seguro de OpenAI Platform y el destino local confir
 
 Las llamadas reales exigen `--live`. Endpoint TLS fijo de OpenAI, sin herramientas, redirecciones ni reintentos automáticos, con `store: false` en Responses. No equivale a garantizar retención cero en el proveedor.
 
-Configuración v3 en evaluación: `gpt-5.4-2026-03-05`, razonamiento `low` para extracción/respuesta y también `low` para verificar; hasta 4000 tokens por extracción/revisión de captura, 2400 por respuesta y 2400 por verificación. Embeddings `text-embedding-3-small` de 512 dimensiones; seis candidatos, ranking 85 % semántico/15 % palabras. Hasta 8000 caracteres por relato, 2000 por consulta/aclaración y ocho recuerdos por intervención. Fuentes seleccionadas: hasta 16000 caracteres, entrada de modelo acotada a 48000. Timeout: 45 segundos por llamada; objetivo p95: 15 segundos por operación, separado de corrección.
+Perfiles v3 evaluados: `gpt-5.4-2026-03-05` con `low` y `gpt-6.1-sol` con `medium` en extracción, revisión, respuesta y verificación; hasta 4000 tokens por extracción/revisión de captura, 2400 por respuesta y 2400 por verificación. Embeddings `text-embedding-3-small` de 512 dimensiones; seis candidatos, ranking 85 % semántico/15 % palabras. Hasta 8000 caracteres por relato, 2000 por consulta/aclaración y ocho recuerdos por intervención. Fuentes seleccionadas: hasta 16000 caracteres, entrada de modelo acotada a 48000. Timeout: 45 segundos por llamada; objetivo p95: 15 segundos por operación, separado de corrección.
 
 **Máximo acumulado estimado de esta iteración: 20 USD** entre conversación y evaluaciones. `local-data/m0/budget.json` conserva uso y reservas entre procesos. Se reserva un máximo conservador antes de llamar; error/timeout mantiene la reserva porque pudo haberse cobrado. No borrar el contador para sortear el límite. Las tarifas estándar verificadas estiman consumo: factura/créditos se consultan en Platform. El contador local no garantiza un límite exacto de factura.
 
@@ -59,7 +61,7 @@ El puntuador comprueba términos, tipos/fechas, fuentes y estados. Puede rechaza
 
 Pruebas locales con dobles verifican el código, no el modelo. No valida Firebase, cuentas, atestación, seguridad remota, voz, dispositivos, gran escala ni limpieza distribuida. El almacén sintético local no se expone por HTTP ni se reutiliza para recuerdos personales. K2/K3/K4 repetirán las evaluaciones contra adaptadores reales.
 
-Fuentes: [Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs), [embeddings](https://developers.openai.com/api/docs/guides/embeddings), [modelo](https://developers.openai.com/api/docs/models/gpt-5.4-mini), [tarifa de embeddings](https://developers.openai.com/api/docs/models/text-embedding-3-small) y [TypeScript en Node](https://nodejs.org/docs/latest-v24.x/api/typescript.html).
+Fuentes: [Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs), [embeddings](https://developers.openai.com/api/docs/guides/embeddings), [GPT-5.4](https://developers.openai.com/api/docs/models/gpt-5.4) y [Sol](https://developers.openai.com/api/docs/models/gpt-6.1-sol), [tarifa de embeddings](https://developers.openai.com/api/docs/models/text-embedding-3-small) y [TypeScript en Node](https://nodejs.org/docs/latest-v24.x/api/typescript.html).
 
 El calendario auxiliar de M0 calcula la semana pasada de lunes a domingo, ambos inclusive, desde la fecha local del timestamp de consulta con su offset. Cada fuente conserva su día local según la zona de captura. No deduce la zona actual del dispositivo: K3 deberá transportar ese contexto explícitamente.
 

@@ -7,7 +7,7 @@ Este documento define el alcance y el cierre de las fases. Los [requisitos](../0
 | Fase | Resultado visible | Estado |
 | --- | --- | --- |
 | D0 · Base documental | Producto, arquitectura y normas definidos | Entregada en `40737a2` |
-| M0 · Prueba temprana de memoria | Evidencia de que interpretar, guardar y recuperar funciona antes de construir la app | En curso; tercera iteración y nueva reserva preparadas, aceptación pendiente |
+| M0 · Prueba temprana de memoria | Evidencia de que interpretar, guardar y recuperar funciona antes de construir la app | En curso; comparación v3 completada, correcciones y aceptación pendientes |
 | K0 · Base técnica | App navegable con estética B y datos ficticios | Pendiente |
 | K1 · Cuenta y configuración | Acceso privado y configuración segura de la clave propia | Pendiente |
 | K2 · Contar por escrito | Separar asuntos, aclarar dudas y guardar automáticamente | Pendiente |
@@ -23,6 +23,8 @@ Implementación y comandos de M0: [guía del prototipo](../../prototypes/memory/
 Primera evaluación: [informe del 11 de noviembre de 2026](../../prototypes/memory/evidence/2026-11-11.md). Prototipo y pruebas preparados, 18 pruebas locales superadas y tres rondas reales completadas con la versión corregida del evaluador; se conservan intentos anteriores. Hay fallos semánticos confirmados y discrepancias de rúbrica. M0 no está validada y K0 no puede empezar. Si los casos revisados se usan para ajustar el núcleo o la rúbrica, pasan a regresión y se prepara una nueva reserva de validación.
 
 Segunda iteración: [evidencia del 12 de noviembre de 2026](../../prototypes/memory/evidence/2026-11-12.md). Precisión temporal, contexto/identidades, procedencia y abstenciones corregidos; 52 pruebas locales superadas. La evaluación v2 completó una ronda, falló el criterio de avance y se interrumpió en la segunda por conexión. Los ajustes posteriores se comprueban como regresión; exigen una reserva nueva y tres rondas antes de cerrar M0.
+
+Tercera iteración: [comparación v3](../../prototypes/memory/evidence/2026-11-12-v3.md), 62 pruebas locales y tres rondas completas por configuración con la misma reserva h, desde cero. Se recomienda Sol medium frente a 5.4 low por respuesta, tiempo y coste medidos. M0 sigue sin validarse: bloqueos de citas compartidos, clasificación de eventos citados y latencia pendientes. Las correcciones usarán h como regresión y exigirán una reserva nueva antes de cerrar M0. K0 no ha empezado.
 
 ## Ejecución y criterios comunes
 
