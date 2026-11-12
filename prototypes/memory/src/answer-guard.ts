@@ -21,6 +21,34 @@ export const verificationSchema = z.strictObject({
 });
 export type Proposal = z.infer<typeof proposalSchema>;
 
+/** An explicit absence is not a successful lookup; a verifier cannot promote an abstention. */
+export function normalizeAnswerStatus<T extends Answer>(
+  answer: T,
+): Omit<T, "status"> & Pick<Answer, "status"> {
+  if (
+    answer.status === "answered" &&
+    /^\s*(?:no consta\b|no tengo (?:evidencia|informaci[oó]n|datos)\b|no hay (?:evidencia|informaci[oó]n|datos)\b)/iu.test(
+      answer.answer,
+    )
+  )
+    return { ...answer, status: "not_found" };
+  return answer;
+}
+
+export function verifiedAnswer(
+  answer: Answer,
+  check: z.infer<typeof verificationSchema>,
+): Answer {
+  if (!check.supported) return unsupportedAnswer(check.problem);
+  return normalizeAnswerStatus({
+    ...answer,
+    status:
+      answer.status !== "answered" && check.status === "answered"
+        ? answer.status
+        : check.status,
+  });
+}
+
 export function validateProposal(
   proposal: Proposal,
   candidates: Candidate[],

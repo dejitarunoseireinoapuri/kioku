@@ -11,8 +11,9 @@ import {
   proposalSchema,
   verificationSchema,
   validateProposal,
-  unsupportedAnswer,
   constrainAnswer,
+  normalizeAnswerStatus,
+  verifiedAnswer,
 } from "./answer-guard.ts";
 
 const responseSchema = z.object({
@@ -72,6 +73,7 @@ export class OpenAiMemory implements MemoryIntelligence {
     candidates: Candidate[],
     sources: Source[] = [],
   ) {
+    this.lastCheck = null;
     const evidence = candidates.map(({ memory }) => ({
       sourceId: memory.sourceId,
       text: memory.text,
@@ -86,11 +88,13 @@ export class OpenAiMemory implements MemoryIntelligence {
       receivedAt: memory.receivedAt,
       zone: memory.zone,
     }));
-    const proposal = await this.structured(
-      answerInstructions,
-      { question, at, candidates: evidence, sources },
-      proposalSchema,
-      "memory_answer",
+    const proposal = normalizeAnswerStatus(
+      await this.structured(
+        answerInstructions,
+        { question, at, candidates: evidence, sources },
+        proposalSchema,
+        "memory_answer",
+      ),
     );
     const answer = validateProposal(proposal, candidates);
     const constrained = constrainAnswer(
@@ -124,9 +128,7 @@ export class OpenAiMemory implements MemoryIntelligence {
       400,
     );
     this.lastCheck = verified;
-    return verified.supported
-      ? { ...answer, status: verified.status }
-      : unsupportedAnswer(verified.problem);
+    return verifiedAnswer(answer, verified);
   }
 
   async embed(texts: string[]): Promise<number[][]> {

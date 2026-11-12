@@ -62,7 +62,9 @@ async function executeRun(
 ) {
   await mkdir(directory, { recursive: true });
   const selected = corpus.filter(
-    (scenario) => scenario.partition === partition,
+    (scenario) =>
+      scenario.partition ===
+      (partition === "regression-v2" ? "validation" : partition),
   );
   const repository = new JsonMemoryRepository(directory);
   const engine = new MemoryEngine(repository, runtime.intelligence);
@@ -208,7 +210,7 @@ async function main(): Promise<void> {
   const args = process.argv.slice(2);
   if (!args.includes("--live")) {
     console.log(
-      "M0: usa --live --partition tuning|validation. Validación: tres ejecuciones, revisión independiente y máximo acumulado 2 USD.",
+      "M0: usa --live --partition tuning|regression|regression-v2. La reserva v2 requiere renovación antes de otra validación; máximo acumulado 2 USD.",
     );
     return;
   }
@@ -216,15 +218,24 @@ async function main(): Promise<void> {
   if (
     partition !== "tuning" &&
     partition !== "validation" &&
-    partition !== "regression"
+    partition !== "regression" &&
+    partition !== "regression-v2"
   )
     throw new Error("Partition required");
   const runCount = partition === "validation" ? 3 : 1;
+  if (partition === "validation") {
+    console.error(
+      "VALIDATION_CORPUS_RENEWAL_REQUIRED: los casos n01–n32 ya se usaron para corregir el núcleo; ejecuta regression-v2.",
+    );
+    process.exitCode = 1;
+    return;
+  }
   const hash = await fingerprint();
   const directory = `local-data/m0/evaluation/${Date.now()}-${randomUUID().slice(0, 8)}`;
   await mkdir(directory, { recursive: true });
   const manifest = {
     partition,
+    acceptanceEligible: false,
     runCount,
     hash,
     model,

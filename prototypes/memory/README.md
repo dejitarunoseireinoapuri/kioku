@@ -45,10 +45,10 @@ Olvidar exige un ID explícito y retira la fuente completa y sus recuerdos/vecto
 ```powershell
 node tooling/m0.mjs m0:eval --live --partition tuning
 node tooling/m0.mjs m0:eval --live --partition regression
-node tooling/m0.mjs m0:eval --live --partition validation
+node tooling/m0.mjs m0:eval --live --partition regression-v2
 ```
 
-Preparación: ocho intervenciones/16 consultas. Regresión: los 32 relatos/64 consultas anteriores, en una ronda. Nueva validación reservada: 32 intervenciones/64 consultas; tres rondas completas con almacenamiento nuevo. Las expectativas nunca se pasan al núcleo ni al proveedor. Las consultas usan una instancia nueva y recargan de disco; reciben únicamente las fuentes seleccionadas, no todo el historial.
+Preparación: ocho intervenciones/16 consultas. Regresión: los 32 relatos/64 consultas originales, en una ronda. `regression-v2`: los 32 relatos/64 consultas n01–n32, usados en la segunda evaluación y después para corregir el núcleo. Ya no son reserva independiente. `validation` se rechaza antes de consumir API hasta renovar corpus/rúbrica y retirar expresamente ese bloqueo; la siguiente aceptación sigue necesitando tres rondas completas. Las expectativas nunca se pasan al núcleo ni al proveedor. Las consultas usan una instancia nueva y recargan de disco; reciben únicamente las fuentes seleccionadas, no todo el historial.
 
 El manifiesto fija huella de código/corpus, configuración, presupuesto, latencia objetivo, commit y cambios locales. Informes privados/checkpoints en `local-data/m0/evaluation/`. Una interrupción deja `complete: false` y no cuenta como ronda superada. Registrar todos los intentos; no ajustar con validación sin renovar los casos reservados.
 

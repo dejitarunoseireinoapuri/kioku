@@ -13,12 +13,12 @@ const monthNames =
 const relative =
   /\b(hoy|ayer|anteayer|mañana|pasado mañana|lunes|martes|miércoles|jueves|viernes|sábado|domingo)\b/iu;
 
-/** Repair an auxiliary paraphrase only when a verified literal fragment supports the same value. */
+/** Canonicalize precision and values from literal evidence bound to the item or its clarification. */
 export function canonicalTime(
   input: MemoryTime,
   literalQuote: string,
   source: string,
-  anchor: { receivedAt: string; zone: string },
+  anchor: { receivedAt: string; zone: string; clarification?: string | null },
 ): MemoryTime {
   let time = input;
   if (
@@ -35,6 +35,12 @@ export function canonicalTime(
   }
   if (!time.quote || !source.includes(time.quote))
     throw new MemoryError("TIME_QUOTE_NOT_IN_SOURCE");
+  // Another topic's date is not evidence for this item. A clarification can supply missing context.
+  if (
+    !literalQuote.includes(time.quote) &&
+    !anchor.clarification?.includes(time.quote)
+  )
+    return { ...unknownTime };
   const evidence = time.quote;
   const dates = dateParts(evidence);
   if (dates.length === 1) {

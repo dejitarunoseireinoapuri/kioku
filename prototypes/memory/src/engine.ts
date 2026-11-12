@@ -90,7 +90,11 @@ export class MemoryEngine {
       ...parsed,
       items: parsed.items.map((item) => {
         const quote = literalQuote(item.quote, sourceText);
-        const time = canonicalTime(item.time, quote, sourceText, turn);
+        const time = canonicalTime(item.time, quote, sourceText, {
+          receivedAt: turn.receivedAt,
+          zone: turn.zone,
+          clarification,
+        });
         return {
           ...item,
           quote,

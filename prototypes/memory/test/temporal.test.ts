@@ -235,3 +235,32 @@ test("partial dates and intervals cannot substitute a different month, year or e
     /TIME_VALUE_NOT_SUPPORTED/,
   );
 });
+
+test("a date in a separate topic cannot silently date an undated memory", () => {
+  const source = "Me gustó la tarta de limón. Hoy terminé un libro.";
+  const time = {
+    precision: "day" as const,
+    value: "2026-11-11",
+    end: null,
+    quote: "Hoy",
+  };
+  const anchor = { receivedAt: "2026-11-11T10:00:00Z", zone: "Europe/Madrid" };
+  assert.deepEqual(
+    canonicalTime(time, "Me gustó la tarta de limón.", source, anchor),
+    unknownTime,
+  );
+  assert.equal(
+    canonicalTime(time, "Hoy terminé un libro.", source, anchor).value,
+    "2026-11-11",
+  );
+  const clarification = "La tarta la probé hoy.";
+  assert.equal(
+    canonicalTime(
+      { ...time, quote: "hoy" },
+      "Me gustó la tarta de limón.",
+      source + "\nAclaración: " + clarification,
+      { ...anchor, clarification },
+    ).value,
+    "2026-11-11",
+  );
+});
