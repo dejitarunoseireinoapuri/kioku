@@ -264,3 +264,26 @@ test("a date in a separate topic cannot silently date an undated memory", () => 
     "2026-11-11",
   );
 });
+
+test("a model's wrong tomorrow is canonicalized from the source time zone across midnight", () => {
+  const source = "Mañana a las 8:10 recojo el paquete.";
+  const time = canonicalTime(
+    {
+      precision: "day",
+      value: "2026-11-12",
+      end: null,
+      quote: "Mañana a las 8:10",
+    },
+    source,
+    source,
+    { receivedAt: "2026-11-11T23:30:00Z", zone: "Europe/Madrid" },
+  );
+  assert.equal(time.value, "2026-11-13");
+  assert.equal(
+    canonicalTime({ ...time, value: "2026-11-13" }, source, source, {
+      receivedAt: "2026-11-11T23:30:00Z",
+      zone: "Atlantic/Canary",
+    }).value,
+    "2026-11-12",
+  );
+});

@@ -8,7 +8,8 @@ import {
   verificationInstructions,
 } from "./prompts.ts";
 import {
-  proposalSchema,
+  providerProposalSchema,
+  attachSelectedMemories,
   verificationSchema,
   validateProposal,
   constrainAnswer,
@@ -88,14 +89,15 @@ export class OpenAiMemory implements MemoryIntelligence {
       receivedAt: memory.receivedAt,
       zone: memory.zone,
     }));
-    const proposal = normalizeAnswerStatus(
+    const generated = normalizeAnswerStatus(
       await this.structured(
         answerInstructions,
         { question, at, candidates: evidence, sources },
-        proposalSchema,
+        providerProposalSchema,
         "memory_answer",
       ),
     );
+    const proposal = attachSelectedMemories(generated, candidates);
     const answer = validateProposal(proposal, candidates);
     const constrained = constrainAnswer(
       proposal,
@@ -124,8 +126,8 @@ export class OpenAiMemory implements MemoryIntelligence {
       },
       verificationSchema,
       "memory_verification",
-      "none",
-      400,
+      "low",
+      1000,
     );
     this.lastCheck = verified;
     return verifiedAnswer(answer, verified);

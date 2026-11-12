@@ -88,7 +88,6 @@ test("outbound provider uses fixed TLS endpoint, refuses redirects and disables 
                         status: "not_found",
                         answer: "No consta.",
                         sourceIds: [],
-                        memoryIds: [],
                       },
                 ),
               },
@@ -164,7 +163,6 @@ test("verification repairs only the state of a faithful abstention and preserves
               status: "answered",
               answer: "No consta que llamaras; solo querías llamar a Nora.",
               sourceIds: ["plan"],
-              memoryIds: ["plan-1"],
             };
       return Response.json({
         status: "completed",

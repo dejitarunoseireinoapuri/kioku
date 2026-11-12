@@ -5,6 +5,7 @@ import {
   unsupportedAnswer,
   normalizeAnswerStatus,
   verifiedAnswer,
+  attachSelectedMemories,
 } from "../src/answer-guard.ts";
 import type { Candidate } from "../src/domain.ts";
 import { unknownTime } from "../src/temporal.ts";
@@ -102,5 +103,25 @@ test("explicit absence retains its explanation while factual negation remains an
       { supported: true, status: "answered", problem: "none" },
     ).status,
     "needs_clarification",
+  );
+});
+
+test("citation fragments are derived from authorized sources and never from foreign source IDs", () => {
+  const result = attachSelectedMemories(
+    {
+      status: "answered",
+      answer: "El texto decía 887766.",
+      sourceIds: ["note"],
+    },
+    candidates,
+  );
+  assert.deepEqual(result.memoryIds, ["note-1"]);
+  assert.throws(
+    () =>
+      attachSelectedMemories(
+        { status: "answered", answer: "Otro dato", sourceIds: ["foreign"] },
+        candidates,
+      ),
+    /ANSWER_CITATION_INVALID/,
   );
 });

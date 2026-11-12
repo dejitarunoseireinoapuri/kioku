@@ -87,8 +87,36 @@ export function canonicalTime(
           : { ...unknownTime, quote: evidence };
     }
   }
+  if (dates.length === 0 && time.precision === "day") {
+    const relativeDay = anchoredRelativeDay(evidence, anchor);
+    if (relativeDay !== null) time = { ...time, value: relativeDay, end: null };
+  }
   validateTime(time, source, anchor);
   return time;
+}
+
+function anchoredRelativeDay(
+  quote: string,
+  anchor: { receivedAt: string; zone: string },
+): string | null {
+  const match =
+    /^(anteayer|pasado mañana|ayer|mañana|hoy)(?=\s|[.,;:]|$)/iu.exec(
+      quote.trim(),
+    );
+  if (!match) return null;
+  const offsets: Record<string, number> = {
+    anteayer: -2,
+    "pasado mañana": 2,
+    ayer: -1,
+    mañana: 1,
+    hoy: 0,
+  };
+  const day = new Intl.DateTimeFormat("sv-SE", {
+    timeZone: anchor.zone,
+  }).format(new Date(anchor.receivedAt));
+  const date = new Date(`${day}T12:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + offsets[match[1]!.toLowerCase()]!);
+  return date.toISOString().slice(0, 10);
 }
 
 const months =

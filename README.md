@@ -4,7 +4,7 @@ Memoria personal por voz y texto para Android e iOS. Cuenta algo, deja que Kioku
 
 ## Estado real
 
-La documentación y las reglas de desarrollo están preparadas. M0 incorpora un [prototipo local de memoria por texto](prototypes/memory/README.md) con pruebas, corpus ficticio y conexión OpenAI. Su [primera evaluación](prototypes/memory/evidence/2026-11-11.md) está ejecutada y no superada: el núcleo necesita ajustes antes de K0. No hay todavía una app KMP compilable, backend desplegado ni Firebase conectado. La arquitectura móvil elegida, por indicación del propietario, sigue Wonderdrop: **Kotlin Multiplatform + Compose Multiplatform, MVVM y Clean Architecture pragmática**. El experimento Expo local de `mobile/` está retirado como dirección técnica; no debe convertirse en una segunda aplicación.
+La documentación y las reglas de desarrollo están preparadas. M0 incorpora un [prototipo local de memoria por texto](prototypes/memory/README.md) con pruebas, corpus ficticio y conexión OpenAI. La [segunda iteración](prototypes/memory/evidence/2026-11-12.md) corrige fechas, identidad, atribución de citas y estados de abstención; hay 49 pruebas locales superadas. La aceptación de M0 sigue pendiente: la segunda evaluación no se superó y sus casos ya son regresión. No hay todavía una app KMP compilable, backend desplegado ni Firebase conectado. La arquitectura móvil elegida, por indicación del propietario, sigue Wonderdrop: **Kotlin Multiplatform + Compose Multiplatform, MVVM y Clean Architecture pragmática**. El experimento Expo local de `mobile/` está retirado como dirección técnica; no debe convertirse en una segunda aplicación.
 
 Repositorio: https://github.com/dejitarunoseireinoapuri/kioku
 
@@ -20,7 +20,7 @@ El [índice documental](docs/README.md) indica dónde vive cada decisión. [AGEN
 
 ## Fases acordadas
 
-D0 (documentación) entregada. **M0: probar el núcleo de memoria por texto antes de construir la app** está en curso. Debe demostrar que interpreta, guarda, encuentra y responde con evidencia usando datos ficticios; la primera evaluación exige ajustes antes de avanzar.
+D0 (documentación) entregada. **M0: probar el núcleo de memoria por texto antes de construir la app** está en curso. Debe demostrar que interpreta, guarda, encuentra y responde con evidencia usando datos ficticios; las correcciones y evaluaciones se registran sin dar por validada la fiabilidad del modelo.
 
 Tras validar M0: K0 (base técnica y navegación), K1 (cuenta y clave), K2 (guardar por texto), K3 (preguntar por texto), K4 (control de memoria), K5 (voz) y K6 (validación para uso personal). M0 está en curso y K0 no ha empezado.
 

@@ -20,6 +20,23 @@ export const verificationSchema = z.strictObject({
   ]),
 });
 export type Proposal = z.infer<typeof proposalSchema>;
+export const providerProposalSchema = proposalSchema.omit({ memoryIds: true });
+
+/** Source IDs are the citation boundary; the server derives their selected fragments. */
+export function attachSelectedMemories(
+  proposal: z.infer<typeof providerProposalSchema>,
+  candidates: Candidate[],
+): Proposal {
+  const allowed = new Set(candidates.map(({ memory }) => memory.sourceId));
+  if (proposal.sourceIds.some((id) => !allowed.has(id)))
+    throw new MemoryError("ANSWER_CITATION_INVALID");
+  return {
+    ...proposal,
+    memoryIds: candidates
+      .filter(({ memory }) => proposal.sourceIds.includes(memory.sourceId))
+      .map(({ memory }) => memory.id),
+  };
+}
 
 /** An explicit absence is not a successful lookup; a verifier cannot promote an abstention. */
 export function normalizeAnswerStatus<T extends Answer>(

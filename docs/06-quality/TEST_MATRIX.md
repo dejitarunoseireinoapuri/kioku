@@ -31,4 +31,6 @@ La recuperación del ejemplo de una película y la corrección a otra son ramas 
 
 TEST-EVAL-001 se ejecuta antes de K0 según [M0](../09-planning/IMPLEMENTATION_PLAN.md#m0--prueba-temprana-de-memoria). Su resultado prueba viabilidad del prototipo, no completa los casos de integración, seguridad, concurrencia, limpieza ni voz de esta matriz. K2/K3/K4 reutilizan y amplían el corpus contra la implementación final.
 
-Primera ejecución de TEST-EVAL-001: [evidencia](../../prototypes/memory/evidence/2026-11-11.md), **no superada**. Tres rondas completas con el evaluador corregido; fallos semánticos confirmados y limitaciones de puntuación identificadas. Las 18 pruebas locales verifican código/barreras y no sustituyen esta aceptación.
+Primera ejecución de TEST-EVAL-001: [evidencia](../../prototypes/memory/evidence/2026-11-11.md), **no superada**. Tres rondas completas con el evaluador corregido; fallos semánticos confirmados y limitaciones de puntuación identificadas. Aquellas 18 pruebas locales verificaron código/barreras y no sustituyen esta aceptación.
+
+Segunda iteración: [evidencia del 12 de noviembre](../../prototypes/memory/evidence/2026-11-12.md). 49 pruebas locales superadas; una ronda reservada v2 completa no superada y segunda ronda interrumpida. Las correcciones posteriores usan esos casos como regresión; una nueva reserva y tres rondas de aceptación siguen pendientes. No se anuncian pruebas móviles, emuladores Firebase ni compilaciones KMP.
