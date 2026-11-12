@@ -7,12 +7,12 @@ import { openRuntime } from "../src/runtime.ts";
 import { unknownTime } from "../src/temporal.ts";
 import type { Candidate, Source } from "../src/domain.ts";
 
-async function fixture() {
+async function fixture(maximum = 0.1) {
   await mkdir("local-data/m0/tests", { recursive: true });
   const directory = await mkdtemp("local-data/m0/tests/provider-");
   return {
     directory,
-    budget: new Budget(`${directory}/budget.json`, 0.1),
+    budget: new Budget(`${directory}/budget.json`, maximum),
     async close() {
       await rm(directory, { recursive: true, force: true });
     },
@@ -140,6 +140,8 @@ test("verification repairs only the state of a faithful abstention and preserves
           time: unknownTime,
           provenance: "personal",
           attribution: null,
+          attributionEvidence: null,
+          eventStatus: "unspecified",
           lifecycle: "current",
           vector: [1],
         },

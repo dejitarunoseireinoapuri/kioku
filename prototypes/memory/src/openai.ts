@@ -1,10 +1,12 @@
 import { z } from "zod";
-import { extractionSchema, MemoryError } from "./domain.ts";
+import { MemoryError } from "./domain.ts";
 import type { Candidate, MemoryIntelligence, Turn, Source } from "./domain.ts";
 import { Budget, rates } from "./budget.ts";
 import { calendarContext } from "./calendar.ts";
+import { captureFormat } from "./capture-format.ts";
 import {
   extractionInstructions,
+  captureReviewInstructions,
   answerInstructions,
   verificationInstructions,
 } from "./prompts.ts";
@@ -42,10 +44,24 @@ const embeddingsSchema = z.object({
   ),
   usage: z.object({ prompt_tokens: z.number().int().nonnegative() }),
 });
-export const model = "gpt-5.4-mini-2026-03-17";
+export const model = "gpt-5.4-2026-03-05";
 export const embeddingModel = "text-embedding-3-small";
+const captureChangesSchema = z
+  .array(
+    z.enum([
+      "attribution",
+      "event_status",
+      "time",
+      "literal",
+      "classification",
+      "completeness",
+      "clarification",
+    ]),
+  )
+  .max(7);
 
 export class OpenAiMemory implements MemoryIntelligence {
+  lastCaptureReview: string[] | null = null;
   lastCheck: { supported: boolean; problem: string; status: string } | null =
     null;
   readonly #key: string;
@@ -60,13 +76,30 @@ export class OpenAiMemory implements MemoryIntelligence {
     this.transport = transport;
   }
 
-  extract(turn: Turn, clarification: string | null) {
-    return this.structured(
+  async extract(turn: Turn, clarification: string | null) {
+    this.lastCaptureReview = null;
+    const format = captureFormat(turn.text, clarification);
+    const draft = await this.structured(
       extractionInstructions,
-      { ...turn, clarification },
-      extractionSchema,
+      { ...turn, clarification, parts: format.parts },
+      format.schema,
       "memory_extraction",
+      "low",
+      4000,
     );
+    const reviewed = await this.structured(
+      captureReviewInstructions,
+      { ...turn, clarification, parts: format.parts, draft },
+      z.strictObject({
+        extraction: format.schema,
+        changes: captureChangesSchema,
+      }),
+      "memory_capture_review",
+      "low",
+      4000,
+    );
+    this.lastCaptureReview = reviewed.changes;
+    return format.materialize(reviewed.extraction);
   }
 
   async answer(
@@ -87,6 +120,8 @@ export class OpenAiMemory implements MemoryIntelligence {
       time: memory.time,
       provenance: memory.provenance,
       attribution: memory.attribution,
+      attributionEvidence: memory.attributionEvidence,
+      eventStatus: memory.eventStatus,
       lifecycle: memory.lifecycle,
       receivedAt: memory.receivedAt,
       zone: memory.zone,

@@ -30,7 +30,7 @@ export class JsonMemoryRepository implements MemoryRepository {
         typeof value === "object" &&
         value !== null &&
         "version" in value &&
-        value.version === 1
+        (value.version === 1 || value.version === 2)
       ) {
         throw new MemoryError("STORE_VERSION_UNSUPPORTED");
       }
@@ -41,7 +41,7 @@ export class JsonMemoryRepository implements MemoryRepository {
         "code" in error &&
         error.code === "ENOENT"
       ) {
-        return { version: 2, sources: [], memories: [] };
+        return { version: 3, sources: [], memories: [] };
       }
       if (
         error instanceof MemoryError &&

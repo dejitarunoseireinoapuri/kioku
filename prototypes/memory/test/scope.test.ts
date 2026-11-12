@@ -18,6 +18,8 @@ const candidates: Candidate[] = [
       kind: "fact",
       provenance: "quoted",
       attribution: "foro",
+      attributionEvidence: "foro",
+      eventStatus: "unspecified",
       lifecycle: "current",
       entities: [],
       time: unknownTime,

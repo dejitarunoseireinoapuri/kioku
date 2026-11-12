@@ -15,7 +15,7 @@ async function main(): Promise<void> {
   }
   const runtime = await openRuntime(true);
   const engine = new MemoryEngine(
-    new JsonMemoryRepository("local-data/m0/interactive-v2"),
+    new JsonMemoryRepository("local-data/m0/interactive-v3"),
     runtime.intelligence,
   );
   const terminal = createInterface({ input: stdin, output: stdout });

@@ -22,6 +22,8 @@ export const itemSchema = z.strictObject({
   time: timeSchema,
   provenance: z.enum(["personal", "reported", "quoted"]),
   attribution: z.string().max(200).nullable(),
+  attributionEvidence: z.string().max(600).nullable(),
+  eventStatus: z.enum(["unspecified", "planned", "completed", "not_completed"]),
   lifecycle: z.enum(["current", "historical", "superseded"]),
 });
 export const extractionSchema = z.strictObject({
@@ -49,7 +51,7 @@ export const memorySchema = itemSchema.extend({
   vector: z.array(z.number().finite()).min(1),
 });
 export const snapshotSchema = z.strictObject({
-  version: z.literal(2),
+  version: z.literal(3),
   sources: z.array(sourceSchema),
   memories: z.array(memorySchema),
 });

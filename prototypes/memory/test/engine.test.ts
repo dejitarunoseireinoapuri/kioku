@@ -30,6 +30,8 @@ const saved: Extraction = {
       time: { precision: "unknown", value: null, end: null, quote: null },
       provenance: "personal",
       attribution: null,
+      attributionEvidence: null,
+      eventStatus: "unspecified",
       lifecycle: "current",
     },
   ],
@@ -201,7 +203,7 @@ test("storage rejects traversal, corrupt snapshots and unknown fields", async ()
   try {
     await writeFile(
       f.repository.file,
-      '{"version":2,"sources":[],"memories":[],"secret":"synthetic"}',
+      '{"version":3,"sources":[],"memories":[],"secret":"synthetic"}',
     );
     await assert.rejects(f.repository.load(), /STORE_READ_FAILED/);
   } finally {
@@ -258,13 +260,15 @@ test("API credentials cannot be sent to the memory model or persisted as a sourc
   }
 });
 
-test("version-one snapshots are preserved and rejected instead of silently reinterpreted", async () => {
+test("version-one and version-two snapshots are preserved and rejected instead of silently reinterpreted", async () => {
   const f = await fixture();
   try {
-    const original = '{"version":1,"sources":[],"memories":[]}';
-    await writeFile(f.repository.file, original);
-    await assert.rejects(f.repository.load(), /STORE_VERSION_UNSUPPORTED/);
-    assert.equal(await readFile(f.repository.file, "utf8"), original);
+    for (const version of [1, 2]) {
+      const original = JSON.stringify({ version, sources: [], memories: [] });
+      await writeFile(f.repository.file, original);
+      await assert.rejects(f.repository.load(), /STORE_VERSION_UNSUPPORTED/);
+      assert.equal(await readFile(f.repository.file, "utf8"), original);
+    }
   } finally {
     await f.close();
   }

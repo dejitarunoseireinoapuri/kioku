@@ -12,10 +12,11 @@ const ledgerSchema = z.strictObject({
 });
 export type Ledger = z.infer<typeof ledgerSchema>;
 
-// Public standard-processing tariffs verified 2026-11-11; an estimate, not an invoice or promo balance.
+// GPT-5.4 public standard-processing tariffs verified 2026-11-12; prior ledger costs are preserved.
+export const maximumBudgetUsd = 5;
 export const rates = {
-  input: 0.75 / 1e6,
-  output: 4.5 / 1e6,
+  input: 2.5 / 1e6,
+  output: 15 / 1e6,
   embedding: 0.02 / 1e6,
 };
 
@@ -31,7 +32,8 @@ export class Budget {
   };
 
   constructor(file: string, maximum: number) {
-    if (!(maximum > 0 && maximum <= 2)) throw new MemoryError("BUDGET_LIMIT");
+    if (!(maximum > 0 && maximum <= maximumBudgetUsd))
+      throw new MemoryError("BUDGET_LIMIT");
     this.file = file;
     this.maximum = maximum;
   }

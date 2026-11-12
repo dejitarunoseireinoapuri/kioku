@@ -1,10 +1,10 @@
 import { mkdir, open, unlink } from "node:fs/promises";
-import { Budget } from "./budget.ts";
+import { Budget, maximumBudgetUsd } from "./budget.ts";
 import { MemoryError } from "./domain.ts";
 import { OpenAiMemory } from "./openai.ts";
 import { z } from "zod";
 
-export async function openRuntime(live: boolean, maximum = 2) {
+export async function openRuntime(live: boolean, maximum = maximumBudgetUsd) {
   if (!live) throw new MemoryError("LIVE_FLAG_REQUIRED");
   const key = process.env.OPENAI_API_KEY;
   if (!key) throw new MemoryError("KEY_MISSING_OR_INVALID");

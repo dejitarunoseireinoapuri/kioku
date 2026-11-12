@@ -17,6 +17,7 @@ import { validateTime, canonicalTime } from "./temporal.ts";
 import { selectEvidence } from "./evidence.ts";
 import { literalQuote } from "./literal.ts";
 import { requiredClarification } from "./clarification.ts";
+import { validateAttribution } from "./capture-evidence.ts";
 
 export class MemoryEngine {
   readonly repository: MemoryRepository;
@@ -172,7 +173,7 @@ export class MemoryEngine {
     if (!snapshot.sources.some((source) => source.id === sourceId))
       throw new MemoryError("SOURCE_NOT_FOUND");
     await this.repository.save({
-      version: 2,
+      version: 3,
       sources: snapshot.sources.filter((source) => source.id !== sourceId),
       memories: snapshot.memories.filter(
         (memory) => memory.sourceId !== sourceId,
@@ -194,6 +195,9 @@ export class MemoryEngine {
     }
     if (result.items.some((item) => !source.includes(item.quote)))
       throw new MemoryError("QUOTE_NOT_IN_SOURCE");
-    result.items.forEach((item) => validateTime(item.time, source, turn));
+    result.items.forEach((item) => {
+      validateTime(item.time, source, turn);
+      validateAttribution(item, source);
+    });
   }
 }

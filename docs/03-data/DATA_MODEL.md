@@ -28,3 +28,11 @@ La fecha incluye precisión `unknown`, `day`, `month`, `year`, `month_day` o `in
 La recuperación aporta los fragmentos candidatos y sus relatos completos vigentes, incluidas aclaraciones, dentro de un presupuesto acotado de contexto. Así se preserva identidad y relación entre fragmentos de una misma fuente. Una fuente olvidada no puede entrar en ese contexto.
 
 Snapshots sintéticos M0 v2: versión 2 y carpeta interactiva separada. Los snapshots v1 se conservan y se rechazan expresamente, sin reinterpretación o borrado automático. No es una migración desplegada de Firestore ni una base offline del cliente.
+
+## Revisión de captura en M0 v3
+
+Cada atribución identificada incluye `attributionEvidence`, un fragmento literal que contiene el nombre/relación exactos del informante o documento. `personal` significa afirmación directa del propietario, también acerca de terceros, y lleva atribución/evidencia nulas. Ser sujeto de una frase no implica ser su informante. Un segundo paso explícito de revisión contrasta la extracción y sus metadatos con el relato; no es una aceptación independiente ni una garantía de fidelidad.
+
+`eventStatus` distingue `unspecified`, `planned`, `completed` y `not_completed`, separado de `kind` y `lifecycle`. El hecho de que haya una cita/examen agendados no prueba su celebración. El estado de no realizado requiere una negación explícita, no ausencia de evidencia.
+
+Los snapshots sintéticos actuales son versión 3, en una carpeta interactiva nueva. Las versiones 1/2 permanecen intactas y se rechazan antes de reinterpretarse; todavía no se necesita ni se ejecuta una migración de datos personales.

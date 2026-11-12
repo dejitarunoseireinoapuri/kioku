@@ -14,7 +14,7 @@ import { MemoryEngine } from "../engine.ts";
 import { JsonMemoryRepository } from "../repository.ts";
 import { openRuntime, reportError } from "../runtime.ts";
 import { model, embeddingModel } from "../openai.ts";
-import { rates } from "../budget.ts";
+import { rates, maximumBudgetUsd } from "../budget.ts";
 import { withdrawForEvaluation } from "./withdraw.ts";
 import { attempt } from "./attempt.ts";
 
@@ -43,6 +43,8 @@ async function fingerprint(): Promise<string> {
       "repository.ts",
       "temporal.ts",
       "calendar.ts",
+      "capture-evidence.ts",
+      "capture-format.ts",
       "evidence.ts",
       "answer-guard.ts",
       "literal.ts",
@@ -138,6 +140,7 @@ async function executeRun(
       final,
       passed,
       legacyScore: legacyExtractionScore(scenario, initial, final),
+      captureReview: runtime.intelligence.lastCaptureReview,
     });
     await checkpoint();
     console.log(`Entrada ${scenario.turn.id}: ${passed ? "OK" : "REVISAR"}`);
@@ -211,7 +214,7 @@ async function main(): Promise<void> {
   const args = process.argv.slice(2);
   if (!args.includes("--live")) {
     console.log(
-      "M0: usa --live --partition tuning|regression|regression-v2. La reserva v2 requiere renovación antes de otra validación; máximo acumulado 2 USD.",
+      `M0: usa --live --partition tuning|regression|regression-v2. Validación pendiente de reserva nueva; máximo acumulado ${maximumBudgetUsd} USD.`,
     );
     return;
   }
@@ -243,13 +246,15 @@ async function main(): Promise<void> {
     embeddingModel,
     rates,
     candidateLimit: 6,
-    protocol: "m0-v2",
+    protocol: "m0-v3",
     reasoning: "low",
     verificationReasoning: "low",
     verificationMaxOutputTokens: 1000,
-    snapshotVersion: 2,
+    captureReview: { reasoning: "low", maxOutputTokens: 4000 },
+    extractionMaxOutputTokens: 4000,
+    snapshotVersion: 3,
     checkpointEveryOperations: 8,
-    budgetUsd: 2,
+    budgetUsd: maximumBudgetUsd,
     latencyTargetP95Ms: 15_000,
     threshold: 0.9,
     evaluationAt,
