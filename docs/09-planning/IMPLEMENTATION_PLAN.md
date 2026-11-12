@@ -7,7 +7,7 @@ Este documento define el alcance y el cierre de las fases. Los [requisitos](../0
 | Fase | Resultado visible | Estado |
 | --- | --- | --- |
 | D0 · Base documental | Producto, arquitectura y normas definidos | Entregada en `40737a2` |
-| M0 · Prueba temprana de memoria | Evidencia de que interpretar, guardar y recuperar funciona antes de construir la app | En curso; correcciones v4 y reserva j preparadas, aceptación pendiente |
+| M0 · Prueba temprana de memoria | Evidencia de que interpretar, guardar y recuperar funciona antes de construir la app | Viabilidad funcional validada en v4; objetivo de latencia de guardado pendiente |
 | K0 · Base técnica | App navegable con estética B y datos ficticios | Pendiente |
 | K1 · Cuenta y configuración | Acceso privado y configuración segura de la clave propia | Pendiente |
 | K2 · Contar por escrito | Separar asuntos, aclarar dudas y guardar automáticamente | Pendiente |
@@ -16,15 +16,17 @@ Este documento define el alcance y el cierre de las fases. Los [requisitos](../0
 | K5 · Voz | Contar y preguntar hablando, con pulsación y bloqueo | Pendiente |
 | K6 · V1 de uso personal | Recorrido completo comprobado en Android e iOS | Pendiente |
 
-M0 está en curso y K0 todavía no ha empezado. La primera versión completa para uso personal llega en K6; las entregas anteriores permiten revisar avances concretos. No se fijan fechas sin conocer herramientas, dependencias y resultados.
+M0 supera el criterio funcional de viabilidad; K0 todavía no ha empezado. La primera versión completa para uso personal llega en K6. La velocidad de guardado no se declara validada: se conserva el objetivo p95 de 15 segundos para su mejora y nueva medición al integrar K2. No se fijan fechas sin conocer herramientas, dependencias y resultados.
 
 Implementación y comandos de M0: [guía del prototipo](../../prototypes/memory/README.md). Su estado de validación y límites se mantienen en [KNOWN_LIMITATIONS](KNOWN_LIMITATIONS.md).
 
-Primera evaluación: [informe del 11 de noviembre de 2026](../../prototypes/memory/evidence/2026-11-11.md). Prototipo y pruebas preparados, 18 pruebas locales superadas y tres rondas reales completadas con la versión corregida del evaluador; se conservan intentos anteriores. Hay fallos semánticos confirmados y discrepancias de rúbrica. M0 no está validada y K0 no puede empezar. Si los casos revisados se usan para ajustar el núcleo o la rúbrica, pasan a regresión y se prepara una nueva reserva de validación.
+Historia de la primera evaluación: [informe del 11 de noviembre de 2026](../../prototypes/memory/evidence/2026-11-11.md). 18 pruebas locales y tres rondas reales con fallos semánticos y discrepancias de rúbrica: no permitía avanzar. Se conservan los intentos anteriores. Si los casos revisados se usan para ajustar el núcleo o la rúbrica, pasan a regresión y se prepara una nueva reserva de validación.
 
 Segunda iteración: [evidencia del 12 de noviembre de 2026](../../prototypes/memory/evidence/2026-11-12.md). Precisión temporal, contexto/identidades, procedencia y abstenciones corregidos; 52 pruebas locales superadas. La evaluación v2 completó una ronda, falló el criterio de avance y se interrumpió en la segunda por conexión. Los ajustes posteriores se comprueban como regresión; exigen una reserva nueva y tres rondas antes de cerrar M0.
 
-Tercera iteración: [comparación v3](../../prototypes/memory/evidence/2026-11-12-v3.md), 62 pruebas locales y tres rondas completas por configuración con la misma reserva h, desde cero. Se recomienda Sol medium frente a 5.4 low por respuesta, tiempo y coste medidos. M0 sigue sin validarse: bloqueos de citas compartidos, clasificación de eventos citados y latencia pendientes. Las correcciones usarán h como regresión y exigirán una reserva nueva antes de cerrar M0. K0 no ha empezado.
+Tercera iteración histórica: [comparación v3](../../prototypes/memory/evidence/2026-11-12-v3.md), 62 pruebas locales y tres rondas por configuración con h, desde cero. Justificó elegir Sol medium frente a 5.4 low, pero no cerraba M0 por bloqueos de citas, metadatos y latencia. Los casos h pasaron a regresión para corregir v4.
+
+Cuarta iteración y decisión actual: [evidencia v4](../../prototypes/memory/evidence/2026-11-12-v4.md), 74 pruebas locales y tres rondas completas con la reserva nueva j, sin ajustes intermedios. Tras revisión contra fuentes: 96/96 capturas y 192/192 respuestas fieles, recuperación completa y cero fallos críticos detectados; se supera el 90 % en todas las etapas/categorías aplicables de cada ronda. Viabilidad funcional validada sobre este corpus sintético, sin garantía universal. El objetivo de rendimiento separado no se supera consistentemente: p95 de guardado 17,25/14,79/19,09 s; consultas 7,02/6,83/6,64 s. No valida todavía la app, Firebase o voz. K0 es la siguiente fase, sin empezarla en esta ejecución.
 
 ## Ejecución y criterios comunes
 
@@ -166,7 +168,4 @@ Tercera iteración: [comparación v3](../../prototypes/memory/evidence/2026-11-1
 
 Estas opciones no comprometen fechas ni autorizan conexiones, escrituras externas o publicación.
 
-Actualización M0 v3: [configuración y protocolo](../../prototypes/memory/evidence/2026-11-12-v3.md), 60 pruebas locales y reserva nueva h01–h32 con facetas de metadatos. El cierre conserva tres rondas completas y revisión independiente por caso, con métricas semánticas separadas del diagnóstico automático. K0 continúa pendiente.
-
-
-Continuación autorizada: [M0 v4](../../prototypes/memory/evidence/2026-11-12-v4.md), Sol medium seleccionado para el proyecto. Primero regresión h, después tres rondas de j sin ajustes intermedios. No comenzar K0 hasta el cierre demostrado de M0.
+Las evaluaciones históricas conservan sus configuraciones, fallos e interrupciones; v4 no los reescribe. El cierre funcional usa revisión contra fuentes separada del diagnóstico automático, con las adjudicaciones por caso disponibles en el informe. Cualquier ajuste futuro basado en j lo convierte en regresión y requiere una reserva nueva para una nueva aceptación independiente. El rendimiento pendiente no se oculta cambiando el reloj, el razonamiento o el objetivo.

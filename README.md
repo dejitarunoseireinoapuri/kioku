@@ -4,7 +4,9 @@ Memoria personal por voz y texto para Android e iOS. Cuenta algo, deja que Kioku
 
 ## Estado real
 
-La documentación y las reglas de desarrollo están preparadas. M0 incorpora un [prototipo local de memoria por texto](prototypes/memory/README.md) con pruebas, corpus ficticio y conexión OpenAI. La [segunda iteración](prototypes/memory/evidence/2026-11-12.md) corrige fechas, identidad, atribución de citas y estados de abstención; la [tercera iteración](prototypes/memory/evidence/2026-11-12-v3.md) añade revisión de captura, evidencia literal por referencias y estado de eventos, con 62 pruebas locales superadas. La comparación de tres rondas por configuración (5.4 low y Sol medium) está completada: se recomienda Sol, pero M0 sigue sin validarse por fallos del núcleo, clasificación de citas y latencia. K0 no ha empezado. No hay todavía una app KMP compilable, backend desplegado ni Firebase conectado. La arquitectura móvil elegida, por indicación del propietario, sigue Wonderdrop: **Kotlin Multiplatform + Compose Multiplatform, MVVM y Clean Architecture pragmática**. El experimento Expo local de `mobile/` está retirado como dirección técnica; no debe convertirse en una segunda aplicación.
+M0 supera el criterio de viabilidad funcional con [Sol medio y la reserva v4](prototypes/memory/evidence/2026-11-12-v4.md): tres rondas desde memoria vacía, 96/96 capturas y 192/192 respuestas correctas tras revisión contra fuentes, recuperación completa y cero fallos críticos detectados. Son 32 relatos y 64 consultas sintéticas repetidos, no una garantía de fiabilidad universal. Pasan las 74 pruebas locales. El objetivo p95 de guardado de 15 segundos sigue abierto: 17,25/14,79/19,09 segundos; las consultas sí lo cumplen.
+
+K0 no ha empezado. No hay todavía una app KMP compilable, backend desplegado ni Firebase conectado. La arquitectura móvil elegida sigue Wonderdrop: **Kotlin Multiplatform + Compose Multiplatform, MVVM y Clean Architecture pragmática**. El experimento Expo local de `mobile/` está retirado como dirección técnica; no debe convertirse en una segunda aplicación. La [comparación v3](prototypes/memory/evidence/2026-11-12-v3.md) y los informes anteriores se conservan como evidencia histórica.
 
 Repositorio: https://github.com/dejitarunoseireinoapuri/kioku
 
@@ -20,9 +22,9 @@ El [índice documental](docs/README.md) indica dónde vive cada decisión. [AGEN
 
 ## Fases acordadas
 
-D0 (documentación) entregada. **M0: probar el núcleo de memoria por texto antes de construir la app** está en curso. Debe demostrar que interpreta, guarda, encuentra y responde con evidencia usando datos ficticios; las correcciones y evaluaciones se registran sin dar por validada la fiabilidad del modelo.
+D0 (documentación) entregada. **M0: viabilidad funcional del núcleo por texto validada**, con rendimiento de guardado pendiente de mejora. No valida todavía voz, cuentas remotas, Firebase, dispositivos o escala.
 
-Tras validar M0: K0 (base técnica y navegación), K1 (cuenta y clave), K2 (guardar por texto), K3 (preguntar por texto), K4 (control de memoria), K5 (voz) y K6 (validación para uso personal). M0 está en curso y K0 no ha empezado.
+La siguiente fase es K0 (base técnica y navegación), seguida de K1 (cuenta y clave), K2 (guardar por texto), K3 (preguntar por texto), K4 (control de memoria), K5 (voz) y K6 (validación para uso personal). K0 no ha empezado. K2/K3 deben repetir la evaluación contra sus adaptadores reales y mantener visible el objetivo de latencia pendiente.
 
 El [plan de fases](docs/09-planning/IMPLEMENTATION_PLAN.md) define qué entrega cada una, qué necesita y cómo se valida en Android/iOS. Integraciones y publicación quedan para una decisión posterior.
 

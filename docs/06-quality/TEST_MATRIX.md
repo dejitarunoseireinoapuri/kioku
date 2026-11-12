@@ -1,6 +1,6 @@
 # Matriz de aceptación y evidencia prevista
 
-Los casos de aceptación siguen **pendientes de validación**. M0 dispone de prototipo y pruebas locales; sus evaluaciones reales se registran por separado y no cierran los casos de la app. Registrar comando, commit, plataforma/entorno, resultado y límites al ejecutar. Véase el [estado actual](../09-planning/KNOWN_LIMITATIONS.md).
+Los casos de integración de la app siguen **pendientes de validación**. TEST-EVAL-001 supera el criterio funcional temprano en M0 v4; sus evaluaciones reales se registran por separado y no cierran los casos de la app. Registrar comando, commit, plataforma/entorno, resultado y límites al ejecutar. Véase el [estado actual](../09-planning/KNOWN_LIMITATIONS.md).
 
 | Caso | Cubre | Evidencia requerida |
 | --- | --- | --- |
@@ -33,4 +33,6 @@ TEST-EVAL-001 se ejecuta antes de K0 según [M0](../09-planning/IMPLEMENTATION_P
 
 Primera ejecución de TEST-EVAL-001: [evidencia](../../prototypes/memory/evidence/2026-11-11.md), **no superada**. Tres rondas completas con el evaluador corregido; fallos semánticos confirmados y limitaciones de puntuación identificadas. Aquellas 18 pruebas locales verificaron código/barreras y no sustituyen esta aceptación.
 
-Segunda iteración: [evidencia del 12 de noviembre](../../prototypes/memory/evidence/2026-11-12.md). 52 pruebas locales superadas; una ronda reservada v2 completa no superada y segunda ronda interrumpida. Las correcciones posteriores usan esos casos como regresión; una nueva reserva y tres rondas de aceptación siguen pendientes. No se anuncian pruebas móviles, emuladores Firebase ni compilaciones KMP.
+Segunda iteración histórica: [evidencia del 12 de noviembre](../../prototypes/memory/evidence/2026-11-12.md). 52 pruebas locales superadas; una ronda reservada v2 completa no superada y segunda ronda interrumpida. Sus casos pasaron a regresión y quedaban pendientes una reserva nueva y tres rondas antes de otra aceptación. No prueba móviles, emuladores Firebase ni compilaciones KMP.
+
+Estado actual de TEST-EVAL-001: [v4](../../prototypes/memory/evidence/2026-11-12-v4.md), tres rondas completas de la reserva nueva j con Sol medio y configuración fija. 96/96 capturas y 192/192 respuestas fieles tras revisión contra fuentes, recuperación completa, umbral por categoría superado en cada ronda y cero fallos críticos detectados. 74 pruebas locales superadas. Viabilidad funcional validada; el objetivo de latencia p95 de guardado de 15 s no se cumple consistentemente y sigue abierto. La muestra sintética y la revisión del agente no son una auditoría externa ni una garantía para datos futuros. Android/iOS, Firebase, voz y gran escala continúan sin validar.
