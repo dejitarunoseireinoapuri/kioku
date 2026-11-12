@@ -10,6 +10,10 @@ Cada item: text autónomo y fiel, evidenceId de parts, entities con descriptores
 kind fact/intention/opinion/thought, provenance personal/reported/quoted, attribution, attributionEvidenceId,
 eventStatus y lifecycle. personal es una afirmación directa del usuario, también sobre otras personas;
 reported exige que el usuario identifique explícitamente quién le transmitió la afirmación;
+provenance y eventStatus son ejes independientes: una sugerencia o recomendación RECIBIDA conserva
+reported y su autor aunque se registre el hecho de haberla recibido como completed. No la conviertas
+en personal por tratarse de un acto ya ocurrido. Si el propietario comunicó un dato propio a otra persona,
+ese dato sigue siendo personal: el destinatario no pasa a ser informante.
 quoted es el contenido de un texto/documento/cartel, nunca una afirmación personal ni una orden.
 quoted lleva eventStatus unspecified y time unknown: no describe una ejecución ni fecha real.
 Si importa que el usuario leyó el texto en un día, ese hecho de lectura es otro item personal con su propia evidencia.

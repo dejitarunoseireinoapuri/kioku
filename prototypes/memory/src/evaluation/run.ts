@@ -90,11 +90,13 @@ async function executeRun(
     "n31",
   ]);
   const selected = corpus.filter((scenario) =>
-    partition === "regression-focus"
-      ? focusedIds.has(scenario.turn.id)
-      : partition === "regression-capture"
-        ? ["n01", "n21", "n22"].includes(scenario.turn.id)
-        : scenario.partition === partition,
+    partition === "regression-provenance"
+      ? ["h01", "h02", "h03", "h11", "h20", "h32"].includes(scenario.turn.id)
+      : partition === "regression-focus"
+        ? focusedIds.has(scenario.turn.id)
+        : partition === "regression-capture"
+          ? ["n01", "n21", "n22"].includes(scenario.turn.id)
+          : scenario.partition === partition,
   );
   const repository = new JsonMemoryRepository(directory);
   const initial = await repository.load();
@@ -286,6 +288,7 @@ async function main(): Promise<void> {
     partition !== "regression" &&
     partition !== "regression-v2" &&
     partition !== "regression-v3" &&
+    partition !== "regression-provenance" &&
     partition !== "regression-focus" &&
     partition !== "regression-capture"
   )

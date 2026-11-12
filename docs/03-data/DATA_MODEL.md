@@ -46,3 +46,6 @@ Snapshot 4 y carpeta interactiva nueva; se rechazan y preservan versiones 1/2/3 
 
 
 El estado se aplica al acontecimiento que registra el fragmento: una recomendación ya comunicada es un acto completado; no implica que el destinatario haya seguido el consejo o leído el libro. Una fecha de agenda sigue describiendo el evento previsto, no una comunicación completada ni asistencia.
+
+
+Origen y estado son independientes: las recomendaciones/sugerencias recibidas conservan reported y su autor aunque su recepción sea un acto completed. Un dato propio que el usuario comunicó a otra persona sigue siendo personal; el destinatario no se convierte en informante.
