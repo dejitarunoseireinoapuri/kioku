@@ -43,3 +43,6 @@ Los snapshots sintéticos actuales son versión 3, en una carpeta interactiva nu
 Un recuerdo quoted describe contenido textual, nunca la ejecución de una orden ni la veracidad de lo que afirma. El código materializa su literal con eventStatus unspecified y time unknown (valor, final y evidencia temporal nulos). Si se conserva una lectura realizada en una fecha, ese es otro hecho personal y mantiene su propia evidencia. No se proyecta la fecha mencionada por un texto citado como fecha de un evento real.
 
 Snapshot 4 y carpeta interactiva nueva; se rechazan y preservan versiones 1/2/3 sin migración de datos personales. El repositorio valida estas invariantes al cargar y guardar. Las respuestas seleccionan evidenceIds de candidatos vigentes permitidos; el servidor deriva sourceIds, sin adjuntar automáticamente todos los recuerdos de la fuente. El alcance memory/quotation/mixed es metadato efímero de generación/verificación, no un nuevo modo de usuario ni un dato de la memoria.
+
+
+El estado se aplica al acontecimiento que registra el fragmento: una recomendación ya comunicada es un acto completado; no implica que el destinatario haya seguido el consejo o leído el libro. Una fecha de agenda sigue describiendo el evento previsto, no una comunicación completada ni asistencia.

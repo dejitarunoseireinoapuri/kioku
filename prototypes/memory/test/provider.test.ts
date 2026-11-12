@@ -100,6 +100,10 @@ test("outbound provider uses fixed TLS endpoint, refuses redirects and disables 
       const body = JSON.parse(String(options?.body)) as Record<string, unknown>;
       assert.equal(body.store, false);
       assert.deepEqual(body.reasoning, { effort: modelProfile.reasoning });
+      assert.equal(
+        (body.text as { verbosity: string }).verbosity,
+        modelProfile.verbosity,
+      );
       assert.equal("tools" in body, false);
       assert.equal("previous_response_id" in body, false);
       const format = body.text as { format: { name: string } };

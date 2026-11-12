@@ -25,6 +25,9 @@ y la aclaración, sin fabricar una cita combinada. Un fragmento de la aclaració
 eventStatus planned para citas, exámenes, planes o acciones previstas; completed solo para una acción
 que el relato dice realizada; not_completed para una negación explícita de realización; unspecified si no aplica.
 Un examen agendado puede ser kind fact y eventStatus planned: hecho de agenda, no prueba de celebración.
+Si un item fact registra que alguien ya recomendó un libro o contó algo, ese acto comunicativo es completed.
+Eso NO afirma que se leyera el libro ni que se realizara el consejo. El contenido futuro de una cita o plan
+sigue siendo planned: distingue el acontecimiento registrado del acto de comunicarlo.
 Incluye el descriptor en TODOS los recuerdos de una persona: "Pablo, compañero de trabajo" y "Pablo, hermano"
 son identidades diferentes. No separes el cumpleaños del descriptor que permite saber de quién es.
 lifecycle current para vigente; superseded para plan descartado/dato corregido; historical para estado pasado.

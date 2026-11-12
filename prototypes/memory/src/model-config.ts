@@ -7,6 +7,7 @@ const profiles = new Map([
     {
       model: "gpt-5.4-2026-03-05",
       reasoning: "low",
+      verbosity: "low",
       baseInput: 2.5 / 1e6,
       inputCeiling: 2.5 / 1e6,
       output: 15 / 1e6,
@@ -17,6 +18,7 @@ const profiles = new Map([
     {
       model: "gpt-6.1-sol",
       reasoning: "medium",
+      verbosity: "low",
       baseInput: 2 / 1e6,
       inputCeiling: 2.5 / 1e6,
       output: 10 / 1e6,

@@ -258,6 +258,7 @@ export class OpenAiMemory implements MemoryIntelligence {
       max_output_tokens: maxOutput,
       reasoning: { effort: modelProfile.reasoning },
       text: {
+        verbosity: modelProfile.verbosity,
         format: {
           type: "json_schema",
           name,
