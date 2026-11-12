@@ -13,6 +13,10 @@ import type {
   Turn,
 } from "./domain.ts";
 import { retrieve } from "./search.ts";
+import { validateTime, canonicalTime } from "./temporal.ts";
+import { selectEvidence } from "./evidence.ts";
+import { literalQuote } from "./literal.ts";
+import { requiredClarification } from "./clarification.ts";
 
 export class MemoryEngine {
   readonly repository: MemoryRepository;
@@ -59,16 +63,48 @@ export class MemoryEngine {
     ) {
       throw new MemoryError("CLARIFICATION_INVALID");
     }
+    if (
+      /sk-[A-Za-z0-9_-]{20,}/u.test(turn.text) ||
+      (clarification && /sk-[A-Za-z0-9_-]{20,}/u.test(clarification))
+    ) {
+      throw new MemoryError("CREDENTIAL_NOT_MEMORY");
+    }
     const snapshot = await this.repository.load();
     if (snapshot.sources.some((source) => source.id === turn.id))
       throw new MemoryError("TURN_ALREADY_EXISTS");
-    const extracted = extractionSchema.parse(
+    const missing =
+      clarification === null ? requiredClarification(turn.text) : null;
+    if (missing)
+      return {
+        status: "needs_clarification",
+        clarification: missing,
+        items: [],
+      };
+    const parsed = extractionSchema.parse(
       await this.intelligence.extract(turn, clarification),
     );
     const sourceText = clarification
       ? `${turn.text}\nAclaración: ${clarification}`
       : turn.text;
-    this.validateExtraction(extracted, sourceText);
+    const extracted = {
+      ...parsed,
+      items: parsed.items.map((item) => {
+        const quote = literalQuote(item.quote, sourceText);
+        const time = canonicalTime(item.time, quote, sourceText, turn);
+        return {
+          ...item,
+          quote,
+          time,
+          text:
+            time.precision !== item.time.precision ||
+            time.value !== item.time.value ||
+            time.end !== item.time.end
+              ? quote
+              : item.text,
+        };
+      }),
+    };
+    this.validateExtraction(extracted, sourceText, turn);
     if (extracted.status !== "saved") return extracted;
     const vectors = await this.intelligence.embed(
       extracted.items.map((item) => item.text),
@@ -95,6 +131,8 @@ export class MemoryEngine {
     question: string,
     at: string,
   ): Promise<{ answer: Answer; candidates: Candidate[] }> {
+    if (/sk-[A-Za-z0-9_-]{20,}/u.test(question))
+      throw new MemoryError("CREDENTIAL_NOT_MEMORY");
     if (
       !question.trim() ||
       question.length > 2000 ||
@@ -105,14 +143,15 @@ export class MemoryEngine {
     const snapshot = await this.repository.load();
     const vectors = await this.intelligence.embed([question]);
     if (!vectors[0]) throw new MemoryError("EMBEDDING_COUNT");
-    const candidates = retrieve(
+    const ranked = retrieve(
       snapshot.memories,
       question,
       vectors[0],
       this.candidateLimit,
     );
+    const { candidates, sources } = selectEvidence(ranked, snapshot.sources);
     const answer = answerSchema.parse(
-      await this.intelligence.answer(question, at, candidates),
+      await this.intelligence.answer(question, at, candidates, sources),
     );
     const allowed = new Set(candidates.map(({ memory }) => memory.sourceId));
     if (
@@ -129,7 +168,7 @@ export class MemoryEngine {
     if (!snapshot.sources.some((source) => source.id === sourceId))
       throw new MemoryError("SOURCE_NOT_FOUND");
     await this.repository.save({
-      version: 1,
+      version: 2,
       sources: snapshot.sources.filter((source) => source.id !== sourceId),
       memories: snapshot.memories.filter(
         (memory) => memory.sourceId !== sourceId,
@@ -137,7 +176,11 @@ export class MemoryEngine {
     });
   }
 
-  private validateExtraction(result: Extraction, source: string): void {
+  private validateExtraction(
+    result: Extraction,
+    source: string,
+    turn: Turn,
+  ): void {
     if (
       (result.status === "saved") !== result.items.length > 0 ||
       (result.status === "needs_clarification") !==
@@ -147,5 +190,6 @@ export class MemoryEngine {
     }
     if (result.items.some((item) => !source.includes(item.quote)))
       throw new MemoryError("QUOTE_NOT_IN_SOURCE");
+    result.items.forEach((item) => validateTime(item.time, source, turn));
   }
 }

@@ -1,15 +1,8 @@
-import { randomUUID } from "node:crypto";
-import {
-  mkdir,
-  readFile,
-  rename,
-  writeFile,
-  lstat,
-  rm,
-} from "node:fs/promises";
+import { mkdir, readFile, lstat } from "node:fs/promises";
 import { dirname, resolve, relative, isAbsolute } from "node:path";
 import { MemoryError, snapshotSchema } from "./domain.ts";
 import type { MemoryRepository, Snapshot } from "./domain.ts";
+import { atomicWrite } from "./file-store.ts";
 
 // CLI-only synthetic storage. No HTTP server, shared file writers or mobile offline cache.
 export class JsonMemoryRepository implements MemoryRepository {
@@ -32,17 +25,29 @@ export class JsonMemoryRepository implements MemoryRepository {
   async load(): Promise<Snapshot> {
     try {
       await this.rejectLinks();
-      return snapshotSchema.parse(
-        JSON.parse(await readFile(this.file, "utf8")),
-      );
+      const value: unknown = JSON.parse(await readFile(this.file, "utf8"));
+      if (
+        typeof value === "object" &&
+        value !== null &&
+        "version" in value &&
+        value.version === 1
+      ) {
+        throw new MemoryError("STORE_VERSION_UNSUPPORTED");
+      }
+      return snapshotSchema.parse(value);
     } catch (error) {
       if (
         error instanceof Error &&
         "code" in error &&
         error.code === "ENOENT"
       ) {
-        return { version: 1, sources: [], memories: [] };
+        return { version: 2, sources: [], memories: [] };
       }
+      if (
+        error instanceof MemoryError &&
+        error.message === "STORE_VERSION_UNSUPPORTED"
+      )
+        throw error;
       throw new MemoryError("STORE_READ_FAILED");
     }
   }
@@ -51,16 +56,7 @@ export class JsonMemoryRepository implements MemoryRepository {
     snapshotSchema.parse(snapshot);
     await mkdir(dirname(this.file), { recursive: true });
     await this.rejectLinks();
-    const temporary = `${this.file}.${randomUUID()}.tmp`;
-    try {
-      await writeFile(temporary, JSON.stringify(snapshot), {
-        mode: 0o600,
-        flag: "wx",
-      });
-      await rename(temporary, this.file);
-    } finally {
-      await rm(temporary, { force: true });
-    }
+    await atomicWrite(this.file, JSON.stringify(snapshot));
   }
 
   private async rejectLinks(): Promise<void> {

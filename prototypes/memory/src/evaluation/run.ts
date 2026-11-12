@@ -1,8 +1,14 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile } from "node:fs/promises";
+import { atomicWrite } from "../file-store.ts";
 import { createHash, randomUUID } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { corpus, evaluationAt } from "./corpus.ts";
-import { scoreExtraction, scoreQuery, summarize } from "./score.ts";
+import {
+  scoreExtraction,
+  legacyExtractionScore,
+  scoreQuery,
+  summarize,
+} from "./score.ts";
 import type { Observation } from "./score.ts";
 import { MemoryEngine } from "../engine.ts";
 import { JsonMemoryRepository } from "../repository.ts";
@@ -10,6 +16,7 @@ import { openRuntime, reportError } from "../runtime.ts";
 import { model, embeddingModel } from "../openai.ts";
 import { rates } from "../budget.ts";
 import { withdrawForEvaluation } from "./withdraw.ts";
+import { attempt } from "./attempt.ts";
 
 async function fingerprint(): Promise<string> {
   const files = [
@@ -18,9 +25,12 @@ async function fingerprint(): Promise<string> {
     "tuning.ts",
     "validation-a.ts",
     "validation-b.ts",
+    "reserved-a.ts",
+    "reserved-b.ts",
     "score.ts",
     "run.ts",
     "withdraw.ts",
+    "attempt.ts",
   ].map((file) => new URL(file, import.meta.url));
   files.push(
     ...[
@@ -31,6 +41,13 @@ async function fingerprint(): Promise<string> {
       "prompts.ts",
       "budget.ts",
       "repository.ts",
+      "temporal.ts",
+      "evidence.ts",
+      "answer-guard.ts",
+      "literal.ts",
+      "file-store.ts",
+      "clarification.ts",
+      "runtime.ts",
     ].map((file) => new URL(`../${file}`, import.meta.url)),
   );
   const hash = createHash("sha256");
@@ -52,7 +69,15 @@ async function executeRun(
   const observations: Observation[] = [];
   const detail: unknown[] = [];
   async function checkpoint(complete = false) {
-    await writeFile(
+    const last = observations.at(-1);
+    if (
+      !complete &&
+      !last?.criticalFailure &&
+      !last?.blocked &&
+      observations.length % 8 !== 0
+    )
+      return;
+    await atomicWrite(
       `${directory}/report.json`,
       JSON.stringify(
         {
@@ -65,16 +90,36 @@ async function executeRun(
         null,
         2,
       ),
-      { mode: 0o600 },
     );
   }
   for (const scenario of selected) {
     const start = performance.now();
-    const initial = await engine.tell(scenario.turn);
-    const final =
-      scenario.clarification && initial.status === "needs_clarification"
-        ? await engine.tell(scenario.turn, scenario.clarification)
-        : initial;
+    const capture = await attempt(async () => {
+      const initial = await engine.tell(scenario.turn);
+      const final =
+        scenario.clarification && initial.status === "needs_clarification"
+          ? await engine.tell(scenario.turn, scenario.clarification)
+          : initial;
+      return { initial, final };
+    });
+    if (!capture.ok) {
+      observations.push({
+        id: scenario.turn.id,
+        category: scenario.category,
+        extraction: false,
+        criticalFailure: true,
+        latencyMs: performance.now() - start,
+      });
+      detail.push({
+        id: scenario.turn.id,
+        errorCode: capture.code,
+        passed: false,
+      });
+      await checkpoint();
+      console.log(`Entrada ${scenario.turn.id}: RECHAZADA (${capture.code})`);
+      continue;
+    }
+    const { initial, final } = capture.value;
     const passed = scoreExtraction(scenario, initial, final);
     observations.push({
       id: scenario.turn.id,
@@ -89,6 +134,7 @@ async function executeRun(
       initial,
       final,
       passed,
+      legacyScore: legacyExtractionScore(scenario, initial, final),
     });
     await checkpoint();
     console.log(`Entrada ${scenario.turn.id}: ${passed ? "OK" : "REVISAR"}`);
@@ -112,7 +158,26 @@ async function executeRun(
         new JsonMemoryRepository(directory),
         runtime.intelligence,
       );
-      const result = await fresh.ask(expected.question, evaluationAt);
+      const query = await attempt(() =>
+        fresh.ask(expected.question, expected.at ?? evaluationAt),
+      );
+      if (!query.ok) {
+        const id = `${scenario.turn.id}-q${index + 1}`;
+        observations.push({
+          id,
+          category: scenario.category,
+          answer: false,
+          retrieval: null,
+          criticalFailure: true,
+          blocked: true,
+          latencyMs: performance.now() - start,
+        });
+        detail.push({ id, errorCode: query.code });
+        await checkpoint();
+        console.log(`Consulta ${id}: RECHAZADA (${query.code})`);
+        continue;
+      }
+      const result = query.value;
       const score = scoreQuery(expected, result.answer, result.candidates);
       const id = `${scenario.turn.id}-q${index + 1}`;
       observations.push({
@@ -125,6 +190,7 @@ async function executeRun(
         id,
         expected,
         answer: result.answer,
+        guardCheck: runtime.intelligence.lastCheck,
         score,
         candidateSources: result.candidates.map(
           ({ memory }) => memory.sourceId,
@@ -147,7 +213,11 @@ async function main(): Promise<void> {
     return;
   }
   const partition = args[args.indexOf("--partition") + 1];
-  if (partition !== "tuning" && partition !== "validation")
+  if (
+    partition !== "tuning" &&
+    partition !== "validation" &&
+    partition !== "regression"
+  )
     throw new Error("Partition required");
   const runCount = partition === "validation" ? 3 : 1;
   const hash = await fingerprint();
@@ -161,6 +231,11 @@ async function main(): Promise<void> {
     embeddingModel,
     rates,
     candidateLimit: 6,
+    protocol: "m0-v2",
+    reasoning: "low",
+    verificationReasoning: "none",
+    snapshotVersion: 2,
+    checkpointEveryOperations: 8,
     budgetUsd: 2,
     latencyTargetP95Ms: 15_000,
     threshold: 0.9,
@@ -174,10 +249,9 @@ async function main(): Promise<void> {
         encoding: "utf8",
       }).trim().length > 0,
   };
-  await writeFile(
+  await atomicWrite(
     `${directory}/manifest.json`,
     JSON.stringify(manifest, null, 2),
-    { mode: 0o600 },
   );
   const runtime = await openRuntime(true);
   const summaries: unknown[] = [];
@@ -189,7 +263,7 @@ async function main(): Promise<void> {
         await executeRun(`${directory}/run-${run}`, partition, runtime),
       );
     }
-    await writeFile(
+    await atomicWrite(
       `${directory}/summary.json`,
       JSON.stringify(
         {
@@ -201,7 +275,6 @@ async function main(): Promise<void> {
         null,
         2,
       ),
-      { mode: 0o600 },
     );
     console.log(`Informe privado: ${directory}/summary.json`);
   } finally {

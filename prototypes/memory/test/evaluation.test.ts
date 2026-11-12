@@ -1,7 +1,17 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { corpus } from "../src/evaluation/corpus.ts";
-import { scoreQuery, summarize } from "../src/evaluation/score.ts";
+import {
+  scoreQuery,
+  scoreExtraction,
+  legacyExtractionScore,
+  summarize,
+} from "../src/evaluation/score.ts";
+import { scenario, item } from "../src/evaluation/fixture.ts";
+import type { Extraction } from "../src/domain.ts";
+import { unknownTime } from "../src/temporal.ts";
+import { attempt } from "../src/evaluation/attempt.ts";
+import { MemoryError } from "../src/domain.ts";
 import type { QuerySpec } from "../src/evaluation/corpus.ts";
 
 test("validation corpus has 30+ interventions, 60+ queries, unique IDs and no tuning sources", () => {
@@ -123,4 +133,123 @@ test("a grounded abstention about an uncompleted plan is not a factual error", (
   assert.equal(score.answer, true);
   assert.equal(score.criticalFailure, false);
   assert.equal(score.retrieval, false);
+});
+
+test("faithful fragments retain source-level coverage while the old strict score remains visible", () => {
+  const fixture = scenario(
+    "unit",
+    "mixed",
+    "Mi bicicleta se llamaba Alba y era violeta.",
+    [item(["bicicleta", "Alba", "violeta"])],
+    [],
+  );
+  const extracted: Extraction = {
+    status: "saved",
+    clarification: null,
+    items: [
+      {
+        text: "La bicicleta se llamaba Alba.",
+        quote: "Mi bicicleta se llamaba Alba",
+        kind: "fact",
+        entities: [],
+        time: unknownTime,
+        provenance: "personal",
+        attribution: null,
+        lifecycle: "historical",
+      },
+      {
+        text: "La bicicleta era violeta.",
+        quote: "era violeta",
+        kind: "fact",
+        entities: [],
+        time: unknownTime,
+        provenance: "personal",
+        attribution: null,
+        lifecycle: "historical",
+      },
+    ],
+  };
+  assert.equal(legacyExtractionScore(fixture, extracted, extracted), false);
+  assert.equal(scoreExtraction(fixture, extracted, extracted), true);
+  assert.equal(
+    scoreExtraction(fixture, extracted, {
+      ...extracted,
+      items: extracted.items.slice(0, 1),
+    }),
+    false,
+  );
+});
+
+test("an unrelated negation cannot satisfy a negative fact about a different subject", () => {
+  const fixture = scenario(
+    "unit",
+    "basic",
+    "No me gusta el cilantro; sí la albahaca.",
+    [item(["no", "cilantro"], "opinion")],
+    [],
+  );
+  const extracted: Extraction = {
+    status: "saved",
+    clarification: null,
+    items: [
+      {
+        text: "Me gusta el cilantro.",
+        quote: "cilantro",
+        kind: "opinion",
+        entities: [],
+        time: unknownTime,
+        provenance: "personal",
+        attribution: null,
+        lifecycle: "current",
+      },
+      {
+        text: "No me gusta la albahaca.",
+        quote: "albahaca",
+        kind: "opinion",
+        entities: [],
+        time: unknownTime,
+        provenance: "personal",
+        attribution: null,
+        lifecycle: "current",
+      },
+    ],
+  };
+  assert.equal(scoreExtraction(fixture, extracted, extracted), false);
+});
+
+test("new reserved corpus is disjoint from the promoted regression corpus", () => {
+  const reserved = corpus.filter((entry) => entry.partition === "validation");
+  const old = corpus.filter((entry) => entry.partition === "regression");
+  assert.equal(reserved.length, 32);
+  assert.equal(old.length, 32);
+  assert.ok(
+    reserved.every(
+      (entry) => !old.some((prior) => prior.turn.text === entry.turn.text),
+    ),
+  );
+});
+
+test("domain rejection is recorded while authentication, network and budget failures stop evaluation", async () => {
+  assert.deepEqual(
+    await attempt(async () => {
+      throw new MemoryError("TIME_UNSUPPORTED_PRECISION");
+    }),
+    {
+      ok: false,
+      code: "TIME_UNSUPPORTED_PRECISION",
+    },
+  );
+  for (const code of [
+    "OPENAI_HTTP_401",
+    "OPENAI_HTTP_429",
+    "BUDGET_EXHAUSTED",
+    "OPENAI_NETWORK_OR_RESPONSE",
+  ]) {
+    await assert.rejects(
+      attempt(async () => {
+        throw new MemoryError(code);
+      }),
+      { message: code },
+    );
+  }
 });

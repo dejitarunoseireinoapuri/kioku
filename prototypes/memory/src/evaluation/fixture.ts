@@ -14,10 +14,12 @@ export type QuerySpec = {
   forbidden?: string[];
   critical?: boolean;
   allowAbstention?: boolean;
+  citationGroups?: string[][];
+  at?: string;
 };
 export type Scenario = {
   turn: Turn;
-  partition: "tuning" | "validation";
+  partition: "tuning" | "regression" | "validation";
   category: string;
   status: "saved" | "needs_clarification" | "ignored";
   clarification: string | null;

@@ -1,7 +1,7 @@
-import { readFile, writeFile, mkdir } from "node:fs/promises";
-import { dirname } from "node:path";
+import { readFile } from "node:fs/promises";
 import { z } from "zod";
 import { MemoryError } from "./domain.ts";
+import { atomicWrite } from "./file-store.ts";
 
 const ledgerSchema = z.strictObject({
   spentUsd: z.number().nonnegative(),
@@ -87,7 +87,10 @@ export class Budget {
   }
 
   private async persist(): Promise<void> {
-    await mkdir(dirname(this.file), { recursive: true });
-    await writeFile(this.file, JSON.stringify(this.ledger), { mode: 0o600 });
+    try {
+      await atomicWrite(this.file, JSON.stringify(this.ledger));
+    } catch {
+      throw new MemoryError("BUDGET_WRITE_FAILED");
+    }
   }
 }

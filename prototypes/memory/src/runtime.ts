@@ -2,6 +2,7 @@ import { mkdir, open, unlink } from "node:fs/promises";
 import { Budget } from "./budget.ts";
 import { MemoryError } from "./domain.ts";
 import { OpenAiMemory } from "./openai.ts";
+import { z } from "zod";
 
 export async function openRuntime(live: boolean, maximum = 2) {
   if (!live) throw new MemoryError("LIVE_FLAG_REQUIRED");
@@ -35,6 +36,23 @@ export async function openRuntime(live: boolean, maximum = 2) {
 }
 
 export function reportError(error: unknown): void {
+  if (error instanceof z.ZodError) {
+    console.error("M0_SCHEMA_VALIDATION_FAILED");
+    process.exitCode = 1;
+    return;
+  }
+  if (
+    error instanceof Error &&
+    "code" in error &&
+    typeof error.code === "string" &&
+    ["EACCES", "EPERM", "ENOSPC", "EBUSY", "EMFILE", "ENOMEM"].includes(
+      error.code,
+    )
+  ) {
+    console.error(`M0_IO_${error.code}`);
+    process.exitCode = 1;
+    return;
+  }
   console.error(
     error instanceof MemoryError ? error.message : "M0_INTERNAL_ERROR",
   );

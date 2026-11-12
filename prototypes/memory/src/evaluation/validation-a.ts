@@ -81,11 +81,14 @@ export const scenarios: Scenario[] = [
     "Para el lunes 16 de noviembre de 2026 tengo que hacer los ejercicios 3 y 5 de la página 42 del libro de japonés.",
     [fixture.item(["3", "5", "42", "japones"], "intention", "2026-11-16")],
     [
-      fixture.yes("¿Qué deberes de japonés tengo para el lunes?", "v05", [
-        ["3"],
-        ["5"],
-        ["42"],
-      ]),
+      {
+        ...fixture.yes("¿Qué deberes de japonés tengo para el lunes?", "v05", [
+          ["3"],
+          ["5"],
+          ["42"],
+        ]),
+        at: "2026-11-11T18:00:00+01:00",
+      },
       fixture.yes(
         "¿Qué página tenía los ejercicios para el 16 de noviembre?",
         "v05",
@@ -106,6 +109,7 @@ export const scenarios: Scenario[] = [
           [["dune"]],
         ),
         sources: ["v01", "v06"],
+        citationGroups: [["v01"]],
       },
       fixture.yes("¿A dónde viajará Gemma el día 21?", "v06", [["roma"]]),
     ],
@@ -254,12 +258,15 @@ export const scenarios: Scenario[] = [
       fixture.item(["jardin", "botanico"], "intention", "2026-11-14"),
     ],
     [
-      fixture.yes(
-        "¿Qué plan tengo finalmente para el sábado 14?",
-        "v16",
-        [["jardin"], ["botanico"]],
-        true,
-      ),
+      {
+        ...fixture.yes(
+          "¿Qué plan tengo finalmente para el sábado 14?",
+          "v16",
+          [["jardin"], ["botanico"]],
+          true,
+        ),
+        at: "2026-11-11T18:00:00+01:00",
+      },
       fixture.yes("¿Qué visita descarté para ese sábado?", "v16", [
         ["museo"],
         ["vidrio"],

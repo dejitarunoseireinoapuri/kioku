@@ -27,7 +27,10 @@ const saved: Extraction = {
       quote: "Me gusta el ramen.",
       kind: "opinion",
       entities: [],
-      occurredOn: null,
+      time: { precision: "unknown", value: null, end: null, quote: null },
+      provenance: "personal",
+      attribution: null,
+      lifecycle: "current",
     },
   ],
 };
@@ -198,7 +201,7 @@ test("storage rejects traversal, corrupt snapshots and unknown fields", async ()
   try {
     await writeFile(
       f.repository.file,
-      '{"version":1,"sources":[],"memories":[],"secret":"synthetic"}',
+      '{"version":2,"sources":[],"memories":[],"secret":"synthetic"}',
     );
     await assert.rejects(f.repository.load(), /STORE_READ_FAILED/);
   } finally {
@@ -226,6 +229,104 @@ test("evaluation records a withdrawal as untested when its source was never save
       reason: null,
     });
     assert.equal((await f.repository.load()).sources.length, 0);
+  } finally {
+    await f.close();
+  }
+});
+
+test("API credentials cannot be sent to the memory model or persisted as a source", async () => {
+  const f = await fixture();
+  try {
+    let invoked = false;
+    const engine = new MemoryEngine(
+      f.repository,
+      fake({
+        extract: async () => {
+          invoked = true;
+          return saved;
+        },
+      }),
+    );
+    await assert.rejects(
+      engine.tell({ ...turn, text: "Mi clave es " + "sk-" + "x".repeat(40) }),
+      /CREDENTIAL_NOT_MEMORY/,
+    );
+    assert.equal(invoked, false);
+    assert.equal((await f.repository.load()).sources.length, 0);
+  } finally {
+    await f.close();
+  }
+});
+
+test("version-one snapshots are preserved and rejected instead of silently reinterpreted", async () => {
+  const f = await fixture();
+  try {
+    const original = '{"version":1,"sources":[],"memories":[]}';
+    await writeFile(f.repository.file, original);
+    await assert.rejects(f.repository.load(), /STORE_VERSION_UNSUPPORTED/);
+    assert.equal(await readFile(f.repository.file, "utf8"), original);
+  } finally {
+    await f.close();
+  }
+});
+
+test("a credential in a question is rejected before embeddings or answer generation", async () => {
+  const f = await fixture();
+  try {
+    let invoked = false;
+    const engine = new MemoryEngine(
+      f.repository,
+      fake({
+        embed: async () => {
+          invoked = true;
+          return [[1, 0]];
+        },
+      }),
+    );
+    await assert.rejects(
+      engine.ask(
+        "Mi clave es " + "sk-" + "x".repeat(40),
+        "2026-11-12T10:00:00Z",
+      ),
+      /CREDENTIAL_NOT_MEMORY/,
+    );
+    assert.equal(invoked, false);
+  } finally {
+    await f.close();
+  }
+});
+
+test("a generated wrong date cannot survive in normalized text after canonical correction", async () => {
+  const f = await fixture();
+  try {
+    const literal = "La cita es el 16 de noviembre de 2026.";
+    const extraction: Extraction = {
+      status: "saved",
+      clarification: null,
+      items: [
+        {
+          ...saved.items[0]!,
+          text: "La cita es el 17 de noviembre de 2026.",
+          quote: literal,
+          kind: "fact",
+          time: {
+            precision: "day",
+            value: "2026-11-17",
+            end: null,
+            quote: "16 de noviembre de 2026",
+          },
+        },
+      ],
+    };
+    const engine = new MemoryEngine(
+      f.repository,
+      fake({ extract: async () => extraction }),
+    );
+    await engine.tell({ ...turn, text: literal });
+    const memory = (await f.repository.load()).memories[0]!;
+    assert.equal(memory.time.value, "2026-11-16");
+    assert.equal(memory.text, literal);
+    assert.doesNotMatch(memory.text, /17 de noviembre/u);
   } finally {
     await f.close();
   }

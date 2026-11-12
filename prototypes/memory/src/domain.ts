@@ -1,12 +1,28 @@
 import { z } from "zod";
 
 export const memoryKinds = ["fact", "intention", "opinion", "thought"] as const;
+export const timeSchema = z.strictObject({
+  precision: z.enum([
+    "unknown",
+    "day",
+    "month",
+    "year",
+    "month_day",
+    "interval",
+  ]),
+  value: z.string().max(20).nullable(),
+  end: z.string().max(20).nullable(),
+  quote: z.string().max(300).nullable(),
+});
 export const itemSchema = z.strictObject({
   text: z.string().min(1).max(1600),
   quote: z.string().min(1).max(2000),
   kind: z.enum(memoryKinds),
   entities: z.array(z.string().min(1).max(100)).max(12),
-  occurredOn: z.iso.date().nullable(),
+  time: timeSchema,
+  provenance: z.enum(["personal", "reported", "quoted"]),
+  attribution: z.string().max(200).nullable(),
+  lifecycle: z.enum(["current", "historical", "superseded"]),
 });
 export const extractionSchema = z.strictObject({
   status: z.enum(["saved", "needs_clarification", "ignored"]),
@@ -33,11 +49,12 @@ export const memorySchema = itemSchema.extend({
   vector: z.array(z.number().finite()).min(1),
 });
 export const snapshotSchema = z.strictObject({
-  version: z.literal(1),
+  version: z.literal(2),
   sources: z.array(sourceSchema),
   memories: z.array(memorySchema),
 });
 export type Item = z.infer<typeof itemSchema>;
+export type MemoryTime = z.infer<typeof timeSchema>;
 export type Extraction = z.infer<typeof extractionSchema>;
 export type Answer = z.infer<typeof answerSchema>;
 export type Source = z.infer<typeof sourceSchema>;
@@ -58,6 +75,7 @@ export interface MemoryIntelligence {
     question: string,
     at: string,
     candidates: Candidate[],
+    sources: Source[],
   ): Promise<Answer>;
 }
 

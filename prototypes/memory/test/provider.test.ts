@@ -4,6 +4,8 @@ import { mkdtemp, mkdir, rm } from "node:fs/promises";
 import { Budget } from "../src/budget.ts";
 import { OpenAiMemory } from "../src/openai.ts";
 import { openRuntime } from "../src/runtime.ts";
+import { unknownTime } from "../src/temporal.ts";
+import type { Candidate, Source } from "../src/domain.ts";
 
 async function fixture() {
   await mkdir("local-data/m0/tests", { recursive: true });
@@ -66,6 +68,7 @@ test("outbound provider uses fixed TLS endpoint, refuses redirects and disables 
       assert.equal(body.store, false);
       assert.equal("tools" in body, false);
       assert.equal("previous_response_id" in body, false);
+      const format = body.text as { format: { name: string } };
       return Response.json({
         status: "completed",
         output: [
@@ -74,11 +77,20 @@ test("outbound provider uses fixed TLS endpoint, refuses redirects and disables 
             content: [
               {
                 type: "output_text",
-                text: JSON.stringify({
-                  status: "not_found",
-                  answer: "No consta.",
-                  sourceIds: [],
-                }),
+                text: JSON.stringify(
+                  format.format.name === "memory_verification"
+                    ? {
+                        supported: true,
+                        problem: "none",
+                        status: "not_found",
+                      }
+                    : {
+                        status: "not_found",
+                        answer: "No consta.",
+                        sourceIds: [],
+                        memoryIds: [],
+                      },
+                ),
               },
             ],
           },
@@ -102,4 +114,90 @@ test("outbound provider uses fixed TLS endpoint, refuses redirects and disables 
 
 test("live access always requires an explicit flag", async () => {
   await assert.rejects(openRuntime(false), /LIVE_FLAG_REQUIRED/);
+});
+
+test("verification repairs only the state of a faithful abstention and preserves its useful source", async () => {
+  const f = await fixture();
+  try {
+    let calls = 0;
+    const source: Source = {
+      id: "plan",
+      text: "Quiero llamar a Nora. Aclaración: mi prima Nora.",
+      receivedAt: "2026-11-12T10:00:00Z",
+      zone: "Europe/Madrid",
+    };
+    const candidates: Candidate[] = [
+      {
+        score: 1,
+        memory: {
+          ...source,
+          id: "plan-1",
+          sourceId: "plan",
+          revision: 1,
+          text: "Quiero llamar a mi prima Nora.",
+          quote: "Quiero llamar a Nora.",
+          kind: "intention",
+          entities: ["Nora, prima"],
+          time: unknownTime,
+          provenance: "personal",
+          attribution: null,
+          lifecycle: "current",
+          vector: [1],
+        },
+      },
+    ];
+    const transport: typeof fetch = async (_url, options) => {
+      calls++;
+      const body = JSON.parse(String(options?.body)) as {
+        input: string;
+        text: { format: { name: string } };
+      };
+      assert.match(body.input, /Aclaración: mi prima Nora/u);
+      const payload =
+        body.text.format.name === "memory_verification"
+          ? {
+              supported: true,
+              problem: "none",
+              status: "not_found",
+            }
+          : {
+              status: "answered",
+              answer: "No consta que llamaras; solo querías llamar a Nora.",
+              sourceIds: ["plan"],
+              memoryIds: ["plan-1"],
+            };
+      return Response.json({
+        status: "completed",
+        output: [
+          {
+            type: "message",
+            content: [
+              {
+                type: "output_text",
+                text: JSON.stringify(payload),
+              },
+            ],
+          },
+        ],
+        usage: { input_tokens: 20, output_tokens: 20 },
+      });
+    };
+    const provider = new OpenAiMemory(
+      "sk-synthetic-test-only",
+      f.budget,
+      transport,
+    );
+    const answer = await provider.answer(
+      "¿Llamé a Nora?",
+      "2026-11-12",
+      candidates,
+      [source],
+    );
+    assert.equal(calls, 2);
+    assert.equal(answer.status, "not_found");
+    assert.deepEqual(answer.sourceIds, ["plan"]);
+    assert.match(answer.answer, /solo querías llamar/u);
+  } finally {
+    await f.close();
+  }
 });

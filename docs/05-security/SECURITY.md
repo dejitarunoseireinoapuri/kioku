@@ -10,6 +10,7 @@ Kioku tratará recuerdos potencialmente íntimos y una credencial que permite co
 - No aceptar destinos HTTP/base URLs arbitrarios desde textos, recuerdos o respuestas del modelo. Evitar exfiltración y SSRF; proveedores y operaciones se configuran en servidor.
 - Validar entrada y salida estructuradas, tamaños, enums, referencias, versiones y límites. El modelo no concede permisos ni ejecuta operaciones por sí solo.
 - Texto recuperado es dato no confiable, no una instrucción. Una orden incrustada en un recuerdo no autoriza borrados, llamadas, cambios de clave o acceso a otra cuenta.
+- M0 v2 valida referencias de recuerdo/fuente, distingue citas de datos personales y contrasta la propuesta con fuentes vigentes antes de mostrarla. Los patrones reconocibles de clave API se rechazan en relatos, aclaraciones y preguntas antes de enviarlos como contexto al proveedor. La comprobación semántica es una defensa adicional, no prueba infalible ni sustituto de autorización.
 - Admisión y concurrencia acotadas antes del trabajo costoso. Nada de recargas, escaladas de coste o cambio de proveedor silenciosos.
 - Separación de entornos, TLS verificado y permisos mínimos por identidad de ejecución. Nunca desactivar verificación TLS para resolver una estación local.
 

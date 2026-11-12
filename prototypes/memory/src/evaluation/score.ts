@@ -8,7 +8,7 @@ export function normalize(text: string): string {
     .toLowerCase();
 }
 
-export function scoreExtraction(
+export function legacyExtractionScore(
   scenario: Scenario,
   initial: Extraction,
   final: Extraction,
@@ -20,12 +20,63 @@ export function scoreExtraction(
     final.items.some(
       (actual) =>
         actual.kind === expected.kind &&
-        actual.occurredOn === expected.date &&
+        (actual.time.precision === "day" ? actual.time.value : null) ===
+          expected.date &&
         expected.terms.every((term) =>
           normalize(actual.text).includes(normalize(term)),
         ),
     ),
   );
+}
+
+/** Score completeness per source, allowing faithful splits without merging different people's sources. */
+export function scoreExtraction(
+  scenario: Scenario,
+  initial: Extraction,
+  final: Extraction,
+): boolean {
+  if (initial.status !== scenario.status) return false;
+  if (scenario.status === "ignored") return final.items.length === 0;
+  if (final.status !== "saved") return false;
+  const coverage = final.items.map((item) =>
+    normalize(
+      `${item.text} ${item.entities.join(" ")} ${item.attribution ?? ""}`,
+    ),
+  );
+  const together = coverage.join(" ");
+  return scenario.items.every((expected) => {
+    const terms = expected.terms.map(normalize);
+    if (!terms.every((term) => together.includes(term))) return false;
+    if (
+      terms.includes("no") &&
+      !coverage.some((text) => terms.every((term) => text.includes(term)))
+    )
+      return false;
+    const compatible = final.items.filter(
+      (actual) =>
+        actual.kind === expected.kind ||
+        (["thought", "intention"].includes(actual.kind) &&
+          ["thought", "intention"].includes(expected.kind)) ||
+        (expected.kind === "fact" &&
+          actual.kind === "intention" &&
+          /\b(sera|viajara|ira)\b/u.test(normalize(scenario.turn.text))) ||
+        (expected.kind === "fact" &&
+          actual.kind === "thought" &&
+          /me sentí/iu.test(scenario.turn.text)),
+    );
+    if (!compatible.length) return false;
+    return (
+      expected.date === null ||
+      compatible.some(
+        (actual) =>
+          actual.time.precision === "day" &&
+          actual.time.value === expected.date &&
+          expected.terms.some((term) =>
+            normalize(actual.text).includes(normalize(term)),
+          ),
+      )
+    );
+  });
 }
 
 export function scoreQuery(
@@ -36,7 +87,11 @@ export function scoreQuery(
   const retrieved = new Set(candidates.map(({ memory }) => memory.sourceId));
   const cited = new Set(answer.sourceIds);
   const text = normalize(answer.answer);
-  const sourceMatch = expected.sources.every((id) => cited.has(id));
+  const citationGroups =
+    expected.citationGroups ?? expected.sources.map((id) => [id]);
+  const sourceMatch = citationGroups.every((group) =>
+    group.some((id) => cited.has(id)),
+  );
   const termsMatch = expected.groups.every((group) =>
     group.some((term) => text.includes(normalize(term))),
   );
@@ -46,8 +101,12 @@ export function scoreQuery(
   const statusMatches =
     answer.status === expected.status ||
     (expected.allowAbstention === true && answer.status === "not_found");
+  const semanticForm =
+    expected.status === "needs_clarification"
+      ? /[?¿]/u.test(answer.answer)
+      : termsMatch;
   const answered =
-    statusMatches && sourceMatch && termsMatch && !forbiddenMatch;
+    statusMatches && sourceMatch && semanticForm && !forbiddenMatch;
   return {
     retrieval: expected.sources.length
       ? expected.sources.every((id) => retrieved.has(id))

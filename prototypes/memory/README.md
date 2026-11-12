@@ -4,6 +4,8 @@ Herramienta local por texto para comprobar interpretación, persistencia, recupe
 
 Primera evaluación ejecutada: [informe y decisión](evidence/2026-11-11.md). **M0 no está validada**: hay errores semánticos confirmados y la puntuación automática tiene limitaciones. K0 no ha empezado.
 
+Segunda iteración: [correcciones y evidencia](evidence/2026-11-12.md). Fechas parciales, procedencia, contexto de identidad y verificación de respuestas incorporados; validación v2 todavía no declarada superada.
+
 ## Preparar y comprobar
 
 Desde la raíz, con Node 24.12 o posterior de la serie 24:
@@ -24,7 +26,7 @@ Configurar mediante el flujo seguro de OpenAI Platform y el destino local confir
 
 Las llamadas reales exigen `--live`. Endpoint TLS fijo de OpenAI, sin herramientas, redirecciones ni reintentos automáticos, con `store: false` en Responses. No equivale a garantizar retención cero en el proveedor.
 
-Configuración fijada: `gpt-5.4-mini-2026-03-17`, razonamiento `none`, hasta 2400 tokens de salida; embeddings `text-embedding-3-small` de 512 dimensiones; seis candidatos, ranking 85 % semántico/15 % palabras. Hasta 8000 caracteres por relato, 2000 por consulta/aclaración y ocho recuerdos por intervención. Timeout: 45 segundos por llamada; objetivo p95: 15 segundos por operación, separado de corrección.
+Configuración v2: `gpt-5.4-mini-2026-03-17`, razonamiento `low` para extracción/respuesta y `none` para verificar; hasta 2400 tokens de salida principal y 400 de verificación. Embeddings `text-embedding-3-small` de 512 dimensiones; seis candidatos, ranking 85 % semántico/15 % palabras. Hasta 8000 caracteres por relato, 2000 por consulta/aclaración y ocho recuerdos por intervención. Fuentes seleccionadas: hasta 16000 caracteres, entrada de modelo acotada a 48000. Timeout: 45 segundos por llamada; objetivo p95: 15 segundos por operación, separado de corrección.
 
 **Máximo acumulado estimado: 2 USD** entre conversación y evaluaciones. `local-data/m0/budget.json` conserva uso y reservas entre procesos. Se reserva un máximo conservador antes de llamar; error/timeout mantiene la reserva porque pudo haberse cobrado. No borrar el contador para sortear el límite. Las tarifas estándar verificadas estiman consumo: factura/créditos se consultan en Platform. El contador local no garantiza un límite exacto de factura.
 
@@ -34,7 +36,7 @@ Configuración fijada: `gpt-5.4-mini-2026-03-17`, razonamiento `none`, hasta 240
 node tooling/m0.mjs m0 --live
 ```
 
-Comandos: `/contar texto`, `/preguntar texto`, `/aclarar texto`, `/olvidar ID`, `/salir`. La terminal muestra respuestas y referencias; los diagnósticos no registran contenido. Datos ficticios en `local-data/m0/interactive`.
+Comandos: `/contar texto`, `/preguntar texto`, `/aclarar texto`, `/olvidar ID`, `/salir`. La terminal muestra respuestas y referencias; los diagnósticos no registran contenido. Datos ficticios v2 en `local-data/m0/interactive-v2`; snapshots v1 preservados y rechazados sin alterarlos.
 
 Olvidar exige un ID explícito y retira la fuente completa y sus recuerdos/vectores. No resuelve objetivos por lenguaje natural ni elimina un solo tema de una fuente mixta: corresponde a K4. IDs repetidos se rechazan; no es el protocolo remoto de idempotencia de K2. Un bloqueo admite un solo proceso escritor, sin concurrencia distribuida.
 
@@ -42,10 +44,11 @@ Olvidar exige un ID explícito y retira la fuente completa y sus recuerdos/vecto
 
 ```powershell
 node tooling/m0.mjs m0:eval --live --partition tuning
+node tooling/m0.mjs m0:eval --live --partition regression
 node tooling/m0.mjs m0:eval --live --partition validation
 ```
 
-Preparación: ocho intervenciones/16 consultas. Validación reservada: 32 intervenciones/64 consultas; tres rondas completas con almacenamiento nuevo. Las expectativas nunca se pasan a OpenAI. Las consultas usan una instancia nueva y recargan de disco, sin recibir todo el historial.
+Preparación: ocho intervenciones/16 consultas. Regresión: los 32 relatos/64 consultas anteriores, en una ronda. Nueva validación reservada: 32 intervenciones/64 consultas; tres rondas completas con almacenamiento nuevo. Las expectativas nunca se pasan al núcleo ni al proveedor. Las consultas usan una instancia nueva y recargan de disco; reciben únicamente las fuentes seleccionadas, no todo el historial.
 
 El manifiesto fija huella de código/corpus, configuración, presupuesto, latencia objetivo, commit y cambios locales. Informes privados/checkpoints en `local-data/m0/evaluation/`. Una interrupción deja `complete: false` y no cuenta como ronda superada. Registrar todos los intentos; no ajustar con validación sin renovar los casos reservados.
 

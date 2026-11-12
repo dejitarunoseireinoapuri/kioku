@@ -1,8 +1,19 @@
 import { z } from "zod";
-import { extractionSchema, answerSchema, MemoryError } from "./domain.ts";
-import type { Candidate, MemoryIntelligence, Turn } from "./domain.ts";
+import { extractionSchema, MemoryError } from "./domain.ts";
+import type { Candidate, MemoryIntelligence, Turn, Source } from "./domain.ts";
 import { Budget, rates } from "./budget.ts";
-import { extractionInstructions, answerInstructions } from "./prompts.ts";
+import {
+  extractionInstructions,
+  answerInstructions,
+  verificationInstructions,
+} from "./prompts.ts";
+import {
+  proposalSchema,
+  verificationSchema,
+  validateProposal,
+  unsupportedAnswer,
+  constrainAnswer,
+} from "./answer-guard.ts";
 
 const responseSchema = z.object({
   status: z.string(),
@@ -32,6 +43,8 @@ export const model = "gpt-5.4-mini-2026-03-17";
 export const embeddingModel = "text-embedding-3-small";
 
 export class OpenAiMemory implements MemoryIntelligence {
+  lastCheck: { supported: boolean; problem: string; status: string } | null =
+    null;
   readonly #key: string;
   readonly budget: Budget;
   readonly transport: typeof fetch;
@@ -53,23 +66,67 @@ export class OpenAiMemory implements MemoryIntelligence {
     );
   }
 
-  answer(question: string, at: string, candidates: Candidate[]) {
+  async answer(
+    question: string,
+    at: string,
+    candidates: Candidate[],
+    sources: Source[] = [],
+  ) {
     const evidence = candidates.map(({ memory }) => ({
       sourceId: memory.sourceId,
       text: memory.text,
       quote: memory.quote,
       kind: memory.kind,
       entities: memory.entities,
-      occurredOn: memory.occurredOn,
+      id: memory.id,
+      time: memory.time,
+      provenance: memory.provenance,
+      attribution: memory.attribution,
+      lifecycle: memory.lifecycle,
       receivedAt: memory.receivedAt,
       zone: memory.zone,
     }));
-    return this.structured(
+    const proposal = await this.structured(
       answerInstructions,
-      { question, at, candidates: evidence },
-      answerSchema,
+      { question, at, candidates: evidence, sources },
+      proposalSchema,
       "memory_answer",
     );
+    const answer = validateProposal(proposal, candidates);
+    const constrained = constrainAnswer(
+      proposal,
+      candidates,
+      sources,
+      question,
+    );
+    if (constrained) {
+      this.lastCheck = {
+        supported: constrained.status === "answered",
+        problem: "deterministic_scope_guard",
+        status: constrained.status,
+      };
+      return constrained;
+    }
+    const verified = await this.structured(
+      verificationInstructions,
+      {
+        question,
+        at,
+        proposal: answer,
+        sources: sources.filter((source) =>
+          answer.sourceIds.includes(source.id),
+        ),
+        candidates: evidence,
+      },
+      verificationSchema,
+      "memory_verification",
+      "none",
+      400,
+    );
+    this.lastCheck = verified;
+    return verified.supported
+      ? { ...answer, status: verified.status }
+      : unsupportedAnswer(verified.problem);
   }
 
   async embed(texts: string[]): Promise<number[][]> {
@@ -88,7 +145,10 @@ export class OpenAiMemory implements MemoryIntelligence {
       input: texts,
       dimensions: 512,
     });
-    const result = embeddingsSchema.parse(raw);
+    const parsed = embeddingsSchema.safeParse(raw);
+    if (!parsed.success)
+      throw new MemoryError("EMBEDDING_RESPONSE_SCHEMA_INVALID");
+    const result = parsed.data;
     const sorted = [...result.data].sort((a, b) => a.index - b.index);
     if (
       sorted.length !== texts.length ||
@@ -105,16 +165,18 @@ export class OpenAiMemory implements MemoryIntelligence {
     data: unknown,
     schema: z.ZodType<T>,
     name: string,
+    effort: "none" | "low" = "low",
+    maxOutput = 2400,
   ): Promise<T> {
     const input = JSON.stringify(data);
-    if (input.length > 32_000) throw new MemoryError("MODEL_INPUT_LIMIT");
+    if (input.length > 48_000) throw new MemoryError("MODEL_INPUT_LIMIT");
     const body = {
       model,
       instructions,
       input,
       store: false,
-      max_output_tokens: 2400,
-      reasoning: { effort: "none" },
+      max_output_tokens: maxOutput,
+      reasoning: { effort },
       text: {
         format: {
           type: "json_schema",
@@ -126,9 +188,32 @@ export class OpenAiMemory implements MemoryIntelligence {
     };
     const reservation =
       (Buffer.byteLength(JSON.stringify(body)) + 2048) * rates.input +
-      2400 * rates.output;
+      maxOutput * rates.output;
     await this.budget.reserve(reservation);
-    const response = responseSchema.parse(await this.post("responses", body));
+    const parsed = responseSchema.safeParse(await this.post("responses", body));
+    if (!parsed.success) {
+      const fields = parsed.error.issues.map((issue) =>
+        issue.path
+          .filter(
+            (part) =>
+              typeof part === "string" &&
+              [
+                "status",
+                "output",
+                "content",
+                "text",
+                "usage",
+                "input_tokens",
+                "output_tokens",
+              ].includes(part),
+          )
+          .join("_"),
+      );
+      throw new MemoryError(
+        `PROVIDER_SCHEMA_INVALID_${[...new Set(fields)].join("_").slice(0, 100)}`,
+      );
+    }
+    const response = parsed.data;
     await this.budget.settle(
       reservation,
       response.usage.input_tokens,
