@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, rm } from "node:fs/promises";
 import { Budget } from "../src/budget.ts";
 import { OpenAiMemory, model } from "../src/openai.ts";
+import { modelProfile } from "../src/model-config.ts";
 const turn = {
   id: "synthetic",
   text: "Hana viajará a Osaka.",
@@ -42,6 +43,7 @@ for (const invalid of [false, true])
           const stage: string = body.text.format.name;
           stages.push(stage);
           assert.equal(body.model, model);
+          assert.deepEqual(body.reasoning, { effort: modelProfile.reasoning });
           const extraction = {
             ...draft,
             items: draft.items.map((i) => ({

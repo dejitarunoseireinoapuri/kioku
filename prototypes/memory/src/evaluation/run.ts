@@ -280,7 +280,20 @@ async function main(): Promise<void> {
     partition !== "regression-capture"
   )
     throw new Error("Partition required");
-  const runCount = partition === "validation" ? 3 : 1;
+  const roundsPosition = args.indexOf("--rounds");
+  const runCount =
+    roundsPosition < 0
+      ? partition === "validation"
+        ? 3
+        : 1
+      : Number(args[roundsPosition + 1]);
+  if (
+    !Number.isInteger(runCount) ||
+    runCount < 1 ||
+    runCount > 3 ||
+    (partition !== "validation" && runCount !== 1)
+  )
+    throw new MemoryError("EVALUATION_ROUND_COUNT_INVALID");
   const dirty =
     execFileSync("git", ["status", "--porcelain"], { encoding: "utf8" }).trim()
       .length > 0;
@@ -301,10 +314,10 @@ async function main(): Promise<void> {
     rates,
     candidateLimit: 6,
     protocol: "m0-v3",
-    reasoning: "low",
-    verificationReasoning: "low",
+    reasoning: modelProfile.reasoning,
+    verificationReasoning: modelProfile.reasoning,
     verificationMaxOutputTokens: 2400,
-    captureReview: { reasoning: "low", maxOutputTokens: 4000 },
+    captureReview: { reasoning: modelProfile.reasoning, maxOutputTokens: 4000 },
     extractionMaxOutputTokens: 4000,
     snapshotVersion: 3,
     checkpointEveryOperations: 8,

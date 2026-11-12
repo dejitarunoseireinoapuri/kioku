@@ -91,7 +91,6 @@ export class OpenAiMemory implements MemoryIntelligence {
       { ...turn, clarification, parts: format.parts },
       format.schema,
       "memory_extraction",
-      "low",
       4000,
     );
     const reviewed = await this.structured(
@@ -102,7 +101,6 @@ export class OpenAiMemory implements MemoryIntelligence {
         changes: captureChangesSchema,
       }),
       "memory_capture_review",
-      "low",
       4000,
     );
     this.lastCaptureReview = reviewed.changes;
@@ -171,7 +169,6 @@ export class OpenAiMemory implements MemoryIntelligence {
       },
       verificationSchema,
       "memory_verification",
-      "low",
       2400,
     );
     this.lastCheck = verified;
@@ -214,7 +211,6 @@ export class OpenAiMemory implements MemoryIntelligence {
     data: unknown,
     schema: z.ZodType<T>,
     name: string,
-    effort: "none" | "low" = "low",
     maxOutput = 2400,
   ): Promise<T> {
     const input = JSON.stringify(data);
@@ -225,7 +221,7 @@ export class OpenAiMemory implements MemoryIntelligence {
       input,
       store: false,
       max_output_tokens: maxOutput,
-      reasoning: { effort },
+      reasoning: { effort: modelProfile.reasoning },
       text: {
         format: {
           type: "json_schema",

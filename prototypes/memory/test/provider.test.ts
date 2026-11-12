@@ -6,6 +6,7 @@ import { OpenAiMemory } from "../src/openai.ts";
 import { openRuntime } from "../src/runtime.ts";
 import { unknownTime } from "../src/temporal.ts";
 import type { Candidate, Source } from "../src/domain.ts";
+import { modelProfile } from "../src/model-config.ts";
 
 async function fixture(maximum = 0.1) {
   await mkdir("local-data/m0/tests", { recursive: true });
@@ -98,6 +99,7 @@ test("outbound provider uses fixed TLS endpoint, refuses redirects and disables 
       assert.equal(options?.redirect, "error");
       const body = JSON.parse(String(options?.body)) as Record<string, unknown>;
       assert.equal(body.store, false);
+      assert.deepEqual(body.reasoning, { effort: modelProfile.reasoning });
       assert.equal("tools" in body, false);
       assert.equal("previous_response_id" in body, false);
       const format = body.text as { format: { name: string } };
