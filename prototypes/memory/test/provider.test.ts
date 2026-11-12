@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtemp, mkdir, rm } from "node:fs/promises";
+import { mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
 import { Budget } from "../src/budget.ts";
 import { OpenAiMemory } from "../src/openai.ts";
 import { openRuntime } from "../src/runtime.ts";
@@ -28,6 +28,38 @@ test("budget reservations survive timeouts and reload; exhaustion blocks before 
     assert.equal(reopened.ledger.reservedUsd, 0.08);
     await assert.rejects(reopened.reserve(0.03), /BUDGET_EXHAUSTED/);
     assert.equal(reopened.ledger.calls, 1);
+  } finally {
+    await f.close();
+  }
+});
+
+test("adding usage meters preserves the legacy accumulated budget and reservations", async () => {
+  const f = await fixture();
+  try {
+    await writeFile(
+      `${f.directory}/budget.json`,
+      JSON.stringify({
+        spentUsd: 1.8,
+        reservedUsd: 0.04,
+        inputTokens: 100,
+        outputTokens: 20,
+        calls: 10,
+      }),
+    );
+    const budget = new Budget(`${f.directory}/budget.json`, 5);
+    await budget.open();
+    assert.equal(budget.ledger.spentUsd, 1.8);
+    assert.equal(budget.ledger.reservedUsd, 0.04);
+    assert.equal(budget.ledger.inputTokens, 100);
+    assert.equal(budget.ledger.generationInputTokens, 0);
+    await budget.settle(0.04, 10, 2, false);
+    const reopened = new Budget(`${f.directory}/budget.json`, 5);
+    await reopened.open();
+    assert.equal(reopened.ledger.inputTokens, 110);
+    assert.equal(reopened.ledger.generationInputTokens, 10);
+    assert.ok(reopened.ledger.spentUsd > 1.8);
+    await assert.rejects(reopened.reserve(6), /BUDGET_EXHAUSTED/);
+    assert.equal(reopened.ledger.calls, 10);
   } finally {
     await f.close();
   }

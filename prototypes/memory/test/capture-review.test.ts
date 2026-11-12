@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { mkdir, mkdtemp, rm } from "node:fs/promises";
 import { Budget } from "../src/budget.ts";
-import { OpenAiMemory } from "../src/openai.ts";
+import { OpenAiMemory, model } from "../src/openai.ts";
 const turn = {
   id: "synthetic",
   text: "Hana viajará a Osaka.",
@@ -41,7 +41,7 @@ for (const invalid of [false, true])
           const body = JSON.parse(String(options?.body));
           const stage: string = body.text.format.name;
           stages.push(stage);
-          assert.equal(body.model, "gpt-5.4-2026-03-05");
+          assert.equal(body.model, model);
           const extraction = {
             ...draft,
             items: draft.items.map((i) => ({

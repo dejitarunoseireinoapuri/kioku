@@ -4,6 +4,7 @@ import type { Candidate, MemoryIntelligence, Turn, Source } from "./domain.ts";
 import { Budget, rates } from "./budget.ts";
 import { calendarContext } from "./calendar.ts";
 import { captureFormat } from "./capture-format.ts";
+import { modelProfile } from "./model-config.ts";
 import {
   extractionInstructions,
   captureReviewInstructions,
@@ -21,6 +22,11 @@ import {
 } from "./answer-guard.ts";
 
 const responseSchema = z.object({
+  model: z
+    .string()
+    .max(100)
+    .regex(/^gpt-[A-Za-z0-9._-]+$/u)
+    .optional(),
   status: z.string(),
   output: z.array(
     z.object({
@@ -44,7 +50,7 @@ const embeddingsSchema = z.object({
   ),
   usage: z.object({ prompt_tokens: z.number().int().nonnegative() }),
 });
-export const model = "gpt-5.4-2026-03-05";
+export const model = modelProfile.model;
 export const embeddingModel = "text-embedding-3-small";
 const captureChangesSchema = z
   .array(
@@ -61,6 +67,7 @@ const captureChangesSchema = z
   .max(7);
 
 export class OpenAiMemory implements MemoryIntelligence {
+  resolvedModel: string | null = null;
   lastCaptureReview: string[] | null = null;
   lastCheck: { supported: boolean; problem: string; status: string } | null =
     null;
@@ -165,7 +172,7 @@ export class OpenAiMemory implements MemoryIntelligence {
       verificationSchema,
       "memory_verification",
       "low",
-      1000,
+      2400,
     );
     this.lastCheck = verified;
     return verifiedAnswer(answer, verified);
@@ -262,6 +269,11 @@ export class OpenAiMemory implements MemoryIntelligence {
       response.usage.output_tokens,
       false,
     );
+    if (response.model) {
+      if (this.resolvedModel !== null && this.resolvedModel !== response.model)
+        throw new MemoryError("PROVIDER_MODEL_CHANGED");
+      this.resolvedModel = response.model;
+    }
     if (response.status !== "completed")
       throw new MemoryError("MODEL_INCOMPLETE");
     const content = response.output.flatMap((item) => item.content ?? []);

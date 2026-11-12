@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import { z } from "zod";
 import { MemoryError } from "./domain.ts";
 import { atomicWrite } from "./file-store.ts";
+import { modelProfile } from "./model-config.ts";
 
 const ledgerSchema = z.strictObject({
   spentUsd: z.number().nonnegative(),
@@ -9,14 +10,16 @@ const ledgerSchema = z.strictObject({
   inputTokens: z.number().nonnegative(),
   outputTokens: z.number().nonnegative(),
   calls: z.number().int().nonnegative(),
+  generationInputTokens: z.number().int().nonnegative().default(0),
+  embeddingInputTokens: z.number().int().nonnegative().default(0),
 });
 export type Ledger = z.infer<typeof ledgerSchema>;
 
 // GPT-5.4 public standard-processing tariffs verified 2026-11-12; prior ledger costs are preserved.
-export const maximumBudgetUsd = 8;
+export const maximumBudgetUsd = 12;
 export const rates = {
-  input: 2.5 / 1e6,
-  output: 15 / 1e6,
+  input: modelProfile.inputCeiling,
+  output: modelProfile.output,
   embedding: 0.02 / 1e6,
 };
 
@@ -29,6 +32,8 @@ export class Budget {
     inputTokens: 0,
     outputTokens: 0,
     calls: 0,
+    generationInputTokens: 0,
+    embeddingInputTokens: 0,
   };
 
   constructor(file: string, maximum: number) {
@@ -84,6 +89,8 @@ export class Budget {
       input * (embedding ? rates.embedding : rates.input) +
       output * rates.output;
     this.ledger.inputTokens += input;
+    if (embedding) this.ledger.embeddingInputTokens += input;
+    else this.ledger.generationInputTokens += input;
     this.ledger.outputTokens += output;
     await this.persist();
   }

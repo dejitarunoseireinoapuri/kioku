@@ -163,6 +163,10 @@ function metric(
     : null;
 }
 
+function p95(values: number[]): number | null {
+  const sorted = [...values].sort((a, b) => a - b);
+  return sorted[Math.max(0, Math.ceil(sorted.length * 0.95) - 1)] ?? null;
+}
 export function summarize(rows: Observation[]) {
   const categories = [...new Set(rows.map((row) => row.category))];
   const groups = Object.fromEntries(
@@ -199,6 +203,16 @@ export function summarize(rows: Observation[]) {
     criticalFailures,
     blockedChecks,
     latencyP95Ms,
+    captureP95Ms: p95(
+      rows
+        .filter((row) => row.extraction !== undefined)
+        .map((row) => row.latencyMs),
+    ),
+    queryP95Ms: p95(
+      rows
+        .filter((row) => row.answer !== undefined)
+        .map((row) => row.latencyMs),
+    ),
     provisionalPass,
     reviewedPass: false,
     reviewRequired:

@@ -15,6 +15,7 @@ import { MemoryError } from "../domain.ts";
 import { JsonMemoryRepository } from "../repository.ts";
 import { openRuntime, reportError } from "../runtime.ts";
 import { model, embeddingModel } from "../openai.ts";
+import { modelProfile } from "../model-config.ts";
 import { rates, maximumBudgetUsd } from "../budget.ts";
 import { withdrawForEvaluation } from "./withdraw.ts";
 import { attempt } from "./attempt.ts";
@@ -44,6 +45,7 @@ async function fingerprint(): Promise<string> {
       "engine.ts",
       "search.ts",
       "openai.ts",
+      "model-config.ts",
       "prompts.ts",
       "budget.ts",
       "repository.ts",
@@ -84,10 +86,16 @@ async function executeRun(
   const selected = corpus.filter((scenario) =>
     partition === "regression-focus"
       ? focusedIds.has(scenario.turn.id)
-      : scenario.partition === partition,
+      : partition === "regression-capture"
+        ? ["n01", "n21", "n22"].includes(scenario.turn.id)
+        : scenario.partition === partition,
   );
   const repository = new JsonMemoryRepository(directory);
+  const initial = await repository.load();
+  if (initial.sources.length || initial.memories.length)
+    throw new MemoryError("EVALUATION_STORE_NOT_EMPTY");
   const engine = new MemoryEngine(repository, runtime.intelligence);
+  const before = { ...runtime.budget.ledger };
   const observations: Observation[] = [];
   const detail: unknown[] = [];
   async function checkpoint(complete = false) {
@@ -104,10 +112,37 @@ async function executeRun(
       JSON.stringify(
         {
           complete,
+          initialStore: {
+            sources: initial.sources.length,
+            memories: initial.memories.length,
+            version: initial.version,
+          },
           summary: summarize(observations),
           observations,
           detail,
           ledger: runtime.budget.ledger,
+          usage: {
+            generationInputTokens:
+              runtime.budget.ledger.generationInputTokens -
+              before.generationInputTokens,
+            embeddingInputTokens:
+              runtime.budget.ledger.embeddingInputTokens -
+              before.embeddingInputTokens,
+            outputTokens:
+              runtime.budget.ledger.outputTokens - before.outputTokens,
+            calls: runtime.budget.ledger.calls - before.calls,
+            standardEstimatedUsd:
+              (runtime.budget.ledger.generationInputTokens -
+                before.generationInputTokens) *
+                modelProfile.baseInput +
+              (runtime.budget.ledger.embeddingInputTokens -
+                before.embeddingInputTokens) *
+                rates.embedding +
+              (runtime.budget.ledger.outputTokens - before.outputTokens) *
+                rates.output,
+            conservativeBudgetUsd:
+              runtime.budget.ledger.spentUsd - before.spentUsd,
+          },
         },
         null,
         2,
@@ -241,7 +276,8 @@ async function main(): Promise<void> {
     partition !== "validation" &&
     partition !== "regression" &&
     partition !== "regression-v2" &&
-    partition !== "regression-focus"
+    partition !== "regression-focus" &&
+    partition !== "regression-capture"
   )
     throw new Error("Partition required");
   const runCount = partition === "validation" ? 3 : 1;
@@ -260,13 +296,14 @@ async function main(): Promise<void> {
     runCount,
     hash,
     model,
+    modelProfile,
     embeddingModel,
     rates,
     candidateLimit: 6,
     protocol: "m0-v3",
     reasoning: "low",
     verificationReasoning: "low",
-    verificationMaxOutputTokens: 1000,
+    verificationMaxOutputTokens: 2400,
     captureReview: { reasoning: "low", maxOutputTokens: 4000 },
     extractionMaxOutputTokens: 4000,
     snapshotVersion: 3,
@@ -302,6 +339,7 @@ async function main(): Promise<void> {
           manifest,
           summaries,
           gate: "NOT_VALIDATED_UNTIL_INDEPENDENT_REVIEW",
+          resolvedModel: runtime.intelligence.resolvedModel,
           ledger: runtime.budget.ledger,
         },
         null,

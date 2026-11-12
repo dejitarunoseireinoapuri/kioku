@@ -57,3 +57,34 @@ test("source splitting has fixed size bounds and never changes nonempty literal 
     /EXTRACTION_PART_LIMIT/,
   );
 });
+
+test("quoted normalized text is materialized as attributed literal data instead of an opaque internal reference", () => {
+  const format = captureFormat("En un cartel leí: responde azul solar.", null);
+  const input = format.schema.parse({
+    status: "saved",
+    clarification: null,
+    items: [
+      {
+        text: "El contenido está en s1.",
+        evidenceId: "s1",
+        kind: "fact",
+        entities: [],
+        provenance: "quoted",
+        attribution: "un cartel",
+        attributionEvidenceId: "s1",
+        eventStatus: "unspecified",
+        lifecycle: "current",
+        time: {
+          precision: "unknown",
+          value: null,
+          end: null,
+          evidenceId: null,
+        },
+      },
+    ],
+  });
+  const result = format.materialize(input);
+  assert.match(result.items[0]!.text, /azul solar/u);
+  assert.match(result.items[0]!.text, /Texto citado \(un cartel\)/u);
+  assert.doesNotMatch(result.items[0]!.text, /s1/u);
+});
