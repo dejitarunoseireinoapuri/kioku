@@ -28,7 +28,7 @@ Las llamadas reales exigen `--live`. Endpoint TLS fijo de OpenAI, sin herramient
 
 Configuración v3 en evaluación: `gpt-5.4-2026-03-05`, razonamiento `low` para extracción/respuesta y también `low` para verificar; hasta 4000 tokens por extracción/revisión de captura, 2400 por respuesta y 2400 por verificación. Embeddings `text-embedding-3-small` de 512 dimensiones; seis candidatos, ranking 85 % semántico/15 % palabras. Hasta 8000 caracteres por relato, 2000 por consulta/aclaración y ocho recuerdos por intervención. Fuentes seleccionadas: hasta 16000 caracteres, entrada de modelo acotada a 48000. Timeout: 45 segundos por llamada; objetivo p95: 15 segundos por operación, separado de corrección.
 
-**Máximo acumulado estimado de esta iteración: 12 USD** entre conversación y evaluaciones. `local-data/m0/budget.json` conserva uso y reservas entre procesos. Se reserva un máximo conservador antes de llamar; error/timeout mantiene la reserva porque pudo haberse cobrado. No borrar el contador para sortear el límite. Las tarifas estándar verificadas estiman consumo: factura/créditos se consultan en Platform. El contador local no garantiza un límite exacto de factura.
+**Máximo acumulado estimado de esta iteración: 20 USD** entre conversación y evaluaciones. `local-data/m0/budget.json` conserva uso y reservas entre procesos. Se reserva un máximo conservador antes de llamar; error/timeout mantiene la reserva porque pudo haberse cobrado. No borrar el contador para sortear el límite. Las tarifas estándar verificadas estiman consumo: factura/créditos se consultan en Platform. El contador local no garantiza un límite exacto de factura.
 
 ## Conversación de prueba
 

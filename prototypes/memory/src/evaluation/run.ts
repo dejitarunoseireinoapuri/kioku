@@ -112,6 +112,7 @@ async function executeRun(
       JSON.stringify(
         {
           complete,
+          resolvedModel: runtime.intelligence.resolvedModel,
           initialStore: {
             sources: initial.sources.length,
             memories: initial.memories.length,
