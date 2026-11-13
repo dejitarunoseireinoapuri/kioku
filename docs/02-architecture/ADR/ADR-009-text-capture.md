@@ -1,6 +1,6 @@
 # ADR-009 · Captura por texto, procedencia e idempotencia
 
-**Estado:** implementada y desplegada; aceptación del nuevo build en móviles pendiente. Fecha: 2026-11-13. Amplía ADR-003/005/008.
+**Estado:** implementada y desplegada; recorrido principal aceptado en Android, validación del nuevo build iOS pendiente. Fecha: 2026-11-13. Amplía ADR-003/005/008.
 
 ## Contexto
 

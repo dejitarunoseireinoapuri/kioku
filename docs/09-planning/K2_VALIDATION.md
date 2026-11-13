@@ -1,6 +1,6 @@
 # K2 · Captura por escrito
 
-Rama: `codex/k2-text-memory`, desde `2f18f23`. **Estado: implementada y desplegada; aceptación del nuevo build en móviles pendiente.** No es cierre de K2 ni de K1/iOS.
+Rama: `codex/k2-text-memory`, desde `2f18f23`. **Estado: implementada y desplegada; recorrido principal aceptado por el propietario en Android, validación del nuevo build iOS pendiente.** No es cierre multiplataforma de K2 ni de K1/iOS.
 
 ## Alcance de esta entrega
 
@@ -47,8 +47,9 @@ Se corrigió además el puente de respuesta para aceptar números enteros serial
 
 ## Aceptación pendiente
 
-- Instalar como actualización y comprobar captura/clarificación/fuente en Android con Google/App Check reales; compilar y comprobar la integración en Mac/iOS. No sustituir estos resultados por fixtures o acceso K1 de un build anterior.
-- APK preparado en el PC, sin instalación automática en móviles personales. El propietario confirma «Recuerdo guardado» y una pregunta de aclaración adecuada tras probar desde su Android. Confirma captura y detección de ambigüedad con Google/App Check reales; revisión del texto original y finalización de la aclaración pendientes. Se explicó que una intervención nueva sustituye la tarjeta anterior; el recorrido actual no es un historial navegable. No se copian recuerdos personales a la evidencia.
+- Compilar el nuevo build y comprobar captura, aclaración, fuente y orientación en Mac/iOS con Google/App Check reales. No sustituir estos resultados por fixtures o acceso K1 de un build anterior.
+- Android: el propietario confirmó guardado y aclaración; tras instalar la corrección confirma «al girar se mantiene todo y puedo ver el texto original». Recorrido principal aceptado en su móvil con Google/App Check reales. APK instalado por el propietario, sin instalación automática en móviles personales. Una intervención nueva sustituye la tarjeta anterior; el recorrido actual no es un historial navegable. No se copian recuerdos personales a la evidencia.
+- Tras la validación iOS, cerrar el registro de K2 e integrar K1/K2 en `main`, como autorizó el propietario. El objetivo de latencia sigue abierto y separado del cierre funcional; recuperación tras muerte del proceso tampoco se declara validada.
 - No declarar consulta, corrección, olvido o voz disponibles hasta sus fases. No usar datos insustituibles como primera aceptación.
 
 ## Corrección de orientación Android
