@@ -6,7 +6,9 @@ Memoria personal por voz y texto para Android e iOS. Cuenta algo, deja que Kioku
 
 M0 supera el criterio de viabilidad funcional con [Sol medio y la reserva v4](prototypes/memory/evidence/2026-11-12-v4.md): tres rondas desde memoria vacía, 96/96 capturas y 192/192 respuestas correctas tras revisión contra fuentes, recuperación completa y cero fallos críticos detectados. Son 32 relatos y 64 consultas sintéticas repetidos, no una garantía de fiabilidad universal. Pasan las 74 pruebas locales. El objetivo p95 de guardado de 15 segundos sigue abierto: 17,25/14,79/19,09 segundos; las consultas sí lo cumplen.
 
-K0 no ha empezado. No hay todavía una app KMP compilable, backend desplegado ni Firebase conectado. La arquitectura móvil elegida sigue Wonderdrop: **Kotlin Multiplatform + Compose Multiplatform, MVVM y Clean Architecture pragmática**. El experimento Expo local de `mobile/` está retirado como dirección técnica; no debe convertirse en una segunda aplicación. La [comparación v3](prototypes/memory/evidence/2026-11-12-v3.md) y los informes anteriores se conservan como evidencia histórica.
+K0 añade una **vista previa Android/iOS con estética B**: conversación, ajustes, fuentes y ocho ejemplos ficticios. Android compila y supera 9 pruebas de lógica y 6 de interfaz, además de formato, Detekt, arquitectura y Lint. El host iOS está preparado, pendiente de compilar y revisar en Mac. [Evidencia K0](docs/09-planning/K0_VALIDATION.md) y [comandos](docs/07-development/DEVELOPMENT_GUIDE.md).
+
+No hay backend desplegado ni Firebase conectado. La vista previa no guarda recuerdos ni usa micrófono o créditos API. La arquitectura sigue Wonderdrop: **Kotlin Multiplatform + Compose Multiplatform, MVVM y Clean Architecture pragmática**. El experimento Expo local de `mobile/` está retirado como dirección técnica; no debe convertirse en una segunda aplicación. La [comparación v3](prototypes/memory/evidence/2026-11-12-v3.md) y los informes anteriores se conservan como evidencia histórica.
 
 Repositorio: https://github.com/dejitarunoseireinoapuri/kioku
 
@@ -24,7 +26,7 @@ El [índice documental](docs/README.md) indica dónde vive cada decisión. [AGEN
 
 D0 (documentación) entregada. **M0: viabilidad funcional del núcleo por texto validada**, con rendimiento de guardado pendiente de mejora. No valida todavía voz, cuentas remotas, Firebase, dispositivos o escala.
 
-La siguiente fase es K0 (base técnica y navegación), seguida de K1 (cuenta y clave), K2 (guardar por texto), K3 (preguntar por texto), K4 (control de memoria), K5 (voz) y K6 (validación para uso personal). K0 no ha empezado. K2/K3 deben repetir la evaluación contra sus adaptadores reales y mantener visible el objetivo de latencia pendiente.
+K0 está implementada con Android comprobado y validación iOS pendiente. Después siguen K1 (cuenta y clave), K2 (guardar por texto), K3 (preguntar por texto), K4 (control de memoria), K5 (voz) y K6 (validación para uso personal). K2/K3 deben repetir la evaluación contra sus adaptadores reales y mantener visible el objetivo de latencia pendiente.
 
 El [plan de fases](docs/09-planning/IMPLEMENTATION_PLAN.md) define qué entrega cada una, qué necesita y cómo se valida en Android/iOS. Integraciones y publicación quedan para una decisión posterior.
 
@@ -34,6 +36,6 @@ Se conserva la estética B: carbón, coral e IBM Plex. [Stitch](https://stitch.g
 
 ## Trabajo local
 
-Los comandos reales de tipos, pruebas y formato del prototipo están en su [guía M0](prototypes/memory/README.md), con acceso API explícito y separado. Los comandos KMP se incorporarán en K0. Véase [DEVELOPMENT_GUIDE.md](docs/07-development/DEVELOPMENT_GUIDE.md) para la comprobación documental.
+Los comandos del prototipo están en su [guía M0](prototypes/memory/README.md), con acceso API explícito y separado. Para la base KMP: `pwsh -NoProfile -File tooling/mobile.ps1 :androidApp:assembleDebug` y `pwsh -NoProfile -File tooling/mobile.ps1 mobileCheck`. Véase [DEVELOPMENT_GUIDE.md](docs/07-development/DEVELOPMENT_GUIDE.md) para preparación, instrumentación, Mac y comprobación documental.
 
 Nunca subir claves, recuerdos reales, grabaciones, configuraciones privadas, certificados o material de firma.

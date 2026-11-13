@@ -1,4 +1,4 @@
-# Policy ported from Wonderdrop. Wire to a verified compatible Detekt version during K0.
+# Policy ported from Wonderdrop; wired to Detekt 2.0.0-alpha.6 by the K0 root build.
 config:
   validation: true
   warningsAsErrors: true

@@ -1,5 +1,13 @@
 # Cambios
 
+## Sin versión publicada · 2026-11-13
+
+- K0 en rama independiente: base KMP/Compose, hosts Android/iOS, Koin, navegación tipada y recursos con estética B revisada en Stitch.
+- Vista previa explícita con ocho estados ficticios, acceso a fuente/corrección y ajustes; no conecta credenciales, proveedores, almacenamiento personal o micrófono.
+- Catálogo, wrapper verificado y lockfiles; JDK 21, SDK/target Android 37 y mínimo 29; mínimo iOS 16 y targets arm64.
+- Android compilado, nueve host tests y seis recorridos instrumentados superados. Detekt, ktlint, arquitectura y Android Lint sin hallazgos; contraste corregido tras inspección real y comprobado por test.
+- Host/esquema iOS preparados, compilación y revisión nativas pendientes de Mac. K0 no se declara validada en ambas plataformas.
+
 ## Sin versión publicada · 2026-11-12
 
 - M0 v2: fechas con precisión explícita y evidencia literal, descriptores de identidad/contexto completo de fuentes seleccionadas, procedencia personal/relatada/citada y verificación de respuestas.

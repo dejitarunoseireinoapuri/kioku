@@ -19,5 +19,6 @@ Una fuente por tipo de decisión. Los documentos son el contrato previsto; el es
 | Gobierno | [DOCUMENTATION_POLICY](07-development/DOCUMENTATION_POLICY.md), [REFERENCE_ADAPTATION](07-development/REFERENCE_ADAPTATION.md) | Mantenimiento y adaptación de Wonderdrop |
 | Despliegue | [ENVIRONMENTS](08-deployment/ENVIRONMENTS.md) | Separación de recursos y operación |
 | Plan | [IMPLEMENTATION_PLAN](09-planning/IMPLEMENTATION_PLAN.md) | Secuencia de entrega |
+| Evidencia móvil | [K0_VALIDATION](09-planning/K0_VALIDATION.md) | Compilación/pruebas Android y límites iOS de la base K0 |
 
 Las conversaciones previas y los prototipos históricos sirven de evidencia de decisiones, no de segunda especificación vigente.

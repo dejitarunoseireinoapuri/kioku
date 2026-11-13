@@ -1,6 +1,6 @@
 # ADR-002 · MVVM y Clean Architecture pragmática
 
-- Estado: aceptada; implementación pendiente.
+- Estado: aceptada; base K0 implementada. Casos de memoria e infraestructura reales pendientes de sus fases.
 - Fecha: 2026-11-11.
 
 ## Contexto y decisión

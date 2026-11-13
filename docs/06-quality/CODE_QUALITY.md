@@ -10,6 +10,6 @@ Adoptada de Wonderdrop: corrección, privacidad, arquitectura, legibilidad, prue
 - Dependencias y herramientas fijadas en catálogo/wrappers/lockfiles; no instalar versiones a ciegas ni añadir una librería por un helper trivial.
 - Tests de reglas/Functions positivos y negativos para cambios de autorización o persistencia. Voz y adaptadores se validan en ambas plataformas.
 
-**Estado actual:** M0 tiene comprobación TypeScript strict, formato Prettier y pruebas ejecutables Node. La configuración Detekt/EditorConfig sigue como base; todavía no existe un build KMP que ejecute sus tareas. No anunciar Detekt, Lint, pruebas nativas, reglas Firebase o integración móvil en verde hasta que estén conectados y se hayan ejecutado.
+**Estado actual:** M0 tiene TypeScript strict, Prettier y pruebas Node. K0 conecta Gradle/KMP, ktlint, Detekt, comprobación de capas, host tests y Android Lint mediante `mobileCheck`; sus compilaciones y seis pruebas instrumentadas Android se ejecutaron según la [evidencia K0](../09-planning/K0_VALIDATION.md). iOS, reglas Firebase e integración remota no están comprobados. No convertir un resultado de preview/emulador en una garantía de esas integraciones.
 
 Para cambios documentales basta la comprobación de enlaces/consistencia y revisión semántica correspondiente. No compilar la app o llamar a OpenAI para verificar documentación.

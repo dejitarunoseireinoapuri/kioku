@@ -1,6 +1,6 @@
 # ADR-001 · Estrategia multiplataforma
 
-- Estado: aceptada; implementación pendiente.
+- Estado: aceptada; base K0 implementada, Android comprobado e iOS pendiente de Mac.
 - Fecha: 2026-11-11.
 - Motivo: el propietario pide seguir la arquitectura de Wonderdrop y soportar Android e iOS.
 

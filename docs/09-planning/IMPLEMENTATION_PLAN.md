@@ -8,7 +8,7 @@ Este documento define el alcance y el cierre de las fases. Los [requisitos](../0
 | --- | --- | --- |
 | D0 · Base documental | Producto, arquitectura y normas definidos | Entregada en `40737a2` |
 | M0 · Prueba temprana de memoria | Evidencia de que interpretar, guardar y recuperar funciona antes de construir la app | Viabilidad funcional validada en v4; objetivo de latencia de guardado pendiente |
-| K0 · Base técnica | App navegable con estética B y datos ficticios | Pendiente |
+| K0 · Base técnica | App navegable con estética B y datos ficticios | Implementada; Android comprobado, validación iOS pendiente |
 | K1 · Cuenta y configuración | Acceso privado y configuración segura de la clave propia | Pendiente |
 | K2 · Contar por escrito | Separar asuntos, aclarar dudas y guardar automáticamente | Pendiente |
 | K3 · Preguntar por escrito | Encontrar recuerdos y responder con sus fuentes | Pendiente |
@@ -16,7 +16,7 @@ Este documento define el alcance y el cierre de las fases. Los [requisitos](../0
 | K5 · Voz | Contar y preguntar hablando, con pulsación y bloqueo | Pendiente |
 | K6 · V1 de uso personal | Recorrido completo comprobado en Android e iOS | Pendiente |
 
-M0 supera el criterio funcional de viabilidad; K0 todavía no ha empezado. La primera versión completa para uso personal llega en K6. La velocidad de guardado no se declara validada: se conserva el objetivo p95 de 15 segundos para su mejora y nueva medición al integrar K2. No se fijan fechas sin conocer herramientas, dependencias y resultados.
+M0 supera el criterio funcional de viabilidad. K0 tiene base y navegación Android comprobadas; requiere validación iOS en Mac antes de declararla validada en ambos sistemas. La primera versión completa para uso personal llega en K6. La velocidad de guardado no se declara validada: se conserva el objetivo p95 de 15 segundos para su mejora y nueva medición al integrar K2. No se fijan fechas sin conocer herramientas, dependencias y resultados.
 
 Implementación y comandos de M0: [guía del prototipo](../../prototypes/memory/README.md). Su estado de validación y límites se mantienen en [KNOWN_LIMITATIONS](KNOWN_LIMITATIONS.md).
 
@@ -76,6 +76,8 @@ Cuarta iteración y decisión actual: [evidencia v4](../../prototypes/memory/evi
 **Alcance de la conclusión:** decidir continuar o corregir el núcleo según la evidencia. No valida todavía autenticación, aislamiento remoto, reglas Firebase, voz, dispositivos Android/iOS, retención del proveedor o comportamiento a gran escala. K2/K3/K4 conservarán y ampliarán esta evaluación contra sus implementaciones reales; un cambio de modelo, búsqueda o extracción exige repetir las comprobaciones afectadas.
 
 ## K0 · Base técnica Android/iOS
+
+**Estado actual:** implementada en `codex/k0-mobile-foundation`; [evidencia del 13 de noviembre](K0_VALIDATION.md), nueve pruebas de lógica/estado y seis instrumentadas Android superadas, compilación/Detekt/formato/arquitectura/Lint correctos. Referencias Stitch inspeccionadas sin modificarlas. Identificador aprobado por el propietario: `io.github.dejitarunoseireinoapuri.kioku`; Android debug usa `.dev`. Framework/host/esquema iOS preparados, compilación y recorrido nativos pendientes de Mac. No se ha iniciado K1 ni conectado proveedor alguno.
 
 **Resultado:** primera app navegable con estética B y datos ficticios. Permite recorrer Contar, Preguntar y los accesos previstos, sin conservar recuerdos reales.
 

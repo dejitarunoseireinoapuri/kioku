@@ -1,0 +1,140 @@
+package io.github.dejitarunoseireinoapuri.kioku.feature.conversation
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.dp
+import io.github.dejitarunoseireinoapuri.kioku.design.IconAction
+import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
+import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
+import io.github.dejitarunoseireinoapuri.kioku.resources.Res
+import io.github.dejitarunoseireinoapuri.kioku.resources.ask
+import io.github.dejitarunoseireinoapuri.kioku.resources.ask_placeholder
+import io.github.dejitarunoseireinoapuri.kioku.resources.clarify_placeholder
+import io.github.dejitarunoseireinoapuri.kioku.resources.icon_send
+import io.github.dejitarunoseireinoapuri.kioku.resources.offline_composer
+import io.github.dejitarunoseireinoapuri.kioku.resources.send
+import io.github.dejitarunoseireinoapuri.kioku.resources.tell
+import io.github.dejitarunoseireinoapuri.kioku.resources.tell_placeholder
+import io.github.dejitarunoseireinoapuri.kioku.resources.voice_hint
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
+
+@Composable
+fun ConversationComposer(
+    state: ConversationState,
+    onEvent: (ConversationEvent) -> Unit,
+) {
+    val enabled = state.scenario != PreviewScenario.Offline
+    Surface(color = KiokuColors.Surface) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Divider(color = KiokuColors.Rule)
+            TextComposer(state, enabled, onEvent)
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                IntentButton(MemoryIntent.Tell, state.intent, enabled, Modifier.weight(1f), onEvent)
+                IntentButton(MemoryIntent.Ask, state.intent, enabled, Modifier.weight(1f), onEvent)
+            }
+            Text(
+                stringResource(Res.string.voice_hint),
+                style = MaterialTheme.typography.body2,
+                color = KiokuColors.Secondary,
+            )
+        }
+    }
+}
+
+@Composable
+private fun TextComposer(
+    state: ConversationState,
+    enabled: Boolean,
+    onEvent: (ConversationEvent) -> Unit,
+) {
+    Surface(shape = MaterialTheme.shapes.small, border = BorderStroke(1.dp, KiokuColors.Rule)) {
+        Row(Modifier.fillMaxWidth().padding(start = 16.dp), verticalAlignment = Alignment.CenterVertically) {
+            BasicTextField(
+                value = state.draft,
+                onValueChange = { onEvent(ConversationEvent.EditDraft(it)) },
+                modifier = Modifier.weight(1f).padding(vertical = 16.dp).testTag("text-composer"),
+                enabled = enabled,
+                maxLines = 4,
+                textStyle = MaterialTheme.typography.body1.copy(color = KiokuColors.Text),
+                cursorBrush = SolidColor(KiokuColors.Coral),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
+                keyboardActions = KeyboardActions(onSend = { onEvent(ConversationEvent.Submit) }),
+                decorationBox = { field ->
+                    Box {
+                        if (state.draft.isEmpty()) {
+                            Text(
+                                stringResource(placeholder(state)),
+                                color = KiokuColors.Secondary,
+                            )
+                        }
+                        field()
+                    }
+                },
+            )
+            if (enabled) {
+                IconAction(Res.drawable.icon_send, stringResource(Res.string.send)) {
+                    onEvent(ConversationEvent.Submit)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun IntentButton(
+    intent: MemoryIntent,
+    selected: MemoryIntent,
+    enabled: Boolean,
+    modifier: Modifier,
+    onEvent: (ConversationEvent) -> Unit,
+) {
+    val active = selected == intent
+    Button(
+        onClick = { onEvent(ConversationEvent.SelectIntent(intent)) },
+        enabled = enabled,
+        modifier =
+            modifier
+                .sizeIn(minHeight = KiokuSpacing.IntentHeight)
+                .semantics { this.selected = active }
+                .testTag("intent-${intent.name}"),
+        elevation = null,
+        border = if (active) null else BorderStroke(1.dp, KiokuColors.Rule),
+        colors =
+            ButtonDefaults.buttonColors(
+                backgroundColor = if (active) KiokuColors.Coral else KiokuColors.Surface,
+                contentColor = if (active) KiokuColors.Background else KiokuColors.Secondary,
+            ),
+    ) { Text(stringResource(if (intent == MemoryIntent.Tell) Res.string.tell else Res.string.ask)) }
+}
+
+private fun placeholder(state: ConversationState): StringResource =
+    when {
+        state.scenario == PreviewScenario.Offline -> Res.string.offline_composer
+        state.scenario == PreviewScenario.Clarification -> Res.string.clarify_placeholder
+        state.intent == MemoryIntent.Ask -> Res.string.ask_placeholder
+        else -> Res.string.tell_placeholder
+    }

@@ -2,9 +2,11 @@
 
 ## Disponible
 
-Nombre Kioku, definición funcional del propietario, estética B en Stitch y base documental adaptada de Wonderdrop. M0 incorpora un [prototipo TypeScript por texto](../../prototypes/memory/README.md), persistencia sintética local y extracción/recuperación/respuesta OpenAI. La [evaluación v4](../../prototypes/memory/evidence/2026-11-12-v4.md) supera el criterio de viabilidad funcional: tres rondas de j desde cero, 96/96 capturas y 192/192 respuestas fieles tras revisión contra fuentes, recuperación completa y cero fallos críticos detectados. 74 pruebas locales y TypeScript strict superados. No hay todavía build KMP, backend/reglas desplegados ni configuración de cuenta móvil. La plantilla Expo local está retirada como dirección, no borrada.
+Nombre Kioku, definición funcional del propietario, estética B en Stitch y base documental adaptada de Wonderdrop. M0 incorpora un [prototipo TypeScript por texto](../../prototypes/memory/README.md), persistencia sintética local y extracción/recuperación/respuesta OpenAI. La [evaluación v4](../../prototypes/memory/evidence/2026-11-12-v4.md) supera el criterio de viabilidad funcional: tres rondas de j desde cero, 96/96 capturas y 192/192 respuestas fieles tras revisión contra fuentes, recuperación completa y cero fallos críticos detectados. 74 pruebas locales y TypeScript strict superados. K0 añade la base KMP/Compose con Android compilable y probado; iOS sigue pendiente de Mac. No hay backend/reglas desplegados ni configuración de cuenta móvil. La plantilla Expo local está retirada como dirección, no borrada.
 
-D0 se entregó en `40737a2`. El [plan de fases](IMPLEMENTATION_PLAN.md) concreta entregables y aceptación. La [primera evaluación](../../prototypes/memory/evidence/2026-11-11.md), la [segunda iteración](../../prototypes/memory/evidence/2026-11-12.md) y la [comparación v3](../../prototypes/memory/evidence/2026-11-12-v3.md) se conservan con sus fallos; no permitían entonces avanzar. La nueva evidencia v4 permite continuar hacia K0, que no ha empezado.
+D0 se entregó en `40737a2`. El [plan de fases](IMPLEMENTATION_PLAN.md) concreta entregables y aceptación. La [primera evaluación](../../prototypes/memory/evidence/2026-11-11.md), la [segunda iteración](../../prototypes/memory/evidence/2026-11-12.md) y la [comparación v3](../../prototypes/memory/evidence/2026-11-12-v3.md) se conservan con sus fallos; no permitían entonces avanzar. La evidencia v4 permitió iniciar K0.
+
+**K0 actual:** [evidencia](K0_VALIDATION.md), nueve pruebas de lógica y seis de interfaz Android, controles de calidad y APK de vista previa. Los estados son ficticios; el catálogo no es memoria local del producto ni autorización remota. Cuenta/clave, voz, red real, persistencia y mutaciones no están conectadas. iOS tiene host SwiftUI y framework arm64, pero necesita compilación/navegación/tema en Mac con Xcode; no se declara K0 validada en ambos sistemas. No se probó Android API 29/37 ni dispositivo físico; el emulador usado es API 36. TalkBack y VoiceOver completos siguen pendientes.
 
 Las correcciones v4 separan citas y datos personales por alcance semántico, materializan citas desde evidencia autorizada, normalizan su estado/tiempo y conservan origen y realización como ejes distintos. Las expectativas automáticas no sustituyen la revisión semántica: se mantienen sus falsos negativos y las adjudicaciones explícitas. Los corpus anteriores son regresión; j no se usó para ajustar entre rondas. Una corrección que use j exige renovar la reserva.
 
@@ -20,8 +22,8 @@ El propietario ya ha creado un proyecto Firebase. Antes de conectarlo se verific
 
 | Pendiente | Cuándo resolver | Opciones/impacto |
 | --- | --- | --- |
-| Versiones y herramientas compatibles | K0 | Catálogo, wrappers y lockfiles verificados; no copiar versiones sueltas |
-| Identificadores Android/iOS | K0/K1 | Identidad estable del propietario; no adivinar ni usar los de Wonderdrop |
+| Versiones y herramientas compatibles | K0 Android comprobado; iOS pendiente | Catálogo, wrapper y lockfiles fijados; comprobar Mac según ADR-006 |
+| Identificadores Android/iOS | Resuelto en K0; registros remotos en K1 | Base aprobada: `io.github.dejitarunoseireinoapuri.kioku`; debug Android `.dev` |
 | Método de acceso y cuenta permitida | K1 | Google/Apple/email u otro acceso Firebase; afecta recuperación y pruebas |
 | Proyectos/región y permisos remotos | K1 | Entorno aislado y otro de datos reales; confirmar antes de crear recursos |
 | Reutilizar/crear clave y destino privado | M0; integración de alta en K1 | Flujo seguro antes de implementar/probar llamadas; M0 no requiere pantalla de configuración móvil |

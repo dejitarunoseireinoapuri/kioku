@@ -1,0 +1,17 @@
+[
+  {
+    "source": "https://raw.githubusercontent.com/IBM/plex/bc6a7e4b37634eb79785d59781893db63ee3edcb/packages/plex-sans/fonts/complete/ttf/IBMPlexSans-Regular.ttf",
+    "file": "ibm_plex_sans_regular.ttf",
+    "sha256": "b47ebd72b5ce53b60f909033ff84d6fc12358cc147e2981f8c321ad3f36246b6"
+  },
+  {
+    "source": "https://raw.githubusercontent.com/IBM/plex/bc6a7e4b37634eb79785d59781893db63ee3edcb/packages/plex-sans/fonts/complete/ttf/IBMPlexSans-SemiBold.ttf",
+    "file": "ibm_plex_sans_semibold.ttf",
+    "sha256": "c51119b25f4a296da2b66edf3201b9aa1735091ed7efc1fca0313346f3851a4d"
+  },
+  {
+    "source": "https://raw.githubusercontent.com/IBM/plex/bc6a7e4b37634eb79785d59781893db63ee3edcb/packages/plex-mono/fonts/complete/ttf/IBMPlexMono-Regular.ttf",
+    "file": "ibm_plex_mono_regular.ttf",
+    "sha256": "7c6fbddca4b700be918f5f6183d9bd4464fa427fe435f0b480d77fe2bb8c5a43"
+  }
+]

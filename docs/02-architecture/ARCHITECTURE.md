@@ -25,6 +25,6 @@ flowchart LR
 - **Plataforma:** SDK oficiales Android/Apple para cuenta, micrófono, audio temporal, reproducción de respuesta y almacenamiento protegido de sesión/configuración no secreta. El host inyecta implementaciones de contratos compartidos; `shared` no depende del host.
 - **Backend TypeScript:** autoriza por cuenta, protege clave y límites, interpreta con IA como entrada no confiable, persiste e indexa coherentemente. Mutaciones protegidas pasan por backend; ningún cliente escribe memoria canónica directamente.
 
-Koin para DI, Navigation 3 tipada para rutas, coroutines estructuradas y Flow/StateFlow. La compatibilidad exacta de versiones se verificará al crear el catálogo y wrappers; no está compilada aún.
+Koin para DI, Navigation 3 tipada para rutas, coroutines estructuradas y Flow/StateFlow. K0 añade `shared`, `androidApp` e `iosApp`, catálogo/wrapper/lockfiles y una vista previa con fixtures; compilación y recorridos Android comprobados. Versiones y límites en [ADR-006](ADR/ADR-006-k0-toolchain.md). iOS permanece sin compilar ni probar en Mac; el backend todavía no está implementado.
 
 El almacenamiento es online y asociado a identidad; no existe una base local de recuerdos ni una cola offline. El audio transitorio no equivale a archivo permanente. Véanse [dependencias](DEPENDENCY_RULES.md), [estado](STATE_MANAGEMENT.md), [datos](../03-data/DATA_MODEL.md) y [API](../04-api/API_CONTRACT.md).

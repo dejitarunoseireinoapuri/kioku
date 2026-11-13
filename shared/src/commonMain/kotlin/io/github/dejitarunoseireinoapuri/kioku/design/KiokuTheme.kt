@@ -1,0 +1,82 @@
+package io.github.dejitarunoseireinoapuri.kioku.design
+
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Shapes
+import androidx.compose.material.Typography
+import androidx.compose.material.darkColors
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import io.github.dejitarunoseireinoapuri.kioku.resources.Res
+import io.github.dejitarunoseireinoapuri.kioku.resources.ibm_plex_sans_regular
+import io.github.dejitarunoseireinoapuri.kioku.resources.ibm_plex_sans_semibold
+import org.jetbrains.compose.resources.Font
+
+object KiokuColors {
+    val Background = Color(0xFF14171B)
+    val Surface = Color(0xFF1A1E23)
+    val Raised = Color(0xFF22272E)
+    val Text = Color(0xFFF2F3F4)
+    val Secondary = Color(0xFFA7AFBA)
+    val Rule = Color(0xFF343B44)
+    val Coral = Color(0xFFFF674F)
+}
+
+object KiokuSpacing {
+    val Small = 8.dp
+    val Medium = 16.dp
+    val Large = 24.dp
+    val TouchTarget = 48.dp
+    val IntentHeight = 64.dp
+    val Corner = 6.dp
+}
+
+@Composable
+fun KiokuTheme(content: @Composable () -> Unit) {
+    val font =
+        FontFamily(
+            Font(Res.font.ibm_plex_sans_regular, FontWeight.Normal),
+            Font(Res.font.ibm_plex_sans_semibold, FontWeight.SemiBold),
+        )
+    MaterialTheme(
+        colors =
+            darkColors(
+                primary = KiokuColors.Coral,
+                onPrimary = KiokuColors.Background,
+                background = KiokuColors.Background,
+                onBackground = KiokuColors.Text,
+                surface = KiokuColors.Surface,
+                onSurface = KiokuColors.Text,
+                secondary = KiokuColors.Coral,
+            ),
+        typography =
+            Typography(
+                defaultFontFamily = font,
+                h5 =
+                    TextStyle(
+                        fontFamily = font,
+                        fontSize = 24.sp,
+                        lineHeight = 32.sp,
+                        fontWeight = FontWeight.SemiBold,
+                    ),
+                body1 = TextStyle(fontFamily = font, fontSize = 16.sp, lineHeight = 24.sp),
+                body2 = TextStyle(fontFamily = font, fontSize = 14.sp, lineHeight = 20.sp),
+                button =
+                    TextStyle(
+                        fontFamily = font,
+                        fontSize = 16.sp,
+                        lineHeight = 24.sp,
+                        fontWeight = FontWeight.SemiBold,
+                    ),
+            ),
+        shapes = Shapes(small = RoundedCornerShape(6.dp), medium = RoundedCornerShape(8.dp)),
+        content = { CompositionLocalProvider(LocalContentAlpha provides 1f, content = content) },
+    )
+}

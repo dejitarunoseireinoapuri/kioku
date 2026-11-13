@@ -44,7 +44,7 @@ Select checks by changed behavior and direct dependencies. Run relevant configur
 
 Zero errors and avoidable warnings. Never weaken tests or globally disable checks. No unjustified suppressions, retries hiding failures, sleeps instead of deterministic tests, unbounded operations or unnecessary dependencies.
 
-Documentation-only changes use the actual documentation checker and semantic review. This foundation has no buildable KMP/backend yet: do not report nonexistent Gradle tasks or native tests as passed. Emulator/fake results do not prove live provider, attestation, iOS signing or real device behavior.
+Documentation-only changes use the actual documentation checker and semantic review. K0 adds a buildable Android/KMP preview; iOS compilation still requires macOS/Xcode and the backend is not implemented. Use the real Gradle tasks in DEVELOPMENT_GUIDE; do not report unexecuted native tests as passed. Emulator/fake results do not prove live provider, attestation, iOS signing or real device behavior.
 
 ## Safety and workflow
 
@@ -57,7 +57,7 @@ Documentation-only changes use the actual documentation checker and semantic rev
 - Use scoped local validation and Conventional Commits; follow the documented empty-repository bootstrap exception.
 - No GitHub Actions, deployments, paid provisioning or store publication by default. Obtain action-specific authorization where required; do not re-ask for already-authorized reversible work.
 - Do not introduce a model-selection approval gate for every task. The prompting guide applies when asked to prepare a separate Codex prompt.
-- Standing owner choice: GPT-6.1 Sol with medium reasoning for Kioku and project coding work when selectable. The API defaults to that profile. Preserve explicitly pinned historical benchmarks; do not silently switch models or reasoning effort.
+- Standing owner choice: GPT-6.1 Sol with medium reasoning for the Kioku API; current coding work uses Sol high (owner clarification 2026-11-13). If Astra would materially help, explain the concrete task and proposed reasoning level before switching. Preserve explicitly pinned historical benchmarks; do not silently switch the API profile.
 - Before implementation requiring API access, follow the active secure credential workflow. Documentation and static design do not require creating a key.
 
 Ask when an unresolved product decision actually blocks the requested behavior; continue independent authorized work and mark non-blocking decisions explicitly. Do not silently invent behavior. Final responses and progress updates are in Spanish and state the changed behavior, validation, limitations and documentation actually consulted.
