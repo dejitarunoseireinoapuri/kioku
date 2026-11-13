@@ -2,7 +2,7 @@
 
 ## Sin versión publicada · 2026-11-13
 
-- Ajuste visual solicitado tras revisar K0: bloque inicial sin hueco fijo, botón «Contar» y etiquetas en una línea; los controles se apilan si el texto ampliado no cabe en paralelo.
+- Ajuste visual solicitado tras revisar K0: bloque inicial sin hueco fijo, botón «Explicar» (preferencia final del propietario) y etiquetas en una línea; los controles se apilan si el texto ampliado no cabe en paralelo.
 
 - K0 en rama independiente: base KMP/Compose, hosts Android/iOS, Koin, navegación tipada y recursos con estética B revisada en Stitch.
 - Vista previa explícita con ocho estados ficticios, acceso a fuente/corrección y ajustes; no conecta credenciales, proveedores, almacenamiento personal o micrófono.

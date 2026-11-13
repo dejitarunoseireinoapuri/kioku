@@ -48,6 +48,8 @@ Refinamiento visual solicitado el 13 de noviembre tras la entrega inicial: elimi
 
 APK debug tras este refinamiento: SHA-256 `952b938957eca5b763d3395920a346900426401438c5c253c10a3054d966f490`. Las capturas locales `layout-normal.png`, `layout-large.png` y `layout-compact.png` conservan las tres revisiones visuales.
 
+Preferencia posterior del propietario: el botón pasa de «Contar» a **Explicar**. Solo cambia el recurso de la etiqueta y la documentación; no cambian el significado del modo, la navegación o las reglas de memoria. APK recompilado, Android Lint y comprobador documental correctos; revisión en emulador confirma «Explicar» en una línea. No se repitieron pruebas de lógica/navegación sin cambios. Captura local `explain-label.png`; SHA-256 del APK `be88c3589f10ef292eac1a367dfc8dc99f598158d731d955a0e83b6b15fa296c`.
+
 Se fijó el JavaLauncher de las tareas de formato a JDK 21 mediante el plugin integrado de toolchains: una configuración local de Android Studio eligió JDK 25 para el daemon y hacía emitir avisos del runtime de ktlint. La configuración local no se modificó ni se incluyó en el commit. No se silenciaron avisos ni reglas; los controles finales terminaron sin esos avisos. Las maquetas Stitch se inspeccionaron, sin editarlas; la petición posterior del propietario gobierna este ajuste de la app.
 
 K0 implementada con Android validado en el entorno descrito; validación iOS pendiente. No declarar la fase validada en ambos sistemas. Falta compilar/ejecutar en Mac Apple Silicon con Xcode, revisar tema/insets/navegación y ejecutar las pruebas nativas; la firma de dispositivo requiere identidad propia, no incluida.

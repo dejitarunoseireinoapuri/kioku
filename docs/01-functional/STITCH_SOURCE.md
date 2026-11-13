@@ -5,7 +5,7 @@
 - URL: https://stitch.google.com/projects/11852641719392883248
 - Referencia estética: B, carbón `#14171B`, coral `#FF674F`, IBM Plex Sans y esquinas de 4–8 dp. Mono para contador/fechas cuando aporte claridad.
 - Las ocho vistas finales están ordenadas por recorrido; los borradores sustituidos 06/07 están ocultos.
-- Ajuste del propietario de 2026-11-13: subir el bloque inicial eliminando el hueco fijo y abreviar el botón a «Contar». Se aplica en la app conservando la estética B. Las maquetas de Stitch no se han editado; esa diferencia está autorizada por la petición posterior del propietario.
+- Ajuste del propietario de 2026-11-13: subir el bloque inicial eliminando el hueco fijo y usar «Explicar» como etiqueta del botón, en lugar de la propuesta «Contar». Se aplica en la app conservando la estética B. Las maquetas de Stitch no se han editado; esa diferencia está autorizada por la petición posterior del propietario.
 
 Antes de implementar o cambiar materialmente una pantalla, inspeccionar las vistas pertinentes mediante Stitch MCP. Usar lectura salvo petición de modificar el diseño. Documentar una indisponibilidad real; no fingir que se inspeccionó.
 
