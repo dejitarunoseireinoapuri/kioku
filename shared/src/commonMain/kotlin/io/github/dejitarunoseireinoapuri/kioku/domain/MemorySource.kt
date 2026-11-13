@@ -10,6 +10,7 @@ data class MemorySource(
     val originalText: String,
     val recordedOn: String,
     val correction: SourceCorrection? = null,
+    val receivedAt: String? = null,
 )
 
 interface SourceRepository {

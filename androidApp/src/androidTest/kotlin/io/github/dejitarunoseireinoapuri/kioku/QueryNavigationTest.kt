@@ -66,8 +66,17 @@ class QueryNavigationTest {
         visible("Cargando texto original...")
         compose.onNodeWithTag("content-loading").assertIsDisplayed()
         compose.onNodeWithContentDescription("Volver").assertIsDisplayed()
-        source.complete(MemorySource("fixture-query-source", "Quiero ver la película ficticia Loto.", "2026-11-13"))
+        source.complete(
+            MemorySource(
+                "fixture-query-source",
+                "Quiero ver la película ficticia Loto.",
+                "2026-11-13",
+                receivedAt = "2026-11-13T12:00:00Z",
+            ),
+        )
         visible("Quiero ver la película ficticia Loto.")
+        compose.onNodeWithText("Lo contaste el 13/11/2026").assertIsDisplayed()
+        captureBrandScreen(compose.activity, "kioku-source-date.png") { compose.onRoot().captureToImage() }
         compose.onNodeWithContentDescription("Volver").performClick()
         visible("Quieres ver la película ficticia Loto.")
         assertEquals(1, queries.commands.size)

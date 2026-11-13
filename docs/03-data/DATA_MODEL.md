@@ -15,6 +15,8 @@ Contrato de diseño, no colecciones desplegadas. Cada documento está bajo ident
 
 Fechas del evento pueden ser intervalo, referencia contextual o fecha desconocida; no forzar un instante inventado. `receivedAt` no sustituye `occurredAt`. Una relación con Gemma no inventa que viajó ni la fecha del viaje.
 
+El modelo portable `MemorySource` conserva además el `receivedAt` ISO completo recibido del servidor. La pantalla del original lo presenta como «Lo contaste el…», con formato `dd/MM/aaaa` y zona horaria actual del dispositivo, incluyendo el desplazamiento aplicable en aquel instante. No se cambia el valor persistido ni se interpreta una fecha del relato como fecha de recepción. `recordedOn` permanece como compatibilidad de fixtures anteriores; las lecturas reales y el resultado de guardado conservan siempre el instante completo para evitar truncar un día UTC antes de convertirlo.
+
 Los historiales de preguntas son contexto de sesión por defecto; conservarlos como hechos exige Contar o aceptar una propuesta. La retención operativa se delimita en [STORAGE_POLICY](STORAGE_POLICY.md).
 
 El backend define el esquema físico e índices con tests de aislamiento, revisión y borrado antes de desplegar. No leer primero un índice global para filtrar propietarios después.

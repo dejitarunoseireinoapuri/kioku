@@ -30,6 +30,7 @@
     <string name="example_offline">08 · Sin conexión</string>
     <string name="original_title">Texto original</string>
     <string name="original_label">LO QUE DIJISTE ORIGINALMENTE</string>
+    <string name="source_recorded_on">Lo contaste el %1$s</string>
     <string name="correction_label">CORRECCIÓN APLICADA</string>
     <string name="forget">Olvidar</string>
     <string name="source_unavailable">Esta fuente no está disponible en la conversación actual.</string>

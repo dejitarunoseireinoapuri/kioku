@@ -29,3 +29,5 @@ Instrucción posterior para toda la app: se retiran ondas/halos y cambios del fo
 Si un detalle visual relevante no está definido, pedir la decisión necesaria antes de implementarlo. Resolver de manera autónoma ajustes mecánicos ya autorizados que no cambien el comportamiento, explicándolos en la entrega.
 
 No copiar scripts, dependencias o HTML de Stitch directamente a Compose como arquitectura de producción. Los ejemplos Perfect Days/Aftersun son ficticios y corresponden a ramas diferentes de demostración.
+
+Petición posterior: hacer explícita la fecha en que se contó el recuerdo en «Texto original». Se inspeccionó mediante MCP la vista 07 (`6532a76d2cf045a4b6e45259530fafd7`) y su imagen. En la app, «Lo contaste el dd/MM/aaaa» se incorpora dentro del recuadro del original, con peso seminegrita y color secundario de marca; sustituye la fecha aislada anterior. Usa la recepción del servidor convertida a la zona del móvil, sin alterar fechas del relato. No se editó Stitch. [Captura sintética Android](../assets/branding/kioku-source-date-android.png).

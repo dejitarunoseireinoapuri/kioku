@@ -51,6 +51,7 @@ class CaptureNavigationTest {
         captureBrandScreen(compose.activity, "kioku-live-saved.png") { compose.onRoot().captureToImage() }
         compose.onNodeWithText("Ver texto original").performScrollTo().performClick()
         compose.onNodeWithText("LO QUE DIJISTE ORIGINALMENTE").assertIsDisplayed()
+        compose.onNodeWithText("Lo contaste el 13/11/2026").assertIsDisplayed()
         compose.onNodeWithText("Quiero ver una película ficticia.").assertIsDisplayed()
         compose.onNodeWithContentDescription("Volver").performClick()
         compose.onNodeWithText("Recuerdo guardado").assertIsDisplayed()
@@ -137,5 +138,13 @@ internal class CaptureNavigationFixture : CaptureRepository {
     }
 
     fun saved() =
-        CaptureOutcome.Saved(MemorySource("saved-fixture", "Quiero ver una película ficticia.", "2026-11-13"), 1)
+        CaptureOutcome.Saved(
+            MemorySource(
+                "saved-fixture",
+                "Quiero ver una película ficticia.",
+                "2026-11-13",
+                receivedAt = "2026-11-13T17:00:00.000Z",
+            ),
+            1,
+        )
 }

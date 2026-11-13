@@ -4,6 +4,7 @@ import io.github.dejitarunoseireinoapuri.kioku.data.parseQuery
 import io.github.dejitarunoseireinoapuri.kioku.data.parseQuerySource
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryOutcome
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFails
 import kotlin.test.assertIs
 
@@ -25,7 +26,7 @@ class QueryWireTest {
     fun sourceCannotReturnAnotherReferenceOrExtraProviderFields() {
         val source = """{"apiVersion":1,"sourceId":"$id","text":"Fuente ficticia",
             "receivedAt":"2026-11-13T12:00:00Z"}"""
-        parseQuerySource(source, id)
+        assertEquals("2026-11-13T12:00:00Z", parseQuerySource(source, id).receivedAt)
         assertFails { parseQuerySource(source, "foreign") }
         assertFails {
             parseQuerySource(

@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.dejitarunoseireinoapuri.kioku.design.ActionButton
 import io.github.dejitarunoseireinoapuri.kioku.design.IconAction
@@ -25,6 +27,7 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.forget
 import io.github.dejitarunoseireinoapuri.kioku.resources.icon_back
 import io.github.dejitarunoseireinoapuri.kioku.resources.original_label
 import io.github.dejitarunoseireinoapuri.kioku.resources.original_title
+import io.github.dejitarunoseireinoapuri.kioku.resources.source_recorded_on
 import io.github.dejitarunoseireinoapuri.kioku.resources.source_unavailable
 import org.jetbrains.compose.resources.stringResource
 
@@ -49,8 +52,8 @@ fun SourceScreen(
             if (source == null && !loading) {
                 Text(stringResource(Res.string.source_unavailable))
             } else if (source != null) {
-                Text(source.recordedOn, color = KiokuColors.Secondary)
                 Panel {
+                    SourceRecordedDate(source)
                     Text(stringResource(Res.string.original_label), color = KiokuColors.Secondary)
                     Text(source.originalText)
                 }
@@ -65,4 +68,18 @@ fun SourceScreen(
             feedback?.let { FeedbackMessage(it) }
         }
     }
+}
+
+@Composable
+private fun SourceRecordedDate(source: MemorySource) {
+    val date =
+        source.receivedAt?.let { formatSourceDate(it) }
+            ?: formatSourceDate("${source.recordedOn}T12:00:00Z", "UTC")
+            ?: source.recordedOn
+    Text(
+        stringResource(Res.string.source_recorded_on, date),
+        color = KiokuColors.BrandSecondary,
+        style = MaterialTheme.typography.body2,
+        fontWeight = FontWeight.SemiBold,
+    )
 }

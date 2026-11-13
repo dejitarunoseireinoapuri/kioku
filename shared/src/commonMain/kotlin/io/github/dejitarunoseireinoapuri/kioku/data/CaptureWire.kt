@@ -71,7 +71,10 @@ private fun saved(value: JsonObject): CaptureOutcome.Saved {
     val date = source.text("receivedAt")
     require(id.matches(UUID_PATTERN) && id == value.text("sourceId") && count in 1..MAX_MEMORY_COUNT)
     require(text.length in 1..MAX_SOURCE_LENGTH && date.matches(Regex("\\d{4}-\\d{2}-\\d{2}T.+Z")))
-    return CaptureOutcome.Saved(MemorySource(id, text, date.take(DATE_LENGTH)), requireNotNull(count))
+    return CaptureOutcome.Saved(
+        MemorySource(id, text, date.take(DATE_LENGTH), receivedAt = date),
+        requireNotNull(count),
+    )
 }
 
 private fun terminal(value: JsonObject): CaptureOutcome {

@@ -25,7 +25,9 @@ class NativeCaptureRepositoryTest {
             val result = async { repository.execute(repository.tell("Dato ficticio")) }
             runCurrent()
             port.completion?.invoke(NativeMemoryReply.Received(savedPayload("1.0")))
-            assertEquals(1, assertIs<CaptureOutcome.Saved>(result.await()).memoryCount)
+            val saved = assertIs<CaptureOutcome.Saved>(result.await())
+            assertEquals(1, saved.memoryCount)
+            assertEquals("2026-11-13T17:00:00.000Z", saved.source.receivedAt)
         }
 
     @Test

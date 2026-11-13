@@ -56,7 +56,7 @@ internal fun parseQuerySource(
     val text = source.queryText("text")
     val date = source.queryText("receivedAt")
     require(text.length in 1..MAX_QUERY_SOURCE_LENGTH && date.matches(QUERY_DATE))
-    return MemorySource(id, text, date.take(QUERY_DATE_LENGTH))
+    return MemorySource(id, text, date.take(QUERY_DATE_LENGTH), receivedAt = date)
 }
 
 private fun queryObject(json: String): JsonObject {
