@@ -38,12 +38,13 @@ private object GoogleBrand {
 fun GoogleButton(
     enabled: Boolean,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val insets = googleButtonInsets()
     OutlinedButton(
         onClick = onClick,
         enabled = enabled,
-        modifier = Modifier.sizeIn(minHeight = 48.dp),
+        modifier = modifier.sizeIn(minHeight = 52.dp),
         shape = RoundedCornerShape(4.dp),
         colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Color.White, contentColor = GoogleBrand.Text),
         border = BorderStroke(1.dp, GoogleBrand.Border),
@@ -53,7 +54,7 @@ fun GoogleButton(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(insets.second.dp),
         ) {
-            Image(painterResource(Res.drawable.google_g), null, Modifier.size(20.dp))
+            Image(painterResource(Res.drawable.google_g), null, Modifier.size(18.dp))
             Text(
                 stringResource(Res.string.google_continue),
                 style =

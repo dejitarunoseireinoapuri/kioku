@@ -1,0 +1,18 @@
+{
+  "source": "https://raw.githubusercontent.com/google/fonts/d4eb04601981780781306966afb88e876652bab4/ofl/notosansjp/NotoSansJP%5Bwght%5D.ttf",
+  "sourceSha256": "c2f3b4d463500a2ddcd3849cded1fceeb9fd6d1c32e6cbecd568453ba50fc68f",
+  "codePoint": "U+61B6",
+  "weight": 900,
+  "glyphBounds": {
+    "minX": 14,
+    "minY": -95,
+    "maxX": 984,
+    "maxY": 855
+  },
+  "tools": {
+    "fontkit": "3.0.0",
+    "sharp": "0.35.5"
+  },
+  "transform": "Uniform scale and Y-axis flip; outlined glyph, unchanged anatomy. SVG master and platform derivatives use identical paths.",
+  "master": "docs/assets/branding/kioku-kanji.svg"
+}

@@ -15,3 +15,5 @@ Adoptada de Wonderdrop: corrección, privacidad, arquitectura, legibilidad, prue
 K1 incorpora TypeScript strict/Prettier, 14 pruebas Node y 13 de emuladores Auth/Functions/Firestore. La integración añade 17 host tests y nueve instrumentados Android con identidades ficticias. [Evidencia actual K1](../09-planning/K1_INTEGRATION_VALIDATION.md) delimita resultados, auditoría de dependencias y recursos remotos; no acredita Google/atestación reales ni compilación iOS. La [primera evidencia](../09-planning/K1_VALIDATION.md) permanece histórica.
 
 Para cambios documentales basta la comprobación de enlaces/consistencia y revisión semántica correspondiente. No compilar la app o llamar a OpenAI para verificar documentación.
+
+La entrega posterior de marca/login 憶 conserva 17 host tests y amplía a 13 instrumentados Android, ejecutados en API 36 con texto del sistema al 200 %. APK, formato, arquitectura, Detekt y Lint correctos; [evidencia visual y límites](../01-functional/BRAND_PROPOSAL.md). No acredita el nuevo build iOS, Google/atestación real o accesibilidad completa a partir de fixtures.

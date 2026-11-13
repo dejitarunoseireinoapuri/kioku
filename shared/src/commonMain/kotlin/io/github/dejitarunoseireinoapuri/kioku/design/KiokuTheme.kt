@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
+import io.github.dejitarunoseireinoapuri.kioku.resources.ibm_plex_sans_bold
 import io.github.dejitarunoseireinoapuri.kioku.resources.ibm_plex_sans_regular
 import io.github.dejitarunoseireinoapuri.kioku.resources.ibm_plex_sans_semibold
 import org.jetbrains.compose.resources.Font
@@ -25,6 +26,7 @@ object KiokuColors {
     val Raised = Color(0xFF22272E)
     val Text = Color(0xFFF2F3F4)
     val Secondary = Color(0xFFA7AFBA)
+    val BrandSecondary = Color(0xFFB9C0C9)
     val Rule = Color(0xFF343B44)
     val Coral = Color(0xFFFF674F)
 }
@@ -36,6 +38,11 @@ object KiokuSpacing {
     val TouchTarget = 48.dp
     val IntentHeight = 64.dp
     val Corner = 6.dp
+    val Mark = 112.dp
+    val LoadingMark = 96.dp
+    val LoginVertical = 32.dp
+    val LoadingVertical = 48.dp
+    val LoginHeadlineGap = 64.dp
 }
 
 @Composable
@@ -44,6 +51,7 @@ fun KiokuTheme(content: @Composable () -> Unit) {
         FontFamily(
             Font(Res.font.ibm_plex_sans_regular, FontWeight.Normal),
             Font(Res.font.ibm_plex_sans_semibold, FontWeight.SemiBold),
+            Font(Res.font.ibm_plex_sans_bold, FontWeight.Bold),
         )
     MaterialTheme(
         colors =

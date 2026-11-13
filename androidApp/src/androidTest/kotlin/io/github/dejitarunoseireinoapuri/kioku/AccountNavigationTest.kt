@@ -7,6 +7,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import io.github.dejitarunoseireinoapuri.kioku.domain.AccountIssue
 import io.github.dejitarunoseireinoapuri.kioku.domain.AiConfiguration
@@ -40,8 +41,16 @@ class AccountNavigationTest {
         compose.onNodeWithText("Continuar con Google").performClick()
         compose.onNodeWithTag("text-composer").performTextInput("Borrador privado ficticio")
         compose.onNodeWithContentDescription("Ajustes").performClick()
-        compose.onNodeWithText("Cerrar sesión").performClick()
-        compose.onNodeWithText("Continuar con Google").assertIsDisplayed().performClick()
+        compose
+            .onNodeWithText("Cerrar sesión")
+            .performScrollTo()
+            .assertIsDisplayed()
+            .performClick()
+        compose
+            .onNodeWithText("Continuar con Google")
+            .performScrollTo()
+            .assertIsDisplayed()
+            .performClick()
         compose.onNodeWithText("Borrador privado ficticio").assertDoesNotExist()
         compose.onNodeWithTag("text-composer").assertIsDisplayed()
     }

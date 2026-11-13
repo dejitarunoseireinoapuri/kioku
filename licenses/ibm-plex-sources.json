@@ -13,5 +13,10 @@
     "source": "https://raw.githubusercontent.com/IBM/plex/bc6a7e4b37634eb79785d59781893db63ee3edcb/packages/plex-mono/fonts/complete/ttf/IBMPlexMono-Regular.ttf",
     "file": "ibm_plex_mono_regular.ttf",
     "sha256": "7c6fbddca4b700be918f5f6183d9bd4464fa427fe435f0b480d77fe2bb8c5a43"
+  },
+  {
+    "source": "https://raw.githubusercontent.com/IBM/plex/bc6a7e4b37634eb79785d59781893db63ee3edcb/packages/plex-sans/fonts/complete/ttf/IBMPlexSans-Bold.ttf",
+    "file": "ibm_plex_sans_bold.ttf",
+    "sha256": "22f59d358e8b9b9fb38ac6ee26a7ea7263ffa1c89a9056c101acff5add91f5d6"
   }
 ]

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -88,7 +89,7 @@ fun ScreenHeading(title: String) {
 @Composable
 fun TopBar(
     title: String,
-    leading: @Composable () -> Unit = {},
+    leading: @Composable () -> Unit = { KiokuMark(Modifier.size(24.dp)) },
     trailing: @Composable () -> Unit = {},
 ) {
     Column {

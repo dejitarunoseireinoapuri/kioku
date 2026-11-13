@@ -68,9 +68,10 @@
     <string name="account_label">Cuenta y configuración de IA</string>
     <string name="account_pending">Todavía no están conectadas en esta vista previa.</string>
     <string name="google_continue">Continuar con Google</string>
-    <string name="login_title">Tu memoria, contigo.</string>
-    <string name="login_description">Entra con tu cuenta para acceder a Kioku desde tus dispositivos.</string>
-    <string name="account_loading">Comprobando tu acceso…</string>
+    <string name="brand_wordmark">kioku</string>
+    <string name="login_title">Cuéntalo hoy.\nRecuérdalo cuando quieras.</string>
+    <string name="login_description">Por voz o por texto, guarda lo que quieras recordar.</string>
+    <string name="account_loading">Entrando en Kioku…</string>
     <string name="account_denied">Esta cuenta no tiene acceso a Kioku. Puedes cerrar sesión y elegir otra.</string>
     <string name="account_unavailable">No se ha podido comprobar el acceso. Revisa tu conexión y vuelve a intentarlo.</string>
     <string name="account_setup">El acceso todavía necesita configuración. No se ha iniciado sesión.</string>

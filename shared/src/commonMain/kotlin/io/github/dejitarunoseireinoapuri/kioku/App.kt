@@ -46,7 +46,7 @@ fun KiokuApp(accountRepository: AccountRepository = remember { DisconnectedAccou
     KoinApplication(configuration = koinConfiguration { modules(appModule, platform) }) {
         KiokuTheme {
             Surface(color = KiokuColors.Background, contentColor = KiokuColors.Text) {
-                Column(Modifier.fillMaxSize().safeDrawingPadding().imePadding()) {
+                Column(Modifier.fillMaxSize().safeDrawingPadding()) {
                     CompositionViewModels { AccountGate(accountRepository) }
                 }
             }
@@ -66,7 +66,9 @@ private fun AccountGate(
     } else {
         key(authorized.session.id, authorized.session.generation) {
             CompositionViewModels {
-                KiokuNavigation(authorized, viewModel::signOut, viewModel::refresh)
+                Column(Modifier.fillMaxSize().imePadding()) {
+                    KiokuNavigation(authorized, viewModel::signOut, viewModel::refresh)
+                }
             }
         }
     }

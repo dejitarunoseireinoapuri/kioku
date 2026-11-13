@@ -2,6 +2,8 @@
 
 ## Disponible
 
+**Marca y acceso 憶 (13 de noviembre):** login/carga implementados en Compose para Android/iOS, iconos nativos preparados, APK Android y controles móviles correctos; 17 pruebas de lógica y 13 de interfaz API 36 con fixtures. [Evidencia y capturas](../01-functional/BRAND_PROPOSAL.md). No se actualizan móviles personales. iOS requiere compilar/verificar este build en Mac, aunque el propietario confirmó el acceso con el anterior; no se valida una versión nueva por extrapolación.
+
 Nombre Kioku, definición funcional del propietario, estética B en Stitch y base documental adaptada de Wonderdrop. M0 incorpora un [prototipo TypeScript por texto](../../prototypes/memory/README.md), persistencia sintética local y extracción/recuperación/respuesta OpenAI. La [evaluación v4](../../prototypes/memory/evidence/2026-11-12-v4.md) supera el criterio de viabilidad funcional: tres rondas de j desde cero, 96/96 capturas y 192/192 respuestas fieles tras revisión contra fuentes, recuperación completa y cero fallos críticos detectados. 74 pruebas locales y TypeScript strict superados. K0 añade la base KMP/Compose; K1 conecta adaptadores de cuenta y prepara recursos remotos. Android compilable y probado con fixtures; iOS requiere Mac. La plantilla Expo local está retirada como dirección, no borrada.
 
 D0 se entregó en `40737a2`. El [plan de fases](IMPLEMENTATION_PLAN.md) concreta entregables y aceptación. La [primera evaluación](../../prototypes/memory/evidence/2026-11-11.md), la [segunda iteración](../../prototypes/memory/evidence/2026-11-12.md) y la [comparación v3](../../prototypes/memory/evidence/2026-11-12-v3.md) se conservan con sus fallos; no permitían entonces avanzar. La evidencia v4 permitió iniciar K0.
