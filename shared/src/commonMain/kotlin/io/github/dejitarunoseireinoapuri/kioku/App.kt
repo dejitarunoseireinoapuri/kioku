@@ -7,15 +7,13 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.ViewModelStore
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.rememberViewModelStoreOwner
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
@@ -88,13 +86,7 @@ private fun AccountGate(
 
 @Composable
 private fun CompositionViewModels(content: @Composable () -> Unit) {
-    val owner =
-        remember {
-            object : ViewModelStoreOwner {
-                override val viewModelStore = ViewModelStore()
-            }
-        }
-    DisposableEffect(owner) { onDispose { owner.viewModelStore.clear() } }
+    val owner = rememberViewModelStoreOwner()
     CompositionLocalProvider(LocalViewModelStoreOwner provides owner, content = content)
 }
 

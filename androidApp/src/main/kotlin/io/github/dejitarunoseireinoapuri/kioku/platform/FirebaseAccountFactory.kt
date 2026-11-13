@@ -11,14 +11,13 @@ import io.github.dejitarunoseireinoapuri.kioku.BuildConfig
 import io.github.dejitarunoseireinoapuri.kioku.data.DisconnectedAccountRepository
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeAccountRepository
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeCaptureRepository
-import io.github.dejitarunoseireinoapuri.kioku.domain.AccountRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureRepository
 
-fun firebaseAccountRepository(activity: ComponentActivity): AccountRepository {
+internal fun firebaseRepositories(activity: ComponentActivity): AndroidRepositories {
     if (BuildConfig.FIREBASE_APP_ID.isBlank() || BuildConfig.FIREBASE_API_KEY.isBlank() ||
         !BuildConfig.GOOGLE_WEB_CLIENT_ID.endsWith(".apps.googleusercontent.com")
     ) {
-        return DisconnectedAccountRepository()
+        return AndroidRepositories(DisconnectedAccountRepository(), null, null)
     }
     val options =
         FirebaseOptions
@@ -32,12 +31,16 @@ fun firebaseAccountRepository(activity: ComponentActivity): AccountRepository {
         FirebaseApp.getApps(activity).find { it.name == "kioku" }
             ?: FirebaseApp.initializeApp(activity.applicationContext, options, "kioku")
     FirebaseAppCheck.getInstance(app).installAppCheckProviderFactory(PlayIntegrityAppCheckProviderFactory.getInstance())
-    return NativeAccountRepository(
-        AndroidAccountPort(activity, FirebaseAuth.getInstance(app), FirebaseFunctions.getInstance(app, "europe-west1")),
+    val port =
+        AndroidAccountPort(activity, FirebaseAuth.getInstance(app), FirebaseFunctions.getInstance(app, "europe-west1"))
+    return AndroidRepositories(
+        NativeAccountRepository(port),
+        firebaseCaptureRepository(activity),
+        port,
     )
 }
 
-fun firebaseCaptureRepository(activity: ComponentActivity): CaptureRepository? =
+private fun firebaseCaptureRepository(activity: ComponentActivity): CaptureRepository? =
     FirebaseApp.getApps(activity).find { it.name == "kioku" }?.let { app ->
         NativeCaptureRepository(
             AndroidMemoryPort(FirebaseAuth.getInstance(app), FirebaseFunctions.getInstance(app, "europe-west1")),

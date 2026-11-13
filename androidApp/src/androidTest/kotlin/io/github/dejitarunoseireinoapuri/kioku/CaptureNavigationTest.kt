@@ -108,7 +108,7 @@ class CaptureNavigationTest {
 
 private const val UI_STATE_TIMEOUT_MS = 5000L
 
-private class CaptureNavigationFixture : CaptureRepository {
+internal class CaptureNavigationFixture : CaptureRepository {
     val commands = mutableListOf<CaptureCommand>()
     val recoveries = mutableListOf<String>()
     var result: suspend () -> CaptureOutcome = { saved() }

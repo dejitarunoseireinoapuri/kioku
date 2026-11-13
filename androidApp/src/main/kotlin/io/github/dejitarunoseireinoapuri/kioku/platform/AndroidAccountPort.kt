@@ -24,41 +24,43 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.ConfigurationResult
 import io.github.dejitarunoseireinoapuri.kioku.domain.SignInResult
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
+import java.lang.ref.WeakReference
 import java.util.UUID
 
 internal class AndroidAccountPort(
-    private val activity: ComponentActivity,
+    activity: ComponentActivity,
     auth: FirebaseAuth,
     private val functions: FirebaseFunctions,
 ) : NativeAccountPort {
     private val session = AndroidSession(activity.applicationContext, auth)
-    private val credentials = CredentialManager.create(activity)
+    private val credentials = CredentialManager.create(activity.applicationContext)
+    private var host = WeakReference(activity)
+
+    fun attach(activity: ComponentActivity) {
+        host = WeakReference(activity)
+    }
+
+    fun detach(activity: ComponentActivity) {
+        if (host.get() === activity) host.clear()
+    }
 
     override fun observeSession(listener: (AccountSession?) -> Unit) = session.observe(listener)
 
     override fun signIn(completion: (SignInResult) -> Unit): NativeCancellation {
+        val activity = host.get()?.takeUnless { it.isDestroyed }
         val epoch =
-            session.begin() ?: run {
+            activity?.let { session.begin() } ?: run {
                 completion(SignInResult.Failed(AccountIssue.Unavailable))
                 return NativeCancellation {}
             }
         val job =
             activity.lifecycleScope.launch {
                 try {
-                    val option =
-                        GetSignInWithGoogleOption
-                            .Builder(BuildConfig.GOOGLE_WEB_CLIENT_ID)
-                            .setNonce(UUID.randomUUID().toString())
-                            .build()
-                    val request = GetCredentialRequest.Builder().addCredentialOption(option).build()
-                    val result = credentials.getCredential(activity, request).credential
-                    if (result !is CustomCredential ||
-                        result.type != GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
-                    ) {
+                    val credential = googleCredential(activity)
+                    if (credential == null) {
                         completion(SignInResult.Failed(AccountIssue.Unavailable))
                     } else {
-                        val token = GoogleIdTokenCredential.createFrom(result.data).idToken
-                        session.exchange(epoch, GoogleAuthProvider.getCredential(token, null), completion)
+                        session.exchange(epoch, credential, completion)
                     }
                 } catch (error: CancellationException) {
                     session.cancel(epoch)
@@ -73,6 +75,9 @@ internal class AndroidAccountPort(
                     completion(SignInResult.Failed(AccountIssue.Unavailable))
                 }
             }
+        job.invokeOnCompletion { error ->
+            if (error is CancellationException) completion(SignInResult.Failed(AccountIssue.Cancelled))
+        }
         return NativeCancellation {
             job.cancel()
             session.cancel(epoch)
@@ -81,6 +86,7 @@ internal class AndroidAccountPort(
 
     override fun signOut() {
         session.signOut()
+        val activity = host.get()?.takeUnless { it.isDestroyed } ?: return
         activity.lifecycleScope.launch {
             try {
                 credentials.clearCredentialState(ClearCredentialStateRequest())
@@ -94,4 +100,18 @@ internal class AndroidAccountPort(
 
     override fun loadConfiguration(completion: (ConfigurationResult) -> Unit) =
         AndroidConfiguration(functions).load(completion)
+
+    private suspend fun googleCredential(activity: ComponentActivity): com.google.firebase.auth.AuthCredential? {
+        val option =
+            GetSignInWithGoogleOption
+                .Builder(BuildConfig.GOOGLE_WEB_CLIENT_ID)
+                .setNonce(UUID.randomUUID().toString())
+                .build()
+        val request = GetCredentialRequest.Builder().addCredentialOption(option).build()
+        val result = credentials.getCredential(activity, request).credential
+        if (result !is CustomCredential || result.type != GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+            return null
+        }
+        return GoogleAuthProvider.getCredential(GoogleIdTokenCredential.createFrom(result.data).idToken, null)
+    }
 }

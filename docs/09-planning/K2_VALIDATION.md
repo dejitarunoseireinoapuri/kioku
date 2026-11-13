@@ -18,7 +18,7 @@ Se consultaron arquitectura, datos/API, seguridad/privacidad/retención, plan/li
 | M0 `check` y `test` mediante su npm fijado | 74 pruebas correctas; sin cambios en prompts/modelo/extracción |
 | Android APK y APK de tests | Compilados con las herramientas fijadas |
 | `pwsh -NoProfile -File tooling/mobile.ps1 mobileCheck` | Formato, arquitectura, Detekt, 26 host tests y Android Lint correctos |
-| Pruebas instrumentadas Android | 16/16 correctas en API 36 con letra al 200 %. Los tres casos nuevos se repitieron a tamaño normal para capturas, con cuenta/repositorio ficticios |
+| Pruebas instrumentadas Android | 19/19 correctas en API 36 al 100 % tras la corrección de orientación; incluye tres regresiones nuevas. La ejecución histórica de 16/16 al 200 % precede a esa corrección; cuenta/repositorio ficticios |
 | iOS | Puente Functions y entrada Compose preparados, archivo Swift registrado en Xcode; no compilado ni ejecutado en Windows |
 
 Casos nuevos: commit y replay sin duplicados; reutilización conflictiva del ID; aclaración sin memoria anticipada; error del proveedor sin fuente parcial; límites/concurrencia; trabajadores tardíos; revocación antes del commit; caducidad; reservas distribuidas; identidad ajena, modo/UID/clave/zona inyectados; respuesta móvil malformada; cancelación y resultados tardíos; Preguntar sin escritura. Los dobles de IA no prueban calidad semántica del proveedor. Las revisiones no debilitaron aserciones: se corrigió una llamada recursiva en el fake y un import de API de tests, además de límites/advertencias reales del código.
@@ -48,5 +48,13 @@ Se corrigió además el puente de respuesta para aceptar números enteros serial
 ## Aceptación pendiente
 
 - Instalar como actualización y comprobar captura/clarificación/fuente en Android con Google/App Check reales; compilar y comprobar la integración en Mac/iOS. No sustituir estos resultados por fixtures o acceso K1 de un build anterior.
-- APK preparado en el PC, sin instalación automática en móviles personales. El propietario confirma «Recuerdo guardado» tras probar desde su Android. Confirma el recorrido positivo de captura con Google/App Check reales; la revisión del texto original y el caso ambiguo siguen pendientes de su respuesta. No se copian recuerdos personales a la evidencia.
+- APK preparado en el PC, sin instalación automática en móviles personales. El propietario confirma «Recuerdo guardado» y una pregunta de aclaración adecuada tras probar desde su Android. Confirma captura y detección de ambigüedad con Google/App Check reales; revisión del texto original y finalización de la aclaración pendientes. Se explicó que una intervención nueva sustituye la tarjeta anterior; el recorrido actual no es un historial navegable. No se copian recuerdos personales a la evidencia.
 - No declarar consulta, corrección, olvido o voz disponibles hasta sus fases. No usar datos insustituibles como primera aceptación.
+
+## Corrección de orientación Android
+
+El propietario detectó pérdida de la pantalla al girar. La causa era crear almacenes de ViewModels con `remember` y limpiarlos desde `onDispose`, que también se ejecuta durante una recreación por configuración. Se sustituyen por ámbitos oficiales de Lifecycle que conservan sus instancias en ese caso y las limpian al abandonar el ámbito. No se bloquea la orientación ni se evita la recreación mediante el manifiesto.
+
+Los repositorios Android se conservan en el ciclo de vida nativo. El acceso usa referencia débil a la Activity actual, vinculada/desvinculada al recrearse, y Credential Manager con contexto de aplicación; no se conserva la Activity destruida. Una solicitud de Google cancelada por destrucción termina su estado pendiente.
+
+Tres pruebas nuevas con recreación real y giros horizontal/vertical en API 36, fuente del sistema al 100 %, superadas: borrador y Ajustes sobreviven pero se limpian al cerrar sesión; aclaración/respuesta parcial continúan con el mismo ID y revisión; envío en curso, confirmación y fuente sobreviven sin más peticiones. Se cierran el teclado y se esperan sus insets y la visibilidad tras la transición nativa antes de comprobar contenido desplazable, sin sleeps ni reenvíos. Los primeros intentos detectaron aserciones prematuras durante esa transición; se conserva la comprobación de visibilidad con espera acotada al estado esperado. El host no exportado solo existe en debug y usa fixtures sin Firebase/OpenAI. Ejecución conjunta final: **19/19 pruebas instrumentadas correctas**. Compilaciones APK/tests, `mobileCheck` (26 host tests, formato, arquitectura, Detekt y Lint) correctos. No prueba muerte del proceso ni la versión iOS.
