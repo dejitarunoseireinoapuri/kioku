@@ -1,34 +1,39 @@
-# Kioku · Propuesta de marca «Pliegue»
+# Kioku · Propuestas de marca japonesa
 
-Fecha: 2026-11-13. **Propuesta pendiente de elección del propietario**, todavía sin integrar en la app. Se crea antes de rediseñar el login, por petición explícita. Se conserva la estética B.
+Fecha: 2026-11-13. **Pendientes de elección del propietario**. Tras descartar el monograma latino «Pliegue», se exploran una mezcla de los hiragana きおく y un kanji de tratamiento moderno. Se mantiene la estética B; todavía no se cambia el logo instalado ni se rediseña el login.
 
 ## Fuente y archivos
 
-- [Proyecto Stitch](https://stitch.google.com/projects/11852641719392883248), lámina «Marca · Pliegue — propuesta», junto a las pantallas móviles existentes.
-- Pantalla final: `c76dd0bdd5a94cb3a3cb20c10b731d7a`; primer borrador: `a41897762ed640d2b1b6cd69f640a15f`. La refinada está colocada en el canvas; no se borran recursos anteriores.
-- [Lámina PNG](../assets/branding/kioku-pliegue-proposal.png), descargada mediante Stitch MCP.
-- [Símbolo SVG](../assets/branding/kioku-pliegue-proposal.svg), extraído de los dos paths de la lámina sin cambiar su geometría. Vector de propuesta, sin scripts, fuentes o imágenes externas.
+- [Proyecto Stitch](https://stitch.google.com/projects/11852641719392883248), lámina «Marca · きおく / 憶 — propuestas», a la derecha de las ocho pantallas móviles.
+- Pantalla refinada: `8d80246de1ff4098a6137efc6a5e267b`; primer borrador: `884ce4117b754bef8ec42ada430f3260`.
+- [Lámina PNG](../assets/branding/kioku-japanese-proposals.png), descargada mediante Stitch MCP.
+- Fuentes consultadas para esta entrega: [glosario](../00-product/GLOSSARY.md), [autoridad visual](STITCH_SOURCE.md), propuesta anterior y [definición de terminado](../07-development/DEFINITION_OF_DONE.md).
 
-![Propuesta de marca Kioku](../assets/branding/kioku-pliegue-proposal.png)
+![Ligadura de hiragana y kanji 憶](../assets/branding/kioku-japanese-proposals.png)
 
-## Dirección visual
+## Las dos direcciones
 
-Monograma que sugiere una K mediante dos trazos sólidos y un encuentro central en forma de pliegue. El símbolo funciona por sí solo; el nombre `kioku` y 記憶 lo acompañan en la presentación. Coral `#FF674F`, carbón `#14171B`, blanco roto `#F2F3F4` e IBM Plex Sans mantienen la relación con B.
+| Propuesta | Construcción y significado | Límite |
+| --- | --- | --- |
+| A · Enlace | Ligadura gráfica inspirada en rasgos de き・お・く: barras superiores, bucle inferior y ángulo abierto a la derecha | Es una marca inventada; no un nuevo carácter japonés ni una lectura literal inequívoca de las tres sílabas |
+| B · Recuerdo | Carácter auténtico 憶, en Noto Sans JP de peso 900, conservando sus componentes | El nombre completo se escribe 記憶 y se lee kioku; 憶 aislado no se lee kioku. El HTML depende de la fuente: aún no es un vector autónomo listo para empaquetar |
 
-La lámina presenta símbolo, máscaras de icono iOS/Android, tamaños de 24/32/48 px y el mismo símbolo aplicado a carga. El icono usa fondo coral y símbolo carbón; la marca interior usa coral sobre carbón. Las máscaras son demostraciones, no iconos nativos listos para distribución.
+La referencia lingüística es Kanjipedia: [記憶](https://www.kanjipedia.jp/kotoba/0001223600) y [憶](https://www.kanjipedia.jp/kanji/0000556600). Modernizar significa aquí un tratamiento tipográfico contemporáneo del carácter, sin inventar trazos a los que atribuir un significado japonés.
+
+Coral `#FF674F`, carbón `#14171B`, blanco roto `#F2F3F4` e IBM Plex Sans conservan la relación con B. Ambas direcciones incluyen símbolo principal, demostraciones de máscaras iOS/Android, tamaños de 24/32/48 px, monocromo y aplicación a carga. Las máscaras son muestras visuales; los recursos nativos siguen pendientes.
 
 ## Carga propuesta
 
-Dos trazos con desplazamiento de aproximadamente 2–3 px y opacidad suave, ciclo de 1200 ms. La demostración HTML de Stitch incluye `prefers-reduced-motion`: símbolo completo estático. El texto «Preparando Kioku…» describe espera general, sin porcentajes o confirmaciones de guardado. Los tres fotogramas muestran el movimiento propuesto, no estados de una operación real.
+El HTML de Stitch propone un pulso suave de opacidad en un ciclo de 1200 ms; A añade un desplazamiento vertical pequeño. Incluye `prefers-reduced-motion` para mostrar el símbolo estático completo. «Preparando Kioku…» describe una espera general, sin implicar un guardado confirmado. La lámina PNG es estática y no demuestra la animación ejecutándose en Android o iOS.
 
 ## Revisión y límites
 
-| Perspectiva | Hallazgo y revisión |
-| --- | --- |
-| Diseño | El primer borrador tenía demasiadas cajas, badges y etiquetas técnicas. Se refinó a una lámina horizontal con foco en la marca y aplicaciones secundarias |
-| Ingeniería | Se contrastaron los SVG del HTML: solo dos paths geométricos normalizados en todos los usos. El export conserva ambos; siguen pendientes los recursos/animación nativos y su prueba en dispositivos |
-| Producto | Se retiró «Encapsulando recuerdo» de la carga porque sugería un guardado inexistente. Se mantienen las ocho pantallas anteriores y no se adelanta el login con una marca aún no elegida |
+- El primer símbolo A se parecía demasiado a ま. Se pidió una revisión en Stitch para distinguir el ángulo de く y el bucle inferior, y se inspeccionó el resultado. La lectura de los hiragana sigue siendo interpretativa.
+- Se corrigieron las descripciones de B para distinguir el carácter 憶 del nombre completo 記憶. Se retiraron etiquetas técnicas innecesarias de los ejemplos de carga.
+- Se revisaron visualmente ambas alternativas, sus muestras pequeñas y monocromas. No se atribuyen pruebas nativas, legibilidad universal ni aprobación del propietario a esta lámina.
+- Tras colocar la comparación en el canvas, Stitch MCP confirmó que los recursos HTML e imagen de las ocho pantallas móviles permanecen sin cambios. La propuesta Pliegue queda oculta y rotulada como descartada; sus archivos se conservan.
+- No se modifican código funcional de acceso, secretos, logo instalado o datos. La siguiente decisión es elegir/ajustar el símbolo antes de aplicarlo al login, manteniendo la marca oficial del botón Google.
 
-Revisión visual de escala y monocromo sobre la lámina, no pruebas instrumentadas de iconos/animación. La forma expresa bien la inicial; su asociación emocional con la memoria y el peso de la referencia japonesa son decisiones de gusto pendientes del propietario. No se declara aprobación, fidelidad nativa, rendimiento o accesibilidad completa a partir de una imagen.
+## Historial descartado: Pliegue
 
-La siguiente decisión de diseño es elegir/ajustar el símbolo y después aplicarlo al login, conservando la marca oficial del botón Google. El código funcional de acceso y el logo instalado permanecen sin cambios en esta entrega.
+Monograma latino K en dos trazos, rechazado por el propietario el 2026-11-13. Pantalla refinada `c76dd0bdd5a94cb3a3cb20c10b731d7a`; primer borrador `a41897762ed640d2b1b6cd69f640a15f`. Se conservan la [lámina PNG](../assets/branding/kioku-pliegue-proposal.png) y el [símbolo SVG](../assets/branding/kioku-pliegue-proposal.svg) como historial, sin integrarlos en la app.
