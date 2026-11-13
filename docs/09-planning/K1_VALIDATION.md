@@ -2,6 +2,8 @@
 
 Estado: **K1 en curso**, primera entrega local comprobada en `codex/k1-account-configuration`, basada en K0 `322fa55`. No cierra UC-001/UC-002, la configuración OpenAI o el recorrido móvil. [ADR-007](../02-architecture/ADR/ADR-007-private-google-account.md) recoge las decisiones del propietario.
 
+Código y pruebas validados: commit `e3d5c26`. Esta anotación posterior solo fija la referencia de evidencia; no cambia la implementación comprobada.
+
 ## Resultado revisable
 
 `backend/` separa contrato/caso de uso de cuenta y adaptadores Firebase. Un callable v2 `getConfiguration` acepta únicamente `{apiVersion: 1}`, cuerpo HTTP hasta 256 bytes y cabecera de autorización hasta 8192 caracteres; comprueba token y revocación/deshabilitación, exige Google/correo verificado permitido y vincula un UID mediante transacción. La configuración privada inválida o deshabilitada falla cerrada. No hay selección de propietario desde el cliente. Máximo de 30 lecturas autorizadas por minuto, contador transaccional y hasta tres intentos de contención.
