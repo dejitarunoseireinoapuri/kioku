@@ -24,24 +24,32 @@ data class ConversationState(
     val source: MemorySource? = null,
     val capture: CaptureOutcome? = null,
     val capturing: Boolean = false,
+    val query: QueryState = QueryState(),
 ) {
     val captureLocked: Boolean
         get() = capturing || capture is CaptureOutcome.Failed || capture == CaptureOutcome.Processing
 
     val canEdit: Boolean
-        get() = scenario != PreviewScenario.Offline && !captureLocked
+        get() = scenario != PreviewScenario.Offline && !captureLocked && !query.busy
 
     val canSwitchIntent: Boolean
-        get() = canEdit && capture !is CaptureOutcome.Clarification
+        get() = canEdit && capture !is CaptureOutcome.Clarification && !query.awaitingClarification
 
     val showingCapture: Boolean
         get() = scenario == PreviewScenario.Ready && intent == MemoryIntent.Tell && hasCapture
+
+    val showingQuery: Boolean
+        get() = scenario == PreviewScenario.Ready && intent == MemoryIntent.Ask && query.question.isNotEmpty()
 
     private val hasCapture: Boolean
         get() = capture != null || capturing
 }
 
 sealed interface ConversationEvent {
+    data class Query(
+        val action: QueryAction,
+    ) : ConversationEvent
+
     data class SelectIntent(
         val intent: MemoryIntent,
     ) : ConversationEvent

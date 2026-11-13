@@ -21,7 +21,12 @@ final class AppleMemoryPort: NSObject, NativeMemoryPort {
         switch endpoint {
         case .submit: name = "submitTurn"
         case .clarify: name = "resolveClarification"
-        default: name = "getOperation"
+        case .operation: name = "getOperation"
+        case .query: name = "queryMemory"
+        case .source: name = "getSource"
+        default:
+            _ = completion(NativeMemoryReplyFailed(issue: .invalid))
+            return AccountCancellation {}
         }
         guard let uid = auth.currentUser?.uid, let bytes = json.data(using: .utf8),
               let payload = try? JSONSerialization.jsonObject(with: bytes) as? [String: Any] else {

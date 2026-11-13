@@ -1,0 +1,83 @@
+{
+  "status": "interrupted",
+  "model": "gpt-6.1-sol",
+  "reasoning": "medium",
+  "rows": [
+    {
+      "id": "film-context",
+      "category": "context",
+      "status": "answered",
+      "references": ["trip-film"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 6637
+    },
+    {
+      "id": "father-last-week",
+      "category": "time",
+      "status": "notFound",
+      "references": [],
+      "coverage": true,
+      "automaticMatch": false,
+      "durationMs": 8214
+    },
+    {
+      "id": "food-opinion",
+      "category": "opinion",
+      "status": "answered",
+      "references": ["food"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 5368
+    },
+    {
+      "id": "exam-date",
+      "category": "time",
+      "status": "answered",
+      "references": ["exam"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 5268
+    },
+    {
+      "id": "homework-monday",
+      "category": "time",
+      "status": "answered",
+      "references": ["homework"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 5240
+    },
+    {
+      "id": "kayak-plan",
+      "category": "plan",
+      "status": "answered",
+      "references": ["kayak"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 5028
+    },
+    {
+      "id": "restaurant-recall",
+      "category": "context",
+      "status": "answered",
+      "references": ["restaurant"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 5217
+    },
+    {
+      "id": "pending-films",
+      "category": "plan",
+      "status": "answered",
+      "references": ["trip-film"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 6582
+    }
+  ],
+  "interruptedBefore": "ambiguous-pablo",
+  "reason": "K3 rejected clarification citations supported by the M0 contract; adapter correction required",
+  "semanticReview": "partial results only; father-last-week failed",
+  "estimatedUsd": 0.27718788
+}

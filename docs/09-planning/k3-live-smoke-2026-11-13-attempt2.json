@@ -1,0 +1,185 @@
+{
+  "stage": "complete",
+  "model": "gpt-6.1-sol",
+  "reasoning": "medium",
+  "role": "regression after attempt1",
+  "rows": [
+    {
+      "id": "film-context",
+      "category": "context",
+      "status": "answered",
+      "references": ["trip-film"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 4133,
+      "semanticPass": true
+    },
+    {
+      "id": "father-last-week",
+      "category": "time",
+      "status": "answered",
+      "references": ["father-call"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 4346,
+      "semanticPass": true
+    },
+    {
+      "id": "food-opinion",
+      "category": "opinion",
+      "status": "answered",
+      "references": ["food"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 4492,
+      "semanticPass": true
+    },
+    {
+      "id": "exam-date",
+      "category": "time",
+      "status": "answered",
+      "references": ["exam"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 4380,
+      "semanticPass": true
+    },
+    {
+      "id": "homework-monday",
+      "category": "time",
+      "status": "answered",
+      "references": ["homework"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 4886,
+      "semanticPass": true
+    },
+    {
+      "id": "kayak-plan",
+      "category": "plan",
+      "status": "answered",
+      "references": ["kayak"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 4114,
+      "semanticPass": true
+    },
+    {
+      "id": "restaurant-recall",
+      "category": "context",
+      "status": "answered",
+      "references": ["restaurant"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 4258,
+      "semanticPass": true
+    },
+    {
+      "id": "pending-films",
+      "category": "plan",
+      "status": "answered",
+      "references": ["trip-film"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 4888,
+      "semanticPass": true
+    },
+    {
+      "id": "ambiguous-pablo",
+      "category": "identity",
+      "status": "needsClarification",
+      "references": [],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 4116,
+      "semanticPass": true
+    },
+    {
+      "id": "classmate-pablo",
+      "category": "identity",
+      "status": "answered",
+      "references": ["classmate"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 5179,
+      "semanticPass": true
+    },
+    {
+      "id": "neighbour-pablo",
+      "category": "identity",
+      "status": "answered",
+      "references": ["neighbour"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 3836,
+      "semanticPass": true
+    },
+    {
+      "id": "missing-dentist",
+      "category": "absence",
+      "status": "notFound",
+      "references": [],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 3950,
+      "semanticPass": true
+    },
+    {
+      "id": "missing-ticket",
+      "category": "absence",
+      "status": "notFound",
+      "references": [],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 4768,
+      "semanticPass": true
+    },
+    {
+      "id": "quote-not-fact",
+      "category": "quotation",
+      "status": "notFound",
+      "references": [],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 4456,
+      "semanticPass": true
+    },
+    {
+      "id": "quoted-content",
+      "category": "quotation",
+      "status": "answered",
+      "references": ["quotation"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 5716,
+      "semanticPass": true
+    },
+    {
+      "id": "test-word",
+      "category": "context",
+      "status": "answered",
+      "references": ["word"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 4697,
+      "semanticPass": true
+    }
+  ],
+  "calls": 100,
+  "inputTokens": 133407,
+  "outputTokens": 4653,
+  "estimatedUsd": 0.37674910000001205,
+  "semanticReview": {
+    "method": "Development agent compared every synthetic answer with its fixed source outside the answer/verifier pipeline",
+    "reviewed": 16,
+    "passed": 16,
+    "criticalFailures": 0
+  },
+  "metrics": {
+    "answerableCases": 12,
+    "completeRetrieval": 12,
+    "totalSemanticPass": 16,
+    "p95Ms": 5716,
+    "medianMs": 4418
+  }
+}

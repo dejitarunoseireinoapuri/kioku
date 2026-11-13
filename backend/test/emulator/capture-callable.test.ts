@@ -36,6 +36,7 @@ test("memory endpoints refuse missing/foreign identity before any payload or pro
     "resolveClarification",
     "getOperation",
     "getSource",
+    "queryMemory",
   ]) {
     assert.equal((await call(name, { apiVersion: 1 })).status, 401);
     assert.equal(

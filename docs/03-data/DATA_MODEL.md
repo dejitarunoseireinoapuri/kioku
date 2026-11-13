@@ -35,6 +35,14 @@ No se guarda el snapshot completo del prototipo ni se mantiene una base de memor
 
 Solo `operations` y `usage` usan el campo de caducidad TTL. Se excluyen texto y vectores de índices automáticos innecesarios; no se crea un índice global de propietarios. La consulta semántica definitiva se concretará en K3. Los historiales de preguntas siguen fuera del almacén canónico.
 
+## Proyecciones y consultas K3
+
+Según [ADR-010](../02-architecture/ADR/ADR-010-text-query.md), los fragmentos añaden `searchSchema:1`, `searchVector` nativo de 512 dimensiones y `searchTerms` acotados. Se derivan del canónico; no crean hechos ni reemplazan su revisión. Un índice vectorial de alcance de colección permite consultas bajo `accounts/{uid}/memories`, nunca una lectura global para filtrar propietarios después. La preparación de recuerdos anteriores es aditiva con precondición de versión; `privateConfiguration/search` liga UID, esquema y preparación completa. La consulta falla cerrada antes de prepararlos, en lugar de ignorarlos.
+
+Los recibos K3 reutilizan `accounts/{uid}/operations/{UUID}` con `kind:query`, digest salado por UID/UUID/entrada, estado processing/finished/failed, nonce, intentos y TTL de 24 h. No contienen preguntas, aclaraciones, respuestas o copias de fuentes. La concesión numérica compartida está en `runtime/capture`. `getOperation` de K2 conserva su contrato de captura, no devuelve conversaciones K3. El contexto de aclaración de preguntas vive exclusivamente en RAM del móvil y de la petición.
+
+Antes de entregar una respuesta, se comprueba de nuevo la versión exacta de los fragmentos y fuentes usados, además de identidad/propietario/concesión. Abrir el original lo lee otra vez del canónico autorizado. Los índices no autorizan respuestas por sí mismos; K4 deberá retirar proyecciones al modificar/olvidar.
+
 ## Frontera privada K1
 
 `privateConfiguration/owner` contiene exactamente `uid`, `enabled`, `window` (minuto de servidor) y `count` (1–30). Es una vinculación privada inmutable de propietario, más admisión acotada, no un perfil ni una credencial. No guarda correo, texto, clave, token o historial. El servidor vincula el primer UID autorizado mediante transacción; otra identidad o una configuración inválida falla cerrada. El cliente tiene lectura/escritura denegadas, incluida esta ruta. Probado con fixtures y propietario real vinculado tras Google/App Check válidos.

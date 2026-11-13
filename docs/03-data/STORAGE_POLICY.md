@@ -24,6 +24,10 @@ Decisión del propietario al iniciar K2: conservar fuentes/recuerdos hasta que s
 
 K2 delimita los datos operativos: pendientes/fallos con contexto, 24 h desde la última actividad admitida; recibos terminales, siete días, sin copias del texto; contadores numéricos de uso, 30 días. El cliente/servidor rechaza pendientes caducados aunque TTL aún no los haya retirado. El borrado físico por TTL es asíncrono; debe estar activado y comprobado. Fuentes/recuerdos no tienen campo de caducidad. Los datos en RAM de la sesión no se guardan en preferencias/backups móviles. K3 mantendrá las preguntas únicamente como contexto de sesión de Kioku; la retención del proveedor es una frontera distinta.
 
+## Consultas K3
+
+Pregunta, aclaraciones y respuesta permanecen solo en RAM de la sesión y de la petición; nunca en la memoria canónica, preferencias o copias móviles. Un recibo de consulta con datos mínimos sin texto caduca a las 24 h mediante el TTL ya previsto para operaciones. Perder la respuesta no permite reconstruirla desde un recibo: repetir requiere acción explícita del propietario. La preparación aditiva de índices no añade versiones históricas ni backups; el original permanece en su fuente actual. Límites y evidencia en [K3_VALIDATION](../09-planning/K3_VALIDATION.md).
+
 ## Credencial K1
 
 La sesión nativa queda a cargo de Firebase Auth; un marcador local no secreto distingue autenticación aceptada/cancelada. No se persiste una clave OpenAI en el móvil. La propuesta administrativa usa Secret Manager con versiones inmutables y una referencia privada vigente. Un candidato rechazado antes de validar no se sube. Un conflicto confirmado puede descartar su candidato nuevo; un commit incierto conserva la versión hasta resolverlo mediante metadatos, para no destruir una credencial activa. Versiones anteriores/huérfanas requieren revisión y retirada explícita; no hay limpieza automática desplegada. Nada de ello representa historial de recuerdos ni permite recuperar contenido olvidado.

@@ -13,6 +13,8 @@ fun appModule() =
     module {
         single<SourceRepository> { DemoSourceRepository() }
         factory { ReadReferencedSource(get()) }
-        viewModel { (dependencies: ConversationDependencies) -> ConversationViewModel(get(), dependencies.captures) }
+        viewModel { (dependencies: ConversationDependencies) ->
+            ConversationViewModel(get(), dependencies.captures, dependencies.queries)
+        }
         viewModel { (account: AccountRepository) -> AccountViewModel(account) }
     }

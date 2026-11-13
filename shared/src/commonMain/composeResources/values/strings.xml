@@ -85,6 +85,14 @@
     <string name="key_setup_hint">Añade la clave desde tu ordenador.</string>
     <string name="refreshing_configuration">Actualizando...</string>
     <string name="query_unavailable">La consulta de recuerdos aún no está disponible. Esta pregunta no se ha guardado.</string>
+    <string name="query_searching">Buscando en tu memoria...</string>
+    <string name="query_error">No he podido recuperar la respuesta. Puedes reintentar; tu pregunta no se ha guardado como recuerdo.</string>
+    <string name="query_repeat">La consulta terminó, pero la respuesta ya no está disponible. Puedes volver a preguntarlo.</string>
+    <string name="query_restart">Volver a preguntar</string>
+    <string name="query_reset">Empezar otra pregunta</string>
+    <string name="query_source">Ver texto original %1$d · %2$s</string>
+    <string name="query_limit">Necesito una pregunta más concreta. Empieza otra consulta con todo el contexto necesario.</string>
+    <string name="source_loading">Cargando texto original...</string>
     <string name="capture_saving">Procesando tu recuerdo...</string>
     <string name="capture_saved">Guardado en tu memoria.</string>
     <string name="capture_uncertain">Todavía no puedo confirmar el resultado. Comprueba el estado antes de volver a enviarlo.</string>

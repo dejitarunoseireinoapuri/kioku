@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
         val factory = viewModelFactory { initializer { firebaseRepositories(this@MainActivity) } }
         repositories = ViewModelProvider(this, factory)[AndroidRepositories::class.java]
         repositories.attach(this)
-        setContent { KiokuApp(repositories.account, repositories.capture) }
+        setContent { KiokuApp(repositories.account, repositories.capture, repositories.queries) }
     }
 
     override fun onDestroy() {

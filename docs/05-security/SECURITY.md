@@ -31,6 +31,12 @@ La identidad de ejecución K2 tiene lectura del secreto **solo** sobre `kioku-op
 
 Fuente/fragmentos se preparan fuera de la transacción y se confirman juntos. Los recibos terminales no contienen el relato; pendientes y contadores tienen retención acotada. Los logs no incorporan entradas, fuentes, prompts o respuestas del proveedor. La validación local usa exclusivamente fixtures; la prueba de IA real se ejecuta contra Firestore demo aislado y conserva el contador de presupuesto existente. Nada de ello acredita por sí solo Google/App Check/iOS reales.
 
+## Consulta K3
+
+`queryMemory` mantiene la autenticación/atestación y secreto de K2; no recibe credenciales, rutas o identidades elegidas por el texto. La recuperación híbrida se hace dentro de la colección del UID verificado. Se comprueban registros canónicos y sus versiones después de la IA; revocación, borrado o cambio de fuente invalidan el resultado. Las fuentes de una respuesta se cargan de nuevo al abrirlas. Respuestas/referencias malformadas o ajenas se rechazan; el móvil no ejecuta instrucciones contenidas en recuerdos.
+
+No se guardan preguntas/respuestas en Firestore: recibos con digest ligado al ID aleatorio, nonce y datos numéricos, TTL 24 h. Repetir una consulta terminada no ejecuta automáticamente otra llamada de pago. No se activa un historial de chat ni se ofrecen escrituras K4. Antes de habilitar la búsqueda se necesita índice y preparación completa; no se ocultan datos antiguos sin proyección. [Evidencia K3](../09-planning/K3_VALIDATION.md) separa emulador, IA real, activación y móviles.
+
 ## Incidentes
 
 Contener acceso, revocar/rotar credenciales afectadas, revisar el uso mediante evidencias mínimas autorizadas, corregir y probar. No exponer material sensible en issues públicas. La política de comunicación y contacto del operador sigue pendiente antes de distribuir.

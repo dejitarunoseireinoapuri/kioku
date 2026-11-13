@@ -11,7 +11,7 @@ Este documento define el alcance y el cierre de las fases. Los [requisitos](../0
 | K0 · Base técnica | App navegable con estética B y datos ficticios | Implementada; Android comprobado, validación iOS pendiente |
 | K1 · Cuenta y configuración | Acceso privado y configuración segura de la clave propia | Acceso y clave activos; propietario confirma Android/iOS, quedan comprobaciones de cierre detalladas |
 | K2 · Contar por escrito | Separar asuntos, aclarar dudas y guardar automáticamente | Implementada y desplegada, integrada en `main` por petición del propietario; recorrido Android aceptado, validación del nuevo build iOS pendiente |
-| K3 · Preguntar por escrito | Encontrar recuerdos y responder con sus fuentes | Pendiente |
+| K3 · Preguntar por escrito | Encontrar recuerdos y responder con sus fuentes | Implementada en `codex/k3-text-query`; pruebas locales/IA real correctas, activación y aceptación móvil pendientes |
 | K4 · Control de memoria | Ofrecer guardar un dato, corregir y olvidar conversando | Pendiente |
 | K5 · Voz | Contar y preguntar hablando, con pulsación y bloqueo | Pendiente |
 | K6 · V1 de uso personal | Recorrido completo comprobado en Android e iOS | Pendiente |
@@ -118,6 +118,8 @@ Cuarta iteración y decisión actual: [evidencia v4](../../prototypes/memory/evi
 **Fuera:** búsqueda natural completa, corrección/borrado conversacional y voz.
 
 ## K3 · Preguntar por escrito
+
+**Estado actual:** implementada en `codex/k3-text-query`, desde `28fdc78`. El propietario aclaró que quería continuar K3, no K4. [Evidencia y criterios](K3_VALIDATION.md), [ADR-010](../02-architecture/ADR/ADR-010-text-query.md): búsqueda híbrida, respuesta/verificación M0, fuentes revalidadas y preguntas solo de sesión. Backend, Android y dos conjuntos sintéticos con IA real comprobados; se conserva el intento parcial fallido. Activación específica en producción y recorrido Android/iOS pendientes. K2 está en `main` por petición expresa sin afirmar validación iOS.
 
 **Resultado:** preguntar con palabras naturales y obtener el dato con su fuente, o una respuesta honesta si no consta. Cubre UC-005 por texto.
 

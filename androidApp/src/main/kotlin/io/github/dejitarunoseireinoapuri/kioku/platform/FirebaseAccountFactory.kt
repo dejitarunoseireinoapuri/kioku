@@ -11,7 +11,7 @@ import io.github.dejitarunoseireinoapuri.kioku.BuildConfig
 import io.github.dejitarunoseireinoapuri.kioku.data.DisconnectedAccountRepository
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeAccountRepository
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeCaptureRepository
-import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureRepository
+import io.github.dejitarunoseireinoapuri.kioku.data.NativeQueryRepository
 
 internal fun firebaseRepositories(activity: ComponentActivity): AndroidRepositories {
     if (BuildConfig.FIREBASE_APP_ID.isBlank() || BuildConfig.FIREBASE_API_KEY.isBlank() ||
@@ -33,16 +33,12 @@ internal fun firebaseRepositories(activity: ComponentActivity): AndroidRepositor
     FirebaseAppCheck.getInstance(app).installAppCheckProviderFactory(PlayIntegrityAppCheckProviderFactory.getInstance())
     val port =
         AndroidAccountPort(activity, FirebaseAuth.getInstance(app), FirebaseFunctions.getInstance(app, "europe-west1"))
+    val memoryPort =
+        AndroidMemoryPort(FirebaseAuth.getInstance(app), FirebaseFunctions.getInstance(app, "europe-west1"))
     return AndroidRepositories(
         NativeAccountRepository(port),
-        firebaseCaptureRepository(activity),
+        NativeCaptureRepository(memoryPort),
         port,
+        NativeQueryRepository(memoryPort),
     )
 }
-
-private fun firebaseCaptureRepository(activity: ComponentActivity): CaptureRepository? =
-    FirebaseApp.getApps(activity).find { it.name == "kioku" }?.let { app ->
-        NativeCaptureRepository(
-            AndroidMemoryPort(FirebaseAuth.getInstance(app), FirebaseFunctions.getInstance(app, "europe-west1")),
-        )
-    }

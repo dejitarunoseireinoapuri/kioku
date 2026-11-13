@@ -6,11 +6,13 @@ import io.github.dejitarunoseireinoapuri.kioku.data.NativeAccountPort
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeAccountRepository
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeCaptureRepository
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeMemoryPort
+import io.github.dejitarunoseireinoapuri.kioku.data.NativeQueryRepository
 
 fun mainViewController(
     port: NativeAccountPort? = null,
     memoryPort: NativeMemoryPort? = null,
 ) = (if (port == null) DisconnectedAccountRepository() else NativeAccountRepository(port)).let { repository ->
     val captures = memoryPort?.let(::NativeCaptureRepository)
-    ComposeUIViewController { KiokuApp(repository, captures) }
+    val queries = memoryPort?.let(::NativeQueryRepository)
+    ComposeUIViewController { KiokuApp(repository, captures, queries) }
 }

@@ -47,6 +47,10 @@ fun ConversationBody(
     onEvent: (ConversationEvent) -> Unit,
     onSource: (String) -> Unit,
 ) {
+    if (state.showingQuery) {
+        QueryBody(state.query, onEvent, onSource)
+        return
+    }
     if (state.showingCapture) {
         CaptureBody(state, onEvent, onSource)
         return

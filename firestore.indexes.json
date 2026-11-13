@@ -1,5 +1,17 @@
 {
-  "indexes": [],
+  "indexes": [
+    {
+      "collectionGroup": "memories",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "__name__", "order": "ASCENDING" },
+        {
+          "fieldPath": "searchVector",
+          "vectorConfig": { "dimension": 512, "flat": {} }
+        }
+      ]
+    }
+  ],
   "fieldOverrides": [
     {
       "collectionGroup": "operations",

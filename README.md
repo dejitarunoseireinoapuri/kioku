@@ -14,6 +14,8 @@ K2 incorpora [guardado real por texto, aclaraciones y texto original](docs/09-pl
 
 Repositorio: https://github.com/dejitarunoseireinoapuri/kioku
 
+K3 está implementada en `codex/k3-text-query`: consulta por texto con fuentes actuales y aclaraciones, sin guardar preguntas como recuerdos. Pruebas locales y evaluación sintética con IA real comprobadas; [evidencia y límites](docs/09-planning/K3_VALIDATION.md). Falta autorización/activación específica en Firebase y aceptación móvil. No se declara disponible en producción por compilar el APK.
+
 ## Empezar aquí
 
 1. [Alcance](docs/00-product/PRODUCT_SCOPE.md) y [reglas de memoria](docs/00-product/BUSINESS_RULES.md).

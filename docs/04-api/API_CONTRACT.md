@@ -36,6 +36,8 @@ Payloads de voz pueden requerir un protocolo temporal de upload/transcripción s
 
 Implementada y desplegada; estado remoto y evidencia en [K2_VALIDATION](../09-planning/K2_VALIDATION.md). Mantiene Google permitido/verificado, UID vinculado, revocación y App Check de K1. Revalida identidad después de inferencia y propietario dentro del commit. Nunca interpreta el texto como permiso para otra operación o cuenta.
 
+La consulta tiene una frontera separada K3, descrita al final; no se envía un modo Preguntar al endpoint de captura.
+
 | Callable | Entrada exacta |
 | --- | --- |
 | `submitTurn` | `{apiVersion:1, requestId:UUID, mode:"tell", channel:"text", text, zone}`; texto no vacío hasta 8000 caracteres y zona IANA válida |
@@ -59,6 +61,24 @@ Resultados de captura/recuperación incluyen `apiVersion:1`, `operationId` y:
 Pendientes/fallos con contexto caducan tras 24 h desde la actividad admitida; recibos terminales tras siete días. El borrado físico TTL es asíncrono. No hay TTL en fuentes/recuerdos. La app solo muestra éxito tras resultado confirmado; una respuesta perdida se comprueba por ID. Cancelar la suspensión descarta callbacks, sin prometer deshacer un commit remoto. El estado de sesión/generación elimina resultados tardíos del cliente anterior.
 
 Pregunta natural, ofertas, corrección y olvido siguen pendientes de K3/K4. Un mensaje en Preguntar no se dirige a `submitTurn` ni se transforma en memoria.
+
+## Frontera K3 · Consulta por texto
+
+Implementación local en `codex/k3-text-query`; activación y evidencias en [K3_VALIDATION](../09-planning/K3_VALIDATION.md). La mención anterior a K3 pendiente describe el alcance de K2, no elimina esta implementación posterior. [ADR-010](../02-architecture/ADR/ADR-010-text-query.md).
+
+`queryMemory` acepta exactamente `{apiVersion:1, requestId:UUID, text:string}`. Texto no vacío, máximo 2000 caracteres y HTTP máximo 12 KB; rechaza secretos reconocibles, UID/modelo/reloj/clave/ruta inyectados. Google, revocación, cuenta permitida y App Check de la app registrada, como K2. Usa fecha del servidor y contexto de fuentes; una aclaración incorpora solo la pregunta anterior y respuestas explícitas del usuario, hasta 2000 caracteres acumulados.
+
+Respuesta exacta `{apiVersion:1, operationId:UUID, status, text, sources:[{sourceId:UUID, receivedAt:ISO}]}`. Hasta 2400 caracteres y seis fuentes distintas. Estados:
+
+- `answered`: respuesta respaldada y al menos una fuente propia vigente.
+- `notFound`: no consta información suficiente; no significa que algo no ocurrió. Puede citar evidencia vigente que explique el límite, sin convertir la ausencia en un hecho.
+- `needsClarification`: preguntar por el alcance/persona/contexto; puede citar fuentes vigentes que expliquen la ambigüedad, sin guardado de hechos.
+- `processing`: mismo ID aún en curso; texto/fuentes vacíos, no reenvío automático.
+- `repeatRequired`: ese ID terminó; texto/fuentes vacíos. Al no conservar respuestas en Firebase, volver a preguntar exige acción explícita e ID nuevo.
+
+El mismo ID con otra entrada es conflicto. Fallo o concesión caducada admite hasta tres intentos explícitos con el mismo ID; no se guarda la pregunta para reconstruirlos. Compartir concesión con captura impide trabajo costoso concurrente por propietario. Presupuesto distribuido y límites de tiempo K2. Revalidación después de IA y de versiones canónicas dentro de la transacción que termina el recibo, sin guardar la respuesta.
+
+Abrir una fuente usa `getSource` protegido con el ID referenciado, no una URL ni una copia cacheada de la respuesta. El cliente rechaza ID distinto, campos extra, fechas/longitudes malformadas y estados sin la evidencia requerida. Datos nuevos, correcciones y borrados conversacionales siguen fuera de K3.
 
 ## Frontera interna comprobada en M0 v4
 

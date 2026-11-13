@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureCommand
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureRepository
+import io.github.dejitarunoseireinoapuri.kioku.domain.QueryRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.ReadReferencedSource
 import io.github.dejitarunoseireinoapuri.kioku.domain.SourceResult
 import kotlinx.coroutines.Job
@@ -16,15 +17,30 @@ import kotlinx.coroutines.launch
 class ConversationViewModel(
     private val readSource: ReadReferencedSource,
     private val captures: CaptureRepository? = null,
+    queries: QueryRepository? = null,
 ) : ViewModel() {
     private val mutableState = MutableStateFlow(ConversationState())
     val state = mutableState.asStateFlow()
     private var command: CaptureCommand? = null
     private var captureJob: Job? = null
     private var operationGeneration = 0
+    private val query =
+        QuerySession(queries, viewModelScope) { next, clearDraft ->
+            mutableState.update {
+                it.copy(
+                    query = next,
+                    source = next.source,
+                    draft = if (clearDraft) "" else it.draft,
+                )
+            }
+        }
 
     fun onEvent(event: ConversationEvent) {
         when (event) {
+            is ConversationEvent.Query -> {
+                query.act(event.action)
+            }
+
             is ConversationEvent.SelectIntent -> {
                 selectIntent(event.intent)
             }
@@ -63,7 +79,10 @@ class ConversationViewModel(
         }
     }
 
-    fun openSource(id: String): Boolean {
+    fun openSource(id: String): Boolean =
+        if (state.value.intent == MemoryIntent.Ask && query.openSource(id)) true else openCaptureSource(id)
+
+    private fun openCaptureSource(id: String): Boolean {
         val saved = state.value.capture as? CaptureOutcome.Saved
         if (saved?.source?.id == id) {
             mutableState.update { it.copy(source = saved.source) }
@@ -85,6 +104,7 @@ class ConversationViewModel(
     private fun selectIntent(intent: MemoryIntent) {
         val current = state.value
         if (current.canSwitchIntent) {
+            if (intent != current.intent) query.reset()
             mutableState.update { it.copy(intent = intent) }
         }
     }
@@ -94,6 +114,8 @@ class ConversationViewModel(
             val limit =
                 if (state.value.capture is CaptureOutcome.Clarification) {
                     MAX_CLARIFICATION_LENGTH
+                } else if (state.value.intent == MemoryIntent.Ask) {
+                    2000
                 } else {
                     MAX_DRAFT_LENGTH
                 }
@@ -104,22 +126,27 @@ class ConversationViewModel(
     private fun submit() {
         val current = state.value
         if (current.scenario == PreviewScenario.Offline || current.draft.isBlank() || current.capturing) return
-        if (captures == null || current.scenario != PreviewScenario.Ready) {
+        if (current.intent == MemoryIntent.Ask && current.scenario == PreviewScenario.Ready) {
+            if (!query.submit(current.draft)) feedback(PreviewFeedback.QueryUnavailable)
+        } else if (captures == null || current.scenario != PreviewScenario.Ready) {
             feedback(PreviewFeedback.TextOnly)
-        } else if (current.intent == MemoryIntent.Ask && current.capture !is CaptureOutcome.Clarification) {
-            feedback(PreviewFeedback.QueryUnavailable)
         } else if (current.capture != CaptureOutcome.Processing) {
-            val clarification = current.capture as? CaptureOutcome.Clarification
-            if (current.capture !is CaptureOutcome.Failed || command == null) {
-                command =
-                    if (clarification != null) {
-                        captures.clarify(current.draft, clarification.id, clarification.revision)
-                    } else {
-                        captures.tell(current.draft)
-                    }
-            }
-            runCapture()
+            submitCapture(current)
         }
+    }
+
+    private fun submitCapture(current: ConversationState) {
+        val captures = captures ?: return
+        val clarification = current.capture as? CaptureOutcome.Clarification
+        if (current.capture !is CaptureOutcome.Failed || command == null) {
+            command =
+                if (clarification != null) {
+                    captures.clarify(current.draft, clarification.id, clarification.revision)
+                } else {
+                    captures.tell(current.draft)
+                }
+        }
+        runCapture()
     }
 
     private fun runCapture(recover: Boolean = false) {
@@ -142,6 +169,7 @@ class ConversationViewModel(
     }
 
     private fun showExample(scenario: PreviewScenario) {
+        query.reset()
         operationGeneration++
         captureJob?.cancel()
         command = null

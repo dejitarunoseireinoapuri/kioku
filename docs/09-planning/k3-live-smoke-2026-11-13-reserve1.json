@@ -1,0 +1,185 @@
+{
+  "stage": "complete",
+  "model": "gpt-6.1-sol",
+  "reasoning": "medium",
+  "role": "new reserve after adapter repair",
+  "rows": [
+    {
+      "id": "new-film-context",
+      "category": "context",
+      "status": "answered",
+      "references": ["travel-film"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 4461,
+      "semanticPass": true
+    },
+    {
+      "id": "new-mother-week",
+      "category": "time",
+      "status": "answered",
+      "references": ["mother-call"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 4355,
+      "semanticPass": true
+    },
+    {
+      "id": "new-tea-taste",
+      "category": "opinion",
+      "status": "answered",
+      "references": ["tea"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 4347,
+      "semanticPass": true
+    },
+    {
+      "id": "new-tea-why",
+      "category": "opinion",
+      "status": "answered",
+      "references": ["tea"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 3452,
+      "semanticPass": true
+    },
+    {
+      "id": "new-exam-time",
+      "category": "time",
+      "status": "answered",
+      "references": ["kanji-test"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 3970,
+      "semanticPass": true
+    },
+    {
+      "id": "new-homework",
+      "category": "context",
+      "status": "answered",
+      "references": ["kanji-test"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 5389,
+      "semanticPass": true
+    },
+    {
+      "id": "new-ambiguous-emi",
+      "category": "identity",
+      "status": "needsClarification",
+      "references": [],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 4204,
+      "semanticPass": true
+    },
+    {
+      "id": "new-classmate-emi",
+      "category": "identity",
+      "status": "answered",
+      "references": ["classmate-emi"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 5597,
+      "semanticPass": true
+    },
+    {
+      "id": "new-neighbour-emi",
+      "category": "identity",
+      "status": "answered",
+      "references": ["neighbour-emi"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 4349,
+      "semanticPass": true
+    },
+    {
+      "id": "new-reading-done",
+      "category": "plan",
+      "status": "answered",
+      "references": ["finished-book"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 4714,
+      "semanticPass": true
+    },
+    {
+      "id": "new-movie-plan",
+      "category": "plan",
+      "status": "answered",
+      "references": ["travel-film"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 3721,
+      "semanticPass": true
+    },
+    {
+      "id": "new-missing-flight",
+      "category": "absence",
+      "status": "notFound",
+      "references": [],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 4079,
+      "semanticPass": true
+    },
+    {
+      "id": "new-missing-dinner",
+      "category": "absence",
+      "status": "notFound",
+      "references": [],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 4383,
+      "semanticPass": true
+    },
+    {
+      "id": "new-quote-not-password",
+      "category": "quotation",
+      "status": "notFound",
+      "references": [],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 4723,
+      "semanticPass": true
+    },
+    {
+      "id": "new-quoted-text",
+      "category": "quotation",
+      "status": "answered",
+      "references": ["quoted-passcode"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 6088,
+      "semanticPass": true
+    },
+    {
+      "id": "new-mother-topic",
+      "category": "context",
+      "status": "answered",
+      "references": ["mother-call"],
+      "coverage": true,
+      "automaticMatch": true,
+      "durationMs": 4357,
+      "semanticPass": true
+    }
+  ],
+  "calls": 88,
+  "inputTokens": 119887,
+  "outputTokens": 3728,
+  "estimatedUsd": 0.33429926000000165,
+  "semanticReview": {
+    "method": "Development agent compared every synthetic answer with its fixed source outside the answer/verifier pipeline",
+    "reviewed": 16,
+    "passed": 16,
+    "criticalFailures": 0
+  },
+  "metrics": {
+    "answerableCases": 12,
+    "completeRetrieval": 12,
+    "totalSemanticPass": 16,
+    "p95Ms": 6088,
+    "medianMs": 4356
+  }
+}

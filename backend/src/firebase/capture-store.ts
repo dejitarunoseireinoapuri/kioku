@@ -14,6 +14,7 @@ import type {
 } from "../memory/contracts.js";
 import { inputHash, readRecord, recordResult } from "../memory/records.js";
 import type { CaptureRecord } from "../memory/records.js";
+import { searchProjection } from "../query/search-projection.js";
 
 const DAY = 86_400_000;
 const LEASE = 240_000;
@@ -209,7 +210,10 @@ export class FirestoreCaptureStore implements CaptureStore {
           for (const memory of snapshot.memories) {
             if (memory.sourceId !== lease.pending.turn.id)
               throw new AccountError("failed-precondition");
-            tx.create(root.collection("memories").doc(memory.id), memory);
+            tx.create(root.collection("memories").doc(memory.id), {
+              ...memory,
+              ...searchProjection(memory),
+            });
           }
         }
         const next: CaptureRecord = {

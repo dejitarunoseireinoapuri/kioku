@@ -38,6 +38,7 @@ test("server fixture writes succeed while all clients are denied canonical reads
     "accounts/owner/usage/day",
     "accounts/other/memories/memory",
     "privateConfiguration/owner",
+    "privateConfiguration/search",
     "indexes/projection",
     "operations/receipt",
     "credentials/metadata",

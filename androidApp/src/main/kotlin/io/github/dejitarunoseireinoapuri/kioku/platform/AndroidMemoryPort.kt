@@ -31,12 +31,7 @@ internal class AndroidMemoryPort(
                 completion(NativeMemoryReply.Failed(CaptureIssue.Denied))
                 return NativeCancellation {}
             }
-        val name =
-            when (endpoint) {
-                MemoryEndpoint.Submit -> "submitTurn"
-                MemoryEndpoint.Clarify -> "resolveClarification"
-                MemoryEndpoint.Operation -> "getOperation"
-            }
+        val name = endpoint.callableName()
         var cancelled = false
         val objectValue = JSONObject(json)
         val payload = objectValue.keys().asSequence().associateWith { objectValue.get(it) }
@@ -81,3 +76,12 @@ internal class AndroidMemoryPort(
 }
 
 private fun <T> com.google.android.gms.tasks.Task<T>.resultOrNull(): T? = if (isSuccessful) result else null
+
+private fun MemoryEndpoint.callableName(): String =
+    when (this) {
+        MemoryEndpoint.Submit -> "submitTurn"
+        MemoryEndpoint.Clarify -> "resolveClarification"
+        MemoryEndpoint.Operation -> "getOperation"
+        MemoryEndpoint.Query -> "queryMemory"
+        MemoryEndpoint.Source -> "getSource"
+    }

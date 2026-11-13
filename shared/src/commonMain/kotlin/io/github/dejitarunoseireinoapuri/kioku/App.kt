@@ -24,6 +24,7 @@ import io.github.dejitarunoseireinoapuri.kioku.di.ConversationDependencies
 import io.github.dejitarunoseireinoapuri.kioku.di.appModule
 import io.github.dejitarunoseireinoapuri.kioku.domain.AccountRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureRepository
+import io.github.dejitarunoseireinoapuri.kioku.domain.QueryRepository
 import io.github.dejitarunoseireinoapuri.kioku.feature.account.AccountScreen
 import io.github.dejitarunoseireinoapuri.kioku.feature.account.AccountState
 import io.github.dejitarunoseireinoapuri.kioku.feature.account.AccountViewModel
@@ -44,6 +45,7 @@ import org.koin.dsl.module
 fun KiokuApp(
     accountRepository: AccountRepository = remember { DisconnectedAccountRepository() },
     captureRepository: CaptureRepository? = null,
+    queryRepository: QueryRepository? = null,
 ) {
     val platform =
         remember(accountRepository, captureRepository) {
@@ -56,7 +58,7 @@ fun KiokuApp(
         KiokuTheme {
             Surface(color = KiokuColors.Background, contentColor = KiokuColors.Text) {
                 Column(Modifier.fillMaxSize().safeDrawingPadding()) {
-                    CompositionViewModels { AccountGate(accountRepository, captureRepository) }
+                    CompositionViewModels { AccountGate(accountRepository, captureRepository, queryRepository) }
                 }
             }
         }
@@ -67,6 +69,7 @@ fun KiokuApp(
 private fun AccountGate(
     accountRepository: AccountRepository,
     captureRepository: CaptureRepository?,
+    queryRepository: QueryRepository?,
     viewModel: AccountViewModel = koinViewModel(parameters = { parametersOf(accountRepository) }),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -77,7 +80,13 @@ private fun AccountGate(
         key(authorized.session.id, authorized.session.generation) {
             CompositionViewModels {
                 Column(Modifier.fillMaxSize().imePadding()) {
-                    KiokuNavigation(authorized, viewModel::signOut, viewModel::refresh, captureRepository)
+                    KiokuNavigation(
+                        authorized,
+                        viewModel::signOut,
+                        viewModel::refresh,
+                        captureRepository,
+                        queryRepository,
+                    )
                 }
             }
         }
@@ -96,9 +105,10 @@ private fun KiokuNavigation(
     onSignOut: () -> Unit,
     onRefresh: () -> Unit,
     captureRepository: CaptureRepository?,
+    queryRepository: QueryRepository?,
     viewModel: ConversationViewModel =
         koinViewModel(
-            parameters = { parametersOf(ConversationDependencies(captureRepository)) },
+            parameters = { parametersOf(ConversationDependencies(captureRepository, queryRepository)) },
         ),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -126,6 +136,7 @@ private fun KiokuNavigation(
                         state.feedback,
                         back,
                         viewModel::sourceActionUnavailable,
+                        loading = state.query.sourceLoading,
                     )
                 }
             },
