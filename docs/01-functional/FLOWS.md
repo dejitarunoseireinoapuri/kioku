@@ -1,5 +1,27 @@
 # Flujos y salidas
 
+## Entrada y carga
+
+El acceso visual usa el logo elegido 憶 y conserva el mecanismo Google existente:
+
+```mermaid
+flowchart TD
+  Open[Abrir Kioku] --> Restore[Entrando en Kioku: resolver sesión]
+  Restore -->|Sin sesión| Login[Acceso: Continuar con Google]
+  Login --> Pending[Entrando en Kioku: acceso pendiente]
+  Pending --> Google[Selector nativo de Google]
+  Google -->|Cancelado| Login
+  Google -->|Sesión obtenida| Config[Entrando en Kioku: resolver configuración]
+  Restore -->|Sesión recuperada| Config
+  Config -->|Autorización resuelta| Home[Pantalla inicial]
+  Google -->|Fallo| Error[Error de acceso recuperable]
+  Config -->|Fallo o cuenta no autorizada| Blocked[Estado de acceso bloqueado existente]
+```
+
+La vista de carga permanece detrás de la interfaz nativa de Google y vuelve a verse tras su retorno mientras se resuelve el acceso. Representa `SignedOut(busy = true)` o `Loading`; no un nuevo destino de navegación ni una operación paralela. Sale al cambiar el estado real. No hay tiempo mínimo, porcentaje inventado o confirmación anticipada de éxito. La carga no solicita permisos ni muestra datos privados. Errores conservan las acciones de recuperación del estado existente; cancelar no se trata como error técnico.
+
+## Memoria
+
 ```mermaid
 flowchart TD
   A[Sesión autorizada + conexión] --> B[Contar o Preguntar]
