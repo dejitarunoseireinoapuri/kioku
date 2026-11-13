@@ -13,7 +13,7 @@ El [contrato de Stitch](STITCH_SOURCE.md) gobierna la consulta visual. Estos est
 | 07 · Fuente y control | Texto original, corrección distinguida y acción contextual de olvidar. | No sobrescribir visualmente el relato histórico como si fuera el dato actual. Volver retorna al origen. |
 | 08 · Sin red | Necesitas conexión, reintento y entradas indisponibles. | No ofrece cola offline. |
 
-El propietario aprueba el acceso inicial con Kioku, explicación y «Continuar con Google», usando sus directrices oficiales de marca. Las ocho maquetas no representan ese acceso. Ajustes muestra cuenta, estado de IA, «Comprobar configuración» y «Cerrar sesión». Comprobar no pierde el borrador; cerrar sesión o cambiar identidad retira conversación/fuente anteriores. La implementación actual prepara alta/sustitución de clave desde el PC hacia el servidor, sin formulario móvil; ese alcance de UC-002 sigue explícito en ADR-008 antes de cerrar K1.
+El propietario aprueba el acceso inicial con Kioku, explicación y «Continuar con Google», usando sus directrices oficiales de marca. Las ocho maquetas no representan ese acceso. Ajustes muestra cuenta, estado de IA, «Comprobar configuración» y «Cerrar sesión». Comprobar no pierde el borrador; cerrar sesión o cambiar identidad retira conversación/fuente anteriores. El propietario acepta por ahora alta/sustitución de clave desde el PC hacia el servidor, sin formulario móvil; es el recorrido vigente de UC-002 según ADR-008.
 
 Usar recursos de texto, tokens y semántica accesible. Nunca mostrar identificadores internos, excepciones del proveedor, saldos inventados o garantías de verificación. La tipografía ampliada y el teclado pueden exigir desplazamiento; no ocultar controles bajo insets.
 

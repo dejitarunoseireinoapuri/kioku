@@ -5,7 +5,7 @@ Contrato vigente. Las reglas BR se definen en [BUSINESS_RULES](../00-product/BUS
 | Requisito | Aceptación verificable | Caso |
 | --- | --- | --- |
 | **FR-001 · Acceso y recuperación** | **AC-001:** la misma cuenta recupera sus recuerdos desde otra instalación; una cuenta ajena no puede leerlos ni operar sobre ellos. | UC-001 |
-| **FR-002 · Clave propia** | **AC-002:** configuración inicial admite introducir/reemplazar la clave, informa de validación fallida y nunca devuelve su valor después de guardarla. | UC-002 |
+| **FR-002 · Clave propia** | **AC-002:** configuración administrativa privada desde el PC admite introducir/reemplazar la clave, informa de validación fallida y conserva la anterior válida. El móvil muestra estado seguro y nunca recibe el valor. Formulario móvil fuera del alcance personal actual por decisión del propietario. | UC-002 |
 | **FR-003 · Captura voz/texto** | **AC-003:** escribir y enviar o mantener pulsado produce una intervención con intención y canal explícitos. Cancelar no incorpora recuerdos. | UC-003 |
 | **FR-004 · Bloqueo** | **AC-004:** deslizar arriba permite retirar el dedo; las pausas no terminan el turno; Terminar inicia procesamiento una vez. | UC-003 |
 | **FR-005 · Aclaración** | **AC-005:** «El examen es el 24» con contexto insuficiente pide concretar, sin inventar asignatura/mes ni marcar guardado. La voz recibe aclaración hablada y visible. | UC-004 |

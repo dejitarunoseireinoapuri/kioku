@@ -4,8 +4,8 @@ Todos requieren internet; salvo el inicio de acceso, también identidad autoriza
 
 | Caso | Entrada y recorrido | Resultado y alternativas |
 | --- | --- | --- |
-| **UC-001 · Acceder y recuperar** | Resolver sesión Google, verificar cuenta permitida y cargar su estado. | Misma memoria en otra instalación. Denegación o cambio de cuenta limpia el estado privado anterior. Acceso personal según ADR-007; integración móvil pendiente. |
-| **UC-002 · Configurar IA** | Introducir clave en configuración privada; servidor valida y almacena el secreto. | App recibe estado/configuración segura, no la clave. Una clave rechazada conserva la configuración anterior válida. |
+| **UC-001 · Acceder y recuperar** | Resolver sesión Google, verificar cuenta permitida y cargar su estado. | Misma memoria en otra instalación. Denegación o cambio de cuenta limpia el estado privado anterior. Acceso personal según ADR-007; evidencia por plataforma en K1. |
+| **UC-002 · Configurar IA** | El propietario introduce o sustituye la clave desde su PC mediante la herramienta administrativa privada; valida y almacena el secreto en servidor. | El móvil consulta estado y revisión, no la clave. Una clave rechazada conserva la configuración anterior válida. El propietario acepta por ahora este recorrido personal sin formulario móvil, según ADR-008. |
 | **UC-003 · Contar** | Elegir Contar; escribir/enviar o mantener/soltar, opcionalmente bloquear/terminar. Interpretar y separar asuntos. | Guardado automático confirmado por servidor. Cancelar descarta. Duda pasa a UC-004; error conserva contexto de reintento sin declarar éxito ni crear cola offline. |
 | **UC-004 · Aclarar** | Mostrar y, si procede, leer una pregunta posterior al turno. Recibir respuesta ligada a la operación pendiente. | Incorporar la aclaración y continuar; no crear un recuerdo independiente por accidente. Si sigue faltando contexto, preguntar solo lo necesario. |
 | **UC-005 · Preguntar** | Formular consulta; recuperar candidatos propios vigentes; responder con evidencia y procedencia. | Texto y voz según canal; abrir fuente. Si no consta, decirlo. Las preguntas no se añaden como hechos. |

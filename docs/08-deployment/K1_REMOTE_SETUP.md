@@ -46,4 +46,4 @@ Una sustitución usa la revisión actual. Una validación rechazada conserva lo 
 
 La comprobación consulta metadatos de modelo, no genera recuerdos ni respuestas; no prueba saldo/créditos o inferencia real. El consumo y la integración IA completa se validarán con K2. En Ajustes, «Comprobar configuración» carga el estado seguro sin perder el borrador; la app nunca recibe la clave.
 
-Este alta personal desde PC no implementa aún un formulario móvil `setAiCredential`. Se conserva esa diferencia con UC-002/ADR-004 para decidirla explícitamente al cerrar K1, sin presentar el contrato histórico como un endpoint disponible.
+El propietario acepta por ahora el alta/sustitución desde PC. UC-002/FR-002/ADR-004 reflejan ese recorrido: no se requiere un formulario o endpoint móvil `setAiCredential` para cerrar el alcance personal de K1.

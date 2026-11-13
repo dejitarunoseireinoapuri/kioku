@@ -7,6 +7,8 @@
 
 El usuario introduce su clave OpenAI mediante configuración privada y puede reemplazarla. Las llamadas duraderas de IA salen de servidor; un almacén de secretos de servidor conserva la clave. Firestore guarda únicamente una referencia opaca y estado seguro. No se introduce la clave en el binario, código, historial, fuente de un recuerdo, logs o respuestas posteriores de configuración.
 
+Actualización aceptada por el propietario el 13 de noviembre de 2026: el alta y sustitución se gestionan desde su PC mediante la herramienta administrativa; el móvil consulta únicamente el estado. El formulario móvil queda fuera del alcance personal actual y no bloquea K1. [ADR-008](ADR-008-k1-native-access-and-credentials.md) concreta la implementación.
+
 El móvil captura únicamente por acción explícita. El audio existe transitoriamente para transcribir la intervención y se elimina después o al cancelar; se conserva como memoria el texto. La lectura de una respuesta usa reproducción temporal, distinta de escuchar una fuente archivada.
 
 ## Consecuencias y alternativas

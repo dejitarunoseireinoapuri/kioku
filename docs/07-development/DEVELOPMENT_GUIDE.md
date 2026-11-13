@@ -56,6 +56,22 @@ Android carga exclusivamente la configuración pública local indicada en `andro
 
 Sin configuración válida se muestra acceso no disponible. La entrada actual exige autorización remota antes de abrir los ejemplos de conversación. No hay bypass de acceso real por una identidad de fixture. Registros, atestación y alta administrativa del secreto: [configuración remota](../08-deployment/K1_REMOTE_SETUP.md). No ejecutar despliegues o alta de secretos por seguir esta guía: requieren autorización explícita, conservada cuando ya se concedió para la misma acción/destino.
 
+### Primera prueba iPhone desde Mac
+
+El propietario confirma acceso a Mac con Xcode. Usar la rama `codex/k1-account-configuration`, con JDK 21, Node 24 y la combinación Xcode documentada en ADR-006 (26.4, todavía por comprobar). Desde su checkout, conservando cualquier trabajo local:
+
+```sh
+git fetch origin
+git switch codex/k1-account-configuration
+git pull --ff-only
+```
+
+Los archivos locales Firebase no viajan por Git. Copiar `GoogleService-Info.plist` a `iosApp/iosApp/GoogleService-Info.plist` y `Firebase.local.xcconfig` a `iosApp/Configuration/Firebase.local.xcconfig`. Se preparó una copia local de esos dos archivos en `local-data/Kioku-iOS-config.zip`, excluida del repositorio. No necesita transferir la clave OpenAI: sigue en Secret Manager.
+
+Abrir `iosApp/iosApp.xcodeproj`, esquema Kioku. Configurar el equipo propio en Signing & Capabilities, manteniendo bundle `io.github.dejitarunoseireinoapuri.kioku`. Resolver paquetes y compilar; la integración Gradle genera el framework compartido. Ejecutar también los tests de simulador indicados arriba. La compilación y los nombres exportados Swift/Kotlin siguen pendientes de comprobar; corregir errores reales antes de declarar compatible.
+
+Para entrar en un iPhone físico, registrar App Attest con el ID de equipo Apple propio en la app Firebase existente y verificar firma/entitlement de producción. Esa configuración está pendiente: disponer de Mac o compilar el simulador no la resuelve. No sustituir automáticamente App Attest por debug ni desactivar el control del servidor. Después comprobar Google, estado de IA, recuperación/cierre de sesión y navegación. Registrar resultados y errores seguros sin copiar tokens, configuración privada o datos personales.
+
 ## Trabajo por caso de uso
 
 Trazar FR/BR → UC → contrato/datos → comportamiento → prueba. Para operaciones protegidas, diseñar y probar backend/reglas antes de confiar en un cliente. Usar proveedores fake para pruebas aisladas. La credencial y su tratamiento se deciden antes de tocar código que llame a OpenAI; no se necesita una clave para preparar esta documentación.

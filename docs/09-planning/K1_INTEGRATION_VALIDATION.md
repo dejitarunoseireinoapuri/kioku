@@ -1,6 +1,6 @@
 # K1 · Integración nativa y preparación remota · 2026-11-13
 
-K1 continúa en `codex/k1-account-configuration`, sobre `4ff1f0e`. La [primera evidencia](K1_VALIDATION.md) describe exclusivamente el commit histórico `e3d5c26`; esta entrega amplía su alcance. **K1 no está cerrada**: Android confirma acceso real Google/atestación, clave activada y recuperación de sesión; quedan iOS/Mac, alcance de UC-002 y comprobaciones restantes.
+K1 continúa en `codex/k1-account-configuration`, sobre `4ff1f0e`. La [primera evidencia](K1_VALIDATION.md) describe exclusivamente el commit histórico `e3d5c26`; esta entrega amplía su alcance. **K1 no está cerrada**: Android confirma acceso real Google/atestación, clave activada y recuperación de sesión; quedan iOS/Mac y comprobaciones restantes.
 
 Código y pruebas de esta integración: commit `0ec1fdd`. Esta anotación posterior solo fija la referencia; no modifica el código comprobado o desplegado. Revisión final del servidor: secreto habilitado, revisión 1 y documento canónico limitado a los cinco campos de metadatos definidos, sin leer su payload.
 
@@ -12,7 +12,7 @@ Android integra Credential Manager, Google ID, Auth, Functions y Play Integrity 
 
 El servidor devuelve `ready`/`notConfigured` y revisión, con App Check e IDs exactos en producción. La herramienta administrativa valida metadatos del modelo, crea una versión inmutable de Secret Manager y activa su referencia mediante revisión esperada. Una sustitución rechazada conserva lo anterior; un commit incierto no destruye una versión posiblemente vigente. El cliente nunca recibe el secreto. La herramienta compilada sin `--apply` solo muestra ayuda. Alta real personal completada con sesión administrativa existente y SDK oficial, sin crear/copiar credenciales Google adicionales.
 
-El alta personal desde PC **no implementa el formulario móvil UC-002**. Resolver explícitamente esa diferencia antes del cierre. Versiones anteriores/huérfanas requieren revisión y retirada administrativa; no hay limpieza automática desplegada. `ready` no acredita saldo, promoción o inferencia real.
+Actualización del propietario el 13 de noviembre de 2026: acepta mantener por ahora la gestión de clave desde PC. Se adapta UC-002/FR-002/ADR-004; el formulario móvil queda fuera del alcance personal actual y deja de ser un pendiente de cierre. Versiones anteriores/huérfanas requieren revisión y retirada administrativa; no hay limpieza automática desplegada. `ready` no acredita saldo, promoción o inferencia real.
 
 ## Evidencia ejecutada
 
@@ -24,7 +24,7 @@ El alta personal desde PC **no implementa el formulario móvil UC-002**. Resolve
 | Accesibilidad visual | Login inspeccionado con fuente 100 % y 200 %; restaurada la escala original. TalkBack/VoiceOver completos pendientes |
 | Configuración nativa | Android compila y pasa Lint con los archivos privados reales del proyecto. Dos tests de validación de configuración pública iOS superados; `plutil` y build Apple no ejecutados |
 | Backend | TypeScript strict y Prettier superados; 14 pruebas unitarias y 13 Auth/Functions/Firestore en emuladores, incluidos propietario, CAS de credenciales, corrupción/denegaciones y 111 rechazos de reglas. Servidor remoto activo y rechazos HTTP reales comprobados |
-| Android real | Propietario confirma acceso, IA configurada tras actualizar Ajustes y recuperación al cerrar/reabrir. Servidor confirma HTTP 200 con Auth y App Check válidos; no prueba otra instalación o cierre explícito de sesión |
+| Android real | Propietario confirma acceso, IA configurada tras actualizar Ajustes y recuperación al cerrar/reabrir. Servidor confirma HTTP 200 con Auth y App Check válidos. Posteriormente comunica funcionamiento en otro Android; cierre explícito real pendiente |
 | Dependencias | Ejecución: cero avisos conocidos. Herramientas: cero altos/críticos y 13 moderados; detalle a continuación |
 | iOS | Fuente/Xcode/SPM preparados; sin compilación, firma, resolución SPM o recorrido en Mac/dispositivo |
 
@@ -64,6 +64,6 @@ La revisión automática rechazó inicialmente un script que mezclaba activació
 
 ## Pendientes de cierre
 
-Recuperación en segunda instalación, revocación/cierre explícito reales y otra identidad remota; reemplazo real de clave (cubierto con dobles/emuladores, sin rotación innecesaria de producción); decidir alcance personal de UC-002; compilación/atestación/recorrido iOS en Mac. Mantener seguimiento de dependencias y texto genérico de error de acceso. No confundir estas pruebas Android con las pendientes.
+El propietario confirma que funciona en otro móvil Android; es una comprobación comunicada por él, sin inspección independiente de esa segunda instalación. No valida recuerdos compartidos, todavía no implementados. Quedan revocación/cierre explícito reales y otra identidad remota; reemplazo real de clave (cubierto con dobles/emuladores, sin rotación innecesaria de producción); compilación/atestación/recorrido iOS en Mac. El propietario dispone de Mac con Xcode; esa validación todavía no se ha ejecutado. Mantener seguimiento de dependencias y texto genérico de error de acceso. No confundir estas pruebas Android con las pendientes.
 
 Documentos consultados: AGENTS, convenciones/calidad, arquitectura/estado, ADR-004/007/008, contrato/datos/almacenamiento, seguridad, guía, plan/limitaciones, matriz y referencia Stitch. [Plan operativo](../08-deployment/K1_REMOTE_SETUP.md).
