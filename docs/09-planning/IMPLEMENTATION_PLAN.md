@@ -9,8 +9,8 @@ Este documento define el alcance y el cierre de las fases. Los [requisitos](../0
 | D0 · Base documental | Producto, arquitectura y normas definidos | Entregada en `40737a2` |
 | M0 · Prueba temprana de memoria | Evidencia de que interpretar, guardar y recuperar funciona antes de construir la app | Viabilidad funcional validada en v4; objetivo de latencia de guardado pendiente |
 | K0 · Base técnica | App navegable con estética B y datos ficticios | Implementada; Android comprobado, validación iOS pendiente |
-| K1 · Cuenta y configuración | Acceso privado y configuración segura de la clave propia | En curso: frontera backend local; móvil, clave y producción pendientes |
-| K2 · Contar por escrito | Separar asuntos, aclarar dudas y guardar automáticamente | En curso en `codex/k2-text-memory`; implementación y pruebas locales, activación pendiente |
+| K1 · Cuenta y configuración | Acceso privado y configuración segura de la clave propia | Acceso y clave activos; propietario confirma Android/iOS, quedan comprobaciones de cierre detalladas |
+| K2 · Contar por escrito | Separar asuntos, aclarar dudas y guardar automáticamente | Implementada y desplegada en `codex/k2-text-memory`; aceptación del nuevo build en móviles pendiente |
 | K3 · Preguntar por escrito | Encontrar recuerdos y responder con sus fuentes | Pendiente |
 | K4 · Control de memoria | Ofrecer guardar un dato, corregir y olvidar conversando | Pendiente |
 | K5 · Voz | Contar y preguntar hablando, con pulsación y bloqueo | Pendiente |
@@ -105,7 +105,7 @@ Cuarta iteración y decisión actual: [evidencia v4](../../prototypes/memory/evi
 
 ## K2 · Contar por escrito
 
-**Estado actual:** implementación en `codex/k2-text-memory`, desde `2f18f23`. [Evidencia y límites](K2_VALIDATION.md), [ADR-009](../02-architecture/ADR/ADR-009-text-capture.md). No se cierra K2 ni se inicia K3 automáticamente: faltan activación y aceptación real. El propietario decide conservar recuerdos hasta borrarlos, preguntas solo de sesión y sin backups históricos/PITR adicionales.
+**Estado actual:** implementada y desplegada desde `codex/k2-text-memory`, basada en `2f18f23`. [Evidencia y límites](K2_VALIDATION.md), [ADR-009](../02-architecture/ADR/ADR-009-text-capture.md). Cuatro funciones activas y protegidas, acceso mínimo al secreto existente y TTL temporales comprobados. No se cierra K2 ni se inicia K3 automáticamente: falta aceptación del nuevo APK en Android y compilación/recorrido del nuevo build iOS. El propietario decide conservar recuerdos hasta borrarlos, preguntas solo de sesión y sin backups históricos/PITR adicionales; configuración remota comprobada. Integrar K1/K2 en `main` al terminar K2, según su autorización.
 
 **Resultado:** escribir un relato, recibir una aclaración solo cuando haga falta y ver la confirmación después de guardar. Cubre UC-003 y UC-004 por texto.
 

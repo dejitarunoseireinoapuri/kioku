@@ -8,9 +8,8 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.intOrNull
+import kotlinx.serialization.json.doubleOrNull
 import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 
 internal fun capturePayload(command: CaptureCommand): String =
@@ -35,7 +34,7 @@ internal fun capturePayload(command: CaptureCommand): String =
 internal fun parseCapture(json: String): CaptureOutcome {
     require(json.length <= MAX_RESPONSE_LENGTH)
     val value = Json.parseToJsonElement(json).jsonObject
-    require(value["apiVersion"]?.jsonPrimitive?.intOrNull == 1)
+    require(value.integer("apiVersion") == 1)
     require(value.text("operationId").matches(UUID_PATTERN))
     return when (value.text("status")) {
         "saved" -> {
@@ -47,7 +46,7 @@ internal fun parseCapture(json: String): CaptureOutcome {
                 value.keys == setOf("apiVersion", "status", "operationId", "clarificationId", "revision", "question"),
             )
             val id = value.text("clarificationId")
-            val revision = value["revision"]?.jsonPrimitive?.intOrNull
+            val revision = value.integer("revision")
             val question = value.text("question")
             require(
                 id.matches(UUID_PATTERN) && revision in 1..MAX_CLARIFICATION_REVISION &&
@@ -67,7 +66,7 @@ private fun saved(value: JsonObject): CaptureOutcome.Saved {
     val source = value.getValue("source").jsonObject
     require(source.keys == setOf("sourceId", "text", "receivedAt"))
     val id = source.text("sourceId")
-    val count = value["memoryCount"]?.jsonPrimitive?.intOrNull
+    val count = value.integer("memoryCount")
     val text = source.text("text")
     val date = source.text("receivedAt")
     require(id.matches(UUID_PATTERN) && id == value.text("sourceId") && count in 1..MAX_MEMORY_COUNT)
@@ -91,6 +90,15 @@ private fun JsonObject.text(key: String): String {
     val value = get(key) as? JsonPrimitive
     require(value?.isString == true)
     return value.content
+}
+
+private fun JsonObject.integer(key: String): Int? {
+    val value = get(key) as? JsonPrimitive
+    val number = value?.takeUnless { it.isString }?.doubleOrNull
+    return number
+        ?.takeIf {
+            it.isFinite() && it in 0.0..Int.MAX_VALUE.toDouble() && it % 1.0 == 0.0
+        }?.toInt()
 }
 
 private val UUID_PATTERN = Regex("[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}")

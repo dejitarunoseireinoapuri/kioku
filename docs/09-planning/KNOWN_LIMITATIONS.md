@@ -2,7 +2,7 @@
 
 ## Disponible
 
-**K2 en curso:** rama `codex/k2-text-memory`; captura/clarificación/recuperación idempotentes implementadas y comprobadas localmente según [K2_VALIDATION](K2_VALIDATION.md). No hay callables K2 activados ni aceptación real de este build todavía. Consulta K3, corrección/olvido K4 y voz K5 siguen pendientes. Decisión del propietario: conservar recuerdos hasta borrarlos, preguntas solo de sesión y sin backups históricos adicionales; la configuración remota debe comprobarse antes de datos reales. El nuevo puente iOS necesita Mac/Xcode.
+**K2 implementada con validación pendiente:** rama `codex/k2-text-memory`; captura/clarificación/recuperación idempotentes implementadas, comprobadas localmente y desplegadas según [K2_VALIDATION](K2_VALIDATION.md). Cuatro funciones activas; peticiones HTTPS sin credenciales rechazadas con 401. Lectura del secreto existente y TTL temporales activos; PITR desactivado y cero backups programados. El propietario confirma guardado real desde el nuevo APK Android; faltan revisión del original/aclaración y compilación/recorrido de este build en Mac/iOS. Ningún móvil personal se ha actualizado automáticamente. Consulta K3, corrección/olvido K4 y voz K5 siguen pendientes. Los recuerdos no caducan; las preguntas no se guardan como hechos.
 
 **Marca y acceso 憶 (13 de noviembre):** login/carga implementados en Compose para Android/iOS, iconos nativos preparados, APK Android y controles móviles correctos; 17 pruebas de lógica y 13 de interfaz API 36 con fixtures. [Evidencia y capturas](../01-functional/BRAND_PROPOSAL.md). No se actualizan móviles personales. iOS requiere compilar/verificar este build en Mac, aunque el propietario confirmó el acceso con el anterior; no se valida una versión nueva por extrapolación.
 
@@ -28,8 +28,8 @@ La clave local de prueba se configuró mediante el flujo seguro y está fuera de
 | --- | --- | --- |
 | Versiones y herramientas compatibles | K0 Android comprobado; iOS pendiente | Catálogo, wrapper y lockfiles fijados; comprobar Mac según ADR-006 |
 | Identificadores Android/iOS | Resuelto en K0; registros remotos en K1 | Base aprobada: `io.github.dejitarunoseireinoapuri.kioku`; debug Android `.dev` |
-| Método de acceso y cuenta permitida | Decidido; integración K1 pendiente | Google y cuenta seleccionados; correo en configuración privada, sin copiar a fixtures |
-| Proyectos/región y permisos remotos | Decidido; provisión K1 pendiente | Único proyecto remoto de producción `kioku-9454f`, Bélgica; pruebas demo locales sin crear otro proyecto |
+| Método de acceso y cuenta permitida | Integrado; acceso K1 confirmado por propietario | Google y cuenta seleccionados; correo en configuración privada, sin copiar a fixtures |
+| Proyectos/región y permisos remotos | Configurados con autorización K1/K2 | Único proyecto remoto de producción `kioku-9454f`, Bélgica; pruebas demo locales sin crear otro proyecto |
 | Reutilizar/crear clave y destino privado | M0; integración de alta en K1 | Flujo seguro antes de implementar/probar llamadas; M0 no requiere pantalla de configuración móvil |
 | Corpus, rúbrica y separación ajuste/validación | M0 | Datos ficticios, respuestas/fuentes esperadas y criterios fijados antes de medir |
 | Procedencia, identidad y precisión temporal | M0 comprobado en j; ampliar en K2/K3 | Mantener la evidencia vigente sin completar fechas ni atribuir citas como hechos propios |

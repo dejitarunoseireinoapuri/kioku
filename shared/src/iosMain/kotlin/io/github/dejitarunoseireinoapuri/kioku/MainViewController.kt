@@ -11,5 +11,6 @@ fun mainViewController(
     port: NativeAccountPort? = null,
     memoryPort: NativeMemoryPort? = null,
 ) = (if (port == null) DisconnectedAccountRepository() else NativeAccountRepository(port)).let { repository ->
-    ComposeUIViewController { KiokuApp(repository, memoryPort?.let(::NativeCaptureRepository)) }
+    val captures = memoryPort?.let(::NativeCaptureRepository)
+    ComposeUIViewController { KiokuApp(repository, captures) }
 }
