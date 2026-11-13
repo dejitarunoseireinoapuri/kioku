@@ -20,6 +20,8 @@ El propietario rechaza el engranaje y solicita alternativas en Stitch. La compar
 
 La autoridad funcional está en [FUNCTIONAL_REQUIREMENTS](FUNCTIONAL_REQUIREMENTS.md), no en HTML generado. El nombre es **Kioku**, aunque capturas previas muestren «Memoria». No copiar artefactos de regalos, audio archivado, categorías obligatorias ni navegación de propuestas descartadas.
 
+Refinamiento de C solicitado después de la implementación: la etiqueta actual es **`[ Ajustes ]`**, con A mayúscula. Mientras se mantiene pulsado, el texto completo usa el coral de acento `#FF674F`; al soltar o cancelar recupera el color claro. Se conserva el tratamiento de foco de teclado independiente. Se consultó de nuevo la comparación mediante Stitch MCP, sin editarla; estas instrucciones posteriores gobiernan el texto y el estado pulsado de Android/iOS.
+
 Si un detalle visual relevante no está definido, pedir la decisión necesaria antes de implementarlo. Resolver de manera autónoma ajustes mecánicos ya autorizados que no cambien el comportamiento, explicándolos en la entrega.
 
 No copiar scripts, dependencias o HTML de Stitch directamente a Compose como arquitectura de producción. Los ejemplos Perfect Days/Aftersun son ficticios y corresponden a ramas diferentes de demostración.

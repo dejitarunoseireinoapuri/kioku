@@ -3,6 +3,7 @@ package io.github.dejitarunoseireinoapuri.kioku.design
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material.ButtonDefaults
@@ -28,6 +29,7 @@ import org.jetbrains.compose.resources.stringResource
 fun SettingsAction(onClick: () -> Unit) {
     val interaction = remember { MutableInteractionSource() }
     val focused by interaction.collectIsFocusedAsState()
+    val pressed by interaction.collectIsPressedAsState()
     val label = stringResource(Res.string.settings)
     TextButton(
         onClick = onClick,
@@ -40,7 +42,7 @@ fun SettingsAction(onClick: () -> Unit) {
         colors =
             ButtonDefaults.textButtonColors(
                 backgroundColor = if (focused) KiokuColors.Raised else Color.Transparent,
-                contentColor = KiokuColors.Text,
+                contentColor = if (pressed) KiokuColors.Coral else KiokuColors.Text,
             ),
         contentPadding = PaddingValues(horizontal = 8.dp),
         interactionSource = interaction,
