@@ -2,6 +2,7 @@ package io.github.dejitarunoseireinoapuri.kioku
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.isDisplayed
@@ -76,7 +77,7 @@ class AccountNavigationTest {
     }
 
     @Test
-    fun refreshHidesActionsUntilItCompletesAndKeepsNavigationAndDraft() {
+    fun refreshKeepsAccountReadableUntilItCompletesAndPreservesTheDraft() {
         compose.onNodeWithText("Continuar con Google").performClick()
         compose.onNodeWithTag("text-composer").performTextInput("Borrador de prueba")
         compose.onNodeWithContentDescription("Ajustes").performClick()
@@ -88,15 +89,34 @@ class AccountNavigationTest {
         }
         compose.onNodeWithText("Actualizar estado").performClick()
         compose.waitUntil(5000) { compose.onNodeWithTag("content-loading").isDisplayed() }
-        compose.onNodeWithText("Actualizando configuración...").assertIsDisplayed()
+        compose.onNodeWithText("Actualizando estado...").assertIsDisplayed()
         captureBrandScreen(compose.activity, "kioku-content-loading.png") { compose.onRoot().captureToImage() }
-        compose.onNodeWithText("Cerrar sesión").assertDoesNotExist()
+        compose.onNodeWithText("Actualizando...").assertIsNotEnabled()
+        compose.onNodeWithText("Cerrar sesión").performScrollTo().assertIsDisplayed()
         compose.onNodeWithTag("text-composer").assertDoesNotExist()
         result.complete(ConfigurationResult.Loaded(AiConfiguration.Ready))
-        compose.waitUntil(5000) { compose.onNodeWithText("IA configurada").isDisplayed() }
+        compose.waitUntil(5000) { !compose.onNodeWithTag("content-loading").isDisplayed() }
+        compose.onNodeWithText("IA configurada").performScrollTo().assertIsDisplayed()
         compose.onNodeWithTag("content-loading").assertDoesNotExist()
         compose.onNodeWithContentDescription("Volver").performClick()
         compose.onNodeWithTag("text-composer").assertTextContains("Borrador de prueba")
         assertEquals(1, calls)
+    }
+
+    @Test
+    fun logoutDuringConfigurationLoadingCannotRestoreTheOldAccount() {
+        compose.onNodeWithText("Continuar con Google").performClick()
+        compose.onNodeWithContentDescription("Ajustes").performClick()
+        val result = CompletableDeferred<ConfigurationResult>()
+        account.configurationLoad = { result.await() }
+        compose.onNodeWithText("Actualizar estado").performClick()
+        compose.waitUntil(5000) { compose.onNodeWithTag("content-loading").isDisplayed() }
+        compose.onNodeWithText("Cerrar sesión").performScrollTo().performClick()
+        compose.onNodeWithText("Continuar con Google").assertIsDisplayed()
+        result.complete(ConfigurationResult.Loaded(AiConfiguration.Ready))
+        compose.waitForIdle()
+        compose.onNodeWithText("Continuar con Google").assertIsDisplayed()
+        compose.onNodeWithTag("content-loading").assertDoesNotExist()
+        compose.onNodeWithTag("text-composer").assertDoesNotExist()
     }
 }

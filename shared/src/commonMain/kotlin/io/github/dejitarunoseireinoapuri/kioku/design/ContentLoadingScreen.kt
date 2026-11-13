@@ -1,10 +1,5 @@
 package io.github.dejitarunoseireinoapuri.kioku.design
 
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -16,10 +11,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
@@ -49,22 +42,9 @@ fun ContentLoadingScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            LoadingMark()
+            LoadingMark(Modifier.size(KiokuSpacing.LoadingMark))
             Column(Modifier.padding(top = KiokuSpacing.Large)) { KiokuWordmark(32.sp) }
             LoadingStatusText(status, Modifier.padding(top = KiokuSpacing.Medium))
         }
     }
-}
-
-@Composable
-private fun LoadingMark() {
-    // InfiniteTransition honors the platform MotionDurationScale; scale zero finishes at opacity 1.
-    val transition = rememberInfiniteTransition(label = "account-wait")
-    val opacity by transition.animateFloat(
-        initialValue = 0.65f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(600), RepeatMode.Reverse),
-        label = "brand-opacity",
-    )
-    KiokuMark(Modifier.size(KiokuSpacing.LoadingMark).graphicsLayer { alpha = opacity })
 }

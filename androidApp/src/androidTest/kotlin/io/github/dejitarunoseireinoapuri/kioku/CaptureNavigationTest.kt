@@ -3,6 +3,7 @@ package io.github.dejitarunoseireinoapuri.kioku
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.isDisplayed
@@ -41,7 +42,8 @@ class CaptureNavigationTest {
         waitVisible("Procesando tu recuerdo...")
         compose.onNodeWithText("Procesando tu recuerdo...").assertIsDisplayed()
         compose.onNodeWithTag("content-loading").assertIsDisplayed()
-        compose.onNodeWithTag("text-composer").assertDoesNotExist()
+        compose.onNodeWithTag("text-composer").assertIsDisplayed().assertIsNotEnabled()
+        captureBrandScreen(compose.activity, "kioku-compact-capture.png") { compose.onRoot().captureToImage() }
         compose.onNodeWithText("Recuerdo guardado").assertDoesNotExist()
         result.complete(repository.saved())
         waitVisible("Recuerdo guardado")

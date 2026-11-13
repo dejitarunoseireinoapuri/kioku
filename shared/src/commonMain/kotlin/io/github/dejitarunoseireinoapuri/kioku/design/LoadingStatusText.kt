@@ -25,6 +25,7 @@ import org.jetbrains.compose.resources.stringResource
 internal fun LoadingStatusText(
     status: String,
     modifier: Modifier = Modifier,
+    textAlign: TextAlign = TextAlign.Center,
 ) {
     val dots = stringResource(Res.string.loading_dots)
     val label = status.removeSuffix(dots)
@@ -49,6 +50,6 @@ internal fun LoadingStatusText(
         statusText,
         modifier.clearAndSetSemantics { text = AnnotatedString(announcement) },
         color = KiokuColors.BrandSecondary,
-        textAlign = TextAlign.Center,
+        textAlign = textAlign,
     )
 }

@@ -38,6 +38,7 @@ fun SettingsScreen(
     onSignOut: () -> Unit,
     onRefresh: () -> Unit,
     onBack: () -> Unit,
+    examplesEnabled: Boolean = true,
     onExample: (PreviewScenario) -> Unit,
 ) {
     Column(Modifier.fillMaxSize()) {
@@ -51,7 +52,12 @@ fun SettingsScreen(
             AccountSettings(account, onRefresh, onSignOut)
             ScreenHeading(stringResource(Res.string.examples_heading))
             PreviewScenario.entries.forEach { scenario ->
-                ActionButton(stringResource(scenarioLabel(scenario)), { onExample(scenario) }, Modifier.fillMaxWidth())
+                ActionButton(
+                    stringResource(scenarioLabel(scenario)),
+                    { onExample(scenario) },
+                    Modifier.fillMaxWidth(),
+                    enabled = examplesEnabled,
+                )
             }
         }
     }

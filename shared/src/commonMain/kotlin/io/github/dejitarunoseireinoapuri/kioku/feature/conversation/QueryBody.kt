@@ -4,10 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.LiveRegionMode
-import androidx.compose.ui.semantics.liveRegion
-import androidx.compose.ui.semantics.semantics
 import io.github.dejitarunoseireinoapuri.kioku.design.ActionButton
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
@@ -20,7 +16,6 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.query_limit
 import io.github.dejitarunoseireinoapuri.kioku.resources.query_repeat
 import io.github.dejitarunoseireinoapuri.kioku.resources.query_reset
 import io.github.dejitarunoseireinoapuri.kioku.resources.query_restart
-import io.github.dejitarunoseireinoapuri.kioku.resources.query_searching
 import io.github.dejitarunoseireinoapuri.kioku.resources.query_source
 import io.github.dejitarunoseireinoapuri.kioku.resources.retry
 import org.jetbrains.compose.resources.stringResource
@@ -33,13 +28,7 @@ fun QueryBody(
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large)) {
         Panel { Text(state.question) }
-        if (state.busy) {
-            Text(
-                stringResource(Res.string.query_searching),
-                color = KiokuColors.Coral,
-                modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
-            )
-        } else {
+        if (!state.busy) {
             QueryResultBody(state.outcome, onEvent, onSource)
         }
         if (state.awaitingClarification) {

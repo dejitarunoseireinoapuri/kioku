@@ -1,13 +1,17 @@
 package io.github.dejitarunoseireinoapuri.kioku
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextContains
+import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performScrollTo
@@ -54,15 +58,35 @@ class QueryNavigationTest {
         send("¿Qué película quiero ver?")
         visible("Buscando en tu memoria...")
         compose.onNodeWithTag("content-loading").assertIsDisplayed()
-        compose.onNodeWithTag("text-composer").assertDoesNotExist()
+        compose.onNodeWithTag("text-composer").assertIsDisplayed().assertIsNotEnabled()
+        captureBrandScreen(compose.activity, "kioku-compact-query.png") { compose.onRoot().captureToImage() }
         response.complete(queries.reply())
         visible("Quieres ver la película ficticia Loto.")
         compose.onNodeWithText("Ver texto original 1 · 2026-11-13").performScrollTo().performClick()
         visible("Cargando texto original...")
         compose.onNodeWithTag("content-loading").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Volver").assertIsDisplayed()
         source.complete(MemorySource("fixture-query-source", "Quiero ver la película ficticia Loto.", "2026-11-13"))
         visible("Quiero ver la película ficticia Loto.")
         compose.onNodeWithContentDescription("Volver").performClick()
+        visible("Quieres ver la película ficticia Loto.")
+        assertEquals(1, queries.commands.size)
+        assertEquals(1, queries.sourceReads)
+    }
+
+    @Test
+    fun returningFromAPendingSourceKeepsTheAnswerAndDoesNotResubmit() {
+        val source = CompletableDeferred<MemorySource?>()
+        queries.read = { source.await() }
+        send("¿Qué película quiero ver?")
+        visible("Quieres ver la película ficticia Loto.")
+        compose.onNodeWithText("Ver texto original 1 · 2026-11-13").performScrollTo().performClick()
+        visible("Cargando texto original...")
+        compose.onNodeWithContentDescription("Volver").performClick()
+        visible("Quieres ver la película ficticia Loto.")
+        compose.onNodeWithTag("content-loading").assertIsDisplayed()
+        source.complete(MemorySource("fixture-query-source", "Quiero ver la película ficticia Loto.", "2026-11-13"))
+        compose.waitUntil(5000) { !compose.onNodeWithTag("content-loading").isDisplayed() }
         visible("Quieres ver la película ficticia Loto.")
         assertEquals(1, queries.commands.size)
         assertEquals(1, queries.sourceReads)
@@ -75,7 +99,8 @@ class QueryNavigationTest {
         send("¿Qué película quiero ver?")
         visible("Buscando en tu memoria...")
         response.complete(QueryOutcome.Failed(CaptureIssue.Unavailable))
-        compose.waitUntil(5000) { compose.onNodeWithTag("text-composer").isDisplayed() }
+        compose.waitUntil(5000) { !compose.onNodeWithTag("content-loading").isDisplayed() }
+        compose.onNodeWithTag("text-composer").assertIsDisplayed().assertIsEnabled()
         compose.onNodeWithTag("content-loading").assertDoesNotExist()
         compose.onNodeWithText("Recuerdo guardado").assertDoesNotExist()
         queries.answer = { queries.reply() }

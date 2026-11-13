@@ -41,6 +41,8 @@ object KiokuSpacing {
     val Corner = 6.dp
     val Mark = 112.dp
     val LoadingMark = 96.dp
+    val InlineLoadingMark = 32.dp
+    val Stroke = 1.dp
     val LoginVertical = 32.dp
     val LoadingVertical = 48.dp
     val LoginHeadlineGap = 64.dp

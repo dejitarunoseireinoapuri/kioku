@@ -1,6 +1,6 @@
 # K3 · Consultar por escrito
 
-Rama: `codex/k3-text-query`, desde `28fdc78` de `main`. **Implementada y activada en producción; consulta y fuente confirmadas por el propietario en Android.** El nuevo loading y el build iOS requieren comprobación en los móviles. Publicar K2 en `main` no cambia esos límites.
+Rama: `codex/k3-text-query`, desde `28fdc78` de `main`. **Implementada y activada en producción; consulta y fuente confirmadas por el propietario en Android.** El indicador compacto posterior y el build iOS requieren comprobación en los móviles. Publicar K2 en `main` no cambia esos límites.
 
 ## Alcance y referencias
 
@@ -62,7 +62,7 @@ El propietario confirma después de la activación que la consulta devuelve el d
 
 Pendiente: comprobar el loading nuevo en Android y compilar/comprobar el build actual en iOS, incluyendo consulta y fuente. Aclaración y ausencia están cubiertas por fixtures y evaluación real sintética; faltan sus comprobaciones manuales en los dispositivos. No se declara cerrada K3 ni se inicia K4.
 
-## Loading común solicitado antes del cierre
+## Primera entrega de loading común · sustituida después por indicador compacto
 
 El componente del acceso se comparte con captura/aclaración, recuperación de guardado, consulta, fuente remota y actualización de configuración. Muestra un texto contextual y conserva símbolo, tipografía y animación de tres puntos con espacio reservado. El texto largo puede saltar de línea sin desplazarlo al animar puntos. No se espera artificialmente ni se muestra una carga por abrir contenido disponible. La navegación/conversación permanece compuesta debajo de una capa opaca, sin interacción ni semántica accesible del contenido tapado; se oculta el teclado. Un error también retira la capa. No se modifica autorización, API, modelo ni persistencia.
 
@@ -71,3 +71,15 @@ Validación de esta entrega: APK y APK de pruebas compilados; `mobileCheck` corr
 Inspeccionadas las capturas sintéticas normal y de letra grande: misma marca y paleta, mensaje completo dentro de la ventana. Las pruebas no sustituyen una revisión completa TalkBack/VoiceOver ni un build iOS. El código de UI es compartido Android/iOS; la compilación y ejecución Apple siguen pendientes de Mac/Xcode.
 
 Nuevo APK local `androidApp/build/outputs/apk/debug/kioku-k3-loading.apk`, SHA-256 `385832269A83BC6FD608CD3F72550178DF5782EBF1C91148C6F469CD8EA4BCD0`. Se entrega para actualizar conservando la instalación; solo se utilizó el emulador, no se instalaron cambios en móviles personales. Este ajuste no realiza llamadas OpenAI ni despliega funciones. Se mantiene la rama K3; no se publica en `main` por este cambio.
+
+## Indicador compacto · entrega vigente
+
+El propietario rechaza después la carga de contenido a pantalla completa y pide un punto intermedio con el antiguo texto suelto. Se sustituye la capa opaca por una franja inferior integrada: superficie elevada, borde discreto, kanji 憶 de 32 dp con pulso y texto contextual de 14 sp con puntos animados estables. La conversación, fuente o Ajustes siguen compuestos, visibles, legibles y navegables; la franja reserva espacio y no tapa contenido ni atrapa el foco. No duplica el mensaje en el cuerpo. El acceso inicial mantiene su pantalla completa hasta resolver autorización.
+
+La pregunta o el texto en curso permanecen visibles; el envío y la selección de intención conservan sus bloqueos durante la operación. Los ejemplos se desactivan mientras hay trabajo para no reemplazar un turno pendiente. Volver desde una fuente no repite la pregunta; cerrar sesión durante una actualización cancela/invalida su resultado. Un fallo retira el indicador y deja disponible la recuperación existente. No se altera servidor, autorización, modelo, API o persistencia; cero llamadas OpenAI nuevas para este cambio.
+
+Validación: APK y pruebas Android compilados; `mobileCheck` correcto, **33 host tests sin errores**, formato, arquitectura, Detekt y Lint correctos. **27/27 pruebas de interfaz API 36 correctas**, con captura/consulta/fuente, aclaración, error, recreación sin reenvío, conservación de borradores, fuente pendiente con vuelta atrás y cierre de sesión durante actualización. Después de abreviar el texto a «Actualizando estado...» para evitar una línea de puntos aislados con letra grande, se repitieron **10/10** pruebas de acceso/configuración. El componente de mensaje largo se comprueba en 320 × 480 dp con letra al 200 % y una altura inferior a la mitad de esa ventana; esto no acredita todos los flujos de la app con ese tamaño de letra.
+
+Revisión visual de fixtures: [consulta](../assets/branding/kioku-compact-query-android.png), [Ajustes](../assets/branding/kioku-compact-settings-android.png) y [componente con letra grande](../assets/branding/kioku-compact-loading-large-android.png). Se retiraron avisos duplicados y el bloqueo global invisible; se ajustó la alineación del texto y se acortó el estado de Ajustes tras comprobar el salto de línea. Jerarquía y contraste mantienen los tokens existentes, sin añadir colores, bibliotecas, acciones ni porcentaje ficticio. La comprobación semántica automática no equivale a una revisión completa TalkBack/VoiceOver. No se otorga una puntuación global de accesibilidad o compatibilidad iOS sin esas pruebas nativas.
+
+APK vigente: `androidApp/build/outputs/apk/debug/kioku-k3-compacto.apk`; SHA-256 `AF364A6E1C5B8440CCDFB0D24A6D298A3988ABAA9AEE9267C8347569ACA92E20`. Instalar como actualización. No se modificaron móviles personales, claves ni recursos remotos. Código de interfaz compartido Android/iOS; build/ejecución Apple pendientes de Mac/Xcode. Se mantiene `codex/k3-text-query`; esta entrega no cierra K3 ni modifica `main`.

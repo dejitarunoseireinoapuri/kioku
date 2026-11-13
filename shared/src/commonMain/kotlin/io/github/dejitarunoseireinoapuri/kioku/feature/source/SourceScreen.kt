@@ -25,7 +25,6 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.forget
 import io.github.dejitarunoseireinoapuri.kioku.resources.icon_back
 import io.github.dejitarunoseireinoapuri.kioku.resources.original_label
 import io.github.dejitarunoseireinoapuri.kioku.resources.original_title
-import io.github.dejitarunoseireinoapuri.kioku.resources.source_loading
 import io.github.dejitarunoseireinoapuri.kioku.resources.source_unavailable
 import org.jetbrains.compose.resources.stringResource
 
@@ -47,9 +46,9 @@ fun SourceScreen(
             Modifier.verticalScroll(rememberScrollState()).padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            if (source == null) {
-                Text(stringResource(if (loading) Res.string.source_loading else Res.string.source_unavailable))
-            } else {
+            if (source == null && !loading) {
+                Text(stringResource(Res.string.source_unavailable))
+            } else if (source != null) {
                 Text(source.recordedOn, color = KiokuColors.Secondary)
                 Panel {
                     Text(stringResource(Res.string.original_label), color = KiokuColors.Secondary)

@@ -4,10 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.LiveRegionMode
-import androidx.compose.ui.semantics.liveRegion
-import androidx.compose.ui.semantics.semantics
 import io.github.dejitarunoseireinoapuri.kioku.design.ActionButton
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
@@ -27,7 +23,6 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.capture_limited
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_more_context
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_restart
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_saved
-import io.github.dejitarunoseireinoapuri.kioku.resources.capture_saving
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_uncertain
 import io.github.dejitarunoseireinoapuri.kioku.resources.clarification_hint
 import io.github.dejitarunoseireinoapuri.kioku.resources.clarification_pending
@@ -44,11 +39,7 @@ fun CaptureBody(
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large)) {
         if (state.capturing) {
-            Text(
-                stringResource(Res.string.capture_saving),
-                color = KiokuColors.Coral,
-                modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
-            )
+            Panel { Text(state.draft) }
         } else {
             when (val outcome = state.capture) {
                 is CaptureOutcome.Saved -> {

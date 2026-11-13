@@ -18,7 +18,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
-import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingScreen
+import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingNotice
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuTheme
 import io.github.dejitarunoseireinoapuri.kioku.domain.AccountIssue
@@ -112,12 +112,19 @@ class AccountAccessTest {
             CompositionLocalProvider(LocalDensity provides Density(density, fontScale = 2f)) {
                 KiokuTheme {
                     Box(Modifier.width(320.dp).height(480.dp).background(KiokuColors.Background)) {
-                        ContentLoadingScreen("Actualizando configuración...")
+                        ContentLoadingNotice("Actualizando estado...")
                     }
                 }
             }
         }
-        compose.onNodeWithText("Actualizando configuración...").assertIsDisplayed()
+        compose.onNodeWithText("Actualizando estado...").assertIsDisplayed()
+        val height =
+            compose
+                .onNodeWithTag("content-loading")
+                .fetchSemanticsNode()
+                .boundsInRoot.height
+        val maximum = 240 * compose.activity.resources.displayMetrics.density
+        assertTrue("The notice must leave most of the small viewport available", height < maximum)
         captureAccess("kioku-content-loading-large.png")
     }
 }

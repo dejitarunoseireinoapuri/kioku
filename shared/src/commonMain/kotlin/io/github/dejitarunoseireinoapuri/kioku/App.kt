@@ -18,7 +18,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import io.github.dejitarunoseireinoapuri.kioku.data.DisconnectedAccountRepository
-import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingLayer
+import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingLayout
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuTheme
 import io.github.dejitarunoseireinoapuri.kioku.di.ConversationDependencies
@@ -116,8 +116,8 @@ private fun KiokuNavigation(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val backStack = rememberNavBackStack(navigationConfiguration, Route.Conversation)
     val loading = contentLoadingStatus(state, account.refreshing)
-    val back: () -> Unit = { if (backStack.size > 1 && loading == null) backStack.removeLastOrNull() }
-    ContentLoadingLayer(loading) {
+    val back: () -> Unit = { if (backStack.size > 1) backStack.removeLastOrNull() }
+    ContentLoadingLayout(loading) {
         NavDisplay(
             backStack = backStack,
             onBack = back,
@@ -129,7 +129,13 @@ private fun KiokuNavigation(
                         }
                     }
                     entry<Route.Settings> {
-                        SettingsScreen(account, onSignOut, onRefresh, back) { scenario ->
+                        SettingsScreen(
+                            account,
+                            onSignOut,
+                            onRefresh,
+                            back,
+                            examplesEnabled = loading == null,
+                        ) { scenario ->
                             viewModel.onEvent(ConversationEvent.ShowExample(scenario))
                             back()
                         }
