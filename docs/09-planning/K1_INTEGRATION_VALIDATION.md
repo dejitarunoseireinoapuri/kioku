@@ -2,6 +2,8 @@
 
 K1 continúa en `codex/k1-account-configuration`, sobre `4ff1f0e`. La [primera evidencia](K1_VALIDATION.md) describe exclusivamente el commit histórico `e3d5c26`; esta entrega amplía su alcance. **K1 no está cerrada**: Android confirma acceso real Google/atestación, clave activada y recuperación de sesión; quedan iOS/Mac, alcance de UC-002 y comprobaciones restantes.
 
+Código y pruebas de esta integración: commit `0ec1fdd`. Esta anotación posterior solo fija la referencia; no modifica el código comprobado o desplegado. Revisión final del servidor: secreto habilitado, revisión 1 y documento canónico limitado a los cinco campos de metadatos definidos, sin leer su payload.
+
 ## Comportamiento implementado
 
 Entrada con Google según su marca oficial y estética B aprobada; sin configuración nativa válida, la app permanece desconectada. Firebase Auth no autoriza por sí solo: se espera la respuesta del servidor. Ajustes muestra sesión y estado seguro de IA. Comprobar configuración conserva el borrador; cerrar sesión retira conversación, navegación y fuentes anteriores. Generaciones, cancelación y ViewModelStores propios impiden reutilizar resultados privados de otra composición/sesión.
