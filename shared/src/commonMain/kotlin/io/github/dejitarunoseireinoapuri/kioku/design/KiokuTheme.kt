@@ -2,6 +2,7 @@ package io.github.dejitarunoseireinoapuri.kioku.design
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.LocalRippleConfiguration
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Shapes
 import androidx.compose.material.Typography
@@ -84,6 +85,12 @@ fun KiokuTheme(content: @Composable () -> Unit) {
                     ),
             ),
         shapes = Shapes(small = RoundedCornerShape(6.dp), medium = RoundedCornerShape(8.dp)),
-        content = { CompositionLocalProvider(LocalContentAlpha provides 1f, content = content) },
+        content = {
+            CompositionLocalProvider(
+                LocalContentAlpha provides 1f,
+                LocalRippleConfiguration provides null,
+                content = content,
+            )
+        },
     )
 }

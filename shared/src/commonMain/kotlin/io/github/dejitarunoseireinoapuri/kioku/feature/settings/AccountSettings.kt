@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
+import io.github.dejitarunoseireinoapuri.kioku.design.rememberButtonFeedback
 import io.github.dejitarunoseireinoapuri.kioku.domain.AiConfiguration
 import io.github.dejitarunoseireinoapuri.kioku.feature.account.AccountState
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
@@ -43,6 +44,7 @@ internal fun AccountSettings(
     onRefresh: () -> Unit,
     onSignOut: () -> Unit,
 ) {
+    val feedback = rememberButtonFeedback(KiokuColors.Secondary)
     Column(verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large)) {
         AccountIdentity(account.session.label)
         Divider(color = KiokuColors.Rule)
@@ -51,8 +53,10 @@ internal fun AccountSettings(
             onClick = onSignOut,
             modifier = Modifier.fillMaxWidth().sizeIn(minHeight = KiokuSpacing.TouchTarget),
             shape = MaterialTheme.shapes.small,
+            colors = ButtonDefaults.textButtonColors(contentColor = feedback.contentColor),
+            interactionSource = feedback.interactionSource,
         ) {
-            Text(stringResource(Res.string.sign_out), color = KiokuColors.Secondary)
+            Text(stringResource(Res.string.sign_out))
         }
     }
 }
@@ -91,6 +95,7 @@ private fun RefreshConfiguration(
     refreshing: Boolean,
     onRefresh: () -> Unit,
 ) {
+    val feedback = rememberButtonFeedback(KiokuColors.Text)
     OutlinedButton(
         onClick = onRefresh,
         enabled = !refreshing,
@@ -100,8 +105,9 @@ private fun RefreshConfiguration(
         colors =
             ButtonDefaults.outlinedButtonColors(
                 backgroundColor = KiokuColors.Raised,
-                contentColor = KiokuColors.Text,
+                contentColor = feedback.contentColor,
             ),
+        interactionSource = feedback.interactionSource,
     ) {
         Icon(painterResource(Res.drawable.icon_refresh), null, Modifier.size(18.dp))
         Text(

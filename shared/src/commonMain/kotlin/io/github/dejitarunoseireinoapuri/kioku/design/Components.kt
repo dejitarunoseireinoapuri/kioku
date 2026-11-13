@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -34,23 +33,15 @@ fun ActionButton(
     primary: Boolean = false,
     enabled: Boolean = true,
 ) {
-    val target = modifier.sizeIn(minHeight = KiokuSpacing.TouchTarget)
-    if (primary) {
-        Button(
-            enabled = enabled,
-            onClick = onClick,
-            modifier = target,
-            elevation = null,
-            colors = ButtonDefaults.buttonColors(),
-        ) { Text(label) }
-    } else {
-        OutlinedButton(
-            enabled = enabled,
-            onClick = onClick,
-            modifier = target,
-            border = BorderStroke(1.dp, KiokuColors.Rule),
-        ) { Text(label, color = KiokuColors.Secondary) }
-    }
+    val feedback = rememberButtonFeedback(if (primary) KiokuColors.Text else KiokuColors.Secondary)
+    OutlinedButton(
+        enabled = enabled,
+        onClick = onClick,
+        modifier = modifier.sizeIn(minHeight = KiokuSpacing.TouchTarget),
+        border = BorderStroke(1.dp, if (primary) KiokuColors.Coral else KiokuColors.Rule),
+        colors = ButtonDefaults.outlinedButtonColors(contentColor = feedback.contentColor),
+        interactionSource = feedback.interactionSource,
+    ) { Text(label) }
 }
 
 @Composable
@@ -59,8 +50,13 @@ fun IconAction(
     description: String,
     onClick: () -> Unit,
 ) {
-    IconButton(onClick = onClick, modifier = Modifier.sizeIn(48.dp, 48.dp)) {
-        Icon(painterResource(icon), description, tint = KiokuColors.Secondary)
+    val feedback = rememberButtonFeedback(KiokuColors.Secondary)
+    IconButton(
+        onClick = onClick,
+        modifier = Modifier.sizeIn(KiokuSpacing.TouchTarget, KiokuSpacing.TouchTarget),
+        interactionSource = feedback.interactionSource,
+    ) {
+        Icon(painterResource(icon), description, tint = feedback.contentColor)
     }
 }
 

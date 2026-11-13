@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.github.dejitarunoseireinoapuri.kioku.design.rememberButtonFeedback
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.google_continue
 import io.github.dejitarunoseireinoapuri.kioku.resources.google_g
@@ -33,7 +34,7 @@ private object GoogleBrand {
     val Border = Color(0xFF747775)
 }
 
-/** Official light branding; original G asset is rendered without tint or stretching. */
+/** Original light assets/typography; Kioku press feedback only changes the label, never the G. */
 @Composable
 fun GoogleButton(
     enabled: Boolean,
@@ -41,14 +42,20 @@ fun GoogleButton(
     modifier: Modifier = Modifier,
 ) {
     val insets = googleButtonInsets()
+    val feedback = rememberButtonFeedback(GoogleBrand.Text)
     OutlinedButton(
         onClick = onClick,
         enabled = enabled,
         modifier = modifier.sizeIn(minHeight = 52.dp),
         shape = MaterialTheme.shapes.small,
-        colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Color.White, contentColor = GoogleBrand.Text),
+        colors =
+            ButtonDefaults.outlinedButtonColors(
+                backgroundColor = Color.White,
+                contentColor = feedback.contentColor,
+            ),
         border = BorderStroke(1.dp, GoogleBrand.Border),
         contentPadding = PaddingValues(horizontal = insets.first.dp, vertical = 12.dp),
+        interactionSource = feedback.interactionSource,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
