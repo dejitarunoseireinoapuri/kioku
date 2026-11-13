@@ -133,3 +133,23 @@ Los rótulos superiores son **«Que no se pierda»** y **«Tira del hilo»**; lo
 | ![Inicio con JetBrains Mono](../assets/branding/kioku-home-android.png) | ![Cuenta y configuración](../assets/branding/kioku-settings-android.png) |
 
 Las capturas de login/carga Android de este documento también reflejan ahora JetBrains Mono; las láminas originales de Stitch conservan la tipografía histórica y son referencias de composición.
+
+## Alternativas de acceso a Ajustes · Pendientes de elección
+
+El propietario rechaza también el engranaje enmarcado y solicita modelos en Stitch. Se preparan tres direcciones sobre la misma cabecera actual, sin cambiar la navegación ni el resto de la app:
+
+| Modelo | Tratamiento | Criterio |
+| --- | --- | --- |
+| A · Controles | Dos pistas horizontales con mandos circulares; sin marco en reposo | Evoca controles y ajustes, con un icono compacto |
+| B · Tres puntos | Tres puntos horizontales; sin marco en reposo | Más discreto; puede sugerir un menú, aunque aquí abriría Ajustes directamente |
+| C · `[ ajustes ]` | Etiqueta textual entre corchetes en JetBrains Mono | Identifica el destino y refuerza la dirección de programación |
+
+Fuente: [proyecto Stitch](https://stitch.google.com/projects/11852641719392883248), lámina «Opciones · A / B / C — por elegir», pantalla final `b997626d91e4446d86d3ddc313fabb5b`. Primer borrador `6de07ba5533448e1b4f1f53bb35e0b8f`; primera revisión `1e99c398ebf14d1487e1722ce153bd25`. [PNG exportado](../assets/branding/kioku-settings-access-proposals.png), descargado mediante Stitch MCP, sin alterar la imagen.
+
+![Alternativas de acceso a Ajustes](../assets/branding/kioku-settings-access-proposals.png)
+
+Se consultaron la autoridad visual, la propuesta anterior y la definición de terminado; se inspeccionaron la referencia 01 de Stitch y la captura Android actual. Revisión de diseño: comparar el control en el mismo contexto y sin engranajes; revisión de producto: todas las alternativas conducen al mismo destino, sin introducir un desplegable; revisión técnica: objetivos de toque de 48 × 48 para iconos y altura de 48 para el texto, con ancho intrínseco. Son objetivos de diseño, no una validación de accesibilidad nativa.
+
+Se refinó la composición para reducir huecos, retirar una afirmación de conformidad no demostrada, mantener el rótulo coral actual sin decoración añadida y separar las etiquetas de columna que se solapaban. La comparación incluye reposo y una muestra de foco/pulsación; el marco coral de esa muestra no forma parte del estado normal.
+
+Se comprobó que la nueva lámina aparece en el canvas y que los recursos HTML/imagen de las once pantallas previamente visibles no cambian. No se cambia código, APK, icono instalado o configuración remota. Queda pendiente elegir una alternativa antes de implementarla. Esta entrega se valida con el comprobador documental y revisión visual; no requiere nuevas pruebas nativas ni llamadas OpenAI.
