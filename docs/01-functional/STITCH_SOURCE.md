@@ -12,6 +12,8 @@
 
 Antes de implementar o cambiar materialmente una pantalla, inspeccionar las vistas pertinentes mediante Stitch MCP. Usar lectura salvo petición de modificar el diseño. Documentar una indisponibilidad real; no fingir que se inspeccionó.
 
+Ajuste posterior del propietario: la carga usa **«Entrando...»**, con aparición cíclica de los tres puntos y ancho reservado completo para que «Entrando» no se desplace. Reduce Motion los deja estáticos y la semántica anuncia el estado una sola vez. La vista 00b se inspeccionó de nuevo mediante MCP; conserva el texto anterior como referencia histórica y no se ha editado Stitch para este ajuste de la app.
+
 La autoridad funcional está en [FUNCTIONAL_REQUIREMENTS](FUNCTIONAL_REQUIREMENTS.md), no en HTML generado. El nombre es **Kioku**, aunque capturas previas muestren «Memoria». No copiar artefactos de regalos, audio archivado, categorías obligatorias ni navegación de propuestas descartadas.
 
 Si un detalle visual relevante no está definido, pedir la decisión necesaria antes de implementarlo. Resolver de manera autónoma ajustes mecánicos ya autorizados que no cambien el comportamiento, explicándolos en la entrega.

@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -27,15 +26,10 @@ import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.progressBarRangeInfo
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuMark
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuWordmark
-import io.github.dejitarunoseireinoapuri.kioku.resources.Res
-import io.github.dejitarunoseireinoapuri.kioku.resources.account_loading
-import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun AccountLoadingScreen() {
@@ -57,12 +51,7 @@ internal fun AccountLoadingScreen() {
         ) {
             LoadingMark()
             Column(Modifier.padding(top = KiokuSpacing.Large)) { KiokuWordmark(32.sp) }
-            Text(
-                stringResource(Res.string.account_loading),
-                color = KiokuColors.BrandSecondary,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = KiokuSpacing.Medium),
-            )
+            LoadingStatusText(Modifier.padding(top = KiokuSpacing.Medium))
         }
     }
 }

@@ -5,7 +5,7 @@ El [contrato de Stitch](STITCH_SOURCE.md) gobierna la consulta visual. Estos est
 | Estado visual | Contenido y acciones | Regla |
 | --- | --- | --- |
 | 00 · Acceso | Marca 憶 en coral, kioku, explicación breve y «Continuar con Google» con la marca oficial del proveedor. | Un solo inicio de acceso pendiente; no solicitar micrófono ni clave API. La elección de cuenta usa la interfaz nativa de Google. |
-| 00b · Entrando | Marca 憶, kioku y «Entrando en Kioku…», con progreso indeterminado. | Cubre el acceso pendiente y la preparación de la pantalla inicial. No anticipa autorización, no muestra recuerdos ni impone una duración mínima. Reduce Motion mantiene el símbolo estático. |
+| 00b · Entrando | Marca 憶, kioku y «Entrando...»; los tres puntos aparecen de forma progresiva y cíclica, reservando siempre su ancho para mantener «Entrando» fijo. | Cubre el acceso pendiente y la preparación de la pantalla inicial. No anticipa autorización, no muestra recuerdos ni impone una duración mínima. Reduce Motion mantiene símbolo y tres puntos estáticos; el anuncio accesible no cambia con la animación. |
 | 01 · Preparado | Kioku, Ajustes discreto, campo de texto y botones Explicar/Preguntar. | Micrófono inactivo hasta mantener pulsado. Tap elige intención escrita; hold inicia esa intención de voz. |
 | 02 · Bloqueado | Candado, indicación de manos libres, contador/onda de captura, Cancelar y Terminar. | No termina por silencio ni al retirar el dedo. No hay otro paso Guardar. |
 | 03 · Aclarar | Relato pendiente, pregunta y respuesta contextual por voz/texto. | No mostrar guardado; no exigir confirmar un resumen. |
