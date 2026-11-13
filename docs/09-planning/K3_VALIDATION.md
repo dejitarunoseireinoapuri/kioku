@@ -32,6 +32,8 @@ Los 12 relatos/16 consultas iniciales pasan a regresión tras esa corrección. A
 | Índice | Especificación comprobada localmente por Firebase CLI; índice remoto todavía no creado |
 | iOS | Puente Query/Source y dependencias preparados; sin compilar/ejecutar el nuevo build en Mac |
 
+El APK descomprimido y los archivos versionados se comprobaron en memoria contra el valor exacto de la clave OpenAI existente: no encontrada en ninguno. No se imprimió ni se copió a otro destino. Los identificadores públicos de Firebase no son esa clave.
+
 ## IA real y revisión de fuentes
 
 [Regresión](k3-live-smoke-2026-11-13-attempt2.json): 12 relatos y 16 consultas; 16/16 respuestas fieles, todas las categorías superan 90 %, recuperación completa en las 12 consultas con fuente esperada y cero fallos críticos detectados. p95 5,716 s, mediana 4,418 s; coste estimado 0,376749 USD. La abstención temporal inicial no tuvo una corrección específica del modelo; el resultado correcto posterior no borra ese fallo ni garantiza que no vuelva a ocurrir.
@@ -47,5 +49,7 @@ Los tres intentos consumieron aproximadamente **0,988236 USD estimados**, inclui
 Inspección remota de solo lectura: `queryMemory` no desplegada e índice vectorial no creado. Simulación de preparación: tres recuerdos revisados, tres necesitan proyección; cero escrituras. No se imprimió texto o UID del propietario. Se conserva único proyecto `kioku-9454f`, Bélgica, secreto/identidad de K2 y políticas de retención existentes.
 
 Antes de activar: autorización específica para desplegar `queryMemory` y actualizar los escritores `submitTurn`/`resolveClarification`, crear el índice y preparar los tres recuerdos actuales; entrada pública HTTPS `roles/run.invoker` para `allUsers` **solo** en `queryMemory`, con Google/App Check/cuenta permitida exigidos por código. No se amplían permisos del secreto ni se crean claves. Tras índice `READY` y escritor actualizado, la preparación aditiva habilita la búsqueda; sin ella falla cerrada.
+
+Implementación publicada en `codex/k3-text-query`, commit `c65dd0a`. Se solicitó al propietario la autorización concreta de activación por el canal que indicó; sin respuesta, no se aplica ninguno de esos cambios remotos. El permiso previo sobre cuatro servicios K2 no se extrapola a la nueva función.
 
 Después: comprobar rechazo real sin credenciales y consulta/fuente/clarificación desde Android con Google/App Check reales; compilar y comprobar el nuevo build iOS. El acceso K1 y guardado K2 previos no acreditan consultas K3. No se declara cerrada K3 ni se inicia K4.
