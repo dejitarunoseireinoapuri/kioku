@@ -20,5 +20,6 @@ Una fuente por tipo de decisión. Los documentos son el contrato previsto; el es
 | Despliegue | [ENVIRONMENTS](08-deployment/ENVIRONMENTS.md) | Separación de recursos y operación |
 | Plan | [IMPLEMENTATION_PLAN](09-planning/IMPLEMENTATION_PLAN.md) | Secuencia de entrega |
 | Evidencia móvil | [K0_VALIDATION](09-planning/K0_VALIDATION.md) | Compilación/pruebas Android y límites iOS de la base K0 |
+| Evidencia de cuenta | [K1_VALIDATION](09-planning/K1_VALIDATION.md) | Primera frontera backend local y pendientes de integración de K1 |
 
 Las conversaciones previas y los prototipos históricos sirven de evidencia de decisiones, no de segunda especificación vigente.

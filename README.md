@@ -8,7 +8,7 @@ M0 supera el criterio de viabilidad funcional con [Sol medio y la reserva v4](pr
 
 K0 añade una **vista previa Android/iOS con estética B**: conversación, ajustes, fuentes y ocho ejemplos ficticios. Android compila y supera 9 pruebas de lógica y 6 de interfaz, además de formato, Detekt, arquitectura y Lint. El host iOS está preparado, pendiente de compilar y revisar en Mac. [Evidencia K0](docs/09-planning/K0_VALIDATION.md) y [comandos](docs/07-development/DEVELOPMENT_GUIDE.md).
 
-No hay backend desplegado ni Firebase conectado. La vista previa no guarda recuerdos ni usa micrófono o créditos API. La arquitectura sigue Wonderdrop: **Kotlin Multiplatform + Compose Multiplatform, MVVM y Clean Architecture pragmática**. El experimento Expo local de `mobile/` está retirado como dirección técnica; no debe convertirse en una segunda aplicación. La [comparación v3](prototypes/memory/evidence/2026-11-12-v3.md) y los informes anteriores se conservan como evidencia histórica.
+K1 inicia una [frontera backend local de acceso privado](docs/09-planning/K1_VALIDATION.md): Google, UID vinculado y reglas Firestore comprobados en emuladores. No hay backend desplegado ni Firebase conectado al móvil. La vista previa no guarda recuerdos ni usa micrófono o créditos API. La arquitectura sigue Wonderdrop: **Kotlin Multiplatform + Compose Multiplatform, MVVM y Clean Architecture pragmática**. El experimento Expo local de `mobile/` está retirado como dirección técnica; no debe convertirse en una segunda aplicación. La [comparación v3](prototypes/memory/evidence/2026-11-12-v3.md) y los informes anteriores se conservan como evidencia histórica.
 
 Repositorio: https://github.com/dejitarunoseireinoapuri/kioku
 

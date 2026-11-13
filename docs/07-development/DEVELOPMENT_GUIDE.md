@@ -48,7 +48,7 @@ Los ejemplos se recorren desde Ajustes → Recorridos de ejemplo. Los ocho estad
 
 Para M0 se ha fijado Node 24 (mínimo 24.12), ejecución TypeScript nativa y comprobación con TypeScript 5.9.3. Comandos: `node tooling/m0.mjs install`, `check`, `test` y `format:check`. La [guía M0](../../prototypes/memory/README.md) detalla las evaluaciones reales con `--live`, credenciales privadas y límite de consumo; las pruebas locales no llaman a OpenAI. El runtime de Functions se decidirá al preparar ese despliegue, sin deducir compatibilidad del prototipo.
 
-Node/TypeScript mantienen su lockfile independiente. Firebase se configurará en K1 y sus verificaciones no existen todavía. No presentar una tarea de éxito vacío como integración real.
+Node/TypeScript mantienen sus lockfiles independientes: M0 en raíz, primera frontera K1 en `backend/`. Las verificaciones Auth/Functions/Firestore locales se describen en la [guía backend](../../backend/README.md) y su [evidencia K1](../09-planning/K1_VALIDATION.md). No prueban Google móvil, App Check remoto ni producción.
 
 ## Trabajo por caso de uso
 

@@ -2,6 +2,9 @@
 
 ## Sin versión publicada · 2026-11-13
 
+- K1 iniciada en rama aparte: primera frontera backend local para Google personal, UID vinculado, revocación/deshabilitación, admisión transaccional y respuesta segura sin secretos. Reglas Firestore deniegan acceso directo cliente; pruebas Auth/Functions/Firestore solo con fixtures en emuladores.
+- Decisión del propietario: un único proyecto Firebase de producción, Bélgica; ningún proyecto remoto de desarrollo. No se modifica producción ni se consume OpenAI. Alta móvil, clave, App Check remoto y despliegue pendientes; K1 no cerrada.
+
 - Ajuste visual solicitado tras revisar K0: bloque inicial sin hueco fijo, botón «Explicar» (preferencia final del propietario) y etiquetas en una línea; los controles se apilan si el texto ampliado no cabe en paralelo.
 
 - K0 en rama independiente: base KMP/Compose, hosts Android/iOS, Koin, navegación tipada y recursos con estética B revisada en Stitch.

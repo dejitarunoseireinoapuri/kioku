@@ -16,7 +16,7 @@ Las correcciones v4 separan citas y datos personales por alcance semántico, mat
 
 La clave local de prueba se configuró mediante el flujo seguro y está fuera de Git; no es el gestor de secretos ni el alta móvil de K1. La primera clave creada no pudo guardarse por pérdida del archivo temporal y quedó sin uso: debe revocarse en Platform. La sustitución se creó y guardó con autorización explícita. No se registran aquí sus identificadores ni valores. Límite acumulado estimado actual de M0: 20 USD, ampliado con autorización del propietario sin reiniciar el contador, con contador/reservas persistentes y llamadas reales explícitas; no confirma saldo o cobertura de los créditos.
 
-El propietario ya ha creado un proyecto Firebase. Antes de conectarlo se verificará su identidad, región y papel como entorno; no se presupone que esté configurado ni se crean otros proyectos por documentar el plan.
+**K1 en curso:** rama `codex/k1-account-configuration`. Proyecto `kioku-9454f` verificado en consola: Spark y sin apps registradas al consultar. El propietario elige Google, una cuenta permitida, único proyecto remoto de producción y Bélgica (`europe-west1`). Primera frontera backend local: identidad verificada, UID vinculado, revocación/deshabilitación, admisión y respuesta segura `notConfigured`; reglas que deniegan acceso directo cliente a Firestore. [Evidencia y pendientes K1](K1_VALIDATION.md). Faltan Google nativo, recuperación/cierre de sesión móvil, App Check remoto, gestor de secretos, alta/reemplazo de clave y despliegue. No se declara K1 cerrada ni producción habilitada. No se han creado otros proyectos.
 
 ## Antes de cada fase
 
@@ -24,8 +24,8 @@ El propietario ya ha creado un proyecto Firebase. Antes de conectarlo se verific
 | --- | --- | --- |
 | Versiones y herramientas compatibles | K0 Android comprobado; iOS pendiente | Catálogo, wrapper y lockfiles fijados; comprobar Mac según ADR-006 |
 | Identificadores Android/iOS | Resuelto en K0; registros remotos en K1 | Base aprobada: `io.github.dejitarunoseireinoapuri.kioku`; debug Android `.dev` |
-| Método de acceso y cuenta permitida | K1 | Google/Apple/email u otro acceso Firebase; afecta recuperación y pruebas |
-| Proyectos/región y permisos remotos | K1 | Entorno aislado y otro de datos reales; confirmar antes de crear recursos |
+| Método de acceso y cuenta permitida | Decidido; integración K1 pendiente | Google y cuenta seleccionados; correo en configuración privada, sin copiar a fixtures |
+| Proyectos/región y permisos remotos | Decidido; provisión K1 pendiente | Único proyecto remoto de producción `kioku-9454f`, Bélgica; pruebas demo locales sin crear otro proyecto |
 | Reutilizar/crear clave y destino privado | M0; integración de alta en K1 | Flujo seguro antes de implementar/probar llamadas; M0 no requiere pantalla de configuración móvil |
 | Corpus, rúbrica y separación ajuste/validación | M0 | Datos ficticios, respuestas/fuentes esperadas y criterios fijados antes de medir |
 | Procedencia, identidad y precisión temporal | M0 comprobado en j; ampliar en K2/K3 | Mantener la evidencia vigente sin completar fechas ni atribuir citas como hechos propios |

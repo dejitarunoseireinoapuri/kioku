@@ -1,0 +1,30 @@
+{
+  "name": "kioku-backend",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "lib/src/index.js",
+  "engines": {
+    "node": ">=22 <25"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test lib/test/unit/*.test.js",
+    "test:emulator": "node --test --test-concurrency=1 lib/test/emulator/*.test.js",
+    "format:check": "prettier --check src test package.json tsconfig.json",
+    "format": "prettier --write src test package.json tsconfig.json"
+  },
+  "dependencies": {
+    "firebase-admin": "14.5.1",
+    "firebase-functions": "7.4.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "6.0.0",
+    "@types/node": "22.19.1",
+    "firebase": "13.3.0",
+    "firebase-tools": "15.36.0",
+    "prettier": "3.6.2",
+    "typescript": "5.9.3"
+  }
+}

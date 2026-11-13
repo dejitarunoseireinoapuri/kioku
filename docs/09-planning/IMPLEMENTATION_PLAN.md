@@ -9,7 +9,7 @@ Este documento define el alcance y el cierre de las fases. Los [requisitos](../0
 | D0 · Base documental | Producto, arquitectura y normas definidos | Entregada en `40737a2` |
 | M0 · Prueba temprana de memoria | Evidencia de que interpretar, guardar y recuperar funciona antes de construir la app | Viabilidad funcional validada en v4; objetivo de latencia de guardado pendiente |
 | K0 · Base técnica | App navegable con estética B y datos ficticios | Implementada; Android comprobado, validación iOS pendiente |
-| K1 · Cuenta y configuración | Acceso privado y configuración segura de la clave propia | Pendiente |
+| K1 · Cuenta y configuración | Acceso privado y configuración segura de la clave propia | En curso: frontera backend local; móvil, clave y producción pendientes |
 | K2 · Contar por escrito | Separar asuntos, aclarar dudas y guardar automáticamente | Pendiente |
 | K3 · Preguntar por escrito | Encontrar recuerdos y responder con sus fuentes | Pendiente |
 | K4 · Control de memoria | Ofrecer guardar un dato, corregir y olvidar conversando | Pendiente |
@@ -77,7 +77,7 @@ Cuarta iteración y decisión actual: [evidencia v4](../../prototypes/memory/evi
 
 ## K0 · Base técnica Android/iOS
 
-**Estado actual:** implementada en `codex/k0-mobile-foundation`; [evidencia del 13 de noviembre](K0_VALIDATION.md), nueve pruebas de lógica/estado y seis instrumentadas Android superadas, compilación/Detekt/formato/arquitectura/Lint correctos. Referencias Stitch inspeccionadas sin modificarlas. Identificador aprobado por el propietario: `io.github.dejitarunoseireinoapuri.kioku`; Android debug usa `.dev`. Framework/host/esquema iOS preparados, compilación y recorrido nativos pendientes de Mac. No se ha iniciado K1 ni conectado proveedor alguno.
+**Estado actual:** implementada en `codex/k0-mobile-foundation`; [evidencia del 13 de noviembre](K0_VALIDATION.md), nueve pruebas de lógica/estado y seis instrumentadas Android superadas, compilación/Detekt/formato/arquitectura/Lint correctos. Referencias Stitch inspeccionadas sin modificarlas. Identificador aprobado por el propietario: `io.github.dejitarunoseireinoapuri.kioku`; Android debug usa `.dev`. Framework/host/esquema iOS preparados, compilación y recorrido nativos pendientes de Mac. La vista previa K0 no conecta proveedores; K1 se inicia en una rama posterior según el apartado siguiente.
 
 **Resultado:** primera app navegable con estética B y datos ficticios. Permite recorrer Contar, Preguntar y los accesos previstos, sin conservar recuerdos reales.
 
@@ -90,6 +90,8 @@ Cuarta iteración y decisión actual: [evidencia v4](../../prototypes/memory/evi
 **Fuera:** Firebase conectado, clave OpenAI, consumo de créditos, micrófono real y memoria real.
 
 ## K1 · Cuenta y configuración privada
+
+**Estado actual:** iniciada en `codex/k1-account-configuration`, desde K0. El propietario elige Google, una cuenta permitida, único proyecto remoto de producción y Bélgica (`europe-west1`). [ADR-007](../02-architecture/ADR/ADR-007-private-google-account.md) y [evidencia K1](K1_VALIDATION.md) delimitan esta primera entrega: acceso/configuración mínima en emuladores y reglas deny-by-default. No conecta aún el móvil, guarda claves ni habilita producción. El entorno demo local no crea un segundo proyecto Firebase.
 
 **Resultado:** acceder con la cuenta autorizada, recuperar sesión e introducir o sustituir la clave propia de OpenAI. Cubre UC-001 y UC-002.
 

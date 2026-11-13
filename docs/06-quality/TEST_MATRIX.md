@@ -7,6 +7,7 @@ Los casos de integración de la app siguen **pendientes de validación**. TEST-E
 | TEST-EVAL-001 | FR-005, FR-007, FR-008, FR-009, FR-011, FR-012, AC-005, AC-007, AC-008, AC-009, AC-011, AC-012, AC-016 | Evaluación temprana M0 de interpretación, recuperación y respuesta, corpus reservado y tres ejecuciones reales; umbrales y bloqueos definidos en el plan |
 | TEST-BASE-001 | Base K0; tema y navegación con fixtures | [Evidencia K0](../09-planning/K0_VALIDATION.md): 9 host tests y 6 instrumentados Android superados; iOS pendiente. No valida memoria, voz o conectividad reales |
 | TEST-AUTH-001 | FR-001, AC-001 | Misma cuenta recupera datos en segunda instalación; otra identidad no |
+| TEST-AUTH-002 | Primera frontera K1, AC-001, BR-010 | Auth/Functions/Firestore locales: Google verificado, propietario vinculado, denegaciones y concurrencia; [evidencia K1](../09-planning/K1_VALIDATION.md). No sustituye dos instalaciones nativas |
 | TEST-KEY-001 | FR-002, AC-002 | Alta/reemplazo inválido/válido; secreto ausente de lecturas, memoria y logs |
 | TEST-AUD-001 | FR-003, FR-004, AC-003, AC-004 | Hold/release/lock, silencio, Terminar una vez y Cancelar |
 | TEST-AUD-002 | AC-015 | Permiso denegado, interrupción, respuesta tardía y cambio de sesión |

@@ -44,7 +44,7 @@ Select checks by changed behavior and direct dependencies. Run relevant configur
 
 Zero errors and avoidable warnings. Never weaken tests or globally disable checks. No unjustified suppressions, retries hiding failures, sleeps instead of deterministic tests, unbounded operations or unnecessary dependencies.
 
-Documentation-only changes use the actual documentation checker and semantic review. K0 adds a buildable Android/KMP preview; iOS compilation still requires macOS/Xcode and the backend is not implemented. Use the real Gradle tasks in DEVELOPMENT_GUIDE; do not report unexecuted native tests as passed. Emulator/fake results do not prove live provider, attestation, iOS signing or real device behavior.
+Documentation-only changes use the actual documentation checker and semantic review. K0 adds a buildable Android/KMP preview; iOS compilation still requires macOS/Xcode. K1 starts an emulator-only account backend; native Google sign-in, credentials, App Check and production are pending. Use the real tasks in DEVELOPMENT_GUIDE; do not report unexecuted native tests as passed. Emulator/fake results do not prove live provider, attestation, iOS signing or real device behavior.
 
 ## Safety and workflow
 

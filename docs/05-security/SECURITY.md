@@ -20,6 +20,8 @@ Solo categoría, operación, duración, código seguro y referencia opaca de sop
 
 No integrar Analytics, informes de crash o grabación de sesiones automáticamente. Si se proponen, revisar filtrado y retención reales antes de activarlos.
 
+Primera frontera K1: proveedor Google y correo verificado permitido, UID vinculado transaccionalmente, tokens revalidados con comprobación de revocación/deshabilitación y 30 lecturas de configuración por minuto. Reglas Firestore deniegan lectura/escritura directa incluso al propietario. El punto de entrada actual se limita a `demo-kioku-local` y direcciones exactas de emuladores antes de inicializar SDKs: la ausencia de App Check solo es local. No está preparado para producción ni procesa claves; [evidencia y pendientes](../09-planning/K1_VALIDATION.md).
+
 ## Incidentes
 
 Contener acceso, revocar/rotar credenciales afectadas, revisar el uso mediante evidencias mínimas autorizadas, corregir y probar. No exponer material sensible en issues públicas. La política de comunicación y contacto del operador sigue pendiente antes de distribuir.

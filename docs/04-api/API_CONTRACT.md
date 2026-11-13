@@ -1,10 +1,10 @@
 # Contrato backend previsto · v1
 
-Operaciones autenticadas, versionadas y ligadas al UID verificado; el cliente no elige otro propietario. App Check y límites de abuso se aplican al entorno remoto antes de distribuir. Este contrato es la base a implementar, no endpoints disponibles.
+Operaciones autenticadas, versionadas y ligadas al UID verificado; el cliente no elige otro propietario. App Check y límites de abuso se aplican al entorno remoto antes de distribuir. Este contrato es la base a implementar, no endpoints remotos disponibles.
 
 | Operación | Entrada relevante | Resultado |
 | --- | --- | --- |
-| `getConfiguration` | sesión | Estado seguro de cuenta/IA, nunca clave |
+| `getConfiguration` | sesión, apiVersion: 1 | Estado seguro de cuenta/IA, nunca clave |
 | `setAiCredential` | requestId, clave por transporte privado | Estado validado y referencia no secreta; reemplazo seguro |
 | `submitTurn` | requestId, mode, channel, texto o referencia temporal autorizada, locale/zone | `saved`, `needsClarification`, `answer`, `proposal` o error tipado |
 | `resolveClarification` | requestId, clarificationId, respuesta, expectedRevision | Continuación del turno original |
@@ -16,6 +16,10 @@ Operaciones autenticadas, versionadas y ligadas al UID verificado; el cliente no
 | `getOperation` | requestId propio | Estado confirmado para recuperar un resultado incierto |
 
 ## Garantías
+
+Primera frontera K1 implementada **solo en emuladores**: `getConfiguration` acepta exactamente `{apiVersion: 1}`, cuerpo HTTP de hasta 256 bytes y cabecera de autorización de hasta 8192 caracteres. Requiere cuenta Google permitida con correo verificado y UID vinculado; revalida tokens revocados/usuarios deshabilitados. Responde `{apiVersion: 1, account: authorized, ai: notConfigured, revision: 0}`. Límite transaccional: 30 llamadas autorizadas por minuto del reloj servidor. No implementa aún `setAiCredential`, lectura de una configuración existente, App Check remoto ni ningún endpoint remoto. El resto de esta tabla continúa como contrato previsto.
+
+Errores seguros de esta frontera: `unauthenticated`, `permission-denied`, `invalid-argument`, `resource-exhausted`, `failed-precondition` y `unavailable`. No devuelve detalles crudos de Firebase ni los campos rechazados. Se reautoriza cada lectura; una sesión cliente no concede acceso permanente.
 
 - Validar campos exactos, tipos, tamaños, longitud y pertenencia de todas las referencias. Límites concretos deben fijarse antes de implementar, no quedar ilimitados.
 - Idempotencia ligada a usuario+operación+requestId+entrada; reutilizar ID con otra entrada es conflicto. Reautorizar incluso un replay. Recibos no repiten secretos ni contenido olvidado.
