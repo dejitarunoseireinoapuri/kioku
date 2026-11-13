@@ -52,7 +52,7 @@ Node/TypeScript mantienen sus lockfiles independientes: M0 en raíz, K1 en `back
 
 ## Configuración nativa K1
 
-Android carga exclusivamente la configuración pública local indicada en `androidApp/firebase.local.properties.example`; nunca una clave OpenAI. Apple necesita el plist privado, `Firebase.local.xcconfig` y Mac. El build Apple verifica sus campos antes de copiarlo al producto mediante `tooling/prepare-ios-firebase.mjs`; probar su validador con `node --test tooling/native-firebase-public.test.mjs`. Firebase Apple/Google Sign-In se resuelven con SPM en Mac; no dar por resueltos sus paquetes desde Windows.
+Android carga exclusivamente la configuración pública local indicada en `androidApp/firebase.local.properties.example`; nunca una clave OpenAI. Apple incorpora por Git el plist cliente revisado y `Firebase.xcconfig`; permite un override opcional `Firebase.local.xcconfig` excluido. El build Apple verifica los campos antes de copiar el plist al producto mediante `tooling/prepare-ios-firebase.mjs`; probar su validador con `node --test tooling/native-firebase-public.test.mjs`. Firebase Apple/Google Sign-In se resuelven con SPM en Mac; no dar por resueltos sus paquetes desde Windows.
 
 Sin configuración válida se muestra acceso no disponible. La entrada actual exige autorización remota antes de abrir los ejemplos de conversación. No hay bypass de acceso real por una identidad de fixture. Registros, atestación y alta administrativa del secreto: [configuración remota](../08-deployment/K1_REMOTE_SETUP.md). No ejecutar despliegues o alta de secretos por seguir esta guía: requieren autorización explícita, conservada cuando ya se concedió para la misma acción/destino.
 
@@ -66,7 +66,7 @@ git switch codex/k1-account-configuration
 git pull --ff-only
 ```
 
-Los archivos locales Firebase no viajan por Git. Copiar `GoogleService-Info.plist` a `iosApp/iosApp/GoogleService-Info.plist` y `Firebase.local.xcconfig` a `iosApp/Configuration/Firebase.local.xcconfig`. Se preparó una copia local de esos dos archivos en `local-data/Kioku-iOS-config.zip`, excluida del repositorio. No necesita transferir la clave OpenAI: sigue en Secret Manager.
+La configuración cliente iOS ya viaja por Git: `iosApp/iosApp/GoogleService-Info.plist` y `iosApp/Configuration/Firebase.xcconfig`. El propietario solicitó versionarla para llevarla al Mac; se revisaron campos, proyecto/app/esquema OAuth y restricciones reales de la clave cliente Firebase. Es configuración pública identificativa, según la política de seguridad. Actualizar la rama basta; el ZIP local histórico ya no es necesario. No transferir la clave OpenAI: sigue en Secret Manager. Los overrides locales y las identidades de firma permanecen excluidos del repositorio.
 
 Abrir `iosApp/iosApp.xcodeproj`, esquema Kioku. Configurar el equipo propio en Signing & Capabilities, manteniendo bundle `io.github.dejitarunoseireinoapuri.kioku`. Resolver paquetes y compilar; la integración Gradle genera el framework compartido. Ejecutar también los tests de simulador indicados arriba. La compilación y los nombres exportados Swift/Kotlin siguen pendientes de comprobar; corregir errores reales antes de declarar compatible.
 

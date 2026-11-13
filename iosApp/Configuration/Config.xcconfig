@@ -12,4 +12,5 @@ TARGETED_DEVICE_FAMILY = 1,2
 GOOGLE_REVERSED_CLIENT_ID =
 APP_ATTEST_ENVIRONMENT = production
 CODE_SIGN_ENTITLEMENTS = iosApp/Kioku.entitlements
+#include "Firebase.xcconfig"
 #include? "Firebase.local.xcconfig"

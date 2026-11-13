@@ -3,7 +3,7 @@
 /mobile/
 /design/
 
-# Credentials, local Firebase identity/configuration and signing.
+# Credentials, local Firebase overrides and signing.
 .env
 .env.*
 *.env
@@ -18,6 +18,8 @@ google-services.json
 androidApp/firebase.local.properties
 iosApp/Configuration/Firebase.local.xcconfig
 GoogleService-Info.plist
+# Reviewed public iOS client configuration; provider/admin secrets stay excluded.
+!/iosApp/iosApp/GoogleService-Info.plist
 service-account*.json
 *-adminsdk-*.json
 *.jks
