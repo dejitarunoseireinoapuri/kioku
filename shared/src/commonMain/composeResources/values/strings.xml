@@ -93,6 +93,8 @@
     <string name="query_source">Ver texto original %1$d · %2$s</string>
     <string name="query_limit">Necesito una pregunta más concreta. Empieza otra consulta con todo el contexto necesario.</string>
     <string name="source_loading">Cargando texto original...</string>
+    <string name="configuration_loading">Actualizando configuración...</string>
+    <string name="capture_checking">Comprobando el guardado...</string>
     <string name="capture_saving">Procesando tu recuerdo...</string>
     <string name="capture_saved">Guardado en tu memoria.</string>
     <string name="capture_uncertain">Todavía no puedo confirmar el resultado. Comprueba el estado antes de volver a enviarlo.</string>

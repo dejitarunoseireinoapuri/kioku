@@ -1,6 +1,7 @@
 package io.github.dejitarunoseireinoapuri.kioku
 
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -17,6 +18,8 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
+import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingScreen
+import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuTheme
 import io.github.dejitarunoseireinoapuri.kioku.domain.AccountIssue
 import io.github.dejitarunoseireinoapuri.kioku.domain.AccountRepository
@@ -100,6 +103,22 @@ class AccountAccessTest {
 
     private fun captureAccess(name: String) {
         captureBrandScreen(compose.activity, name) { compose.onRoot().captureToImage() }
+    }
+
+    @Test
+    fun contextualLoadingFitsSmallWindowWithLargeText() {
+        compose.setContent {
+            val density = LocalDensity.current.density
+            CompositionLocalProvider(LocalDensity provides Density(density, fontScale = 2f)) {
+                KiokuTheme {
+                    Box(Modifier.width(320.dp).height(480.dp).background(KiokuColors.Background)) {
+                        ContentLoadingScreen("Actualizando configuración...")
+                    }
+                }
+            }
+        }
+        compose.onNodeWithText("Actualizando configuración...").assertIsDisplayed()
+        captureAccess("kioku-content-loading-large.png")
     }
 }
 

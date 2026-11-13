@@ -12,6 +12,7 @@ internal class FixtureAccount(
 ) : AccountRepository {
     override val sessions = MutableStateFlow(if (authorized) session() else null)
     var configuration: ConfigurationResult = ConfigurationResult.Loaded(AiConfiguration.Ready)
+    var configurationLoad: suspend () -> ConfigurationResult = { configuration }
     private var generation = 1L
 
     override suspend fun signIn(): SignInResult {
@@ -24,7 +25,7 @@ internal class FixtureAccount(
         sessions.value = null
     }
 
-    override suspend fun loadConfiguration() = configuration
+    override suspend fun loadConfiguration() = configurationLoad()
 
     private fun session() = AccountSession("synthetic-ui", 1, "Cuenta ficticia")
 }

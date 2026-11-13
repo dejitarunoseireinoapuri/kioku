@@ -1,6 +1,6 @@
 # K3 · Consultar por escrito
 
-Rama: `codex/k3-text-query`, desde `28fdc78` de `main`. **Implementada y activada en producción; aceptación del nuevo build en móviles pendiente.** K2 Android aceptada por el propietario; nuevo build iOS aún sin validar. Publicar K2 en `main` no cambia esos límites.
+Rama: `codex/k3-text-query`, desde `28fdc78` de `main`. **Implementada y activada en producción; consulta y fuente confirmadas por el propietario en Android.** El nuevo loading y el build iOS requieren comprobación en los móviles. Publicar K2 en `main` no cambia esos límites.
 
 ## Alcance y referencias
 
@@ -29,7 +29,7 @@ Los 12 relatos/16 consultas iniciales pasan a regresión tras esa corrección. A
 | Emuladores Auth/Functions/Firestore | 36/36 correctas; 12 nuevas de consulta y ampliaciones de entrada/reglas, incluidos rechazo de otro propietario, cambio/borrado durante inferencia, recibos sin preguntas/respuestas, concesión obsoleta y conflicto de ID con captura |
 | `mobileCheck` | 33 host tests correctos (siete nuevos), formato, arquitectura, Detekt y Lint sin errores |
 | Android APK y tests | Compilados; 22/22 pruebas instrumentadas API 36 al 100 %. Las tres de consulta se repitieron tras ajustar citas/reinicio; fuente actual, espera, aclaración, recreación y cierre de sesión |
-| Índice | Especificación comprobada localmente por Firebase CLI; índice remoto todavía no creado |
+| Índice | Especificación comprobada por Firebase CLI; activación remota posterior `READY`, detallada abajo |
 | iOS | Puente Query/Source y dependencias preparados; sin compilar/ejecutar el nuevo build en Mac |
 
 El APK descomprimido y los archivos versionados se comprobaron en memoria contra el valor exacto de la clave OpenAI existente: no encontrada en ninguno. No se imprimió ni se copió a otro destino. Los identificadores públicos de Firebase no son esa clave.
@@ -58,4 +58,16 @@ Preparación real autorizada: **tres recuerdos revisados y tres actualizados**, 
 
 Inspección posterior: región Bélgica, PITR desactivado, cero backups programados, TTL de operaciones/uso activos y acceso al mismo secreto conservado. Recuerdos/fuentes no caducan. El APK `kioku-k3-consulta.apk` coincide con la compilación verificada y se entrega como actualización; no se instaló automáticamente en móviles personales.
 
-Pendiente: consulta/fuente/clarificación desde Android con Google/App Check reales; compilar y comprobar el nuevo build iOS. El acceso K1 y guardado K2 previos no acreditan consultas K3. No se declara cerrada K3 ni se inicia K4.
+El propietario confirma después de la activación que la consulta devuelve el dato esperado y permite abrir el texto original en Android. Esta aceptación real no utiliza ni exporta sus recuerdos como fixtures. No equivale a comprobar personalmente todos los casos de aclaración/ausencia ni acredita iOS.
+
+Pendiente: comprobar el loading nuevo en Android y compilar/comprobar el build actual en iOS, incluyendo consulta y fuente. Aclaración y ausencia están cubiertas por fixtures y evaluación real sintética; faltan sus comprobaciones manuales en los dispositivos. No se declara cerrada K3 ni se inicia K4.
+
+## Loading común solicitado antes del cierre
+
+El componente del acceso se comparte con captura/aclaración, recuperación de guardado, consulta, fuente remota y actualización de configuración. Muestra un texto contextual y conserva símbolo, tipografía y animación de tres puntos con espacio reservado. El texto largo puede saltar de línea sin desplazarlo al animar puntos. No se espera artificialmente ni se muestra una carga por abrir contenido disponible. La navegación/conversación permanece compuesta debajo de una capa opaca, sin interacción ni semántica accesible del contenido tapado; se oculta el teclado. Un error también retira la capa. No se modifica autorización, API, modelo ni persistencia.
+
+Validación de esta entrega: APK y APK de pruebas compilados; `mobileCheck` correcto, con 33 host tests, formato, arquitectura, Detekt y Android Lint. **25/25 pruebas instrumentadas en API 36 correctas**, incluyendo tres nuevas: actualización asíncrona que conserva navegación/borrador y oculta acciones, salida del loading tras una consulta fallida seguida de otra pregunta, y mensaje largo en ventana 320 × 480 dp con texto al 200 %. Captura, consulta y fuente comprueban el loading; las pruebas de recreación mantienen borrador/operación/fuente sin reenvío. Los helpers de desplazamiento se adaptaron para no intentar desplazar una carga ya visible; conservan sus aserciones de visibilidad y resultados. Después se repitieron **2/2** pruebas de configuración/texto grande tras ajustar únicamente sus capturas al tema real.
+
+Inspeccionadas las capturas sintéticas normal y de letra grande: misma marca y paleta, mensaje completo dentro de la ventana. Las pruebas no sustituyen una revisión completa TalkBack/VoiceOver ni un build iOS. El código de UI es compartido Android/iOS; la compilación y ejecución Apple siguen pendientes de Mac/Xcode.
+
+Nuevo APK local `androidApp/build/outputs/apk/debug/kioku-k3-loading.apk`, SHA-256 `385832269A83BC6FD608CD3F72550178DF5782EBF1C91148C6F469CD8EA4BCD0`. Se entrega para actualizar conservando la instalación; solo se utilizó el emulador, no se instalaron cambios en móviles personales. Este ajuste no realiza llamadas OpenAI ni despliega funciones. Se mantiene la rama K3; no se publica en `main` por este cambio.

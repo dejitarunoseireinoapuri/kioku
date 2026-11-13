@@ -22,6 +22,7 @@ Los casos de integración de la app siguen **pendientes de validación**. TEST-E
 | TEST-UI-002 | AC-003, AC-004 | Teclado, insets, texto grande y gestos Android/iOS |
 | TEST-UI-003 | AC-009 | TalkBack/VoiceOver, foco, lectura accesible y entrada alternativa |
 | TEST-UI-004 | AC-015 | Cambio de cuenta/cancelación invalidan resultados privados viejos: host/Android con dobles en [K1](../09-planning/K1_INTEGRATION_VALIDATION.md); SDK real/iOS pendientes |
+| TEST-UI-005 | AC-013, AC-015 | Loading de marca contextual durante cargas, contenido tapado sin acciones accesibles, borrador/navegación conservados, salida tras error y sin reenvío al recrear. [K3](../09-planning/K3_VALIDATION.md): 25 pruebas Android correctas, incluye mensaje largo al 200 %; validación actual iOS pendiente |
 | TEST-SEC-001 | BR-010, AC-001 | Lecturas y consultas con referencias ajenas denegadas |
 | TEST-SEC-002 | BR-010 | Escritura canónica/índice/recibo/secreto directa denegada |
 | TEST-SEC-003 | AC-016 | Recuerdo malicioso no ejecuta instrucciones ni obtiene claves |

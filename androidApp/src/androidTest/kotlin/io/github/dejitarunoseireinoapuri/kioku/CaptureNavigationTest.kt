@@ -40,6 +40,8 @@ class CaptureNavigationTest {
         send("Quiero ver una película ficticia.")
         waitVisible("Procesando tu recuerdo...")
         compose.onNodeWithText("Procesando tu recuerdo...").assertIsDisplayed()
+        compose.onNodeWithTag("content-loading").assertIsDisplayed()
+        compose.onNodeWithTag("text-composer").assertDoesNotExist()
         compose.onNodeWithText("Recuerdo guardado").assertDoesNotExist()
         result.complete(repository.saved())
         waitVisible("Recuerdo guardado")

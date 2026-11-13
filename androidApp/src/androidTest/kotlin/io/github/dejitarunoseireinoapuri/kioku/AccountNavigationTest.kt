@@ -2,16 +2,22 @@ package io.github.dejitarunoseireinoapuri.kioku
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextContains
+import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import io.github.dejitarunoseireinoapuri.kioku.domain.AccountIssue
 import io.github.dejitarunoseireinoapuri.kioku.domain.AiConfiguration
 import io.github.dejitarunoseireinoapuri.kioku.domain.ConfigurationResult
+import kotlinx.coroutines.CompletableDeferred
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -67,5 +73,30 @@ class AccountNavigationTest {
         compose.onNodeWithText("IA configurada").assertIsDisplayed()
         compose.onNodeWithContentDescription("Volver").performClick()
         compose.onNodeWithText("Texto todavía no enviado").assertIsDisplayed()
+    }
+
+    @Test
+    fun refreshHidesActionsUntilItCompletesAndKeepsNavigationAndDraft() {
+        compose.onNodeWithText("Continuar con Google").performClick()
+        compose.onNodeWithTag("text-composer").performTextInput("Borrador de prueba")
+        compose.onNodeWithContentDescription("Ajustes").performClick()
+        val result = CompletableDeferred<ConfigurationResult>()
+        var calls = 0
+        account.configurationLoad = {
+            calls++
+            result.await()
+        }
+        compose.onNodeWithText("Actualizar estado").performClick()
+        compose.waitUntil(5000) { compose.onNodeWithTag("content-loading").isDisplayed() }
+        compose.onNodeWithText("Actualizando configuración...").assertIsDisplayed()
+        captureBrandScreen(compose.activity, "kioku-content-loading.png") { compose.onRoot().captureToImage() }
+        compose.onNodeWithText("Cerrar sesión").assertDoesNotExist()
+        compose.onNodeWithTag("text-composer").assertDoesNotExist()
+        result.complete(ConfigurationResult.Loaded(AiConfiguration.Ready))
+        compose.waitUntil(5000) { compose.onNodeWithText("IA configurada").isDisplayed() }
+        compose.onNodeWithTag("content-loading").assertDoesNotExist()
+        compose.onNodeWithContentDescription("Volver").performClick()
+        compose.onNodeWithTag("text-composer").assertTextContains("Borrador de prueba")
+        assertEquals(1, calls)
     }
 }

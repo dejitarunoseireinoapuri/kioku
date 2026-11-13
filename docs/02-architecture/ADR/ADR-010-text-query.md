@@ -1,6 +1,6 @@
 # ADR-010 · Consulta por texto y evidencia vigente
 
-**Estado:** implementada y activada K3; evaluación sintética real comprobada, aceptación móvil pendiente. Fecha: 2026-11-13. Amplía ADR-005/009.
+**Estado:** implementada y activada K3; evaluación sintética real comprobada, consulta/fuente aceptadas en Android. Loading posterior y build actual iOS pendientes de aceptación móvil. Fecha: 2026-11-13. Amplía ADR-005/009.
 
 ## Contexto
 

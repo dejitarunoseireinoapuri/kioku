@@ -138,7 +138,7 @@ class CaptureRotationTest {
             }
         }
         if (!tag) {
-            compose.onNodeWithText(text).performScrollTo()
+            if (!compose.onNodeWithText(text).isDisplayed()) compose.onNodeWithText(text).performScrollTo()
             compose.waitUntil(5000) { compose.onNodeWithText(text).isDisplayed() }
             compose.onNodeWithText(text).assertIsDisplayed()
         }

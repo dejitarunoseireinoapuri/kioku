@@ -1,4 +1,4 @@
-package io.github.dejitarunoseireinoapuri.kioku.feature.account
+package io.github.dejitarunoseireinoapuri.kioku.design
 
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -27,12 +27,12 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.progressBarRangeInfo
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.sp
-import io.github.dejitarunoseireinoapuri.kioku.design.KiokuMark
-import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
-import io.github.dejitarunoseireinoapuri.kioku.design.KiokuWordmark
 
 @Composable
-internal fun AccountLoadingScreen() {
+fun ContentLoadingScreen(
+    status: String,
+    tag: String = "content-loading",
+) {
     BoxWithConstraints(Modifier.fillMaxSize()) {
         val viewportHeight = maxHeight
         Column(
@@ -41,7 +41,7 @@ internal fun AccountLoadingScreen() {
                 .verticalScroll(rememberScrollState())
                 .heightIn(min = viewportHeight)
                 .padding(horizontal = KiokuSpacing.Large, vertical = KiokuSpacing.LoadingVertical)
-                .testTag("account-loading")
+                .testTag(tag)
                 .semantics(mergeDescendants = true) {
                     liveRegion = LiveRegionMode.Polite
                     progressBarRangeInfo = ProgressBarRangeInfo.Indeterminate
@@ -51,7 +51,7 @@ internal fun AccountLoadingScreen() {
         ) {
             LoadingMark()
             Column(Modifier.padding(top = KiokuSpacing.Large)) { KiokuWordmark(32.sp) }
-            LoadingStatusText(Modifier.padding(top = KiokuSpacing.Medium))
+            LoadingStatusText(status, Modifier.padding(top = KiokuSpacing.Medium))
         }
     }
 }

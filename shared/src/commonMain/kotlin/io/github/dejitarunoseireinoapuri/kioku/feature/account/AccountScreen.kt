@@ -15,12 +15,14 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import io.github.dejitarunoseireinoapuri.kioku.design.ActionButton
+import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingScreen
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuMark
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuWordmark
 import io.github.dejitarunoseireinoapuri.kioku.domain.AccountIssue
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.account_denied
+import io.github.dejitarunoseireinoapuri.kioku.resources.account_loading
 import io.github.dejitarunoseireinoapuri.kioku.resources.account_setup
 import io.github.dejitarunoseireinoapuri.kioku.resources.account_unavailable
 import io.github.dejitarunoseireinoapuri.kioku.resources.retry
@@ -42,11 +44,15 @@ fun AccountScreen(
     }
     when (state) {
         AccountState.Loading -> {
-            AccountLoadingScreen()
+            ContentLoadingScreen(stringResource(Res.string.account_loading), tag = "account-loading")
         }
 
         is AccountState.SignedOut -> {
-            if (state.busy) AccountLoadingScreen() else LoginScreen(state.issue, onSignIn)
+            if (state.busy) {
+                ContentLoadingScreen(stringResource(Res.string.account_loading), tag = "account-loading")
+            } else {
+                LoginScreen(state.issue, onSignIn)
+            }
         }
 
         is AccountState.Blocked -> {

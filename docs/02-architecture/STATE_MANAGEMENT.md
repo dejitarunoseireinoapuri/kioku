@@ -9,7 +9,7 @@ Estado inmutable y observable mediante `StateFlow`; `MutableStateFlow` privado. 
 
 Coroutines estructuradas; cancelación propagada; listeners desechados con su scope. Los efectos de navegación/anuncio no transportan hechos duraderos. Una rotación no debe reenviar la misma mutación ni duplicar una petición de pago.
 
-Una operación de servidor muestra procesamiento en el contexto que la inició. Puede bloquear la mutación incompatible; no ocultar controles esenciales para detener audio ni presentar un blur obligatorio durante una grabación. Se adopta de Wonderdrop preservar la pantalla y no navegar por un éxito supuesto; su overlay de regalos no se copia literalmente.
+Una operación de servidor mantiene el contexto que la inició. Por petición posterior del propietario, las esperas reales de captura/aclaración, recuperación, consulta, fuente y configuración muestran el mismo loading de marca del acceso con texto contextual. La capa conserva compuesto el árbol de navegación y sus ámbitos de ViewModels: no se alterna entre loading y contenido destruyendo el contexto. Retira foco/teclado y bloquea interacción y semántica del contenido tapado; el resultado real termina la espera, también si falla. No añade temporizadores ni duplica operaciones. No ocultar controles esenciales para detener audio ni mostrar esta espera durante una grabación. Se adopta de Wonderdrop preservar la pantalla y no navegar por un éxito supuesto; su overlay de regalos no se copia literalmente.
 
 Cerrar sesión o cambiar identidad limpia contenido privado, cachés de recuperación y reproducción. Al volver a primer plano, revalidar sesión y datos de servidor sin pisar texto aún no enviado. No restaurar memoria desde caché local como si fuera una lectura autorizada nueva.
 

@@ -13,6 +13,7 @@ import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import io.github.dejitarunoseireinoapuri.kioku.domain.AnswerStatus
+import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureIssue
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemorySource
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryCommand
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryOutcome
@@ -52,16 +53,35 @@ class QueryNavigationTest {
         queries.read = { source.await() }
         send("¿Qué película quiero ver?")
         visible("Buscando en tu memoria...")
+        compose.onNodeWithTag("content-loading").assertIsDisplayed()
+        compose.onNodeWithTag("text-composer").assertDoesNotExist()
         response.complete(queries.reply())
         visible("Quieres ver la película ficticia Loto.")
         compose.onNodeWithText("Ver texto original 1 · 2026-11-13").performScrollTo().performClick()
         visible("Cargando texto original...")
+        compose.onNodeWithTag("content-loading").assertIsDisplayed()
         source.complete(MemorySource("fixture-query-source", "Quiero ver la película ficticia Loto.", "2026-11-13"))
         visible("Quiero ver la película ficticia Loto.")
         compose.onNodeWithContentDescription("Volver").performClick()
         visible("Quieres ver la película ficticia Loto.")
         assertEquals(1, queries.commands.size)
         assertEquals(1, queries.sourceReads)
+    }
+
+    @Test
+    fun failedQueryDismissesLoadingAndAllowsAnotherQuestion() {
+        val response = CompletableDeferred<QueryOutcome>()
+        queries.answer = { response.await() }
+        send("¿Qué película quiero ver?")
+        visible("Buscando en tu memoria...")
+        response.complete(QueryOutcome.Failed(CaptureIssue.Unavailable))
+        compose.waitUntil(5000) { compose.onNodeWithTag("text-composer").isDisplayed() }
+        compose.onNodeWithTag("content-loading").assertDoesNotExist()
+        compose.onNodeWithText("Recuerdo guardado").assertDoesNotExist()
+        queries.answer = { queries.reply() }
+        send("¿Qué película tengo pendiente?")
+        visible("Quieres ver la película ficticia Loto.")
+        assertEquals(2, queries.commands.size)
     }
 
     @Test
@@ -105,7 +125,7 @@ class QueryNavigationTest {
 
     private fun visible(text: String) {
         compose.waitUntil(5000) { compose.onAllNodesWithText(text).fetchSemanticsNodes().isNotEmpty() }
-        compose.onNodeWithText(text).performScrollTo()
+        if (!compose.onNodeWithText(text).isDisplayed()) compose.onNodeWithText(text).performScrollTo()
         compose.waitUntil(5000) { compose.onNodeWithText(text).isDisplayed() }
         compose.onNodeWithText(text).assertIsDisplayed()
     }
