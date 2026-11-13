@@ -134,7 +134,7 @@ Los rótulos superiores son **«Que no se pierda»** y **«Tira del hilo»**; lo
 
 Las capturas de login/carga Android de este documento también reflejan ahora JetBrains Mono; las láminas originales de Stitch conservan la tipografía histórica y son referencias de composición.
 
-## Alternativas de acceso a Ajustes · Pendientes de elección
+## Alternativas de acceso a Ajustes · C elegida
 
 El propietario rechaza también el engranaje enmarcado y solicita modelos en Stitch. Se preparan tres direcciones sobre la misma cabecera actual, sin cambiar la navegación ni el resto de la app:
 
@@ -152,4 +152,14 @@ Se consultaron la autoridad visual, la propuesta anterior y la definición de te
 
 Se refinó la composición para reducir huecos, retirar una afirmación de conformidad no demostrada, mantener el rótulo coral actual sin decoración añadida y separar las etiquetas de columna que se solapaban. La comparación incluye reposo y una muestra de foco/pulsación; el marco coral de esa muestra no forma parte del estado normal.
 
-Se comprobó que la nueva lámina aparece en el canvas y que los recursos HTML/imagen de las once pantallas previamente visibles no cambian. No se cambia código, APK, icono instalado o configuración remota. Queda pendiente elegir una alternativa antes de implementarla. Esta entrega se valida con el comprobador documental y revisión visual; no requiere nuevas pruebas nativas ni llamadas OpenAI.
+Se comprobó que la nueva lámina aparece en el canvas y que los recursos HTML/imagen de las once pantallas previamente visibles no cambian. La entrega original de propuestas solo modificó documentación y Stitch, validándose con el comprobador documental y revisión visual.
+
+### Aplicación de C · `[ ajustes ]`
+
+El propietario elige C para Android e iOS. Se sustituye el engranaje por la etiqueta en JetBrains Mono de 13 sp, con altura táctil mínima de 48 dp y ancho según contenido. No hay fondo ni marco en reposo; conserva el efecto nativo de pulsación y muestra superficie elevada/borde coral al recibir foco de teclado. La semántica anuncia «Ajustes» como botón, sin leer los corchetes. Abre la misma pantalla directamente y conserva intención y borrador al volver; no introduce un menú.
+
+Se inspeccionó la comparación mediante Stitch MCP y se consultaron fuente visual, especificaciones, convenciones y calidad. El cambio está en el componente Compose compartido, sin modificar sesión, API, clave, servidor o icono de instalación. Las propuestas A/B y el título histórico de la lámina se conservan como comparación.
+
+Comprobaciones de esta aplicación: APK y APK de tests compilados; `mobileCheck` correcto (formato, arquitectura, Detekt, 17 host tests y Android Lint). **13/13 instrumentados** correctos en API 36 con texto al 200 %, incluidos acceso a Ajustes, ida/vuelta con borrador y actualización de configuración. Se revisó la cabecera en capturas a texto normal y al 200 %, sin solapamiento ni recorte en ese emulador. El caso de captura pasó en ambos tamaños y se restauró la configuración de texto original. La [captura actual de inicio](../assets/branding/kioku-home-android.png) refleja C. Documentación comprobada con `tooling/check-docs.ps1`.
+
+El código compartido aplica también a iOS; compilación/firma y revisión del nuevo build en Xcode/VoiceOver siguen pendientes. Las pruebas usan cuenta ficticia y no acreditan Google/atestación reales ni accesibilidad completa. No se realizaron llamadas OpenAI ni despliegues para este cambio.

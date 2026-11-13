@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Kioku</string>
     <string name="settings">Ajustes</string>
+    <string name="settings_action">[ ajustes ]</string>
     <string name="back">Volver</string>
     <string name="tell_heading">Que no se pierda</string>
     <string name="ask_heading">Tira del hilo</string>

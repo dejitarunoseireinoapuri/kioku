@@ -1,31 +1,54 @@
 package io.github.dejitarunoseireinoapuri.kioku.design
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
-import io.github.dejitarunoseireinoapuri.kioku.resources.icon_settings
 import io.github.dejitarunoseireinoapuri.kioku.resources.settings
-import org.jetbrains.compose.resources.painterResource
+import io.github.dejitarunoseireinoapuri.kioku.resources.settings_action
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SettingsAction(onClick: () -> Unit) {
-    OutlinedButton(
+    val interaction = remember { MutableInteractionSource() }
+    val focused by interaction.collectIsFocusedAsState()
+    val label = stringResource(Res.string.settings)
+    TextButton(
         onClick = onClick,
-        modifier = Modifier.size(KiokuSpacing.TouchTarget),
+        modifier =
+            Modifier
+                .sizeIn(minWidth = KiokuSpacing.TouchTarget, minHeight = KiokuSpacing.TouchTarget)
+                .border(1.dp, if (focused) KiokuColors.Coral else Color.Transparent, MaterialTheme.shapes.small)
+                .semantics { contentDescription = label },
         shape = MaterialTheme.shapes.small,
-        border = BorderStroke(1.dp, KiokuColors.Rule),
-        colors = ButtonDefaults.outlinedButtonColors(backgroundColor = KiokuColors.Surface),
-        contentPadding = PaddingValues(12.dp),
+        colors =
+            ButtonDefaults.textButtonColors(
+                backgroundColor = if (focused) KiokuColors.Raised else Color.Transparent,
+                contentColor = KiokuColors.Text,
+            ),
+        contentPadding = PaddingValues(horizontal = 8.dp),
+        interactionSource = interaction,
     ) {
-        Icon(painterResource(Res.drawable.icon_settings), stringResource(Res.string.settings), tint = KiokuColors.Text)
+        Text(
+            stringResource(Res.string.settings_action),
+            modifier = Modifier.clearAndSetSemantics {},
+            style = MaterialTheme.typography.body2.copy(fontSize = 13.sp),
+        )
     }
 }
