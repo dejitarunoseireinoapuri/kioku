@@ -4,6 +4,8 @@ K1 continúa en `codex/k1-account-configuration`, sobre `4ff1f0e`. La [primera e
 
 Código y pruebas de esta integración: commit `0ec1fdd`. Esta anotación posterior solo fija la referencia; no modifica el código comprobado o desplegado. Revisión final del servidor: secreto habilitado, revisión 1 y documento canónico limitado a los cinco campos de metadatos definidos, sin leer su payload.
 
+Confirmación posterior del propietario (2026-11-13): «en iOS también funciona», tras preparar la prueba en su Mac. Se registra como funcionamiento comunicado por él; no se recibieron comandos/resultados de compilación, versión de Xcode, firma o detalles de App Attest. No atribuir a esta estación Windows una compilación iOS ni dar por comprobados todos sus recorridos. Antes de continuar con memoria solicita una nueva marca en Stitch y posterior mejora del login, según [propuesta visual](../01-functional/BRAND_PROPOSAL.md).
+
 ## Comportamiento implementado
 
 Entrada con Google según su marca oficial y estética B aprobada; sin configuración nativa válida, la app permanece desconectada. Firebase Auth no autoriza por sí solo: se espera la respuesta del servidor. Ajustes muestra sesión y estado seguro de IA. Comprobar configuración conserva el borrador; cerrar sesión retira conversación, navegación y fuentes anteriores. Generaciones, cancelación y ViewModelStores propios impiden reutilizar resultados privados de otra composición/sesión.
@@ -26,7 +28,7 @@ Actualización del propietario el 13 de noviembre de 2026: acepta mantener por a
 | Backend | TypeScript strict y Prettier superados; 14 pruebas unitarias y 13 Auth/Functions/Firestore en emuladores, incluidos propietario, CAS de credenciales, corrupción/denegaciones y 111 rechazos de reglas. Servidor remoto activo y rechazos HTTP reales comprobados |
 | Android real | Propietario confirma acceso, IA configurada tras actualizar Ajustes y recuperación al cerrar/reabrir. Servidor confirma HTTP 200 con Auth y App Check válidos. Posteriormente comunica funcionamiento en otro Android; cierre explícito real pendiente |
 | Dependencias | Ejecución: cero avisos conocidos. Herramientas: cero altos/críticos y 13 moderados; detalle a continuación |
-| iOS | Fuente/Xcode/SPM preparados; sin compilación, firma, resolución SPM o recorrido en Mac/dispositivo |
+| iOS | Propietario confirma que funciona desde su prueba con Mac; comandos, versión Xcode, firma/SPM/App Attest y recorridos detallados no aportados para esta evidencia. No se ejecutó build iOS en Windows |
 
 Comandos reproducibles desde raíz: [guía móvil](../07-development/DEVELOPMENT_GUIDE.md) y [backend](../../backend/README.md). Logs ignorados: `k1-mobile-session-scope.log`, `k1-shared-final.log`, `k1-android-session-scope.log`, `k1-final-packaging.log`, `k1-native-config-build-2.log`, `k1-credential-patched-emulators.log` y `k1-android-final-scoped.log`, bajo `local-data/`. No contienen evidencia pública de recuerdos reales.
 
@@ -66,6 +68,6 @@ La revisión automática rechazó inicialmente un script que mezclaba activació
 
 ## Pendientes de cierre
 
-El propietario confirma que funciona en otro móvil Android; es una comprobación comunicada por él, sin inspección independiente de esa segunda instalación. No valida recuerdos compartidos, todavía no implementados. Quedan revocación/cierre explícito reales y otra identidad remota; reemplazo real de clave (cubierto con dobles/emuladores, sin rotación innecesaria de producción); compilación/atestación/recorrido iOS en Mac. El propietario dispone de Mac con Xcode; esa validación todavía no se ha ejecutado. Mantener seguimiento de dependencias y texto genérico de error de acceso. No confundir estas pruebas Android con las pendientes.
+El propietario confirma funcionamiento en otro Android y posteriormente en iOS; son comprobaciones comunicadas por él, sin inspección independiente de esas instalaciones. No validan recuerdos compartidos, todavía no implementados. Quedan revocación/cierre explícito reales y otra identidad remota; reemplazo real de clave (cubierto con dobles/emuladores, sin rotación innecesaria de producción); recopilar evidencia de compilación/atestación/recorridos iOS desde Mac. Mantener seguimiento de dependencias y texto genérico de error de acceso. No confundir estas confirmaciones con una validación de todos los casos.
 
 Documentos consultados: AGENTS, convenciones/calidad, arquitectura/estado, ADR-004/007/008, contrato/datos/almacenamiento, seguridad, guía, plan/limitaciones, matriz y referencia Stitch. [Plan operativo](../08-deployment/K1_REMOTE_SETUP.md).

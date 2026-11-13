@@ -9,7 +9,7 @@ Una fuente por tipo de decisión. Los documentos son el contrato previsto; el es
 | Vocabulario | [GLOSSARY](00-product/GLOSSARY.md) | Significado de los conceptos |
 | Funciones | [FUNCTIONAL_REQUIREMENTS](01-functional/FUNCTIONAL_REQUIREMENTS.md) | Requisitos FR y aceptación AC |
 | Recorridos | [USE_CASES](01-functional/USE_CASES.md), [FLOWS](01-functional/FLOWS.md) | Casos UC y transiciones |
-| Pantallas | [SCREEN_SPECIFICATIONS](01-functional/SCREEN_SPECIFICATIONS.md), [STITCH_SOURCE](01-functional/STITCH_SOURCE.md) | Comportamiento visual y referencia |
+| Pantallas | [SCREEN_SPECIFICATIONS](01-functional/SCREEN_SPECIFICATIONS.md), [STITCH_SOURCE](01-functional/STITCH_SOURCE.md), [BRAND_PROPOSAL](01-functional/BRAND_PROPOSAL.md) | Comportamiento visual, referencia y marca en revisión |
 | Arquitectura | [ARCHITECTURE](02-architecture/ARCHITECTURE.md), [ADR](02-architecture/ADR/README.md) | Límites y decisiones |
 | Datos | [DATA_MODEL](03-data/DATA_MODEL.md) | Información canónica y derivada |
 | API | [API_CONTRACT](04-api/API_CONTRACT.md) | Operaciones y garantías externas |
