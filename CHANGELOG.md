@@ -2,6 +2,8 @@
 
 ## Sin versión publicada · 2026-11-13
 
+- Ajuste visual solicitado tras revisar K0: bloque inicial sin hueco fijo, botón «Contar» y etiquetas en una línea; los controles se apilan si el texto ampliado no cabe en paralelo.
+
 - K0 en rama independiente: base KMP/Compose, hosts Android/iOS, Koin, navegación tipada y recursos con estética B revisada en Stitch.
 - Vista previa explícita con ocho estados ficticios, acceso a fuente/corrección y ajustes; no conecta credenciales, proveedores, almacenamiento personal o micrófono.
 - Catálogo, wrapper verificado y lockfiles; JDK 21, SDK/target Android 37 y mínimo 29; mínimo iOS 16 y targets arm64.

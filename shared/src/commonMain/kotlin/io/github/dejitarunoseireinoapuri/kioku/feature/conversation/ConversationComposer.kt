@@ -3,6 +3,7 @@ package io.github.dejitarunoseireinoapuri.kioku.feature.conversation
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,10 +22,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import io.github.dejitarunoseireinoapuri.kioku.design.IconAction
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
@@ -36,7 +39,7 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.clarify_placeholder
 import io.github.dejitarunoseireinoapuri.kioku.resources.icon_send
 import io.github.dejitarunoseireinoapuri.kioku.resources.offline_composer
 import io.github.dejitarunoseireinoapuri.kioku.resources.send
-import io.github.dejitarunoseireinoapuri.kioku.resources.tell
+import io.github.dejitarunoseireinoapuri.kioku.resources.tell_action
 import io.github.dejitarunoseireinoapuri.kioku.resources.tell_placeholder
 import io.github.dejitarunoseireinoapuri.kioku.resources.voice_hint
 import org.jetbrains.compose.resources.StringResource
@@ -52,15 +55,39 @@ fun ConversationComposer(
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Divider(color = KiokuColors.Rule)
             TextComposer(state, enabled, onEvent)
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                IntentButton(MemoryIntent.Tell, state.intent, enabled, Modifier.weight(1f), onEvent)
-                IntentButton(MemoryIntent.Ask, state.intent, enabled, Modifier.weight(1f), onEvent)
-            }
+            IntentControls(state.intent, enabled, onEvent)
             Text(
                 stringResource(Res.string.voice_hint),
                 style = MaterialTheme.typography.body2,
                 color = KiokuColors.Secondary,
             )
+        }
+    }
+}
+
+@Composable
+private fun IntentControls(
+    selected: MemoryIntent,
+    enabled: Boolean,
+    onEvent: (ConversationEvent) -> Unit,
+) {
+    val measurer = rememberTextMeasurer()
+    val tell = stringResource(Res.string.tell_action)
+    val ask = stringResource(Res.string.ask)
+    val style = MaterialTheme.typography.button
+    val width = maxOf(measurer.measure(tell, style).size.width, measurer.measure(ask, style).size.width)
+    val minimumButtonWidth = with(LocalDensity.current) { width.toDp() } + KiokuSpacing.Medium * 2
+    BoxWithConstraints(Modifier.fillMaxWidth()) {
+        if ((maxWidth - 12.dp) / 2 >= minimumButtonWidth) {
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                IntentButton(MemoryIntent.Tell, selected, enabled, Modifier.weight(1f), onEvent)
+                IntentButton(MemoryIntent.Ask, selected, enabled, Modifier.weight(1f), onEvent)
+            }
+        } else {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                IntentButton(MemoryIntent.Tell, selected, enabled, Modifier.fillMaxWidth(), onEvent)
+                IntentButton(MemoryIntent.Ask, selected, enabled, Modifier.fillMaxWidth(), onEvent)
+            }
         }
     }
 }
@@ -128,7 +155,13 @@ private fun IntentButton(
                 backgroundColor = if (active) KiokuColors.Coral else KiokuColors.Surface,
                 contentColor = if (active) KiokuColors.Background else KiokuColors.Secondary,
             ),
-    ) { Text(stringResource(if (intent == MemoryIntent.Tell) Res.string.tell else Res.string.ask)) }
+    ) {
+        Text(
+            stringResource(if (intent == MemoryIntent.Tell) Res.string.tell_action else Res.string.ask),
+            maxLines = 1,
+            softWrap = false,
+        )
+    }
 }
 
 private fun placeholder(state: ConversationState): StringResource =

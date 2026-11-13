@@ -2,8 +2,6 @@ package io.github.dejitarunoseireinoapuri.kioku.feature.conversation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -88,7 +86,6 @@ fun ConversationBody(
 
 @Composable
 private fun ReadyContent(intent: MemoryIntent) {
-    Spacer(Modifier.height(72.dp))
     val tell = intent == MemoryIntent.Tell
     Text(stringResource(if (tell) Res.string.tell else Res.string.ask), color = KiokuColors.Coral)
     ScreenHeading(stringResource(if (tell) Res.string.ready_title else Res.string.ask_title))

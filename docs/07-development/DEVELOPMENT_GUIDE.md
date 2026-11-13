@@ -18,7 +18,7 @@ Comprueba enlaces locales, mapa de fuentes, índice ADR y marcadores de secreto/
 
 ## Base móvil K0
 
-Versiones fijadas en `gradle/libs.versions.toml`, wrapper y lockfiles; justificación en [ADR-006](../02-architecture/ADR/ADR-006-k0-toolchain.md). Instalar JDK 21 y Android SDK 37/Build Tools 36.0.0; configurar `JAVA_HOME` y `ANDROID_HOME` o `local.properties` privado. Node 24 ejecuta la comprobación de arquitectura. `tooling/mobile.ps1` acepta esos valores; si faltan, puede localizar un JDK 21 local bajo `.setup/k0-jdk`, o el JBR/SDK estándar de Android Studio. JDK 25 no es el entorno validado de los controles de formato.
+Versiones fijadas en `gradle/libs.versions.toml`, wrapper y lockfiles; justificación en [ADR-006](../02-architecture/ADR/ADR-006-k0-toolchain.md). Instalar JDK 21 y Android SDK 37/Build Tools 36.0.0; configurar `JAVA_HOME` y `ANDROID_HOME` o `local.properties` privado. Node 24 ejecuta la comprobación de arquitectura. `tooling/mobile.ps1` acepta esos valores; si faltan, puede localizar un JDK 21 local bajo `.setup/k0-jdk`, o el JBR/SDK estándar de Android Studio. Las tareas de formato fijan su JavaLauncher a JDK 21 mediante toolchains, también si Android Studio elige JDK 25 para el daemon. No se reescribe automáticamente la configuración local del IDE.
 
 Desde Windows, sin cambiar rutas personales en el código:
 

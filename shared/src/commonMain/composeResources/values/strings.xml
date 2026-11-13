@@ -4,6 +4,7 @@
     <string name="back">Volver</string>
     <string name="preview_banner">Vista previa · datos ficticios</string>
     <string name="tell">Contar un recuerdo</string>
+    <string name="tell_action">Contar</string>
     <string name="ask">Preguntar</string>
     <string name="ready_title">Cuéntame algo que quieras recordar.</string>
     <string name="ready_hint">Una idea, algo que te pasó, una fecha…</string>

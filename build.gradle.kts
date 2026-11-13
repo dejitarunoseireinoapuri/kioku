@@ -2,6 +2,7 @@ import dev.detekt.gradle.Detekt
 import org.gradle.api.attributes.Bundling
 
 plugins {
+    id("jvm-toolchains")
     alias(libs.plugins.kotlin.multiplatform) apply false
     alias(libs.plugins.kotlin.compose) apply false
     alias(libs.plugins.kotlin.serialization) apply false
@@ -24,6 +25,10 @@ tasks.named<Detekt>("detekt") {
 
 val ktlint by configurations.creating {
     attributes { attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.SHADOWED)) }
+}
+
+tasks.withType<JavaExec>().configureEach {
+    javaLauncher.set(javaToolchains.launcherFor { languageVersion.set(JavaLanguageVersion.of(21)) })
 }
 dependencies { ktlint("com.pinterest.ktlint:ktlint-cli:${libs.versions.ktlint.get()}") }
 
