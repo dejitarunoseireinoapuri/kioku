@@ -1,5 +1,6 @@
 import dev.detekt.gradle.Detekt
 import org.gradle.api.attributes.Bundling
+import org.gradle.process.CommandLineArgumentProvider
 
 plugins {
     id("jvm-toolchains")
@@ -32,19 +33,31 @@ tasks.withType<JavaExec>().configureEach {
 }
 dependencies { ktlint("com.pinterest.ktlint:ktlint-cli:${libs.versions.ktlint.get()}") }
 
+val kotlinFormatFiles =
+    files(
+        fileTree("shared/src") { include("**/*.kt") },
+        fileTree("androidApp/src") { include("**/*.kt") },
+        allprojects.map { it.buildFile }.filter { it.extension == "kts" },
+        file("settings.gradle.kts"),
+    )
+
+val kotlinFormatArguments =
+    CommandLineArgumentProvider { kotlinFormatFiles.files.sortedBy { it.path }.map { it.absolutePath } }
+
 tasks.register<JavaExec>("formatCheck") {
     group = "verification"
     description = "Checks hand-written Kotlin and Gradle Kotlin scripts."
     classpath = ktlint
     mainClass.set("com.pinterest.ktlint.Main")
-    args("shared/src/**/*.kt", "androidApp/src/**/*.kt", "*.gradle.kts", "*/build.gradle.kts")
+    argumentProviders.add(kotlinFormatArguments)
 }
 
 tasks.register<JavaExec>("formatKotlin") {
     group = "formatting"
     classpath = ktlint
     mainClass.set("com.pinterest.ktlint.Main")
-    args("--format", "shared/src/**/*.kt", "androidApp/src/**/*.kt", "*.gradle.kts", "*/build.gradle.kts")
+    args("--format")
+    argumentProviders.add(kotlinFormatArguments)
 }
 
 allprojects {

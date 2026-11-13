@@ -8,7 +8,7 @@ Los casos de integración de la app siguen **pendientes de validación**. TEST-E
 | TEST-BASE-001 | Base K0; tema y navegación con fixtures | [Evidencia K0](../09-planning/K0_VALIDATION.md): 9 host tests y 6 instrumentados Android superados; iOS pendiente. No valida memoria, voz o conectividad reales |
 | TEST-AUTH-001 | FR-001, AC-001 | Misma cuenta recupera datos en segunda instalación; otra identidad no |
 | TEST-AUTH-002 | Primera frontera K1, AC-001, BR-010 | Auth/Functions/Firestore locales: Google verificado, propietario vinculado, denegaciones y concurrencia; [evidencia K1](../09-planning/K1_VALIDATION.md). No sustituye dos instalaciones nativas |
-| TEST-KEY-001 | FR-002, AC-002 | Alta/reemplazo inválido/válido; secreto ausente de lecturas, memoria y logs |
+| TEST-KEY-001 | FR-002, AC-002 | Alta/reemplazo inválido/válido; secreto ausente de lecturas, memoria y logs. CAS/rechazo/commit incierto probados en unidades/emuladores K1; alta real pendiente |
 | TEST-AUD-001 | FR-003, FR-004, AC-003, AC-004 | Hold/release/lock, silencio, Terminar una vez y Cancelar |
 | TEST-AUD-002 | AC-015 | Permiso denegado, interrupción, respuesta tardía y cambio de sesión |
 | TEST-AUD-003 | FR-014, AC-014 | Audio temporal privado y limpieza; sin reproductor de archivo original |
@@ -21,7 +21,7 @@ Los casos de integración de la app siguen **pendientes de validación**. TEST-E
 | TEST-UI-001 | FR-013, AC-013 | Sin red no captura ni consulta ni encola; reintento no declara falso éxito |
 | TEST-UI-002 | AC-003, AC-004 | Teclado, insets, texto grande y gestos Android/iOS |
 | TEST-UI-003 | AC-009 | TalkBack/VoiceOver, foco, lectura accesible y entrada alternativa |
-| TEST-UI-004 | AC-015 | Cambio de cuenta/cancelación invalidan resultados privados viejos |
+| TEST-UI-004 | AC-015 | Cambio de cuenta/cancelación invalidan resultados privados viejos: host/Android con dobles en [K1](../09-planning/K1_INTEGRATION_VALIDATION.md); SDK real/iOS pendientes |
 | TEST-SEC-001 | BR-010, AC-001 | Lecturas y consultas con referencias ajenas denegadas |
 | TEST-SEC-002 | BR-010 | Escritura canónica/índice/recibo/secreto directa denegada |
 | TEST-SEC-003 | AC-016 | Recuerdo malicioso no ejecuta instrucciones ni obtiene claves |

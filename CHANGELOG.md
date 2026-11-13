@@ -2,8 +2,14 @@
 
 ## Sin versión publicada · 2026-11-13
 
+- Integración K1: entrada Google con marca oficial, estado de cuenta/IA, cancelación y limpieza de conversación al cerrar sesión; adaptadores Android compilados e iOS preparados, pendiente Mac.
+- Frontera administrativa de clave: validar, crear versión privada y activar referencia por revisión, preservando la anterior ante rechazo/conflicto e incertidumbre. Alta real personal completada (revisión 1); sin clave en APK o Git.
+- Registros Android/iOS y Google habilitado; propietario activa Blaze. Firestore/Secret Manager en Bélgica, reglas deny-by-default, identidad con roles concretos aprobados y Play Integrity. Callable activo; Google/App Check, estado de IA y recuperación de sesión confirmados en Android real. Corregidos permiso HTTP inicial y número público de proyecto necesario para atestación.
+- Formato móvil acotado a archivos de código/Gradle, evitando recorrer descargas y dependencias; APK r2 y `mobileCheck` final superados.
+- 17 host tests, nueve instrumentados Android con fixtures, 14 unitarios backend y 13 de emuladores superados. gRPC de pruebas corregido; cero avisos altos, 13 moderados de herramientas pendientes y cero en dependencias de ejecución. K1 continúa abierta.
+
 - K1 iniciada en rama aparte: primera frontera backend local para Google personal, UID vinculado, revocación/deshabilitación, admisión transaccional y respuesta segura sin secretos. Reglas Firestore deniegan acceso directo cliente; pruebas Auth/Functions/Firestore solo con fixtures en emuladores.
-- Decisión del propietario: un único proyecto Firebase de producción, Bélgica; ningún proyecto remoto de desarrollo. No se modifica producción ni se consume OpenAI. Alta móvil, clave, App Check remoto y despliegue pendientes; K1 no cerrada.
+- Decisión del propietario: un único proyecto Firebase de producción, Bélgica; ningún proyecto remoto de desarrollo. La entrega inicial fue solo local; la integración posterior anterior detalla los recursos reales autorizados. Sin inferencia OpenAI nueva; K1 no cerrada.
 
 - Ajuste visual solicitado tras revisar K0: bloque inicial sin hueco fijo, botón «Explicar» (preferencia final del propietario) y etiquetas en una línea; los controles se apilan si el texto ampliado no cabe en paralelo.
 

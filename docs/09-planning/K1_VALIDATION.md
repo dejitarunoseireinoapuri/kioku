@@ -1,5 +1,7 @@
 # K1 · Primera frontera de cuenta · 2026-11-13
 
+**Evidencia histórica del commit `e3d5c26`.** El estado posterior de integración nativa, recursos remotos y dependencias se registra en [K1_INTEGRATION_VALIDATION](K1_INTEGRATION_VALIDATION.md); las limitaciones siguientes describen aquella primera entrega.
+
 Estado: **K1 en curso**, primera entrega local comprobada en `codex/k1-account-configuration`, basada en K0 `322fa55`. No cierra UC-001/UC-002, la configuración OpenAI o el recorrido móvil. [ADR-007](../02-architecture/ADR/ADR-007-private-google-account.md) recoge las decisiones del propietario.
 
 Código y pruebas validados: commit `e3d5c26`. Esta anotación posterior solo fija la referencia de evidencia; no cambia la implementación comprobada.

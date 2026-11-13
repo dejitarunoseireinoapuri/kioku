@@ -20,7 +20,7 @@ Solo categoría, operación, duración, código seguro y referencia opaca de sop
 
 No integrar Analytics, informes de crash o grabación de sesiones automáticamente. Si se proponen, revisar filtrado y retención reales antes de activarlos.
 
-Primera frontera K1: proveedor Google y correo verificado permitido, UID vinculado transaccionalmente, tokens revalidados con comprobación de revocación/deshabilitación y 30 lecturas de configuración por minuto. Reglas Firestore deniegan lectura/escritura directa incluso al propietario. El punto de entrada actual se limita a `demo-kioku-local` y direcciones exactas de emuladores antes de inicializar SDKs: la ausencia de App Check solo es local. No está preparado para producción ni procesa claves; [evidencia y pendientes](../09-planning/K1_VALIDATION.md).
+K1: proveedor Google y correo verificado permitido, UID vinculado transaccionalmente, tokens revalidados con comprobación de revocación/deshabilitación y 30 lecturas de configuración por minuto. Reglas Firestore deniegan lectura/escritura directa incluso al propietario. Local exige proyecto/direcciones exactos de emuladores; producción exige proyecto/configuración completos y App Check con IDs exactos. No hay fallback entre ambos. Alta de clave solo administrativa: valida destino fijo y candidato, Secret Manager inmutable y activación por revisión, sin endpoint móvil de escritura. El callable de configuración no accede al valor del secreto ni su identidad administra credenciales. [Evidencia y límites reales](../09-planning/K1_INTEGRATION_VALIDATION.md), incluidos acceso/atestación/iOS pendientes.
 
 ## Incidentes
 

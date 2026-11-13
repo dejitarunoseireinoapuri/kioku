@@ -26,11 +26,15 @@ export interface VerifiedIdentity {
 export interface Configuration {
   readonly apiVersion: 1;
   readonly account: "authorized";
-  readonly ai: "notConfigured";
-  readonly revision: 0;
+  readonly ai: "notConfigured" | "ready";
+  readonly revision: number;
 }
 
 export interface OwnerAccess {
   /** Atomically binds the first permitted Google identity; never rebinds it. */
   admit(uid: string, nowMs: number): Promise<void>;
+}
+
+export interface CredentialStatus {
+  read(uid: string): Promise<Pick<Configuration, "ai" | "revision">>;
 }

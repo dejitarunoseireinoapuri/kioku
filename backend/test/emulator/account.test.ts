@@ -8,6 +8,7 @@ import { adminApp, callConfiguration, db, signInGoogle } from "./helpers.js";
 const owner = db.doc("privateConfiguration/owner");
 beforeEach(async () => {
   await owner.delete();
+  await db.doc("privateConfiguration/ai").delete();
   const response = await fetch(
     "http://127.0.0.1:9097/emulator/v1/projects/demo-kioku-local/accounts",
     {

@@ -2,6 +2,7 @@ import { z } from "zod";
 import { AccountError } from "./contracts.js";
 import type {
   Configuration,
+  CredentialStatus,
   OwnerAccess,
   VerifiedIdentity,
 } from "./contracts.js";
@@ -13,14 +14,23 @@ export class GetConfiguration {
   readonly #allowedEmail: string;
   readonly #access: OwnerAccess;
   readonly #now: () => number;
+  readonly #credentials: CredentialStatus;
 
-  constructor(allowedEmail: string, access: OwnerAccess, now: () => number) {
+  constructor(
+    allowedEmail: string,
+    access: OwnerAccess,
+    now: () => number,
+    credentials: CredentialStatus = {
+      read: async () => ({ ai: "notConfigured", revision: 0 }),
+    },
+  ) {
     if (!z.email().safeParse(allowedEmail).success) {
       throw new AccountError("failed-precondition");
     }
     this.#allowedEmail = allowedEmail.toLowerCase();
     this.#access = access;
     this.#now = now;
+    this.#credentials = credentials;
   }
 
   async execute(
@@ -41,12 +51,11 @@ export class GetConfiguration {
       throw new AccountError("invalid-argument");
     }
     await this.#access.admit(identity.uid, this.#now());
-    // This K1 slice deliberately has no credential write endpoint or secret.
+    const credential = await this.#credentials.read(identity.uid);
     return {
       apiVersion: 1,
       account: "authorized",
-      ai: "notConfigured",
-      revision: 0,
+      ...credential,
     };
   }
 }

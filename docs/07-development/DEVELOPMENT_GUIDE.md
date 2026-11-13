@@ -28,7 +28,7 @@ pwsh -NoProfile -File tooling/mobile.ps1 mobileCheck
 pwsh -NoProfile -File tooling/mobile.ps1 :androidApp:assembleDebugAndroidTest
 ```
 
-`mobileCheck` ejecuta `formatCheck` (ktlint), `checkArchitecture`, `detekt`, `:shared:testAndroidHostTest` y `:androidApp:lintDebug`. `formatKotlin` aplica formato; no desactiva comprobaciones. La compilación de APK de tests no ejecuta instrumentación. Ejecutarla sobre un emulador elegido mediante AndroidJUnitRunner o `:androidApp:connectedDebugAndroidTest`; este último puede alcanzar todos los dispositivos conectados y debe acotarse antes si hay instalaciones personales. El APK de desarrollo usa sufijo `.dev`, mantiene firma debug local y no se publica en tiendas.
+`mobileCheck` ejecuta `formatCheck` (ktlint), `checkArchitecture`, `detekt`, `:shared:testAndroidHostTest` y `:androidApp:lintDebug`. `formatKotlin` aplica formato; no desactiva comprobaciones. Ambas tareas de formato reciben archivos explícitos de `shared/src`, `androidApp/src`, scripts de proyectos y settings; no globs raíz que recorran descargas/dependencias. La compilación de APK de tests no ejecuta instrumentación. Ejecutarla sobre un emulador elegido mediante AndroidJUnitRunner o `:androidApp:connectedDebugAndroidTest`; este último puede alcanzar todos los dispositivos conectados y debe acotarse antes si hay instalaciones personales. El APK de desarrollo usa sufijo `.dev`, mantiene firma debug local y no se publica en tiendas.
 
 La primera resolución autorizada usa `--write-locks`; las verificaciones normales no deben reescribir los lockfiles para ocultar cambios. No ejecutar `clean`, borrar cachés, reinstalar o restablecer dispositivos como solución rutinaria. Si Gradle pide versiones nuevas, revisar compatibilidad antes de modificar el catálogo. Detekt es 2.0.0-alpha.6: estado preliminar explícito, política numérica conservada y sin baseline.
 
@@ -48,7 +48,13 @@ Los ejemplos se recorren desde Ajustes → Recorridos de ejemplo. Los ocho estad
 
 Para M0 se ha fijado Node 24 (mínimo 24.12), ejecución TypeScript nativa y comprobación con TypeScript 5.9.3. Comandos: `node tooling/m0.mjs install`, `check`, `test` y `format:check`. La [guía M0](../../prototypes/memory/README.md) detalla las evaluaciones reales con `--live`, credenciales privadas y límite de consumo; las pruebas locales no llaman a OpenAI. El runtime de Functions se decidirá al preparar ese despliegue, sin deducir compatibilidad del prototipo.
 
-Node/TypeScript mantienen sus lockfiles independientes: M0 en raíz, primera frontera K1 en `backend/`. Las verificaciones Auth/Functions/Firestore locales se describen en la [guía backend](../../backend/README.md) y su [evidencia K1](../09-planning/K1_VALIDATION.md). No prueban Google móvil, App Check remoto ni producción.
+Node/TypeScript mantienen sus lockfiles independientes: M0 en raíz, K1 en `backend/`. Las verificaciones Auth/Functions/Firestore locales se describen en la [guía backend](../../backend/README.md). La [evidencia de integración K1](../09-planning/K1_INTEGRATION_VALIDATION.md) distingue recursos remotos y tests locales; estos no prueban Google móvil, App Check remoto o iOS.
+
+## Configuración nativa K1
+
+Android carga exclusivamente la configuración pública local indicada en `androidApp/firebase.local.properties.example`; nunca una clave OpenAI. Apple necesita el plist privado, `Firebase.local.xcconfig` y Mac. El build Apple verifica sus campos antes de copiarlo al producto mediante `tooling/prepare-ios-firebase.mjs`; probar su validador con `node --test tooling/native-firebase-public.test.mjs`. Firebase Apple/Google Sign-In se resuelven con SPM en Mac; no dar por resueltos sus paquetes desde Windows.
+
+Sin configuración válida se muestra acceso no disponible. La entrada actual exige autorización remota antes de abrir los ejemplos de conversación. No hay bypass de acceso real por una identidad de fixture. Registros, atestación y alta administrativa del secreto: [configuración remota](../08-deployment/K1_REMOTE_SETUP.md). No ejecutar despliegues o alta de secretos por seguir esta guía: requieren autorización explícita, conservada cuando ya se concedió para la misma acción/destino.
 
 ## Trabajo por caso de uso
 

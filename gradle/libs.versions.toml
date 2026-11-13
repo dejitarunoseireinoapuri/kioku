@@ -10,6 +10,9 @@ koin = "4.2.0"
 activity = "1.12.4"
 detekt = "2.0.0-alpha.6"
 ktlint = "1.8.0"
+firebase = "35.2.0"
+credentials = "1.6.0"
+googleid = "1.2.1"
 
 [libraries]
 compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose" }
@@ -21,6 +24,14 @@ lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-vie
 lifecycle-runtime = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 navigation-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "navigation" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
+firebase-auth = { module = "com.google.firebase:firebase-auth" }
+firebase-functions = { module = "com.google.firebase:firebase-functions" }
+firebase-appcheck = { module = "com.google.firebase:firebase-appcheck-playintegrity" }
+credentials-core = { module = "androidx.credentials:credentials", version.ref = "credentials" }
+credentials-google = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
+googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
 serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
 koin-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }

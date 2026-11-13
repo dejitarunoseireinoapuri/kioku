@@ -1,6 +1,6 @@
 # Contrato backend previsto · v1
 
-Operaciones autenticadas, versionadas y ligadas al UID verificado; el cliente no elige otro propietario. App Check y límites de abuso se aplican al entorno remoto antes de distribuir. Este contrato es la base a implementar, no endpoints remotos disponibles.
+Operaciones autenticadas, versionadas y ligadas al UID verificado; el cliente no elige otro propietario. App Check y límites de abuso se aplican al entorno remoto antes de distribuir. La tabla es el contrato previsto; solo `getConfiguration` tiene implementación/despliegue K1, con validación real todavía incompleta según la evidencia.
 
 | Operación | Entrada relevante | Resultado |
 | --- | --- | --- |
@@ -17,7 +17,9 @@ Operaciones autenticadas, versionadas y ligadas al UID verificado; el cliente no
 
 ## Garantías
 
-Primera frontera K1 implementada **solo en emuladores**: `getConfiguration` acepta exactamente `{apiVersion: 1}`, cuerpo HTTP de hasta 256 bytes y cabecera de autorización de hasta 8192 caracteres. Requiere cuenta Google permitida con correo verificado y UID vinculado; revalida tokens revocados/usuarios deshabilitados. Responde `{apiVersion: 1, account: authorized, ai: notConfigured, revision: 0}`. Límite transaccional: 30 llamadas autorizadas por minuto del reloj servidor. No implementa aún `setAiCredential`, lectura de una configuración existente, App Check remoto ni ningún endpoint remoto. El resto de esta tabla continúa como contrato previsto.
+Frontera K1 comprobada en emuladores, función remota activa: `getConfiguration` acepta exactamente `{apiVersion: 1}`, cuerpo HTTP de hasta 256 bytes y cabecera de autorización de hasta 8192 caracteres. Requiere Google permitido, correo verificado y UID vinculado; revalida tokens revocados/usuarios deshabilitados. Responde `{apiVersion: 1, account: authorized, ai: ready | notConfigured, revision: entero no negativo}`. Sin referencia de credencial, devuelve `notConfigured`, revisión 0. Límite: 30 lecturas autorizadas por minuto de servidor. Producción exige entorno/proyecto exactos y App Check de las apps registradas. Estado de transporte HTTP y recorrido positivo real en la [evidencia K1](../09-planning/K1_INTEGRATION_VALIDATION.md); no se deducen de los tests locales. El resto de operaciones sigue previsto.
+
+La activación administrativa de clave no es `setAiCredential`: una herramienta privada valida la credencial, crea versión inmutable en Secret Manager y activa solo su referencia con revisión esperada. No acepta identidades arbitrarias de un cliente móvil ni devuelve la clave. Una clave rechazada preserva el estado anterior. `ready` refleja la última activación validada; no verifica saldo ni garantiza que la clave no se haya revocado después. El formulario/endpoint móvil previsto sigue pendiente, según ADR-008.
 
 Errores seguros de esta frontera: `unauthenticated`, `permission-denied`, `invalid-argument`, `resource-exhausted`, `failed-precondition` y `unavailable`. No devuelve detalles crudos de Firebase ni los campos rechazados. Se reautoriza cada lectura; una sesión cliente no concede acceso permanente.
 

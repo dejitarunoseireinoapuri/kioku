@@ -6,6 +6,7 @@
 - Referencia estética: B, carbón `#14171B`, coral `#FF674F`, IBM Plex Sans y esquinas de 4–8 dp. Mono para contador/fechas cuando aporte claridad.
 - Las ocho vistas finales están ordenadas por recorrido; los borradores sustituidos 06/07 están ocultos.
 - Ajuste del propietario de 2026-11-13: subir el bloque inicial eliminando el hueco fijo y usar «Explicar» como etiqueta del botón, en lugar de la propuesta «Contar». Se aplica en la app conservando la estética B. Las maquetas de Stitch no se han editado; esa diferencia está autorizada por la petición posterior del propietario.
+- Acceso K1 aprobado el mismo día: pantalla sencilla Kioku/explicación/Google y cuenta/estado IA en Ajustes. La referencia 01 se inspeccionó de nuevo; se mantiene B y el botón sigue la [marca oficial Google](https://developers.google.com/identity/branding-guidelines), con G y tipografía originales. No se editó Stitch ni se presentó esa pantalla nueva como una maqueta existente.
 
 Antes de implementar o cambiar materialmente una pantalla, inspeccionar las vistas pertinentes mediante Stitch MCP. Usar lectura salvo petición de modificar el diseño. Documentar una indisponibilidad real; no fingir que se inspeccionó.
 

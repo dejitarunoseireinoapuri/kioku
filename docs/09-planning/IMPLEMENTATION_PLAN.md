@@ -91,7 +91,7 @@ Cuarta iteración y decisión actual: [evidencia v4](../../prototypes/memory/evi
 
 ## K1 · Cuenta y configuración privada
 
-**Estado actual:** iniciada en `codex/k1-account-configuration`, desde K0. El propietario elige Google, una cuenta permitida, único proyecto remoto de producción y Bélgica (`europe-west1`). [ADR-007](../02-architecture/ADR/ADR-007-private-google-account.md) y [evidencia K1](K1_VALIDATION.md) delimitan esta primera entrega: acceso/configuración mínima en emuladores y reglas deny-by-default. No conecta aún el móvil, guarda claves ni habilita producción. El entorno demo local no crea un segundo proyecto Firebase.
+**Estado actual:** en `codex/k1-account-configuration`, desde K0. Google, una cuenta permitida, único proyecto remoto de producción y Bélgica (`europe-west1`). [ADR-008](../02-architecture/ADR/ADR-008-k1-native-access-and-credentials.md) y [evidencia actual](K1_INTEGRATION_VALIDATION.md): adaptadores nativos, aislamiento de sesión y alta administrativa personal. Android real confirma acceso, recuperación de sesión e IA configurada; servidor verifica Google/App Check y clave activada en Secret Manager. Apps/Google/Blaze, Firestore, identidad de ejecución y Play Integrity configurados con autorización. Servidor activo. iOS/Mac, segundo dispositivo, cierre/revocación reales y alcance de UC-002 siguen pendientes. No cierra K1 ni inicia memoria K2. La [primera evidencia](K1_VALIDATION.md) queda histórica. El demo local no crea otro proyecto remoto.
 
 **Resultado:** acceder con la cuenta autorizada, recuperar sesión e introducir o sustituir la clave propia de OpenAI. Cubre UC-001 y UC-002.
 

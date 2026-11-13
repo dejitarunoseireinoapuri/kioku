@@ -1,4 +1,5 @@
 import SwiftUI
+import GoogleSignIn
 
 @main
 struct KiokuApp: App {
@@ -6,6 +7,7 @@ struct KiokuApp: App {
         WindowGroup {
             ContentView()
                 .preferredColorScheme(.dark)
+                .onOpenURL { _ = GIDSignIn.sharedInstance.handle($0) }
         }
     }
 }

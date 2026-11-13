@@ -31,10 +31,12 @@ fun ActionButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     primary: Boolean = false,
+    enabled: Boolean = true,
 ) {
     val target = modifier.sizeIn(minHeight = KiokuSpacing.TouchTarget)
     if (primary) {
         Button(
+            enabled = enabled,
             onClick = onClick,
             modifier = target,
             elevation = null,
@@ -42,6 +44,7 @@ fun ActionButton(
         ) { Text(label) }
     } else {
         OutlinedButton(
+            enabled = enabled,
             onClick = onClick,
             modifier = target,
             border = BorderStroke(1.dp, KiokuColors.Rule),

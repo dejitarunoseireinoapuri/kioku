@@ -1,5 +1,6 @@
 package io.github.dejitarunoseireinoapuri.kioku
 
+import androidx.activity.ComponentActivity
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.assertIsDisplayed
@@ -16,12 +17,19 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.text.TextLayoutResult
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 class NavigationTest {
     @get:Rule
-    val compose = createAndroidComposeRule<MainActivity>()
+    val compose = createAndroidComposeRule<ComponentActivity>()
+    private val account = FixtureAccount()
+
+    @Before
+    fun openSyntheticConversation() {
+        compose.setContent { KiokuApp(account) }
+    }
 
     @Test
     fun headingReceivesReadableForegroundFromRootTheme() {

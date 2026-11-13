@@ -42,7 +42,10 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.viewmodel)
         }
-        commonTest.dependencies { implementation(kotlin("test")) }
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+            implementation(libs.coroutines.test)
+        }
     }
 }
 

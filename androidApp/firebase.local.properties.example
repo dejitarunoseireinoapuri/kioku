@@ -1,0 +1,5 @@
+# Native Firebase public configuration only. Never put an OpenAI key here.
+# Copy to firebase.local.properties after registering this app in kioku-9454f.
+firebaseAppId=
+firebaseApiKey=
+googleWebClientId=

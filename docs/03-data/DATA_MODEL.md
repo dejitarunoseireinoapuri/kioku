@@ -19,9 +19,11 @@ Los historiales de preguntas son contexto de sesión por defecto; conservarlos c
 
 El backend define el esquema físico e índices con tests de aislamiento, revisión y borrado antes de desplegar. No leer primero un índice global para filtrar propietarios después.
 
-## Primera frontera local K1
+## Frontera privada K1
 
-Solo en emuladores, `privateConfiguration/owner` contiene exactamente `uid`, `enabled`, `window` (minuto de servidor) y `count` (1–30). Es una vinculación privada inmutable de propietario, más admisión acotada, no un perfil ni una credencial. No guarda correo, texto, clave, token o historial. El servidor vincula el primer UID autorizado mediante transacción; otra identidad o una configuración inválida falla cerrada. El cliente tiene lectura/escritura denegadas, incluida esta ruta. No hay esquema de memoria ni almacenamiento de secretos desplegados.
+`privateConfiguration/owner` contiene exactamente `uid`, `enabled`, `window` (minuto de servidor) y `count` (1–30). Es una vinculación privada inmutable de propietario, más admisión acotada, no un perfil ni una credencial. No guarda correo, texto, clave, token o historial. El servidor vincula el primer UID autorizado mediante transacción; otra identidad o una configuración inválida falla cerrada. El cliente tiene lectura/escritura denegadas, incluida esta ruta. Probado con fixtures y propietario real vinculado tras Google/App Check válidos.
+
+La integración K1 añade `privateConfiguration/ai`: `uid`, `revision` positiva, `secretVersion` numérica de `kioku-openai-owner` en el proyecto permitido, `operationId` UUID y `updatedAtMs` de servidor. Lectura/activación reautorizan propietario habilitado. La revisión se cambia mediante transacción, sin llamadas OpenAI o Secret Manager dentro del callback. No guarda clave, prefijo, hash o copia del payload. El cliente recibe únicamente estado y revisión; las reglas deniegan acceso directo a ambos documentos. Pruebas ficticias de CAS/rechazos y alta real personal completada, revisión 1.
 
 ## Precisión y procedencia en M0 v2
 

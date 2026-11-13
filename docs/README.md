@@ -17,9 +17,9 @@ Una fuente por tipo de decisión. Los documentos son el contrato previsto; el es
 | Calidad | [CODE_QUALITY](06-quality/CODE_QUALITY.md), [TEST_MATRIX](06-quality/TEST_MATRIX.md) | Criterios y evidencia |
 | Desarrollo | [DEVELOPMENT_GUIDE](07-development/DEVELOPMENT_GUIDE.md) | Trabajo y comprobación local |
 | Gobierno | [DOCUMENTATION_POLICY](07-development/DOCUMENTATION_POLICY.md), [REFERENCE_ADAPTATION](07-development/REFERENCE_ADAPTATION.md) | Mantenimiento y adaptación de Wonderdrop |
-| Despliegue | [ENVIRONMENTS](08-deployment/ENVIRONMENTS.md) | Separación de recursos y operación |
+| Despliegue | [ENVIRONMENTS](08-deployment/ENVIRONMENTS.md), [K1_REMOTE_SETUP](08-deployment/K1_REMOTE_SETUP.md) | Recursos, configuración privada y operación |
 | Plan | [IMPLEMENTATION_PLAN](09-planning/IMPLEMENTATION_PLAN.md) | Secuencia de entrega |
 | Evidencia móvil | [K0_VALIDATION](09-planning/K0_VALIDATION.md) | Compilación/pruebas Android y límites iOS de la base K0 |
-| Evidencia de cuenta | [K1_VALIDATION](09-planning/K1_VALIDATION.md) | Primera frontera backend local y pendientes de integración de K1 |
+| Evidencia de cuenta | [K1_VALIDATION](09-planning/K1_VALIDATION.md), [K1_INTEGRATION_VALIDATION](09-planning/K1_INTEGRATION_VALIDATION.md) | Primera frontera histórica e integración nativa/remota actual |
 
 Las conversaciones previas y los prototipos históricos sirven de evidencia de decisiones, no de segunda especificación vigente.

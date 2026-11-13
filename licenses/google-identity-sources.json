@@ -1,0 +1,14 @@
+[
+  {
+    "source": "https://developers.google.com/static/identity/images/g-logo.png",
+    "file": "shared/src/commonMain/composeResources/drawable/google_g.png",
+    "sha256": "d1ce9c2af0b10a7333abc99bc706f9a6a199e5b65bf3e3009624f076b8638e6a",
+    "usage": "Unmodified Google G; Sign in with Google branding guidelines, 2026-07-07 revision"
+  },
+  {
+    "source": "https://raw.githubusercontent.com/google/fonts/d4eb04601981780781306966afb88e876652bab4/ofl/googlesans/GoogleSans%5BGRAD%2Copsz%2Cwght%5D.ttf",
+    "file": "shared/src/commonMain/composeResources/font/google_sans.ttf",
+    "sha256": "d0a87d835a944b8b40d0e82a5651bb59ab97b936a2aeed5946eb57e7b2a3a90a",
+    "usage": "Google Sans Medium for the Google button only; OFL and trademarks bundled"
+  }
+]

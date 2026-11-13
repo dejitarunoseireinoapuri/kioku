@@ -6,19 +6,16 @@ import { AccountError } from "./account/contracts.js";
 import { GetConfiguration } from "./account/get-configuration.js";
 import { FirestoreOwnerAccess } from "./firebase/owner-access.js";
 import { verifyIdentity } from "./firebase/verify-identity.js";
-import {
-  LOCAL_EMAIL,
-  LOCAL_PROJECT,
-  requireLocalRuntime,
-} from "./firebase/runtime.js";
+import { FirestoreCredentialStore } from "./firebase/credential-store.js";
+import { backendRuntime } from "./firebase/runtime.js";
 
-// A local-only entry point fails before initializing SDKs in any remote project.
-requireLocalRuntime(process.env);
-const app = initializeApp({ projectId: LOCAL_PROJECT });
+const runtime = backendRuntime(process.env);
+const app = initializeApp({ projectId: runtime.projectId });
 const configuration = new GetConfiguration(
-  LOCAL_EMAIL,
+  runtime.allowedEmail,
   new FirestoreOwnerAccess(getFirestore(app)),
   Date.now,
+  new FirestoreCredentialStore(getFirestore(app)),
 );
 
 export const getConfiguration = onCall(
@@ -27,10 +24,23 @@ export const getConfiguration = onCall(
     timeoutSeconds: 15,
     maxInstances: 1,
     concurrency: 8,
+    enforceAppCheck: runtime.production,
+    ...(runtime.production
+      ? {
+          serviceAccount: "kioku-runtime@kioku-9454f.iam.gserviceaccount.com",
+          invoker: "public",
+        }
+      : {}),
   },
   async (request) => {
     try {
       if (!request.auth) throw new AccountError("unauthenticated");
+      if (
+        runtime.production &&
+        !runtime.appIds.includes(request.app?.appId ?? "")
+      ) {
+        throw new AccountError("permission-denied");
+      }
       if (request.rawRequest.rawBody.byteLength > 256) {
         throw new AccountError("invalid-argument");
       }

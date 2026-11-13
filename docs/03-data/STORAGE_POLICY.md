@@ -19,3 +19,7 @@ Un tombstone no incluye el contenido borrado. El éxito comunicado debe correspo
 ## Recuperación
 
 La misma identidad recupera la memoria guardada en otro móvil. No equivale a restaurar un estado anterior ni a recuperar un borrado. Backups/PITR y retenciones exactas quedan pendientes de configuración y deben respetar las revocaciones al restaurar.
+
+## Credencial K1
+
+La sesión nativa queda a cargo de Firebase Auth; un marcador local no secreto distingue autenticación aceptada/cancelada. No se persiste una clave OpenAI en el móvil. La propuesta administrativa usa Secret Manager con versiones inmutables y una referencia privada vigente. Un candidato rechazado antes de validar no se sube. Un conflicto confirmado puede descartar su candidato nuevo; un commit incierto conserva la versión hasta resolverlo mediante metadatos, para no destruir una credencial activa. Versiones anteriores/huérfanas requieren revisión y retirada explícita; no hay limpieza automática desplegada. Nada de ello representa historial de recuerdos ni permite recuperar contenido olvidado.
