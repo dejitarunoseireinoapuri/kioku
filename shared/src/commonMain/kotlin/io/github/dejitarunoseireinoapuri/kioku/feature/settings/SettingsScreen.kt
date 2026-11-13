@@ -7,26 +7,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.dejitarunoseireinoapuri.kioku.design.ActionButton
 import io.github.dejitarunoseireinoapuri.kioku.design.IconAction
-import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
-import io.github.dejitarunoseireinoapuri.kioku.design.Panel
 import io.github.dejitarunoseireinoapuri.kioku.design.ScreenHeading
 import io.github.dejitarunoseireinoapuri.kioku.design.TopBar
-import io.github.dejitarunoseireinoapuri.kioku.domain.AiConfiguration
 import io.github.dejitarunoseireinoapuri.kioku.feature.account.AccountState
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.PreviewScenario
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
-import io.github.dejitarunoseireinoapuri.kioku.resources.account_label
-import io.github.dejitarunoseireinoapuri.kioku.resources.account_loading
-import io.github.dejitarunoseireinoapuri.kioku.resources.ai_missing
-import io.github.dejitarunoseireinoapuri.kioku.resources.ai_ready
 import io.github.dejitarunoseireinoapuri.kioku.resources.back
-import io.github.dejitarunoseireinoapuri.kioku.resources.check_ai
 import io.github.dejitarunoseireinoapuri.kioku.resources.example_answer
 import io.github.dejitarunoseireinoapuri.kioku.resources.example_clarification
 import io.github.dejitarunoseireinoapuri.kioku.resources.example_corrected
@@ -37,10 +28,7 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.example_ready
 import io.github.dejitarunoseireinoapuri.kioku.resources.example_saved
 import io.github.dejitarunoseireinoapuri.kioku.resources.examples_heading
 import io.github.dejitarunoseireinoapuri.kioku.resources.icon_back
-import io.github.dejitarunoseireinoapuri.kioku.resources.key_on_server
 import io.github.dejitarunoseireinoapuri.kioku.resources.settings
-import io.github.dejitarunoseireinoapuri.kioku.resources.settings_description
-import io.github.dejitarunoseireinoapuri.kioku.resources.sign_out
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -58,19 +46,9 @@ fun SettingsScreen(
         })
         Column(
             Modifier.verticalScroll(rememberScrollState()).padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            Text(stringResource(Res.string.settings_description), color = KiokuColors.Secondary)
-            Panel {
-                Text(stringResource(Res.string.account_label))
-                Text(account.session.label)
-                val aiLabel = if (account.ai == AiConfiguration.Ready) Res.string.ai_ready else Res.string.ai_missing
-                Text(stringResource(aiLabel), color = KiokuColors.Secondary)
-                Text(stringResource(Res.string.key_on_server), color = KiokuColors.Secondary)
-                if (account.refreshing) Text(stringResource(Res.string.account_loading))
-                ActionButton(stringResource(Res.string.check_ai), onRefresh, enabled = !account.refreshing)
-                ActionButton(stringResource(Res.string.sign_out), onSignOut)
-            }
+            AccountSettings(account, onRefresh, onSignOut)
             ScreenHeading(stringResource(Res.string.examples_heading))
             PreviewScenario.entries.forEach { scenario ->
                 ActionButton(stringResource(scenarioLabel(scenario)), { onExample(scenario) }, Modifier.fillMaxWidth())

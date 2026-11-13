@@ -3,7 +3,7 @@
 - Proyecto vigente: **Kioku · B — memoria conversacional**.
 - ID: `11852641719392883248`.
 - URL: https://stitch.google.com/projects/11852641719392883248
-- Referencia estética: B, carbón `#14171B`, coral `#FF674F`, IBM Plex Sans y esquinas de 4–8 dp. Mono para contador/fechas cuando aporte claridad.
+- Referencia estética: B, carbón `#14171B`, coral `#FF674F` y esquinas de 4–8 dp. Por petición posterior del propietario, la fuente actual de la app es **JetBrains Mono**, con pesos normal/seminegrita/negrita. Google conserva Google Sans y su G oficial; el kanji sigue siendo el contorno Noto Sans JP 900 elegido. Las maquetas históricas usan IBM Plex.
 - Las ocho vistas finales están ordenadas por recorrido; los borradores sustituidos 06/07 están ocultos.
 - Ajuste del propietario de 2026-11-13: subir el bloque inicial eliminando el hueco fijo y usar «Explicar» como etiqueta del botón, en lugar de la propuesta «Contar». Se aplica en la app conservando la estética B. Las maquetas de Stitch no se han editado; esa diferencia está autorizada por la petición posterior del propietario.
 - Acceso K1 aprobado el mismo día: pantalla sencilla Kioku/explicación/Google y cuenta/estado IA en Ajustes. La referencia 01 se inspeccionó de nuevo; se mantiene B y el botón sigue la [marca oficial Google](https://developers.google.com/identity/branding-guidelines), con G y tipografía originales. No se editó Stitch ni se presentó esa pantalla nueva como una maqueta existente.
@@ -13,6 +13,8 @@
 Antes de implementar o cambiar materialmente una pantalla, inspeccionar las vistas pertinentes mediante Stitch MCP. Usar lectura salvo petición de modificar el diseño. Documentar una indisponibilidad real; no fingir que se inspeccionó.
 
 Ajuste posterior del propietario: la carga usa **«Entrando...»**, con aparición cíclica de los tres puntos y ancho reservado completo para que «Entrando» no se desplace. Reduce Motion los deja estáticos y la semántica anuncia el estado una sola vez. La vista 00b se inspeccionó de nuevo mediante MCP; conserva el texto anterior como referencia histórica y no se ha editado Stitch para este ajuste de la app.
+
+Refinamiento posterior de la app: Google usa `MaterialTheme.shapes.small`, igual que Explicar/Preguntar; el acceso a Ajustes tiene marco carbón y radio compartido. Cuenta e IA se separan por jerarquía y divisores, con identidad/estado en negrita y «Actualizar estado». Los rótulos superiores pasan a «Que no se pierda» / «Tira del hilo», sin cambiar las etiquetas funcionales de los botones. Se retiran avisos globales de vista previa/datos ficticios y el subtítulo de instalación; los mensajes de acciones aún no conectadas siguen siendo veraces. Se inspeccionaron mediante MCP las vistas 01 y 00 y el inventario del proyecto: no existe una maqueta de Ajustes; esa pantalla se refinó a partir del código y la estética vigente por petición expresa. No se modificó Stitch.
 
 La autoridad funcional está en [FUNCTIONAL_REQUIREMENTS](FUNCTIONAL_REQUIREMENTS.md), no en HTML generado. El nombre es **Kioku**, aunque capturas previas muestren «Memoria». No copiar artefactos de regalos, audio archivado, categorías obligatorias ni navegación de propuestas descartadas.
 

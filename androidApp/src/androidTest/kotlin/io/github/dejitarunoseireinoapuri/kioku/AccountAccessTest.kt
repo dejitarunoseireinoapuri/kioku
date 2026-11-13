@@ -1,13 +1,11 @@
 package io.github.dejitarunoseireinoapuri.kioku
 
-import android.graphics.Bitmap
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.captureToImage
@@ -19,7 +17,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
-import androidx.test.platform.app.InstrumentationRegistry
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuTheme
 import io.github.dejitarunoseireinoapuri.kioku.domain.AccountIssue
 import io.github.dejitarunoseireinoapuri.kioku.domain.AccountRepository
@@ -35,7 +32,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
-import java.io.File
 
 class AccountAccessTest {
     @get:Rule
@@ -103,12 +99,7 @@ class AccountAccessTest {
     }
 
     private fun captureAccess(name: String) {
-        if (InstrumentationRegistry.getArguments().getString("brandScreenshots") != "true") return
-        val image = compose.onRoot().captureToImage().asAndroidBitmap()
-        File(compose.activity.getExternalFilesDir(null), name).outputStream().use {
-            image.compress(Bitmap.CompressFormat.PNG, 100, it)
-        }
-        image.recycle()
+        captureBrandScreen(compose.activity, name) { compose.onRoot().captureToImage() }
     }
 }
 

@@ -6,10 +6,12 @@ import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performSemanticsAction
@@ -44,6 +46,7 @@ class NavigationTest {
                 .layoutInput.style.color
                 .toArgb(),
         )
+        captureBrandScreen(compose.activity, "kioku-home-technical.png") { compose.onRoot().captureToImage() }
     }
 
     @Test
@@ -51,6 +54,7 @@ class NavigationTest {
         compose.onNodeWithTag("intent-Ask").performClick()
         compose.onNodeWithTag("text-composer").performTextInput("Una pregunta de prueba")
         compose.onNodeWithContentDescription("Ajustes").performClick()
+        captureBrandScreen(compose.activity, "kioku-settings-technical.png") { compose.onRoot().captureToImage() }
         compose.onNodeWithContentDescription("Volver").performClick()
         compose.onNodeWithTag("intent-Ask").assertIsSelected()
         compose.onNodeWithText("Una pregunta de prueba").assertIsDisplayed()

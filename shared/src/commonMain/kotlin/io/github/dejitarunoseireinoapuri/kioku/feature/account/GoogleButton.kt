@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -45,7 +45,7 @@ fun GoogleButton(
         onClick = onClick,
         enabled = enabled,
         modifier = modifier.sizeIn(minHeight = 52.dp),
-        shape = RoundedCornerShape(4.dp),
+        shape = MaterialTheme.shapes.small,
         colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Color.White, contentColor = GoogleBrand.Text),
         border = BorderStroke(1.dp, GoogleBrand.Border),
         contentPadding = PaddingValues(horizontal = insets.first.dp, vertical = 12.dp),

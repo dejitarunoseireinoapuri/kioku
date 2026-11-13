@@ -4,7 +4,7 @@
 <dict>
     <key>CFBundleURLTypes</key>
     <array><dict><key>CFBundleURLSchemes</key><array><string>$(GOOGLE_REVERSED_CLIENT_ID)</string></array></dict></array>
-    <key>CFBundleDisplayName</key><string>Kioku · Vista previa</string>
+    <key>CFBundleDisplayName</key><string>Kioku</string>
     <key>CFBundleExecutable</key><string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key><string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
     <key>CFBundleInfoDictionaryVersion</key><string>6.0</string>

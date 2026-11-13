@@ -106,3 +106,30 @@ No se ejecutan llamadas OpenAI, despliegues o pruebas de backend para este cambi
 ## Historial descartado: Pliegue
 
 Monograma latino K en dos trazos, rechazado por el propietario el 2026-11-13. Pantalla refinada `c76dd0bdd5a94cb3a3cb20c10b731d7a`; primer borrador `a41897762ed640d2b1b6cd69f640a15f`. Se conservan la [lámina PNG](../assets/branding/kioku-pliegue-proposal.png) y el [símbolo SVG](../assets/branding/kioku-pliegue-proposal.svg) como historial, sin integrarlos en la app.
+
+## Refinamiento posterior: tipografía, controles y Ajustes
+
+Por petición del propietario, **JetBrains Mono 2.304** sustituye a IBM Plex en toda la interfaz Compose, incluidos wordmark, encabezados, cuerpo y contador. Se empaquetan pesos 400, 600 y 700, con ligaduras de código desactivadas en los estilos de texto para preservar puntuación y los tres puntos animados. Google conserva Google Sans Medium y su G oficial; el logo 憶 sigue siendo el vector elegido, no un carácter de la nueva fuente. Referencias primarias: [JetBrains Mono](https://www.jetbrains.com/lp/mono/) y [release 2.304](https://github.com/JetBrains/JetBrainsMono/releases/tag/v2.304). Procedencia/hash en [fuentes](../../licenses/jetbrains-mono-sources.json), licencia [OFL](../../licenses/jetbrains-mono-OFL.txt).
+
+Los cuatro recursos IBM anteriores se retiran del paquete. Se detectaron copias obsoletas conservadas por las tareas incrementales de assets; se eliminaron exclusivamente esos archivos conocidos dentro de las carpetas de compilación verificadas y se regeneró el APK, sin limpiar cachés globales ni instalaciones. Inspección del APK final: solo Google Sans y los tres pesos JetBrains Mono en recursos de fuente. Los registros/licencias IBM anteriores se conservan como historial de las entregas descritas arriba.
+
+Google comparte ahora `MaterialTheme.shapes.small` (6 dp) con Explicar/Preguntar, conservando altura, marca y tipografía oficiales. El acceso superior a Ajustes utiliza un marco de superficie carbón, borde discreto y la misma esquina. Se revisaron tanto ese control como la acción anteriormente llamada «Comprobar configuración», ya que no existía una etiqueta literal «Configurar».
+
+Ajustes deja de encerrar toda la información en un panel único. Presenta «TU CUENTA», identidad en negrita y proveedor Google; después, divisor e «INTELIGENCIA», estado en negrita, «Actualizar estado» con icono de recarga y «Cerrar sesión» secundario. El estado se actualiza con la operación remota existente; no se añade una llamada OpenAI ni se interpreta la configuración como prueba de inferencia. El estado ocupado indica «Actualizando...» y sigue evitando doble envío. Si falta la clave, la indicación remite al ordenador según el recorrido ya aprobado.
+
+Los rótulos superiores son **«Que no se pierda»** y **«Tira del hilo»**; los botones mantienen Explicar/Preguntar y la intención funcional no cambia. Se retiran los banners globales de conversación/fuente y el sufijo «Vista previa» del nombre de instalación Android/iOS. Los recorridos siguen identificados como ejemplos y los mensajes contextuales de guardar/audio/borrar explican que esas operaciones aún no están conectadas: no se introducen confirmaciones de guardado real.
+
+### Revisión y comprobaciones
+
+- Se consultaron convenciones, calidad, pantallas y fuente visual. Se inspeccionaron mediante Stitch MCP las pantallas de inicio/login y el inventario; no existe maqueta de Ajustes. Se conservó la estética B y se aplicó la instrucción posterior del propietario sin editar Stitch.
+- Revisión de diseño: jerarquía de cuenta/IA, texto en negrita, menos avisos repetidos y esquinas compartidas. Revisión de ingeniería: sin cambios en autorización, almacenamiento, clave o ViewModel; sin descarga de fuentes en ejecución. Revisión de producto: los ejemplos y las acciones todavía no implementadas no simulan memoria real.
+- La primera captura de Ajustes coincidía con el efecto nativo de pulsación de Actualizar. Se revisó y sustituyó por una captura del estado en reposo al abrir Ajustes; no se eliminó el feedback nativo para maquillar la imagen.
+- APK y APK de tests compilados. `mobileCheck` correcto: formato, arquitectura, Detekt, 17 host tests y Android Lint. Suite conjunta de **13/13 instrumentados** correcta en API 36 con texto del sistema al 200 %, manteniendo aserciones de acceso, configuración, borrador, navegación y fuentes. Se actualizaron únicamente las expectativas de copy afectadas.
+- Casos de captura repetidos a texto normal con identidades ficticias; configuración de letra del emulador restaurada. Los tests no prueban Google/atestación remotos ni rendimiento de la IA. El emulador de esta sesión se cierra al terminar, sin modificar los móviles personales conectados.
+- Código compartido y nombre de instalación iOS actualizados; compilación, firma, VoiceOver y revisión visual del nuevo build en Xcode siguen pendientes. No se declara accesibilidad completa o fidelidad nativa Apple a partir de las capturas Android.
+
+| Inicio actual · Android | Ajustes actuales · Android |
+| --- | --- |
+| ![Inicio con JetBrains Mono](../assets/branding/kioku-home-android.png) | ![Cuenta y configuración](../assets/branding/kioku-settings-android.png) |
+
+Las capturas de login/carga Android de este documento también reflejan ahora JetBrains Mono; las láminas originales de Stitch conservan la tipografía histórica y son referencias de composición.

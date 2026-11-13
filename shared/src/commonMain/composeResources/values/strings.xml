@@ -2,8 +2,8 @@
     <string name="app_name">Kioku</string>
     <string name="settings">Ajustes</string>
     <string name="back">Volver</string>
-    <string name="preview_banner">Vista previa · datos ficticios</string>
-    <string name="tell">Contar un recuerdo</string>
+    <string name="tell_heading">Que no se pierda</string>
+    <string name="ask_heading">Tira del hilo</string>
     <string name="tell_action">Explicar</string>
     <string name="ask">Preguntar</string>
     <string name="ready_title">Cuéntame algo que quieras recordar.</string>
@@ -15,10 +15,9 @@
     <string name="clarify_placeholder">Escribe tu respuesta…</string>
     <string name="send">Enviar texto</string>
     <string name="voice_hint">La voz estará disponible en una próxima versión.</string>
-    <string name="text_preview_notice">En esta vista previa el texto no se envía ni se guarda. Puedes recorrer los ejemplos desde Ajustes.</string>
-    <string name="voice_preview_notice">Esta vista previa no utiliza el micrófono ni reproduce audio.</string>
-    <string name="forget_preview_notice">Esta vista previa no modifica ni borra recuerdos.</string>
-    <string name="settings_description">Estás probando la navegación y los estados con ejemplos ficticios. La memoria real todavía no está conectada.</string>
+    <string name="text_preview_notice">El guardado aún no está conectado. El texto sigue en el editor.</string>
+    <string name="voice_preview_notice">El micrófono y el audio todavía no están disponibles.</string>
+    <string name="forget_preview_notice">El borrado de recuerdos todavía no está conectado.</string>
     <string name="examples_heading">Recorridos de ejemplo</string>
     <string name="example_ready">01 · Listo para recordar</string>
     <string name="example_locked">02 · Grabación bloqueada</string>
@@ -65,8 +64,6 @@
     <string name="offline_composer">Sin conexión a internet</string>
     <string name="retry">Reintentar</string>
     <string name="read_answer">Escuchar respuesta</string>
-    <string name="account_label">Cuenta y configuración de IA</string>
-    <string name="account_pending">Todavía no están conectadas en esta vista previa.</string>
     <string name="google_continue">Continuar con Google</string>
     <string name="brand_wordmark">kioku</string>
     <string name="login_title">Cuéntalo hoy.\nRecuérdalo cuando quieras.</string>
@@ -78,8 +75,12 @@
     <string name="account_unavailable">No se ha podido comprobar el acceso. Revisa tu conexión y vuelve a intentarlo.</string>
     <string name="account_setup">El acceso todavía necesita configuración. No se ha iniciado sesión.</string>
     <string name="sign_out">Cerrar sesión</string>
-    <string name="ai_ready">IA configurada en el servidor</string>
-    <string name="check_ai">Comprobar configuración</string>
-    <string name="ai_missing">IA pendiente de configurar en el servidor</string>
-    <string name="key_on_server">La clave de OpenAI permanece en el servidor y no se muestra en la app.</string>
+    <string name="ai_ready">IA configurada</string>
+    <string name="check_ai">Actualizar estado</string>
+    <string name="ai_missing">IA sin configurar</string>
+    <string name="account_section">TU CUENTA</string>
+    <string name="account_provider">Sesión con Google</string>
+    <string name="ai_section">INTELIGENCIA</string>
+    <string name="key_setup_hint">Añade la clave desde tu ordenador.</string>
+    <string name="refreshing_configuration">Actualizando...</string>
 </resources>

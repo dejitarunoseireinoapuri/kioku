@@ -61,10 +61,10 @@ class AccountNavigationTest {
         compose.onNodeWithText("Continuar con Google").performClick()
         compose.onNodeWithTag("text-composer").performTextInput("Texto todavía no enviado")
         compose.onNodeWithContentDescription("Ajustes").performClick()
-        compose.onNodeWithText("IA pendiente de configurar en el servidor").assertIsDisplayed()
+        compose.onNodeWithText("IA sin configurar").assertIsDisplayed()
         account.configuration = ConfigurationResult.Loaded(AiConfiguration.Ready)
-        compose.onNodeWithText("Comprobar configuración").performClick()
-        compose.onNodeWithText("IA configurada en el servidor").assertIsDisplayed()
+        compose.onNodeWithText("Actualizar estado").performClick()
+        compose.onNodeWithText("IA configurada").assertIsDisplayed()
         compose.onNodeWithContentDescription("Volver").performClick()
         compose.onNodeWithText("Texto todavía no enviado").assertIsDisplayed()
     }

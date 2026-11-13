@@ -42,7 +42,7 @@ xcodebuild -project iosApp/iosApp.xcodeproj -scheme Kioku -configuration Debug \
 
 El esquema invoca `:shared:embedAndSignAppleFrameworkForXcode`; no son comandos ya superados en Windows. Revisar después tema, teclado/insets, navegación y VoiceOver en iOS. Para instalar en dispositivo se debe configurar identidad/firma propia; no copiar las de Wonderdrop. El catálogo incluye targets arm64, no un simulador Intel. `gradlew` debe conservar su bit ejecutable y LF.
 
-Los ejemplos se recorren desde Ajustes → Recorridos de ejemplo. Los ocho estados no son ocho destinos. La vista previa no guarda texto, no graba, no interpreta, no detecta realmente la red ni modifica fuentes. Los controles explican sus límites y el banner identifica los datos ficticios.
+Los ejemplos se recorren desde Ajustes → Recorridos de ejemplo. Los ocho estados no son ocho destinos. La conversación de esta fase no guarda texto, no graba, no interpreta, no detecta realmente la red ni modifica fuentes. El propietario pidió retirar el banner global y el subtítulo de vista previa del nombre instalado; las acciones todavía no conectadas mantienen mensajes contextuales veraces y los recorridos siguen identificados como ejemplos. No deducir memoria real del nuevo aspecto.
 
 ## Prototipo M0
 

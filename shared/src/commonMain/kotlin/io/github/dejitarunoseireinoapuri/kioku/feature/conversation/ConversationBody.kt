@@ -13,7 +13,7 @@ import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.Panel
 import io.github.dejitarunoseireinoapuri.kioku.design.ScreenHeading
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
-import io.github.dejitarunoseireinoapuri.kioku.resources.ask
+import io.github.dejitarunoseireinoapuri.kioku.resources.ask_heading
 import io.github.dejitarunoseireinoapuri.kioku.resources.ask_hint
 import io.github.dejitarunoseireinoapuri.kioku.resources.ask_title
 import io.github.dejitarunoseireinoapuri.kioku.resources.clarification_hint
@@ -34,7 +34,7 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.sample_date
 import io.github.dejitarunoseireinoapuri.kioku.resources.saved_example
 import io.github.dejitarunoseireinoapuri.kioku.resources.saved_title
 import io.github.dejitarunoseireinoapuri.kioku.resources.source_context
-import io.github.dejitarunoseireinoapuri.kioku.resources.tell
+import io.github.dejitarunoseireinoapuri.kioku.resources.tell_heading
 import io.github.dejitarunoseireinoapuri.kioku.resources.text_preview_notice
 import io.github.dejitarunoseireinoapuri.kioku.resources.view_source
 import io.github.dejitarunoseireinoapuri.kioku.resources.voice_preview_notice
@@ -87,7 +87,7 @@ fun ConversationBody(
 @Composable
 private fun ReadyContent(intent: MemoryIntent) {
     val tell = intent == MemoryIntent.Tell
-    Text(stringResource(if (tell) Res.string.tell else Res.string.ask), color = KiokuColors.Coral)
+    Text(stringResource(if (tell) Res.string.tell_heading else Res.string.ask_heading), color = KiokuColors.Coral)
     ScreenHeading(stringResource(if (tell) Res.string.ready_title else Res.string.ask_title))
     Text(stringResource(if (tell) Res.string.ready_hint else Res.string.ask_hint), color = KiokuColors.Secondary)
 }

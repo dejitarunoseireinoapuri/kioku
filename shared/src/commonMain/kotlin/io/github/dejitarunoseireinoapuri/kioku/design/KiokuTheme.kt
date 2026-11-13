@@ -15,9 +15,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
-import io.github.dejitarunoseireinoapuri.kioku.resources.ibm_plex_sans_bold
-import io.github.dejitarunoseireinoapuri.kioku.resources.ibm_plex_sans_regular
-import io.github.dejitarunoseireinoapuri.kioku.resources.ibm_plex_sans_semibold
+import io.github.dejitarunoseireinoapuri.kioku.resources.jetbrains_mono_bold
+import io.github.dejitarunoseireinoapuri.kioku.resources.jetbrains_mono_regular
+import io.github.dejitarunoseireinoapuri.kioku.resources.jetbrains_mono_semibold
 import org.jetbrains.compose.resources.Font
 
 object KiokuColors {
@@ -49,10 +49,11 @@ object KiokuSpacing {
 fun KiokuTheme(content: @Composable () -> Unit) {
     val font =
         FontFamily(
-            Font(Res.font.ibm_plex_sans_regular, FontWeight.Normal),
-            Font(Res.font.ibm_plex_sans_semibold, FontWeight.SemiBold),
-            Font(Res.font.ibm_plex_sans_bold, FontWeight.Bold),
+            Font(Res.font.jetbrains_mono_regular, FontWeight.Normal),
+            Font(Res.font.jetbrains_mono_semibold, FontWeight.SemiBold),
+            Font(Res.font.jetbrains_mono_bold, FontWeight.Bold),
         )
+    val text = TextStyle(fontFamily = font, fontFeatureSettings = "'liga' 0, 'calt' 0")
     MaterialTheme(
         colors =
             darkColors(
@@ -68,17 +69,15 @@ fun KiokuTheme(content: @Composable () -> Unit) {
             Typography(
                 defaultFontFamily = font,
                 h5 =
-                    TextStyle(
-                        fontFamily = font,
+                    text.copy(
                         fontSize = 24.sp,
                         lineHeight = 32.sp,
                         fontWeight = FontWeight.SemiBold,
                     ),
-                body1 = TextStyle(fontFamily = font, fontSize = 16.sp, lineHeight = 24.sp),
-                body2 = TextStyle(fontFamily = font, fontSize = 14.sp, lineHeight = 20.sp),
+                body1 = text.copy(fontSize = 16.sp, lineHeight = 24.sp),
+                body2 = text.copy(fontSize = 14.sp, lineHeight = 20.sp),
                 button =
-                    TextStyle(
-                        fontFamily = font,
+                    text.copy(
                         fontSize = 16.sp,
                         lineHeight = 24.sp,
                         fontWeight = FontWeight.SemiBold,

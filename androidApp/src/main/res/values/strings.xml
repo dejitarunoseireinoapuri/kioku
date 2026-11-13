@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Kioku · Vista previa</string>
+    <string name="app_name">Kioku</string>
     <style name="AppTheme" parent="android:style/Theme.Material.NoActionBar">
         <item name="android:fontFamily">sans</item>
         <item name="android:windowLightStatusBar">false</item>
