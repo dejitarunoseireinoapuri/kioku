@@ -10,7 +10,7 @@ El [contrato de Stitch](STITCH_SOURCE.md) gobierna la consulta visual. Estos est
 | 02 · Bloqueado | Candado, indicación de manos libres, contador/onda de captura, Cancelar y Terminar. | No termina por silencio ni al retirar el dedo. No hay otro paso Guardar. |
 | 03 · Aclarar | Relato pendiente, pregunta y respuesta contextual por voz/texto. | No mostrar guardado; no exigir confirmar un resumen. |
 | 04 · Guardado | Confirmación posterior al commit y acceso al relato. | Sin botón de aprobación; listo para otro turno. |
-| 05 · Consultar | Pregunta, respuesta, lectura/parada de voz y fuente textual. | Controles son de respuesta sintetizada, no de grabación original. |
+| 05 · Consultar | Pregunta, respuesta, lectura/parada de voz y fuente textual. | Enviar vacía inmediatamente el campo inferior y muestra la pregunta solo en la conversación, también mientras carga. El comando conserva el reintento tras fallo. Controles son de respuesta sintetizada, no de grabación original. |
 | 06 · Oferta | Afirmación nueva y Sí, recuérdalo / No, gracias. | Pendiente hasta aceptación; la intención sigue siendo Preguntar. |
 | 07 · Fuente y control | Fecha «Lo contaste el dd/MM/aaaa» dentro del recuadro del texto original, relato, corrección distinguida y acción contextual de olvidar. | La fecha procede de la recepción del relato y se presenta en la zona del móvil; no es la fecha del acontecimiento narrado. No sobrescribir visualmente el relato histórico como si fuera el dato actual. Volver retorna al origen. |
 | 08 · Sin red | Necesitas conexión, reintento y entradas indisponibles. | No ofrece cola offline. |

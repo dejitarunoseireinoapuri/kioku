@@ -52,7 +52,7 @@ internal class QuerySession(
             } else {
                 if (state.awaitingClarification) clarifications++ else clarifications = 0
                 command = queries.prepare(question).copy(previousQuestions = previousQuestions.toList())
-                execute()
+                execute(clearDraft = true)
             }
         }
         return true
@@ -78,14 +78,14 @@ internal class QuerySession(
         }
     }
 
-    private fun execute() {
+    private fun execute(clearDraft: Boolean = false) {
         val queries = repository
         val pending = command?.takeUnless { state.busy }
         if (queries == null || pending == null) return
         val epoch = ++generation
         sourceGeneration++
         sourceJob?.cancel()
-        publish(QueryState(question = pending.text, busy = true))
+        publish(QueryState(question = pending.text, busy = true), clearDraft = clearDraft)
         job =
             scope.launch {
                 val result = queries.execute(pending)
@@ -93,7 +93,7 @@ internal class QuerySession(
                 if (result is QueryOutcome.Reply && result.status != AnswerStatus.Clarification) {
                     rememberQuestion(pending.text)
                 }
-                publish(state.copy(busy = false, outcome = result), clearDraft = result is QueryOutcome.Reply)
+                publish(state.copy(busy = false, outcome = result))
             }
     }
 

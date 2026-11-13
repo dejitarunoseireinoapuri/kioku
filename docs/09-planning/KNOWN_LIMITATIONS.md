@@ -2,6 +2,8 @@
 
 ## Disponible
 
+**Última corrección de Preguntar:** el campo se vacía al enviar, sin duplicar la pregunta mientras carga; el comando conserva el reintento y otro borrador no enviado se respeta. 41 host tests y 6 de interfaz correctos; [evidencia](K3_VALIDATION.md). El reporte temporal requiere aclarar en qué turno/modo se indicó la fecha: el original inspeccionado no contiene el marcador referido y no se ha modificado. No se declara resuelto ese reporte; iOS sigue pendiente.
+
 **Seguimientos en Preguntar:** contexto de hasta cuatro preguntas previas, también tras ausencia, para «¿y hoy?» y otras referencias; solo RAM y 2000 caracteres acumulados. Limpieza al reiniciar/cambiar intención/cuenta. No reutiliza respuestas como hechos ni añade llamadas de reescritura. 40 host tests, 9 pruebas Android afectadas y 12 casos sintéticos con Sol medio correctos; [alcance y evidencia](K3_VALIDATION.md). No es un historial ilimitado, entre dispositivos o persistente; aceptación del propietario del seguimiento nuevo e iOS pendientes.
 
 **Último ajuste del original:** «Lo contaste el dd/MM/aaaa» dentro de su recuadro, a partir de `receivedAt` completo convertido a la zona del móvil. 35 host tests y 8 pruebas Android afectadas correctos; incluye medianoche y horario de verano. [Evidencia y APK](K3_VALIDATION.md). El adaptador Apple está preparado, pero falta compilarlo/ejecutarlo en Mac; no se extrapola el resultado Android.

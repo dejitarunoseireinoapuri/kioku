@@ -43,6 +43,8 @@ class QueryViewModelTest {
             runCurrent()
             model.onEvent(ConversationEvent.Submit)
             assertTrue(model.state.value.query.busy)
+            assertEquals("", model.state.value.draft)
+            assertEquals("¿Qué película tengo pendiente?", model.state.value.query.question)
             assertNull(model.state.value.capture)
             assertEquals(1, repo.commands.size)
             pending.complete(repo.reply())
@@ -64,6 +66,25 @@ class QueryViewModelTest {
             runCurrent()
             assertEquals("¿Qué película dijo Pablo?\nAclaración: Mi compañero de japonés.", repo.commands.last().text)
             assertNull(model.state.value.capture)
+        }
+
+    @Test
+    fun retryKeepsTheSentQuestionAndDoesNotEraseANewUnsentDraft() =
+        queryTest { repo, model ->
+            repo.answer = { QueryOutcome.Failed(CaptureIssue.Unavailable) }
+            send(model, "¿Qué película tengo pendiente?")
+            runCurrent()
+            assertEquals("", model.state.value.draft)
+            model.onEvent(ConversationEvent.EditDraft("Otra pregunta aún sin enviar"))
+            val pending = CompletableDeferred<QueryOutcome>()
+            repo.answer = { pending.await() }
+            model.onEvent(ConversationEvent.Query(QueryAction.Retry))
+            runCurrent()
+            assertEquals("Otra pregunta aún sin enviar", model.state.value.draft)
+            assertEquals("¿Qué película tengo pendiente?", repo.commands.last().text)
+            pending.complete(repo.reply())
+            runCurrent()
+            assertEquals("Otra pregunta aún sin enviar", model.state.value.draft)
         }
 
     @Test

@@ -1,5 +1,8 @@
 package io.github.dejitarunoseireinoapuri.kioku
 
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -16,6 +19,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.text.AnnotatedString
 import io.github.dejitarunoseireinoapuri.kioku.domain.AnswerStatus
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureIssue
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemorySource
@@ -59,6 +63,9 @@ class QueryNavigationTest {
         visible("Buscando en tu memoria...")
         compose.onNodeWithTag("content-loading").assertIsDisplayed()
         compose.onNodeWithTag("text-composer").assertIsDisplayed().assertIsNotEnabled()
+        compose.onNodeWithTag("text-composer").assert(
+            SemanticsMatcher.expectValue(SemanticsProperties.EditableText, AnnotatedString("")),
+        )
         captureBrandScreen(compose.activity, "kioku-compact-query.png") { compose.onRoot().captureToImage() }
         response.complete(queries.reply())
         visible("Quieres ver la película ficticia Loto.")
