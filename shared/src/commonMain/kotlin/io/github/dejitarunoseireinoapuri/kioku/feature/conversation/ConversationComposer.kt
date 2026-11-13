@@ -23,6 +23,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
@@ -32,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import io.github.dejitarunoseireinoapuri.kioku.design.IconAction
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
+import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.ask
 import io.github.dejitarunoseireinoapuri.kioku.resources.ask_placeholder
@@ -50,12 +53,21 @@ fun ConversationComposer(
     state: ConversationState,
     onEvent: (ConversationEvent) -> Unit,
 ) {
-    val enabled = state.scenario != PreviewScenario.Offline
+    val enabled = state.canEdit
+    val focus = LocalFocusManager.current
+    val keyboard = LocalSoftwareKeyboardController.current
+    val inputEvent: (ConversationEvent) -> Unit = { event ->
+        if (event == ConversationEvent.Submit) {
+            focus.clearFocus()
+            keyboard?.hide()
+        }
+        onEvent(event)
+    }
     Surface(color = KiokuColors.Surface) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Divider(color = KiokuColors.Rule)
-            TextComposer(state, enabled, onEvent)
-            IntentControls(state.intent, enabled, onEvent)
+            TextComposer(state, enabled, inputEvent)
+            IntentControls(state.intent, state.canSwitchIntent, onEvent)
             Text(
                 stringResource(Res.string.voice_hint),
                 style = MaterialTheme.typography.body2,
@@ -166,6 +178,7 @@ private fun IntentButton(
 
 private fun placeholder(state: ConversationState): StringResource =
     when {
+        state.capture is CaptureOutcome.Clarification -> Res.string.clarify_placeholder
         state.scenario == PreviewScenario.Offline -> Res.string.offline_composer
         state.scenario == PreviewScenario.Clarification -> Res.string.clarify_placeholder
         state.intent == MemoryIntent.Ask -> Res.string.ask_placeholder

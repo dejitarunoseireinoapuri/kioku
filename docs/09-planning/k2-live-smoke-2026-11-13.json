@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "environment": "demo-kioku-local; real OpenAI, synthetic sources only",
+  "model": "gpt-6.1-sol",
+  "reasoning": "medium",
+  "cases": [
+    { "id": "clear-multiple-topics", "status": "saved", "items": 2, "durationMs": 12698 },
+    { "id": "ambiguous-then-clarified", "status": "saved", "items": 1, "durationMs": 5201 }
+  ],
+  "calls": 6,
+  "inputTokens": 7869,
+  "outputTokens": 463,
+  "estimatedUsd": 0.02381394,
+  "replayWithoutProviderCall": true,
+  "canonicalSourceAndClarificationPreserved": true,
+  "syntheticDataCleaned": true,
+  "existingM0BudgetCounterPreserved": true,
+  "limitations": "Two cases, no p95 acceptance; does not validate production IAM, attestation or iOS."
+}

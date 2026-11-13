@@ -23,6 +23,14 @@ No integrar Analytics, informes de crash o grabación de sesiones automáticamen
 
 K1: proveedor Google y correo verificado permitido, UID vinculado transaccionalmente, tokens revalidados con comprobación de revocación/deshabilitación y 30 lecturas de configuración por minuto. Reglas Firestore deniegan lectura/escritura directa incluso al propietario. Local exige proyecto/direcciones exactos de emuladores; producción exige proyecto/configuración completos y App Check con IDs exactos. No hay fallback entre ambos. Alta de clave solo administrativa: valida destino fijo y candidato, Secret Manager inmutable y activación por revisión, sin endpoint móvil de escritura. El callable de configuración no accede al valor del secreto ni su identidad administra credenciales. [Evidencia y límites reales](../09-planning/K1_INTEGRATION_VALIDATION.md), incluidos acceso/atestación/iOS pendientes.
 
+## Captura K2
+
+Los nuevos callables reutilizan la admisión/revocación de K1 y reautorizan antes de confirmar; las transacciones comprueban propietario, nonce y concesión vigente. El SDK administrativo no delega escrituras al cliente. Se limitan cuerpo, texto, referencias UUID, revisiones, intentos, concurrencia y presupuesto estimado distribuido. Los replays se reautorizan y no llaman de nuevo a la IA si el resultado ya está confirmado.
+
+La identidad de ejecución K2 necesita `secretmanager.versions.access` **solo** sobre `kioku-openai-owner`; no puede listar/provisionar/sustituir secretos. El adaptador lee exclusivamente la versión numérica activada de `FirestoreCredentialStore`, nunca una ruta recibida del móvil. No se transporta el secreto al dispositivo ni se usa la credencial administrativa del operador en runtime. Activación/IAM remotos aún pendientes según [K2_VALIDATION](../09-planning/K2_VALIDATION.md).
+
+Fuente/fragmentos se preparan fuera de la transacción y se confirman juntos. Los recibos terminales no contienen el relato; pendientes y contadores tienen retención acotada. Los logs no incorporan entradas, fuentes, prompts o respuestas del proveedor. La validación local usa exclusivamente fixtures; la prueba de IA real se ejecuta contra Firestore demo aislado y conserva el contador de presupuesto existente. Nada de ello acredita por sí solo Google/App Check/iOS reales.
+
 ## Incidentes
 
 Contener acceso, revocar/rotar credenciales afectadas, revisar el uso mediante evidencias mínimas autorizadas, corregir y probar. No exponer material sensible en issues públicas. La política de comunicación y contacto del operador sigue pendiente antes de distribuir.

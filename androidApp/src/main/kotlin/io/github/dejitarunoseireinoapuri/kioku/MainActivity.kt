@@ -7,6 +7,7 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import io.github.dejitarunoseireinoapuri.kioku.platform.firebaseAccountRepository
+import io.github.dejitarunoseireinoapuri.kioku.platform.firebaseCaptureRepository
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,6 +17,7 @@ class MainActivity : ComponentActivity() {
             navigationBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),
         )
         val account = firebaseAccountRepository(this)
-        setContent { KiokuApp(account) }
+        val capture = firebaseCaptureRepository(this)
+        setContent { KiokuApp(account, capture) }
     }
 }

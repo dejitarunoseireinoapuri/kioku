@@ -10,7 +10,9 @@ import com.google.firebase.functions.FirebaseFunctions
 import io.github.dejitarunoseireinoapuri.kioku.BuildConfig
 import io.github.dejitarunoseireinoapuri.kioku.data.DisconnectedAccountRepository
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeAccountRepository
+import io.github.dejitarunoseireinoapuri.kioku.data.NativeCaptureRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.AccountRepository
+import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureRepository
 
 fun firebaseAccountRepository(activity: ComponentActivity): AccountRepository {
     if (BuildConfig.FIREBASE_APP_ID.isBlank() || BuildConfig.FIREBASE_API_KEY.isBlank() ||
@@ -34,3 +36,10 @@ fun firebaseAccountRepository(activity: ComponentActivity): AccountRepository {
         AndroidAccountPort(activity, FirebaseAuth.getInstance(app), FirebaseFunctions.getInstance(app, "europe-west1")),
     )
 }
+
+fun firebaseCaptureRepository(activity: ComponentActivity): CaptureRepository? =
+    FirebaseApp.getApps(activity).find { it.name == "kioku" }?.let { app ->
+        NativeCaptureRepository(
+            AndroidMemoryPort(FirebaseAuth.getInstance(app), FirebaseFunctions.getInstance(app, "europe-west1")),
+        )
+    }

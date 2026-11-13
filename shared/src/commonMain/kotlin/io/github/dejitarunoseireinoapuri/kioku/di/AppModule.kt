@@ -9,10 +9,10 @@ import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.Conversation
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
-val appModule =
+fun appModule() =
     module {
         single<SourceRepository> { DemoSourceRepository() }
         factory { ReadReferencedSource(get()) }
-        viewModel { ConversationViewModel(get()) }
+        viewModel { (dependencies: ConversationDependencies) -> ConversationViewModel(get(), dependencies.captures) }
         viewModel { (account: AccountRepository) -> AccountViewModel(account) }
     }

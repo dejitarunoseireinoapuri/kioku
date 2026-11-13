@@ -1,4 +1,4 @@
-param([string]$FunctionsNode = '')
+param([string]$FunctionsNode = '', [switch]$LiveCaptureSmoke)
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
@@ -32,9 +32,12 @@ try {
     $env:METADATA_SERVER_DETECTION = 'none'
     Push-Location -LiteralPath $kiokuRoot
     try {
+        $kiokuValidationCommand = if ($LiveCaptureSmoke) {
+            'node tooling/run-backend-emulator-tests.mjs --live-capture'
+        } else { 'node tooling/run-backend-emulator-tests.mjs' }
         & $FunctionsNode 'backend/node_modules/firebase-tools/lib/bin/firebase.js' emulators:exec `
             --config firebase.local.json --project demo-kioku-local --only auth,firestore,functions `
-            'node tooling/run-backend-emulator-tests.mjs'
+            $kiokuValidationCommand
         if ($LASTEXITCODE -ne 0) { throw 'Local backend validation failed; see the test result.' }
     } finally { Pop-Location }
 } finally {

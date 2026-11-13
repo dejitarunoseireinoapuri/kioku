@@ -1,6 +1,6 @@
 # Contrato backend previsto · v1
 
-Operaciones autenticadas, versionadas y ligadas al UID verificado; el cliente no elige otro propietario. App Check y límites de abuso se aplican al entorno remoto antes de distribuir. La tabla es el contrato previsto; solo `getConfiguration` tiene implementación/despliegue K1, con validación real todavía incompleta según la evidencia.
+Operaciones autenticadas, versionadas y ligadas al UID verificado; el cliente no elige otro propietario. App Check y límites de abuso se aplican al entorno remoto antes de distribuir. La tabla conserva el contrato de conjunto. `getConfiguration` está activo en K1; captura, aclaración, recuperación y fuente tienen implementación K2 local según el apartado siguiente, con activación todavía pendiente.
 
 | Operación | Entrada relevante | Resultado |
 | --- | --- | --- |
@@ -31,6 +31,34 @@ Errores seguros de esta frontera: `unauthenticated`, `permission-denied`, `inval
 
 Payloads de voz pueden requerir un protocolo temporal de upload/transcripción separado por límites del transporte; se resolverá antes de UC-003. No subir binarios arbitrarios al contrato de texto por conveniencia.
 
+
+## Frontera K2 · Captura por texto
+
+Implementada localmente; estado remoto y evidencia en [K2_VALIDATION](../09-planning/K2_VALIDATION.md). Mantiene Google permitido/verificado, UID vinculado, revocación y App Check de K1. Revalida identidad después de inferencia y propietario dentro del commit. Nunca interpreta el texto como permiso para otra operación o cuenta.
+
+| Callable | Entrada exacta |
+| --- | --- |
+| `submitTurn` | `{apiVersion:1, requestId:UUID, mode:"tell", channel:"text", text, zone}`; texto no vacío hasta 8000 caracteres y zona IANA válida |
+| `resolveClarification` | `{apiVersion:1, requestId:UUID, clarificationId:UUID, expectedRevision, text}`; revisión 1–3, respuesta y aclaración acumulada hasta 2000 caracteres |
+| `getOperation` | `{apiVersion:1, requestId:UUID}` propio; sigue hasta tres continuaciones de la operación |
+| `getSource` | `{apiVersion:1, sourceId:UUID}` propio; fuente inmutable de K2, sin campos de edición/borrado |
+
+Todos rechazan campos extra, patrones de credencial, UID/rutas/modelo elegidos por cliente y cuerpos HTTP de más de 40 KB. Idempotencia por UID+requestId+digest de entrada; un ID reutilizado con otra entrada falla. Una captura con varios asuntos escribe una fuente y hasta ocho recuerdos con revisión inicial 1, en el mismo commit que su recibo. El servidor no llama al proveedor dentro de transacciones.
+
+Resultados de captura/recuperación incluyen `apiVersion:1`, `operationId` y:
+
+- `saved`: `sourceId`, `memoryCount` (1–8) y `source:{sourceId,text,receivedAt}` leída del canónico autorizado; el recibo no duplica ese texto.
+- `needsClarification`: `clarificationId`, `revision` y `question`; no existe aún fuente/recuerdo confirmado.
+- `processing`: resultado pendiente/incierto; el cliente comprueba el recibo sin reenviar automáticamente.
+- `failed`: el intento no terminó; reintento explícito con el mismo ID, hasta tres intentos y sin sobrescribir un recibo confirmado.
+- `needsRetelling`: sigue faltando contexto tras tres versiones del turno (inicial y dos aclaraciones). No se guarda; se ofrece volver a explicarlo, sin un bucle de preguntas que no pueda contestarse.
+- `ignored`: no se produjo memoria. `expired`: no puede recuperarse el resultado mediante ese recibo; no acredita por sí solo que nunca hubiera commit.
+
+`getSource` responde `{apiVersion:1,sourceId,text,receivedAt}`. Los errores usan los códigos seguros de K1. La función limita a una captura costosa simultánea por propietario, concesión de cuatro minutos, nonce por intento y tres intentos; máximo 180 s por llamada. SDKs: 185 s, suspensión compartida: 195 s. Son límites técnicos, no objetivos de latencia. Las reservas conservadoras de IA limitan cada intento a 1 USD estimado/ocho llamadas y el día UTC a 10 USD estimados; no son saldo promocional ni un límite monetario de Firebase.
+
+Pendientes/fallos con contexto caducan tras 24 h desde la actividad admitida; recibos terminales tras siete días. El borrado físico TTL es asíncrono. No hay TTL en fuentes/recuerdos. La app solo muestra éxito tras resultado confirmado; una respuesta perdida se comprueba por ID. Cancelar la suspensión descarta callbacks, sin prometer deshacer un commit remoto. El estado de sesión/generación elimina resultados tardíos del cliente anterior.
+
+Pregunta natural, ofertas, corrección y olvido siguen pendientes de K3/K4. Un mensaje en Preguntar no se dirige a `submitTurn` ni se transforma en memoria.
 
 ## Frontera interna comprobada en M0 v4
 

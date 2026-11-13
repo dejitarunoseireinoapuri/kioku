@@ -8,9 +8,12 @@ import { FirestoreOwnerAccess } from "./firebase/owner-access.js";
 import { verifyIdentity } from "./firebase/verify-identity.js";
 import { FirestoreCredentialStore } from "./firebase/credential-store.js";
 import { backendRuntime } from "./firebase/runtime.js";
+import { memoryCallables } from "./memory/callables.js";
 
 const runtime = backendRuntime(process.env);
 const app = initializeApp({ projectId: runtime.projectId });
+export const { submitTurn, resolveClarification, getOperation, getSource } =
+  memoryCallables(app, getFirestore(app), runtime);
 const configuration = new GetConfiguration(
   runtime.allowedEmail,
   new FirestoreOwnerAccess(getFirestore(app)),

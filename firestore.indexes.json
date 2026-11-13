@@ -1,0 +1,28 @@
+{
+  "indexes": [],
+  "fieldOverrides": [
+    {
+      "collectionGroup": "operations",
+      "fieldPath": "expiresAt",
+      "ttl": true,
+      "indexes": []
+    },
+    {
+      "collectionGroup": "usage",
+      "fieldPath": "expiresAt",
+      "ttl": true,
+      "indexes": []
+    },
+    { "collectionGroup": "operations", "fieldPath": "pending", "indexes": [] },
+    { "collectionGroup": "operations", "fieldPath": "question", "indexes": [] },
+    { "collectionGroup": "sources", "fieldPath": "text", "indexes": [] },
+    { "collectionGroup": "memories", "fieldPath": "vector", "indexes": [] },
+    { "collectionGroup": "memories", "fieldPath": "text", "indexes": [] },
+    { "collectionGroup": "memories", "fieldPath": "quote", "indexes": [] },
+    {
+      "collectionGroup": "memories",
+      "fieldPath": "attributionEvidence",
+      "indexes": []
+    }
+  ]
+}

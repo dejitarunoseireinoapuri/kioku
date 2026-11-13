@@ -84,4 +84,18 @@
     <string name="ai_section">INTELIGENCIA</string>
     <string name="key_setup_hint">Añade la clave desde tu ordenador.</string>
     <string name="refreshing_configuration">Actualizando...</string>
+    <string name="query_unavailable">La consulta de recuerdos se conectará en la siguiente fase. Esta pregunta no se ha guardado.</string>
+    <string name="capture_saving">Procesando tu recuerdo...</string>
+    <string name="capture_saved">Guardado en tu memoria.</string>
+    <string name="capture_uncertain">Todavía no puedo confirmar el resultado. Comprueba el estado antes de volver a enviarlo.</string>
+    <string name="capture_check">Comprobar estado</string>
+    <string name="capture_restart">Volver a explicarlo</string>
+    <string name="capture_more_context">Sigo sin tener suficiente contexto y no he guardado este recuerdo. Vuelve a explicarlo con las personas y fechas que conoces.</string>
+    <string name="capture_ignored">No he encontrado un dato que guardar en este mensaje. No se ha creado ningún recuerdo.</string>
+    <string name="capture_expired">Esta operación ha caducado. No puedo recuperar su resultado desde aquí.</string>
+    <string name="capture_error">No he podido completar el guardado. Puedes reintentar sin duplicar este recuerdo.</string>
+    <string name="capture_denied">No se ha autorizado esta operación. Comprueba tu sesión desde Ajustes.</string>
+    <string name="capture_limited">Se ha alcanzado el límite de uso o hay otro recuerdo procesándose. Inténtalo de nuevo más tarde.</string>
+    <string name="capture_invalid">No se ha aceptado el texto de este recuerdo.</string>
+    <string name="capture_configuration">No se ha podido preparar esta operación. Comprueba el estado de la IA en Ajustes.</string>
 </resources>

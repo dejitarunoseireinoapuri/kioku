@@ -8,8 +8,21 @@
         "node tooling/backend.mjs build",
         "node tooling/backend.mjs format:check"
       ],
-      "ignore": ["node_modules", "test", "lib/test", "src/setup", "lib/src/setup", ".env*", "*.local", "*-debug.log"]
+      "ignore": [
+        "node_modules",
+        "test",
+        "lib/test",
+        "src/setup",
+        "lib/src/setup",
+        ".env*",
+        "*.local",
+        "*-debug.log"
+      ]
     }
   ],
-  "firestore": { "rules": "firestore.rules", "location": "europe-west1" }
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json",
+    "location": "europe-west1"
+  }
 }

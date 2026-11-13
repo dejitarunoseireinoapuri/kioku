@@ -76,10 +76,14 @@ export class OpenAiMemory implements MemoryIntelligence {
     scope?: string;
   } | null = null;
   readonly #key: string;
-  readonly budget: Budget;
+  readonly budget: Pick<Budget, "reserve" | "settle">;
   readonly transport: typeof fetch;
 
-  constructor(key: string, budget: Budget, transport: typeof fetch = fetch) {
+  constructor(
+    key: string,
+    budget: Pick<Budget, "reserve" | "settle">,
+    transport: typeof fetch = fetch,
+  ) {
     if (!/^sk-[A-Za-z0-9_-]+$/.test(key))
       throw new MemoryError("KEY_MISSING_OR_INVALID");
     this.#key = key;

@@ -21,5 +21,6 @@ Una fuente por tipo de decisión. Los documentos son el contrato previsto; el es
 | Plan | [IMPLEMENTATION_PLAN](09-planning/IMPLEMENTATION_PLAN.md) | Secuencia de entrega |
 | Evidencia móvil | [K0_VALIDATION](09-planning/K0_VALIDATION.md) | Compilación/pruebas Android y límites iOS de la base K0 |
 | Evidencia de cuenta | [K1_VALIDATION](09-planning/K1_VALIDATION.md), [K1_INTEGRATION_VALIDATION](09-planning/K1_INTEGRATION_VALIDATION.md) | Primera frontera histórica e integración nativa/remota actual |
+| Evidencia de captura | [K2_VALIDATION](09-planning/K2_VALIDATION.md) | Guardado textual, aclaraciones y distinción entre pruebas locales y activación real |
 
 Las conversaciones previas y los prototipos históricos sirven de evidencia de decisiones, no de segunda especificación vigente.

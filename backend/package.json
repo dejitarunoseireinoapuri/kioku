@@ -4,22 +4,24 @@
   "private": true,
   "type": "module",
   "main": "lib/src/index.js",
+  "imports": {
+    "#memory-core/*": "./lib/memory-core/*.js"
+  },
   "engines": {
     "node": ">=22 <25"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p tsconfig.memory-core.json && tsc",
     "gcp-build": "",
     "test": "node --test lib/test/unit/*.test.js",
     "test:emulator": "node --test --test-concurrency=1 lib/test/emulator/*.test.js",
-    "format:check": "prettier --check src test package.json tsconfig.json",
-    "format": "prettier --write src test package.json tsconfig.json"
+    "format:check": "prettier --check src test package.json tsconfig*.json",
+    "format": "prettier --write src test package.json tsconfig*.json"
   },
   "dependencies": {
     "@google-cloud/secret-manager": "8.0.0",
     "firebase-admin": "14.5.1",
     "firebase-functions": "7.4.0",
-    "kioku": "file:..",
     "zod": "4.6.7"
   },
   "devDependencies": {

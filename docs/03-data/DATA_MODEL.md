@@ -19,6 +19,22 @@ Los historiales de preguntas son contexto de sesión por defecto; conservarlos c
 
 El backend define el esquema físico e índices con tests de aislamiento, revisión y borrado antes de desplegar. No leer primero un índice global para filtrar propietarios después.
 
+## Persistencia K2 · Captura textual
+
+Esquema implementado según [ADR-009](../02-architecture/ADR/ADR-009-text-capture.md); activación y comprobaciones reales en [K2_VALIDATION](../09-planning/K2_VALIDATION.md). Todas las rutas siguientes pertenecen al UID del token verificado y siguen denegadas a clientes por reglas:
+
+| Ruta | Contenido y ciclo de vida |
+| --- | --- |
+| `accounts/{uid}/sources/{uuid}` | Fuente original, `receivedAt` de servidor, zona, digest con ID aleatorio y número de fragmentos. Puede incluir aclaraciones distinguidas. Sin TTL |
+| `accounts/{uid}/memories/{sourceUuid-n}` | Fragmento M0 v4, evidencia/precisión/procedencia/estado, revisión 1, sourceId y embedding de 512 dimensiones. Sin TTL |
+| `accounts/{uid}/operations/{requestUuid}` | Estado, digest, nonce, intentos y resultado mínimo. Contexto pendiente solo durante captura/aclaración/fallo; se retira al completar o pasar a una continuación. TTL 24 h para pendientes y siete días para recibos terminales |
+| `accounts/{uid}/runtime/capture` | Nonce y vencimiento de la concesión de trabajo; sin contenido personal |
+| `accounts/{uid}/usage/{diaUTC}` | Reservas/coste estimado conservador, llamadas y contadores de tokens. Sin relatos/preguntas; TTL 30 días |
+
+No se guarda el snapshot completo del prototipo ni se mantiene una base de memoria en el móvil. La extracción se prepara en RAM del servidor; fuente, fragmentos y recibo terminal se confirman atómicamente. Un trabajador obsoleto no puede confirmar con otro nonce. Aclarar conserva el ID de fuente y la referencia temporal original; el nuevo requestId continúa la operación anterior. Un pendiente no participa en búsquedas.
+
+Solo `operations` y `usage` usan el campo de caducidad TTL. Se excluyen texto y vectores de índices automáticos innecesarios; no se crea un índice global de propietarios. La consulta semántica definitiva se concretará en K3. Los historiales de preguntas siguen fuera del almacén canónico.
+
 ## Frontera privada K1
 
 `privateConfiguration/owner` contiene exactamente `uid`, `enabled`, `window` (minuto de servidor) y `count` (1–30). Es una vinculación privada inmutable de propietario, más admisión acotada, no un perfil ni una credencial. No guarda correo, texto, clave, token o historial. El servidor vincula el primer UID autorizado mediante transacción; otra identidad o una configuración inválida falla cerrada. El cliente tiene lectura/escritura denegadas, incluida esta ruta. Probado con fixtures y propietario real vinculado tras Google/App Check válidos.

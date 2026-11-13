@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "verbatimModuleSyntax": true,
+    "rewriteRelativeImportExtensions": true,
+    "declaration": true,
+    "rootDir": "../prototypes/memory/src",
+    "outDir": "lib/memory-core",
+    "types": ["node"]
+  },
+  "files": [
+    "../prototypes/memory/src/engine.ts",
+    "../prototypes/memory/src/openai.ts"
+  ]
+}

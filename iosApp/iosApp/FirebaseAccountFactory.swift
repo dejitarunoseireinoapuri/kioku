@@ -15,6 +15,10 @@ final class KiokuAppCheckFactory: NSObject, AppCheckProviderFactory {
 
 enum FirebaseAccountFactory {
     static let port: AppleAccountPort? = makePort()
+    static var memoryPort: AppleMemoryPort? {
+        guard port != nil, let app = FirebaseApp.app(name: "kioku") else { return nil }
+        return AppleMemoryPort(auth: Auth.auth(app: app), functions: Functions.functions(app: app, region: "europe-west1"))
+    }
 
     private static func makePort() -> AppleAccountPort? {
         guard let path = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist"),

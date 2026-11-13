@@ -18,7 +18,11 @@ Un tombstone no incluye el contenido borrado. El éxito comunicado debe correspo
 
 ## Recuperación
 
-La misma identidad recupera la memoria guardada en otro móvil. No equivale a restaurar un estado anterior ni a recuperar un borrado. Backups/PITR y retenciones exactas quedan pendientes de configuración y deben respetar las revocaciones al restaurar.
+La misma identidad recupera la memoria guardada en otro móvil. No equivale a restaurar un estado anterior ni a recuperar un borrado. Una futura política de restauración deberá respetar las revocaciones.
+
+Decisión del propietario al iniciar K2: conservar fuentes/recuerdos hasta que se borren y **no activar backups históricos/PITR adicionales**. No caducan al cerrar la app, reinstalarla o cambiar de móvil. Esto conserva el estado actual; no permite volver a un día anterior tras un borrado accidental. Antes de datos reales se comprueba la configuración remota, sin modificar una política previa no revisada silenciosamente.
+
+K2 delimita los datos operativos: pendientes/fallos con contexto, 24 h desde la última actividad admitida; recibos terminales, siete días, sin copias del texto; contadores numéricos de uso, 30 días. El cliente/servidor rechaza pendientes caducados aunque TTL aún no los haya retirado. El borrado físico por TTL es asíncrono; debe estar activado y comprobado. Fuentes/recuerdos no tienen campo de caducidad. Los datos en RAM de la sesión no se guardan en preferencias/backups móviles. K3 mantendrá las preguntas únicamente como contexto de sesión de Kioku; la retención del proveedor es una frontera distinta.
 
 ## Credencial K1
 

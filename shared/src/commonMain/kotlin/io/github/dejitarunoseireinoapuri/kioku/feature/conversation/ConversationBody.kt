@@ -27,6 +27,7 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.movie_story
 import io.github.dejitarunoseireinoapuri.kioku.resources.no_audio_archive
 import io.github.dejitarunoseireinoapuri.kioku.resources.offer_accepted_example
 import io.github.dejitarunoseireinoapuri.kioku.resources.offer_declined_example
+import io.github.dejitarunoseireinoapuri.kioku.resources.query_unavailable
 import io.github.dejitarunoseireinoapuri.kioku.resources.read_answer
 import io.github.dejitarunoseireinoapuri.kioku.resources.ready_hint
 import io.github.dejitarunoseireinoapuri.kioku.resources.ready_title
@@ -46,6 +47,10 @@ fun ConversationBody(
     onEvent: (ConversationEvent) -> Unit,
     onSource: (String) -> Unit,
 ) {
+    if (state.showingCapture) {
+        CaptureBody(state, onEvent, onSource)
+        return
+    }
     Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
         when (state.scenario) {
             PreviewScenario.Ready -> {
@@ -135,6 +140,7 @@ fun FeedbackMessage(feedback: PreviewFeedback) {
             PreviewFeedback.AcceptedExample -> Res.string.offer_accepted_example
             PreviewFeedback.DeclinedExample -> Res.string.offer_declined_example
             PreviewFeedback.ForgetUnavailable -> Res.string.forget_preview_notice
+            PreviewFeedback.QueryUnavailable -> Res.string.query_unavailable
         }
     Text(
         stringResource(text),

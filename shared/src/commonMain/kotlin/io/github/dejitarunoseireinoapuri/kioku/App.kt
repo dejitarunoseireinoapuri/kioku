@@ -22,8 +22,10 @@ import androidx.navigation3.ui.NavDisplay
 import io.github.dejitarunoseireinoapuri.kioku.data.DisconnectedAccountRepository
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuTheme
+import io.github.dejitarunoseireinoapuri.kioku.di.ConversationDependencies
 import io.github.dejitarunoseireinoapuri.kioku.di.appModule
 import io.github.dejitarunoseireinoapuri.kioku.domain.AccountRepository
+import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureRepository
 import io.github.dejitarunoseireinoapuri.kioku.feature.account.AccountScreen
 import io.github.dejitarunoseireinoapuri.kioku.feature.account.AccountState
 import io.github.dejitarunoseireinoapuri.kioku.feature.account.AccountViewModel
@@ -41,13 +43,22 @@ import org.koin.dsl.koinConfiguration
 import org.koin.dsl.module
 
 @Composable
-fun KiokuApp(accountRepository: AccountRepository = remember { DisconnectedAccountRepository() }) {
-    val platform = remember(accountRepository) { module { single<AccountRepository> { accountRepository } } }
-    KoinApplication(configuration = koinConfiguration { modules(appModule, platform) }) {
+fun KiokuApp(
+    accountRepository: AccountRepository = remember { DisconnectedAccountRepository() },
+    captureRepository: CaptureRepository? = null,
+) {
+    val platform =
+        remember(accountRepository, captureRepository) {
+            module {
+                single<AccountRepository> { accountRepository }
+            }
+        }
+    val application = remember { appModule() }
+    KoinApplication(configuration = koinConfiguration { modules(application, platform) }) {
         KiokuTheme {
             Surface(color = KiokuColors.Background, contentColor = KiokuColors.Text) {
                 Column(Modifier.fillMaxSize().safeDrawingPadding()) {
-                    CompositionViewModels { AccountGate(accountRepository) }
+                    CompositionViewModels { AccountGate(accountRepository, captureRepository) }
                 }
             }
         }
@@ -57,6 +68,7 @@ fun KiokuApp(accountRepository: AccountRepository = remember { DisconnectedAccou
 @Composable
 private fun AccountGate(
     accountRepository: AccountRepository,
+    captureRepository: CaptureRepository?,
     viewModel: AccountViewModel = koinViewModel(parameters = { parametersOf(accountRepository) }),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -67,7 +79,7 @@ private fun AccountGate(
         key(authorized.session.id, authorized.session.generation) {
             CompositionViewModels {
                 Column(Modifier.fillMaxSize().imePadding()) {
-                    KiokuNavigation(authorized, viewModel::signOut, viewModel::refresh)
+                    KiokuNavigation(authorized, viewModel::signOut, viewModel::refresh, captureRepository)
                 }
             }
         }
@@ -91,7 +103,11 @@ private fun KiokuNavigation(
     account: AccountState.Authorized,
     onSignOut: () -> Unit,
     onRefresh: () -> Unit,
-    viewModel: ConversationViewModel = koinViewModel(),
+    captureRepository: CaptureRepository?,
+    viewModel: ConversationViewModel =
+        koinViewModel(
+            parameters = { parametersOf(ConversationDependencies(captureRepository)) },
+        ),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val backStack = rememberNavBackStack(navigationConfiguration, Route.Conversation)

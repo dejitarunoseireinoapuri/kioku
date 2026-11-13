@@ -1,12 +1,20 @@
 package io.github.dejitarunoseireinoapuri.kioku.feature.conversation
 
+import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemorySource
 
 enum class MemoryIntent { Tell, Ask }
 
 enum class PreviewScenario { Ready, Locked, Clarification, Saved, Answer, Offer, Corrected, Offline }
 
-enum class PreviewFeedback { TextOnly, VoiceUnavailable, AcceptedExample, DeclinedExample, ForgetUnavailable }
+enum class PreviewFeedback {
+    TextOnly,
+    VoiceUnavailable,
+    AcceptedExample,
+    DeclinedExample,
+    ForgetUnavailable,
+    QueryUnavailable,
+}
 
 data class ConversationState(
     val intent: MemoryIntent = MemoryIntent.Tell,
@@ -14,7 +22,24 @@ data class ConversationState(
     val draft: String = "",
     val feedback: PreviewFeedback? = null,
     val source: MemorySource? = null,
-)
+    val capture: CaptureOutcome? = null,
+    val capturing: Boolean = false,
+) {
+    val captureLocked: Boolean
+        get() = capturing || capture is CaptureOutcome.Failed || capture == CaptureOutcome.Processing
+
+    val canEdit: Boolean
+        get() = scenario != PreviewScenario.Offline && !captureLocked
+
+    val canSwitchIntent: Boolean
+        get() = canEdit && capture !is CaptureOutcome.Clarification
+
+    val showingCapture: Boolean
+        get() = scenario == PreviewScenario.Ready && intent == MemoryIntent.Tell && hasCapture
+
+    private val hasCapture: Boolean
+        get() = capture != null || capturing
+}
 
 sealed interface ConversationEvent {
     data class SelectIntent(
@@ -30,6 +55,8 @@ sealed interface ConversationEvent {
     ) : ConversationEvent
 
     data object Submit : ConversationEvent
+
+    data object RecoverCapture : ConversationEvent
 
     data object TryVoice : ConversationEvent
 

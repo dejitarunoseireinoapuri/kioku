@@ -12,5 +12,6 @@ Una decisión aceptada define la dirección de implementación, no afirma que es
 | [ADR-006](ADR-006-k0-toolchain.md) | Implementada; iOS pendiente | Base móvil, catálogo fijado, Navigation 3 y controles de calidad |
 | [ADR-007](ADR-007-private-google-account.md) | Aceptada; frontera local inicial | Google personal, UID vinculado, proyecto remoto único y emuladores aislados |
 | [ADR-008](ADR-008-k1-native-access-and-credentials.md) | Android/emuladores comprobados; remoto/iOS pendientes | Acceso nativo, sesiones aisladas y configuración de clave administrativa |
+| [ADR-009](ADR-009-text-capture.md) | Implementación local; activación pendiente | Núcleo M0 compartido, captura textual transaccional, aclaración e idempotencia |
 
 Una nueva ADR recoge contexto, decisión, alternativas, consecuencias y estado. No copiar la numeración ni las decisiones de regalos/comercio de Wonderdrop. No modificar retroactivamente una decisión incompatible: sustituirla con otra que la cite.
