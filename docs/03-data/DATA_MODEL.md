@@ -19,6 +19,8 @@ El modelo portable `MemorySource` conserva además el `receivedAt` ISO completo 
 
 Los historiales de preguntas son contexto de sesión por defecto; conservarlos como hechos exige Contar o aceptar una propuesta. La retención operativa se delimita en [STORAGE_POLICY](STORAGE_POLICY.md).
 
+El comando portable de consulta lleva la pregunta actual y hasta cuatro preguntas previas completadas, sin respuestas generadas. Este campo vive en la sesión y en la petición transitoria; no crea una colección ni modifica recuerdos/fuentes. Permite retomar el tema de una pregunta que devolvió ausencia. El texto completo enviado sigue limitado a 2000 caracteres y se elimina del contexto al reiniciar/cambiar de intención/cuenta.
+
 El backend define el esquema físico e índices con tests de aislamiento, revisión y borrado antes de desplegar. No leer primero un índice global para filtrar propietarios después.
 
 ## Persistencia K2 · Captura textual

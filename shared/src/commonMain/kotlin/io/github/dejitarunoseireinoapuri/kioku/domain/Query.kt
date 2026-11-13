@@ -3,6 +3,7 @@ package io.github.dejitarunoseireinoapuri.kioku.domain
 data class QueryCommand(
     val requestId: String,
     val text: String,
+    val previousQuestions: List<String> = emptyList(),
 )
 
 data class QueryReference(

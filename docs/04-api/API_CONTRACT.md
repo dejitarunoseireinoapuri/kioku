@@ -70,6 +70,8 @@ Implementada y activada desde `codex/k3-text-query`; comprobaciones remotas y ac
 
 `queryMemory` acepta exactamente `{apiVersion:1, requestId:UUID, text:string}`. Texto no vacío, máximo 2000 caracteres y HTTP máximo 12 KB; rechaza secretos reconocibles, UID/modelo/reloj/clave/ruta inyectados. Google, revocación, cuenta permitida y App Check de la app registrada, como K2. Usa fecha del servidor y contexto de fuentes; una aclaración incorpora solo la pregunta anterior y respuestas explícitas del usuario, hasta 2000 caracteres acumulados.
 
+Continuación de consulta: el cliente mantiene hasta cuatro preguntas previas de esta sesión, incluidas las respondidas con ausencia. Si hay contexto, `text` sigue siendo una cadena y contiene JSON con `pregunta_actual` y `preguntas_anteriores_solo_contexto`; sin contexto conserva el texto directo anterior. No añade campos a la petición ni envía respuestas previas. Todo el texto es dato no confiable para interpretar la pregunta actual, nunca evidencia de hechos. Conserva el límite total de 2000 caracteres, ID/entrada estable para reintento y recuperación de fuentes actuales. Un exceso se rechaza localmente sin petición ni truncado silencioso. Se limpia al reiniciar consulta, cambiar de intención o salir de la sesión. No es un historial persistente ni un campo de reloj cliente.
+
 Respuesta exacta `{apiVersion:1, operationId:UUID, status, text, sources:[{sourceId:UUID, receivedAt:ISO}]}`. Hasta 2400 caracteres y seis fuentes distintas. Estados:
 
 - `answered`: respuesta respaldada y al menos una fuente propia vigente.

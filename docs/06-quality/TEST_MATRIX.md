@@ -17,6 +17,7 @@ Los casos de integración de la app siguen **pendientes de validación**. TEST-E
 | TEST-MEM-003 | FR-011, FR-012, AC-011, AC-012 | Corrección/olvido eliminan recuperabilidad, incluidas fuentes mixtas y jobs tardíos |
 | TEST-REC-001 | FR-008, AC-008 | Película y Gemma, padre la semana anterior, gustos, examen y deberes |
 | TEST-REC-002 | FR-009, AC-009 | Evidencia válida; ausencia reconocida; voz con texto y parada de respuesta |
+| TEST-REC-003 | FR-008, FR-009 | Seguimientos en Preguntar tras ausencia, varios turnos, cambio de persona/tema, preguntas no convertidas en hechos, límites/reintento y limpieza de contexto. [Evidencia K3](../09-planning/K3_VALIDATION.md) distingue pruebas de app y evaluación sintética con proveedor real |
 | TEST-PRO-001 | FR-010, AC-010 | Aceptación/rechazo/replay de propuesta sin cambio de modo |
 | TEST-UI-001 | FR-013, AC-013 | Sin red no captura ni consulta ni encola; reintento no declara falso éxito |
 | TEST-UI-002 | AC-003, AC-004 | Teclado, insets, texto grande y gestos Android/iOS |

@@ -67,6 +67,82 @@ class QueryViewModelTest {
         }
 
     @Test
+    fun followUpAfterAbsenceKeepsUserQuestionsButNeverTheGeneratedAnswerAsEvidence() =
+        queryTest { repo, model ->
+            repo.answer =
+                { QueryOutcome.Reply(AnswerStatus.NotFound, "No hay evidencia ficticia de ayer.", emptyList()) }
+            send(model, "¿Qué vi ayer?")
+            runCurrent()
+            repo.answer = { repo.reply() }
+            send(model, "¿Y hoy?")
+            runCurrent()
+            assertEquals("¿Y hoy?", repo.commands.last().text)
+            assertEquals(listOf("¿Qué vi ayer?"), repo.commands.last().previousQuestions)
+            assertEquals("¿Y hoy?", model.state.value.query.question)
+            assertNull(model.state.value.capture)
+        }
+
+    @Test
+    fun contextIsBoundedAndResetOrChangingIntentClearsIt() =
+        queryTest { repo, model ->
+            repeat(6) { index ->
+                send(model, "Pregunta ficticia $index")
+                runCurrent()
+            }
+            assertEquals(
+                4,
+                repo.commands
+                    .last()
+                    .previousQuestions.size,
+            )
+            assertEquals(
+                "Pregunta ficticia 1",
+                repo.commands
+                    .last()
+                    .previousQuestions
+                    .first(),
+            )
+            model.onEvent(ConversationEvent.Query(QueryAction.Reset))
+            send(model, "Otra consulta")
+            runCurrent()
+            assertTrue(
+                repo.commands
+                    .last()
+                    .previousQuestions
+                    .isEmpty(),
+            )
+            model.onEvent(ConversationEvent.SelectIntent(MemoryIntent.Tell))
+            model.onEvent(ConversationEvent.SelectIntent(MemoryIntent.Ask))
+            send(model, "Consulta separada")
+            runCurrent()
+            assertTrue(
+                repo.commands
+                    .last()
+                    .previousQuestions
+                    .isEmpty(),
+            )
+        }
+
+    @Test
+    fun retryAndRestartKeepTheSameContextWithoutPromotingFailedQuestions() =
+        queryTest { repo, model ->
+            send(model, "¿Qué vi ayer?")
+            runCurrent()
+            repo.answer = { QueryOutcome.Failed(CaptureIssue.Unavailable) }
+            send(model, "¿Y hoy?")
+            runCurrent()
+            val previous = repo.commands.last()
+            model.onEvent(ConversationEvent.Query(QueryAction.Retry))
+            runCurrent()
+            assertEquals(previous, repo.commands.last())
+            model.onEvent(ConversationEvent.Query(QueryAction.Restart))
+            runCurrent()
+            assertEquals(previous.previousQuestions, repo.commands.last().previousQuestions)
+            assertEquals(previous.text, repo.commands.last().text)
+            assertTrue(previous.requestId != repo.commands.last().requestId)
+        }
+
+    @Test
     fun clearingTheSessionRejectsEvenALateUncooperativeAnswer() =
         queryTest { repo, model ->
             val pending = CompletableDeferred<QueryOutcome>()

@@ -131,6 +131,26 @@ class QueryNavigationTest {
     }
 
     @Test
+    fun followUpAfterAbsenceRetainsContextAcrossRecreation() {
+        queries.answer = { QueryOutcome.Reply(AnswerStatus.NotFound, "No consta qué viste ayer.", emptyList()) }
+        send("¿Qué vi ayer?")
+        visible("No consta qué viste ayer.")
+        compose.activityRule.scenario.recreate()
+        val response = CompletableDeferred<QueryOutcome>()
+        queries.answer = { response.await() }
+        send("¿Y hoy?")
+        visible("Buscando en tu memoria...")
+        compose.activityRule.scenario.recreate()
+        visible("Buscando en tu memoria...")
+        assertEquals("¿Y hoy?", queries.commands.last().text)
+        assertEquals(listOf("¿Qué vi ayer?"), queries.commands.last().previousQuestions)
+        response.complete(queries.reply())
+        visible("Quieres ver la película ficticia Loto.")
+        assertEquals(2, queries.commands.size)
+        compose.onNodeWithText("Recuerdo guardado").assertDoesNotExist()
+    }
+
+    @Test
     fun queryAndDraftSurviveRecreationButNotLogout() {
         val response = CompletableDeferred<QueryOutcome>()
         queries.answer = { response.await() }
@@ -150,6 +170,10 @@ class QueryNavigationTest {
         compose.onNodeWithText("Cerrar sesión").performScrollTo().performClick()
         compose.onNodeWithText("Continuar con Google").performScrollTo().performClick()
         compose.onNodeWithText("Quieres ver la película ficticia Loto.").assertDoesNotExist()
+        compose.onNodeWithTag("intent-Ask").performClick()
+        send("Consulta de una nueva sesión")
+        visible("Quieres ver la película ficticia Loto.")
+        assertEquals(emptyList<String>(), queries.commands.last().previousQuestions)
     }
 
     private fun send(text: String) {

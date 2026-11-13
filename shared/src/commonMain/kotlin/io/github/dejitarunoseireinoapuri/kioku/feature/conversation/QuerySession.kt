@@ -39,6 +39,7 @@ internal class QuerySession(
     private var generation = 0
     private var sourceGeneration = 0
     private var clarifications = 0
+    private val previousQuestions = ArrayDeque<String>()
 
     fun submit(text: String): Boolean {
         val queries = repository ?: return false
@@ -50,7 +51,7 @@ internal class QuerySession(
                 publish(state.copy(outcome = QueryOutcome.Failed(CaptureIssue.MoreContext)))
             } else {
                 if (state.awaitingClarification) clarifications++ else clarifications = 0
-                command = queries.prepare(question)
+                command = queries.prepare(question).copy(previousQuestions = previousQuestions.toList())
                 execute()
             }
         }
@@ -68,7 +69,10 @@ internal class QuerySession(
             }
 
             QueryAction.Restart -> {
-                command = command?.let { repository?.prepare(it.text) }
+                command =
+                    command?.let { previous ->
+                        repository?.prepare(previous.text)?.copy(previousQuestions = previous.previousQuestions)
+                    }
                 execute()
             }
         }
@@ -85,11 +89,11 @@ internal class QuerySession(
         job =
             scope.launch {
                 val result = queries.execute(pending)
-                if (generation ==
-                    epoch
-                ) {
-                    publish(state.copy(busy = false, outcome = result), clearDraft = result is QueryOutcome.Reply)
+                if (generation != epoch) return@launch
+                if (result is QueryOutcome.Reply && result.status != AnswerStatus.Clarification) {
+                    rememberQuestion(pending.text)
                 }
+                publish(state.copy(busy = false, outcome = result), clearDraft = result is QueryOutcome.Reply)
             }
     }
 
@@ -118,6 +122,7 @@ internal class QuerySession(
         sourceJob?.cancel()
         command = null
         clarifications = 0
+        previousQuestions.clear()
         publish(QueryState(), clearDraft)
     }
 
@@ -128,4 +133,11 @@ internal class QuerySession(
         state = next
         onState(next, clearDraft)
     }
+
+    private fun rememberQuestion(question: String) {
+        if (previousQuestions.lastOrNull() != question) previousQuestions.addLast(question)
+        while (previousQuestions.size > MAX_CONTEXT_QUESTIONS) previousQuestions.removeFirst()
+    }
 }
+
+private const val MAX_CONTEXT_QUESTIONS = 4

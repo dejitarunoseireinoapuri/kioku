@@ -1,0 +1,122 @@
+{
+  "stage": "complete",
+  "model": "gpt-6.1-sol",
+  "reasoning": "medium",
+  "scope": "M0 pipeline, contextual client question text, synthetic in-memory sources; no production Firebase",
+  "rows": [
+    {
+      "id": "absence-control",
+      "status": "answered",
+      "references": [
+        "yesterday"
+      ],
+      "automaticMatch": true,
+      "durationMs": 4208
+    },
+    {
+      "id": "today-after-absence",
+      "status": "answered",
+      "references": [
+        "today"
+      ],
+      "automaticMatch": true,
+      "durationMs": 4266
+    },
+    {
+      "id": "second-followup",
+      "status": "answered",
+      "references": [
+        "before"
+      ],
+      "automaticMatch": true,
+      "durationMs": 5408
+    },
+    {
+      "id": "explicit-new-topic",
+      "status": "answered",
+      "references": [
+        "exam"
+      ],
+      "automaticMatch": true,
+      "durationMs": 4601
+    },
+    {
+      "id": "follow-new-topic",
+      "status": "answered",
+      "references": [
+        "exam"
+      ],
+      "automaticMatch": true,
+      "durationMs": 4432
+    },
+    {
+      "id": "another-person",
+      "status": "answered",
+      "references": [
+        "gemma"
+      ],
+      "automaticMatch": true,
+      "durationMs": 4529
+    },
+    {
+      "id": "missing-period",
+      "status": "not_found",
+      "references": [],
+      "automaticMatch": true,
+      "durationMs": 5642
+    },
+    {
+      "id": "question-is-not-evidence",
+      "status": "not_found",
+      "references": [],
+      "automaticMatch": true,
+      "durationMs": 5262
+    },
+    {
+      "id": "untrusted-history",
+      "status": "answered",
+      "references": [
+        "today"
+      ],
+      "automaticMatch": true,
+      "durationMs": 6714
+    },
+    {
+      "id": "unrelated-full-question",
+      "status": "answered",
+      "references": [
+        "gemma"
+      ],
+      "automaticMatch": true,
+      "durationMs": 3655
+    },
+    {
+      "id": "future-is-plan",
+      "status": "answered",
+      "references": [
+        "plan"
+      ],
+      "automaticMatch": true,
+      "durationMs": 4367
+    },
+    {
+      "id": "standalone-control",
+      "status": "answered",
+      "references": [
+        "exam"
+      ],
+      "automaticMatch": true,
+      "durationMs": 4193
+    }
+  ],
+  "estimatedUsd": 0.24925411999998914,
+  "calls": 57,
+  "semanticReview": {
+    "kind": "development agent source comparison outside the runtime verifier; not independent human audit",
+    "reviewed": 12,
+    "supported": 12,
+    "criticalFailures": 0
+  },
+  "queryP95Ms": 6714,
+  "queryMedianMs": 4480.5
+}

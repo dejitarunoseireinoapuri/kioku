@@ -18,7 +18,20 @@ class NativeQueryRepository(
     override fun prepare(text: String) = QueryCommand(port.requestId(), text)
 
     override suspend fun execute(command: QueryCommand): QueryOutcome {
-        val reply = request(MemoryEndpoint.Query, payload("requestId", command.requestId, command.text))
+        val invalid =
+            when {
+                command.text.isBlank() -> CaptureIssue.Invalid
+                command.previousQuestions.size > MAX_CONTEXT_QUESTIONS -> CaptureIssue.MoreContext
+                else -> null
+            }
+        if (invalid != null) return QueryOutcome.Failed(invalid)
+        val question = queryQuestion(command)
+        val reply =
+            if (question.length > MAX_QUERY_TEXT_LENGTH) {
+                NativeMemoryReply.Failed(CaptureIssue.MoreContext)
+            } else {
+                request(MemoryEndpoint.Query, payload("requestId", command.requestId, question))
+            }
         return when (reply) {
             is NativeMemoryReply.Received -> {
                 runCatching { parseQuery(reply.json, command.requestId) }
@@ -65,3 +78,5 @@ class NativeQueryRepository(
 }
 
 private const val QUERY_TIMEOUT_MS = 195_000L
+private const val MAX_QUERY_TEXT_LENGTH = 2000
+private const val MAX_CONTEXT_QUESTIONS = 4
