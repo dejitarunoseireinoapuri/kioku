@@ -1,6 +1,6 @@
 # K3 · Consultar por escrito
 
-Rama: `codex/k3-text-query`, desde `28fdc78` de `main`. **En implementación local; no activada en producción.** K2 Android aceptada por el propietario; nuevo build iOS aún sin validar. Publicar K2 en `main` no cambia esos límites.
+Rama: `codex/k3-text-query`, desde `28fdc78` de `main`. **Implementada y activada en producción; aceptación del nuevo build en móviles pendiente.** K2 Android aceptada por el propietario; nuevo build iOS aún sin validar. Publicar K2 en `main` no cambia esos límites.
 
 ## Alcance y referencias
 
@@ -44,12 +44,18 @@ El agente de desarrollo comparó cada respuesta con los relatos ficticios, fuera
 
 Los tres intentos consumieron aproximadamente **0,988236 USD estimados**, incluidos capturas y embeddings diagnósticos. El contador acumulado previo se conservó: 17,869579 USD gastados estimados y 0,136855 reservados, con límite 20 USD. No representa saldo disponible de la cuenta ni cobertura promocional. Los próximos resultados se guardan en archivos con sufijo temporal para no sobrescribir esta evidencia.
 
-## Activación y aceptación pendientes
+## Activación remota y aceptación móvil pendiente
 
-Inspección remota de solo lectura: `queryMemory` no desplegada e índice vectorial no creado. Simulación de preparación: tres recuerdos revisados, tres necesitan proyección; cero escrituras. No se imprimió texto o UID del propietario. Se conserva único proyecto `kioku-9454f`, Bélgica, secreto/identidad de K2 y políticas de retención existentes.
+La inspección previa mostró `queryMemory` no desplegada e índice vectorial no creado. Simulación de preparación: tres recuerdos revisados, tres necesitaban proyección; cero escrituras en esa simulación. No se imprimió texto o UID del propietario. Se conserva único proyecto `kioku-9454f`, Bélgica, secreto/identidad de K2 y políticas de retención existentes.
 
-Antes de activar: autorización específica para desplegar `queryMemory` y actualizar los escritores `submitTurn`/`resolveClarification`, crear el índice y preparar los tres recuerdos actuales; entrada pública HTTPS `roles/run.invoker` para `allUsers` **solo** en `queryMemory`, con Google/App Check/cuenta permitida exigidos por código. No se amplían permisos del secreto ni se crean claves. Tras índice `READY` y escritor actualizado, la preparación aditiva habilita la búsqueda; sin ella falla cerrada.
+El propietario confirmó expresamente en el chat el despliegue de `queryMemory`, actualización de `submitTurn`/`resolveClarification`, índice y preparación de los tres recuerdos; entrada pública HTTPS `roles/run.invoker` para `allUsers` **solo** en `queryMemory`, con Google/App Check/cuenta permitida exigidos por código. No se ampliaron permisos del secreto ni se crearon claves.
 
 Implementación publicada en `codex/k3-text-query`, commit `c65dd0a`. El propietario respondió afirmativamente por el canal que indicó, pero la revisión automática rechazó el despliegue: no acepta la respuesta de correo como autorización verificable para producción/invocador público y exige confirmación en el chat. El proceso de despliegue no llegó a iniciarse; no se aplicó ninguno de esos cambios remotos ni se intentó una vía alternativa. Se solicitó la misma confirmación en el chat y se comunicó el bloqueo por correo. El permiso previo sobre cuatro servicios K2 no se extrapola a la nueva función.
 
-Después: comprobar rechazo real sin credenciales y consulta/fuente/clarificación desde Android con Google/App Check reales; compilar y comprobar el nuevo build iOS. El acceso K1 y guardado K2 previos no acreditan consultas K3. No se declara cerrada K3 ni se inicia K4.
+Tras la confirmación verificable del chat, la revisión permitió el mismo despliegue; el bloqueo anterior quedó resuelto. Firebase confirmó creación de `queryMemory` y actualización de los dos escritores en `europe-west1`. Índice vectorial `READY`, función `ACTIVE` e identidad de ejecución prevista. Petición HTTPS sin credenciales rechazada con **401**; no hizo falta aplicar otra concesión manual del invocador.
+
+Preparación real autorizada: **tres recuerdos revisados y tres actualizados**, cero pendientes. La comparación en memoria antes/después del contenido canónico de los recuerdos y sus fuentes coincidió; solo se añadieron campos derivados. Consulta vectorial nativa real comprobada y marcador privado de búsqueda listo. Esta comprobación administrativa no suplanta una consulta desde el móvil ni prueba su atestación. No realizó llamadas OpenAI ni imprimió texto/UID o hashes del contenido real. [Evidencia remota sin datos personales](k3-production-activation-2026-11-13.json).
+
+Inspección posterior: región Bélgica, PITR desactivado, cero backups programados, TTL de operaciones/uso activos y acceso al mismo secreto conservado. Recuerdos/fuentes no caducan. El APK `kioku-k3-consulta.apk` coincide con la compilación verificada y se entrega como actualización; no se instaló automáticamente en móviles personales.
+
+Pendiente: consulta/fuente/clarificación desde Android con Google/App Check reales; compilar y comprobar el nuevo build iOS. El acceso K1 y guardado K2 previos no acreditan consultas K3. No se declara cerrada K3 ni se inicia K4.

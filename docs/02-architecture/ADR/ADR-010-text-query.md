@@ -1,6 +1,6 @@
 # ADR-010 · Consulta por texto y evidencia vigente
 
-**Estado:** implementación local K3; evaluación real, activación y aceptación móvil pendientes. Fecha: 2026-11-13. Amplía ADR-005/009.
+**Estado:** implementada y activada K3; evaluación sintética real comprobada, aceptación móvil pendiente. Fecha: 2026-11-13. Amplía ADR-005/009.
 
 ## Contexto
 

@@ -10,11 +10,11 @@ K0 añade una **vista previa Android/iOS con estética B**: conversación, ajust
 
 K1 añade [acceso Google nativo y configuración privada](docs/09-planning/K1_INTEGRATION_VALIDATION.md): Android compilado y comprobado en el móvil del propietario, sesión recuperada, Google/App Check válidos y clave activada en Secret Manager. Servidor activo en Bélgica; aislamiento de sesión probado. El propietario confirmó también acceso K1 en iOS; el nuevo build requiere validación en Mac. La arquitectura sigue Wonderdrop: **Kotlin Multiplatform + Compose Multiplatform, MVVM y Clean Architecture pragmática**. El experimento Expo local de `mobile/` está retirado como dirección técnica; no debe convertirse en una segunda aplicación. La [comparación v3](prototypes/memory/evidence/2026-11-12-v3.md) y los informes anteriores se conservan como evidencia histórica.
 
-K2 incorpora [guardado real por texto, aclaraciones y texto original](docs/09-planning/K2_VALIDATION.md), con funciones protegidas desplegadas. El propietario confirma el recorrido principal y la conservación de pantalla al girar Android. 26 host tests y 19 pruebas de interfaz Android correctos; compilación y recorrido del nuevo build iOS pendientes. Preguntar, corregir/olvidar conversando y voz pertenecen a K3/K4/K5 y todavía no están conectados.
+K2 incorpora [guardado real por texto, aclaraciones y texto original](docs/09-planning/K2_VALIDATION.md), con funciones protegidas desplegadas. El propietario confirma el recorrido principal y la conservación de pantalla al girar Android. 26 host tests y 19 pruebas de interfaz Android correctos; compilación y recorrido del nuevo build iOS pendientes. La consulta se añade en K3; corregir/olvidar conversando y voz pertenecen a K4/K5 y todavía no están conectados.
 
 Repositorio: https://github.com/dejitarunoseireinoapuri/kioku
 
-K3 está implementada en `codex/k3-text-query`: consulta por texto con fuentes actuales y aclaraciones, sin guardar preguntas como recuerdos. Pruebas locales y evaluación sintética con IA real comprobadas; [evidencia y límites](docs/09-planning/K3_VALIDATION.md). Falta autorización/activación específica en Firebase y aceptación móvil. No se declara disponible en producción por compilar el APK.
+K3 está implementada en `codex/k3-text-query` y activada en Firebase con autorización expresa: consulta por texto con fuentes actuales y aclaraciones, sin guardar preguntas como recuerdos. Índice listo y recuerdos anteriores preparados sin cambios canónicos; pruebas locales y evaluación sintética con IA real comprobadas. [Evidencia y límites](docs/09-planning/K3_VALIDATION.md). Falta aceptación del nuevo recorrido en móviles; la versión iOS debe compilarse en Mac.
 
 ## Empezar aquí
 

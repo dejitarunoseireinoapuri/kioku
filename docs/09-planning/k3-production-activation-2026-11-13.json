@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-13",
+  "project": "kioku-9454f",
+  "region": "europe-west1",
+  "authorizationConfirmedInChat": true,
+  "deploymentSucceeded": true,
+  "deployedFunctions": ["queryMemory", "submitTurn", "resolveClarification"],
+  "queryState": "ACTIVE",
+  "indexState": "READY",
+  "vectorDimensions": 512,
+  "unauthenticatedHttpsStatus": 401,
+  "runtimeExpected": true,
+  "preparation": {
+    "checked": 3,
+    "changed": 3,
+    "applied": true,
+    "canonicalUnchanged": true,
+    "nativeVectorQuery": true,
+    "unprepared": 0,
+    "searchReady": true
+  },
+  "pitr": "POINT_IN_TIME_RECOVERY_DISABLED",
+  "scheduledBackupCount": 0,
+  "operationTtl": "ACTIVE",
+  "usageTtl": "ACTIVE",
+  "existingRuntimeSecretAccess": true,
+  "newOpenAiCallsForActivation": 0,
+  "newBuildAcceptance": { "android": "pending", "ios": "pending" }
+}
