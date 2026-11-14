@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingNotice
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
 import io.github.dejitarunoseireinoapuri.kioku.design.rememberButtonFeedback
@@ -31,6 +32,7 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.ai_missing
 import io.github.dejitarunoseireinoapuri.kioku.resources.ai_ready
 import io.github.dejitarunoseireinoapuri.kioku.resources.ai_section
 import io.github.dejitarunoseireinoapuri.kioku.resources.check_ai
+import io.github.dejitarunoseireinoapuri.kioku.resources.configuration_loading
 import io.github.dejitarunoseireinoapuri.kioku.resources.icon_refresh
 import io.github.dejitarunoseireinoapuri.kioku.resources.key_setup_hint
 import io.github.dejitarunoseireinoapuri.kioku.resources.refreshing_configuration
@@ -87,6 +89,7 @@ private fun AiSettings(
             Text(stringResource(Res.string.key_setup_hint), color = KiokuColors.Secondary)
         }
         RefreshConfiguration(account.refreshing, onRefresh)
+        if (account.refreshing) ContentLoadingNotice(stringResource(Res.string.configuration_loading))
     }
 }
 

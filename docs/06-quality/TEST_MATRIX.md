@@ -23,6 +23,7 @@ Los casos de integración de la app siguen **pendientes de validación**. TEST-E
 | TEST-UI-002 | AC-003, AC-004 | Teclado, insets, texto grande y gestos Android/iOS |
 | TEST-UI-003 | AC-009 | TalkBack/VoiceOver, foco, lectura accesible y entrada alternativa |
 | TEST-UI-004 | AC-015 | Cambio de cuenta/cancelación invalidan resultados privados viejos: host/Android con dobles en [K1](../09-planning/K1_INTEGRATION_VALIDATION.md); SDK real/iOS pendientes |
+| TEST-UI-006 | AC-013, AC-015 | Teclado real conserva caja accesible y oculta modos; cierre restaura selección/borrador. Envío con fondo coral solo para texto válido, objetivo de 48 dp. Chat acotado, fuentes anteriores actuales, limpieza y carga visible bajo mensajes con autodesplazamiento/manual |
 | TEST-UI-005 | AC-013, AC-015 | Indicador compacto contextual, contenido legible y navegable, envíos incompatibles desactivados, borrador conservado, salida tras error y sin reenvío al recrear. Volver durante lectura y cerrar sesión durante actualización no recuperan datos obsoletos. [K3](../09-planning/K3_VALIDATION.md): incluye ventana pequeña y texto al 200 %; validación actual iOS pendiente |
 | TEST-SEC-001 | BR-010, AC-001 | Lecturas y consultas con referencias ajenas denegadas |
 | TEST-SEC-002 | BR-010 | Escritura canónica/índice/recibo/secreto directa denegada |

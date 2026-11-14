@@ -19,6 +19,7 @@ data class QueryState(
     val busy: Boolean = false,
     val source: MemorySource? = null,
     val sourceLoading: Boolean = false,
+    val messages: List<QueryMessage> = emptyList(),
 ) {
     val awaitingClarification: Boolean
         get() = (outcome as? QueryOutcome.Reply)?.status == AnswerStatus.Clarification
@@ -40,6 +41,8 @@ internal class QuerySession(
     private var sourceGeneration = 0
     private var clarifications = 0
     private val previousQuestions = ArrayDeque<String>()
+    private var messages = emptyList<QueryMessage>()
+    private var messageId = 0L
 
     fun submit(text: String): Boolean {
         val queries = repository ?: return false
@@ -52,6 +55,7 @@ internal class QuerySession(
             } else {
                 if (state.awaitingClarification) clarifications++ else clarifications = 0
                 command = queries.prepare(question).copy(previousQuestions = previousQuestions.toList())
+                appendMessage(QueryMessage.Question(++messageId, text))
                 execute(clearDraft = true)
             }
         }
@@ -85,22 +89,26 @@ internal class QuerySession(
         val epoch = ++generation
         sourceGeneration++
         sourceJob?.cancel()
-        publish(QueryState(question = pending.text, busy = true), clearDraft = clearDraft)
+        publish(QueryState(question = pending.text, busy = true, messages = messages), clearDraft = clearDraft)
         job =
             scope.launch {
                 val result = queries.execute(pending)
                 if (generation != epoch) return@launch
+                appendMessage(QueryMessage.Result(++messageId, result))
                 if (result is QueryOutcome.Reply && result.status != AnswerStatus.Clarification) {
                     rememberQuestion(pending.text)
                 }
-                publish(state.copy(busy = false, outcome = result))
+                publish(state.copy(busy = false, outcome = result, messages = messages))
             }
     }
 
     fun openSource(id: String): Boolean {
         val queries = repository
-        val answer = state.outcome as? QueryOutcome.Reply
-        if (queries == null || answer?.sources?.any { it.sourceId == id } != true) return false
+        val referenced =
+            messages.filterIsInstance<QueryMessage.Result>().any { message ->
+                (message.outcome as? QueryOutcome.Reply)?.sources?.any { it.sourceId == id } == true
+            }
+        if (queries == null || !referenced) return false
         val epoch = generation
         val sourceEpoch = ++sourceGeneration
         sourceJob?.cancel()
@@ -123,6 +131,8 @@ internal class QuerySession(
         command = null
         clarifications = 0
         previousQuestions.clear()
+        messages = emptyList()
+        messageId = 0L
         publish(QueryState(), clearDraft)
     }
 
@@ -138,6 +148,11 @@ internal class QuerySession(
         if (previousQuestions.lastOrNull() != question) previousQuestions.addLast(question)
         while (previousQuestions.size > MAX_CONTEXT_QUESTIONS) previousQuestions.removeFirst()
     }
+
+    private fun appendMessage(message: QueryMessage) {
+        messages = (messages + message).takeLast(MAX_QUERY_MESSAGES).dropWhile { it is QueryMessage.Result }
+    }
 }
 
 private const val MAX_CONTEXT_QUESTIONS = 4
+private const val MAX_QUERY_MESSAGES = 40

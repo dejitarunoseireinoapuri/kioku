@@ -14,6 +14,7 @@ import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.Conversation
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.ConversationViewModel
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.MemoryIntent
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.QueryAction
+import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.QueryMessage
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -65,6 +66,13 @@ class QueryViewModelTest {
             send(model, "Mi compañero de japonés.")
             runCurrent()
             assertEquals("¿Qué película dijo Pablo?\nAclaración: Mi compañero de japonés.", repo.commands.last().text)
+            assertEquals(4, model.state.value.query.messages.size)
+            assertEquals(
+                listOf("¿Qué película dijo Pablo?", "Mi compañero de japonés."),
+                model.state.value.query.messages
+                    .filterIsInstance<QueryMessage.Question>()
+                    .map { it.text },
+            )
             assertNull(model.state.value.capture)
         }
 
@@ -145,6 +153,39 @@ class QueryViewModelTest {
         }
 
     @Test
+    fun visibleChatIsBoundedAndResetClearsItsSourcesAndMessages() =
+        queryTest { _, model ->
+            repeat(25) { index ->
+                send(model, "Pregunta ficticia $index")
+                runCurrent()
+            }
+            val messages = model.state.value.query.messages
+            assertEquals(40, messages.size)
+            assertEquals("Pregunta ficticia 5", assertIs<QueryMessage.Question>(messages.first()).text)
+            model.onEvent(ConversationEvent.Query(QueryAction.Reset))
+            assertTrue(
+                model.state.value.query.messages
+                    .isEmpty(),
+            )
+            assertFalse(model.openSource("fixture-source"))
+        }
+
+    @Test
+    fun earlierVisibleAnswerCanReadItsSourceAgainWithoutAllowingForeignReferences() =
+        queryTest { repo, model ->
+            send(model, "Primera pregunta ficticia")
+            runCurrent()
+            repo.answer = { repo.reply("second-fixture-source") }
+            send(model, "Segunda pregunta ficticia")
+            runCurrent()
+            assertTrue(model.openSource("fixture-source"))
+            runCurrent()
+            assertEquals(1, repo.sourceCalls)
+            assertFalse(model.openSource("foreign-source"))
+            assertEquals(1, repo.sourceCalls)
+        }
+
+    @Test
     fun retryAndRestartKeepTheSameContextWithoutPromotingFailedQuestions() =
         queryTest { repo, model ->
             send(model, "¿Qué vi ayer?")
@@ -175,6 +216,10 @@ class QueryViewModelTest {
             runCurrent()
             assertNull(model.state.value.query.outcome)
             assertEquals("", model.state.value.query.question)
+            assertTrue(
+                model.state.value.query.messages
+                    .isEmpty(),
+            )
         }
 
     @Test
@@ -258,10 +303,10 @@ private class QueryFixture : QueryRepository {
         return source
     }
 
-    fun reply() =
+    fun reply(sourceId: String = "fixture-source") =
         QueryOutcome.Reply(
             AnswerStatus.Answered,
             "Respuesta ficticia",
-            listOf(QueryReference("fixture-source", "2026-11-13")),
+            listOf(QueryReference(sourceId, "2026-11-13")),
         )
 }

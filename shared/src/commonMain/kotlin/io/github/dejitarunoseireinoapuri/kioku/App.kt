@@ -18,7 +18,6 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import io.github.dejitarunoseireinoapuri.kioku.data.DisconnectedAccountRepository
-import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingLayout
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuTheme
 import io.github.dejitarunoseireinoapuri.kioku.di.ConversationDependencies
@@ -117,39 +116,42 @@ private fun KiokuNavigation(
     val backStack = rememberNavBackStack(navigationConfiguration, Route.Conversation)
     val loading = contentLoadingStatus(state, account.refreshing)
     val back: () -> Unit = { if (backStack.size > 1) backStack.removeLastOrNull() }
-    ContentLoadingLayout(loading) {
-        NavDisplay(
-            backStack = backStack,
-            onBack = back,
-            entryProvider =
-                entryProvider {
-                    entry<Route.Conversation> {
-                        ConversationScreen(state, viewModel::onEvent, { backStack.add(Route.Settings) }) { id ->
-                            if (viewModel.openSource(id)) backStack.add(Route.Source(id))
-                        }
+    NavDisplay(
+        backStack = backStack,
+        onBack = back,
+        entryProvider =
+            entryProvider {
+                entry<Route.Conversation> {
+                    ConversationScreen(
+                        state,
+                        viewModel::onEvent,
+                        { backStack.add(Route.Settings) },
+                        loading = loading.takeIf { backStack.lastOrNull() == Route.Conversation },
+                    ) { id ->
+                        if (viewModel.openSource(id)) backStack.add(Route.Source(id))
                     }
-                    entry<Route.Settings> {
-                        SettingsScreen(
-                            account,
-                            onSignOut,
-                            onRefresh,
-                            back,
-                            examplesEnabled = loading == null,
-                        ) { scenario ->
-                            viewModel.onEvent(ConversationEvent.ShowExample(scenario))
-                            back()
-                        }
+                }
+                entry<Route.Settings> {
+                    SettingsScreen(
+                        account,
+                        onSignOut,
+                        onRefresh,
+                        back,
+                        examplesEnabled = loading == null,
+                    ) { scenario ->
+                        viewModel.onEvent(ConversationEvent.ShowExample(scenario))
+                        back()
                     }
-                    entry<Route.Source> { route ->
-                        SourceScreen(
-                            state.source?.takeIf { it.id == route.id },
-                            state.feedback,
-                            back,
-                            viewModel::sourceActionUnavailable,
-                            loading = state.query.sourceLoading,
-                        )
-                    }
-                },
-        )
-    }
+                }
+                entry<Route.Source> { route ->
+                    SourceScreen(
+                        state.source?.takeIf { it.id == route.id },
+                        state.feedback,
+                        back,
+                        viewModel::sourceActionUnavailable,
+                        loading = state.query.sourceLoading,
+                    )
+                }
+            },
+    )
 }

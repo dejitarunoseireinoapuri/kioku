@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.text.BasicTextField
@@ -31,7 +33,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
-import io.github.dejitarunoseireinoapuri.kioku.design.IconAction
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
@@ -39,9 +40,7 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.ask
 import io.github.dejitarunoseireinoapuri.kioku.resources.ask_placeholder
 import io.github.dejitarunoseireinoapuri.kioku.resources.clarify_placeholder
-import io.github.dejitarunoseireinoapuri.kioku.resources.icon_send
 import io.github.dejitarunoseireinoapuri.kioku.resources.offline_composer
-import io.github.dejitarunoseireinoapuri.kioku.resources.send
 import io.github.dejitarunoseireinoapuri.kioku.resources.tell_action
 import io.github.dejitarunoseireinoapuri.kioku.resources.tell_placeholder
 import io.github.dejitarunoseireinoapuri.kioku.resources.voice_hint
@@ -54,6 +53,7 @@ fun ConversationComposer(
     onEvent: (ConversationEvent) -> Unit,
 ) {
     val enabled = state.canEdit
+    val keyboardVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
     val focus = LocalFocusManager.current
     val keyboard = LocalSoftwareKeyboardController.current
     val inputEvent: (ConversationEvent) -> Unit = { event ->
@@ -67,12 +67,14 @@ fun ConversationComposer(
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Divider(color = KiokuColors.Rule)
             TextComposer(state, enabled, inputEvent)
-            IntentControls(state.intent, state.canSwitchIntent, onEvent)
-            Text(
-                stringResource(Res.string.voice_hint),
-                style = MaterialTheme.typography.body2,
-                color = KiokuColors.Secondary,
-            )
+            if (!keyboardVisible) {
+                IntentControls(state.intent, state.canSwitchIntent, onEvent)
+                Text(
+                    stringResource(Res.string.voice_hint),
+                    style = MaterialTheme.typography.body2,
+                    color = KiokuColors.Secondary,
+                )
+            }
         }
     }
 }
@@ -134,11 +136,7 @@ private fun TextComposer(
                     }
                 },
             )
-            if (enabled) {
-                IconAction(Res.drawable.icon_send, stringResource(Res.string.send)) {
-                    onEvent(ConversationEvent.Submit)
-                }
-            }
+            SendAction(enabled && state.draft.isNotBlank()) { onEvent(ConversationEvent.Submit) }
         }
     }
 }

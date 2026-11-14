@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.dejitarunoseireinoapuri.kioku.design.ActionButton
+import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingNotice
 import io.github.dejitarunoseireinoapuri.kioku.design.IconAction
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.Panel
@@ -27,6 +28,7 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.forget
 import io.github.dejitarunoseireinoapuri.kioku.resources.icon_back
 import io.github.dejitarunoseireinoapuri.kioku.resources.original_label
 import io.github.dejitarunoseireinoapuri.kioku.resources.original_title
+import io.github.dejitarunoseireinoapuri.kioku.resources.source_loading
 import io.github.dejitarunoseireinoapuri.kioku.resources.source_recorded_on
 import io.github.dejitarunoseireinoapuri.kioku.resources.source_unavailable
 import org.jetbrains.compose.resources.stringResource
@@ -49,6 +51,7 @@ fun SourceScreen(
             Modifier.verticalScroll(rememberScrollState()).padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
+            if (loading) ContentLoadingNotice(stringResource(Res.string.source_loading))
             if (source == null && !loading) {
                 Text(stringResource(Res.string.source_unavailable))
             } else if (source != null) {

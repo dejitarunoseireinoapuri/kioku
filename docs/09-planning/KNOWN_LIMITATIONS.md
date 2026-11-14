@@ -2,6 +2,8 @@
 
 ## Disponible
 
+**Último refinamiento de conversación:** teclado con solo el compositor encima, envío coral cuando hay texto y carga bajo el último mensaje con desplazamiento automático. Preguntar conserva hasta 40 mensajes visibles en RAM; cambiar intención/reiniciar/cerrar cuenta o ámbito los limpia. No es historial permanente ni entre dispositivos; el contexto interpretativo sigue limitado a cuatro preguntas. 43 host tests y 31/31 pruebas Android correctos; [alcance, capturas y APK](K3_VALIDATION.md). Sin llamadas OpenAI nuevas ni cambios remotos. iOS actual y el reporte temporal anterior siguen pendientes; K3 permanece abierta.
+
 **Última corrección de Preguntar:** el campo se vacía al enviar, sin duplicar la pregunta mientras carga; el comando conserva el reintento y otro borrador no enviado se respeta. 41 host tests y 6 de interfaz correctos; [evidencia](K3_VALIDATION.md). El reporte temporal requiere aclarar en qué turno/modo se indicó la fecha: el original inspeccionado no contiene el marcador referido y no se ha modificado. No se declara resuelto ese reporte; iOS sigue pendiente.
 
 **Seguimientos en Preguntar:** contexto de hasta cuatro preguntas previas, también tras ausencia, para «¿y hoy?» y otras referencias; solo RAM y 2000 caracteres acumulados. Limpieza al reiniciar/cambiar intención/cuenta. No reutiliza respuestas como hechos ni añade llamadas de reescritura. 40 host tests, 9 pruebas Android afectadas y 12 casos sintéticos con Sol medio correctos; [alcance y evidencia](K3_VALIDATION.md). No es un historial ilimitado, entre dispositivos o persistente; aceptación del propietario del seguimiento nuevo e iOS pendientes.

@@ -27,8 +27,26 @@ fun QueryBody(
     onSource: (String) -> Unit,
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large)) {
-        Panel { Text(state.question) }
-        if (!state.busy) {
+        state.messages.forEach { message ->
+            when (message) {
+                is QueryMessage.Question -> {
+                    Panel { Text(message.text) }
+                }
+
+                is QueryMessage.Result -> {
+                    QueryResultBody(
+                        message.outcome,
+                        onEvent,
+                        onSource,
+                        interactive =
+                            !state.busy && message.id == state.messages.lastOrNull()?.id &&
+                                state.outcome == message.outcome,
+                    )
+                }
+            }
+        }
+        val last = (state.messages.lastOrNull() as? QueryMessage.Result)?.outcome
+        if (!state.busy && state.outcome != null && last != state.outcome) {
             QueryResultBody(state.outcome, onEvent, onSource)
         }
         if (state.awaitingClarification) {
@@ -45,6 +63,7 @@ private fun QueryResultBody(
     outcome: QueryOutcome?,
     onEvent: (ConversationEvent) -> Unit,
     onSource: (String) -> Unit,
+    interactive: Boolean = true,
 ) {
     when (outcome) {
         is QueryOutcome.Reply -> {
@@ -63,17 +82,21 @@ private fun QueryResultBody(
                 stringResource(if (limited) Res.string.query_limit else Res.string.query_error),
                 color = KiokuColors.Coral,
             )
-            ActionButton(stringResource(if (limited) Res.string.query_reset else Res.string.retry), {
-                onEvent(ConversationEvent.Query(if (limited) QueryAction.Reset else QueryAction.Retry))
-            })
+            if (interactive) {
+                ActionButton(stringResource(if (limited) Res.string.query_reset else Res.string.retry), {
+                    onEvent(ConversationEvent.Query(if (limited) QueryAction.Reset else QueryAction.Retry))
+                })
+            }
         }
 
         QueryOutcome.RepeatRequired -> {
             Text(stringResource(Res.string.query_repeat))
-            ActionButton(
-                stringResource(Res.string.query_restart),
-                { onEvent(ConversationEvent.Query(QueryAction.Restart)) },
-            )
+            if (interactive) {
+                ActionButton(
+                    stringResource(Res.string.query_restart),
+                    { onEvent(ConversationEvent.Query(QueryAction.Restart)) },
+                )
+            }
         }
 
         null -> {}

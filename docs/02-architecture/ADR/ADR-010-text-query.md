@@ -21,6 +21,8 @@ K2 guarda fuentes y fragmentos con vectores M0 de 512 dimensiones. K3 debe encon
 
 ## Alternativas y consecuencias
 
+Refinamiento de presentación del 14 de noviembre: historial visible de hasta 40 mensajes de Preguntar en RAM, con el mismo ciclo de limpieza del contexto de consulta. No añade historial persistido ni incorpora las respuestas al texto enviado al modelo. Se admite abrir referencias de respuestas anteriores aún visibles mediante lectura actual protegida. Indicador dentro del contenido y autodesplazamiento pertenecen a UI; no cambian búsqueda, API, fuentes canónicas, idempotencia ni modelo.
+
 Se rechaza descargar todos los recuerdos o usar solo coincidencia literal. La preparación del índice es necesaria antes de activar; no hay fallback silencioso a un subconjunto de recuerdos. La recuperación sigue acotada y la verificación semántica es falible; K3 requiere evaluación contra fuentes, además de tests de transporte. iOS exige compilación y recorrido en Mac; Windows no los acredita.
 
 El contrato de consulta no autoriza corregir, olvidar ni aceptar hechos nuevos. Esas invariantes y la limpieza completa se implementarán en K4. [Criterios y evidencia K3](../../09-planning/K3_VALIDATION.md).

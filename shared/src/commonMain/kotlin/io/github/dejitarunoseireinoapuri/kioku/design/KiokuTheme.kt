@@ -37,6 +37,7 @@ object KiokuSpacing {
     val Medium = 16.dp
     val Large = 24.dp
     val TouchTarget = 48.dp
+    val SendBackground = 40.dp
     val IntentHeight = 64.dp
     val Corner = 6.dp
     val Mark = 112.dp

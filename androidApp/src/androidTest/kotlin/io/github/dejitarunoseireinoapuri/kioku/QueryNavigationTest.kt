@@ -11,6 +11,7 @@ import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -19,6 +20,8 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeDown
 import androidx.compose.ui.text.AnnotatedString
 import io.github.dejitarunoseireinoapuri.kioku.domain.AnswerStatus
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureIssue
@@ -51,6 +54,26 @@ class QueryNavigationTest {
     @After
     fun clearHost() {
         compose.runOnUiThread { LifecycleTestActivity.content = null }
+    }
+
+    @Test
+    fun newMessagesAndInlineLoadingBecomeVisibleWithoutManuallyScrolling() {
+        val longAnswer = "Respuesta ficticia extensa.\n".repeat(45)
+        queries.answer = { queries.reply().copy(text = longAnswer) }
+        send("Primera pregunta de prueba")
+        val reference = "Ver texto original 1 · 2026-11-13"
+        compose.waitUntil(5000) { compose.onAllNodesWithText(reference).onLast().isDisplayed() }
+        compose.onNodeWithTag("conversation-messages").performTouchInput { swipeDown() }
+        val pending = CompletableDeferred<QueryOutcome>()
+        queries.answer = { pending.await() }
+        send("¿Y hoy?")
+        compose.waitUntil(5000) { compose.onNodeWithTag("content-loading").isDisplayed() }
+        compose.onNodeWithText("¿Y hoy?").assertIsDisplayed()
+        captureBrandScreen(compose.activity, "kioku-chat-inline-loading.png") { compose.onRoot().captureToImage() }
+        assertEquals(1, compose.onAllNodesWithText(longAnswer).fetchSemanticsNodes().size)
+        pending.complete(queries.reply())
+        compose.waitUntil(5000) { compose.onAllNodesWithText(reference).onLast().isDisplayed() }
+        compose.onNodeWithText("Primera pregunta de prueba").performScrollTo().assertIsDisplayed()
     }
 
     @Test
@@ -190,9 +213,10 @@ class QueryNavigationTest {
 
     private fun visible(text: String) {
         compose.waitUntil(5000) { compose.onAllNodesWithText(text).fetchSemanticsNodes().isNotEmpty() }
-        if (!compose.onNodeWithText(text).isDisplayed()) compose.onNodeWithText(text).performScrollTo()
-        compose.waitUntil(5000) { compose.onNodeWithText(text).isDisplayed() }
-        compose.onNodeWithText(text).assertIsDisplayed()
+        val latest = compose.onAllNodesWithText(text).onLast()
+        if (!latest.isDisplayed()) latest.performScrollTo()
+        compose.waitUntil(5000) { latest.isDisplayed() }
+        latest.assertIsDisplayed()
     }
 }
 
