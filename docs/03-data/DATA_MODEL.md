@@ -53,9 +53,9 @@ Implementada localmente, sin endpoint o despliegue: `accounts/{uid}/revocations/
 
 Captura y consulta verifican revocación además de las versiones y de la concesión de trabajo. La resolución interna conserva versiones de todos los documentos y dura cinco minutos. No es todavía la representación de corrección ni de borrado selectivo de una fuente compartida; contratos completos pendientes en [ADR-011](../02-architecture/ADR/ADR-011-memory-control.md).
 
-`firestore.indexes.json` prepara un índice ascendente de colección exclusivamente para `operations.pending.turn.id`, que permite localizar pendientes vinculados por UUID. El resto del mapa `pending`, preguntas y textos siguen excluidos. Ese índice y la frontera K4 no están desplegados; los emuladores no validan su disponibilidad remota.
+`firestore.indexes.json` prepara un índice ascendente de colección exclusivamente para `operations.pending.turn.id`, que permite localizar pendientes vinculados por UUID. El resto del mapa `pending`, preguntas y textos siguen excluidos. La primera entrega solo los preparó; la continuación autorizada despliega la frontera y verifica ese índice READY. Los emuladores no sustituyen esa comprobación remota.
 
-## Reemplazo selectivo K4 · continuación local
+## Reemplazo selectivo K4 · continuación activa
 
 `changeMemory` reemplaza una fuente vigente con hasta dos nuevas: texto conservado con la recepción/zona originales y corrección explícita con recepción/zona actuales. Se retiran todos los fragmentos del origen y se crean derivados de los restantes con IDs nuevos/revisión incrementada. Los datos corregidos parten de la revisión del dato seleccionado más uno. Las proyecciones se insertan junto con el canónico; nada se confirma solo en el índice. Se preservan literales ajenos y se revisa que no reconstruyan el objetivo. La operación no alcanza otros relatos que repitan el mismo hecho.
 

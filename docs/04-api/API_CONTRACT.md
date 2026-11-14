@@ -90,9 +90,9 @@ La primitiva privada `SourceRetirementStore` resuelve y retira exclusivamente fu
 
 Los adaptadores K2/K3 se preparan para revocaciones: `getSource` rechaza la fuente retirada con `failed-precondition`; `getOperation` no devuelve `saved` de un recibo retirado, sino `expired` sin referencia ni texto. Un replay de captura/consulta con un ID original revocado falla cerrado. Una consulta no entrega evidencia retirada durante la inferencia. No añade campos o estados al HTTP actual ni está desplegado este cambio.
 
-## Frontera K4 · selección desde la fuente (activación pendiente)
+## Frontera K4 · selección desde la fuente (activa)
 
-Dos callables preparados en Bélgica. Ambos requieren identidad Google permitida/verificada, token no revocado, UID autorizado habilitado y App Check de app registrada. No se permite elegir propietario, ruta, clave o modelo. Reautorización tras IA y dentro del commit. Recibos ligados a UID+requestId+entrada; las peticiones exactas repetidas no vuelven a mutar ni a llamar al proveedor. Misma concesión costosa, presupuestos y máximo de tres intentos que K2/K3. Sin reintentos pagados automáticos.
+Dos callables activos en Bélgica. Ambos requieren identidad Google permitida/verificada, token no revocado, UID autorizado habilitado y App Check de app registrada. No se permite elegir propietario, ruta, clave o modelo. Reautorización tras IA y dentro del commit. Recibos ligados a UID+requestId+entrada; las peticiones exactas repetidas no vuelven a mutar ni a llamar al proveedor. Misma concesión costosa, presupuestos y máximo de tres intentos que K2/K3. Sin reintentos pagados automáticos.
 
 | Callable | Entrada exacta y límites |
 | --- | --- |

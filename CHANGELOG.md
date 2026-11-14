@@ -2,9 +2,9 @@
 
 ## Sin versión publicada · 2026-11-14
 
-- K4 en `codex/k4-memory-control`: retirada/corrección selectivas desde «Texto original» → «Gestionar», fuente conservada y corrección distinguidas; preservación de otros asuntos, versiones, revocación y proyecciones atómicas. Nuevos callables preparados, sin despliegue en esta entrega.
+- K4 en `codex/k4-memory-control`: retirada/corrección selectivas desde «Texto original» → «Gestionar», fuente conservada y corrección distinguidas; preservación de otros asuntos, versiones, revocación y proyecciones atómicas. Dos callables nuevos y cinco adaptados activados con autorización; índice READY y rechazo HTTPS sin sesión.
 - Revisión de memoria antes de restaurar contenido/enviar, limpieza de chat/contexto/fuentes después del éxito y recuperación de cambios sin duplicarlos. Corrección conserva borrador tras error/rotación; cargas y confirmaciones se desplazan a la zona visible. Teclado con poca altura prioriza campo/envío.
-- Pruebas sintéticas locales y siete casos con Sol medio real (0,13151104 USD estimados), sin datos productivos. [Evidencia y límites K4](docs/09-planning/K4_VALIDATION.md): activación, iOS, órdenes naturales/ofertas pendientes; K4 no cerrada.
+- Pruebas sintéticas locales y siete casos con Sol medio real (0,13151104 USD estimados), más aceptación nativa productiva en Honor correcta. Datos sintéticos de producción retirados al terminar. [Evidencia y límites K4](docs/09-planning/K4_VALIDATION.md): iOS, órdenes naturales/ofertas pendientes; K4 no cerrada.
 
 ## Sin versión publicada · 2026-11-13
 

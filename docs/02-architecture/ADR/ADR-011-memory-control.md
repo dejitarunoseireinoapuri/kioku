@@ -1,6 +1,6 @@
 # ADR-011 · Retirada canónica y control conversacional
 
-- Estado: retirada y corrección selectivas por fuente implementadas localmente; activación y control conversacional completo pendientes.
+- Estado: retirada y corrección selectivas por fuente activas y comprobadas en Honor; iOS y control conversacional completo pendientes.
 - Fecha: 2026-11-14.
 - Amplía [ADR-005](ADR-005-memory-evidence-and-deletion.md), [K2](ADR-009-text-capture.md) y [K3](ADR-010-text-query.md).
 
@@ -34,11 +34,11 @@ Estados móviles `Loading/Missing/Ready/Working/Done`, generaciones y comandos e
 
 ## Secuencia restante de K4
 
-1. Activación autorizada de la frontera selectiva y comprobación nativa remota. Los casos locales/sintéticos de transformación, corrección, revisión y conservación ya están ejecutados; no acreditan despliegue ni iOS.
+1. Completar la validación iOS en Mac. Activación autorizada de la frontera selectiva e índice READY, rechazo sin credenciales y recorrido nativo productivo en Honor ya comprobados; los casos locales/sintéticos no sustituyen esas evidencias separadas.
 2. Resolver conversacional y propuestas: solo orden explícita actual autoriza corrección/olvido; nuevo dato en Preguntar requiere oferta aceptada, con versión, caducidad e idempotencia. Texto recuperado y salidas del modelo siguen siendo datos no confiables.
 3. Integrar el resolver y las propuestas en los estados/fronteras compartidos ya implementados, conservando las mismas garantías de limpieza y revisión. Comprobar distinción entre corrección y cambio real con el tiempo a través de ese nuevo recorrido.
 4. Ampliar la evaluación previa para esos recorridos nuevos e iOS en Mac. La evaluación selectiva con proveedor real ya pasó siete casos fijados antes de ejecutar; Android usa Honor con fixtures. Activación de endpoints/recursos productivos requiere autorización concreta; no se deduce de este ADR.
 
 ## Alternativas y límites
 
-No se usa borrado suave con contenido o copias históricas, ni TTL para revocaciones. Tampoco una búsqueda global de todos los datos de la cuenta para cada operación: fuente máxima ocho fragmentos y dos consultas de recibos limitadas a nueve documentos cada una, que rechazan exceso en lugar de limpiar parcialmente. El ámbito actual no elimina hechos repetidos en otras fuentes ni resuelve referencias naturales. El nuevo recorrido fuente espera activación; no se declara K4 cerrada hasta completar los bloques restantes y sus pruebas. [Evidencia](../../09-planning/K4_VALIDATION.md).
+No se usa borrado suave con contenido o copias históricas, ni TTL para revocaciones. Tampoco una búsqueda global de todos los datos de la cuenta para cada operación: fuente máxima ocho fragmentos y dos consultas de recibos limitadas a nueve documentos cada una, que rechazan exceso en lugar de limpiar parcialmente. El ámbito actual no elimina hechos repetidos en otras fuentes ni resuelve referencias naturales. El recorrido fuente está activo; no se declara K4 cerrada hasta completar los bloques restantes y sus pruebas. [Evidencia](../../09-planning/K4_VALIDATION.md).
