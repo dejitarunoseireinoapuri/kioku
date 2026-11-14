@@ -25,6 +25,7 @@ data class ConversationState(
     val scenario: PreviewScenario = PreviewScenario.Ready,
     val draft: String = "",
     val feedback: PreviewFeedback? = null,
+    val forgottenText: String? = null,
     val source: MemorySource? = null,
     val capture: CaptureOutcome? = null,
     val capturing: Boolean = false,
@@ -51,7 +52,7 @@ data class ConversationState(
         get() = captureLocked || query.busy || textLocked
 
     private val textLocked: Boolean
-        get() = conversation?.busy == true || conversation?.processing == true
+        get() = conversation?.busy == true || conversation?.processing == true || conversation?.confirmingForget == true
 
     private val awaitingClarification: Boolean
         get() =

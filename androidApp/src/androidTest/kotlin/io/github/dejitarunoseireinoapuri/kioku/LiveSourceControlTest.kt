@@ -81,7 +81,11 @@ class LiveSourceControlTest {
         compose.onNodeWithText("Gestionar").performClick()
         waitVisible("Olvidar este dato")
         compose.onNodeWithText("Olvidar este dato").performScrollTo().performClick()
-        waitVisible("He olvidado lo que has seleccionado.")
+        waitVisible("Sí, borrar")
+        compose.onNodeWithText("Sí, borrar").performScrollTo().performClick()
+        compose.waitUntil(LIVE_TIMEOUT) {
+            compose.onAllNodesWithText("He olvidado «", substring = true).fetchSemanticsNodes().isNotEmpty()
+        }
         verifyCurrentEvidence()
     }
 

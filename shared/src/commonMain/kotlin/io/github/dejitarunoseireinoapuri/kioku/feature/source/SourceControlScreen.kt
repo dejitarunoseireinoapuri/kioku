@@ -23,11 +23,13 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.dejitarunoseireinoapuri.kioku.design.ActionButton
 import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingNotice
+import io.github.dejitarunoseireinoapuri.kioku.design.ForgetConfirmationDialog
 import io.github.dejitarunoseireinoapuri.kioku.design.IconAction
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
 import io.github.dejitarunoseireinoapuri.kioku.design.Panel
 import io.github.dejitarunoseireinoapuri.kioku.design.TopBar
+import io.github.dejitarunoseireinoapuri.kioku.design.memoryChangeText
 import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChange
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryControlRepository
@@ -35,7 +37,6 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.back
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_apply
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_cancel
-import io.github.dejitarunoseireinoapuri.kioku.resources.control_corrected
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_correcting
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_correction_hint
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_edit
@@ -44,7 +45,6 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.control_failed
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_forget_all
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_forget_item
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_forgetting
-import io.github.dejitarunoseireinoapuri.kioku.resources.control_forgotten
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_loading
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_reload
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_retry
@@ -62,13 +62,13 @@ fun SourceControlRoute(
     repository: MemoryControlRepository,
     onBack: () -> Unit,
     viewModel: SourceControlViewModel = koinViewModel(parameters = { parametersOf(repository, sourceId) }),
-    onChanged: (MemoryChange.Confirmed) -> Unit,
+    onChanged: (MemoryChange.Confirmed, String?) -> Unit,
 ) {
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.check() }
     LifecycleEventEffect(Lifecycle.Event.ON_PAUSE) { viewModel.conceal() }
     val state by viewModel.state.collectAsStateWithLifecycle()
     val done = state as? SourceControlState.Done
-    LaunchedEffect(done) { done?.let { onChanged(it.result) } }
+    LaunchedEffect(done) { done?.let { onChanged(it.result, it.forgottenText) } }
     SourceControlScreen(state, viewModel::onEvent, onBack)
 }
 
@@ -81,6 +81,13 @@ fun SourceControlScreen(
     val scroll = rememberScrollState()
     val working = state is SourceControlState.Working
     val forward = controlInputEvents(onEvent)
+    (state as? SourceControlState.Ready)?.forget?.let { pending ->
+        ForgetConfirmationDialog(
+            pending.preview,
+            { forward(SourceControlEvent.ConfirmForget) },
+            { forward(SourceControlEvent.CancelForget) },
+        )
+    }
     LaunchedEffect(working, scroll.maxValue) { if (working) scroll.animateScrollTo(scroll.maxValue) }
     Column(Modifier.fillMaxSize()) {
         TopBar(stringResource(Res.string.control_title), leading = {
@@ -101,15 +108,7 @@ fun SourceControlScreen(
                 }
 
                 is SourceControlState.Done -> {
-                    Text(
-                        stringResource(
-                            if (state.result.action == ChangeAction.Correct) {
-                                Res.string.control_corrected
-                            } else {
-                                Res.string.control_forgotten
-                            },
-                        ),
-                    )
+                    Text(memoryChangeText(state.result.action, state.forgottenText))
                 }
 
                 else -> {
@@ -142,7 +141,7 @@ private fun ControlContent(
 ) {
     val ready = (state as? SourceControlState.Working)?.previous ?: state as SourceControlState.Ready
     val working = state is SourceControlState.Working
-    val enabled = !working && ready.feedback != ControlFeedback.Processing
+    val enabled = !working && ready.feedback != ControlFeedback.Processing && ready.forget == null
     Text(stringResource(Res.string.control_explanation), color = KiokuColors.Secondary)
     ready.source.items.forEach { item ->
         Panel {

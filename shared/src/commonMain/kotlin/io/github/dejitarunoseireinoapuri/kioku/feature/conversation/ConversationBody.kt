@@ -12,6 +12,8 @@ import io.github.dejitarunoseireinoapuri.kioku.design.ActionButton
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.Panel
 import io.github.dejitarunoseireinoapuri.kioku.design.ScreenHeading
+import io.github.dejitarunoseireinoapuri.kioku.design.memoryChangeText
+import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.ask_heading
 import io.github.dejitarunoseireinoapuri.kioku.resources.ask_hint
@@ -19,7 +21,7 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.ask_title
 import io.github.dejitarunoseireinoapuri.kioku.resources.clarification_hint
 import io.github.dejitarunoseireinoapuri.kioku.resources.clarification_pending
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_corrected
-import io.github.dejitarunoseireinoapuri.kioku.resources.control_forgotten
+import io.github.dejitarunoseireinoapuri.kioku.resources.control_forgotten_fallback
 import io.github.dejitarunoseireinoapuri.kioku.resources.exam_clarification
 import io.github.dejitarunoseireinoapuri.kioku.resources.exam_story
 import io.github.dejitarunoseireinoapuri.kioku.resources.forget_preview_notice
@@ -144,7 +146,10 @@ private fun ClarificationExample() {
 }
 
 @Composable
-fun FeedbackMessage(feedback: PreviewFeedback) {
+fun FeedbackMessage(
+    feedback: PreviewFeedback,
+    forgottenText: String? = null,
+) {
     val text =
         when (feedback) {
             PreviewFeedback.TextOnly -> Res.string.text_preview_notice
@@ -154,10 +159,14 @@ fun FeedbackMessage(feedback: PreviewFeedback) {
             PreviewFeedback.ForgetUnavailable -> Res.string.forget_preview_notice
             PreviewFeedback.QueryUnavailable -> Res.string.query_unavailable
             PreviewFeedback.Corrected -> Res.string.control_corrected
-            PreviewFeedback.Forgotten -> Res.string.control_forgotten
+            PreviewFeedback.Forgotten -> Res.string.control_forgotten_fallback
         }
     Text(
-        stringResource(text),
+        if (feedback == PreviewFeedback.Forgotten) {
+            memoryChangeText(ChangeAction.Forget, forgottenText)
+        } else {
+            stringResource(text)
+        },
         color = KiokuColors.Coral,
         style = MaterialTheme.typography.body2,
         modifier = Modifier.padding(top = 16.dp),

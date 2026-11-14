@@ -23,6 +23,8 @@ import androidx.compose.ui.text.AnnotatedString
 import io.github.dejitarunoseireinoapuri.kioku.domain.AnswerStatus
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
+import io.github.dejitarunoseireinoapuri.kioku.domain.ForgetPreview
+import io.github.dejitarunoseireinoapuri.kioku.domain.ForgetScope
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChange
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemorySource
 import io.github.dejitarunoseireinoapuri.kioku.domain.OfferDecision
@@ -160,9 +162,15 @@ class ConversationFlowTest {
         send("Olvida lo del examen de Pablo.")
         visible("¿Qué Pablo?")
         compose.onNodeWithTag("intent-Ask").assertIsNotEnabled()
-        repository.answer = { TextOutcome.Changed(MemoryChange.Confirmed(ChangeAction.Forget, 1)) }
+        repository.answer = {
+            TextOutcome.ConfirmForget(ForgetPreview("Examen de mi primo Pablo.", ForgetScope.AllOccurrences))
+        }
         send("Mi primo.")
-        visible("He olvidado lo que has seleccionado.")
+        visible("¿Borrar este recuerdo?")
+        assertEquals(2, repository.commands.size)
+        repository.answer = { TextOutcome.Changed(MemoryChange.Confirmed(ChangeAction.Forget, 1)) }
+        click("Sí, borrar")
+        visible("He olvidado «Examen de mi primo Pablo.».")
         assertTrue(
             repository.commands
                 .last()
@@ -171,6 +179,21 @@ class ConversationFlowTest {
         )
         compose.onNodeWithText("Olvida lo del examen de Pablo.").assertDoesNotExist()
         compose.onNodeWithText("¿Qué Pablo?").assertDoesNotExist()
+    }
+
+    @Test
+    fun cancellingTheConversationalPopupMakesNoApplyCall() {
+        repository.answer = {
+            TextOutcome.ConfirmForget(ForgetPreview("Película Loto.", ForgetScope.AllOccurrences))
+        }
+        send("Olvida esa película.")
+        visible("¿Borrar este recuerdo?")
+        assertEquals(1, repository.commands.size)
+        compose.onNodeWithTag("text-composer").assertIsNotEnabled()
+        click("Cancelar")
+        visible("No he borrado ningún recuerdo.")
+        compose.onNodeWithTag("forget-confirmation").assertDoesNotExist()
+        assertEquals(1, repository.commands.size)
     }
 
     private fun send(text: String) {

@@ -16,9 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingNotice
+import io.github.dejitarunoseireinoapuri.kioku.design.ForgetConfirmationDialog
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
 import io.github.dejitarunoseireinoapuri.kioku.design.SettingsAction
 import io.github.dejitarunoseireinoapuri.kioku.design.TopBar
+import io.github.dejitarunoseireinoapuri.kioku.domain.TextOutcome
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.app_name
 import org.jetbrains.compose.resources.StringResource
@@ -33,6 +35,7 @@ fun ConversationScreen(
     onSource: (String) -> Unit,
 ) {
     val scroll = conversationScroll(state, loading)
+    ConversationForgetConfirmation(state, onEvent)
     Column(Modifier.fillMaxSize()) {
         ConversationHeader(onSettings)
         Column(
@@ -45,7 +48,7 @@ fun ConversationScreen(
         ) {
             if (!state.concealingMemory) {
                 ConversationBody(state, onEvent, onSource)
-                state.feedback?.let { FeedbackMessage(it) }
+                state.feedback?.let { FeedbackMessage(it, state.forgottenText) }
             }
             if (loading != null) ContentLoadingNotice(stringResource(loading))
         }
@@ -54,6 +57,21 @@ fun ConversationScreen(
         } else {
             ConversationComposer(if (state.concealingMemory) state.copy(draft = "") else state, onEvent)
         }
+    }
+}
+
+@Composable
+private fun ConversationForgetConfirmation(
+    state: ConversationState,
+    onEvent: (ConversationEvent) -> Unit,
+) {
+    val pending = state.conversation?.outcome as? TextOutcome.ConfirmForget
+    if (!state.checkingMemory && pending != null) {
+        ForgetConfirmationDialog(
+            pending.preview,
+            { onEvent(ConversationEvent.Message(MessageAction.ConfirmForget)) },
+            { onEvent(ConversationEvent.Message(MessageAction.CancelForget)) },
+        )
     }
 }
 

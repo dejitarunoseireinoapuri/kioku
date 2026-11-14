@@ -60,6 +60,7 @@ data class TextCommand(
     val plan: TextPlan? = null,
     val decision: OfferDecision? = null,
     val capture: CaptureCommand.Clarify? = null,
+    val forgetApproval: ForgetPreview? = null,
 )
 
 sealed interface TextOutcome {
@@ -83,6 +84,12 @@ sealed interface TextOutcome {
     data class Changed(
         val result: MemoryChange.Confirmed,
     ) : TextOutcome
+
+    data class ConfirmForget(
+        val preview: ForgetPreview,
+    ) : TextOutcome
+
+    data object ForgetCancelled : TextOutcome
 
     data class Failed(
         val issue: CaptureIssue,

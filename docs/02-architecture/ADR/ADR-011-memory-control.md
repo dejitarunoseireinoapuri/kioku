@@ -60,6 +60,14 @@ El proveedor mantiene Sol medio y `store:false`. Solo el servidor puede elegir e
 
 No hay nuevos endpoints, índices, colecciones, claves, backups o permisos. Se actualizan con autorización `routeMessage`, `applyMessage` y `changeMemory`, más APK compartido actualizado y aceptado en Honor real. Activación y aceptación remota se distinguen de pruebas locales en [K4_VALIDATION](../../09-planning/K4_VALIDATION.md). Referencias de restos hasta 32 quedan solo en recibo para reautorizar recuperación; el resultado público de este olvido devuelve `sources:[]`, compatible con la limpieza del chat y sin fingir que un resto es original intacto.
 
+## Refinamiento posterior · confirmar todo olvido
+
+Tras aceptar el recorrido Honor, el propietario cambia explícitamente la decisión inicial sin confirmación: olvidar desde Gestionar o por orden conversacional requiere popup de texto/alcance, advertencia y Cancelar/Sí, borrar. Corrección y ofertas mantienen su recorrido. La confirmación es una decisión local de interacción; no cambia la autorización ni el contrato de escritura del servidor y clientes antiguos necesitan actualizarse para verla.
+
+Antes de aplicar una ruta forget, el adaptador móvil lee los detalles autorizados existentes y exige versión/revisión/IDs iguales al plan. Devuelve ConfirmForget sin llamar applyMessage. La sesión solo aprueba ese mismo plan/IDs tras pulsar Sí, borrar; cancelar no aplica. La aprobación vive en RAM y no se serializa. Desde fuente se conserva la selección en el ViewModel, sin preparar/enviar comando antes de confirmar. El servidor sigue comprobando versión, época, propietario y ticket; caducidad/conflicto requieren resolver de nuevo y confirmar un plan nuevo.
+
+El resultado confirmado permite un aviso local «He olvidado «recuerdo»» con el objetivo que se mostró. Esta excepción de presentación solicitada no es un recibo de contenido persistido ni memoria recuperable: se limpia antes de la siguiente entrada, al cambiar intención o invalidar/salir del ámbito. Nunca se añade a preguntas/contexto/proveedor. No se despliegan funciones, permisos, índices o claves para este cambio. Pruebas y límites por plataforma en [K4_VALIDATION](../../09-planning/K4_VALIDATION.md).
+
 ## Secuencia restante de K4
 
 1. Completar la validación iOS en Mac. Activación autorizada de la frontera selectiva e índice READY, rechazo sin credenciales y recorrido nativo productivo en Honor ya comprobados; los casos locales/sintéticos no sustituyen esas evidencias separadas.

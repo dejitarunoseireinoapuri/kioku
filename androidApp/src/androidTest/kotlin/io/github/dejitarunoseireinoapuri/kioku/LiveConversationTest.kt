@@ -64,7 +64,10 @@ class LiveConversationTest {
         visible("Recuerdo guardado")
         ready()
         send("Olvida lo del museo Nube de la prueba K4nube9261.")
-        visible("He olvidado lo que has seleccionado.")
+        click("Sí, borrar")
+        compose.waitUntil(CONVERSATION_LIVE_TIMEOUT) {
+            compose.onAllNodesWithText("He olvidado «", substring = true).fetchSemanticsNodes().isNotEmpty()
+        }
         verifyEvidence()
     }
 

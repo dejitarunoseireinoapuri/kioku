@@ -141,8 +141,8 @@ private fun KiokuNavigation(
         }
     }
     val actions =
-        NavigationActions(onSignOut, onRefresh, back, { backStack.add(it) }, { result ->
-            viewModel.memoryChanged(result)
+        NavigationActions(onSignOut, onRefresh, back, { backStack.add(it) }, { result, forgottenText ->
+            viewModel.memoryChanged(result, forgottenText)
             backStack.clear()
             backStack.add(Route.Conversation)
         }, backStack.lastOrNull())

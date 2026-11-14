@@ -2,6 +2,7 @@ package io.github.dejitarunoseireinoapuri.kioku
 
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import android.view.KeyEvent
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.ComposeTimeoutException
 import androidx.compose.ui.test.SemanticsMatcher
@@ -26,6 +27,7 @@ import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.lifecycle.Lifecycle
+import androidx.test.platform.app.InstrumentationRegistry
 import io.github.dejitarunoseireinoapuri.kioku.domain.AnswerStatus
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureIssue
 import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
@@ -118,14 +120,25 @@ class SourceControlNavigationTest {
     }
 
     @Test
-    fun forgettingOneItemIsImmediateInIntentButWaitsForConfirmedServerResult() {
-        controls.change = { MemoryChange.Confirmed(ChangeAction.Forget, 1) }
+    fun forgettingOneItemRequiresThePopupAndWaitsForConfirmedServerResult() {
+        val pending = CompletableDeferred<MemoryChange>()
+        controls.change = { pending.await() }
         compose
             .onAllNodesWithText("Olvidar este dato")
             .onFirst()
             .performScrollTo()
             .performClick()
-        compose.waitUntil(5000) { compose.onNodeWithText("He olvidado lo que has seleccionado.").isDisplayed() }
+        compose.onNodeWithTag("forget-confirmation").assertIsDisplayed()
+        assertEquals(0, controls.commands.size)
+        captureBrandScreen(compose.activity, "kioku-forget-confirmation.png") {
+            compose.onNodeWithTag("forget-confirmation").captureToImage()
+        }
+        compose.onNodeWithText("Sí, borrar").performScrollTo().performClick()
+        compose.waitUntil(5000) { controls.commands.size == 1 }
+        compose.onNodeWithTag("forget-confirmation").assertDoesNotExist()
+        compose.onNodeWithText("He olvidado «Película Loto.».").assertDoesNotExist()
+        pending.complete(MemoryChange.Confirmed(ChangeAction.Forget, 1))
+        compose.waitUntil(5000) { compose.onNodeWithText("He olvidado «Película Loto.».").isDisplayed() }
         assertEquals(1, controls.commands.size)
         assertEquals(listOf("$CONTROL_ID-1"), controls.commands.single().memoryIds)
         assertEquals(ChangeAction.Forget, controls.commands.single().action)
@@ -137,7 +150,15 @@ class SourceControlNavigationTest {
         controls.change = { MemoryChange.Confirmed(ChangeAction.Forget, 1) }
         captureBrandScreen(compose.activity, "kioku-source-controls.png") { compose.onRoot().captureToImage() }
         compose.onNodeWithText("Olvidar todo este texto y sus recuerdos").performScrollTo().performClick()
-        compose.waitUntil(5000) { compose.onNodeWithText("He olvidado lo que has seleccionado.").isDisplayed() }
+        compose
+            .onNodeWithText(
+                "Este texto y sus recuerdos dejarán de estar accesibles. Las copias en otros relatos se conservarán.",
+            ).assertIsDisplayed()
+        assertEquals(0, controls.commands.size)
+        compose.onNodeWithText("Sí, borrar").performScrollTo().performClick()
+        compose.waitUntil(5000) {
+            compose.onNodeWithText("He olvidado «Película Loto. Examen el martes.».").isDisplayed()
+        }
         assertEquals(1, controls.commands.size)
         assertEquals(
             2,
@@ -145,6 +166,39 @@ class SourceControlNavigationTest {
                 .single()
                 .memoryIds.size,
         )
+    }
+
+    @Test
+    fun cancellingAfterRotationLeavesTheSourceAndSendsNoDeletion() {
+        compose
+            .onAllNodesWithText("Olvidar este dato")
+            .onFirst()
+            .performScrollTo()
+            .performClick()
+        compose.onNodeWithTag("forget-confirmation").assertIsDisplayed()
+        compose.runOnUiThread { compose.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE }
+        compose.waitUntil(5000) {
+            compose.activity.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
+                compose.onNodeWithTag("forget-confirmation").isDisplayed()
+        }
+        compose.onNodeWithText("Cancelar").performScrollTo().performClick()
+        compose.onNodeWithTag("forget-confirmation").assertDoesNotExist()
+        compose.onNodeWithText("Película Loto.").performScrollTo().assertIsDisplayed()
+        assertEquals(0, controls.commands.size)
+    }
+
+    @Test
+    fun dismissingThePopupWithBackDoesNotDeleteOrLeaveTheSource() {
+        compose
+            .onAllNodesWithText("Olvidar este dato")
+            .onFirst()
+            .performScrollTo()
+            .performClick()
+        compose.onNodeWithTag("forget-confirmation").assertIsDisplayed()
+        InstrumentationRegistry.getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_BACK)
+        compose.onNodeWithTag("forget-confirmation").assertDoesNotExist()
+        compose.onNodeWithText("Película Loto.").performScrollTo().assertIsDisplayed()
+        assertEquals(0, controls.commands.size)
     }
 
     @Test

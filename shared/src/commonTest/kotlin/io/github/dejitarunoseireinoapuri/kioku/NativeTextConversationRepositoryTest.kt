@@ -5,6 +5,7 @@ import io.github.dejitarunoseireinoapuri.kioku.data.NativeCancellation
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeMemoryPort
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeMemoryReply
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeTextConversationRepository
+import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.domain.OfferDecision
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextContext
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextIntent
@@ -52,23 +53,81 @@ class NativeTextConversationRepositoryTest {
             val repository = NativeTextConversationRepository(port)
             val command = repository.prepare("Olvida ese dato.", TextIntent.Ask, TextContext())
             val source = "8e65fd01-d6b7-4cd4-9000-000000000001"
-            port.reply = { _, _ ->
-                ready(
-                    command.ids.route,
-                    """
-                    "action":"forget","sourceId":"$source","expectedVersion":"${"a".repeat(64)}",
-                    "memoryIds":["$source-1"],"correction":null,"forgetScope":"allOccurrences"
-                    """.trimIndent(),
+            port.reply = { endpoint, _ ->
+                when (endpoint) {
+                    MemoryEndpoint.SourceDetails -> {
+                        sourceDetails(source)
+                    }
+
+                    MemoryEndpoint.ApplyMessage -> {
+                        """{"apiVersion":1,"operationId":"${command.ids.action}","status":"forgotten",
+                        "text":"Cambio confirmado","sources":[],"memoryEpoch":1}"""
+                    }
+
+                    else -> {
+                        ready(
+                            command.ids.route,
+                            """
+                            "action":"forget","sourceId":"$source","expectedVersion":"${"a".repeat(64)}",
+                            "memoryIds":["$source-1"],"correction":null,"forgetScope":"allOccurrences"
+                            """.trimIndent(),
+                        )
+                    }
+                }
+            }
+            val prepared = repository.execute(command)
+            val confirmation = assertIs<TextOutcome.ConfirmForget>(prepared.outcome)
+            assertEquals("Película Loto.", confirmation.preview.text)
+            assertEquals(listOf(MemoryEndpoint.RouteMessage, MemoryEndpoint.SourceDetails), port.calls.map { it.first })
+            val approved = prepared.command.copy(forgetApproval = confirmation.preview)
+            val applied = assertIs<TextOutcome.Changed>(repository.execute(approved).outcome)
+            assertEquals(ChangeAction.Forget, applied.result.action)
+            assertEquals(MemoryEndpoint.ApplyMessage, port.calls.last().first)
+            val payload = port.calls.last().second
+            assertTrue(payload.contains("\"forgetScope\":\"allOccurrences\""))
+            assertFalse(payload.contains("forgetApproval"))
+            assertFalse(payload.contains("Película Loto."))
+            repository.execute(approved)
+            assertEquals(port.calls[2], port.calls[3])
+        }
+
+    @Test
+    fun staleOrMissingPreviewCannotReachTheApplyEndpoint() =
+        runTest {
+            for (mutation in listOf("version", "epoch", "missing", "unavailable")) {
+                val port = TextWirePort()
+                val repository = NativeTextConversationRepository(port)
+                val command = repository.prepare("Olvida ese dato.", TextIntent.Ask, TextContext())
+                val source = "8e65fd01-d6b7-4cd4-9000-000000000001"
+                port.reply = { endpoint, _ ->
+                    if (endpoint == MemoryEndpoint.RouteMessage) {
+                        ready(
+                            command.ids.route,
+                            """
+                            "action":"forget","sourceId":"$source","expectedVersion":"${"a".repeat(64)}",
+                            "memoryIds":["$source-1"],"correction":null,"forgetScope":"allOccurrences"
+                            """.trimIndent(),
+                        )
+                    } else {
+                        when (mutation) {
+                            "version" -> sourceDetails(source).replace("a".repeat(64), "b".repeat(64))
+                            "epoch" -> sourceDetails(source, 1)
+                            "missing" -> sourceDetails(source).replace("$source-1", "$source-2")
+                            else -> null
+                        }
+                    }
+                }
+                val outcome = repository.execute(command).outcome
+                if (mutation == "unavailable") {
+                    assertIs<TextOutcome.Failed>(outcome)
+                } else {
+                    assertEquals(TextOutcome.RepeatRequired, outcome)
+                }
+                assertEquals(
+                    listOf(MemoryEndpoint.RouteMessage, MemoryEndpoint.SourceDetails),
+                    port.calls.map { it.first },
                 )
             }
-            repository.execute(command)
-            assertEquals(MemoryEndpoint.ApplyMessage, port.calls.last().first)
-            assertTrue(
-                port.calls
-                    .last()
-                    .second
-                    .contains("\"forgetScope\":\"allOccurrences\""),
-            )
         }
 
     @Test
@@ -221,6 +280,13 @@ class NativeTextConversationRepositoryTest {
 
     private fun offerFields(fact: String = "Me gusta el miso.") =
         "\"action\":\"offer\",\"fact\":\"$fact\",\"alsoAsk\":false"
+
+    private fun sourceDetails(
+        source: String,
+        epoch: Int = 0,
+    ) = """{"apiVersion":1,"sourceId":"$source","version":"${"a".repeat(64)}",
+        "text":"Película Loto.","receivedAt":"2026-11-14T12:00:00Z","memoryEpoch":$epoch,
+        "items":[{"id":"$source-1","text":"Película Loto."}]}"""
 
     private fun ready(
         id: String,

@@ -2,6 +2,8 @@
 
 ## Sin versión publicada · 2026-11-14
 
+- Confirmación de todo olvido por petición posterior del propietario: popup con objetivo, alcance y advertencia desde Gestionar o conversación. Cancelar/cerrar no aplica; confirmar mantiene la operación y espera al servidor. El aviso «He olvidado «recuerdo»» solo vive en RAM, fuera de historial/contexto. Pruebas locales y en Honor, estética B compartida y backend sin cambios; iOS pendiente. [Evidencia](docs/09-planning/K4_VALIDATION.md).
+
 - Olvido de copias entre relatos activo: inventario completo acotado, paráfrasis del mismo hecho/sujeto, revisión de preservación y retirada conjunta de fuentes/índices/pendientes. Dato y texto completo conservan alcances distintos; fallo, cuota o copia concurrente no dejan borrado parcial.
 - 84 pruebas de emuladores, 77 host, 41 de interfaz Honor y reserva final IA real correctas; se conserva el intento intermedio con conflicto de reconstrucción y se mejora su aclaración. Tres funciones existentes actualizadas con autorización; recorrido nativo productivo Honor correcto para olvido conversacional y desde la fuente, conservando datos ajenos. Datos ficticios retirados; sin nuevos permisos/índices/claves. Este bloque queda validado en Android/backend; iOS pendiente. [Evidencia y cotas](docs/09-planning/K4_VALIDATION.md).
 

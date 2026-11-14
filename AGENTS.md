@@ -36,7 +36,7 @@ The official name is **Kioku**. Documentation overrides inconsistent historical 
 
 ## Memory invariants
 
-Explicit Contar/Preguntar intent; hold-to-talk with upward lock; no interruption before ending speech. Clear content saves automatically; uncertain content asks a same-channel clarification. Questions are not facts. New facts during a query require an accepted offer. Responses require authorized current evidence. A clear correction/forget request does not add redundant confirmation; ambiguous scope is clarified. Forgotten content must not reappear from sources, indexes, jobs, conversation or receipts.
+Explicit Contar/Preguntar intent; hold-to-talk with upward lock; no interruption before ending speech. Clear content saves automatically; uncertain content asks a same-channel clarification. Questions are not facts. New facts during a query require an accepted offer. Responses require authorized current evidence. A clear correction does not add redundant confirmation; forgetting always requires the owner's requested local confirmation dialog, including an explicit conversational request. Ambiguous scope is clarified first. Forgotten content must not reappear from sources, indexes, jobs or retrieval. The requested named success notice is transient presentation only, never stored or sent as conversation evidence.
 
 ## Quality and validation
 

@@ -55,7 +55,7 @@ class LiveRepeatedForgetTest {
         seedStories()
         compose.onNodeWithTag("intent-Ask").performClick()
         send("Olvida que en la prueba K4eco3746 yo quiero ver la película Farol K4eco3746.")
-        visible("He olvidado lo que has seleccionado.")
+        confirmForget("Farol")
         verifyMovieRemoval()
         forgetExamCopiesFromSource()
         verifyExamRemoval()
@@ -98,7 +98,7 @@ class LiveRepeatedForgetTest {
             hasText("Olvidar este dato") and hasAnySibling(hasText("simulacro", substring = true, ignoreCase = true))
         compose.waitUntil(20_000) { compose.onAllNodes(exam).fetchSemanticsNodes().size == 1 }
         compose.onNode(exam).performScrollTo().performClick()
-        visible("He olvidado lo que has seleccionado.")
+        confirmForget("simulacro")
     }
 
     private fun verifyMovieRemoval() =
@@ -107,6 +107,18 @@ class LiveRepeatedForgetTest {
             val absent = reply(repository, "En la prueba K4eco3746, ¿qué película tengo yo pendiente de ver?")
             assertEquals(AnswerStatus.NotFound, absent.status)
         }
+
+    private fun confirmForget(expected: String) {
+        click("Sí, borrar")
+        compose.waitUntil(REPEATED_LIVE_TIMEOUT) {
+            compose
+                .onAllNodes(
+                    hasText("He olvidado «", substring = true) and
+                        hasText(expected, substring = true, ignoreCase = true),
+                ).fetchSemanticsNodes()
+                .isNotEmpty()
+        }
+    }
 
     private fun verifyExamRemoval() =
         runBlocking {

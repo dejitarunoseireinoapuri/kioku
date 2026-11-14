@@ -33,9 +33,12 @@ class SourceControlViewModelTest {
         controlTest { repository, model, _ ->
             repository.change = { MemoryChange.Clarification("Prueba sin cambios.") }
             model.onEvent(SourceControlEvent.Forget("$CONTROL_SOURCE-1"))
+            assertEquals(0, repository.commands.size)
+            model.onEvent(SourceControlEvent.ConfirmForget)
             runCurrent()
             assertEquals(ForgetScope.AllOccurrences, repository.commands.last().forgetScope)
             model.onEvent(SourceControlEvent.Forget())
+            model.onEvent(SourceControlEvent.ConfirmForget)
             runCurrent()
             assertEquals(ForgetScope.Source, repository.commands.last().forgetScope)
         }
@@ -150,11 +153,53 @@ class SourceControlViewModelTest {
             val pending = CompletableDeferred<MemoryChange>()
             repository.change = { withContext(NonCancellable) { pending.await() } }
             model.onEvent(SourceControlEvent.Forget("$CONTROL_SOURCE-1"))
+            model.onEvent(SourceControlEvent.ConfirmForget)
             runCurrent()
             store.clear()
             pending.complete(MemoryChange.Confirmed(ChangeAction.Forget, 1))
             runCurrent()
             assertEquals(SourceControlState.Missing, model.state.value)
+        }
+
+    @Test
+    fun cancelOrInvalidTargetCannotForgetAndConfirmationKeepsTheExactReceiptOnRetry() =
+        controlTest { repository, model, _ ->
+            model.onEvent(SourceControlEvent.Forget("unknown"))
+            model.onEvent(SourceControlEvent.ConfirmForget)
+            assertEquals(0, repository.commands.size)
+            model.onEvent(SourceControlEvent.Forget("$CONTROL_SOURCE-1"))
+            val preview = assertIs<SourceControlState.Ready>(model.state.value).forget!!.preview
+            assertEquals("Película Loto.", preview.text)
+            model.onEvent(SourceControlEvent.CancelForget)
+            model.onEvent(SourceControlEvent.ConfirmForget)
+            assertEquals(0, repository.commands.size)
+            repository.change = { MemoryChange.Failed(CaptureIssue.Unavailable) }
+            model.onEvent(SourceControlEvent.Forget("$CONTROL_SOURCE-2"))
+            model.onEvent(SourceControlEvent.ConfirmForget)
+            model.onEvent(SourceControlEvent.ConfirmForget)
+            runCurrent()
+            assertEquals(1, repository.commands.size)
+            repository.change = { MemoryChange.Confirmed(ChangeAction.Forget, 1) }
+            model.onEvent(SourceControlEvent.Retry)
+            runCurrent()
+            assertEquals(repository.commands[0], repository.commands[1])
+            assertEquals("Examen el martes.", assertIs<SourceControlState.Done>(model.state.value).forgottenText)
+        }
+
+    @Test
+    fun confirmationIsDiscardedWhenSourceRevisionChangesWhilePaused() =
+        controlTest { repository, model, _ ->
+            model.onEvent(SourceControlEvent.Forget())
+            val ready = assertIs<SourceControlState.Ready>(model.state.value)
+            assertEquals(repository.source.source.originalText, ready.forget!!.preview.text)
+            model.conceal()
+            repository.revisionRead = { 1 }
+            repository.read = { null }
+            model.check()
+            runCurrent()
+            model.onEvent(SourceControlEvent.ConfirmForget)
+            assertEquals(SourceControlState.Missing, model.state.value)
+            assertEquals(0, repository.commands.size)
         }
 
     private fun edit(model: SourceControlViewModel) {

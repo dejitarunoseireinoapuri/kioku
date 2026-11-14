@@ -19,7 +19,7 @@ internal class TextConversationSession(
     private val repository: TextConversationRepository?,
     private val scope: CoroutineScope,
     private val onState: (TextConversationState, Boolean) -> Unit,
-    private val onChanged: (MemoryChange.Confirmed) -> Unit,
+    private val onChanged: (MemoryChange.Confirmed, String?) -> Unit,
     private val onRevision: (Long) -> Unit,
 ) {
     private var state = TextConversationState()
@@ -42,7 +42,7 @@ internal class TextConversationSession(
         intent: TextIntent,
     ): Boolean {
         val repository = repository ?: return false
-        if (!state.busy && !state.processing && text.isNotBlank()) {
+        if (state.acceptingInput && text.isNotBlank()) {
             if (!submitOfferAnswer(text)) prepareMessage(repository, text, intent)
         }
         return true
@@ -102,6 +102,8 @@ internal class TextConversationSession(
     fun act(action: MessageAction) {
         if (action == MessageAction.Reset) {
             reset(clearDraft = true)
+        } else if (action == MessageAction.CancelForget) {
+            cancelForget()
         } else {
             (state.status as? TextStatus.Ready)?.let { ready -> nextCommand(ready, action)?.let { execute(it) } }
         }
@@ -112,6 +114,10 @@ internal class TextConversationSession(
         action: MessageAction,
     ): TextCommand? =
         when (action) {
+            MessageAction.ConfirmForget -> {
+                (ready.outcome as? TextOutcome.ConfirmForget)?.let { ready.command.copy(forgetApproval = it.preview) }
+            }
+
             MessageAction.Accept, MessageAction.Reject -> {
                 ready.command.takeIf { ready.outcome is TextOutcome.Offered }?.copy(
                     decision = if (action == MessageAction.Accept) OfferDecision.Accept else OfferDecision.Reject,
@@ -126,10 +132,17 @@ internal class TextConversationSession(
                 ready.command
             }
 
-            MessageAction.Reset -> {
+            MessageAction.Reset, MessageAction.CancelForget -> {
                 null
             }
         }
+
+    private fun cancelForget() {
+        val ready = state.status as? TextStatus.Ready ?: return
+        if (ready.outcome !is TextOutcome.ConfirmForget) return
+        append(TextMessage.Result(++messageId, TextOutcome.ForgetCancelled))
+        publish(state.copy(status = TextStatus.Ready(ready.command, TextOutcome.ForgetCancelled)))
+    }
 
     private fun context() = TextContext(revision, questions.toList(), references)
 
@@ -155,13 +168,13 @@ internal class TextConversationSession(
                 if (epoch != generation) return@launch
                 val outcome = execution.outcome
                 if (outcome is TextOutcome.Changed) {
-                    onChanged(outcome.result)
+                    onChanged(outcome.result, execution.command.forgetApproval?.text)
                     return@launch
                 }
                 alignRevision(execution.command)
                 references = outcome.references()
                 rememberQuestion(command.text, outcome)
-                append(TextMessage.Result(++messageId, outcome))
+                if (outcome !is TextOutcome.ConfirmForget) append(TextMessage.Result(++messageId, outcome))
                 publish(state.copy(status = TextStatus.Ready(execution.command, outcome)))
             }
     }

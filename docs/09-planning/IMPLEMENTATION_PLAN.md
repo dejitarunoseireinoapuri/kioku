@@ -135,11 +135,11 @@ Cuarta iteración y decisión actual: [evidencia v4](../../prototypes/memory/evi
 
 **Estado actual:** iniciada desde K3 `6b264e7`, sin integrar K3 en `main` ni declarar resueltas sus comprobaciones pendientes. Control selectivo, órdenes naturales y ofertas activos y comprobados en Honor. El olvido de copias entre relatos queda validado en Android/backend dentro de sus cotas: 84 pruebas de emuladores, 77 host, 41 de interfaz Honor y recorrido nativo productivo adicional correctos. Tres funciones existentes actualizadas con autorización, sin nuevos recursos/permisos; datos ficticios retirados. Conserva asuntos ajenos y rechaza el conjunto ante ambigüedad, exceso o concurrencia. No es borrado global. [ADR-011](../02-architecture/ADR/ADR-011-memory-control.md), [evaluación con IA real, fallos y límites](K4_VALIDATION.md). K4 completa continúa abierta por la comprobación de este build en iOS.
 
-**Resultado:** controlar lo guardado sin abandonar la conversación. Cubre UC-006, UC-007 y UC-008 por texto.
+**Resultado:** controlar lo guardado sin abandonar la conversación. Cubre UC-006, UC-007 y UC-008 por texto. Tras aceptar el recorrido Honor, el propietario solicita confirmar siempre el olvido mediante popup; cancelar no aplica y el aviso final nombra el objetivo solo en RAM, después del servidor. Esta decisión sustituye el olvido inequívoco sin diálogo inicial.
 
 Ampliación actual: copias semánticas entre relatos activas y aceptadas en Honor con inventario completo acotado y commit atómico, sin usar el top seis como alcance final. Conserva personas/asuntos distintos, pide aclaración si otro dato reconstruye el objetivo y rechaza todo si supera capacidad o cambia el inventario. Bloque Android/backend terminado dentro de sus cotas; iOS continúa separado. [Pruebas/criterios y límites de la cuarta ejecución](K4_VALIDATION.md).
 
-**Entrega:** ofrecer guardar un dato nuevo durante una consulta y aceptar/rechazar sin cambiar de modo. Corregir con objetivo y versión resueltos, distinguiendo corrección de evolución temporal. Olvidar con alcance claro sin confirmaciones redundantes; aclarar solo ambigüedades. Retirar lo olvidado de fuentes, índices, contexto y trabajos pendientes preservando datos ajenos al alcance.
+**Entrega:** ofrecer guardar un dato nuevo durante una consulta y aceptar/rechazar sin cambiar de modo. Corregir con objetivo y versión resueltos, distinguiendo corrección de evolución temporal. Olvidar con alcance claro y confirmación mediante popup; aclarar objetivos ambiguos antes del diálogo. Retirar lo olvidado de fuentes, índices, contexto y trabajos pendientes preservando datos ajenos al alcance.
 
 **Antes de empezar:** K2/K3 y estrategia consistente de versiones, derivados y limpieza.
 

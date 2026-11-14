@@ -87,7 +87,10 @@ class ConversationViewModel(
         if (visible) visibility.check(onReady = onReady) else visibility.hide()
     }
 
-    fun memoryChanged(result: MemoryChange.Confirmed? = null) {
+    fun memoryChanged(
+        result: MemoryChange.Confirmed? = null,
+        forgottenText: String? = null,
+    ) {
         operationGeneration++
         captureJob?.cancel()
         command = null
@@ -104,6 +107,7 @@ class ConversationViewModel(
                 capture = null,
                 capturing = false,
                 draft = "",
+                forgottenText = forgottenText.takeIf { result?.action == ChangeAction.Forget },
                 feedback =
                     result?.let { change ->
                         if (change.action ==
@@ -203,7 +207,13 @@ class ConversationViewModel(
                 query.reset()
                 messages.reset()
             }
-            mutableState.update { it.copy(intent = intent) }
+            mutableState.update {
+                it.copy(
+                    intent = intent,
+                    feedback = it.feedback.takeIf { intent == current.intent },
+                    forgottenText = it.forgottenText.takeIf { intent == current.intent },
+                )
+            }
         }
     }
 
@@ -219,7 +229,7 @@ class ConversationViewModel(
                 } else {
                     MAX_DRAFT_LENGTH
                 }
-            mutableState.update { it.copy(draft = text.take(limit), feedback = null) }
+            mutableState.update { it.copy(draft = text.take(limit), feedback = null, forgottenText = null) }
         }
     }
 

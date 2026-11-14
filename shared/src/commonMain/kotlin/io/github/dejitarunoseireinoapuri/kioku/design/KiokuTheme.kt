@@ -48,6 +48,8 @@ object KiokuSpacing {
     val LoginVertical = 32.dp
     val LoadingVertical = 48.dp
     val LoginHeadlineGap = 64.dp
+    val ConfirmationMaxHeight = 560.dp
+    val ConfirmationTextHeight = 200.dp
 }
 
 @Composable

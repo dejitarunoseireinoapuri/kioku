@@ -4,10 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.domain.EditableSource
+import io.github.dejitarunoseireinoapuri.kioku.domain.ForgetPreview
 import io.github.dejitarunoseireinoapuri.kioku.domain.ForgetScope
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChange
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChangeCommand
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryControlRepository
+import io.github.dejitarunoseireinoapuri.kioku.domain.previewForget
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -33,6 +35,7 @@ sealed interface SourceControlState {
         val editing: String? = null,
         val draft: String = "",
         val feedback: ControlFeedback? = null,
+        val forget: PendingSourceForget? = null,
     ) : SourceControlState
 
     data class Working(
@@ -42,8 +45,14 @@ sealed interface SourceControlState {
 
     data class Done(
         val result: MemoryChange.Confirmed,
+        val forgottenText: String? = null,
     ) : SourceControlState
 }
+
+data class PendingSourceForget(
+    val ids: List<String>,
+    val preview: ForgetPreview,
+)
 
 sealed interface SourceControlEvent {
     data class Edit(
@@ -60,6 +69,10 @@ sealed interface SourceControlEvent {
 
     data object Apply : SourceControlEvent
 
+    data object ConfirmForget : SourceControlEvent
+
+    data object CancelForget : SourceControlEvent
+
     data object Cancel : SourceControlEvent
 
     data object Retry : SourceControlEvent
@@ -74,6 +87,7 @@ class SourceControlViewModel(
     private val mutableState = MutableStateFlow<SourceControlState>(SourceControlState.Loading)
     val state = mutableState.asStateFlow()
     private var command: MemoryChangeCommand? = null
+    private var approvedForgetText: String? = null
     private var job: Job? = null
     private var generation = 0
     private var paused: SourceControlState? = null
@@ -137,6 +151,10 @@ class SourceControlViewModel(
         ready: SourceControlState.Ready,
         event: SourceControlEvent,
     ) {
+        if (ready.forget != null) {
+            decideForget(ready, event)
+            return
+        }
         when (event) {
             is SourceControlEvent.Edit -> {
                 selectEdit(ready, event.id)
@@ -160,7 +178,9 @@ class SourceControlViewModel(
                 mutableState.value = ready.copy(editing = null, draft = "", feedback = null)
             }
 
-            SourceControlEvent.Reload, SourceControlEvent.Retry -> {}
+            SourceControlEvent.Reload, SourceControlEvent.Retry,
+            SourceControlEvent.ConfirmForget, SourceControlEvent.CancelForget,
+            -> {}
         }
     }
 
@@ -179,11 +199,29 @@ class SourceControlViewModel(
         id: String?,
     ) {
         val ids = id?.let { listOf(it) } ?: ready.source.items.map { it.id }
-        if (ids.all { selected ->
-                ready.source.items.any { it.id == selected }
+        val scope = if (id == null) ForgetScope.Source else ForgetScope.AllOccurrences
+        ready.source.previewForget(ids, scope)?.let { preview ->
+            command = null
+            approvedForgetText = null
+            mutableState.value = ready.copy(forget = PendingSourceForget(ids, preview), feedback = null)
+        }
+    }
+
+    private fun decideForget(
+        ready: SourceControlState.Ready,
+        event: SourceControlEvent,
+    ) {
+        val pending = ready.forget ?: return
+        when (event) {
+            SourceControlEvent.ConfirmForget -> {
+                prepare(ready, pending.ids, ChangeAction.Forget, pending.preview.scope)
             }
-        ) {
-            prepare(ready, ids, ChangeAction.Forget, if (id == null) ForgetScope.Source else ForgetScope.AllOccurrences)
+
+            SourceControlEvent.CancelForget -> {
+                mutableState.value = ready.copy(forget = null)
+            }
+
+            else -> {}
         }
     }
 
@@ -200,6 +238,7 @@ class SourceControlViewModel(
         val epoch = ++generation
         job?.cancel()
         command = null
+        approvedForgetText = null
         if (paused != null) paused = SourceControlState.Loading
         mutableState.value = SourceControlState.Loading
         job =
@@ -219,6 +258,11 @@ class SourceControlViewModel(
         action: ChangeAction,
         forgetScope: ForgetScope = ForgetScope.Source,
     ) {
+        approvedForgetText =
+            ready.forget
+                ?.preview
+                ?.text
+                .takeIf { action == ChangeAction.Forget }
         val pending =
             repository
                 .prepare(
@@ -236,7 +280,8 @@ class SourceControlViewModel(
         ready: SourceControlState.Ready,
     ) {
         val epoch = ++generation
-        mutableState.value = SourceControlState.Working(ready.copy(feedback = null), pending.action)
+        val previous = ready.copy(feedback = null, forget = null)
+        mutableState.value = SourceControlState.Working(previous, pending.action)
         job =
             viewModelScope.launch {
                 val result = repository.execute(pending)
@@ -244,21 +289,21 @@ class SourceControlViewModel(
                 present(
                     when (result) {
                         is MemoryChange.Confirmed -> {
-                            SourceControlState.Done(result)
+                            SourceControlState.Done(result, approvedForgetText)
                         }
 
                         is MemoryChange.Clarification -> {
-                            ready.copy(
+                            previous.copy(
                                 feedback = ControlFeedback.Clarification(result.text),
                             )
                         }
 
                         is MemoryChange.Failed -> {
-                            ready.copy(feedback = ControlFeedback.Unavailable)
+                            previous.copy(feedback = ControlFeedback.Unavailable)
                         }
 
                         MemoryChange.Processing -> {
-                            ready.copy(feedback = ControlFeedback.Processing)
+                            previous.copy(feedback = ControlFeedback.Processing)
                         }
                     },
                 )
@@ -269,6 +314,7 @@ class SourceControlViewModel(
         generation++
         job?.cancel()
         command = null
+        approvedForgetText = null
         paused = null
         mutableState.value = SourceControlState.Missing
     }

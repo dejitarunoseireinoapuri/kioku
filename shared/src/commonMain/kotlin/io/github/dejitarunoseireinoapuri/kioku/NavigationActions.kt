@@ -21,7 +21,7 @@ internal data class NavigationActions(
     val refresh: () -> Unit,
     val back: () -> Unit,
     val navigate: (Route) -> Unit,
-    val changed: (MemoryChange.Confirmed) -> Unit,
+    val changed: (MemoryChange.Confirmed, String?) -> Unit,
     val current: NavKey?,
 )
 

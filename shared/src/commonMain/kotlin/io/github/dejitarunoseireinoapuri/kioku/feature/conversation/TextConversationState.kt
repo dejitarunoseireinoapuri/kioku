@@ -43,6 +43,8 @@ data class TextConversationState(
 ) {
     val busy: Boolean get() = status is TextStatus.Working
     val outcome: TextOutcome? get() = (status as? TextStatus.Ready)?.outcome
+    val confirmingForget: Boolean get() = outcome is TextOutcome.ConfirmForget
+    val acceptingInput: Boolean get() = !busy && !processing && !confirmingForget
     val clarification: Boolean get() =
         when (val result = outcome) {
             is TextOutcome.Clarification -> true
@@ -55,7 +57,7 @@ data class TextConversationState(
             (outcome as? TextOutcome.Captured)?.capture == CaptureOutcome.Processing
 }
 
-enum class MessageAction { Retry, Restart, Accept, Reject, Reset }
+enum class MessageAction { Retry, Restart, Accept, Reject, ConfirmForget, CancelForget, Reset }
 
 internal val MemoryIntent.textIntent: TextIntent
     get() = if (this == MemoryIntent.Ask) TextIntent.Ask else TextIntent.Tell

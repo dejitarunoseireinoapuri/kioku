@@ -10,9 +10,9 @@ import io.github.dejitarunoseireinoapuri.kioku.design.ActionButton
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
 import io.github.dejitarunoseireinoapuri.kioku.design.Panel
+import io.github.dejitarunoseireinoapuri.kioku.design.memoryChangeText
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureIssue
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
-import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextOutcome
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
@@ -21,8 +21,7 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.capture_ignored
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_more_context
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_restart
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_uncertain
-import io.github.dejitarunoseireinoapuri.kioku.resources.control_corrected
-import io.github.dejitarunoseireinoapuri.kioku.resources.control_forgotten
+import io.github.dejitarunoseireinoapuri.kioku.resources.forget_cancelled
 import io.github.dejitarunoseireinoapuri.kioku.resources.offer_accept
 import io.github.dejitarunoseireinoapuri.kioku.resources.offer_decline
 import io.github.dejitarunoseireinoapuri.kioku.resources.offer_title
@@ -91,7 +90,24 @@ private fun TextOutcomeBody(
         }
 
         is TextOutcome.Changed -> {
-            ChangeReceipt(outcome.result.action)
+            Text(memoryChangeText(outcome.result.action))
+        }
+
+        else -> {
+            TextOutcomeNotice(outcome, interactive, onEvent)
+        }
+    }
+}
+
+@Composable
+private fun TextOutcomeNotice(
+    outcome: TextOutcome,
+    interactive: Boolean,
+    onEvent: (ConversationEvent) -> Unit,
+) {
+    when (outcome) {
+        TextOutcome.ForgetCancelled -> {
+            Text(stringResource(Res.string.forget_cancelled))
         }
 
         TextOutcome.Declined -> {
@@ -113,22 +129,9 @@ private fun TextOutcomeBody(
         is TextOutcome.Failed -> {
             FailureReceipt(outcome.issue, interactive, onEvent)
         }
-    }
-}
 
-@Composable
-private fun ChangeReceipt(action: ChangeAction) {
-    Text(
-        stringResource(
-            if (action ==
-                ChangeAction.Correct
-            ) {
-                Res.string.control_corrected
-            } else {
-                Res.string.control_forgotten
-            },
-        ),
-    )
+        else -> {}
+    }
 }
 
 @Composable

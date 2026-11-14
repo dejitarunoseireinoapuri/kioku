@@ -3,6 +3,8 @@ package io.github.dejitarunoseireinoapuri.kioku.data
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureCommand
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureIssue
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
+import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
+import io.github.dejitarunoseireinoapuri.kioku.domain.ForgetScope
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChange
 import io.github.dejitarunoseireinoapuri.kioku.domain.OfferDecision
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryCommand
@@ -14,6 +16,7 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.TextIntent
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextPlan
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextWorkIds
+import io.github.dejitarunoseireinoapuri.kioku.domain.previewForget
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withTimeoutOrNull
@@ -28,6 +31,7 @@ class NativeTextConversationRepository(
 ) : TextConversationRepository {
     private val captures = NativeCaptureRepository(port)
     private val queries = NativeQueryRepository(port)
+    private val controls = NativeMemoryControlRepository(port)
 
     override fun prepare(
         text: String,
@@ -135,7 +139,11 @@ class NativeTextConversationRepository(
             }
 
             is TextPlan.Change -> {
-                apply(command)
+                if (plan.action == ChangeAction.Forget && command.forgetApproval == null) {
+                    previewForget(plan)
+                } else {
+                    apply(command)
+                }
             }
 
             is TextPlan.Offer -> {
@@ -149,6 +157,16 @@ class NativeTextConversationRepository(
                 }
             }
         }
+
+    private suspend fun previewForget(plan: TextPlan.Change): TextOutcome {
+        val source = controls.details(plan.sourceId) ?: return TextOutcome.Failed(CaptureIssue.Unavailable)
+        return if (source.version != plan.version || source.memoryRevision != plan.stamp.revision) {
+            TextOutcome.RepeatRequired
+        } else {
+            val preview = source.previewForget(plan.memoryIds, plan.forgetScope ?: ForgetScope.Source)
+            preview?.let { TextOutcome.ConfirmForget(it) } ?: TextOutcome.RepeatRequired
+        }
+    }
 
     private suspend fun ask(
         command: TextCommand,
