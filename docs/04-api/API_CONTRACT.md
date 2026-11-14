@@ -107,9 +107,9 @@ Original y todos sus fragmentos quedan revocados al reemplazarlos; se conserva e
 
 `getSource` y `saved.source` conservan sus campos y admiten `sourceKind` opcional para las fuentes derivadas; originales mantienen la forma anterior. La UI distingue «Texto original», «Texto que conservas» y «Fragmento de tu corrección». En contexto JSON de `queryMemory`, `memory_revision` es opcional y se valida como entero seguro no negativo. Si difiere de la revisión del servidor, se descartan preguntas anteriores antes de recuperar; clientes sin el campo se consideran revisión 0. La pregunta actual siempre se mantiene como dato no confiable, nunca como hecho guardado. El campo no sustituye autorización ni decide escrituras.
 
-La primera activación no incluía interpretación natural ni ofertas. La continuación siguiente las implementa localmente, sin un endpoint separado llamado `resolveProposal`. El transporte HTTPS público no da acceso a contenido sin superar las comprobaciones. Estado remoto en [K4_VALIDATION](../09-planning/K4_VALIDATION.md).
+La primera activación no incluía interpretación natural ni ofertas. La continuación siguiente las incorpora y activa con autorización posterior, sin un endpoint separado llamado `resolveProposal`. El transporte HTTPS público no da acceso a contenido sin superar las comprobaciones. Estado remoto en [K4_VALIDATION](../09-planning/K4_VALIDATION.md).
 
-## Conversación K4 · preparada, activación pendiente
+## Conversación K4 · activa
 
 `routeMessage` interpreta `{apiVersion:1,requestId,mode:ask|tell,text,zone,memoryEpoch,context:{questions,sourceIds}}`. Texto no vacío: 2000 caracteres en ask, 8000 en tell. Hasta cuatro preguntas previas, suma máxima 2000, y seis referencias propias; cuerpo máximo 64 KB. No acepta identidades/rutas/modelo/credenciales elegidos por el relato. Devuelve `ready` con plan, `needsClarification` con pregunta, `processing` o `repeatRequired`. Una interpretación terminada no puede recuperar el plan desde un recibo: no se persiste su contenido.
 
@@ -119,7 +119,7 @@ Todo plan incluye `memoryEpoch`, `receivedAt` del mensaje y `expiresAtMs` (cinco
 
 Ofertas/correcciones conservan el instante del mensaje original para resolver fechas relativas, aunque se apliquen después de medianoche. Una aclaración de captura aceptada conserva esa época: si hubo un cambio de memoria, expira sin exponer ni guardar el texto antiguo. Los planes quedan en RAM del cliente; no hay cola offline. `ask`/`tell` normales reutilizan las fronteras de consulta/captura ya existentes. Los dos callables nuevos mantienen Google verificado/no revocado, App Check, cuenta permitida y propietario habilitado; una admisión por petición y comprobación final tras IA.
 
-No existe borrado global de la cuenta desde esta frontera ni garantía de retirar duplicados repartidos por otros relatos. Una orden de borrar toda la memoria pide un objetivo concreto, sin retirar un subconjunto de candidatos. No se requieren nuevos índices o claves. Desplegar los dos endpoints y actualizar captura/aclaración/estado/consulta requiere autorización concreta.
+No existe borrado global de la cuenta desde esta frontera ni garantía de retirar duplicados repartidos por otros relatos. Una orden de borrar toda la memoria pide un objetivo concreto, sin retirar un subconjunto de candidatos. Se activan los dos endpoints y se actualizan captura/aclaración/estado/consulta con autorización concreta, sin nuevos índices o claves. [Aceptación nativa y límites](../09-planning/K4_VALIDATION.md).
 
 La evidencia interna de consulta conserva `sourceKind:retained|correction` opcional, validado desde Firestore, hasta generación y verificación. La cabecera de una corrección no la convierte en cita ajena; la procedencia `quoted` de un candidato sigue sin acreditar hechos personales. No cambia la forma pública de las referencias de respuesta ni permite al cliente asignar esa etiqueta.
 

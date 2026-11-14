@@ -55,7 +55,7 @@ Captura y consulta verifican revocación además de las versiones y de la conces
 
 `firestore.indexes.json` prepara un índice ascendente de colección exclusivamente para `operations.pending.turn.id`, que permite localizar pendientes vinculados por UUID. El resto del mapa `pending`, preguntas y textos siguen excluidos. La primera entrega solo los preparó; la continuación autorizada despliega la frontera y verifica ese índice READY. Los emuladores no sustituyen esa comprobación remota.
 
-## Tickets conversacionales K4 · continuación local
+## Tickets conversacionales K4 · continuación activa
 
 En `accounts/{uid}/operations/{requestId}`, `kind:routing` comparte nonce/concesión con consulta y añade `createdAtMs`, época, `planHash`, caducidad y, si procede, `executionId` o `declinedBy`. El digest incluye UID, entrada original, plan e ID aleatorio; no permite recuperación de preguntas/propuestas desde Firestore. Texto, pregunta, plan, corrección y hecho ofrecido no se guardan en este ticket. Sin aceptar, TTL y vigencia lógica de cinco minutos; tras vincular ejecución, TTL siete días conservando la admisión lógica original. No hay índice nuevo.
 

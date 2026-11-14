@@ -1,6 +1,6 @@
 # K4 · Control conversacional de memoria
 
-Rama: `codex/k4-memory-control`, desde la entrega K3 `6b264e7`. **En curso: controles por fuente activos en Honor; continuación conversacional implementada y comprobada localmente, activación nueva pendiente.** K3 conserva la comprobación iOS actual y la aclaración del reporte temporal pendientes. No se integran ramas en `main` por esta ejecución. K4 no cerrada.
+Rama: `codex/k4-memory-control`, desde la entrega K3 `6b264e7`. **En curso: controles por fuente y continuación conversacional activos y comprobados en Honor real.** K3 conserva la comprobación iOS actual y la aclaración del reporte temporal pendientes. No se integran ramas en `main` por esta ejecución. iOS actual y alcance de olvido entre fuentes pendientes; K4 no cerrada.
 
 ## Alcance de la primera ejecución
 
@@ -80,11 +80,11 @@ Esta prueba nativa añade llamadas pagadas distintas de las 36 del informe local
 
 Se consulta la [documentación oficial de despliegue acotado](https://firebase.google.com/docs/functions/manage-functions) y el código del CLI fijado. No se crean proyectos, backups o claves ni se amplían permisos de memoria de clientes. iOS comparte UI/adaptadores preparados, pero este build necesita Mac/Xcode y comprobación propia. Tampoco se resuelve retroactivamente el reporte «debate hoy» a partir de inferencias o de esta entrega.
 
-## Tercera ejecución · conversación y ofertas, preparada para activar
+## Tercera ejecución · conversación y ofertas
 
 Se implementan órdenes naturales explícitas de corrección/olvido en ambos modos y ofertas para afirmaciones nuevas en Preguntar. Los controles «Sí, recuérdalo» / «No, gracias» o una respuesta inequívoca a la oferta activa conservan el modo. Preguntas, hipótesis, citas e instrucciones relatadas no autorizan una escritura. Un cambio real con el tiempo se añade como nuevo dato y conserva el pasado. Una orden clara no añade confirmación; objetivo ambiguo pide aclaración. Chat compartido en RAM, carga bajo mensajes por fase real, borrador vaciado al enviar y operaciones estables ante giro/reintento.
 
-Los dos nuevos callables preparados son `routeMessage` y `applyMessage`; **no están desplegados**. Ticket sin texto, digest ligado a UID/entrada/plan/ID aleatorio, vigencia de cinco minutos, un solo hijo y época/versiones actuales. Rechazo definitivo no llama a IA. Fecha original del mensaje ancla ofertas y correcciones, incluso al cruzar medianoche. Un pendiente de oferta aceptada conserva época y no puede restaurarse tras un cambio. La consulta descarta contexto antiguo y el cliente retira mensajes anteriores al conocer otra época, antes del resultado hijo. La fuente actual se vuelve a leer para abrirla. [Contrato](../04-api/API_CONTRACT.md), [ADR-011](../02-architecture/ADR/ADR-011-memory-control.md).
+Los dos nuevos callables son `routeMessage` y `applyMessage`; su activación posterior autorizada se documenta al final de este apartado. Ticket sin texto, digest ligado a UID/entrada/plan/ID aleatorio, vigencia de cinco minutos, un solo hijo y época/versiones actuales. Rechazo definitivo no llama a IA. Fecha original del mensaje ancla ofertas y correcciones, incluso al cruzar medianoche. Un pendiente de oferta aceptada conserva época y no puede restaurarse tras un cambio. La consulta descarta contexto antiguo y el cliente retira mensajes anteriores al conocer otra época, antes del resultado hijo. La fuente actual se vuelve a leer para abrirla. [Contrato](../04-api/API_CONTRACT.md), [ADR-011](../02-architecture/ADR/ADR-011-memory-control.md).
 
 ### Evaluación con proveedor, conservando los fallos
 
@@ -121,11 +121,17 @@ node tooling/m0.mjs check
 node tooling/m0.mjs test
 ```
 
-APK preparado `androidApp/build/outputs/apk/debug/kioku-k4-conversacion.apk`, SHA-256 `064fef84e8a166b825b0b5bb8a6981eac3498cff2e715cadade5de313eb509d1`. Después de probar con fixtures se deja en Honor el APK anterior compatible con el servidor actual, por actualización sin borrar datos o sesión. El APK nuevo se instalará al activar las fronteras nuevas; no se deja una interfaz que dependa de endpoints inexistentes.
+APK `androidApp/build/outputs/apk/debug/kioku-k4-conversacion.apk`, SHA-256 `064fef84e8a166b825b0b5bb8a6981eac3498cff2e715cadade5de313eb509d1`. Después de probar con fixtures se reinstaló temporalmente el APK anterior compatible mientras se autorizaba la activación. Tras activar las fronteras nuevas se instaló por actualización el APK nuevo, conservando datos y sesión; es el que queda en Honor. No se dejó una interfaz dependiente de endpoints inexistentes.
 
-### Activación y límites pendientes
+### Activación y aceptación productiva de la conversación
 
-El despliegue preparado añade dos funciones y actualiza `submitTurn`, `resolveClarification`, `getOperation` y `queryMemory`. Los dos nuevos necesitan entrada HTTPS pública de transporte, manteniendo Google, App Check y propietario permitido; misma identidad/secreto/Blaze y OpenAI. No hay nuevos índices, claves, backups o permisos directos de cliente. La autorización de la frontera anterior no se interpreta como autorización de esta ampliación; se solicita con entrega concreta revisable. Después se comprobarán estado/denegación y recorrido nativo en Honor con nuevos datos sintéticos y limpieza exclusivamente de ellos.
+El propietario autoriza expresamente en este chat activar y probar el commit `6555c68`, después de subirlo a su rama. Se crean `routeMessage`/`applyMessage` y se actualizan `submitTurn`, `resolveClarification`, `getOperation` y `queryMemory`, exclusivamente en `kioku-9454f`, `europe-west1`. Despliegue correcto, con compilación/formato de predeploy. Los dos nuevos tienen entrada HTTPS pública de transporte; se mantienen Google, App Check, propietario permitido e identidad/secreto existentes. Verificación administrativa de nueve funciones de memoria: `ACTIVE`, identidad esperada, máximo una instancia y rechazo HTTPS sin credenciales con 401; índice anterior READY y mapa pending excluido. No se crean nuevos índices, claves, backups o permisos directos de cliente. `getConfiguration`, reglas e índices no se despliegan de nuevo.
+
+`LiveConversationTest`: **1/1 correcta en Honor, 74,592 s**, usando MainActivity y SDKs Google/Firebase reales, sin dobles ni tokens de depuración. Guarda dos datos marcados `K4nube9261`, corrige naturalmente el examen del día 24 al 26, acepta una oferta de visitar el museo Nube sin salir de Preguntar y olvida ese dato por orden natural. Las consultas nativas posteriores confirman el examen el día 26, la película Loto conservada y ausencia del museo. No se sustituye esta prueba por resultados del emulador. Rechazo de ofertas, caducidad y concurrencia tienen evidencia determinista/IA sintética separada; este recorrido nativo no demuestra todos los casos posibles ni iOS.
+
+Ausencia del marcador comprobada antes de empezar. Se registra solo una línea base de IDs existentes en la ventana de la prueba, sin copiar textos. Al terminar se retiran las dos fuentes residuales que contienen el marcador, validando pertenencia de todos sus fragmentos; el retiro del museo ya se produjo por la app. Comprobación final: cero fuentes con el marcador y **cero fuentes nuevas sin contabilizar frente a la línea base**. No se cambian otros recuerdos; permanecen únicamente revocaciones mínimas sin texto. APK nuevo instalado por actualización en Honor, con sesión conservada. Este recorrido añade gasto productivo a las estimaciones locales anteriores; no se obtuvo un desglose monetario remoto aislado ni saldo real API.
+
+### Límites pendientes
 
 Alcance actual de corrección/olvido: una fuente inequívoca, hasta ocho fragmentos; resolver recupera seis candidatos o una fuente contextual. No garantiza retirar copias del mismo hecho en otros relatos ni borrar toda la cuenta. Una orden global pide concretar sin borrar parcialmente. Tampoco hay sincronización continua de otro móvil en primer plano. iOS comparte implementación/adaptadores preparados, pero falta compilar y probar este build en Mac. Estas limitaciones impiden declarar K4 completa.
 

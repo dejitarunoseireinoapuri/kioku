@@ -1,6 +1,6 @@
 # ADR-011 · Retirada canónica y control conversacional
 
-- Estado: control por fuente activo y comprobado en Honor; continuación conversacional implementada localmente, activación y nuevo build iOS pendientes.
+- Estado: control por fuente y conversación activos y comprobados en Honor; nuevo build iOS y olvido entre fuentes pendientes.
 - Fecha: 2026-11-14.
 - Amplía [ADR-005](ADR-005-memory-evidence-and-deletion.md), [K2](ADR-009-text-capture.md) y [K3](ADR-010-text-query.md).
 
@@ -42,13 +42,13 @@ Fecha/zona de la corrección natural y de la oferta aceptada proceden del mensaj
 
 `TextConversationRepository` portable une estas fronteras mediante adaptadores nativos. El ViewModel conserva plan/IDs/decisión en RAM antes de iniciar la operación hija; rotación/reintento no los recrean. Chat visible acotado a 40 mensajes y contexto de cuatro preguntas, sin respuestas como hechos. Oferta admite botones o una respuesta afirmativa/negativa inequívoca a la oferta activa. Una pregunta como «sí?» no se interpreta como aceptación. Resultado incierto bloquea nuevos envíos hasta comprobarlo. Época nueva recibida al preparar elimina chat/contexto antiguos antes de presentar la respuesta; cambio confirmado y salida de sesión invalidan generaciones y fuentes. Antes de enviar se valida la época en el propio resolver; regreso a primer plano y apertura de fuente conservan sus controles específicos.
 
-Implementación compartida Android/iOS preparada. Evidencia local, evaluación con proveedor y activación remota se distinguen en [K4_VALIDATION](../../09-planning/K4_VALIDATION.md); esta decisión no autoriza el despliegue.
+Implementación compartida Android/iOS preparada. El propietario autoriza después del commit revisable `6555c68` la ampliación productiva: dos funciones nuevas y cuatro actualizaciones. Despliegue, denegación sin sesión y recorrido nativo real en Honor correctos; nuevos datos sintéticos retirados. Evidencia local, evaluación con proveedor y activación remota se distinguen en [K4_VALIDATION](../../09-planning/K4_VALIDATION.md); esta decisión por sí sola no autoriza otros despliegues.
 
 ## Secuencia restante de K4
 
 1. Completar la validación iOS en Mac. Activación autorizada de la frontera selectiva e índice READY, rechazo sin credenciales y recorrido nativo productivo en Honor ya comprobados; los casos locales/sintéticos no sustituyen esas evidencias separadas.
-2. Validar la continuación conversacional mediante evaluación reservada y controles positivos/negativos; mantener los intentos fallidos como evidencia. El nuevo recorrido está implementado localmente, con ofertas y órdenes explícitas actuales; texto recuperado sigue sin ser permiso.
-3. Activar los dos callables nuevos y adaptar los existentes afectados solo después de autorización concreta. Comprobar el recorrido completo en Honor con identidad/atestación reales y limpiar únicamente sus nuevos datos sintéticos. La aprobación de la primera frontera no implica esta ampliación.
+2. Mantener la evaluación reservada y los controles positivos/negativos al cambiar comportamientos; conservar los intentos fallidos como evidencia. La continuación de ofertas/órdenes ya tiene aceptación local reservada, sin convertir texto recuperado en permiso.
+3. Ampliación activada después de autorización concreta, con recorrido completo en Honor usando identidad/atestación reales y limpieza de sus nuevos datos sintéticos. Una futura ampliación de endpoints/permisos necesita su propia autorización.
 4. Completar iOS en Mac y resolver el alcance de olvido entre fuentes antes de prometer eliminación exhaustiva. No se deduce autorización de despliegue de este ADR.
 
 ## Alternativas y límites
