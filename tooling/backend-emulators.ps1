@@ -1,8 +1,8 @@
-param([string]$FunctionsNode = '', [switch]$LiveCaptureSmoke, [switch]$LiveQuerySmoke, [switch]$LiveQueryReserve, [switch]$LiveControlSmoke, [switch]$LiveConversationSmoke, [switch]$LiveConversationReserve, [ValidateSet('', 'dates', 'acceptance')][string]$ConversationCorpus = '')
+param([string]$FunctionsNode = '', [switch]$LiveCaptureSmoke, [switch]$LiveQuerySmoke, [switch]$LiveQueryReserve, [switch]$LiveControlSmoke, [switch]$LiveConversationSmoke, [switch]$LiveConversationReserve, [switch]$LiveRepeatedSmoke, [switch]$LiveRepeatedReserve, [switch]$LiveRepeatedFinal, [ValidateSet('', 'dates', 'acceptance')][string]$ConversationCorpus = '')
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
-if (([int]$LiveCaptureSmoke.IsPresent + [int]$LiveQuerySmoke.IsPresent + [int]$LiveQueryReserve.IsPresent + [int]$LiveControlSmoke.IsPresent + [int]$LiveConversationSmoke.IsPresent + [int]$LiveConversationReserve.IsPresent + [int][bool]$ConversationCorpus) -gt 1) {
+if (([int]$LiveCaptureSmoke.IsPresent + [int]$LiveQuerySmoke.IsPresent + [int]$LiveQueryReserve.IsPresent + [int]$LiveControlSmoke.IsPresent + [int]$LiveConversationSmoke.IsPresent + [int]$LiveConversationReserve.IsPresent + [int]$LiveRepeatedSmoke.IsPresent + [int]$LiveRepeatedReserve.IsPresent + [int]$LiveRepeatedFinal.IsPresent + [int][bool]$ConversationCorpus) -gt 1) {
     throw 'Choose one isolated live smoke.'
 }
 $kiokuRoot = Split-Path -Parent $PSScriptRoot
@@ -43,6 +43,9 @@ try {
         elseif ($LiveConversationSmoke) { 'node tooling/run-backend-emulator-tests.mjs --live-conversation' }
         elseif ($LiveConversationReserve) { 'node tooling/run-backend-emulator-tests.mjs --live-conversation-reserve' }
         elseif ($ConversationCorpus) { "node tooling/run-backend-emulator-tests.mjs --live-conversation-$ConversationCorpus" }
+        elseif ($LiveRepeatedSmoke) { 'node tooling/run-backend-emulator-tests.mjs --live-repeated' }
+        elseif ($LiveRepeatedReserve) { 'node tooling/run-backend-emulator-tests.mjs --live-repeated-reserve' }
+        elseif ($LiveRepeatedFinal) { 'node tooling/run-backend-emulator-tests.mjs --live-repeated-final' }
         else { 'node tooling/run-backend-emulator-tests.mjs' }
         & $FunctionsNode 'backend/node_modules/firebase-tools/lib/bin/firebase.js' emulators:exec `
             --config firebase.local.json --project demo-kioku-local --only auth,firestore,functions `

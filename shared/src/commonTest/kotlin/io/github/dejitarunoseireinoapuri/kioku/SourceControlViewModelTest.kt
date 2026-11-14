@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelStore
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureIssue
 import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.domain.EditableSource
+import io.github.dejitarunoseireinoapuri.kioku.domain.ForgetScope
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChange
 import io.github.dejitarunoseireinoapuri.kioku.feature.source.ControlFeedback
 import io.github.dejitarunoseireinoapuri.kioku.feature.source.SourceControlEvent
@@ -27,6 +28,18 @@ import kotlin.test.assertNotEquals
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SourceControlViewModelTest {
+    @Test
+    fun forgettingOneFactSearchesCopiesButWholeTextKeepsItsNarrowScope() =
+        controlTest { repository, model, _ ->
+            repository.change = { MemoryChange.Clarification("Prueba sin cambios.") }
+            model.onEvent(SourceControlEvent.Forget("$CONTROL_SOURCE-1"))
+            runCurrent()
+            assertEquals(ForgetScope.AllOccurrences, repository.commands.last().forgetScope)
+            model.onEvent(SourceControlEvent.Forget())
+            runCurrent()
+            assertEquals(ForgetScope.Source, repository.commands.last().forgetScope)
+        }
+
     @Test
     fun correctionWaitsForServerAndCannotDoubleSubmit() =
         controlTest { repository, model, _ ->

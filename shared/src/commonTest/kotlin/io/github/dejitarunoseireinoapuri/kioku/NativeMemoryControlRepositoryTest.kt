@@ -6,6 +6,7 @@ import io.github.dejitarunoseireinoapuri.kioku.data.NativeMemoryControlRepositor
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeMemoryPort
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeMemoryReply
 import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
+import io.github.dejitarunoseireinoapuri.kioku.domain.ForgetScope
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChange
 import io.github.dejitarunoseireinoapuri.kioku.domain.SourceKind
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -52,6 +53,9 @@ class NativeMemoryControlRepositoryTest {
                 )
             port.response = result("forgotten", "1.0")
             assertIs<MemoryChange.Confirmed>(repository.execute(command))
+            assertTrue(port.payload.contains("\"forgetScope\":\"source\""))
+            assertIs<MemoryChange.Confirmed>(repository.execute(command.copy(forgetScope = ForgetScope.AllOccurrences)))
+            assertTrue(port.payload.contains("\"forgetScope\":\"allOccurrences\""))
             port.response = result("forgotten", "1.5")
             assertIs<MemoryChange.Failed>(repository.execute(command))
             port.response = result("forgotten", "1.0").replace(CONTROL_REQUEST, CONTROL_SOURCE)
@@ -83,6 +87,7 @@ class NativeMemoryControlRepositoryTest {
 private const val CONTROL_REQUEST = "d8da9bb7-0dbb-4769-8c3c-e9b527cc350f"
 
 private class ControlPort : NativeMemoryPort {
+    var payload = ""
     var response = ""
     var deferred = false
     var endpoint: MemoryEndpoint? = null
@@ -99,6 +104,7 @@ private class ControlPort : NativeMemoryPort {
         completion: (NativeMemoryReply) -> Unit,
     ): NativeCancellation {
         this.endpoint = endpoint
+        payload = json
         this.completion = completion
         if (!deferred) completion(NativeMemoryReply.Received(response))
         return object : NativeCancellation {

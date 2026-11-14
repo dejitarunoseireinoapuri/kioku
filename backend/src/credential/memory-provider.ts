@@ -9,6 +9,7 @@ import type { Firestore } from "firebase-admin/firestore";
 export async function memoryProvider(
   db: Firestore,
   uid: string,
+  profile: "standard" | "completeForget" = "standard",
 ): Promise<OpenAiMemory> {
   const record = await new FirestoreCredentialStore(db).current(uid);
   if (!record) throw new AccountError("failed-precondition");
@@ -21,7 +22,10 @@ export async function memoryProvider(
     const key = Buffer.from(version.payload?.data ?? []).toString("utf8");
     if (!/^sk-[A-Za-z0-9_-]+$/.test(key))
       throw new AccountError("failed-precondition");
-    return new OpenAiMemory(key, new FirestoreMemoryBudget(db, uid));
+    return new OpenAiMemory(
+      key,
+      new FirestoreMemoryBudget(db, uid, Date.now(), profile),
+    );
   } catch (error) {
     if (error instanceof AccountError) throw error;
     throw new AccountError("unavailable");

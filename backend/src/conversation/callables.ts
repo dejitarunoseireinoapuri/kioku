@@ -75,19 +75,28 @@ export function conversationCallables(
               throw new AccountError("permission-denied");
             // Initial admission is counted once. Final transactions recheck the enabled owner.
           };
-          return operation === "route"
-            ? await route.execute(
+          if (operation === "route")
+            return await route.execute(
+              identity.uid,
+              parseInput(routingInput, request.data),
+              () => memoryProvider(db, identity.uid),
+              reauthorize,
+            );
+          const input = parseInput(decisionInput, request.data);
+          return await apply.execute(
+            identity.uid,
+            input,
+            () =>
+              memoryProvider(
+                db,
                 identity.uid,
-                parseInput(routingInput, request.data),
-                () => memoryProvider(db, identity.uid),
-                reauthorize,
-              )
-            : await apply.execute(
-                identity.uid,
-                parseInput(decisionInput, request.data),
-                () => memoryProvider(db, identity.uid),
-                reauthorize,
-              );
+                input.plan.action === "forget" &&
+                  input.plan.forgetScope === "allOccurrences"
+                  ? "completeForget"
+                  : "standard",
+              ),
+            reauthorize,
+          );
         } catch (error) {
           if (error instanceof AccountError)
             throw new HttpsError(error.code, error.code);

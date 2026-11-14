@@ -9,6 +9,7 @@
 - **BR-007:** un dato nuevo durante Preguntar requiere una oferta y aceptación explícita antes de guardarse. Rechazar no cambia la memoria.
 - **BR-008:** la corrección explícita prevalece en futuras respuestas; un cambio real conserva su secuencia temporal cuando corresponda.
 - **BR-009:** ejecutar un borrado inequívoco sin otra confirmación obligatoria. Si hay varios posibles objetivos, aclararlos primero. El contenido olvidado no reaparece desde fuentes, índices, mensajes o cachés.
+- Olvidar un dato incluye sus copias semánticas del mismo sujeto/alcance en otros relatos; compartir palabras no basta. Retirar expresamente solo un texto limita la acción a ese relato. Si no puede comprobarse todo el alcance o conservarse un dato ajeno sin revelar el objetivo, no se aplica una retirada parcial ni se amplía sin aclaración.
 - **BR-010:** datos y operaciones ligados a la cuenta autenticada. El servidor decide autorización, versión y éxito del guardado; el cliente no declara éxito anticipado.
 - **BR-011:** sin internet no hay captura, consulta ni cola offline. Fallos no se anuncian como guardados.
 - **BR-012:** no conservar un archivo permanente de grabaciones. El audio transitorio solo sirve a la operación autorizada y tiene limpieza verificable.

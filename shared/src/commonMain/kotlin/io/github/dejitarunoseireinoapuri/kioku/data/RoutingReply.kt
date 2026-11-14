@@ -1,6 +1,7 @@
 package io.github.dejitarunoseireinoapuri.kioku.data
 
 import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
+import io.github.dejitarunoseireinoapuri.kioku.domain.ForgetScope
 import io.github.dejitarunoseireinoapuri.kioku.domain.OfferDecision
 import io.github.dejitarunoseireinoapuri.kioku.domain.PlanStamp
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextCommand
@@ -92,6 +93,9 @@ private fun planPayload(plan: TextPlan): JsonObject =
                 put("expectedVersion", plan.version)
                 putJsonArray("memoryIds") { plan.memoryIds.forEach { add(it) } }
                 put("correction", plan.correction?.let(::JsonPrimitive) ?: JsonNull)
+                plan.forgetScope?.let {
+                    put("forgetScope", it.wireName())
+                }
             }
 
             else -> {}
@@ -175,7 +179,8 @@ private fun parseChange(
     stamp: PlanStamp,
     fields: Set<String>,
 ): TextPlan.Change {
-    require(value.keys == fields + setOf("sourceId", "expectedVersion", "memoryIds", "correction"))
+    val base = fields + setOf("sourceId", "expectedVersion", "memoryIds", "correction")
+    require(value.keys == base || value.keys == base + "forgetScope")
     val id = value.text("sourceId")
     val version = value.text("expectedVersion")
     require(id.matches(ROUTE_UUID) && version.matches(Regex("[a-f0-9]{64}")))
@@ -192,8 +197,24 @@ private fun parseChange(
         }
     val action = if (value.text("action") == "correct") ChangeAction.Correct else ChangeAction.Forget
     require(if (action == ChangeAction.Correct) ids.size == 1 && correction != null else correction == null)
-    return TextPlan.Change(stamp, id, version, ids, action, correction)
+    val scope = parseForgetScope(value, action)
+    return TextPlan.Change(stamp, id, version, ids, action, correction, scope)
 }
+
+private fun ForgetScope.wireName() = if (this == ForgetScope.AllOccurrences) "allOccurrences" else "source"
+
+private fun parseForgetScope(
+    value: JsonObject,
+    action: ChangeAction,
+): ForgetScope? =
+    value["forgetScope"]?.let {
+        require(action == ChangeAction.Forget && it is JsonPrimitive && it.isString)
+        when (it.content) {
+            "source" -> ForgetScope.Source
+            "allOccurrences" -> ForgetScope.AllOccurrences
+            else -> error("Invalid forget scope")
+        }
+    }
 
 private fun JsonObject.text(key: String): String {
     val value = get(key) as? JsonPrimitive

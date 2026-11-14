@@ -3,6 +3,7 @@ package io.github.dejitarunoseireinoapuri.kioku.data
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureIssue
 import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.domain.EditableSource
+import io.github.dejitarunoseireinoapuri.kioku.domain.ForgetScope
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChange
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChangeCommand
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryControlRepository
@@ -62,6 +63,18 @@ class NativeMemoryControlRepository(
                 put("action", if (command.action == ChangeAction.Forget) "forget" else "correct")
                 put("correction", command.correction?.let { JsonPrimitive(it) } ?: JsonNull)
                 put("zone", command.zone)
+                if (command.action == ChangeAction.Forget) {
+                    put(
+                        "forgetScope",
+                        if (command.forgetScope ==
+                            ForgetScope.AllOccurrences
+                        ) {
+                            "allOccurrences"
+                        } else {
+                            "source"
+                        },
+                    )
+                }
             }.toString()
         return when (val reply = request(MemoryEndpoint.Change, payload)) {
             is NativeMemoryReply.Received -> {

@@ -20,6 +20,11 @@ import { validateRetirementTarget } from "../memory-control/retirement.js";
 import { scopeVersion } from "../memory-control/retirement.js";
 import { FirestoreQueryStore } from "./query-store.js";
 import { FirestoreSourceRetirementStore } from "./retirement-store.js";
+import { FirestoreForgetStore } from "./forget-store.js";
+import type {
+  MemoryInventory,
+  ForgetReplacement,
+} from "../memory-control/forget-contracts.js";
 
 const noChange =
   "No se ha aplicado ningún cambio. Revisa el alcance o escribe una frase completa.";
@@ -177,6 +182,28 @@ export class FirestoreSourceControlStore implements SourceControlStore {
     return this.work.fail(uid, lease);
   }
 
+  inventory(uid: string, work: QueryLease) {
+    return new FirestoreForgetStore(this.db, this.now).inventory(uid, work);
+  }
+  async forget(
+    uid: string,
+    input: ChangeInput,
+    inventory: MemoryInventory,
+    changes: ForgetReplacement[],
+    work: QueryLease,
+    deadlineMs: number,
+  ) {
+    await new FirestoreForgetStore(this.db, this.now).commit(
+      uid,
+      input,
+      inventory,
+      changes,
+      work,
+      deadlineMs,
+    );
+    return this.result(uid, input.requestId);
+  }
+
   private async result(uid: string, id: string): Promise<ChangeResult> {
     return this.db.runTransaction(async (tx) => {
       await this.owner(tx, uid);
@@ -205,7 +232,8 @@ export class FirestoreSourceControlStore implements SourceControlStore {
           memoryEpoch,
         };
       const references: unknown = operation.get("references");
-      if (!Array.isArray(references) || references.length > 2)
+      const repeated = operation.get("forgetScope") === "allOccurrences";
+      if (!Array.isArray(references) || references.length > (repeated ? 32 : 2))
         throw new AccountError("failed-precondition");
       const ids = references.map((entry: unknown) => {
         if (
@@ -237,10 +265,12 @@ export class FirestoreSourceControlStore implements SourceControlStore {
           status === "corrected"
             ? "Dato corregido."
             : "He olvidado lo que has seleccionado.",
-        sources: current.slice(0, ids.length).map((entry) => ({
-          sourceId: entry.id,
-          receivedAt: String(entry.get("receivedAt")),
-        })),
+        sources: (repeated ? [] : current.slice(0, ids.length)).map(
+          (entry) => ({
+            sourceId: entry.id,
+            receivedAt: String(entry.get("receivedAt")),
+          }),
+        ),
         memoryEpoch,
       };
     });

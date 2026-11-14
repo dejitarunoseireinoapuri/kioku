@@ -11,6 +11,7 @@ import type {
 } from "./contracts.js";
 import { correctionNotice, selectiveChange } from "./selection.js";
 import { scopeVersion } from "./retirement.js";
+import { ForgetRepeatedMemory } from "./forget.js";
 
 export class ChangeMemory {
   private readonly store: SourceControlStore;
@@ -32,6 +33,16 @@ export class ChangeMemory {
       const bundle = await this.store.bundle(uid, input.sourceId);
       if (scopeVersion(bundle.scope) !== input.expectedVersion)
         throw new AccountError("failed-precondition");
+      if (input.action === "forget" && input.forgetScope === "allOccurrences") {
+        return await new ForgetRepeatedMemory(this.store).execute(
+          uid,
+          input,
+          bundle,
+          work,
+          await provider(),
+          reauthorize,
+        );
+      }
       const change = selectiveChange(
         bundle.source,
         bundle.memories,
@@ -117,6 +128,18 @@ export class ChangeMemory {
       await reauthorize();
       return await this.store.commit(uid, input, bundle.scope, snapshot, work);
     } catch (error) {
+      if (
+        input.forgetScope === "allOccurrences" &&
+        error instanceof AccountError &&
+        error.code === "resource-exhausted"
+      ) {
+        await reauthorize();
+        return this.store.noChange(
+          uid,
+          work,
+          "No puedo completar la comprobación dentro de los límites de esta operación. No he borrado nada.",
+        );
+      }
       await this.store.fail(uid, work).catch(() => undefined);
       throw error;
     }

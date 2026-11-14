@@ -68,6 +68,7 @@ const decision = (
 function offer() {
   model.intent = {
     action: "offer",
+    forgetScope: null,
     fact: "Me gusta el miso.",
     alsoAsk: false,
     useContext: false,
@@ -81,6 +82,7 @@ async function correction() {
   input.context.sourceIds = [target.source.id];
   model.intent = {
     action: "correct",
+    forgetScope: null,
     fact: null,
     alsoAsk: false,
     useContext: true,

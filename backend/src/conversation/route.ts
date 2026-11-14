@@ -84,7 +84,10 @@ export class RouteMessage {
         question =
           "Ahora puedo retirar recuerdos concretos o textos completos. Indícame cuál quieres olvidar.";
       } else if (intent.action === "correct" || intent.action === "forget") {
-        if (intent.useContext && context.sourceIds.length !== 1) {
+        if (intent.action === "forget" && intent.forgetScope === null) {
+          question =
+            "¿Quieres olvidar el dato en tus recuerdos o retirar solo este relato?";
+        } else if (intent.useContext && context.sourceIds.length !== 1) {
           question =
             "¿Qué dato concreto de la respuesta quieres cambiar u olvidar?";
         } else {
@@ -136,6 +139,9 @@ export class RouteMessage {
               expectedVersion: details.version,
               memoryIds: selected.memoryIds,
               correction: selected.correction,
+              ...(intent.action === "forget"
+                ? { forgetScope: intent.forgetScope ?? "source" }
+                : {}),
             };
           }
         }

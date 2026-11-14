@@ -119,9 +119,19 @@ Todo plan incluye `memoryEpoch`, `receivedAt` del mensaje y `expiresAtMs` (cinco
 
 Ofertas/correcciones conservan el instante del mensaje original para resolver fechas relativas, aunque se apliquen después de medianoche. Una aclaración de captura aceptada conserva esa época: si hubo un cambio de memoria, expira sin exponer ni guardar el texto antiguo. Los planes quedan en RAM del cliente; no hay cola offline. `ask`/`tell` normales reutilizan las fronteras de consulta/captura ya existentes. Los dos callables nuevos mantienen Google verificado/no revocado, App Check, cuenta permitida y propietario habilitado; una admisión por petición y comprobación final tras IA.
 
-No existe borrado global de la cuenta desde esta frontera ni garantía de retirar duplicados repartidos por otros relatos. Una orden de borrar toda la memoria pide un objetivo concreto, sin retirar un subconjunto de candidatos. Se activan los dos endpoints y se actualizan captura/aclaración/estado/consulta con autorización concreta, sin nuevos índices o claves. [Aceptación nativa y límites](../09-planning/K4_VALIDATION.md).
+No existe borrado global de la cuenta desde esta frontera. Una orden de borrar toda la memoria pide un objetivo concreto, sin retirar un subconjunto de candidatos. El alcance entre relatos se amplía en el apartado siguiente; su activación es distinta de la primera frontera. [Aceptación nativa y límites](../09-planning/K4_VALIDATION.md).
 
 La evidencia interna de consulta conserva `sourceKind:retained|correction` opcional, validado desde Firestore, hasta generación y verificación. La cabecera de una corrección no la convierte en cita ajena; la procedencia `quoted` de un candidato sigue sin acreditar hechos personales. No cambia la forma pública de las referencias de respuesta ni permite al cliente asignar esa etiqueta.
+
+## Olvido de copias K4 · preparado
+
+Entrada `changeMemory`: `forgetScope:source|allOccurrences` opcional y solo aplicable a olvidar; `allOccurrences` se rechaza para corregir. Ausente mantiene source para clientes anteriores. La app nueva envía allOccurrences al olvidar un dato y source al retirar todo el texto. Los planes de ruta forget incluyen el mismo campo; el móvil conserva presencia/valor exactos al aplicar, y el ticket rechaza cambios. Una ruta sin scope resuelto pide aclaración, sin escoger una sola copia por defecto. Las órdenes de corregir y las ofertas conservan su alcance existente.
+
+allOccurrences parte de un representante/versiones actuales y revisa el inventario completo de la cuenta, no solo candidatos de búsqueda. Selección/revisión semánticas, transformación literal y commit conjunto impiden anunciar éxito si falla algún relato. Inventario cambiado, fuente/unidad nueva, revocación, propietario o concesión inválidos bloquean toda la mutación. Resultado confirmado usa el contrato de cambio existente con `status:forgotten`, `sources:[]` y una época nueva. No expone otras 32 referencias como fuentes de respuesta; permanecen solo en el recibo mínimo para comprobar su vigencia al recuperar. El replay no repite IA ni borrado.
+
+Rechazo por ambigüedad/reconstrucción devuelve needsClarification y ninguna mutación, con pregunta útil si consta. No hay reescritura automática de otro hecho ni aprobación redundante de un olvido inequívoco. Si se supera capacidad/presupuesto se devuelve una explicación de que no pudo completarse y no borró nada. La implementación está limitada a 128 fuentes/512 unidades/180 000 caracteres, hasta 16 lotes de 48 000 caracteres, 32 fuentes afectadas/400 escrituras y preparación de 160 s; los límites se comprueban antes del commit. El servidor mantiene las cuotas y elige su perfil de presupuesto; el cliente no puede enviarlo. [Decisión](../02-architecture/ADR/ADR-011-memory-control.md).
+
+Se requiere actualizar la app; clientes antiguos no saben aplicar el nuevo campo de ruta y sus acciones explícitas por fuente conservan el alcance anterior. Sin endpoints/permisos nuevos. El despliegue de las tres funciones afectadas y su aceptación real están registrados en [K4_VALIDATION](../09-planning/K4_VALIDATION.md).
 
 ## Frontera interna comprobada en M0 v4
 

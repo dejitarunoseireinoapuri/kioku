@@ -1,6 +1,6 @@
 # ADR-011 · Retirada canónica y control conversacional
 
-- Estado: control por fuente y conversación activos y comprobados en Honor; nuevo build iOS y olvido entre fuentes pendientes.
+- Estado: base conversacional activa; copias entre relatos implementadas y probadas localmente, activación de la ampliación e iOS pendientes.
 - Fecha: 2026-11-14.
 - Amplía [ADR-005](ADR-005-memory-evidence-and-deletion.md), [K2](ADR-009-text-capture.md) y [K3](ADR-010-text-query.md).
 
@@ -44,13 +44,29 @@ Fecha/zona de la corrección natural y de la oferta aceptada proceden del mensaj
 
 Implementación compartida Android/iOS preparada. El propietario autoriza después del commit revisable `6555c68` la ampliación productiva: dos funciones nuevas y cuatro actualizaciones. Despliegue, denegación sin sesión y recorrido nativo real en Honor correctos; nuevos datos sintéticos retirados. Evidencia local, evaluación con proveedor y activación remota se distinguen en [K4_VALIDATION](../../09-planning/K4_VALIDATION.md); esta decisión por sí sola no autoriza otros despliegues.
 
+## Continuación · copias entre relatos, preparada para activar
+
+«Olvidar este dato» y la orden natural equivalente usan `forgetScope:allOccurrences`; el objetivo inicial se resuelve desde un representante inequívoco, sin confundirlo con todos los recuerdos del mismo tema. `source` limita explícitamente la acción al relato elegido y sigue siendo el valor compatible de entradas antiguas sin campo. Retirar todo este texto conserva ese alcance estrecho. Scope viaja en el plan firmado por digest; no se permite cambiarlo al aplicar. Una interpretación sin alcance no cae silenciosamente a borrar una sola copia.
+
+`ForgetRepeatedMemory` se ejecuta después de adquirir la concesión compartida de control. Lee el inventario canónico completo dentro de límites, incluyendo fuentes literales y unidades históricas/superseded, sin depender del top seis de búsqueda. Lo divide por payload real y revisa TODAS y SOLO las copias del mismo hecho/sujeto/alcance. Paráfrasis pueden ser copias; homónimos, negación, condicionales, hechos realizados frente a planes y citas ajenas no lo son por compartir palabras. Un segundo paso revisa exhaustividad, preservación y ausencia en fuentes afectadas y no afectadas. Instrucciones almacenadas nunca son órdenes.
+
+La transformación mantiene la retirada literal existente. Si eliminar el objetivo exige perder otro dato o si un relato restante lo permite reconstruir, no aplica nada y pregunta. La aclaración útil del selector se presenta como texto, nunca se ejecuta. El caso «ya vi X» junto a «quiero volver a ver X» puede necesitar esa aclaración; conservar ambos requisitos sin intervenir no se promete posible. Tampoco se reescriben recuerdos ajenos para ocultar una implicación.
+
+Se prepara todo en RAM. Antes del commit, la frontera de almacenamiento vuelve a calcular la transformación desde la selección y comprueba bytes/metadatos/vectores ajenos sin cambios. Una única transacción revalida propietario, nonce/concesión, época, conjunto completo de fuentes/unidades y todas sus versiones, además de referencias y colisiones. Una nueva copia o cualquier cambio concurrente impide el commit completo. Retira todos los originales afectados/índices, crea los restos con nuevos IDs, limpia pendientes/recibos vinculados y crea revocaciones sin contenido. Incrementa la época una vez, no por relato. No persiste el inventario, propuestas o órdenes como un job.
+
+Límites de esta operación síncrona: 128 fuentes, 512 unidades y 180 000 caracteres de inventario sin vectores; hasta 16 lotes de payload inferior al límite del proveedor (48 000 caracteres), 32 fuentes afectadas y 400 escrituras calculadas antes de mutar. Plazo de preparación 160 s, comprobado antes de seguir y antes de escribir, dentro del callable de 180 s y concesión de 240 s. Un límite, corrupción o revisión insegura no produce un borrado parcial. No es una promesa de memoria ilimitada; superar esos límites necesita otra estrategia de ejecución.
+
+El proveedor mantiene Sol medio y `store:false`. Solo el servidor puede elegir el presupuesto `completeForget`: hasta 32 llamadas/reservas acumuladas de 3 USD para comprobar el inventario; las demás operaciones conservan 8 llamadas/1 USD y la cota diaria sigue siendo 10 USD. Son cotas de admisión conservadoras, no precio esperado. El selector de presupuesto no está en la entrada pública. La evaluación local conserva el contador previo y eleva su límite autorizado de 20 a 30 USD, sin modificar tarifas históricas.
+
+No hay nuevos endpoints, índices, colecciones, claves, backups o permisos. Se preparan actualizaciones de `routeMessage`, `applyMessage` y `changeMemory`, más APK compartido actualizado. Activación y aceptación remota se distinguen de pruebas locales en [K4_VALIDATION](../../09-planning/K4_VALIDATION.md). Referencias de restos hasta 32 quedan solo en recibo para reautorizar recuperación; el resultado público de este olvido devuelve `sources:[]`, compatible con la limpieza del chat y sin fingir que un resto es original intacto.
+
 ## Secuencia restante de K4
 
 1. Completar la validación iOS en Mac. Activación autorizada de la frontera selectiva e índice READY, rechazo sin credenciales y recorrido nativo productivo en Honor ya comprobados; los casos locales/sintéticos no sustituyen esas evidencias separadas.
 2. Mantener la evaluación reservada y los controles positivos/negativos al cambiar comportamientos; conservar los intentos fallidos como evidencia. La continuación de ofertas/órdenes ya tiene aceptación local reservada, sin convertir texto recuperado en permiso.
 3. Ampliación activada después de autorización concreta, con recorrido completo en Honor usando identidad/atestación reales y limpieza de sus nuevos datos sintéticos. Una futura ampliación de endpoints/permisos necesita su propia autorización.
-4. Completar iOS en Mac y resolver el alcance de olvido entre fuentes antes de prometer eliminación exhaustiva. No se deduce autorización de despliegue de este ADR.
+4. Activar y comprobar la ampliación de copias con autorización concreta y completar iOS en Mac. Mantener explícitos los límites de capacidad, ambigüedad y sincronización; no prometer eliminación universal sin esas condiciones. Este ADR no autoriza despliegues.
 
 ## Alternativas y límites
 
-No se usa borrado suave con contenido o copias históricas, ni TTL para revocaciones. Tampoco una búsqueda global de todos los datos de la cuenta para cada operación: fuente máxima ocho fragmentos y dos consultas de recibos limitadas a nueve documentos cada una, que rechazan exceso en lugar de limpiar parcialmente. El ámbito actual no elimina exhaustivamente hechos repetidos en otras fuentes. El resolver natural recupera seis candidatos o una fuente contextual; exige un único relato inequívoco. Borrado global pide objetivo concreto, sin borrado parcial encubierto. El recorrido fuente está activo; no se declara K4 cerrada hasta completar los bloques restantes y sus pruebas. [Evidencia](../../09-planning/K4_VALIDATION.md).
+No se usa borrado suave con contenido o copias históricas, ni TTL para revocaciones. Captura/consulta/corrección mantienen sus límites; solo allOccurrences añade el inventario completo acotado descrito arriba. Cada fuente admite ocho fragmentos y las consultas de recibos vinculados se limitan a nueve documentos y rechazan exceso. El top seis solo resuelve el representante, no determina todas sus copias. Un borrado global de la cuenta sigue pidiendo objetivo concreto, sin retirada parcial encubierta. Los límites de capacidad y las dependencias ambiguas no se sortean. La ampliación de copias está preparada, no activada por este documento. [Evidencia](../../09-planning/K4_VALIDATION.md).

@@ -118,7 +118,7 @@
     <string name="capture_configuration">No se ha podido preparar esta operación. Comprueba el estado de la IA en Ajustes.</string>
     <string name="control_title">Cambiar un recuerdo</string>
     <string name="control_manage">Gestionar</string>
-    <string name="control_explanation">Cada dato conserva su propio alcance. Corregir sustituye algo que contaste mal; si ha cambiado con el tiempo, explícalo como un recuerdo nuevo.</string>
+    <string name="control_explanation">Olvidar un dato retira también sus copias en otros relatos. Olvidar todo este texto solo afecta a este relato. Corregir sustituye algo que contaste mal; si ha cambiado con el tiempo, explícalo como un recuerdo nuevo.</string>
     <string name="control_loading">Leyendo los datos actuales...</string>
     <string name="control_unavailable">No puedo cargar este recuerdo. Puede haber cambiado o haberse olvidado.</string>
     <string name="control_reload">Volver a cargar</string>

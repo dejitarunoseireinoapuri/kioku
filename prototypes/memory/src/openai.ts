@@ -7,6 +7,11 @@ import { captureFormat } from "./capture-format.ts";
 import { answerFormat, constrainScope } from "./answer-format.ts";
 import { modelProfile } from "./model-config.ts";
 import {
+  duplicateSelectionSchema,
+  duplicateInstructions,
+  duplicateReviewInstructions,
+} from "./forget-format.ts";
+import {
   messageIntentInstructions,
   messageIntentSchema,
   targetSelectionInstructions,
@@ -294,6 +299,26 @@ export class OpenAiMemory implements MemoryIntelligence {
       }),
       "memory_change_review",
       800,
+    );
+  }
+
+  async selectDuplicateFacts(data: unknown) {
+    return this.structured(
+      duplicateInstructions,
+      data,
+      duplicateSelectionSchema,
+      "memory_duplicates",
+      2000,
+    );
+  }
+
+  async reviewDuplicateFacts(data: unknown) {
+    return this.structured(
+      duplicateReviewInstructions,
+      data,
+      z.strictObject({ allowed: z.boolean() }),
+      "memory_duplicates_review",
+      1000,
     );
   }
 

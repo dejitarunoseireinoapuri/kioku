@@ -5,6 +5,11 @@ if (!process.env.KIOKU_TEST_NODE)
     throw new Error("Use the documented local emulator runner.");
 const liveCapture = process.argv.slice(2).join(" ") === "--live-capture";
 const liveControl = process.argv.slice(2).join(" ") === "--live-control";
+const liveRepeated = [
+    "--live-repeated",
+    "--live-repeated-reserve",
+    "--live-repeated-final",
+].includes(process.argv.slice(2).join(" "));
 const liveConversation = [
     "--live-conversation",
     "--live-conversation-reserve",
@@ -16,37 +21,51 @@ const liveQuery =
     freshQuery || process.argv.slice(2).join(" ") === "--live-query";
 const result = spawnSync(
     process.env.KIOKU_TEST_NODE,
-    liveConversation
+    liveRepeated
         ? [
-              resolve(import.meta.dirname, "k4-conversation-live.mjs"),
+              resolve(import.meta.dirname, "k4-repeated-live.mjs"),
               "--live",
-              ...(process.argv.includes("--live-conversation-reserve")
+              ...(process.argv.includes("--live-repeated-reserve")
                   ? ["--reserve"]
-                  : process.argv.includes("--live-conversation-dates")
-                    ? ["--dates"]
-                    : process.argv.includes("--live-conversation-acceptance")
-                      ? ["--acceptance"]
-                      : []),
+                  : process.argv.includes("--live-repeated-final")
+                    ? ["--final"]
+                    : []),
           ]
-        : liveControl
-          ? [resolve(import.meta.dirname, "k4-control-live.mjs"), "--live"]
-          : liveQuery
-            ? [
-                  resolve(import.meta.dirname, "k3-live-smoke.mjs"),
-                  "--live",
-                  ...(freshQuery ? ["--fresh"] : []),
-              ]
-            : liveCapture
-              ? [resolve(import.meta.dirname, "k2-live-smoke.mjs"), "--live"]
-              : [
-                    "--test",
-                    "--test-concurrency=1",
-                    "lib/test/emulator/*.test.js",
-                ],
+        : liveConversation
+          ? [
+                resolve(import.meta.dirname, "k4-conversation-live.mjs"),
+                "--live",
+                ...(process.argv.includes("--live-conversation-reserve")
+                    ? ["--reserve"]
+                    : process.argv.includes("--live-conversation-dates")
+                      ? ["--dates"]
+                      : process.argv.includes("--live-conversation-acceptance")
+                        ? ["--acceptance"]
+                        : []),
+            ]
+          : liveControl
+            ? [resolve(import.meta.dirname, "k4-control-live.mjs"), "--live"]
+            : liveQuery
+              ? [
+                    resolve(import.meta.dirname, "k3-live-smoke.mjs"),
+                    "--live",
+                    ...(freshQuery ? ["--fresh"] : []),
+                ]
+              : liveCapture
+                ? [resolve(import.meta.dirname, "k2-live-smoke.mjs"), "--live"]
+                : [
+                      "--test",
+                      "--test-concurrency=1",
+                      "lib/test/emulator/*.test.js",
+                  ],
     {
         cwd: resolve(
             import.meta.dirname,
-            liveCapture || liveQuery || liveControl || liveConversation
+            liveCapture ||
+                liveQuery ||
+                liveControl ||
+                liveConversation ||
+                liveRepeated
                 ? ".."
                 : "../backend",
         ),

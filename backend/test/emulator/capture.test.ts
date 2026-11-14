@@ -283,6 +283,22 @@ test("distributed budget admits bounded reservations and keeps only numeric usag
   assert.equal(data?.reservedUsd, 10);
 });
 
+test("complete-forget has a bounded server-selected call budget without changing standard or daily caps", async () => {
+  const standard = new FirestoreMemoryBudget(db, uid, now);
+  for (let i = 0; i < 8; i++) await standard.reserve(0.001);
+  await assert.rejects(standard.reserve(0.001));
+  const complete = new FirestoreMemoryBudget(db, uid, now, "completeForget");
+  for (let i = 0; i < 32; i++) await complete.reserve(0.001);
+  await assert.rejects(complete.reserve(0.001));
+  const limited = new FirestoreMemoryBudget(db, uid, now, "completeForget");
+  await assert.rejects(limited.reserve(3.01));
+  const day = new Date(now).toISOString().slice(0, 10);
+  await db
+    .doc(`accounts/${uid}/usage/${day}`)
+    .set({ reservedUsd: 9.99, calls: 0 });
+  await assert.rejects(limited.reserve(0.02));
+});
+
 test("repeated ambiguity asks for a fresh explanation instead of an unanswerable clarification", async () => {
   const ambiguous: MemoryIntelligence = {
     ...intelligence,

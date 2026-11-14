@@ -30,6 +30,7 @@ export class ConversationIntelligence implements RoutingIntelligence {
     alsoAsk: false,
     useContext: false,
     question: null,
+    forgetScope: null,
   };
   selection: TargetSelection = {
     memoryIds: [],

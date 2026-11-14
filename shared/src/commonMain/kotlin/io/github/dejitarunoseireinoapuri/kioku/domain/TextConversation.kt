@@ -46,6 +46,7 @@ sealed interface TextPlan {
         val memoryIds: List<String>,
         val action: ChangeAction,
         val correction: String?,
+        val forgetScope: ForgetScope? = null,
     ) : TextPlan
 }
 

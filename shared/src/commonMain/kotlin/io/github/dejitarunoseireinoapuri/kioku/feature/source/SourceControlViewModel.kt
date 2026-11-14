@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.domain.EditableSource
+import io.github.dejitarunoseireinoapuri.kioku.domain.ForgetScope
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChange
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChangeCommand
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryControlRepository
@@ -182,7 +183,7 @@ class SourceControlViewModel(
                 ready.source.items.any { it.id == selected }
             }
         ) {
-            prepare(ready, ids, ChangeAction.Forget)
+            prepare(ready, ids, ChangeAction.Forget, if (id == null) ForgetScope.Source else ForgetScope.AllOccurrences)
         }
     }
 
@@ -216,14 +217,16 @@ class SourceControlViewModel(
         ready: SourceControlState.Ready,
         ids: List<String>,
         action: ChangeAction,
+        forgetScope: ForgetScope = ForgetScope.Source,
     ) {
         val pending =
-            repository.prepare(
-                ready.source,
-                ids,
-                action,
-                ready.draft.takeIf { action == ChangeAction.Correct },
-            )
+            repository
+                .prepare(
+                    ready.source,
+                    ids,
+                    action,
+                    ready.draft.takeIf { action == ChangeAction.Correct },
+                ).copy(forgetScope = forgetScope)
         command = pending
         execute(pending, ready)
     }

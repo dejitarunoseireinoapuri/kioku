@@ -2,6 +2,9 @@
 
 ## Sin versión publicada · 2026-11-14
 
+- Olvido de copias entre relatos preparado: inventario completo acotado, paráfrasis del mismo hecho/sujeto, revisión de preservación y retirada conjunta de fuentes/índices/pendientes. Dato y texto completo conservan alcances distintos; fallo, cuota o copia concurrente no dejan borrado parcial.
+- 84 pruebas de emuladores, 77 host, 41 de interfaz Honor y reserva final IA real correctas; se conserva el intento intermedio con conflicto de reconstrucción y se mejora su aclaración. Actualización de tres funciones existentes y aceptación productiva de la ampliación pendientes; sin nuevos permisos/índices/claves. [Evidencia y cotas](docs/09-planning/K4_VALIDATION.md).
+
 - Continuación K4 preparada: interpretar órdenes explícitas de corrección/olvido y ofrecer guardar afirmaciones nuevas desde Preguntar, con aceptación/rechazo sin cambiar de modo. Tickets sin texto, versiones/época/caducidad y un único hijo; fecha relativa anclada al mensaje original.
 - Chat compartido y cargas por fase, recuperación estable tras giro, limpieza de contenido antiguo antes de nuevas respuestas y protección de aclaraciones aceptadas frente a cambios. 74 host tests y 41 recorridos Honor con fixtures correctos. Dos nuevos endpoints y cuatro actualizaciones activados con autorización; recorrido conversacional productivo nativo en Honor correcto y sus datos ficticios retirados. Nuevo build iOS pendiente. [Evaluación con IA real y límites](docs/09-planning/K4_VALIDATION.md).
 

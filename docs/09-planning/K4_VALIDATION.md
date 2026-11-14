@@ -136,3 +136,55 @@ Ausencia del marcador comprobada antes de empezar. Se registra solo una línea b
 Alcance actual de corrección/olvido: una fuente inequívoca, hasta ocho fragmentos; resolver recupera seis candidatos o una fuente contextual. No garantiza retirar copias del mismo hecho en otros relatos ni borrar toda la cuenta. Una orden global pide concretar sin borrar parcialmente. Tampoco hay sincronización continua de otro móvil en primer plano. iOS comparte implementación/adaptadores preparados, pero falta compilar y probar este build en Mac. Estas limitaciones impiden declarar K4 completa.
 
 Se consultaron convenciones/calidad, reglas/casos de uso, ADR-011, plan/limitaciones, estado, contratos/modelo/retención y seguridad/privacidad. Referencia Stitch 06 y captura inspeccionadas por MCP, sin editar el diseño. No se cambió modelo/perfil ni se usó Astra.
+
+## Cuarta ejecución · olvidar copias entre relatos, preparada
+
+Se implementa allOccurrences en `changeMemory` y en el plan natural de `routeMessage`/`applyMessage`. La app compartida envía ese alcance al olvidar un dato; retirar expresamente todo el texto conserva source. Campos ausentes en clientes/tickets anteriores conservan el alcance antiguo, y la app nueva mantiene presencia/valor exactos del plan para no alterar su digest. Un alcance natural no resuelto pregunta, sin caer a borrar una sola copia. No hay nuevos endpoints, índices, claves, colecciones o permisos.
+
+El servidor recorre el inventario canónico completo acotado, con fuentes literales y unidades históricas/superseded, y distingue copias/paráfrasis de otro sujeto, negación, condición, intención/realización y cita ajena. Un segundo paso revisa selección completa/preservación. Se prepara todo en RAM; la frontera de escritura recalcula la transformación literal y exige identidad, nonce, época, membresía y versiones completas actuales. Una sola transacción reemplaza fuentes/índices afectados, retira pendientes/recibos vinculados, crea revocaciones sin texto e incrementa la época una vez. Si falla un lote, cambia el inventario o se supera una cota, no confirma ni borra parcialmente.
+
+Capacidad explícita: 128 fuentes, 512 unidades y 180 000 caracteres sin vectores; hasta 16 lotes preparados para el límite real del proveedor de 48 000 caracteres, 32 fuentes afectadas y 400 escrituras calculadas antes de mutar. Preparación de 160 s y última comprobación temporal antes de escribir, dentro de callable 180 s/concesión 240 s. El servidor elige completeForget (32 llamadas/3 USD de reservas máximas); las operaciones estándar conservan 8 llamadas/1 USD y la cuota diaria sigue en 10 USD. No son precios esperados ni autorización de cuota ilimitada. El perfil no es un campo cliente. [Contrato](../04-api/API_CONTRACT.md), [decisión y referencia oficial de transacciones](../02-architecture/ADR/ADR-011-memory-control.md).
+
+### Proveedor real y revisión semántica
+
+Sol medio y `store:false`, misma clave existente, contador previo y reservas preservados. La autorización de gasto anterior permite ampliar el límite local acumulado de 20 a 30 USD; no se reinicia el contador. El primer arranque con parámetro 30 se detuvo en el guard del presupuesto antes de llamar a OpenAI; se ajustó el límite autorizado, sin contar aquel arranque como prueba semántica.
+
+| Conjunto fijado antes de ejecutar | Resultado | Llamadas | Estimación USD | Informe |
+| --- | --- | --- | --- | --- |
+| Ocho casos iniciales, 19 consultas | 8/8 casos y 19/19 consultas | 165 | 0,55046502 | [Inicial](k4-repeated-1794673380245.json) |
+| Reserva intermedia de tres casos, ocho consultas | 2/3 expectativas de caso; el tercero pide aclaración y no borra | 69 | 0,22007880 | [Intento conservado](k4-repeated-reserve-1794673802963.json) |
+| Reserva final nueva, tres casos y siete consultas | 3/3 casos y 7/7 consultas; uno exige aclarar sin mutación | 65 | 0,21065642 | [Aceptación final local](k4-repeated-final-1794674254096.json) |
+
+El inicial comprueba paráfrasis en tres relatos mixtos, dos Pablos, gusto frente a negación histórica, cita de cartel frente a preferencia propia, dos exámenes/idiomas con misma fecha, retiro limitado a un texto, referencia ambigua y órdenes citadas que no se ejecutan. El retiro de originales, preservación y las consultas se comprueban en código y se revisan contra las fuentes sintéticas después. Replays de cambios: cero llamadas nuevas. Las rondas son locales con IA real, no prueba de producción/Google/App Check.
+
+La reserva intermedia comprueba restos de una corrección y dos destinatarias distintas correctamente. Su tercer caso pedía borrar «ya vi Avellano» conservando «quiero volver a verla». La expectativa de borrar dos fuentes entraba en conflicto con impedir reconstrucción desde la tercera: el guard no borró nada. No se cambia el informe para convertirlo en éxito. Un diagnóstico acotado confirmó selección de dos copias, `unresolved:true`, pregunta sobre ese conflicto y revisión negativa. Se mejora la presentación de la aclaración específica, que antes se sustituía por una genérica. Las fuentes permanecen intactas; no se amplía el alcance sin instrucción del propietario.
+
+La reserva final usa ejemplos nuevos y expectativas fijadas antes: pasado explícito frente a deseo simple (sin «volver»), una dependencia real que DEBE aclararse y un deseo condicional distinto del plan de verano. Se verifica que desaparecen solo las copias previstas, siguen los asuntos ajenos y no se anuncian cambios en el caso de aclaración. La revisión de literales, procedencia, estados y respuestas la hizo el agente de desarrollo fuera del circuito de respuesta; no es auditoría humana independiente ni garantía universal. Los refinamientos mecánicos posteriores de payload/cuotas se comprueban determinísticamente, sin repetir llamadas pagadas que no cambian la semántica evaluada.
+
+Estimación local acumulada final **20,04202434 USD**, incremento **0,99115774 USD** desde 19,05086660, incluyendo el diagnóstico además de los informes. Reservas anteriores conservadas: 0,13685492 USD. No es saldo API, crédito promocional restante ni factura; no incluye una futura aceptación productiva. No se inspeccionan datos reales para construir el corpus.
+
+### Pruebas deterministas y móvil
+
+- Backend TypeScript strict/formato y **22/22 unidades** correctas; **84/84 emuladores**, catorce casos adicionales/expandidos respecto de la base conversacional. Incluyen doce copias fuera del top seis, alcance source conservado, rechazo del último lote, nueva copia/edición/época/propietario/nonce durante IA, selección alterada/ajena, inventario malformado/excesivo, presupuesto de escrituras, plazo, cuota servidor, recibos/pendientes y replay sin resurrección. La frontera de escritura rechaza una propuesta que modifica una memoria ajena o aporta IDs de retirada extraños.
+- Núcleo M0 **86/86 pruebas locales** y check/formato correctos, incluidas cuatro nuevas del transporte de duplicados: perfil fijo, `store:false`, límites de salida y salida extra rechazada. No se cambia extracción/consulta ni el razonamiento acordado.
+- Compilación Android app/pruebas, `mobileCheck`, formato, capas, Detekt y Lint correctos; **77/77 host tests**. Se comprueba alcance de dato frente a texto, reintento exacto, scope de plan conservado y rechazo de valores desconocidos/booleanos antes de aplicar. Se separan funciones para respetar complejidad, sin elevar umbrales.
+- Honor FNE_NX9, Android 14/API 34: **41/41 pruebas de interfaz** con repositorios ficticios, incluidos teclado, fuentes, control, giro y sesión. El texto explicativo de Gestionar distingue copias de dato y retiro de relato. Las pruebas ordinarias excluyen las tres pruebas productivas.
+- `LiveRepeatedForgetTest` preparada para recorrido natural y desde fuente en MainActivity/SDKs reales; guard externo exige `-e liveRepeatedProject kioku-9454f` antes de abrir la sesión. Sin opt-in se comprobó **una omisión** (-4), no se cuenta como aceptación productiva ni llama al proveedor. Película y evento inventados llevan el marcador nuevo `K4eco3746` en su propio nombre para evitar coincidencias reales.
+
+La primera prueba host del nuevo plan detectó un JSON ficticio al que faltaba la comilla de cierre; se corrige el fixture, sin relajar el parser. Las primeras alertas de complejidad se resuelven separando serialización/lectura del alcance. Solo las rondas finales verdes se cuentan como aceptación. Referencia Stitch 07 y su imagen inspeccionadas por MCP antes del ajuste de copy, sin editar Stitch. Se siguieron convenciones/calidad, reglas/requisitos/casos, ADR-011, contratos/datos/retención y seguridad/privacidad.
+
+Comandos nuevos:
+
+```powershell
+pwsh -NoProfile -File tooling/backend-emulators.ps1 -LiveRepeatedSmoke
+pwsh -NoProfile -File tooling/backend-emulators.ps1 -LiveRepeatedReserve
+pwsh -NoProfile -File tooling/backend-emulators.ps1 -LiveRepeatedFinal
+pwsh -NoProfile -File tooling/backend-emulators.ps1
+pwsh -NoProfile -File tooling/mobile.ps1 formatKotlin :androidApp:assembleDebug :androidApp:assembleDebugAndroidTest mobileCheck
+```
+
+APK preparado `androidApp/build/outputs/apk/debug/kioku-k4-olvido-copias.apk`, SHA-256 `a27023cb625b641b49cfb3466dd96f031c61559fe236c976d3a984d0ae67ad5a`. Se deja temporalmente en Honor el APK conversacional anterior mientras se autoriza el servidor; no se desinstala ni borra sesión/datos. La ampliación está subida/preparada para activar tres funciones existentes, sin nuevas entradas HTTPS/IAM. La prueba real posterior deberá retirar exclusivamente sus nuevos datos sintéticos y comprobar ausencia frente a una línea base de IDs, sin copiar textos.
+
+### Cierre de este bloque pendiente
+
+Faltan autorización concreta de actualización productiva, despliegue de `routeMessage`/`applyMessage`/`changeMemory` y aceptación nativa del nuevo recorrido. iOS sigue requiriendo compilar/probar este build en Mac. Un inventario mayor que las cotas exige otra estrategia y se rechaza entero; no se vende como eliminación ilimitada. Una dependencia de otro dato puede requerir aclaración antes de ampliar el alcance. Borrado global de la cuenta y sincronización continua de otro móvil en primer plano no se añaden. Este bloque no da por cerrada toda K4 automáticamente.

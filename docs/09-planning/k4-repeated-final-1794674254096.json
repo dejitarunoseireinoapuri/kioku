@@ -1,0 +1,86 @@
+{
+  "stage": "complete",
+  "model": "gpt-6.1-sol",
+  "reasoning": "medium",
+  "corpusHash": "26d1cc8e4f736b2a2a51620ca88c0c6c183bf1d3aea7aa0553096cfda6370272",
+  "evaluation": "fresh-reserve",
+  "scope": "Synthetic complete-inventory local execution with actual provider; no production/native attestation",
+  "rows": [
+    {
+      "caseId": "f01",
+      "action": "forget",
+      "result": "forgotten",
+      "scopeOk": true,
+      "removedCount": 2,
+      "expectedRemoved": 2,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "status": "notFound",
+          "words": true,
+          "pass": true
+        },
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        },
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 39083
+    },
+    {
+      "caseId": "f02",
+      "action": "forget",
+      "result": "needsClarification",
+      "scopeOk": true,
+      "removedCount": 0,
+      "expectedRemoved": 0,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        },
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 31852
+    },
+    {
+      "caseId": "f03",
+      "action": "forget",
+      "result": "forgotten",
+      "scopeOk": true,
+      "removedCount": 2,
+      "expectedRemoved": 2,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        },
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 33184
+    }
+  ],
+  "calls": 65,
+  "estimatedUsd": 0.2106564199999994
+}

@@ -1,0 +1,210 @@
+{
+  "stage": "complete",
+  "model": "gpt-6.1-sol",
+  "reasoning": "medium",
+  "corpusHash": "434e71397dc58111307a965a13a78326d5f0e91337898cacdc4283a07bd0778b",
+  "evaluation": "fresh-reserve",
+  "scope": "Synthetic complete-inventory local execution with actual provider; no production/native attestation",
+  "rows": [
+    {
+      "caseId": "d01",
+      "action": "forget",
+      "result": "forgotten",
+      "scopeOk": true,
+      "removedCount": 3,
+      "expectedRemoved": 3,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "status": "notFound",
+          "words": true,
+          "pass": true
+        },
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        },
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 44288
+    },
+    {
+      "caseId": "d02",
+      "action": "forget",
+      "result": "forgotten",
+      "scopeOk": true,
+      "removedCount": 2,
+      "expectedRemoved": 2,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "status": "notFound",
+          "words": true,
+          "pass": true
+        },
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        },
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 41375
+    },
+    {
+      "caseId": "d03",
+      "action": "forget",
+      "result": "forgotten",
+      "scopeOk": true,
+      "removedCount": 2,
+      "expectedRemoved": 2,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        },
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 38819
+    },
+    {
+      "caseId": "d04",
+      "action": "forget",
+      "result": "forgotten",
+      "scopeOk": true,
+      "removedCount": 2,
+      "expectedRemoved": 2,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "status": "notFound",
+          "words": true,
+          "pass": true
+        },
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        },
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 38227
+    },
+    {
+      "caseId": "d05",
+      "action": "forget",
+      "result": "forgotten",
+      "scopeOk": true,
+      "removedCount": 2,
+      "expectedRemoved": 2,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "status": "notFound",
+          "words": true,
+          "pass": true
+        },
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        },
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 37004
+    },
+    {
+      "caseId": "d06",
+      "action": "forget",
+      "result": "forgotten",
+      "scopeOk": true,
+      "removedCount": 1,
+      "expectedRemoved": 1,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        },
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 25209
+    },
+    {
+      "caseId": "d07",
+      "action": "needsClarification",
+      "result": null,
+      "scopeOk": true,
+      "removedCount": 0,
+      "expectedRemoved": 0,
+      "replayCalls": 0,
+      "queries": [],
+      "pass": true,
+      "durationMs": 12283
+    },
+    {
+      "caseId": "d08",
+      "action": "forget",
+      "result": "forgotten",
+      "scopeOk": true,
+      "removedCount": 2,
+      "expectedRemoved": 2,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "status": "notFound",
+          "words": true,
+          "pass": true
+        },
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        },
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 42362
+    }
+  ],
+  "calls": 165,
+  "estimatedUsd": 0.5504650199999901
+}

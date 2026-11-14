@@ -10,17 +10,26 @@ export class FirestoreMemoryBudget {
   private readonly day: string;
   private requestReserved = 0;
   private calls = 0;
-  constructor(db: Firestore, uid: string, now = Date.now()) {
+  private readonly maximumCalls: number;
+  private readonly maximumRequestUsd: number;
+  constructor(
+    db: Firestore,
+    uid: string,
+    now = Date.now(),
+    profile: "standard" | "completeForget" = "standard",
+  ) {
     this.db = db;
     this.uid = uid;
     this.day = new Date(now).toISOString().slice(0, 10);
+    this.maximumCalls = profile === "completeForget" ? 32 : 8;
+    this.maximumRequestUsd = profile === "completeForget" ? 3 : 1;
   }
   async reserve(amount: number): Promise<void> {
     if (
       !Number.isFinite(amount) ||
       amount <= 0 ||
-      this.requestReserved + amount > 1 ||
-      this.calls >= 8
+      this.requestReserved + amount > this.maximumRequestUsd ||
+      this.calls >= this.maximumCalls
     )
       throw new AccountError("resource-exhausted");
     const reference = this.db.doc(`accounts/${this.uid}/usage/${this.day}`);

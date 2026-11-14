@@ -14,6 +14,7 @@ const profiles = [
       alsoAsk: false,
       useContext: false,
       question: null,
+      forgetScope: null,
     },
   },
   {

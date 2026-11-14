@@ -72,6 +72,7 @@ test("authenticated conversation tickets reject tampering and decline through HT
   const model = new ConversationIntelligence();
   const input = turn("Me gusta el miso.");
   model.intent = {
+    forgetScope: null,
     action: "offer",
     fact: input.text,
     question: null,

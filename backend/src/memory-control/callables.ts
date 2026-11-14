@@ -86,13 +86,21 @@ export function controlCallables(
         ? store.details(uid, input.sourceId)
         : { apiVersion: 1, memoryEpoch: await store.epoch(uid) };
     }),
-    changeMemory: protect(true, async (uid, data, reauthorize) =>
-      change.execute(
+    changeMemory: protect(true, async (uid, data, reauthorize) => {
+      const input = parseInput(changeInput, data);
+      return change.execute(
         uid,
-        parseInput(changeInput, data),
-        () => memoryProvider(db, uid),
+        input,
+        () =>
+          memoryProvider(
+            db,
+            uid,
+            input.forgetScope === "allOccurrences"
+              ? "completeForget"
+              : "standard",
+          ),
         reauthorize,
-      ),
-    ),
+      );
+    }),
   };
 }

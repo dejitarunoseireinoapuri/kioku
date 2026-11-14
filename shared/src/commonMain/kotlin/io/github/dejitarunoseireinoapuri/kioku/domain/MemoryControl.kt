@@ -14,6 +14,8 @@ data class EditableSource(
 
 enum class ChangeAction { Correct, Forget }
 
+enum class ForgetScope { Source, AllOccurrences }
+
 data class MemoryChangeCommand(
     val requestId: String,
     val sourceId: String,
@@ -22,6 +24,7 @@ data class MemoryChangeCommand(
     val action: ChangeAction,
     val correction: String?,
     val zone: String,
+    val forgetScope: ForgetScope = ForgetScope.Source,
 )
 
 sealed interface MemoryChange {

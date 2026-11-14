@@ -28,6 +28,50 @@ import kotlin.test.assertTrue
 @OptIn(ExperimentalCoroutinesApi::class)
 class NativeTextConversationRepositoryTest {
     @Test
+    fun anUnknownOrBooleanScopeCannotExecuteAnApplication() =
+        runTest {
+            for (scope in listOf("\"everything\"", "true")) {
+                val port = TextWirePort()
+                val repository = NativeTextConversationRepository(port)
+                val command = repository.prepare("Olvida ese dato.", TextIntent.Ask, TextContext())
+                val source = "8e65fd01-d6b7-4cd4-9000-000000000001"
+                val fields =
+                    "\"action\":\"forget\",\"sourceId\":\"$source\"," +
+                        "\"expectedVersion\":\"${"a".repeat(64)}\",\"memoryIds\":[\"$source-1\"]," +
+                        "\"correction\":null,\"forgetScope\":$scope"
+                port.reply = { _, _ -> ready(command.ids.route, fields) }
+                assertIs<TextOutcome.Failed>(repository.execute(command).outcome)
+                assertEquals(1, port.calls.size)
+            }
+        }
+
+    @Test
+    fun allOccurrencesPlanKeepsItsExactScopeOnTheApplicationRequest() =
+        runTest {
+            val port = TextWirePort()
+            val repository = NativeTextConversationRepository(port)
+            val command = repository.prepare("Olvida ese dato.", TextIntent.Ask, TextContext())
+            val source = "8e65fd01-d6b7-4cd4-9000-000000000001"
+            port.reply = { _, _ ->
+                ready(
+                    command.ids.route,
+                    """
+                    "action":"forget","sourceId":"$source","expectedVersion":"${"a".repeat(64)}",
+                    "memoryIds":["$source-1"],"correction":null,"forgetScope":"allOccurrences"
+                    """.trimIndent(),
+                )
+            }
+            repository.execute(command)
+            assertEquals(MemoryEndpoint.ApplyMessage, port.calls.last().first)
+            assertTrue(
+                port.calls
+                    .last()
+                    .second
+                    .contains("\"forgetScope\":\"allOccurrences\""),
+            )
+        }
+
+    @Test
     fun oversizedFollowUpIsRejectedBeforeAnyPaidRouting() =
         runTest {
             val port = TextWirePort()

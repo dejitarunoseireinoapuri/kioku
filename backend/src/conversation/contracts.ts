@@ -48,14 +48,19 @@ export const routingPlan = z.discriminatedUnion("action", [
     fact: z.string().min(1).max(2000),
     alsoAsk: z.boolean(),
   }),
-  z.strictObject({
-    ...common,
-    action: z.enum(["correct", "forget"]),
-    sourceId: z.uuid(),
-    expectedVersion: z.string().regex(/^[a-f0-9]{64}$/u),
-    memoryIds: z.array(z.string().min(1).max(40)).min(1).max(8),
-    correction: z.string().min(1).max(2000).nullable(),
-  }),
+  z
+    .strictObject({
+      ...common,
+      action: z.enum(["correct", "forget"]),
+      sourceId: z.uuid(),
+      expectedVersion: z.string().regex(/^[a-f0-9]{64}$/u),
+      memoryIds: z.array(z.string().min(1).max(40)).min(1).max(8),
+      correction: z.string().min(1).max(2000).nullable(),
+      forgetScope: z.enum(["source", "allOccurrences"]).optional(),
+    })
+    .refine(
+      (value) => value.action === "forget" || value.forgetScope === undefined,
+    ),
 ]);
 export const decisionInput = z.strictObject({
   apiVersion: z.literal(1),

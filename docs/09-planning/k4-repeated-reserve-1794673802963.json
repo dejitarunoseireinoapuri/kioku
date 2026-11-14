@@ -1,0 +1,91 @@
+{
+  "stage": "complete",
+  "model": "gpt-6.1-sol",
+  "reasoning": "medium",
+  "corpusHash": "293a7f08fd7fa7fffc3e41f214ebd48264743352541a3a6d49dc5fe2c806960f",
+  "evaluation": "fresh-reserve",
+  "scope": "Synthetic complete-inventory local execution with actual provider; no production/native attestation",
+  "rows": [
+    {
+      "caseId": "e01",
+      "action": "forget",
+      "result": "forgotten",
+      "scopeOk": true,
+      "removedCount": 2,
+      "expectedRemoved": 2,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "status": "notFound",
+          "words": true,
+          "pass": true
+        },
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 41533
+    },
+    {
+      "caseId": "e02",
+      "action": "forget",
+      "result": "forgotten",
+      "scopeOk": true,
+      "removedCount": 2,
+      "expectedRemoved": 2,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "status": "notFound",
+          "words": true,
+          "pass": true
+        },
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        },
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 39774
+    },
+    {
+      "caseId": "e03",
+      "action": "forget",
+      "result": "needsClarification",
+      "scopeOk": true,
+      "removedCount": 0,
+      "expectedRemoved": 2,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "status": "answered",
+          "words": true,
+          "pass": false
+        },
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        },
+        {
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": false,
+      "durationMs": 39213
+    }
+  ],
+  "calls": 69,
+  "estimatedUsd": 0.22007879999999247
+}

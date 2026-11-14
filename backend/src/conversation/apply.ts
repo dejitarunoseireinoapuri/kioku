@@ -48,6 +48,9 @@ export class ApplyMessage {
         action: plan.action,
         correction: plan.correction,
         zone: input.turn.zone,
+        ...(plan.action === "forget" && plan.forgetScope
+          ? { forgetScope: plan.forgetScope }
+          : {}),
       });
       return new ChangeMemory(this.sources, () =>
         Date.parse(plan.receivedAt),

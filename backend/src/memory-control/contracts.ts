@@ -4,6 +4,7 @@ import type { QueryLease } from "../query/contracts.js";
 import type { RetirementScope } from "./retirement.js";
 import type { SelectiveChange } from "./selection.js";
 import { captureInput } from "../memory/contracts.js";
+import type { ForgetStore, ForgetIntelligence } from "./forget-contracts.js";
 
 export const detailsInput = z.strictObject({
   apiVersion: z.literal(1),
@@ -19,10 +20,12 @@ export const changeInput = z
     action: z.enum(["forget", "correct"]),
     correction: z.string().max(2000).nullable(),
     zone: captureInput.shape.zone,
+    forgetScope: z.enum(["source", "allOccurrences"]).optional(),
   })
   .refine((input) =>
     input.action === "correct"
       ? Boolean(input.correction?.trim()) &&
+        input.forgetScope !== "allOccurrences" &&
         input.memoryIds.length === 1 &&
         !/sk-[A-Za-z0-9_-]{20,}/u.test(input.correction ?? "")
       : input.correction === null,
@@ -53,14 +56,16 @@ export interface SourceBundle {
   memoryEpoch: number;
   sourceKind?: "retained" | "correction";
 }
-export interface ChangeIntelligence extends MemoryIntelligence {
+export interface ChangeIntelligence
+  extends MemoryIntelligence,
+    Partial<ForgetIntelligence> {
   reviewSourceChange(data: unknown): Promise<{
     authorized: boolean;
     unrelatedPreserved: boolean;
     noRemovedDataRemains: boolean;
   }>;
 }
-export interface SourceControlStore {
+export interface SourceControlStore extends ForgetStore {
   details(uid: string, id: string): Promise<SourceDetails>;
   epoch(uid: string): Promise<number>;
   begin(uid: string, input: ChangeInput): Promise<QueryLease | ChangeResult>;
