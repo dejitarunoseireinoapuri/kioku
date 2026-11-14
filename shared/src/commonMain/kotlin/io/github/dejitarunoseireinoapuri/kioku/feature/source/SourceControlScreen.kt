@@ -3,21 +3,18 @@ package io.github.dejitarunoseireinoapuri.kioku.feature.source
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -27,24 +24,13 @@ import io.github.dejitarunoseireinoapuri.kioku.design.ForgetConfirmationDialog
 import io.github.dejitarunoseireinoapuri.kioku.design.IconAction
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
-import io.github.dejitarunoseireinoapuri.kioku.design.Panel
 import io.github.dejitarunoseireinoapuri.kioku.design.TopBar
 import io.github.dejitarunoseireinoapuri.kioku.design.memoryChangeText
-import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChange
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryControlRepository
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.back
-import io.github.dejitarunoseireinoapuri.kioku.resources.control_apply
-import io.github.dejitarunoseireinoapuri.kioku.resources.control_cancel
-import io.github.dejitarunoseireinoapuri.kioku.resources.control_correcting
-import io.github.dejitarunoseireinoapuri.kioku.resources.control_correction_hint
-import io.github.dejitarunoseireinoapuri.kioku.resources.control_edit
-import io.github.dejitarunoseireinoapuri.kioku.resources.control_explanation
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_failed
-import io.github.dejitarunoseireinoapuri.kioku.resources.control_forget_all
-import io.github.dejitarunoseireinoapuri.kioku.resources.control_forget_item
-import io.github.dejitarunoseireinoapuri.kioku.resources.control_forgetting
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_loading
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_reload
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_retry
@@ -90,9 +76,11 @@ fun SourceControlScreen(
     }
     LaunchedEffect(working, scroll.maxValue) { if (working) scroll.animateScrollTo(scroll.maxValue) }
     Column(Modifier.fillMaxSize()) {
-        TopBar(stringResource(Res.string.control_title), leading = {
-            IconAction(Res.drawable.icon_back, stringResource(Res.string.back), onBack)
-        })
+        TopBar(
+            stringResource(Res.string.control_title),
+            leading = { IconAction(Res.drawable.icon_back, stringResource(Res.string.back), onBack) },
+            titleStyle = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.SemiBold),
+        )
         Column(
             Modifier.weight(1f).verticalScroll(scroll).padding(KiokuSpacing.Large),
             verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large),
@@ -112,7 +100,7 @@ fun SourceControlScreen(
                 }
 
                 else -> {
-                    ControlContent(state, forward)
+                    SourceControlContent(state, forward)
                 }
             }
         }
@@ -135,86 +123,7 @@ private fun controlInputEvents(onEvent: (SourceControlEvent) -> Unit): (SourceCo
 }
 
 @Composable
-private fun ControlContent(
-    state: SourceControlState,
-    onEvent: (SourceControlEvent) -> Unit,
-) {
-    val ready = (state as? SourceControlState.Working)?.previous ?: state as SourceControlState.Ready
-    val working = state is SourceControlState.Working
-    val enabled = !working && ready.feedback != ControlFeedback.Processing && ready.forget == null
-    Text(stringResource(Res.string.control_explanation), color = KiokuColors.Secondary)
-    ready.source.items.forEach { item ->
-        Panel {
-            Text(item.text)
-            if (ready.editing == item.id) {
-                CorrectionEditor(ready, enabled, onEvent)
-            } else {
-                ActionButton(
-                    stringResource(Res.string.control_edit),
-                    { onEvent(SourceControlEvent.Edit(item.id)) },
-                    enabled = enabled,
-                )
-                ActionButton(stringResource(Res.string.control_forget_item), {
-                    onEvent(SourceControlEvent.Forget(item.id))
-                }, enabled = enabled)
-            }
-        }
-    }
-    ActionButton(
-        stringResource(Res.string.control_forget_all),
-        { onEvent(SourceControlEvent.Forget()) },
-        enabled = enabled,
-    )
-    if (working) {
-        ContentLoadingNotice(
-            stringResource(
-                if (state.action == ChangeAction.Correct) {
-                    Res.string.control_correcting
-                } else {
-                    Res.string.control_forgetting
-                },
-            ),
-        )
-    }
-    ControlFeedbackNotice(ready.feedback, working, onEvent)
-}
-
-@Composable
-private fun CorrectionEditor(
-    ready: SourceControlState.Ready,
-    enabled: Boolean,
-    onEvent: (SourceControlEvent) -> Unit,
-) {
-    Text(
-        stringResource(Res.string.control_correction_hint),
-        style = MaterialTheme.typography.body2,
-        color = KiokuColors.Secondary,
-    )
-    TextField(
-        value = ready.draft,
-        onValueChange = { onEvent(SourceControlEvent.Draft(it)) },
-        enabled = enabled,
-        modifier = Modifier.fillMaxWidth().testTag("correction-input"),
-        maxLines = 5,
-        colors =
-            TextFieldDefaults.textFieldColors(
-                textColor = KiokuColors.Text,
-                backgroundColor = KiokuColors.Surface,
-                cursorColor = KiokuColors.Coral,
-                focusedIndicatorColor = KiokuColors.Coral,
-            ),
-    )
-    ActionButton(
-        stringResource(Res.string.control_apply),
-        { onEvent(SourceControlEvent.Apply) },
-        enabled =
-            enabled && ready.draft.isNotBlank(),
-    )
-    ActionButton(stringResource(Res.string.control_cancel), { onEvent(SourceControlEvent.Cancel) }, enabled = enabled)
-}
-
-@Composable
-private fun ControlFeedbackNotice(
+internal fun ControlFeedbackNotice(
     feedback: ControlFeedback?,
     working: Boolean,
     onEvent: (SourceControlEvent) -> Unit,

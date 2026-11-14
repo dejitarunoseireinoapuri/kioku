@@ -8,6 +8,9 @@ import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithContentDescription
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -34,42 +37,57 @@ class CaptureNavigationTest {
     private val account = FixtureAccount()
 
     @Test
-    fun savedStateWaitsForCommitAndOpensTheCanonicalSource() {
+    fun savedStateWaitsForCommitAndOpensManagementDirectly() {
         val result = CompletableDeferred<CaptureOutcome>()
         repository.result = { result.await() }
-        compose.setContent { KiokuApp(account, repository) }
+        compose.setContent {
+            KiokuApp(
+                account,
+                repository,
+                controlRepository = SavedControlFixture(repository.saved().source),
+            )
+        }
         send("Quiero ver una película ficticia.")
         waitVisible("Procesando tu recuerdo...")
         compose.onNodeWithText("Procesando tu recuerdo...").assertIsDisplayed()
         compose.onNodeWithTag("content-loading").assertIsDisplayed()
         compose.onNodeWithTag("text-composer").assertIsDisplayed().assertIsNotEnabled()
         captureBrandScreen(compose.activity, "kioku-compact-capture.png") { compose.onRoot().captureToImage() }
-        compose.onNodeWithText("Recuerdo guardado").assertDoesNotExist()
+        compose.onNodeWithContentDescription("Gestionar este recuerdo").assertDoesNotExist()
         result.complete(repository.saved())
-        waitVisible("Recuerdo guardado")
-        compose.onNodeWithText("Recuerdo guardado").assertIsDisplayed()
+        savedVisible()
+        compose.onNodeWithContentDescription("Gestionar este recuerdo").assertIsDisplayed()
         captureBrandScreen(compose.activity, "kioku-live-saved.png") { compose.onRoot().captureToImage() }
-        compose.onNodeWithText("Ver texto original").performScrollTo().performClick()
+        compose.onNodeWithContentDescription("Gestionar este recuerdo").performScrollTo().performClick()
+        compose.onNodeWithText("Gestionar un recuerdo").assertIsDisplayed()
+        compose.onNodeWithText("Texto original").assertDoesNotExist()
+        compose.onNodeWithText("Leer el relato").performClick()
         compose.onNodeWithText("LO QUE DIJISTE ORIGINALMENTE").assertIsDisplayed()
         compose.onNodeWithText("Lo contaste el 13/11/2026").assertIsDisplayed()
-        compose.onNodeWithText("Quiero ver una película ficticia.").assertIsDisplayed()
+        compose.onAllNodesWithText("Quiero ver una película ficticia.").onFirst().assertIsDisplayed()
         compose.onNodeWithContentDescription("Volver").performClick()
-        compose.onNodeWithText("Recuerdo guardado").assertIsDisplayed()
+        compose.onNodeWithTag("text-composer").assertIsDisplayed()
     }
 
     @Test
     fun clarificationSendsAnAnswerForThePendingOperation() {
         repository.result = { CaptureOutcome.Clarification("pending-fixture", 1, "¿De qué mes es el examen?") }
-        compose.setContent { KiokuApp(account, repository) }
+        compose.setContent {
+            KiokuApp(
+                account,
+                repository,
+                controlRepository = SavedControlFixture(repository.saved().source),
+            )
+        }
         send("El examen es el día 24.")
         waitVisible("¿De qué mes es el examen?")
         compose.onNodeWithText("¿De qué mes es el examen?").assertIsDisplayed()
-        compose.onNodeWithText("Recuerdo guardado").assertDoesNotExist()
+        compose.onNodeWithContentDescription("Gestionar este recuerdo").assertDoesNotExist()
         captureBrandScreen(compose.activity, "kioku-live-clarification.png") { compose.onRoot().captureToImage() }
         repository.result = { repository.saved() }
         send("De noviembre de 2026.")
-        waitVisible("Recuerdo guardado")
-        compose.onNodeWithText("Recuerdo guardado").assertIsDisplayed()
+        savedVisible()
+        compose.onNodeWithContentDescription("Gestionar este recuerdo").assertIsDisplayed()
         val command = repository.commands.last() as CaptureCommand.Clarify
         assertEquals("pending-fixture", command.clarificationId)
         assertEquals("De noviembre de 2026.", command.text)
@@ -78,13 +96,28 @@ class CaptureNavigationTest {
     @Test
     fun uncertainDeliveryChecksItsReceiptWithoutSubmittingAgain() {
         repository.result = { CaptureOutcome.Processing }
-        compose.setContent { KiokuApp(account, repository) }
+        compose.setContent {
+            KiokuApp(
+                account,
+                repository,
+                controlRepository = SavedControlFixture(repository.saved().source),
+            )
+        }
         send("Quiero ver una película ficticia.", keyboard = false)
         waitVisible("Comprobar estado")
         compose.onNodeWithText("Comprobar estado").performScrollTo().performClick()
-        compose.onNodeWithText("Recuerdo guardado").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Gestionar este recuerdo").assertIsDisplayed()
         assertEquals(1, repository.commands.size)
         assertEquals(listOf(repository.commands.single().requestId), repository.recoveries)
+    }
+
+    private fun savedVisible() {
+        compose.waitUntil(5000) {
+            compose.onAllNodesWithContentDescription("Gestionar este recuerdo").fetchSemanticsNodes().isNotEmpty()
+        }
+        compose.onNodeWithContentDescription("Gestionar este recuerdo").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("Recuerdo guardado").assertDoesNotExist()
+        compose.onNodeWithText("Ver texto original").assertDoesNotExist()
     }
 
     private fun send(

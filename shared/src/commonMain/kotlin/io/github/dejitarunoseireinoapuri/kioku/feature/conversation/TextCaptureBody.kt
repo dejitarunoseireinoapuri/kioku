@@ -2,7 +2,6 @@ package io.github.dejitarunoseireinoapuri.kioku.feature.conversation
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.font.FontWeight
 import io.github.dejitarunoseireinoapuri.kioku.design.ActionButton
 import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingNotice
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
@@ -17,8 +16,6 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.capture_ignored
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_processing
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_uncertain
 import io.github.dejitarunoseireinoapuri.kioku.resources.retry
-import io.github.dejitarunoseireinoapuri.kioku.resources.saved_title
-import io.github.dejitarunoseireinoapuri.kioku.resources.view_source
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -26,16 +23,10 @@ internal fun TextCaptureBody(
     capture: CaptureOutcome,
     interactive: Boolean,
     onEvent: (ConversationEvent) -> Unit,
-    onSource: (String) -> Unit,
     recovery: CaptureRecoveryUi?,
 ) {
     when (capture) {
-        is CaptureOutcome.Saved -> {
-            Panel {
-                Text(stringResource(Res.string.saved_title), fontWeight = FontWeight.SemiBold)
-                ActionButton(stringResource(Res.string.view_source), { onSource(capture.source.id) })
-            }
-        }
+        is CaptureOutcome.Saved -> {}
 
         is CaptureOutcome.Clarification -> {
             Panel { Text(capture.question) }

@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.captureToImage
@@ -12,7 +13,9 @@ import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.isEnabled
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
@@ -57,7 +60,14 @@ class ConversationFlowTest {
     @Before
     fun enterAskMode() {
         compose.runOnUiThread {
-            LifecycleTestActivity.content = { KiokuApp(FixtureAccount(), conversationRepository = repository) }
+            LifecycleTestActivity.content =
+                {
+                    KiokuApp(
+                        FixtureAccount(),
+                        conversationRepository = repository,
+                        controlRepository = SavedControlFixture(repository.saved().source),
+                    )
+                }
             compose.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
         compose.activityRule.scenario.recreate()
@@ -87,14 +97,15 @@ class ConversationFlowTest {
             .onNodeWithTag(
                 "text-composer",
             ).assert(SemanticsMatcher.expectValue(SemanticsProperties.EditableText, AnnotatedString("")))
-        compose.onNodeWithText("Recuerdo guardado").assertDoesNotExist()
+        compose.onNodeWithContentDescription("Gestionar este recuerdo").assertDoesNotExist()
         captureBrandScreen(compose.activity, "kioku-memory-offer.png") { compose.onRoot().captureToImage() }
         repository.answer = { TextOutcome.Captured(repository.saved()) }
         click("Sí, recuérdalo")
-        visible("Recuerdo guardado")
+        savedVisible()
         assertEquals(OfferDecision.Accept, repository.commands.last().decision)
         compose.onNodeWithTag("intent-Ask").assert(SemanticsMatcher.expectValue(SemanticsProperties.Selected, true))
-        click("Ver texto original")
+        compose.onNodeWithContentDescription("Gestionar este recuerdo").performClick()
+        visible("Gestionar un recuerdo")
         visible("Dato de prueba: me gusta el miso.")
     }
 
@@ -105,7 +116,7 @@ class ConversationFlowTest {
         repository.answer = { TextOutcome.Declined }
         send("no")
         visible("No se ha guardado con esta propuesta.")
-        compose.onNodeWithText("Recuerdo guardado").assertDoesNotExist()
+        compose.onNodeWithContentDescription("Gestionar este recuerdo").assertDoesNotExist()
         compose.onNodeWithText("Sí, recuérdalo").assertDoesNotExist()
         assertEquals(OfferDecision.Reject, repository.commands.last().decision)
     }
@@ -125,7 +136,7 @@ class ConversationFlowTest {
         }
         assertEquals(2, repository.commands.size)
         pending.complete(TextOutcome.Captured(repository.saved()))
-        visible("Recuerdo guardado")
+        savedVisible()
         assertEquals(2, repository.commands.size)
     }
 
@@ -198,6 +209,15 @@ class ConversationFlowTest {
         assertEquals(1, repository.commands.size)
     }
 
+    private fun savedVisible() {
+        compose.waitUntil(5000) {
+            compose.onAllNodesWithContentDescription("Gestionar este recuerdo").fetchSemanticsNodes().isNotEmpty()
+        }
+        compose.onNodeWithContentDescription("Gestionar este recuerdo").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("Recuerdo guardado").assertDoesNotExist()
+        compose.onNodeWithText("Ver texto original").assertDoesNotExist()
+    }
+
     private fun send(text: String) {
         compose.onNodeWithTag("text-composer").performTextInput(text)
         compose.onNodeWithTag("text-composer").performImeAction()
@@ -213,7 +233,7 @@ class ConversationFlowTest {
         compose.onNodeWithTag("intent-Tell").assertIsEnabled()
         repository.answer = { TextOutcome.Captured(repository.saved()) }
         click("Reintentar")
-        visible("Recuerdo guardado")
+        savedVisible()
         assertEquals(repository.commands[0].ids, repository.commands[1].ids)
     }
 
@@ -235,7 +255,7 @@ class ConversationFlowTest {
         visible("No consta otra cosa.")
         repository.recovered = repository.saved()
         click("Comprobar estado")
-        visible("Recuerdo guardado")
+        savedVisible()
         compose.onNodeWithText("No consta otra cosa.").assertExists()
         assertEquals(2, repository.commands.size)
         assertEquals(repository.commands.first().ids, repository.recoveries.single().ids)

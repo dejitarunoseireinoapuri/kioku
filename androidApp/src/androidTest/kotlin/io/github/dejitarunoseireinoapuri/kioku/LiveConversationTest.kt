@@ -5,6 +5,7 @@ import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.isEnabled
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -53,7 +54,7 @@ class LiveConversationTest {
             "En la prueba K4nube9261 quiero ver la película Loto. " +
                 "En la prueba K4nube9261 el examen de japonés es el 24 de noviembre de 2026.",
         )
-        visible("Recuerdo guardado")
+        savedVisible()
         ready()
         compose.onNodeWithTag("intent-Ask").performClick()
         send("En la prueba K4nube9261, corrige la fecha del examen de japonés: es el 26 de noviembre de 2026.")
@@ -61,7 +62,7 @@ class LiveConversationTest {
         ready()
         send("En la prueba K4nube9261 me apetece visitar el museo Nube.")
         click("Sí, recuérdalo")
-        visible("Recuerdo guardado")
+        savedVisible()
         ready()
         send("Olvida lo del museo Nube de la prueba K4nube9261.")
         click("Sí, borrar")
@@ -106,6 +107,10 @@ class LiveConversationTest {
             compose.activity.hasWindowFocus() &&
                 compose.onAllNodes(hasTestTag("text-composer") and isEnabled()).fetchSemanticsNodes().isNotEmpty()
         }
+    }
+
+    private fun savedVisible() {
+        compose.waitUntil(120_000) { compose.onNodeWithContentDescription("Gestionar este recuerdo").isDisplayed() }
     }
 
     private fun send(text: String) {

@@ -1,6 +1,5 @@
 package io.github.dejitarunoseireinoapuri.kioku
 
-import androidx.compose.ui.test.hasAnySibling
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
@@ -8,6 +7,7 @@ import androidx.compose.ui.test.isEnabled
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -53,15 +53,13 @@ class LiveSourceControlTest {
     fun syntheticSourceCanBeCorrectedAndForgottenThroughTheRealAndroidBoundary() {
         awaitReady()
         send(STORY)
-        waitVisible("Recuerdo guardado")
-        compose.onNodeWithText("Ver texto original").performScrollTo().performClick()
-        waitVisible("Gestionar")
-        compose.onNodeWithText("Gestionar").performClick()
-        val movie = hasAnySibling(hasText("Loto", substring = true))
+        savedVisible()
+        compose.onNodeWithContentDescription("Gestionar este recuerdo").performScrollTo().performClick()
+        val movie = memoryItemContaining("Loto")
         compose.waitUntil(20_000) {
-            compose.onAllNodes(hasText("Corregir este dato") and movie).fetchSemanticsNodes().size == 1
+            compose.onAllNodes(hasText("Corregir") and movie).fetchSemanticsNodes().size == 1
         }
-        compose.onNode(hasText("Corregir este dato") and movie).performScrollTo().performClick()
+        compose.onNode(hasText("Corregir") and movie).performScrollTo().performClick()
         compose.onNodeWithTag("correction-input").performTextInput(CORRECTION)
         compose.onNodeWithText("Aplicar corrección").performScrollTo().performClick()
         waitVisible("Dato corregido.")
@@ -79,8 +77,8 @@ class LiveSourceControlTest {
             .performClick()
         waitVisible("Gestionar")
         compose.onNodeWithText("Gestionar").performClick()
-        waitVisible("Olvidar este dato")
-        compose.onNodeWithText("Olvidar este dato").performScrollTo().performClick()
+        waitVisible("Olvidar")
+        compose.onNodeWithText("Olvidar").performScrollTo().performClick()
         waitVisible("Sí, borrar")
         compose.onNodeWithText("Sí, borrar").performScrollTo().performClick()
         compose.waitUntil(LIVE_TIMEOUT) {
@@ -111,6 +109,10 @@ class LiveSourceControlTest {
             compose.activity.hasWindowFocus() &&
                 compose.onAllNodes(hasTestTag("text-composer") and isEnabled()).fetchSemanticsNodes().isNotEmpty()
         }
+    }
+
+    private fun savedVisible() {
+        compose.waitUntil(120_000) { compose.onNodeWithContentDescription("Gestionar este recuerdo").isDisplayed() }
     }
 
     private fun send(text: String) {

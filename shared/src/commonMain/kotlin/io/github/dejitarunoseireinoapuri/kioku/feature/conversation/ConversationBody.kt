@@ -50,12 +50,29 @@ fun ConversationBody(
     state: ConversationState,
     onEvent: (ConversationEvent) -> Unit,
     onSource: (String) -> Unit,
+    onManage: (String) -> Unit = onSource,
 ) {
     when {
-        state.showingConversation -> TextConversationBody(requireNotNull(state.conversation), onEvent, onSource)
-        state.showingQuery -> QueryBody(state.query, onEvent, onSource)
-        state.showingCapture -> CaptureBody(state, onEvent, onSource)
-        else -> PreviewConversationBody(state, onEvent, onSource)
+        state.showingConversation -> {
+            TextConversationBody(
+                requireNotNull(state.conversation),
+                onEvent,
+                onSource,
+                onManage,
+            )
+        }
+
+        state.showingQuery -> {
+            QueryBody(state.query, onEvent, onSource)
+        }
+
+        state.showingCapture -> {
+            CaptureBody(state, onEvent, onManage)
+        }
+
+        else -> {
+            PreviewConversationBody(state, onEvent, onSource)
+        }
     }
 }
 

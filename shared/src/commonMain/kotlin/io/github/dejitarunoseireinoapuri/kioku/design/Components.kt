@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -78,8 +79,11 @@ fun Panel(
 }
 
 @Composable
-fun ScreenHeading(title: String) {
-    Text(title, style = MaterialTheme.typography.h5, modifier = Modifier.semantics { heading() })
+fun ScreenHeading(
+    title: String,
+    style: TextStyle = MaterialTheme.typography.h5,
+) {
+    Text(title, style = style, modifier = Modifier.semantics { heading() })
 }
 
 @Composable
@@ -87,6 +91,7 @@ fun TopBar(
     title: String,
     leading: @Composable () -> Unit = { KiokuMark(Modifier.size(24.dp)) },
     trailing: @Composable () -> Unit = {},
+    titleStyle: TextStyle = MaterialTheme.typography.h5,
 ) {
     Column {
         Row(
@@ -95,7 +100,7 @@ fun TopBar(
             verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
         ) {
             leading()
-            Column(Modifier.weight(1f)) { ScreenHeading(title) }
+            Column(Modifier.weight(1f)) { ScreenHeading(title, titleStyle) }
             trailing()
         }
         Divider(color = KiokuColors.Rule)

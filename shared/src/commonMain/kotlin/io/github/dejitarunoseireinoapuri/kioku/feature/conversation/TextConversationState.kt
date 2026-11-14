@@ -20,6 +20,7 @@ sealed interface TextMessage {
         override val id: Long,
         val outcome: TextOutcome,
         val captureCommand: TextCommand? = null,
+        val ownerId: Long? = null,
     ) : TextMessage
 }
 

@@ -1,11 +1,11 @@
 package io.github.dejitarunoseireinoapuri.kioku
 
-import androidx.compose.ui.test.hasAnySibling
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.isEnabled
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
@@ -75,7 +75,8 @@ class LiveRepeatedForgetTest {
             ready()
             send(story)
             compose.waitUntil(REPEATED_LIVE_TIMEOUT) {
-                compose.onAllNodesWithText("Recuerdo guardado").fetchSemanticsNodes().size == index + 1
+                compose.onAllNodesWithContentDescription("Gestionar este recuerdo").fetchSemanticsNodes().size ==
+                    index + 1
             }
         }
         ready()
@@ -95,7 +96,7 @@ class LiveRepeatedForgetTest {
             .performClick()
         click("Gestionar")
         val exam =
-            hasText("Olvidar este dato") and hasAnySibling(hasText("simulacro", substring = true, ignoreCase = true))
+            hasText("Olvidar") and memoryItemContaining("simulacro")
         compose.waitUntil(20_000) { compose.onAllNodes(exam).fetchSemanticsNodes().size == 1 }
         compose.onNode(exam).performScrollTo().performClick()
         confirmForget("simulacro")

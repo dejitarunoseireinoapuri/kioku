@@ -108,7 +108,7 @@ private fun SourceContent(source: MemorySource) {
 }
 
 @Composable
-private fun SourceRecordedDate(source: MemorySource) {
+internal fun SourceRecordedDate(source: MemorySource) {
     val date =
         source.receivedAt?.let { formatSourceDate(it) }
             ?: formatSourceDate("${source.recordedOn}T12:00:00Z", "UTC")

@@ -32,6 +32,7 @@ fun ConversationScreen(
     onEvent: (ConversationEvent) -> Unit,
     onSettings: () -> Unit,
     loading: StringResource? = null,
+    onManage: ((String) -> Unit)? = null,
     onSource: (String) -> Unit,
 ) {
     val scroll = conversationScroll(state, loading)
@@ -47,7 +48,7 @@ fun ConversationScreen(
             verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large),
         ) {
             if (!state.concealingMemory) {
-                ConversationBody(state, onEvent, onSource)
+                ConversationBody(state, onEvent, onSource, onManage ?: onSource)
                 state.feedback?.let { FeedbackMessage(it, state.forgottenText) }
             }
             if (loading != null) ContentLoadingNotice(stringResource(loading))

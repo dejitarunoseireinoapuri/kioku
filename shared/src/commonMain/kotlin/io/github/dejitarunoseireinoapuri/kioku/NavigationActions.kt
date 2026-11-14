@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import io.github.dejitarunoseireinoapuri.kioku.di.ConversationDependencies
+import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChange
 import io.github.dejitarunoseireinoapuri.kioku.feature.account.AccountState
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.ConversationEvent
@@ -11,6 +12,7 @@ import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.Conversation
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.ConversationState
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.ConversationViewModel
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.contentLoadingStatus
+import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.savedMessageSources
 import io.github.dejitarunoseireinoapuri.kioku.feature.settings.SettingsScreen
 import io.github.dejitarunoseireinoapuri.kioku.feature.source.SourceControlRoute
 import io.github.dejitarunoseireinoapuri.kioku.feature.source.SourceScreen
@@ -40,6 +42,7 @@ internal fun kiokuEntries(
             model::onEvent,
             { actions.navigate(Route.Settings) },
             loading = loading.takeIf { actions.current == Route.Conversation },
+            onManage = { id -> manageSavedSource(id, model, dependencies, actions) },
         ) { id ->
             model.checkMemory { if (model.openSource(id)) actions.navigate(Route.Source(id)) }
         }
@@ -85,5 +88,28 @@ private fun ControlDestination(
 ) {
     dependencies.controls?.let { repository ->
         CompositionViewModels { SourceControlRoute(id, repository, actions.back, onChanged = actions.changed) }
+    }
+}
+
+private fun manageSavedSource(
+    id: String,
+    model: ConversationViewModel,
+    dependencies: ConversationDependencies,
+    actions: NavigationActions,
+) {
+    model.checkMemory {
+        val current = model.state.value
+        val known =
+            id in
+                current.conversation
+                    ?.savedMessageSources()
+                    .orEmpty()
+                    .values ||
+                (current.capture as? CaptureOutcome.Saved)?.source?.id == id
+        if (known && dependencies.controls != null) {
+            actions.navigate(Route.Control(id))
+        } else {
+            model.sourceActionUnavailable()
+        }
     }
 }

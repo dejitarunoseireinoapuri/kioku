@@ -3,6 +3,7 @@ package io.github.dejitarunoseireinoapuri.kioku
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.isEnabled
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
@@ -61,7 +62,7 @@ class LiveCaptureDatesTest {
         compose.onNodeWithTag("text-composer").performTextInput(text)
         compose.onNodeWithTag("text-composer").performImeAction()
         compose.waitUntil(195_000) {
-            compose.onAllNodesWithText("Recuerdo guardado").fetchSemanticsNodes().isNotEmpty()
+            compose.onAllNodesWithContentDescription("Gestionar este recuerdo").fetchSemanticsNodes().isNotEmpty()
         }
         runBlocking {
             val app = FirebaseApp.getInstance("kioku")

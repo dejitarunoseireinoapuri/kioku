@@ -8,7 +8,6 @@ import io.github.dejitarunoseireinoapuri.kioku.design.ActionButton
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
 import io.github.dejitarunoseireinoapuri.kioku.design.Panel
-import io.github.dejitarunoseireinoapuri.kioku.design.ScreenHeading
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureIssue
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
@@ -23,13 +22,10 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.capture_limited
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_more_context
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_processing
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_restart
-import io.github.dejitarunoseireinoapuri.kioku.resources.capture_saved
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_uncertain
 import io.github.dejitarunoseireinoapuri.kioku.resources.clarification_hint
 import io.github.dejitarunoseireinoapuri.kioku.resources.clarification_pending
 import io.github.dejitarunoseireinoapuri.kioku.resources.retry
-import io.github.dejitarunoseireinoapuri.kioku.resources.saved_title
-import io.github.dejitarunoseireinoapuri.kioku.resources.view_source
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -98,12 +94,7 @@ private fun SavedCapture(
     outcome: CaptureOutcome.Saved,
     onSource: (String) -> Unit,
 ) {
-    Panel { Text(outcome.source.originalText) }
-    Panel {
-        ScreenHeading(stringResource(Res.string.saved_title))
-        Text(stringResource(Res.string.capture_saved))
-        ActionButton(stringResource(Res.string.view_source), { onSource(outcome.source.id) })
-    }
+    OwnerMemoryMessage(outcome.source.originalText, outcome.source.id, true, onSource)
 }
 
 @Composable

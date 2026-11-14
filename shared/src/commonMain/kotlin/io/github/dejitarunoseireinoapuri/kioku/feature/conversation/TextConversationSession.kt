@@ -31,6 +31,7 @@ internal class TextConversationSession(
     private var sourceJob: Job? = null
     private var recoveryJob: Job? = null
     private var messageId = 0L
+    private var ownerId: Long? = null
     private var clarifications = 0
     private val questions = ArrayDeque<String>()
     private var references = emptyList<String>()
@@ -91,6 +92,15 @@ internal class TextConversationSession(
                 repository.prepare(combined, intent, context())
             }
         if (state.clarification) clarifications++ else clarifications = 0
+        ownerId =
+            if (state.clarification) {
+                state.messages
+                    .filterIsInstance<TextMessage.Result>()
+                    .lastOrNull()
+                    ?.ownerId ?: ownerId ?: (messageId + 1)
+            } else {
+                messageId + 1
+            }
         append(TextMessage.Owner(++messageId, text))
         if (combined.length > (if (intent == TextIntent.Ask) MAX_MESSAGE_QUERY else MAX_MESSAGE_TELL) ||
             clarifications > MAX_MESSAGE_CLARIFICATIONS
@@ -186,7 +196,7 @@ internal class TextConversationSession(
                 rememberQuestion(command.text, outcome)
                 if (outcome !is TextOutcome.ConfirmForget) {
                     val pending = (outcome as? TextOutcome.Captured)?.capture.isUnresolvedCapture()
-                    append(TextMessage.Result(++messageId, outcome, execution.command.takeIf { pending }))
+                    append(TextMessage.Result(++messageId, outcome, execution.command.takeIf { pending }, ownerId))
                 }
                 publish(state.copy(status = TextStatus.Ready(execution.command, outcome)))
             }
@@ -196,6 +206,7 @@ internal class TextConversationSession(
         command.plan?.stamp?.revision?.takeIf { it > revision }?.let { value ->
             val last = state.messages.filterIsInstance<TextMessage.Owner>().lastOrNull()
             state = state.copy(messages = listOfNotNull(last), source = null)
+            ownerId = last?.id
             questions.clear()
             references = emptyList()
             revision = value
@@ -250,6 +261,7 @@ internal class TextConversationSession(
         sourceJob?.cancel()
         clarifications = 0
         messageId = pending.maxOfOrNull { it.id } ?: 0
+        ownerId = null
         questions.clear()
         references = emptyList()
         publish(TextConversationState(messages = pending), clearDraft)

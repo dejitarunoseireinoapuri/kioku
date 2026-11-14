@@ -82,7 +82,7 @@ class SourceControlNavigationTest {
         compose.waitUntil(5000) { compose.onNodeWithText("Gestionar").isDisplayed() }
         compose.onNodeWithText("Gestionar").performClick()
         compose.waitUntil(5000) {
-            compose.onAllNodes(hasText("Corregir este dato") and isEnabled()).fetchSemanticsNodes().size ==
+            compose.onAllNodes(hasText("Corregir") and isEnabled()).fetchSemanticsNodes().size ==
                 2
         }
     }
@@ -124,7 +124,7 @@ class SourceControlNavigationTest {
         val pending = CompletableDeferred<MemoryChange>()
         controls.change = { pending.await() }
         compose
-            .onAllNodesWithText("Olvidar este dato")
+            .onAllNodesWithText("Olvidar")
             .onFirst()
             .performScrollTo()
             .performClick()
@@ -149,7 +149,7 @@ class SourceControlNavigationTest {
     fun fullTextWithdrawalHasExplicitScopeAndUsesOneCommand() {
         controls.change = { MemoryChange.Confirmed(ChangeAction.Forget, 1) }
         captureBrandScreen(compose.activity, "kioku-source-controls.png") { compose.onRoot().captureToImage() }
-        compose.onNodeWithText("Olvidar todo este texto y sus recuerdos").performScrollTo().performClick()
+        compose.onNodeWithText("Olvidar este relato").performScrollTo().performClick()
         compose
             .onNodeWithText(
                 "Este texto y sus recuerdos dejarán de estar accesibles. Las copias en otros relatos se conservarán.",
@@ -171,7 +171,7 @@ class SourceControlNavigationTest {
     @Test
     fun cancellingAfterRotationLeavesTheSourceAndSendsNoDeletion() {
         compose
-            .onAllNodesWithText("Olvidar este dato")
+            .onAllNodesWithText("Olvidar")
             .onFirst()
             .performScrollTo()
             .performClick()
@@ -190,7 +190,7 @@ class SourceControlNavigationTest {
     @Test
     fun dismissingThePopupWithBackDoesNotDeleteOrLeaveTheSource() {
         compose
-            .onAllNodesWithText("Olvidar este dato")
+            .onAllNodesWithText("Olvidar")
             .onFirst()
             .performScrollTo()
             .performClick()
@@ -228,7 +228,7 @@ class SourceControlNavigationTest {
 
     private fun editExam() {
         compose
-            .onAllNodesWithText("Corregir este dato")
+            .onAllNodesWithText("Corregir")
             .onLast()
             .performScrollTo()
             .performClick()

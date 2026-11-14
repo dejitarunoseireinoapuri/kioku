@@ -36,24 +36,33 @@ fun TextConversationBody(
     state: TextConversationState,
     onEvent: (ConversationEvent) -> Unit,
     onSource: (String) -> Unit,
+    onManage: (String) -> Unit = onSource,
 ) {
+    val saved = state.savedMessageSources()
     Column(verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large)) {
         state.messages.forEach { message ->
             when (message) {
                 is TextMessage.Owner -> {
-                    Panel { Text(message.text) }
+                    OwnerMemoryMessage(
+                        message.text,
+                        saved[message.id],
+                        !state.busy && !state.confirmingForget,
+                        onManage,
+                    )
                 }
 
                 is TextMessage.Result -> {
-                    TextOutcomeBody(
-                        message.outcome,
-                        interactive = !state.busy && message.id == state.messages.lastOrNull()?.id,
-                        onEvent,
-                        onSource,
-                        message.captureCommand?.let {
-                            CaptureRecoveryUi(message.id, state.checkingCapture == message.id, !state.busy)
-                        },
-                    )
+                    message.visibleOutcome(saved)?.let { outcome ->
+                        TextOutcomeBody(
+                            outcome,
+                            interactive = !state.busy && message.id == state.messages.lastOrNull()?.id,
+                            onEvent,
+                            onSource,
+                            message.captureCommand?.let {
+                                CaptureRecoveryUi(message.id, state.checkingCapture == message.id, !state.busy)
+                            },
+                        )
+                    }
                 }
             }
         }
@@ -61,6 +70,11 @@ fun TextConversationBody(
         state.outcome?.takeIf { !state.busy && it != last }?.let { TextOutcomeBody(it, true, onEvent, onSource) }
         if (state.clarification) MessageButton(MessageAction.Reset, stringResource(Res.string.capture_restart), onEvent)
     }
+}
+
+private fun TextMessage.Result.visibleOutcome(saved: Map<Long, String>): TextOutcome? {
+    val offer = outcome as? TextOutcome.Offered
+    return if (offer != null && ownerId in saved) offer.answer?.let { TextOutcome.Asked(it) } else outcome
 }
 
 @Composable
@@ -77,7 +91,7 @@ private fun TextOutcomeBody(
         }
 
         is TextOutcome.Captured -> {
-            TextCaptureBody(outcome.capture, interactive, onEvent, onSource, recovery)
+            TextCaptureBody(outcome.capture, interactive, onEvent, recovery)
         }
 
         is TextOutcome.Offered -> {

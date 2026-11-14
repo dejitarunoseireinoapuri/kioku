@@ -15,7 +15,7 @@ internal fun TextConversationState.pendingCaptureMessages(): List<TextMessage> {
             messages
                 .take(index)
                 .filterIsInstance<TextMessage.Owner>()
-                .lastOrNull()
+                .findLast { it.id == message.ownerId || message.ownerId == null }
                 ?.let { selected.add(it.id) }
         }
     }

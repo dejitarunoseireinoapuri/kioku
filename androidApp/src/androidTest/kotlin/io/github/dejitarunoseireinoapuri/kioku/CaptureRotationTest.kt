@@ -6,6 +6,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
@@ -33,7 +34,10 @@ class CaptureRotationTest {
 
     @Before
     fun openApp() {
-        compose.runOnUiThread { LifecycleTestActivity.content = { KiokuApp(account, repository) } }
+        compose.runOnUiThread {
+            LifecycleTestActivity.content =
+                { KiokuApp(account, repository, controlRepository = SavedControlFixture(repository.saved().source)) }
+        }
         compose.activityRule.scenario.recreate()
         waitVisible("text-composer", tag = true)
     }
@@ -68,7 +72,7 @@ class CaptureRotationTest {
         compose.onNodeWithTag("text-composer").assertTextContains("De noviembre de 2026.")
         repository.result = { repository.saved() }
         compose.onNodeWithTag("text-composer").performImeAction()
-        waitVisible("Recuerdo guardado")
+        savedVisible()
         val clarification = repository.commands.last() as CaptureCommand.Clarify
         assertEquals("pending-fixture", clarification.clarificationId)
         assertEquals(1, clarification.revision)
@@ -85,14 +89,23 @@ class CaptureRotationTest {
         waitVisible("Procesando tu recuerdo...")
         assertEquals(1, repository.commands.size)
         result.complete(repository.saved())
-        waitVisible("Recuerdo guardado")
+        savedVisible()
         rotate()
-        compose.onNodeWithText("Ver texto original").performScrollTo().performClick()
+        compose.onNodeWithContentDescription("Gestionar este recuerdo").performScrollTo().performClick()
         rotate()
         compose.onNodeWithText("Quiero ver una película ficticia.").performScrollTo().assertIsDisplayed()
         compose.onNodeWithContentDescription("Volver").performClick()
-        compose.onNodeWithText("Recuerdo guardado").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithTag("text-composer").assertIsDisplayed()
         assertEquals(1, repository.commands.size)
+    }
+
+    private fun savedVisible() {
+        compose.waitUntil(5000) {
+            compose.onAllNodesWithContentDescription("Gestionar este recuerdo").fetchSemanticsNodes().isNotEmpty()
+        }
+        compose.onNodeWithContentDescription("Gestionar este recuerdo").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("Recuerdo guardado").assertDoesNotExist()
+        compose.onNodeWithText("Ver texto original").assertDoesNotExist()
     }
 
     private fun send(text: String) {
