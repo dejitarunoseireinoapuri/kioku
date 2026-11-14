@@ -1,6 +1,6 @@
 # ADR-011 · Retirada canónica y control conversacional
 
-- Estado: base conversacional activa; copias entre relatos implementadas y probadas localmente, activación de la ampliación e iOS pendientes.
+- Estado: base conversacional y copias entre relatos activas y aceptadas en Honor; nuevo build iOS pendiente.
 - Fecha: 2026-11-14.
 - Amplía [ADR-005](ADR-005-memory-evidence-and-deletion.md), [K2](ADR-009-text-capture.md) y [K3](ADR-010-text-query.md).
 
@@ -44,7 +44,7 @@ Fecha/zona de la corrección natural y de la oferta aceptada proceden del mensaj
 
 Implementación compartida Android/iOS preparada. El propietario autoriza después del commit revisable `6555c68` la ampliación productiva: dos funciones nuevas y cuatro actualizaciones. Despliegue, denegación sin sesión y recorrido nativo real en Honor correctos; nuevos datos sintéticos retirados. Evidencia local, evaluación con proveedor y activación remota se distinguen en [K4_VALIDATION](../../09-planning/K4_VALIDATION.md); esta decisión por sí sola no autoriza otros despliegues.
 
-## Continuación · copias entre relatos, preparada para activar
+## Continuación · copias entre relatos activas
 
 «Olvidar este dato» y la orden natural equivalente usan `forgetScope:allOccurrences`; el objetivo inicial se resuelve desde un representante inequívoco, sin confundirlo con todos los recuerdos del mismo tema. `source` limita explícitamente la acción al relato elegido y sigue siendo el valor compatible de entradas antiguas sin campo. Retirar todo este texto conserva ese alcance estrecho. Scope viaja en el plan firmado por digest; no se permite cambiarlo al aplicar. Una interpretación sin alcance no cae silenciosamente a borrar una sola copia.
 
@@ -58,15 +58,15 @@ Límites de esta operación síncrona: 128 fuentes, 512 unidades y 180 000 carac
 
 El proveedor mantiene Sol medio y `store:false`. Solo el servidor puede elegir el presupuesto `completeForget`: hasta 32 llamadas/reservas acumuladas de 3 USD para comprobar el inventario; las demás operaciones conservan 8 llamadas/1 USD y la cota diaria sigue siendo 10 USD. Son cotas de admisión conservadoras, no precio esperado. El selector de presupuesto no está en la entrada pública. La evaluación local conserva el contador previo y eleva su límite autorizado de 20 a 30 USD, sin modificar tarifas históricas.
 
-No hay nuevos endpoints, índices, colecciones, claves, backups o permisos. Se preparan actualizaciones de `routeMessage`, `applyMessage` y `changeMemory`, más APK compartido actualizado. Activación y aceptación remota se distinguen de pruebas locales en [K4_VALIDATION](../../09-planning/K4_VALIDATION.md). Referencias de restos hasta 32 quedan solo en recibo para reautorizar recuperación; el resultado público de este olvido devuelve `sources:[]`, compatible con la limpieza del chat y sin fingir que un resto es original intacto.
+No hay nuevos endpoints, índices, colecciones, claves, backups o permisos. Se actualizan con autorización `routeMessage`, `applyMessage` y `changeMemory`, más APK compartido actualizado y aceptado en Honor real. Activación y aceptación remota se distinguen de pruebas locales en [K4_VALIDATION](../../09-planning/K4_VALIDATION.md). Referencias de restos hasta 32 quedan solo en recibo para reautorizar recuperación; el resultado público de este olvido devuelve `sources:[]`, compatible con la limpieza del chat y sin fingir que un resto es original intacto.
 
 ## Secuencia restante de K4
 
 1. Completar la validación iOS en Mac. Activación autorizada de la frontera selectiva e índice READY, rechazo sin credenciales y recorrido nativo productivo en Honor ya comprobados; los casos locales/sintéticos no sustituyen esas evidencias separadas.
 2. Mantener la evaluación reservada y los controles positivos/negativos al cambiar comportamientos; conservar los intentos fallidos como evidencia. La continuación de ofertas/órdenes ya tiene aceptación local reservada, sin convertir texto recuperado en permiso.
 3. Ampliación activada después de autorización concreta, con recorrido completo en Honor usando identidad/atestación reales y limpieza de sus nuevos datos sintéticos. Una futura ampliación de endpoints/permisos necesita su propia autorización.
-4. Activar y comprobar la ampliación de copias con autorización concreta y completar iOS en Mac. Mantener explícitos los límites de capacidad, ambigüedad y sincronización; no prometer eliminación universal sin esas condiciones. Este ADR no autoriza despliegues.
+4. Ampliación de copias activada con autorización concreta y aceptada en Honor real, con datos de prueba retirados. Completar iOS en Mac para cerrar K4; conservar límites de capacidad, ambigüedad y sincronización. Este ADR no autoriza otros despliegues.
 
 ## Alternativas y límites
 
-No se usa borrado suave con contenido o copias históricas, ni TTL para revocaciones. Captura/consulta/corrección mantienen sus límites; solo allOccurrences añade el inventario completo acotado descrito arriba. Cada fuente admite ocho fragmentos y las consultas de recibos vinculados se limitan a nueve documentos y rechazan exceso. El top seis solo resuelve el representante, no determina todas sus copias. Un borrado global de la cuenta sigue pidiendo objetivo concreto, sin retirada parcial encubierta. Los límites de capacidad y las dependencias ambiguas no se sortean. La ampliación de copias está preparada, no activada por este documento. [Evidencia](../../09-planning/K4_VALIDATION.md).
+No se usa borrado suave con contenido o copias históricas, ni TTL para revocaciones. Captura/consulta/corrección mantienen sus límites; solo allOccurrences añade el inventario completo acotado descrito arriba. Cada fuente admite ocho fragmentos y las consultas de recibos vinculados se limitan a nueve documentos y rechazan exceso. El top seis solo resuelve el representante, no determina todas sus copias. Un borrado global de la cuenta sigue pidiendo objetivo concreto, sin retirada parcial encubierta. Los límites de capacidad y las dependencias ambiguas no se sortean. La ampliación de copias está activa por autorización específica del propietario y comprobada en Honor; este documento no autoriza futuros despliegues. [Evidencia](../../09-planning/K4_VALIDATION.md).

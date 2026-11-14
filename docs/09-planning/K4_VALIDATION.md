@@ -1,6 +1,6 @@
 # K4 · Control conversacional de memoria
 
-Rama: `codex/k4-memory-control`, desde la entrega K3 `6b264e7`. **En curso: controles por fuente y continuación conversacional activos y comprobados en Honor real.** K3 conserva la comprobación iOS actual y la aclaración del reporte temporal pendientes. No se integran ramas en `main` por esta ejecución. iOS actual y alcance de olvido entre fuentes pendientes; K4 no cerrada.
+Rama: `codex/k4-memory-control`, desde la entrega K3 `6b264e7`. **Control por fuente, conversación y olvido de copias entre relatos activos y comprobados en Honor real.** Este bloque de olvido queda validado en Android/backend dentro de sus cotas. K3 conserva la comprobación iOS actual y la aclaración del reporte temporal pendientes. No se integran ramas en `main` por esta ejecución. K4 completa continúa pendiente de iOS.
 
 ## Alcance de la primera ejecución
 
@@ -131,13 +131,13 @@ El propietario autoriza expresamente en este chat activar y probar el commit `65
 
 Ausencia del marcador comprobada antes de empezar. Se registra solo una línea base de IDs existentes en la ventana de la prueba, sin copiar textos. Al terminar se retiran las dos fuentes residuales que contienen el marcador, validando pertenencia de todos sus fragmentos; el retiro del museo ya se produjo por la app. Comprobación final: cero fuentes con el marcador y **cero fuentes nuevas sin contabilizar frente a la línea base**. No se cambian otros recuerdos; permanecen únicamente revocaciones mínimas sin texto. APK nuevo instalado por actualización en Honor, con sesión conservada. Este recorrido añade gasto productivo a las estimaciones locales anteriores; no se obtuvo un desglose monetario remoto aislado ni saldo real API.
 
-### Límites pendientes
+### Límites de la tercera ejecución (antes de ampliar copias)
 
-Alcance actual de corrección/olvido: una fuente inequívoca, hasta ocho fragmentos; resolver recupera seis candidatos o una fuente contextual. No garantiza retirar copias del mismo hecho en otros relatos ni borrar toda la cuenta. Una orden global pide concretar sin borrar parcialmente. Tampoco hay sincronización continua de otro móvil en primer plano. iOS comparte implementación/adaptadores preparados, pero falta compilar y probar este build en Mac. Estas limitaciones impiden declarar K4 completa.
+En aquella entrega, el alcance de corrección/olvido era una fuente inequívoca, hasta ocho fragmentos; resolver recuperaba seis candidatos o una fuente contextual. No garantizaba retirar copias del mismo hecho en otros relatos ni borrar toda la cuenta. La cuarta ejecución siguiente amplía el olvido de copias dentro de cotas. Se mantienen pendientes iOS y la sincronización continua de otro móvil en primer plano; una orden global pide concretar sin borrar parcialmente.
 
 Se consultaron convenciones/calidad, reglas/casos de uso, ADR-011, plan/limitaciones, estado, contratos/modelo/retención y seguridad/privacidad. Referencia Stitch 06 y captura inspeccionadas por MCP, sin editar el diseño. No se cambió modelo/perfil ni se usó Astra.
 
-## Cuarta ejecución · olvidar copias entre relatos, preparada
+## Cuarta ejecución · olvidar copias entre relatos, activa y aceptada en Honor
 
 Se implementa allOccurrences en `changeMemory` y en el plan natural de `routeMessage`/`applyMessage`. La app compartida envía ese alcance al olvidar un dato; retirar expresamente todo el texto conserva source. Campos ausentes en clientes/tickets anteriores conservan el alcance antiguo, y la app nueva mantiene presencia/valor exactos del plan para no alterar su digest. Un alcance natural no resuelto pregunta, sin caer a borrar una sola copia. No hay nuevos endpoints, índices, claves, colecciones o permisos.
 
@@ -183,8 +183,20 @@ pwsh -NoProfile -File tooling/backend-emulators.ps1
 pwsh -NoProfile -File tooling/mobile.ps1 formatKotlin :androidApp:assembleDebug :androidApp:assembleDebugAndroidTest mobileCheck
 ```
 
-APK preparado `androidApp/build/outputs/apk/debug/kioku-k4-olvido-copias.apk`, SHA-256 `a27023cb625b641b49cfb3466dd96f031c61559fe236c976d3a984d0ae67ad5a`. Se deja temporalmente en Honor el APK conversacional anterior mientras se autoriza el servidor; no se desinstala ni borra sesión/datos. La ampliación está subida/preparada para activar tres funciones existentes, sin nuevas entradas HTTPS/IAM. La prueba real posterior deberá retirar exclusivamente sus nuevos datos sintéticos y comprobar ausencia frente a una línea base de IDs, sin copiar textos.
+APK `androidApp/build/outputs/apk/debug/kioku-k4-olvido-copias.apk`, SHA-256 `a27023cb625b641b49cfb3466dd96f031c61559fe236c976d3a984d0ae67ad5a`. Mientras se autorizaba la ampliación se dejó temporalmente el APK anterior compatible. Tras desplegar se instala este APK por actualización, conservando sesión y datos; es la versión que queda en Honor. No se desinstala ni resetea. La preparación de la prueba nativa en `8b785b6` reutiliza las mismas tres historias para las dos formas de olvido y conserva sus aserciones de preservación; no modifica el backend revisable `491c41b`.
 
-### Cierre de este bloque pendiente
+### Activación y prueba real de las copias
 
-Faltan autorización concreta de actualización productiva, despliegue de `routeMessage`/`applyMessage`/`changeMemory` y aceptación nativa del nuevo recorrido. iOS sigue requiriendo compilar/probar este build en Mac. Un inventario mayor que las cotas exige otra estrategia y se rechaza entero; no se vende como eliminación ilimitada. Una dependencia de otro dato puede requerir aclaración antes de ampliar el alcance. Borrado global de la cuenta y sincronización continua de otro móvil en primer plano no se añaden. Este bloque no da por cerrada toda K4 automáticamente.
+El propietario autoriza expresamente en el chat actualizar únicamente `routeMessage`, `applyMessage` y `changeMemory` en `kioku-9454f`, Bélgica, y probarlo en Honor con nuevos datos sintéticos/limpieza limitada a ellos. Las tres actualizaciones finalizan correctamente, incluido build/formato de predeploy. Sin nuevas funciones, IAM, índices, reglas, claves o backups. Inspección administrativa de las nueve funciones de memoria: ACTIVE, runtime esperado, máximo una instancia y rechazo HTTPS sin credenciales con 401; las entradas existentes permanecen y el índice anterior está READY, con pending excluido. No se redespliegan funciones ajenas al alcance.
+
+Al iniciar la comprobación solo estaba disponible Samsung; no se intervino en él. Se avisó al propietario y este volvió a conectar Honor. Se actualizaron app/test por instalación conservadora, sin borrar datos ni sesión. `LiveRepeatedForgetTest`: **1/1 correcta en Honor FNE_NX9, Android 14/API 34, 108,275 s para el recorrido completo**, MainActivity y SDKs Google/Firebase reales, sin repositorios ficticios ni tokens de depuración. No es el tiempo de una única consulta.
+
+El recorrido guarda tres relatos con el marcador `K4eco3746`: dos copias del deseo de ver la película inventada Farol K4eco3746, dos copias de la fecha del simulacro de japonés K4eco3746 y otros asuntos. La orden natural retira las dos copias del deseo propio, y la consulta confirma NotFound. La consulta posterior recupera la fecha 27 del simulacro y abre su fuente actual. Desde Gestionar se elige el dato del simulacro y se retiran sus dos copias. Las consultas posteriores confirman NotFound para el simulacro y Answered con las peras y el deseo del hermano de ver Farol, conservados. Se prueba la diferencia de persona, no solo la coincidencia del título. Las guardias de omisión siguen fuera de este éxito y las 41 pruebas con dobles mantienen su evidencia separada.
+
+Antes de iniciar: marcador ausente y línea base de IDs de la ventana de prueba, sin copiar textos. Después del recorrido se retiran exclusivamente las dos fuentes residuales con el marcador, validando que sus unidades sean de prueba. Comprobación final: **cero fuentes con el marcador, cero fuentes nuevas sin contabilizar frente a la línea base y ningún otro origen modificado por la limpieza**. Las revocaciones mínimas sin texto permanecen. Se vuelve a abrir Kioku actual en Honor para revalidar su revisión; conserva su sesión. La aceptación nativa añade consumo de producción a los 0,99115774 USD estimados de evaluación local; no se obtuvo un desglose monetario remoto aislado o saldo real API.
+
+### Cierre del olvido entre relatos y límites restantes
+
+Este bloque queda validado y activo para Android/backend dentro de las cotas documentadas. iOS sigue requiriendo compilar/probar este build en Mac antes de cerrar K4 completa. Un inventario mayor que las cotas exige otra estrategia y se rechaza entero; no se vende como eliminación ilimitada. Una dependencia de otro dato puede requerir aclaración antes de ampliar el alcance. Borrado global de la cuenta y sincronización continua de otro móvil en primer plano no se añaden. Las pruebas confirman los recorridos fijados, sin garantizar universalmente la interpretación semántica de cualquier dato futuro.
+
+Registro final contrastado con los logs de despliegue/prueba y la comprobación de limpieza. Se actualizan estado, plan, ADR-011, casos de uso, contrato, datos/retención, seguridad, matriz y changelog. Comprobador documental: 65 documentos y 11 ADRs correctos; revisión semántica y `git diff --check` correctos. Esta actualización documental no repite llamadas de pago ni atribuye validación iOS a los resultados Android.

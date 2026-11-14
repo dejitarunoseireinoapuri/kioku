@@ -123,7 +123,7 @@ No existe borrado global de la cuenta desde esta frontera. Una orden de borrar t
 
 La evidencia interna de consulta conserva `sourceKind:retained|correction` opcional, validado desde Firestore, hasta generación y verificación. La cabecera de una corrección no la convierte en cita ajena; la procedencia `quoted` de un candidato sigue sin acreditar hechos personales. No cambia la forma pública de las referencias de respuesta ni permite al cliente asignar esa etiqueta.
 
-## Olvido de copias K4 · preparado
+## Olvido de copias K4 · activo
 
 Entrada `changeMemory`: `forgetScope:source|allOccurrences` opcional y solo aplicable a olvidar; `allOccurrences` se rechaza para corregir. Ausente mantiene source para clientes anteriores. La app nueva envía allOccurrences al olvidar un dato y source al retirar todo el texto. Los planes de ruta forget incluyen el mismo campo; el móvil conserva presencia/valor exactos al aplicar, y el ticket rechaza cambios. Una ruta sin scope resuelto pide aclaración, sin escoger una sola copia por defecto. Las órdenes de corregir y las ofertas conservan su alcance existente.
 
