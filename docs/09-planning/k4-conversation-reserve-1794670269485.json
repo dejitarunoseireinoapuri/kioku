@@ -1,0 +1,221 @@
+{
+  "stage": "complete",
+  "model": "gpt-6.1-sol",
+  "reasoning": "medium",
+  "corpusHash": "355efae2afffe0106727c58a4496b347f19bd71ff63fdfb8c28fcb17e259fc09",
+  "evaluation": "fresh-reserve",
+  "scope": "Frozen synthetic local cases with actual provider; no production or native attestation",
+  "rows": [
+    {
+      "caseId": "s01",
+      "action": "tell",
+      "result": "saved",
+      "present": true,
+      "absent": true,
+      "keep": true,
+      "statusOk": true,
+      "asked": true,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "index": 0,
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 15862
+    },
+    {
+      "caseId": "s02",
+      "action": "correct",
+      "result": "corrected",
+      "present": true,
+      "absent": true,
+      "keep": true,
+      "statusOk": true,
+      "asked": true,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "index": 0,
+          "status": "notFound",
+          "words": false,
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "durationMs": 21503
+    },
+    {
+      "caseId": "s03",
+      "action": "forget",
+      "result": "forgotten",
+      "present": true,
+      "absent": true,
+      "keep": true,
+      "statusOk": true,
+      "asked": true,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "index": 0,
+          "status": "notFound",
+          "words": true,
+          "pass": true
+        },
+        {
+          "index": 1,
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 15497
+    },
+    {
+      "caseId": "s04",
+      "action": "offer",
+      "result": "saved",
+      "present": true,
+      "absent": true,
+      "keep": true,
+      "statusOk": true,
+      "asked": true,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "index": 0,
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 12876
+    },
+    {
+      "caseId": "s05",
+      "action": "ask",
+      "result": null,
+      "present": true,
+      "absent": true,
+      "keep": true,
+      "statusOk": true,
+      "asked": true,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "index": 0,
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 6870
+    },
+    {
+      "caseId": "s06",
+      "action": "clarify",
+      "result": null,
+      "present": true,
+      "absent": true,
+      "keep": true,
+      "statusOk": true,
+      "asked": true,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "index": 0,
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 5259
+    },
+    {
+      "caseId": "s07",
+      "action": "correct",
+      "result": "corrected",
+      "present": true,
+      "absent": true,
+      "keep": true,
+      "statusOk": true,
+      "asked": true,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "index": 0,
+          "status": "notFound",
+          "words": false,
+          "pass": false
+        }
+      ],
+      "pass": false,
+      "durationMs": 22550
+    },
+    {
+      "caseId": "s08",
+      "action": "offer",
+      "result": "saved",
+      "present": true,
+      "absent": true,
+      "keep": true,
+      "statusOk": true,
+      "asked": true,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "index": 0,
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 19241
+    },
+    {
+      "caseId": "s09",
+      "action": "clarify",
+      "result": null,
+      "present": true,
+      "absent": true,
+      "keep": true,
+      "statusOk": true,
+      "asked": true,
+      "replayCalls": 0,
+      "queries": [],
+      "pass": true,
+      "durationMs": 1770
+    },
+    {
+      "caseId": "s10",
+      "action": "tell",
+      "result": "saved",
+      "present": true,
+      "absent": true,
+      "keep": true,
+      "statusOk": true,
+      "asked": true,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "index": 0,
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 27263
+    }
+  ],
+  "calls": 98,
+  "estimatedUsd": 0.28486984000000604
+}

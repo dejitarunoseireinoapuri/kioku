@@ -22,9 +22,17 @@ const LEASE = 240_000;
 export class FirestoreCaptureStore implements CaptureStore {
   private readonly db: Firestore;
   private readonly now: () => number;
-  constructor(db: Firestore, now = Date.now) {
+  private readonly accepted:
+    | { memoryEpoch: number; receivedAt: string }
+    | undefined;
+  constructor(
+    db: Firestore,
+    now = Date.now,
+    accepted?: { memoryEpoch: number; receivedAt: string },
+  ) {
     this.db = db;
     this.now = now;
+    this.accepted = accepted;
   }
   private root(uid: string) {
     return this.db.doc(`accounts/${uid}`);
@@ -33,6 +41,19 @@ export class FirestoreCaptureStore implements CaptureStore {
     const owner = await tx.get(this.db.doc("privateConfiguration/owner"));
     if (owner.get("uid") !== uid || owner.get("enabled") !== true)
       throw new AccountError("permission-denied");
+  }
+
+  private async epoch(
+    tx: Transaction,
+    uid: string,
+    expected: number | undefined,
+  ): Promise<void> {
+    if (expected === undefined) return;
+    const current = await tx.get(
+      this.root(uid).collection("runtime").doc("memory"),
+    );
+    if (Number(current.get("revision") ?? 0) !== expected)
+      throw new AccountError("failed-precondition");
   }
 
   async begin(
@@ -92,6 +113,7 @@ export class FirestoreCaptureStore implements CaptureStore {
         const pending =
           previous?.pending ?? (await this.pending(tx, uid, input, hash, now));
         if (!pending) throw new AccountError("failed-precondition");
+        await this.epoch(tx, uid, pending.memoryEpoch);
         if (
           (await tx.get(root.collection("revocations").doc(pending.turn.id)))
             .exists
@@ -145,11 +167,12 @@ export class FirestoreCaptureStore implements CaptureStore {
           id: input.requestId,
           text: input.text,
           zone: input.zone,
-          receivedAt: new Date(now).toISOString(),
+          receivedAt: this.accepted?.receivedAt ?? new Date(now).toISOString(),
         },
         clarification: null,
         revision: 1,
         rootHash: hash,
+        ...(this.accepted ? { memoryEpoch: this.accepted.memoryEpoch } : {}),
       };
     if (input.clarificationId === input.requestId)
       throw new AccountError("invalid-argument");
@@ -188,6 +211,7 @@ export class FirestoreCaptureStore implements CaptureStore {
     return this.db.runTransaction(
       async (tx) => {
         await this.owner(tx, uid);
+        await this.epoch(tx, uid, lease.pending.memoryEpoch);
         const [operation, lock, source, retired] = await tx.getAll(
           target,
           root.collection("runtime").doc("capture"),
@@ -296,6 +320,16 @@ export class FirestoreCaptureStore implements CaptureStore {
         if (snapshot.get("kind") === "retired")
           return { apiVersion: 1, status: "expired", operationId: id };
         const record = readRecord(snapshot.data());
+        if (record.pending?.memoryEpoch !== undefined) {
+          const epoch = await tx.get(
+            this.root(uid).collection("runtime").doc("memory"),
+          );
+          if (
+            Number(epoch.get("revision") ?? 0) !== record.pending.memoryEpoch
+          ) {
+            return { apiVersion: 1, status: "expired", operationId: id };
+          }
+        }
         if (
           record.sourceId &&
           (

@@ -59,6 +59,13 @@
     <string name="offer_pending">Pendiente de tu confirmación</string>
     <string name="offer_accept">Sí, recuérdalo</string>
     <string name="offer_decline">No, gracias</string>
+    <string name="text_offer_question">¿Quieres que lo recuerde?</string>
+    <string name="text_interpreting">Entendiendo tu mensaje...</string>
+    <string name="text_declining">Descartando la propuesta...</string>
+    <string name="text_declined">No se ha guardado con esta propuesta.</string>
+    <string name="text_expired">El contexto ha cambiado o ha caducado. Vuelve a explicarlo.</string>
+    <string name="text_failure">No he podido completar la operación. Puedes comprobarla sin duplicar el cambio.</string>
+    <string name="text_repeat">Vuelve a enviar el mensaje para recuperar este recorrido.</string>
     <string name="offer_accepted_example">Ejemplo de oferta aceptada. No se ha guardado ningún dato real.</string>
     <string name="offer_declined_example">Oferta descartada en este ejemplo.</string>
     <string name="offline_title">Necesitas conexión</string>

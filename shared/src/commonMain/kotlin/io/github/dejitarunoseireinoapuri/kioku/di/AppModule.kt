@@ -16,7 +16,13 @@ fun appModule() =
         single<SourceRepository> { DemoSourceRepository() }
         factory { ReadReferencedSource(get()) }
         viewModel { (dependencies: ConversationDependencies) ->
-            ConversationViewModel(get(), dependencies.captures, dependencies.queries, dependencies.controls)
+            ConversationViewModel(
+                get(),
+                dependencies.captures,
+                dependencies.queries,
+                dependencies.controls,
+                dependencies.conversation,
+            )
         }
         viewModel { parameters ->
             SourceControlViewModel(parameters.get<MemoryControlRepository>(), parameters.get<String>())

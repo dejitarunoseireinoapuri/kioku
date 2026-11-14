@@ -13,6 +13,12 @@ export const pendingSchema = z.strictObject({
   clarification: z.string().max(2000).nullable(),
   revision: z.number().int().min(1).max(3),
   rootHash: z.string().regex(/^[a-f0-9]{64}$/),
+  memoryEpoch: z
+    .number()
+    .int()
+    .nonnegative()
+    .max(Number.MAX_SAFE_INTEGER)
+    .optional(),
 });
 export const recordSchema = z.object({
   inputHash: z.string().regex(/^[a-f0-9]{64}$/),

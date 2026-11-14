@@ -37,6 +37,17 @@ internal class MemoryVisibilitySession(
         }
     }
 
+    fun beforeSubmit(
+        state: ConversationState,
+        onReady: () -> Unit,
+    ) {
+        if (state.conversation != null) {
+            if (state.canEdit) onReady()
+        } else {
+            check(preserveDraft = true, onReady = onReady)
+        }
+    }
+
     fun check(
         preserveDraft: Boolean = false,
         onReady: () -> Unit = {},

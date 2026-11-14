@@ -1,8 +1,8 @@
-param([string]$FunctionsNode = '', [switch]$LiveCaptureSmoke, [switch]$LiveQuerySmoke, [switch]$LiveQueryReserve, [switch]$LiveControlSmoke)
+param([string]$FunctionsNode = '', [switch]$LiveCaptureSmoke, [switch]$LiveQuerySmoke, [switch]$LiveQueryReserve, [switch]$LiveControlSmoke, [switch]$LiveConversationSmoke, [switch]$LiveConversationReserve, [ValidateSet('', 'dates', 'acceptance')][string]$ConversationCorpus = '')
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
-if (([int]$LiveCaptureSmoke.IsPresent + [int]$LiveQuerySmoke.IsPresent + [int]$LiveQueryReserve.IsPresent + [int]$LiveControlSmoke.IsPresent) -gt 1) {
+if (([int]$LiveCaptureSmoke.IsPresent + [int]$LiveQuerySmoke.IsPresent + [int]$LiveQueryReserve.IsPresent + [int]$LiveControlSmoke.IsPresent + [int]$LiveConversationSmoke.IsPresent + [int]$LiveConversationReserve.IsPresent + [int][bool]$ConversationCorpus) -gt 1) {
     throw 'Choose one isolated live smoke.'
 }
 $kiokuRoot = Split-Path -Parent $PSScriptRoot
@@ -40,6 +40,9 @@ try {
         } elseif ($LiveQuerySmoke) { 'node tooling/run-backend-emulator-tests.mjs --live-query' }
         elseif ($LiveQueryReserve) { 'node tooling/run-backend-emulator-tests.mjs --live-query-fresh' }
         elseif ($LiveControlSmoke) { 'node tooling/run-backend-emulator-tests.mjs --live-control' }
+        elseif ($LiveConversationSmoke) { 'node tooling/run-backend-emulator-tests.mjs --live-conversation' }
+        elseif ($LiveConversationReserve) { 'node tooling/run-backend-emulator-tests.mjs --live-conversation-reserve' }
+        elseif ($ConversationCorpus) { "node tooling/run-backend-emulator-tests.mjs --live-conversation-$ConversationCorpus" }
         else { 'node tooling/run-backend-emulator-tests.mjs' }
         & $FunctionsNode 'backend/node_modules/firebase-tools/lib/bin/firebase.js' emulators:exec `
             --config firebase.local.json --project demo-kioku-local --only auth,firestore,functions `

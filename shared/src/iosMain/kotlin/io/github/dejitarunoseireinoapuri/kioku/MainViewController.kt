@@ -8,6 +8,7 @@ import io.github.dejitarunoseireinoapuri.kioku.data.NativeCaptureRepository
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeMemoryControlRepository
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeMemoryPort
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeQueryRepository
+import io.github.dejitarunoseireinoapuri.kioku.data.NativeTextConversationRepository
 
 fun mainViewController(
     port: NativeAccountPort? = null,
@@ -16,5 +17,6 @@ fun mainViewController(
     val captures = memoryPort?.let(::NativeCaptureRepository)
     val queries = memoryPort?.let(::NativeQueryRepository)
     val controls = memoryPort?.let(::NativeMemoryControlRepository)
-    ComposeUIViewController { KiokuApp(repository, captures, queries, controls) }
+    val conversation = memoryPort?.let(::NativeTextConversationRepository)
+    ComposeUIViewController { KiokuApp(repository, captures, queries, controls, conversation) }
 }

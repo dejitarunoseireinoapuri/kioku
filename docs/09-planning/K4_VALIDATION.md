@@ -1,6 +1,6 @@
 # K4 · Control conversacional de memoria
 
-Rama: `codex/k4-memory-control`, desde la entrega K3 `6b264e7`. **En curso: controles selectivos por fuente implementados, activados y comprobados en Honor real.** K3 conserva la comprobación iOS actual y la aclaración del reporte temporal pendientes. No se integran ramas en `main` por esta ejecución. Órdenes naturales y ofertas siguen pendientes; K4 no cerrada.
+Rama: `codex/k4-memory-control`, desde la entrega K3 `6b264e7`. **En curso: controles por fuente activos en Honor; continuación conversacional implementada y comprobada localmente, activación nueva pendiente.** K3 conserva la comprobación iOS actual y la aclaración del reporte temporal pendientes. No se integran ramas en `main` por esta ejecución. K4 no cerrada.
 
 ## Alcance de la primera ejecución
 
@@ -79,3 +79,54 @@ La regla exterior de [LiveSourceControlTest](../../androidApp/src/androidTest/ko
 Esta prueba nativa añade llamadas pagadas distintas de las 36 del informe local de 0,13151104 USD. No se atribuye ese importe al total remoto ni al saldo real API. No se recabó un desglose monetario aislado del intento nativo. La aceptación confirma este recorrido y dispositivo, sin convertirlo en garantía universal, prueba iOS o cierre de todas las historias K4.
 
 Se consulta la [documentación oficial de despliegue acotado](https://firebase.google.com/docs/functions/manage-functions) y el código del CLI fijado. No se crean proyectos, backups o claves ni se amplían permisos de memoria de clientes. iOS comparte UI/adaptadores preparados, pero este build necesita Mac/Xcode y comprobación propia. Tampoco se resuelve retroactivamente el reporte «debate hoy» a partir de inferencias o de esta entrega.
+
+## Tercera ejecución · conversación y ofertas, preparada para activar
+
+Se implementan órdenes naturales explícitas de corrección/olvido en ambos modos y ofertas para afirmaciones nuevas en Preguntar. Los controles «Sí, recuérdalo» / «No, gracias» o una respuesta inequívoca a la oferta activa conservan el modo. Preguntas, hipótesis, citas e instrucciones relatadas no autorizan una escritura. Un cambio real con el tiempo se añade como nuevo dato y conserva el pasado. Una orden clara no añade confirmación; objetivo ambiguo pide aclaración. Chat compartido en RAM, carga bajo mensajes por fase real, borrador vaciado al enviar y operaciones estables ante giro/reintento.
+
+Los dos nuevos callables preparados son `routeMessage` y `applyMessage`; **no están desplegados**. Ticket sin texto, digest ligado a UID/entrada/plan/ID aleatorio, vigencia de cinco minutos, un solo hijo y época/versiones actuales. Rechazo definitivo no llama a IA. Fecha original del mensaje ancla ofertas y correcciones, incluso al cruzar medianoche. Un pendiente de oferta aceptada conserva época y no puede restaurarse tras un cambio. La consulta descarta contexto antiguo y el cliente retira mensajes anteriores al conocer otra época, antes del resultado hijo. La fuente actual se vuelve a leer para abrirla. [Contrato](../04-api/API_CONTRACT.md), [ADR-011](../02-architecture/ADR/ADR-011-memory-control.md).
+
+### Evaluación con proveedor, conservando los fallos
+
+Se mantiene Sol medio, `store:false` y la clave existente, sin crear/copiar secretos ni reiniciar el contador. Todas estas rondas usan datos sintéticos y Firestore local; no acreditan identidad/atestación productivas ni iOS.
+
+| Conjunto | Resultado | Llamadas | Estimación USD | Informe |
+| --- | --- | --- | --- | --- |
+| Inicial, 14 casos fijados | 14/14 interpretación/efecto correctos | 62 | 0,16970436 | [Inicial](k4-conversation-1794667252096.json) |
+| Reserva nueva, 10 casos + 10 consultas | 8/10 casos; dos consultas de fechas corregidas se abstienen indebidamente | 98 | 0,28486984 | [Intento fallido conservado](k4-conversation-reserve-1794670269485.json) |
+| Regresión dirigida tras corregir procedencia | 2/2 casos y consultas correctos | 28 | 0,08279040 | [Regresión](k4-conversation-dates-1794670825728.json) |
+| Reserva nueva final, seis casos + diez consultas | 6/6 casos y 10/10 consultas correctos | 80 | 0,22492988 | [Aceptación local reservada](k4-conversation-acceptance-1794670927440.json) |
+
+El primer conjunto precede los refinamientos de revisión de tell/borrado global y del instante de corrección; no prueba por sí solo la versión final. La reserva posterior encontró que se guardaban correctamente las fechas nuevas y se retiraban las anteriores, pero el verificador confundía la cabecera de corrección con una cita. Una comparación diagnóstica acotada confirmó `quoted_as_personal` al omitir la procedencia; no fue un reintento contado como aceptación. Se corrige la lectura de evidencia para conservar `sourceKind` tipado del servidor y explicar sus cabeceras al generador/verificador, sin promover candidatos quoted a hechos personales. El resultado sigue exigiendo su procedencia individual y evidencia actual.
+
+Los casos observados pasan a regresión. La aceptación posterior se fijó antes de ejecutar y usa otras fechas/asuntos: bicicleta/mandarinas, cerámica cruzando medianoche, corrección de aprendizaje con cita de cartel preservada, olvido de pódcast conservando acuario, oferta de alimento y borrado global que no actúa. Incluye pregunta personal sobre una cita ajena rechazada, consulta del literal citado correcta, fecha nueva recuperable y asunto ajeno conservado. Replays de mutaciones: cero llamadas nuevas. Revisión posterior de las fuentes y respuestas sintéticas realizada por el agente de desarrollo, separada del circuito de respuesta, sin auditor humano independiente; no es garantía universal ni evaluación a gran escala.
+
+La estimación local acumulada queda en **19,05086660 USD**, incremento de **0,80052278 USD** respecto de 18,25034382 al iniciar esta continuación; incluye las comparaciones diagnósticas, además de los informes. No representa saldo real de créditos API ni incluye gasto productivo de otras ejecuciones.
+
+### Comprobaciones locales y Honor
+
+- Backend: TypeScript strict/formato, **22/22 unidades**, **70/70 emuladores** y núcleo M0 **82/82 pruebas deterministas**. Incluyen autorización/HTTP de los nuevos endpoints, tickets alterados/ajenos/caducados, rechazo/aceptación simultánea, revisión negativa, versión/época/revocación durante trabajo, propietario deshabilitado tras IA, aclaración antigua, medianoche y procedencia de consulta tipada. Seis pruebas nuevas de transporte verifican perfil fijo, `store:false`, límites de salida y rechazo de campos inventados para interpretación/selección/revisión.
+- Android: compilación de app y pruebas, `mobileCheck`, formato, capas, Detekt y Lint correctos; **74/74 host tests**. Contexto excesivo se rechaza antes de IA; época regresiva no ejecuta hijo; época nueva limpia antes de responder; la sesión no recupera resultados tardíos después de destruirse.
+- Honor FNE_NX9, Android 14/API 34: **41/41 pruebas instrumentadas con dobles**, cinco nuevas de oferta/aceptación/rechazo, giro real durante aceptación, seguimientos y olvido con limpieza. Se mantiene teclado y regresión de cuenta/fuentes. [Oferta ficticia, revisada visualmente](../assets/branding/kioku-memory-offer-honor.png). No son pruebas de los nuevos endpoints en producción.
+- `LiveConversationTest` está preparada para probar MainActivity, SDKs nativos y servidor real con el marcador nuevo `K4nube9261`. Una regla exterior exige `-e liveConversationProject kioku-9454f` antes de abrir la Activity. Sin opt-in se comprobó **una omisión** (código -4), no un éxito del recorrido ni una llamada a IA. La prueba productiva anterior tiene su guardia separada y no forma parte de las 41.
+
+Comandos adicionales:
+
+```powershell
+pwsh -NoProfile -File tooling/backend-emulators.ps1 -LiveConversationSmoke
+pwsh -NoProfile -File tooling/backend-emulators.ps1 -LiveConversationReserve
+pwsh -NoProfile -File tooling/backend-emulators.ps1 -ConversationCorpus dates
+pwsh -NoProfile -File tooling/backend-emulators.ps1 -ConversationCorpus acceptance
+node tooling/m0.mjs check
+node tooling/m0.mjs test
+```
+
+APK preparado `androidApp/build/outputs/apk/debug/kioku-k4-conversacion.apk`, SHA-256 `064fef84e8a166b825b0b5bb8a6981eac3498cff2e715cadade5de313eb509d1`. Después de probar con fixtures se deja en Honor el APK anterior compatible con el servidor actual, por actualización sin borrar datos o sesión. El APK nuevo se instalará al activar las fronteras nuevas; no se deja una interfaz que dependa de endpoints inexistentes.
+
+### Activación y límites pendientes
+
+El despliegue preparado añade dos funciones y actualiza `submitTurn`, `resolveClarification`, `getOperation` y `queryMemory`. Los dos nuevos necesitan entrada HTTPS pública de transporte, manteniendo Google, App Check y propietario permitido; misma identidad/secreto/Blaze y OpenAI. No hay nuevos índices, claves, backups o permisos directos de cliente. La autorización de la frontera anterior no se interpreta como autorización de esta ampliación; se solicita con entrega concreta revisable. Después se comprobarán estado/denegación y recorrido nativo en Honor con nuevos datos sintéticos y limpieza exclusivamente de ellos.
+
+Alcance actual de corrección/olvido: una fuente inequívoca, hasta ocho fragmentos; resolver recupera seis candidatos o una fuente contextual. No garantiza retirar copias del mismo hecho en otros relatos ni borrar toda la cuenta. Una orden global pide concretar sin borrar parcialmente. Tampoco hay sincronización continua de otro móvil en primer plano. iOS comparte implementación/adaptadores preparados, pero falta compilar y probar este build en Mac. Estas limitaciones impiden declarar K4 completa.
+
+Se consultaron convenciones/calidad, reglas/casos de uso, ADR-011, plan/limitaciones, estado, contratos/modelo/retención y seguridad/privacidad. Referencia Stitch 06 y captura inspeccionadas por MCP, sin editar el diseño. No se cambió modelo/perfil ni se usó Astra.

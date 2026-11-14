@@ -86,4 +86,6 @@ private fun MemoryEndpoint.callableName(): String =
         MemoryEndpoint.Source -> "getSource"
         MemoryEndpoint.SourceDetails -> "getSourceDetails"
         MemoryEndpoint.Change -> "changeMemory"
+        MemoryEndpoint.RouteMessage -> "routeMessage"
+        MemoryEndpoint.ApplyMessage -> "applyMessage"
     }

@@ -64,11 +64,14 @@ private fun conversationScroll(
 ): ScrollState {
     val scroll = rememberScrollState()
     val newest =
-        state.query.messages
+        state.conversation
+            ?.messages
+            ?.lastOrNull()
+            ?.id ?: state.query.messages
             .lastOrNull()
             ?.id
     LaunchedEffect(newest, state.capture, state.feedback, loading, scroll.maxValue) {
-        val hasConversation = state.showingQuery || state.showingCapture
+        val hasConversation = state.showingQuery || state.showingCapture || state.showingConversation
         if (hasConversation || state.feedback != null || loading != null) {
             scroll.animateScrollTo(scroll.maxValue)
         }

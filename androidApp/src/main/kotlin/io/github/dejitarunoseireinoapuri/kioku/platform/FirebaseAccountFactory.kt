@@ -13,6 +13,7 @@ import io.github.dejitarunoseireinoapuri.kioku.data.NativeAccountRepository
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeCaptureRepository
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeMemoryControlRepository
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeQueryRepository
+import io.github.dejitarunoseireinoapuri.kioku.data.NativeTextConversationRepository
 
 internal fun firebaseRepositories(activity: ComponentActivity): AndroidRepositories {
     if (BuildConfig.FIREBASE_APP_ID.isBlank() || BuildConfig.FIREBASE_API_KEY.isBlank() ||
@@ -42,5 +43,6 @@ internal fun firebaseRepositories(activity: ComponentActivity): AndroidRepositor
         port,
         NativeQueryRepository(memoryPort),
         NativeMemoryControlRepository(memoryPort),
+        NativeTextConversationRepository(memoryPort),
     )
 }

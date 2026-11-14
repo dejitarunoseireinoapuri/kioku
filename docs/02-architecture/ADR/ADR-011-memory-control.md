@@ -1,6 +1,6 @@
 # ADR-011 · Retirada canónica y control conversacional
 
-- Estado: retirada y corrección selectivas por fuente activas y comprobadas en Honor; iOS y control conversacional completo pendientes.
+- Estado: control por fuente activo y comprobado en Honor; continuación conversacional implementada localmente, activación y nuevo build iOS pendientes.
 - Fecha: 2026-11-14.
 - Amplía [ADR-005](ADR-005-memory-evidence-and-deletion.md), [K2](ADR-009-text-capture.md) y [K3](ADR-010-text-query.md).
 
@@ -32,13 +32,25 @@ Se comparte la concesión costosa de K2/K3 para evitar cambios paralelos. Un rec
 
 Estados móviles `Loading/Missing/Ready/Working/Done`, generaciones y comandos estables conservan borradores durante errores/recreación. La confirmación remota limpia chat/contexto/fuentes anteriores antes de presentar éxito. La pantalla fuente distingue texto conservado y corrección de original. Reintentar comprueba la misma orden; volver/cancelar no promete anular un commit ya iniciado. [Contrato](../../04-api/API_CONTRACT.md) y [evidencia](../../09-planning/K4_VALIDATION.md).
 
+## Continuación · resolución y aceptación conversacionales
+
+Se añaden `RouteMessage` y `ApplyMessage`, separados de la autoridad de persistencia. La IA interpreta la entrada actual, selecciona únicamente IDs de candidatos autorizados y revisa independientemente los planes de captura/cambio. Las órdenes explícitas actuales permiten cambiar; texto almacenado, preguntas y citas no son permisos. Una afirmación nueva en Preguntar genera una oferta literal; aceptarla conserva ese modo. Evolución temporal no equivale a corregir un error pasado. Objetivo ambiguo, varios relatos o borrado global no se ejecutan parcialmente.
+
+La concesión costosa se comparte con captura/consulta. Un ticket `kind:routing` contiene solo metadatos y digest ligado a UID/entrada/plan/ID aleatorio, nunca pregunta, corrección o propuesta. Emite después de comprobar época, propietario habilitado, versiones y revocaciones. Vigencia lógica de cinco minutos; aceptar vincula un único ID hijo y conserva metadatos siete días para recuperar un resultado confirmado. Rechazo definitivo sin proveedor. Un plan alterado, otro ID, caducidad o época antigua bloquean una nueva mutación. Un replay confirmado delega además la comprobación de evidencia actual.
+
+Fecha/zona de la corrección natural y de la oferta aceptada proceden del mensaje original; una espera que cruce medianoche no cambia «mañana». La captura aceptada transporta una época guardada en el pendiente y la comprueba al resolver, recuperar y confirmar. Así una aclaración antigua no restaura contenido después de un olvido. No se crea otro almacén de hechos ni copias históricas.
+
+`TextConversationRepository` portable une estas fronteras mediante adaptadores nativos. El ViewModel conserva plan/IDs/decisión en RAM antes de iniciar la operación hija; rotación/reintento no los recrean. Chat visible acotado a 40 mensajes y contexto de cuatro preguntas, sin respuestas como hechos. Oferta admite botones o una respuesta afirmativa/negativa inequívoca a la oferta activa. Una pregunta como «sí?» no se interpreta como aceptación. Resultado incierto bloquea nuevos envíos hasta comprobarlo. Época nueva recibida al preparar elimina chat/contexto antiguos antes de presentar la respuesta; cambio confirmado y salida de sesión invalidan generaciones y fuentes. Antes de enviar se valida la época en el propio resolver; regreso a primer plano y apertura de fuente conservan sus controles específicos.
+
+Implementación compartida Android/iOS preparada. Evidencia local, evaluación con proveedor y activación remota se distinguen en [K4_VALIDATION](../../09-planning/K4_VALIDATION.md); esta decisión no autoriza el despliegue.
+
 ## Secuencia restante de K4
 
 1. Completar la validación iOS en Mac. Activación autorizada de la frontera selectiva e índice READY, rechazo sin credenciales y recorrido nativo productivo en Honor ya comprobados; los casos locales/sintéticos no sustituyen esas evidencias separadas.
-2. Resolver conversacional y propuestas: solo orden explícita actual autoriza corrección/olvido; nuevo dato en Preguntar requiere oferta aceptada, con versión, caducidad e idempotencia. Texto recuperado y salidas del modelo siguen siendo datos no confiables.
-3. Integrar el resolver y las propuestas en los estados/fronteras compartidos ya implementados, conservando las mismas garantías de limpieza y revisión. Comprobar distinción entre corrección y cambio real con el tiempo a través de ese nuevo recorrido.
-4. Ampliar la evaluación previa para esos recorridos nuevos e iOS en Mac. La evaluación selectiva con proveedor real ya pasó siete casos fijados antes de ejecutar; Android usa Honor con fixtures. Activación de endpoints/recursos productivos requiere autorización concreta; no se deduce de este ADR.
+2. Validar la continuación conversacional mediante evaluación reservada y controles positivos/negativos; mantener los intentos fallidos como evidencia. El nuevo recorrido está implementado localmente, con ofertas y órdenes explícitas actuales; texto recuperado sigue sin ser permiso.
+3. Activar los dos callables nuevos y adaptar los existentes afectados solo después de autorización concreta. Comprobar el recorrido completo en Honor con identidad/atestación reales y limpiar únicamente sus nuevos datos sintéticos. La aprobación de la primera frontera no implica esta ampliación.
+4. Completar iOS en Mac y resolver el alcance de olvido entre fuentes antes de prometer eliminación exhaustiva. No se deduce autorización de despliegue de este ADR.
 
 ## Alternativas y límites
 
-No se usa borrado suave con contenido o copias históricas, ni TTL para revocaciones. Tampoco una búsqueda global de todos los datos de la cuenta para cada operación: fuente máxima ocho fragmentos y dos consultas de recibos limitadas a nueve documentos cada una, que rechazan exceso en lugar de limpiar parcialmente. El ámbito actual no elimina hechos repetidos en otras fuentes ni resuelve referencias naturales. El recorrido fuente está activo; no se declara K4 cerrada hasta completar los bloques restantes y sus pruebas. [Evidencia](../../09-planning/K4_VALIDATION.md).
+No se usa borrado suave con contenido o copias históricas, ni TTL para revocaciones. Tampoco una búsqueda global de todos los datos de la cuenta para cada operación: fuente máxima ocho fragmentos y dos consultas de recibos limitadas a nueve documentos cada una, que rechazan exceso en lugar de limpiar parcialmente. El ámbito actual no elimina exhaustivamente hechos repetidos en otras fuentes. El resolver natural recupera seis candidatos o una fuente contextual; exige un único relato inequívoco. Borrado global pide objetivo concreto, sin borrado parcial encubierto. El recorrido fuente está activo; no se declara K4 cerrada hasta completar los bloques restantes y sus pruebas. [Evidencia](../../09-planning/K4_VALIDATION.md).

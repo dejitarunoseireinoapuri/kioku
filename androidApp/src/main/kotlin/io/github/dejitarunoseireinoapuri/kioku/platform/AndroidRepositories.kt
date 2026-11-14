@@ -6,6 +6,7 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.AccountRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryControlRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryRepository
+import io.github.dejitarunoseireinoapuri.kioku.domain.TextConversationRepository
 
 /** Native dependencies share the Activity's retained lifetime without retaining an Activity instance. */
 internal class AndroidRepositories(
@@ -14,6 +15,7 @@ internal class AndroidRepositories(
     private val accountPort: AndroidAccountPort?,
     val queries: QueryRepository? = null,
     val controls: MemoryControlRepository? = null,
+    val conversation: TextConversationRepository? = null,
 ) : ViewModel() {
     fun attach(activity: ComponentActivity) = accountPort?.attach(activity)
 

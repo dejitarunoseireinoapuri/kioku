@@ -1,0 +1,162 @@
+{
+  "stage": "complete",
+  "model": "gpt-6.1-sol",
+  "reasoning": "medium",
+  "corpusHash": "f536a7c7542952f0c258a52bb0b00a596a06761e78d4d3f63e1470b0bb1f3c07",
+  "evaluation": "fresh-reserve",
+  "scope": "Frozen synthetic local cases with actual provider; no production or native attestation",
+  "rows": [
+    {
+      "caseId": "t01",
+      "action": "correct",
+      "result": "corrected",
+      "present": true,
+      "absent": true,
+      "keep": true,
+      "statusOk": true,
+      "asked": true,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "index": 0,
+          "status": "answered",
+          "words": true,
+          "pass": true
+        },
+        {
+          "index": 1,
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 19573
+    },
+    {
+      "caseId": "t02",
+      "action": "correct",
+      "result": "corrected",
+      "present": true,
+      "absent": true,
+      "keep": true,
+      "statusOk": true,
+      "asked": true,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "index": 0,
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 17526
+    },
+    {
+      "caseId": "t03",
+      "action": "correct",
+      "result": "corrected",
+      "present": true,
+      "absent": true,
+      "keep": true,
+      "statusOk": true,
+      "asked": true,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "index": 0,
+          "status": "notFound",
+          "words": true,
+          "pass": true
+        },
+        {
+          "index": 1,
+          "status": "answered",
+          "words": true,
+          "pass": true
+        },
+        {
+          "index": 2,
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 23414
+    },
+    {
+      "caseId": "t04",
+      "action": "forget",
+      "result": "forgotten",
+      "present": true,
+      "absent": true,
+      "keep": true,
+      "statusOk": true,
+      "asked": true,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "index": 0,
+          "status": "notFound",
+          "words": true,
+          "pass": true
+        },
+        {
+          "index": 1,
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 16781
+    },
+    {
+      "caseId": "t05",
+      "action": "offer",
+      "result": "saved",
+      "present": true,
+      "absent": true,
+      "keep": true,
+      "statusOk": true,
+      "asked": true,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "index": 0,
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 11556
+    },
+    {
+      "caseId": "t06",
+      "action": "clarify",
+      "result": null,
+      "present": true,
+      "absent": true,
+      "keep": true,
+      "statusOk": true,
+      "asked": true,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "index": 0,
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 5868
+    }
+  ],
+  "calls": 80,
+  "estimatedUsd": 0.2249298800000048
+}

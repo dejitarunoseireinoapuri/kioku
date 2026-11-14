@@ -75,6 +75,7 @@ export interface PendingCapture {
   clarification: string | null;
   revision: number;
   rootHash: string;
+  memoryEpoch?: number | undefined;
 }
 export interface CaptureLease {
   requestId: string;

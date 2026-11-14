@@ -70,7 +70,7 @@ internal fun kiokuEntries(
                     model.sourceActionUnavailable()
                 }
             },
-            loading = state.query.sourceLoading || state.concealingMemory,
+            loading = state.query.sourceLoading || state.conversation?.sourceLoading == true || state.concealingMemory,
             manageable = dependencies.controls != null,
         )
     }

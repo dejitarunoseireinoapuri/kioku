@@ -30,6 +30,7 @@ data class ConversationState(
     val capturing: Boolean = false,
     val query: QueryState = QueryState(),
     val memoryVisibility: MemoryVisibility = MemoryVisibility.Visible,
+    val conversation: TextConversationState? = null,
 ) {
     val checkingMemory: Boolean
         get() = memoryVisibility != MemoryVisibility.Visible
@@ -41,10 +42,24 @@ data class ConversationState(
         get() = capturing || capture is CaptureOutcome.Failed || capture == CaptureOutcome.Processing
 
     val canEdit: Boolean
-        get() = scenario != PreviewScenario.Offline && !captureLocked && !query.busy && !checkingMemory
+        get() = scenario != PreviewScenario.Offline && !operationLocked && !checkingMemory
 
     val canSwitchIntent: Boolean
-        get() = canEdit && capture !is CaptureOutcome.Clarification && !query.awaitingClarification
+        get() = canEdit && !awaitingClarification
+
+    private val operationLocked: Boolean
+        get() = captureLocked || query.busy || textLocked
+
+    private val textLocked: Boolean
+        get() = conversation?.busy == true || conversation?.processing == true
+
+    private val awaitingClarification: Boolean
+        get() =
+            capture is CaptureOutcome.Clarification || query.awaitingClarification ||
+                conversation?.clarification == true
+
+    val showingConversation: Boolean
+        get() = scenario == PreviewScenario.Ready && conversation?.messages?.isNotEmpty() == true
 
     val showingCapture: Boolean
         get() = scenario == PreviewScenario.Ready && intent == MemoryIntent.Tell && hasCapture
@@ -57,6 +72,10 @@ data class ConversationState(
 }
 
 sealed interface ConversationEvent {
+    data class Message(
+        val action: MessageAction,
+    ) : ConversationEvent
+
     data class Query(
         val action: QueryAction,
     ) : ConversationEvent

@@ -11,9 +11,15 @@ import { backendRuntime } from "./firebase/runtime.js";
 import { memoryCallables } from "./memory/callables.js";
 import { queryCallable } from "./query/callable.js";
 import { controlCallables } from "./memory-control/callables.js";
+import { conversationCallables } from "./conversation/callables.js";
 
 const runtime = backendRuntime(process.env);
 const app = initializeApp({ projectId: runtime.projectId });
+export const { routeMessage, applyMessage } = conversationCallables(
+  app,
+  getFirestore(app),
+  runtime,
+);
 export const queryMemory = queryCallable(app, getFirestore(app), runtime);
 export const { getSourceDetails, changeMemory } = controlCallables(
   app,

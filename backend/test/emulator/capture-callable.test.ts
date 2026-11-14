@@ -6,6 +6,10 @@ import { adminApp, callConfiguration, db, signInGoogle } from "./helpers.js";
 import { fixture } from "./retirement-fixtures.js";
 import { searchProjection } from "../../src/query/search-projection.js";
 import { z } from "zod";
+import { FirestoreRoutingStore } from "../../src/firebase/routing-store.js";
+import { FirestoreSourceControlStore } from "../../src/firebase/source-control-store.js";
+import { RouteMessage } from "../../src/conversation/route.js";
+import { turn, ConversationIntelligence } from "./conversation-fixtures.js";
 
 beforeEach(async () => {
   const fixtureOwner = await signInGoogle("capture-http-owner");
@@ -44,6 +48,8 @@ test("memory endpoints refuse missing/foreign identity before any payload or pro
     "queryMemory",
     "getSourceDetails",
     "changeMemory",
+    "routeMessage",
+    "applyMessage",
   ]) {
     assert.equal((await call(name, { apiVersion: 1 })).status, 401);
     assert.equal(
@@ -54,6 +60,89 @@ test("memory endpoints refuse missing/foreign identity before any payload or pro
   assert.equal(
     (await db.doc("privateConfiguration/owner").get()).exists,
     false,
+  );
+});
+
+test("authenticated conversation tickets reject tampering and decline through HTTPS without provider access", async () => {
+  const identity = await signInGoogle("conversation-http-owner");
+  await callConfiguration(identity.idToken);
+  await db
+    .doc("privateConfiguration/search")
+    .set({ uid: identity.localId, schema: 1, ready: true });
+  const model = new ConversationIntelligence();
+  const input = turn("Me gusta el miso.");
+  model.intent = {
+    action: "offer",
+    fact: input.text,
+    question: null,
+    alsoAsk: false,
+    useContext: false,
+  };
+  const service = new RouteMessage(
+    new FirestoreRoutingStore(db),
+    new FirestoreSourceControlStore(db),
+  );
+  const routed = await service.execute(
+    identity.localId,
+    input,
+    async () => model,
+    async () => {},
+  );
+  assert.equal(routed.status, "ready");
+  if (routed.status !== "ready") throw new Error("Expected a ready fixture");
+  const command = {
+    apiVersion: 1,
+    requestId: randomUUID(),
+    turn: input,
+    plan: routed.plan,
+    decision: "reject",
+  };
+  assert.equal(
+    (
+      await call(
+        "applyMessage",
+        { ...command, uid: "foreign" },
+        identity.idToken,
+      )
+    ).status,
+    400,
+  );
+  const declined = await call("applyMessage", command, identity.idToken);
+  assert.equal(declined.status, 200);
+  assert.deepEqual(declined.body, {
+    result: {
+      apiVersion: 1,
+      operationId: command.requestId,
+      status: "declined",
+    },
+  });
+  assert.deepEqual(
+    (await call("applyMessage", command, identity.idToken)).body,
+    declined.body,
+  );
+  assert.equal(
+    (
+      await call(
+        "applyMessage",
+        { ...command, decision: "accept" },
+        identity.idToken,
+      )
+    ).status,
+    400,
+  );
+  assert.equal(
+    (
+      await call(
+        "routeMessage",
+        { ...input, model: "arbitrary" },
+        identity.idToken,
+      )
+    ).status,
+    400,
+  );
+  assert.equal(
+    (await db.collection(`accounts/${identity.localId}/sources`).get()).size,
+    0,
   );
 });
 

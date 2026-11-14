@@ -11,6 +11,7 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryControlRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.ReadReferencedSource
 import io.github.dejitarunoseireinoapuri.kioku.domain.SourceResult
+import io.github.dejitarunoseireinoapuri.kioku.domain.TextConversationRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,11 +23,13 @@ class ConversationViewModel(
     private val captures: CaptureRepository? = null,
     queries: QueryRepository? = null,
     controls: MemoryControlRepository? = null,
+    conversation: TextConversationRepository? = null,
 ) : ViewModel() {
     private val mutableState =
         MutableStateFlow(
             ConversationState(
                 memoryVisibility = if (controls == null) MemoryVisibility.Visible else MemoryVisibility.Hidden,
+                conversation = if (conversation == null) null else TextConversationState(),
             ),
         )
     val state = mutableState.asStateFlow()
@@ -44,7 +47,7 @@ class ConversationViewModel(
             }
         }
 
-    private val visibility =
+    private val visibility: MemoryVisibilitySession =
         MemoryVisibilitySession(
             controls,
             viewModelScope,
@@ -53,8 +56,27 @@ class ConversationViewModel(
                 val draft = state.value.draft
                 if (result.resetContent) memoryChanged()
                 result.revision?.let(query::setRevision)
+                result.revision?.let(messages::setRevision)
                 if (result.resetContent && result.preserveDraft) mutableState.update { it.copy(draft = draft) }
                 if (result.revision == null) feedback(PreviewFeedback.QueryUnavailable)
+            },
+        )
+
+    private val messages: TextConversationSession =
+        TextConversationSession(
+            conversation,
+            viewModelScope,
+            { next, clearDraft ->
+                if (conversation != null) {
+                    mutableState.update {
+                        it.copy(conversation = next, source = next.source, draft = if (clearDraft) "" else it.draft)
+                    }
+                }
+            },
+            ::memoryChanged,
+            { revision ->
+                query.setRevision(revision)
+                visibility.accept(revision)
             },
         )
 
@@ -70,9 +92,11 @@ class ConversationViewModel(
         captureJob?.cancel()
         command = null
         query.reset(clearDraft = true)
+        messages.reset(clearDraft = true)
         result?.memoryRevision?.let {
             visibility.accept(it)
             query.setRevision(it)
+            messages.setRevision(it)
         }
         mutableState.update {
             it.copy(
@@ -96,6 +120,10 @@ class ConversationViewModel(
 
     fun onEvent(event: ConversationEvent) {
         when (event) {
+            is ConversationEvent.Message -> {
+                messages.act(event.action)
+            }
+
             is ConversationEvent.Query -> {
                 query.act(event.action)
             }
@@ -113,7 +141,7 @@ class ConversationViewModel(
             }
 
             ConversationEvent.Submit -> {
-                visibility.check(preserveDraft = true) { submit() }
+                visibility.beforeSubmit(state.value, ::submit)
             }
 
             ConversationEvent.RecoverCapture -> {
@@ -139,7 +167,15 @@ class ConversationViewModel(
     }
 
     fun openSource(id: String): Boolean =
-        if (state.value.intent == MemoryIntent.Ask && query.openSource(id)) true else openCaptureSource(id)
+        if (messages.openSource(id)) {
+            true
+        } else if (state.value.intent == MemoryIntent.Ask &&
+            query.openSource(id)
+        ) {
+            true
+        } else {
+            openCaptureSource(id)
+        }
 
     private fun openCaptureSource(id: String): Boolean {
         val saved = state.value.capture as? CaptureOutcome.Saved
@@ -163,7 +199,10 @@ class ConversationViewModel(
     private fun selectIntent(intent: MemoryIntent) {
         val current = state.value
         if (current.canSwitchIntent) {
-            if (intent != current.intent) query.reset()
+            if (intent != current.intent) {
+                query.reset()
+                messages.reset()
+            }
             mutableState.update { it.copy(intent = intent) }
         }
     }
@@ -171,7 +210,9 @@ class ConversationViewModel(
     private fun editDraft(text: String) {
         if (state.value.canEdit) {
             val limit =
-                if (state.value.capture is CaptureOutcome.Clarification) {
+                if (state.value.capture is CaptureOutcome.Clarification ||
+                    state.value.conversation?.clarification == true
+                ) {
                     MAX_CLARIFICATION_LENGTH
                 } else if (state.value.intent == MemoryIntent.Ask) {
                     2000
@@ -185,6 +226,14 @@ class ConversationViewModel(
     private fun submit() {
         val current = state.value
         if (current.scenario == PreviewScenario.Offline || current.draft.isBlank() || current.capturing) return
+        if (current.scenario == PreviewScenario.Ready &&
+            messages.submit(
+                current.draft,
+                current.intent.textIntent,
+            )
+        ) {
+            return
+        }
         if (current.intent == MemoryIntent.Ask && current.scenario == PreviewScenario.Ready) {
             if (!query.submit(current.draft)) feedback(PreviewFeedback.QueryUnavailable)
         } else if (captures == null || current.scenario != PreviewScenario.Ready) {
@@ -229,11 +278,17 @@ class ConversationViewModel(
 
     private fun showExample(scenario: PreviewScenario) {
         query.reset()
+        messages.reset()
         operationGeneration++
         captureJob?.cancel()
         command = null
         val intent = if (scenario in QUERY_EXAMPLES) MemoryIntent.Ask else MemoryIntent.Tell
-        mutableState.value = ConversationState(intent = intent, scenario = scenario)
+        mutableState.value =
+            ConversationState(
+                intent = intent,
+                scenario = scenario,
+                conversation = state.value.conversation?.let { TextConversationState() },
+            )
     }
 
     private fun decideOffer(accept: Boolean) {
@@ -248,6 +303,20 @@ class ConversationViewModel(
 
     private fun finishExample() {
         if (state.value.scenario == PreviewScenario.Locked) showExample(PreviewScenario.Saved)
+    }
+
+    override fun onCleared() {
+        operationGeneration++
+        captureJob?.cancel()
+        command = null
+        visibility.hide()
+        query.reset(clearDraft = true)
+        messages.reset(clearDraft = true)
+        mutableState.value =
+            ConversationState(
+                memoryVisibility = MemoryVisibility.Hidden,
+                conversation = state.value.conversation?.let { TextConversationState() },
+            )
     }
 
     private companion object {

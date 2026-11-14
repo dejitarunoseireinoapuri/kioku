@@ -55,6 +55,12 @@ Captura y consulta verifican revocación además de las versiones y de la conces
 
 `firestore.indexes.json` prepara un índice ascendente de colección exclusivamente para `operations.pending.turn.id`, que permite localizar pendientes vinculados por UUID. El resto del mapa `pending`, preguntas y textos siguen excluidos. La primera entrega solo los preparó; la continuación autorizada despliega la frontera y verifica ese índice READY. Los emuladores no sustituyen esa comprobación remota.
 
+## Tickets conversacionales K4 · continuación local
+
+En `accounts/{uid}/operations/{requestId}`, `kind:routing` comparte nonce/concesión con consulta y añade `createdAtMs`, época, `planHash`, caducidad y, si procede, `executionId` o `declinedBy`. El digest incluye UID, entrada original, plan e ID aleatorio; no permite recuperación de preguntas/propuestas desde Firestore. Texto, pregunta, plan, corrección y hecho ofrecido no se guardan en este ticket. Sin aceptar, TTL y vigencia lógica de cinco minutos; tras vincular ejecución, TTL siete días conservando la admisión lógica original. No hay índice nuevo.
+
+Una oferta aceptada usa captura canónica existente y puede crear su pendiente temporal normal con `memoryEpoch` adicional. Época distinta invalida recuperación/aclaración/commit sin devolver contenido antiguo. `receivedAt` es el instante del mensaje original, no del clic de aceptación. Corrección natural usa también ese instante; los controles manuales mantienen su recepción propia. Recuerdos confirmados conservan la política sin caducidad. [Contrato de conversación](../04-api/API_CONTRACT.md), [retención](STORAGE_POLICY.md).
+
 ## Reemplazo selectivo K4 · continuación activa
 
 `changeMemory` reemplaza una fuente vigente con hasta dos nuevas: texto conservado con la recepción/zona originales y corrección explícita con recepción/zona actuales. Se retiran todos los fragmentos del origen y se crean derivados de los restantes con IDs nuevos/revisión incrementada. Los datos corregidos parten de la revisión del dato seleccionado más uno. Las proyecciones se insertan junto con el canónico; nada se confirma solo en el índice. Se preservan literales ajenos y se revisa que no reconstruyan el objetivo. La operación no alcanza otros relatos que repitan el mismo hecho.

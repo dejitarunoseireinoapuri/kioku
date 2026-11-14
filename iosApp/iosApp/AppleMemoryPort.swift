@@ -26,6 +26,8 @@ final class AppleMemoryPort: NSObject, NativeMemoryPort {
         case .source: name = "getSource"
         case .sourceDetails: name = "getSourceDetails"
         case .change: name = "changeMemory"
+        case .routeMessage: name = "routeMessage"
+        case .applyMessage: name = "applyMessage"
         default:
             _ = completion(NativeMemoryReplyFailed(issue: .invalid))
             return AccountCancellation {}

@@ -28,6 +28,7 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.AccountRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryControlRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryRepository
+import io.github.dejitarunoseireinoapuri.kioku.domain.TextConversationRepository
 import io.github.dejitarunoseireinoapuri.kioku.feature.account.AccountScreen
 import io.github.dejitarunoseireinoapuri.kioku.feature.account.AccountState
 import io.github.dejitarunoseireinoapuri.kioku.feature.account.AccountViewModel
@@ -52,6 +53,7 @@ fun KiokuApp(
     captureRepository: CaptureRepository? = null,
     queryRepository: QueryRepository? = null,
     controlRepository: MemoryControlRepository? = null,
+    conversationRepository: TextConversationRepository? = null,
 ) {
     val platform =
         remember(accountRepository, captureRepository) {
@@ -67,7 +69,12 @@ fun KiokuApp(
                     CompositionViewModels {
                         AccountGate(
                             accountRepository,
-                            ConversationDependencies(captureRepository, queryRepository, controlRepository),
+                            ConversationDependencies(
+                                captureRepository,
+                                queryRepository,
+                                controlRepository,
+                                conversationRepository,
+                            ),
                         )
                     }
                 }

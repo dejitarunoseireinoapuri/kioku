@@ -49,14 +49,20 @@ fun ConversationBody(
     onEvent: (ConversationEvent) -> Unit,
     onSource: (String) -> Unit,
 ) {
-    if (state.showingQuery) {
-        QueryBody(state.query, onEvent, onSource)
-        return
+    when {
+        state.showingConversation -> TextConversationBody(requireNotNull(state.conversation), onEvent, onSource)
+        state.showingQuery -> QueryBody(state.query, onEvent, onSource)
+        state.showingCapture -> CaptureBody(state, onEvent, onSource)
+        else -> PreviewConversationBody(state, onEvent, onSource)
     }
-    if (state.showingCapture) {
-        CaptureBody(state, onEvent, onSource)
-        return
-    }
+}
+
+@Composable
+private fun PreviewConversationBody(
+    state: ConversationState,
+    onEvent: (ConversationEvent) -> Unit,
+    onSource: (String) -> Unit,
+) {
     Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
         when (state.scenario) {
             PreviewScenario.Ready -> {

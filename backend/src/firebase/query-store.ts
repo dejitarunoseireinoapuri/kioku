@@ -28,11 +28,11 @@ function version(document: DocumentSnapshot): string {
 export class FirestoreQueryStore implements QueryStore {
   private readonly db: Firestore;
   private readonly now: () => number;
-  private readonly kind: "query" | "control";
+  private readonly kind: "query" | "control" | "routing";
   constructor(
     db: Firestore,
     now = Date.now,
-    kind: "query" | "control" = "query",
+    kind: "query" | "control" | "routing" = "query",
   ) {
     this.db = db;
     this.now = now;
@@ -110,6 +110,9 @@ export class FirestoreQueryStore implements QueryStore {
         const nonce = randomUUID();
         tx.set(operation, {
           kind: this.kind,
+          ...(this.kind === "routing"
+            ? { createdAtMs: Number(previous?.get("createdAtMs") ?? now) }
+            : {}),
           inputHash: hash,
           state: "processing",
           nonce,
@@ -199,6 +202,9 @@ export class FirestoreQueryStore implements QueryStore {
           text: document.get("text"),
           receivedAt: document.get("receivedAt"),
           zone: document.get("zone"),
+          ...(document.get("sourceKind") !== undefined
+            ? { sourceKind: document.get("sourceKind") }
+            : {}),
         });
         if (source.text.length > 10_020)
           throw new AccountError("failed-precondition");

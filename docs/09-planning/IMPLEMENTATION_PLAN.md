@@ -12,7 +12,7 @@ Este documento define el alcance y el cierre de las fases. Los [requisitos](../0
 | K1 · Cuenta y configuración | Acceso privado y configuración segura de la clave propia | Acceso y clave activos; propietario confirma Android/iOS, quedan comprobaciones de cierre detalladas |
 | K2 · Contar por escrito | Separar asuntos, aclarar dudas y guardar automáticamente | Implementada y desplegada, integrada en `main` por petición del propietario; recorrido Android aceptado, validación del nuevo build iOS pendiente |
 | K3 · Preguntar por escrito | Encontrar recuerdos y responder con sus fuentes | Implementada y activada desde `codex/k3-text-query`; pruebas locales/IA real correctas, aceptación móvil pendiente |
-| K4 · Control de memoria | Ofrecer guardar un dato, corregir y olvidar conversando | En curso en `codex/k4-memory-control`; control selectivo por fuente activo y probado en Honor, iOS y resolver/ofertas pendientes |
+| K4 · Control de memoria | Ofrecer guardar un dato, corregir y olvidar conversando | En curso en `codex/k4-memory-control`; control por fuente activo, conversación implementada localmente; activación nueva e iOS pendientes |
 | K5 · Voz | Contar y preguntar hablando, con pulsación y bloqueo | Pendiente |
 | K6 · V1 de uso personal | Recorrido completo comprobado en Android e iOS | Pendiente |
 
@@ -133,7 +133,7 @@ Cuarta iteración y decisión actual: [evidencia v4](../../prototypes/memory/evi
 
 ## K4 · Control conversacional de memoria
 
-**Estado actual:** iniciada desde K3 `6b264e7`, sin integrar K3 en `main` ni declarar resueltas sus comprobaciones pendientes. Retirada atómica y revocaciones ampliadas a selección de datos/corrección con preservación del resto del relato, controles desde «Texto original» y revisión de contexto por dispositivo. Siete casos sintéticos de proveedor real correctos, 36 recorridos con fixtures en Honor y una aceptación productiva nativa completa correcta. Activación autorizada de siete funciones e índice READY; datos de prueba retirados, sesión y APK actual preservados. Pendientes iOS, órdenes naturales y ofertas de guardado. [ADR-011](../02-architecture/ADR/ADR-011-memory-control.md), [evidencia y límites](K4_VALIDATION.md). K4 continúa abierta.
+**Estado actual:** iniciada desde K3 `6b264e7`, sin integrar K3 en `main` ni declarar resueltas sus comprobaciones pendientes. Control selectivo por fuente activo y comprobado en Honor, siete funciones autorizadas e índice READY. Continuación de órdenes naturales y ofertas implementada en backend y UI compartida; 74 host tests y 41 recorridos con fixtures en Honor correctos. Activación de los dos endpoints nuevos, aceptación nativa actual e iOS pendientes. El olvido se limita a una fuente identificada, sin prometer retirada exhaustiva de duplicados ni borrado global. [ADR-011](../02-architecture/ADR/ADR-011-memory-control.md), [evaluación con IA real, fallos y límites](K4_VALIDATION.md). K4 continúa abierta.
 
 **Resultado:** controlar lo guardado sin abandonar la conversación. Cubre UC-006, UC-007 y UC-008 por texto.
 

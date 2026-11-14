@@ -41,6 +41,7 @@ export const sourceSchema = z.strictObject({
   text: z.string(),
   receivedAt: z.iso.datetime({ offset: true }),
   zone: z.string(),
+  sourceKind: z.enum(["retained", "correction"]).optional(),
 });
 export const memorySchema = itemSchema.extend({
   id: z.string(),

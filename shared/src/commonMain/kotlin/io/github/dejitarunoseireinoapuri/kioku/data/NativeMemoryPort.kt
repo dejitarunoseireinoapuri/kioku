@@ -2,7 +2,17 @@ package io.github.dejitarunoseireinoapuri.kioku.data
 
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureIssue
 
-enum class MemoryEndpoint { Submit, Clarify, Operation, Query, Source, SourceDetails, Change }
+enum class MemoryEndpoint {
+    Submit,
+    Clarify,
+    Operation,
+    Query,
+    Source,
+    SourceDetails,
+    Change,
+    RouteMessage,
+    ApplyMessage,
+}
 
 sealed interface NativeMemoryReply {
     data class Received(

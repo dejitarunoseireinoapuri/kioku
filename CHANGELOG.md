@@ -2,6 +2,9 @@
 
 ## Sin versión publicada · 2026-11-14
 
+- Continuación K4 preparada: interpretar órdenes explícitas de corrección/olvido y ofrecer guardar afirmaciones nuevas desde Preguntar, con aceptación/rechazo sin cambiar de modo. Tickets sin texto, versiones/época/caducidad y un único hijo; fecha relativa anclada al mensaje original.
+- Chat compartido y cargas por fase, recuperación estable tras giro, limpieza de contenido antiguo antes de nuevas respuestas y protección de aclaraciones aceptadas frente a cambios. 74 host tests y 41 recorridos Honor con fixtures correctos. Dos nuevos endpoints aún sin activar; nuevo build iOS pendiente. [Evaluación con IA real y límites](docs/09-planning/K4_VALIDATION.md).
+
 - K4 en `codex/k4-memory-control`: retirada/corrección selectivas desde «Texto original» → «Gestionar», fuente conservada y corrección distinguidas; preservación de otros asuntos, versiones, revocación y proyecciones atómicas. Dos callables nuevos y cinco adaptados activados con autorización; índice READY y rechazo HTTPS sin sesión.
 - Revisión de memoria antes de restaurar contenido/enviar, limpieza de chat/contexto/fuentes después del éxito y recuperación de cambios sin duplicarlos. Corrección conserva borrador tras error/rotación; cargas y confirmaciones se desplazan a la zona visible. Teclado con poca altura prioriza campo/envío.
 - Pruebas sintéticas locales y siete casos con Sol medio real (0,13151104 USD estimados), más aceptación nativa productiva en Honor correcta. Datos sintéticos de producción retirados al terminar. [Evidencia y límites K4](docs/09-planning/K4_VALIDATION.md): iOS, órdenes naturales/ofertas pendientes; K4 no cerrada.

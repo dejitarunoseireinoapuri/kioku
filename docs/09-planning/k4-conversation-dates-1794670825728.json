@@ -1,0 +1,54 @@
+{
+  "stage": "complete",
+  "model": "gpt-6.1-sol",
+  "reasoning": "medium",
+  "corpusHash": "a377097e5b4a46b0281148c51e8e7561e059bd33c98ee6345370a621f2748ba5",
+  "evaluation": "regression",
+  "scope": "Frozen synthetic local cases with actual provider; no production or native attestation",
+  "rows": [
+    {
+      "caseId": "s02",
+      "action": "correct",
+      "result": "corrected",
+      "present": true,
+      "absent": true,
+      "keep": true,
+      "statusOk": true,
+      "asked": true,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "index": 0,
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 15369
+    },
+    {
+      "caseId": "s07",
+      "action": "correct",
+      "result": "corrected",
+      "present": true,
+      "absent": true,
+      "keep": true,
+      "statusOk": true,
+      "asked": true,
+      "replayCalls": 0,
+      "queries": [
+        {
+          "index": 0,
+          "status": "answered",
+          "words": true,
+          "pass": true
+        }
+      ],
+      "pass": true,
+      "durationMs": 17702
+    }
+  ],
+  "calls": 28,
+  "estimatedUsd": 0.08279039999999327
+}
