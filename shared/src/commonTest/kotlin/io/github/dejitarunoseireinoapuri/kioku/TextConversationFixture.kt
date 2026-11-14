@@ -21,6 +21,8 @@ internal class TextConversationFixture : TextConversationRepository {
     var plan: (TextCommand) -> TextPlan = { TextPlan.Offer(stamp, it.text, false) }
     var reply: suspend (TextCommand) -> TextOutcome = { TextOutcome.Offered(it.text) }
     var readSource: suspend (String) -> MemorySource? = { null }
+    val recoveries = mutableListOf<TextCommand>()
+    var recovery: suspend () -> CaptureOutcome = { CaptureOutcome.Unconfirmed }
 
     override fun prepare(
         text: String,
@@ -52,6 +54,11 @@ internal class TextConversationFixture : TextConversationRepository {
         commands.add(prepared)
         onPrepared(prepared)
         return TextExecution(prepared, reply(prepared))
+    }
+
+    override suspend fun recoverCapture(command: TextCommand): CaptureOutcome {
+        recoveries.add(command)
+        return recovery()
     }
 
     override suspend fun source(id: String): MemorySource? {

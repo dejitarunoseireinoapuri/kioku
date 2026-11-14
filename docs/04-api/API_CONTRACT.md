@@ -51,8 +51,8 @@ Resultados de captura/recuperación incluyen `apiVersion:1`, `operationId` y:
 
 - `saved`: `sourceId`, `memoryCount` (1–8) y `source:{sourceId,text,receivedAt}` leída del canónico autorizado; el recibo no duplica ese texto.
 - `needsClarification`: `clarificationId`, `revision` y `question`; no existe aún fuente/recuerdo confirmado.
-- `processing`: resultado pendiente/incierto; el cliente comprueba el recibo sin reenviar automáticamente.
-- `failed`: el intento no terminó; reintento explícito con el mismo ID, hasta tres intentos y sin sobrescribir un recibo confirmado.
+- `processing`: el servidor mantiene una concesión de captura vigente. La app distingue este estado de una respuesta de transporte desconocida (`Unconfirmed`, solo local) y comprueba el recibo sin reenviar el texto. Si la concesión ha caducado o ya no pertenece al trabajador, getOperation cierra únicamente su recibo como failed y bloquea su commit tardío.
+- `failed`: recibo confirmado de intento sin guardado; reintento explícito con el mismo ID, hasta tres intentos y sin sobrescribir un recibo saved. Un error de red/HTTP no basta para inferir failed: el cliente hace una única comprobación getOperation; si tampoco obtiene evidencia válida mantiene Unconfirmed.
 - `needsRetelling`: sigue faltando contexto tras tres versiones del turno (inicial y dos aclaraciones). No se guarda; se ofrece volver a explicarlo, sin un bucle de preguntas que no pueda contestarse.
 - `ignored`: no se produjo memoria. `expired`: no puede recuperarse el resultado mediante ese recibo; no acredita por sí solo que nunca hubiera commit.
 
@@ -63,6 +63,8 @@ Presentación de la fuente: el cliente conserva `receivedAt` completo tanto desd
 Pendientes/fallos con contexto caducan tras 24 h desde la actividad admitida; recibos terminales tras siete días. El borrado físico TTL es asíncrono. No hay TTL en fuentes/recuerdos. La app solo muestra éxito tras resultado confirmado; una respuesta perdida se comprueba por ID. Cancelar la suspensión descarta callbacks, sin prometer deshacer un commit remoto. El estado de sesión/generación elimina resultados tardíos del cliente anterior.
 
 Pregunta natural, ofertas, corrección y olvido siguen pendientes de K3/K4. Un mensaje en Preguntar no se dirige a `submitTurn` ni se transforma en memoria.
+
+Presentación de fallos: tras failed, processing o Unconfirmed de captura se puede continuar usando el chat. Las tarjetas de capturas pendientes conservan su ID/comando solo en RAM, dentro del límite de 40 mensajes, incluso al cambiar Explicar/Preguntar. Comprobar estado usa getOperation, no submitTurn ni una nueva inferencia. Una aclaración recuperada continúa el padre original. Cuenta/época/reinicio/fin de ámbito limpian esas referencias y descartan respuestas tardías.
 
 ## Frontera K3 · Consulta por texto
 

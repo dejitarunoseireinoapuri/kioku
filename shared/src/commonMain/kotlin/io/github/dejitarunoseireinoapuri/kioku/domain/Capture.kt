@@ -38,6 +38,9 @@ sealed interface CaptureOutcome {
 
     data object Processing : CaptureOutcome
 
+    /** The transport did not establish whether a commit happened; only a receipt can resolve it. */
+    data object Unconfirmed : CaptureOutcome
+
     data object Ignored : CaptureOutcome
 
     data object Expired : CaptureOutcome

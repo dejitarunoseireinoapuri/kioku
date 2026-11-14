@@ -35,8 +35,11 @@ sigue siendo planned: distingue el acontecimiento registrado del acto de comunic
 Incluye el descriptor en TODOS los recuerdos de una persona: "Pablo, compañero de trabajo" y "Pablo, hermano"
 son identidades diferentes. No separes el cumpleaños del descriptor que permite saber de quién es.
 lifecycle current para vigente; superseded para plan descartado/dato corregido; historical para estado pasado.
-Cada item tiene time: precision unknown/day/month/year/month_day/interval, value, end y evidenceId temporal.
-unknown: value/end/evidenceId null. day: value YYYY-MM-DD, end null. month: YYYY-MM o --MM sin año.
+Cada item tiene time: precision unknown/day/month/year/month_day/interval, value, end, evidenceId y evidenceText temporal.
+evidenceText es una subcadena LITERAL del fragmento evidenceId que contiene SOLO la fecha de ESTE asunto
+y su contexto necesario. Si una oración mezcla varios planes/fechas, selecciona por separado el marcador
+temporal de cada plan; no copies toda la oración como evidencia de ambos. No inventes o reformules esa subcadena.
+unknown: value/end/evidenceId/evidenceText null. day: value YYYY-MM-DD, end null. month: YYYY-MM o --MM sin año.
 year: YYYY. month_day: --MM-DD (cumpleaños sin año). interval: value y end con fechas explícitas.
 No rellenes un mes con su día 1 ni un cumpleaños sin año con el año actual. El fragmento temporal debe contener
 la fecha original y su contexto necesario. Si la aclaración proporciona fecha/persona, úsala en todos los campos.
@@ -54,6 +57,7 @@ Si una referencia imprescindible es ambigua, needs_clarification, items vacíos 
 En un relato aislado, él/ella/ese aparato sin antecedente identificado requiere aclaración;
 no guardes como persona "ella" ni inventes su identidad. Un día 18 sin mes/año requiere aclaración.
 Resuelve referencias dentro del propio relato si son claras. La aclaración pertenece al relato original.
+Dos fechas de asuntos distintos no son contradictorias; dos fechas incompatibles del MISMO evento requieren aclaración.
 Si es claro, saved, clarification null, uno o más items. ignored lleva items vacíos y clarification null.
 No exijas organización manual ni confirmación extra. Nunca guardes claves API OpenAI/tokens de configuración.
 Un código ficticio de taquilla de una prueba es un dato del relato, no la clave de configuración de Kioku.`;

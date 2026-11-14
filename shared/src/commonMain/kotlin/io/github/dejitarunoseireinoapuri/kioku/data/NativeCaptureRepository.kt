@@ -24,7 +24,8 @@ class NativeCaptureRepository(
 
     override suspend fun execute(command: CaptureCommand): CaptureOutcome {
         val endpoint = if (command is CaptureCommand.Tell) MemoryEndpoint.Submit else MemoryEndpoint.Clarify
-        return request(endpoint, capturePayload(command))
+        val result = request(endpoint, capturePayload(command))
+        return if (result == CaptureOutcome.Unconfirmed) recover(command.requestId) else result
     }
 
     override suspend fun recover(requestId: String): CaptureOutcome =
@@ -50,23 +51,23 @@ class NativeCaptureRepository(
                         }
                     continuation.invokeOnCancellation { request.cancel() }
                 }
-            } ?: CaptureOutcome.Processing
+            } ?: CaptureOutcome.Unconfirmed
         } catch (error: CancellationException) {
             throw error
         } catch (_: Exception) {
-            CaptureOutcome.Processing
+            CaptureOutcome.Unconfirmed
         }
 }
 
 private fun captureReply(reply: NativeMemoryReply): CaptureOutcome =
     when (reply) {
         is NativeMemoryReply.Received -> {
-            runCatching { parseCapture(reply.json) }.getOrDefault(CaptureOutcome.Processing)
+            runCatching { parseCapture(reply.json) }.getOrDefault(CaptureOutcome.Unconfirmed)
         }
 
         is NativeMemoryReply.Failed -> {
             if (reply.issue == CaptureIssue.Unavailable) {
-                CaptureOutcome.Processing
+                CaptureOutcome.Unconfirmed
             } else {
                 CaptureOutcome.Failed(reply.issue)
             }

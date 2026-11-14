@@ -5,7 +5,7 @@
 - **BR-003:** guardar automáticamente solo cuando el contenido esté suficientemente determinado; si falta contexto relevante, aclarar por el mismo canal. Nunca exigir aprobar cada resumen correcto.
 - **BR-004:** conservar el relato textual y la procedencia; separar asuntos manteniendo sus relaciones. No convertir una intención en un hecho realizado.
 - **BR-005:** toda respuesta factual sobre la memoria debe apoyarse en fuentes autorizadas. Sin evidencia, reconocer la ausencia de información: no afirmar que algo no ocurrió.
-- **BR-006:** interpretar referencias relativas desde el momento y zona correspondientes; distinguir fecha del evento y fecha de registro. No inventar precisión.
+- **BR-006:** interpretar referencias relativas desde el momento y zona correspondientes; distinguir fecha del evento y fecha de registro. No inventar precisión. Cada asunto usa su propio literal temporal aunque comparta oración con otras fechas.
 - **BR-007:** un dato nuevo durante Preguntar requiere una oferta y aceptación explícita antes de guardarse. Rechazar no cambia la memoria.
 - **BR-008:** la corrección explícita prevalece en futuras respuestas; un cambio real conserva su secuencia temporal cuando corresponda.
 - **BR-009:** antes de borrar, mostrar siempre un diálogo con el objetivo y el alcance, advertir de que dejará de estar accesible y esperar «Sí, borrar»; cancelar o cerrar el diálogo no borra. Aplica desde Gestionar y desde una orden conversacional. Si hay varios posibles objetivos, aclararlos primero. La confirmación del servidor permite mostrar «He olvidado «recuerdo»» como aviso transitorio, sin guardarlo ni enviarlo como contexto. El contenido olvidado no reaparece desde fuentes, índices, búsquedas o trabajos antiguos.

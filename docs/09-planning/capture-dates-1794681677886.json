@@ -1,0 +1,29 @@
+{
+  "complete": true,
+  "corpusHash": "f467de34d772b12e784542688062585bb0ef980cb793fcbc62d6485dc008e819",
+  "rows": [
+    {
+      "id": "date-final-1",
+      "partition": "reserve",
+      "status": "saved",
+      "code": null,
+      "passed": true
+    },
+    {
+      "id": "date-final-2",
+      "partition": "reserve",
+      "status": "needs_clarification",
+      "code": null,
+      "passed": true
+    },
+    {
+      "id": "date-final-3",
+      "partition": "reserve",
+      "status": "saved",
+      "code": null,
+      "passed": true
+    }
+  ],
+  "calls": 7,
+  "estimatedUsd": 0.03322582000000196
+}

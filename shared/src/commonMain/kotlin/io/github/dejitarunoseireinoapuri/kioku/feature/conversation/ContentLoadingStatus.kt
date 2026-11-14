@@ -30,7 +30,7 @@ internal fun contentLoadingStatus(
         state.conversation?.busy == true -> messageLoading(state.conversation.status as TextStatus.Working)
         state.query.sourceLoading -> Res.string.source_loading
         state.query.busy -> Res.string.query_searching
-        state.capturing && state.capture == CaptureOutcome.Processing -> Res.string.capture_checking
+        state.capturing && state.capture.isUnresolvedCapture() -> Res.string.capture_checking
         state.capturing -> Res.string.capture_saving
         else -> null
     }

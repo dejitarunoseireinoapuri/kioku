@@ -12,27 +12,23 @@ import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
 import io.github.dejitarunoseireinoapuri.kioku.design.Panel
 import io.github.dejitarunoseireinoapuri.kioku.design.memoryChangeText
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureIssue
-import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextOutcome
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_check
-import io.github.dejitarunoseireinoapuri.kioku.resources.capture_ignored
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_more_context
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_restart
-import io.github.dejitarunoseireinoapuri.kioku.resources.capture_uncertain
 import io.github.dejitarunoseireinoapuri.kioku.resources.forget_cancelled
 import io.github.dejitarunoseireinoapuri.kioku.resources.offer_accept
 import io.github.dejitarunoseireinoapuri.kioku.resources.offer_decline
 import io.github.dejitarunoseireinoapuri.kioku.resources.offer_title
+import io.github.dejitarunoseireinoapuri.kioku.resources.operation_uncertain
 import io.github.dejitarunoseireinoapuri.kioku.resources.query_source
-import io.github.dejitarunoseireinoapuri.kioku.resources.saved_title
 import io.github.dejitarunoseireinoapuri.kioku.resources.text_declined
 import io.github.dejitarunoseireinoapuri.kioku.resources.text_expired
 import io.github.dejitarunoseireinoapuri.kioku.resources.text_failure
 import io.github.dejitarunoseireinoapuri.kioku.resources.text_offer_question
 import io.github.dejitarunoseireinoapuri.kioku.resources.text_repeat
-import io.github.dejitarunoseireinoapuri.kioku.resources.view_source
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -54,6 +50,9 @@ fun TextConversationBody(
                         interactive = !state.busy && message.id == state.messages.lastOrNull()?.id,
                         onEvent,
                         onSource,
+                        message.captureCommand?.let {
+                            CaptureRecoveryUi(message.id, state.checkingCapture == message.id, !state.busy)
+                        },
                     )
                 }
             }
@@ -70,6 +69,7 @@ private fun TextOutcomeBody(
     interactive: Boolean,
     onEvent: (ConversationEvent) -> Unit,
     onSource: (String) -> Unit,
+    recovery: CaptureRecoveryUi? = null,
 ) {
     when (outcome) {
         is TextOutcome.Asked -> {
@@ -77,7 +77,7 @@ private fun TextOutcomeBody(
         }
 
         is TextOutcome.Captured -> {
-            TextCapture(outcome.capture, interactive, onEvent, onSource)
+            TextCaptureBody(outcome.capture, interactive, onEvent, onSource, recovery)
         }
 
         is TextOutcome.Offered -> {
@@ -123,7 +123,7 @@ private fun TextOutcomeNotice(
         }
 
         TextOutcome.Processing -> {
-            TextProblem(Res.string.capture_uncertain, MessageAction.Retry, interactive, onEvent)
+            TextProblem(Res.string.operation_uncertain, MessageAction.Retry, interactive, onEvent)
         }
 
         is TextOutcome.Failed -> {
@@ -198,43 +198,6 @@ private fun TextAnswer(
             interactive,
             onEvent,
         )
-    }
-}
-
-@Composable
-private fun TextCapture(
-    capture: CaptureOutcome,
-    interactive: Boolean,
-    onEvent: (ConversationEvent) -> Unit,
-    onSource: (String) -> Unit,
-) {
-    when (capture) {
-        is CaptureOutcome.Saved -> {
-            Panel {
-                Text(stringResource(Res.string.saved_title), fontWeight = FontWeight.SemiBold)
-                ActionButton(stringResource(Res.string.view_source), { onSource(capture.source.id) })
-            }
-        }
-
-        is CaptureOutcome.Clarification -> {
-            Panel { Text(capture.question) }
-        }
-
-        CaptureOutcome.Ignored -> {
-            Text(stringResource(Res.string.capture_ignored))
-        }
-
-        CaptureOutcome.Expired -> {
-            TextProblem(Res.string.text_expired, MessageAction.Restart, interactive, onEvent)
-        }
-
-        CaptureOutcome.Processing -> {
-            TextProblem(Res.string.capture_uncertain, MessageAction.Retry, interactive, onEvent)
-        }
-
-        is CaptureOutcome.Failed -> {
-            TextProblem(Res.string.text_failure, MessageAction.Retry, interactive, onEvent)
-        }
     }
 }
 

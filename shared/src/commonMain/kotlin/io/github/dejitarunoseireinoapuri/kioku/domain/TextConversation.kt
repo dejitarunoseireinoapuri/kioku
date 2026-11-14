@@ -129,4 +129,6 @@ interface TextConversationRepository {
     ): TextExecution
 
     suspend fun source(id: String): MemorySource?
+
+    suspend fun recoverCapture(command: TextCommand): CaptureOutcome
 }

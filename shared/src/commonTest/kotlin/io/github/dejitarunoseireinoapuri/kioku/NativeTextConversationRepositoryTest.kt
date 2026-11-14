@@ -5,6 +5,7 @@ import io.github.dejitarunoseireinoapuri.kioku.data.NativeCancellation
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeMemoryPort
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeMemoryReply
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeTextConversationRepository
+import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.domain.OfferDecision
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextContext
@@ -250,7 +251,7 @@ class NativeTextConversationRepositoryTest {
             port.reply = { _, _ -> ready(command.ids.route, offerFields()) }
             val prepared = repository.execute(command).command.copy(decision = OfferDecision.Accept)
             port.reply = { _, body -> declined(body) }
-            assertEquals(TextOutcome.Processing, repository.execute(prepared).outcome)
+            assertEquals(TextOutcome.Captured(CaptureOutcome.Unconfirmed), repository.execute(prepared).outcome)
             port.reply = { _, _ -> """{"apiVersion":1,"operationId":"${command.ids.query}","status":"declined"}""" }
             assertEquals(
                 TextOutcome.Processing,

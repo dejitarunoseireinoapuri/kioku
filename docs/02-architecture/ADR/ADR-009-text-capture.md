@@ -26,6 +26,10 @@ Pendientes/fallos con contexto: 24 h; recibos terminales: siete días. La app bl
 
 ## Alternativas y consecuencias
 
+Refinamiento del 14 de noviembre, preparado para activar: processing exige concesión vigente; consultar un recibo con concesión perdida/caducada cierra solo ese recibo failed e impide el commit tardío, preservando una concesión posterior. Un error de transporte no demuestra failed ni processing: el cliente consulta una vez getOperation y conserva Unconfirmed si no obtiene evidencia válida. No reintenta inferencia automáticamente. El chat permite continuar y conserva los IDs/comandos pendientes solo en RAM entre modos, dentro de 40 mensajes; no son contexto de preguntas y se limpian por cuenta/época/reinicio/ámbito. Una aclaración recuperada continúa su padre, nunca una captura independiente. [Validación y activación](../../09-planning/K4_VALIDATION.md).
+
+La extracción/revisión añade evidenceText temporal, subcadena literal del fragmento evidenceId validada/materializada por código. Evita exigir a un dato las fechas de otro asunto dentro de la misma oración. El canónico sigue usando time.quote sin cambio de esquema ni migración. El guard temporal no se relaja: referencias ajenas, literales inventados o valores incompatibles se rechazan. Una contradicción real del mismo evento se aclara antes de guardar.
+
 Se rechazan escrituras directas del móvil, guardar el snapshot completo de M0 en un documento, claves en el binario y operaciones OpenAI dentro de callbacks transaccionales. El diseño mantiene varias materias en una fuente y sus fragmentos, evita una biblioteca obligatoria y prepara K3 sin afirmarla implementada. Recuperación de una operación actual no equivale a historial de chat persistente ni a cola offline.
 
 La app debe seguir indicando que consulta, voz y olvido conversacional todavía no están conectados. K2 no cierra K1/iOS por extrapolación ni valida la experiencia final de K6. [Evidencia K2](../../09-planning/K2_VALIDATION.md) distingue pruebas locales, proveedor real, despliegue y aceptación móvil.

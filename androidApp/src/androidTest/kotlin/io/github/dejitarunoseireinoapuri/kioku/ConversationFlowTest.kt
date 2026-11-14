@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.hasTestTag
@@ -21,6 +22,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.text.AnnotatedString
 import io.github.dejitarunoseireinoapuri.kioku.domain.AnswerStatus
+import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureIssue
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.domain.ForgetPreview
@@ -201,6 +203,61 @@ class ConversationFlowTest {
         compose.onNodeWithTag("text-composer").performImeAction()
     }
 
+    @Test
+    fun failedCaptureIsClearlyNotSavedAndRetryKeepsItsIdentity() {
+        repository.answer = { TextOutcome.Captured(CaptureOutcome.Failed(CaptureIssue.Unavailable)) }
+        send("Plan ficticio.")
+        visible("No se ha guardado este recuerdo. Puedes reintentarlo o seguir usando Kioku.")
+        captureBrandScreen(compose.activity, "kioku-capture-failed.png") { compose.onRoot().captureToImage() }
+        compose.onNodeWithTag("text-composer").assertIsEnabled()
+        compose.onNodeWithTag("intent-Tell").assertIsEnabled()
+        repository.answer = { TextOutcome.Captured(repository.saved()) }
+        click("Reintentar")
+        visible("Recuerdo guardado")
+        assertEquals(repository.commands[0].ids, repository.commands[1].ids)
+    }
+
+    @Test
+    fun processingDoesNotBlockAnotherQuestionAndAnOldReceiptStaysCheckable() {
+        compose.onNodeWithTag("intent-Tell").performClick()
+        repository.answer = { TextOutcome.Captured(CaptureOutcome.Processing) }
+        send("Plan ficticio.")
+        visible(
+            "El servidor sigue procesando este recuerdo. El guardado todavía no está confirmado. " +
+                "Puedes seguir usando Kioku.",
+        )
+        compose.onNodeWithTag("text-composer").assertIsEnabled()
+        compose.onNodeWithTag("intent-Ask").performClick()
+        captureBrandScreen(compose.activity, "kioku-capture-processing.png") { compose.onRoot().captureToImage() }
+        repository.answer =
+            { TextOutcome.Asked(QueryOutcome.Reply(AnswerStatus.NotFound, "No consta otra cosa.", emptyList())) }
+        send("¿Qué otra cosa?")
+        visible("No consta otra cosa.")
+        repository.recovered = repository.saved()
+        click("Comprobar estado")
+        visible("Recuerdo guardado")
+        compose.onNodeWithText("No consta otra cosa.").assertExists()
+        assertEquals(2, repository.commands.size)
+        assertEquals(repository.commands.first().ids, repository.recoveries.single().ids)
+    }
+
+    @Test
+    fun unknownReceiptDoesNotClaimProcessingAndAReadCanConfirmFailure() {
+        repository.answer = { TextOutcome.Captured(CaptureOutcome.Unconfirmed) }
+        send("Plan ficticio.")
+        visible(
+            "No he podido comprobar si este recuerdo se ha guardado. " +
+                "Puedes seguir usando Kioku y consultar su estado después.",
+        )
+        compose.onNodeWithTag("text-composer").assertIsEnabled()
+        repository.recovered = CaptureOutcome.Failed(CaptureIssue.Unavailable)
+        captureBrandScreen(compose.activity, "kioku-capture-unconfirmed.png") { compose.onRoot().captureToImage() }
+        click("Comprobar estado")
+        visible("No se ha guardado este recuerdo. Puedes reintentarlo o seguir usando Kioku.")
+        assertEquals(1, repository.commands.size)
+        assertEquals(1, repository.recoveries.size)
+    }
+
     private fun click(text: String) {
         visible(text)
         compose.onNodeWithText(text).performClick()
@@ -217,6 +274,8 @@ private class ConversationFlowFixture : TextConversationRepository {
     val commands = mutableListOf<TextCommand>()
     private var ids = 0
     var answer: suspend (TextCommand) -> TextOutcome = { TextOutcome.Offered(it.text) }
+    val recoveries = mutableListOf<TextCommand>()
+    var recovered: CaptureOutcome = CaptureOutcome.Unconfirmed
 
     override fun prepare(
         text: String,
@@ -258,6 +317,11 @@ private class ConversationFlowFixture : TextConversationRepository {
 
     fun saved() =
         CaptureOutcome.Saved(MemorySource("saved-source", "Dato de prueba: me gusta el miso.", "2026-11-14"), 1)
+
+    override suspend fun recoverCapture(command: TextCommand): CaptureOutcome {
+        recoveries.add(command)
+        return recovered
+    }
 
     override suspend fun source(id: String) = saved().source.takeIf { it.id == id }
 }

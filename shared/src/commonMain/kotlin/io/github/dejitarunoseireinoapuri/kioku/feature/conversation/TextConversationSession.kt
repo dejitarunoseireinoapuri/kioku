@@ -11,6 +11,7 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.TextContext
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextConversationRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextIntent
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextOutcome
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -28,6 +29,7 @@ internal class TextConversationSession(
     private var sourceGeneration = 0
     private var job: Job? = null
     private var sourceJob: Job? = null
+    private var recoveryJob: Job? = null
     private var messageId = 0L
     private var clarifications = 0
     private val questions = ArrayDeque<String>()
@@ -105,37 +107,36 @@ internal class TextConversationSession(
         } else if (action == MessageAction.CancelForget) {
             cancelForget()
         } else {
-            (state.status as? TextStatus.Ready)?.let { ready -> nextCommand(ready, action)?.let { execute(it) } }
+            (state.status as? TextStatus.Ready)?.let { ready ->
+                ready.nextCommand(action, repository, context())?.let { execute(it) }
+            }
         }
     }
 
-    private fun nextCommand(
-        ready: TextStatus.Ready,
-        action: MessageAction,
-    ): TextCommand? =
-        when (action) {
-            MessageAction.ConfirmForget -> {
-                (ready.outcome as? TextOutcome.ConfirmForget)?.let { ready.command.copy(forgetApproval = it.preview) }
+    fun checkCapture(messageId: Long) {
+        if (state.busy || state.checkingCapture != null) return
+        val command =
+            state.messages
+                .filterIsInstance<TextMessage.Result>()
+                .find { it.id == messageId }
+                ?.captureCommand
+                ?.takeIf { repository != null } ?: return
+        val repository = requireNotNull(repository)
+        val epoch = generation
+        publish(state.copy(checkingCapture = messageId))
+        recoveryJob =
+            scope.launch {
+                val result =
+                    try {
+                        repository.recoverCapture(command)
+                    } catch (error: CancellationException) {
+                        throw error
+                    } catch (_: Exception) {
+                        CaptureOutcome.Unconfirmed
+                    }
+                if (epoch == generation) publish(state.recoveredCapture(messageId, command, result))
             }
-
-            MessageAction.Accept, MessageAction.Reject -> {
-                ready.command.takeIf { ready.outcome is TextOutcome.Offered }?.copy(
-                    decision = if (action == MessageAction.Accept) OfferDecision.Accept else OfferDecision.Reject,
-                )
-            }
-
-            MessageAction.Restart -> {
-                repository?.prepare(ready.command.text, ready.command.intent, context())
-            }
-
-            MessageAction.Retry -> {
-                ready.command
-            }
-
-            MessageAction.Reset, MessageAction.CancelForget -> {
-                null
-            }
-        }
+    }
 
     private fun cancelForget() {
         val ready = state.status as? TextStatus.Ready ?: return
@@ -153,9 +154,18 @@ internal class TextConversationSession(
         val repository = repository ?: return
         if (state.busy) return
         val epoch = ++generation
+        recoveryJob?.cancel()
         sourceGeneration++
         sourceJob?.cancel()
-        publish(state.copy(status = TextStatus.Working(command), source = null, sourceLoading = false), clearDraft)
+        publish(
+            state.copy(
+                status = TextStatus.Working(command),
+                source = null,
+                sourceLoading = false,
+                checkingCapture = null,
+            ),
+            clearDraft,
+        )
         job =
             scope.launch {
                 val execution =
@@ -174,7 +184,10 @@ internal class TextConversationSession(
                 alignRevision(execution.command)
                 references = outcome.references()
                 rememberQuestion(command.text, outcome)
-                if (outcome !is TextOutcome.ConfirmForget) append(TextMessage.Result(++messageId, outcome))
+                if (outcome !is TextOutcome.ConfirmForget) {
+                    val pending = (outcome as? TextOutcome.Captured)?.capture.isUnresolvedCapture()
+                    append(TextMessage.Result(++messageId, outcome, execution.command.takeIf { pending }))
+                }
                 publish(state.copy(status = TextStatus.Ready(execution.command, outcome)))
             }
     }
@@ -212,6 +225,7 @@ internal class TextConversationSession(
         val epoch = generation
         val sourceEpoch = ++sourceGeneration
         sourceJob?.cancel()
+        recoveryJob?.cancel()
         publish(state.copy(source = null, sourceLoading = true))
         sourceJob =
             scope.launch {
@@ -225,16 +239,20 @@ internal class TextConversationSession(
         return true
     }
 
-    fun reset(clearDraft: Boolean = false) {
+    fun reset(
+        clearDraft: Boolean = false,
+        preservePending: Boolean = false,
+    ) {
+        val pending = if (preservePending) state.pendingCaptureMessages() else emptyList()
         generation++
         sourceGeneration++
         job?.cancel()
         sourceJob?.cancel()
         clarifications = 0
-        messageId = 0
+        messageId = pending.maxOfOrNull { it.id } ?: 0
         questions.clear()
         references = emptyList()
-        publish(TextConversationState(), clearDraft)
+        publish(TextConversationState(messages = pending), clearDraft)
     }
 
     private fun append(message: TextMessage) {

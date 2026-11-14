@@ -5,6 +5,7 @@ import {
   timeSchema,
   MemoryError,
 } from "./domain.ts";
+import { literalQuote } from "./literal.ts";
 
 /** The model selects source IDs; only application code materializes literal evidence. */
 export function captureFormat(text: string, clarification: string | null) {
@@ -37,9 +38,10 @@ export function captureFormat(text: string, clarification: string | null) {
           .extend({
             evidenceId: ids,
             attributionEvidenceId: ids.nullable(),
-            time: timeSchema
-              .omit({ quote: true })
-              .extend({ evidenceId: ids.nullable() }),
+            time: timeSchema.omit({ quote: true }).extend({
+              evidenceId: ids.nullable(),
+              evidenceText: z.string().min(1).max(300).nullable(),
+            }),
           }),
       )
       .max(8),
@@ -57,7 +59,14 @@ export function captureFormat(text: string, clarification: string | null) {
       ...result,
       items: result.items.map(
         ({ evidenceId, attributionEvidenceId, time, ...item }) => {
-          const { evidenceId: timeId, ...date } = time;
+          const { evidenceId: timeId, evidenceText, ...date } = time;
+          let temporalQuote: string | null = null;
+          if (item.provenance !== "quoted" && date.precision !== "unknown") {
+            const temporalPart = literal(timeId);
+            if (temporalPart === null || evidenceText === null)
+              throw new MemoryError("TIME_EVIDENCE_REQUIRED");
+            temporalQuote = literalQuote(evidenceText, temporalPart);
+          }
           return {
             ...item,
             eventStatus:
@@ -71,7 +80,7 @@ export function captureFormat(text: string, clarification: string | null) {
             time:
               item.provenance === "quoted"
                 ? { precision: "unknown", value: null, end: null, quote: null }
-                : { ...date, quote: literal(timeId) },
+                : { ...date, quote: temporalQuote },
           };
         },
       ),

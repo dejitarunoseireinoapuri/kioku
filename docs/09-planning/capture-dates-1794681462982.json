@@ -1,0 +1,43 @@
+{
+  "complete": true,
+  "corpusHash": "d37426904b152964af6378cde2fc07aadf31e39171c554daa9f92c5ca659c75f",
+  "rows": [
+    {
+      "id": "date-regression",
+      "partition": "regression",
+      "status": "saved",
+      "code": null,
+      "passed": true
+    },
+    {
+      "id": "date-reserve-1",
+      "partition": "reserve",
+      "status": "saved",
+      "code": null,
+      "passed": true
+    },
+    {
+      "id": "date-reserve-2",
+      "partition": "reserve",
+      "status": "saved",
+      "code": null,
+      "passed": true
+    },
+    {
+      "id": "date-reserve-3",
+      "partition": "reserve",
+      "status": "needs_clarification",
+      "code": null,
+      "passed": true
+    },
+    {
+      "id": "date-reserve-4",
+      "partition": "reserve",
+      "status": "saved",
+      "code": null,
+      "passed": false
+    }
+  ],
+  "calls": 13,
+  "estimatedUsd": 0.0631835599999988
+}

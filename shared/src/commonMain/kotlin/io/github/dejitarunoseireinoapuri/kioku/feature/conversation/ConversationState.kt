@@ -40,7 +40,7 @@ data class ConversationState(
         get() = memoryVisibility == MemoryVisibility.Hidden
 
     val captureLocked: Boolean
-        get() = capturing || capture is CaptureOutcome.Failed || capture == CaptureOutcome.Processing
+        get() = capturing
 
     val canEdit: Boolean
         get() = scenario != PreviewScenario.Offline && !operationLocked && !checkingMemory
@@ -73,6 +73,10 @@ data class ConversationState(
 }
 
 sealed interface ConversationEvent {
+    data class CheckCapture(
+        val messageId: Long,
+    ) : ConversationEvent
+
     data class Message(
         val action: MessageAction,
     ) : ConversationEvent

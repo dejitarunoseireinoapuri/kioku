@@ -2,6 +2,8 @@
 
 ## Sin versión publicada · 2026-11-14
 
+- Corrección preparada de captura con dos fechas en una oración: evidencia temporal literal por asunto, sin debilitar el validador. App distingue fallo confirmado, procesamiento y transporte desconocido; consulta recibos sin reenviar, permite continuar y conserva tarjetas pendientes en RAM entre modos. Concesiones caducadas dejan de figurar como processing y no pueden confirmar tarde. Pruebas locales/IA real/Honor correctas; activación productiva de cinco funciones e iOS pendientes. [Evidencia](docs/09-planning/K4_VALIDATION.md).
+
 - Confirmación de todo olvido por petición posterior del propietario: popup con objetivo, alcance y advertencia desde Gestionar o conversación. Cancelar/cerrar no aplica; confirmar mantiene la operación y espera al servidor. El aviso «He olvidado «recuerdo»» solo vive en RAM, fuera de historial/contexto. Pruebas locales y en Honor, estética B compartida y backend sin cambios; iOS pendiente. [Evidencia](docs/09-planning/K4_VALIDATION.md).
 
 - Olvido de copias entre relatos activo: inventario completo acotado, paráfrasis del mismo hecho/sujeto, revisión de preservación y retirada conjunta de fuentes/índices/pendientes. Dato y texto completo conservan alcances distintos; fallo, cuota o copia concurrente no dejan borrado parcial.

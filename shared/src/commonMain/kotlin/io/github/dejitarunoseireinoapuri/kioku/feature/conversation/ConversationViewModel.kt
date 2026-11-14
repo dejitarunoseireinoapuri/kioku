@@ -124,8 +124,8 @@ class ConversationViewModel(
 
     fun onEvent(event: ConversationEvent) {
         when (event) {
-            is ConversationEvent.Message -> {
-                messages.act(event.action)
+            is ConversationEvent.CheckCapture, is ConversationEvent.Message -> {
+                handleMessageEvent(event, messages)
             }
 
             is ConversationEvent.Query -> {
@@ -205,7 +205,7 @@ class ConversationViewModel(
         if (current.canSwitchIntent) {
             if (intent != current.intent) {
                 query.reset()
-                messages.reset()
+                messages.reset(preservePending = true)
             }
             mutableState.update {
                 it.copy(
@@ -219,6 +219,10 @@ class ConversationViewModel(
 
     private fun editDraft(text: String) {
         if (state.value.canEdit) {
+            if (state.value.capture is CaptureOutcome.Failed && command?.text != text) {
+                command = null
+                mutableState.update { it.copy(capture = null) }
+            }
             val limit =
                 if (state.value.capture is CaptureOutcome.Clarification ||
                     state.value.conversation?.clarification == true
@@ -248,7 +252,7 @@ class ConversationViewModel(
             if (!query.submit(current.draft)) feedback(PreviewFeedback.QueryUnavailable)
         } else if (captures == null || current.scenario != PreviewScenario.Ready) {
             feedback(PreviewFeedback.TextOnly)
-        } else if (current.capture != CaptureOutcome.Processing) {
+        } else if (!current.capture.isUnresolvedCapture()) {
             submitCapture(current)
         }
     }

@@ -87,7 +87,15 @@ class NativeTextConversationRepository(
             } catch (_: Exception) {
                 TextOutcome.Processing
             }
-        return TextExecution(resolved.command, result)
+        val outcome =
+            if (result == TextOutcome.Processing && resolved.command.plan is TextPlan.Offer &&
+                resolved.command.decision == OfferDecision.Accept
+            ) {
+                TextOutcome.Captured(captures.recover(resolved.command.ids.action))
+            } else {
+                result
+            }
+        return TextExecution(resolved.command, outcome)
     }
 
     private suspend fun resolve(command: TextCommand): RoutingResolution {
@@ -235,6 +243,9 @@ class NativeTextConversationRepository(
     }
 
     override suspend fun source(id: String) = queries.source(id)
+
+    override suspend fun recoverCapture(command: TextCommand): CaptureOutcome =
+        captures.recover(command.capture?.requestId ?: command.ids.action)
 
     private suspend fun request(
         endpoint: MemoryEndpoint,

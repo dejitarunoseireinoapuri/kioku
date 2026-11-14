@@ -39,6 +39,8 @@ No se guarda el snapshot completo del prototipo ni se mantiene una base de memor
 
 Solo `operations` y `usage` usan el campo de caducidad TTL. Se excluyen texto y vectores de índices automáticos innecesarios; no se crea un índice global de propietarios. La consulta semántica definitiva se concretará en K3. Los historiales de preguntas siguen fuera del almacén canónico.
 
+Corrección de captura de noviembre: la evidencia temporal se materializa desde una subcadena literal validada del fragmento elegido, no necesariamente toda la oración que puede contener otros planes. evidenceText es solo salida interna de extracción/revisión; el canónico conserva time.quote con esa subcadena y no añade otro campo. Unconfirmed es estado local de transporte y no se guarda en Firestore. Consultar un recibo processing con concesión perdida/caducada puede marcar solo ese recibo failed y retirar exclusivamente su propia concesión; no toca una fuente saved ni una concesión posterior.
+
 ## Proyecciones y consultas K3
 
 Según [ADR-010](../02-architecture/ADR/ADR-010-text-query.md), los fragmentos añaden `searchSchema:1`, `searchVector` nativo de 512 dimensiones y `searchTerms` acotados. Se derivan del canónico; no crean hechos ni reemplazan su revisión. Un índice vectorial de alcance de colección permite consultas bajo `accounts/{uid}/memories`, nunca una lectura global para filtrar propietarios después. La preparación de recuerdos anteriores es aditiva con precondición de versión; `privateConfiguration/search` liga UID, esquema y preparación completa. La consulta falla cerrada antes de prepararlos, en lugar de ignorarlos.

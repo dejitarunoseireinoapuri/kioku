@@ -339,6 +339,20 @@ export class FirestoreCaptureStore implements CaptureStore {
           ).exists
         )
           return { apiVersion: 1, status: "expired", operationId: id };
+        if (record.state === "processing") {
+          const lock = await tx.get(
+            this.root(uid).collection("runtime").doc("capture"),
+          );
+          if (
+            lock.get("nonce") !== record.nonce ||
+            Number(lock.get("expiresAtMs") ?? 0) <= this.now()
+          ) {
+            // A lost/expired lease cannot commit. Never remove a different worker's lease.
+            tx.update(snapshot.ref, { state: "failed" });
+            if (lock.get("nonce") === record.nonce) tx.delete(lock.ref);
+            return { apiVersion: 1, status: "failed", operationId: current };
+          }
+        }
         if (record.state !== "continued" || !record.continuationId)
           return recordResult(current, record, this.now());
         current = record.continuationId;

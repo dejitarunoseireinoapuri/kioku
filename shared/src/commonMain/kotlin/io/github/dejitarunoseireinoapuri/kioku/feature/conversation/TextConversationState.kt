@@ -19,6 +19,7 @@ sealed interface TextMessage {
     data class Result(
         override val id: Long,
         val outcome: TextOutcome,
+        val captureCommand: TextCommand? = null,
     ) : TextMessage
 }
 
@@ -40,6 +41,7 @@ data class TextConversationState(
     val status: TextStatus = TextStatus.Idle,
     val source: MemorySource? = null,
     val sourceLoading: Boolean = false,
+    val checkingCapture: Long? = null,
 ) {
     val busy: Boolean get() = status is TextStatus.Working
     val outcome: TextOutcome? get() = (status as? TextStatus.Ready)?.outcome
@@ -52,9 +54,7 @@ data class TextConversationState(
             is TextOutcome.Asked -> (result.answer as? QueryOutcome.Reply)?.status == AnswerStatus.Clarification
             else -> false
         }
-    val processing: Boolean get() =
-        outcome == TextOutcome.Processing ||
-            (outcome as? TextOutcome.Captured)?.capture == CaptureOutcome.Processing
+    val processing: Boolean get() = outcome == TextOutcome.Processing
 }
 
 enum class MessageAction { Retry, Restart, Accept, Reject, ConfirmForget, CancelForget, Reset }

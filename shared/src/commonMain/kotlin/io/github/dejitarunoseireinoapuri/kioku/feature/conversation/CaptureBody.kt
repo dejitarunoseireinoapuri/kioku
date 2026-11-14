@@ -21,6 +21,7 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.capture_ignored
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_invalid
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_limited
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_more_context
+import io.github.dejitarunoseireinoapuri.kioku.resources.capture_processing
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_restart
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_saved
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_uncertain
@@ -50,8 +51,18 @@ fun CaptureBody(
                     PendingClarification(outcome)
                 }
 
-                CaptureOutcome.Processing -> {
-                    Text(stringResource(Res.string.capture_uncertain))
+                CaptureOutcome.Processing, CaptureOutcome.Unconfirmed -> {
+                    Text(
+                        stringResource(
+                            if (outcome ==
+                                CaptureOutcome.Processing
+                            ) {
+                                Res.string.capture_processing
+                            } else {
+                                Res.string.capture_uncertain
+                            },
+                        ),
+                    )
                     ActionButton(
                         stringResource(Res.string.capture_check),
                         { onEvent(ConversationEvent.RecoverCapture) },
@@ -102,7 +113,7 @@ private fun PendingClarification(outcome: CaptureOutcome.Clarification) {
     Text(stringResource(Res.string.clarification_hint), color = KiokuColors.Secondary)
 }
 
-private fun captureError(issue: CaptureIssue) =
+internal fun captureError(issue: CaptureIssue) =
     when (issue) {
         CaptureIssue.Denied -> Res.string.capture_denied
         CaptureIssue.Invalid -> Res.string.capture_invalid

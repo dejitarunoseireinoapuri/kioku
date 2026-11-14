@@ -79,7 +79,7 @@ class CaptureViewModelTest {
             model.onEvent(ConversationEvent.Submit)
             runCurrent()
             assertEquals(first, repo.commands.last())
-            assertFalse(model.state.value.canEdit)
+            assertTrue(model.state.value.canEdit)
             repo.recovered = saved()
             model.onEvent(ConversationEvent.RecoverCapture)
             runCurrent()
