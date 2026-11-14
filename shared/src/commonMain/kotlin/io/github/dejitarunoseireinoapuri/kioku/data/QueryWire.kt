@@ -4,6 +4,7 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.AnswerStatus
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemorySource
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryReference
+import io.github.dejitarunoseireinoapuri.kioku.domain.SourceKind
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -51,13 +52,27 @@ internal fun parseQuerySource(
     id: String,
 ): MemorySource {
     val source = queryObject(json)
-    require(source.keys == setOf("apiVersion", "sourceId", "text", "receivedAt"))
+    val fields = setOf("apiVersion", "sourceId", "text", "receivedAt")
+    require(source.keys == fields || source.keys == fields + "sourceKind")
     require(source.queryText("sourceId") == id && id.matches(QUERY_UUID))
     val text = source.queryText("text")
     val date = source.queryText("receivedAt")
     require(text.length in 1..MAX_QUERY_SOURCE_LENGTH && date.matches(QUERY_DATE))
-    return MemorySource(id, text, date.take(QUERY_DATE_LENGTH), receivedAt = date)
+    return MemorySource(id, text, date.take(QUERY_DATE_LENGTH), receivedAt = date, kind = parseSourceKind(source))
 }
+
+internal fun parseSourceKind(source: JsonObject): SourceKind =
+    when (
+        source["sourceKind"]?.let {
+            require(it is JsonPrimitive && it.isString)
+            it.content
+        }
+    ) {
+        null -> SourceKind.Original
+        "retained" -> SourceKind.Retained
+        "correction" -> SourceKind.Correction
+        else -> error("Invalid source kind")
+    }
 
 private fun queryObject(json: String): JsonObject {
     require(json.length <= MAX_QUERY_RESPONSE_LENGTH)

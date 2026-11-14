@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { createHash } from "node:crypto";
 import { AccountError } from "../account/contracts.js";
 
 const version = z.string().regex(/^\d{1,12}:\d{1,9}$/u);
@@ -25,6 +26,21 @@ export const retirementScope = z
       context.addIssue({ code: "custom", message: "Invalid resolved scope" });
   });
 export type RetirementScope = z.infer<typeof retirementScope>;
+
+/** Opaque UI precondition covers both the source and every item the owner saw. */
+export function scopeVersion(scope: RetirementScope): string {
+  return createHash("sha256")
+    .update(
+      JSON.stringify([
+        scope.sourceId,
+        scope.sourceVersion,
+        [...scope.memories].sort((left, right) =>
+          left.id.localeCompare(right.id),
+        ),
+      ]),
+    )
+    .digest("hex");
+}
 export interface RetirementResult {
   readonly status: "forgotten";
   readonly operationId: string;

@@ -4,6 +4,7 @@ data class QueryCommand(
     val requestId: String,
     val text: String,
     val previousQuestions: List<String> = emptyList(),
+    val memoryRevision: Long = 0,
 )
 
 data class QueryReference(

@@ -4,24 +4,27 @@ import { resolve } from "node:path";
 if (!process.env.KIOKU_TEST_NODE)
     throw new Error("Use the documented local emulator runner.");
 const liveCapture = process.argv.slice(2).join(" ") === "--live-capture";
+const liveControl = process.argv.slice(2).join(" ") === "--live-control";
 const freshQuery = process.argv.slice(2).join(" ") === "--live-query-fresh";
 const liveQuery =
     freshQuery || process.argv.slice(2).join(" ") === "--live-query";
 const result = spawnSync(
     process.env.KIOKU_TEST_NODE,
-    liveQuery
-        ? [
-              resolve(import.meta.dirname, "k3-live-smoke.mjs"),
-              "--live",
-              ...(freshQuery ? ["--fresh"] : []),
-          ]
-        : liveCapture
-          ? [resolve(import.meta.dirname, "k2-live-smoke.mjs"), "--live"]
-          : ["--test", "--test-concurrency=1", "lib/test/emulator/*.test.js"],
+    liveControl
+        ? [resolve(import.meta.dirname, "k4-control-live.mjs"), "--live"]
+        : liveQuery
+          ? [
+                resolve(import.meta.dirname, "k3-live-smoke.mjs"),
+                "--live",
+                ...(freshQuery ? ["--fresh"] : []),
+            ]
+          : liveCapture
+            ? [resolve(import.meta.dirname, "k2-live-smoke.mjs"), "--live"]
+            : ["--test", "--test-concurrency=1", "lib/test/emulator/*.test.js"],
     {
         cwd: resolve(
             import.meta.dirname,
-            liveCapture || liveQuery ? ".." : "../backend",
+            liveCapture || liveQuery || liveControl ? ".." : "../backend",
         ),
         stdio: "inherit",
     },

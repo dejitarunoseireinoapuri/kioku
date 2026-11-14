@@ -16,6 +16,8 @@ Repositorio: https://github.com/dejitarunoseireinoapuri/kioku
 
 K3 está implementada en `codex/k3-text-query` y activada en Firebase con autorización expresa: consulta por texto con fuentes actuales y aclaraciones, sin guardar preguntas como recuerdos. Índice listo y recuerdos anteriores preparados sin cambios canónicos; pruebas locales y evaluación sintética con IA real comprobadas. [Evidencia y límites](docs/09-planning/K3_VALIDATION.md). Falta aceptación del nuevo recorrido en móviles; la versión iOS debe compilarse en Mac.
 
+K4 continúa en `codex/k4-memory-control`: corrección y olvido selectivos desde la fuente, preservación de otros asuntos y limpieza del contexto implementados/comprobados localmente. Siete casos sintéticos con OpenAI real correctos y controles Android en Honor; activación productiva, build iOS, órdenes naturales y ofertas de guardado pendientes. No se declara cerrada la fase. [Evidencia y alcance actual](docs/09-planning/K4_VALIDATION.md).
+
 ## Empezar aquí
 
 1. [Alcance](docs/00-product/PRODUCT_SCOPE.md) y [reglas de memoria](docs/00-product/BUSINESS_RULES.md).

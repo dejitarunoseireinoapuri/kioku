@@ -5,6 +5,7 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_checking
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_saving
 import io.github.dejitarunoseireinoapuri.kioku.resources.configuration_loading
+import io.github.dejitarunoseireinoapuri.kioku.resources.control_checking
 import io.github.dejitarunoseireinoapuri.kioku.resources.query_searching
 import io.github.dejitarunoseireinoapuri.kioku.resources.source_loading
 import org.jetbrains.compose.resources.StringResource
@@ -14,6 +15,7 @@ internal fun contentLoadingStatus(
     refreshing: Boolean,
 ): StringResource? =
     when {
+        state.checkingMemory -> Res.string.control_checking
         refreshing -> Res.string.configuration_loading
         state.query.sourceLoading -> Res.string.source_loading
         state.query.busy -> Res.string.query_searching

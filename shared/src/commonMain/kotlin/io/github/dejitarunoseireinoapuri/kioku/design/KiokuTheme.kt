@@ -43,6 +43,7 @@ object KiokuSpacing {
     val Mark = 112.dp
     val LoadingMark = 96.dp
     val InlineLoadingMark = 32.dp
+    val CompactContentHeight = 240.dp
     val Stroke = 1.dp
     val LoginVertical = 32.dp
     val LoadingVertical = 48.dp

@@ -43,6 +43,10 @@ No se guardan preguntas/respuestas en Firestore: recibos con digest ligado al ID
 
 Revocaciones y datos canónicos permanecen denegados a clientes por las reglas. Un reintento antiguo no recrea el origen y una consulta con evidencia retirada no termina correctamente. Recibos vinculados se limpian sin conservar pregunta/relato; la marca sin TTL no guarda contenido ni huella del contenido. Los casos locales positivos/negativos están en [K4_VALIDATION](../09-planning/K4_VALIDATION.md); no acreditan aún seguridad de un endpoint K4 productivo o sincronización de dispositivos.
 
+Continuación local: `getSourceDetails` / `changeMemory` añaden Google verificado/no revocado, correo permitido, UID habilitado y App Check. Entrada exacta, límites, versión de fuente y todos sus fragmentos, concesión vigente y reautorización tras IA. El cliente selecciona IDs propios; no escribe canónico/índices ni decide propietarios, rutas o modelo. La selección de un dato no autoriza retirar otro asunto ni todo el relato. La revisión semántica puede bloquear un cambio, nunca ampliar su alcance. Una cita de instrucciones sigue siendo dato, como se comprueba con fixtures adversarios.
+
+El reemplazo revoca el origen, retira proyecciones y limpia recibos vinculados en el commit; la fuente conservada/corrección no almacena la versión retirada como historial. Recibos de control sin texto caducan lógicamente y por TTL; revocaciones y época global sin contenido no caducan. App actualizada revalida antes de restaurar contenido/enviar/abrir fuente; generaciones invalidan respuestas tardías. No promete purgar memoria de clientes antiguos o de otro dispositivo continuamente. Modelo Sol medio y secreto existente solo en servidor; no se incorporan secretos al APK. El transporte HTTPS público preparado no sustituye ninguna autorización. Activación productiva e iOS pendientes.
+
 ## Incidentes
 
 Contener acceso, revocar/rotar credenciales afectadas, revisar el uso mediante evidencias mínimas autorizadas, corregir y probar. No exponer material sensible en issues públicas. La política de comunicación y contacto del operador sigue pendiente antes de distribuir.

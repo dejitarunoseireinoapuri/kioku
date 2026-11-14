@@ -1,0 +1,81 @@
+{
+  "stage": "complete",
+  "model": "gpt-6.1-sol",
+  "reasoning": "medium",
+  "corpusHash": "e1d50797cb7cb9267ca9f206f9dd38aec289cd8009b4f29cd25047686c2b5afb",
+  "scope": "Synthetic local Firestore, actual provider; no production data or native attestation",
+  "rows": [
+    {
+      "caseId": "c01",
+      "status": "forgotten",
+      "oldRemoved": true,
+      "absent": true,
+      "keep": true,
+      "replayCalls": 0,
+      "pass": true,
+      "durationMs": 1707
+    },
+    {
+      "caseId": "c02",
+      "status": "corrected",
+      "oldRemoved": true,
+      "absent": true,
+      "keep": true,
+      "replayCalls": 0,
+      "pass": true,
+      "durationMs": 7016
+    },
+    {
+      "caseId": "c03",
+      "status": "forgotten",
+      "oldRemoved": true,
+      "absent": true,
+      "keep": true,
+      "replayCalls": 0,
+      "pass": true,
+      "durationMs": 2430
+    },
+    {
+      "caseId": "c04",
+      "status": "corrected",
+      "oldRemoved": true,
+      "absent": true,
+      "keep": true,
+      "replayCalls": 0,
+      "pass": true,
+      "durationMs": 8077
+    },
+    {
+      "caseId": "c05",
+      "status": "forgotten",
+      "oldRemoved": true,
+      "absent": true,
+      "keep": true,
+      "replayCalls": 0,
+      "pass": true,
+      "durationMs": 1836
+    },
+    {
+      "caseId": "c06",
+      "status": "corrected",
+      "oldRemoved": true,
+      "absent": true,
+      "keep": true,
+      "replayCalls": 0,
+      "pass": true,
+      "durationMs": 7559
+    },
+    {
+      "caseId": "c07",
+      "status": "forgotten",
+      "oldRemoved": true,
+      "absent": true,
+      "keep": true,
+      "replayCalls": 0,
+      "pass": true,
+      "durationMs": 388
+    }
+  ],
+  "calls": 36,
+  "estimatedUsd": 0.13151104000000302
+}

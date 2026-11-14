@@ -11,6 +11,7 @@ import io.github.dejitarunoseireinoapuri.kioku.BuildConfig
 import io.github.dejitarunoseireinoapuri.kioku.data.DisconnectedAccountRepository
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeAccountRepository
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeCaptureRepository
+import io.github.dejitarunoseireinoapuri.kioku.data.NativeMemoryControlRepository
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeQueryRepository
 
 internal fun firebaseRepositories(activity: ComponentActivity): AndroidRepositories {
@@ -40,5 +41,6 @@ internal fun firebaseRepositories(activity: ComponentActivity): AndroidRepositor
         NativeCaptureRepository(memoryPort),
         port,
         NativeQueryRepository(memoryPort),
+        NativeMemoryControlRepository(memoryPort),
     )
 }

@@ -1,5 +1,7 @@
 package io.github.dejitarunoseireinoapuri.kioku.domain
 
+enum class SourceKind { Original, Retained, Correction }
+
 data class SourceCorrection(
     val instruction: String,
     val currentSummary: String,
@@ -11,6 +13,7 @@ data class MemorySource(
     val recordedOn: String,
     val correction: SourceCorrection? = null,
     val receivedAt: String? = null,
+    val kind: SourceKind = SourceKind.Original,
 )
 
 interface SourceRepository {

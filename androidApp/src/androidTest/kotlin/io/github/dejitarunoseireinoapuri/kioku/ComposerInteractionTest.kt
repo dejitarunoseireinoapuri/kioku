@@ -2,6 +2,7 @@ package io.github.dejitarunoseireinoapuri.kioku
 
 import android.graphics.Bitmap
 import androidx.activity.ComponentActivity
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.ui.graphics.toPixelMap
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
@@ -11,6 +12,7 @@ import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextClearance
@@ -31,6 +33,7 @@ class ComposerInteractionTest {
 
     @Before
     fun openApp() {
+        compose.runOnUiThread { compose.activity.enableEdgeToEdge() }
         compose.setContent { KiokuApp(FixtureAccount()) }
         compose.waitUntil(5000) { compose.onNodeWithTag("intent-Ask").isDisplayed() }
         compose.onNodeWithTag("intent-Ask").performClick()
@@ -43,7 +46,9 @@ class ComposerInteractionTest {
             val window = compose.activity.window
             WindowCompat.getInsetsController(window, window.decorView).show(WindowInsetsCompat.Type.ime())
         }
-        compose.waitUntil(5000) { imeVisible() }
+        compose.waitUntil(5000) {
+            imeVisible() && compose.onAllNodesWithTag("intent-Ask").fetchSemanticsNodes().isEmpty()
+        }
         compose.onNodeWithTag("intent-Ask").assertDoesNotExist()
         compose.onNodeWithTag("intent-Tell").assertDoesNotExist()
         val bottom =

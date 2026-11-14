@@ -47,13 +47,21 @@ Los recibos K3 reutilizan `accounts/{uid}/operations/{UUID}` con `kind:query`, d
 
 Antes de entregar una respuesta, se comprueba de nuevo la versión exacta de los fragmentos y fuentes usados, además de identidad/propietario/concesión. Abrir el original lo lee otra vez del canónico autorizado. Los índices no autorizan respuestas por sí mismos; K4 deberá retirar proyecciones al modificar/olvidar.
 
-## Base interna de retirada K4
+## Base interna de retirada K4 · primera entrega
 
 Implementada localmente, sin endpoint o despliegue: `accounts/{uid}/revocations/{sourceUuid}` conserva únicamente `retiredAtMs`, `operationId`, `removedCount` y digest de IDs/versiones/vencimiento, nunca texto o hash del texto. Sin TTL para impedir que una captura antigua renazca después de caducar su recibo. La transacción de fuente completa retira original y todos sus 1–8 fragmentos con proyección; sustituye recibos/textos pendientes vinculados por `{kind:retired, expiresAt}` (24 h) y crea un recibo sin contenido de retirada (siete días). El resto de fuentes/trabajos permanece intacto.
 
 Captura y consulta verifican revocación además de las versiones y de la concesión de trabajo. La resolución interna conserva versiones de todos los documentos y dura cinco minutos. No es todavía la representación de corrección ni de borrado selectivo de una fuente compartida; contratos completos pendientes en [ADR-011](../02-architecture/ADR/ADR-011-memory-control.md).
 
 `firestore.indexes.json` prepara un índice ascendente de colección exclusivamente para `operations.pending.turn.id`, que permite localizar pendientes vinculados por UUID. El resto del mapa `pending`, preguntas y textos siguen excluidos. Ese índice y la frontera K4 no están desplegados; los emuladores no validan su disponibilidad remota.
+
+## Reemplazo selectivo K4 · continuación local
+
+`changeMemory` reemplaza una fuente vigente con hasta dos nuevas: texto conservado con la recepción/zona originales y corrección explícita con recepción/zona actuales. Se retiran todos los fragmentos del origen y se crean derivados de los restantes con IDs nuevos/revisión incrementada. Los datos corregidos parten de la revisión del dato seleccionado más uno. Las proyecciones se insertan junto con el canónico; nada se confirma solo en el índice. Se preservan literales ajenos y se revisa que no reconstruyan el objetivo. La operación no alcanza otros relatos que repitan el mismo hecho.
+
+Fuentes derivadas añaden `sourceKind:retained|correction`, exclusivamente escrito por servidor, y avisos explícitos en el texto. Una fuente original no lleva esa etiqueta. La fuente reemplazada desaparece del canónico y su revocación no contiene texto/historial. No se sobrescribe un original para fingir que siempre dijo otra cosa. `expectedVersion` es un digest de IDs y versiones exactas de fuente y todos sus fragmentos; una edición de cualquier fragmento invalida la selección. No es un hash del texto.
+
+`accounts/{uid}/runtime/memory` contiene únicamente `revision`, entero seguro monótono sin TTL. Se incrementa en el commit de retirada/reemplazo y se lee atómicamente con el contenido de detalles. Permite descartar RAM/contextos anteriores antes de nuevas consultas o restauración. No es un archivo de recuerdos ni una copia histórica. Los recibos `kind:control` guardan estado, digest de entrada ligado al ID aleatorio, referencias actuales, época y vencimiento; no guardan orden/corrección. Terminales confirmados: siete días con TTL y comprobación lógica `expiresAtMs`. Recibos/textos vinculados al origen retirado se sustituyen sin texto y caducan en 24 h. [Contrato](../04-api/API_CONTRACT.md), [evidencia](../09-planning/K4_VALIDATION.md).
 
 ## Frontera privada K1
 

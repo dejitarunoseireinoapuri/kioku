@@ -11,6 +11,7 @@ internal fun queryQuestion(command: QueryCommand): String {
     if (command.previousQuestions.isEmpty()) return command.text
     return buildJsonObject {
         put("pregunta_actual", command.text)
+        if (command.memoryRevision > 0) put("memory_revision", command.memoryRevision)
         putJsonArray("preguntas_anteriores_solo_contexto") {
             command.previousQuestions.forEach { add(it) }
         }

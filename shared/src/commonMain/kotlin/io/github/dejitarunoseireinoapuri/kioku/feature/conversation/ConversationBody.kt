@@ -18,6 +18,8 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.ask_hint
 import io.github.dejitarunoseireinoapuri.kioku.resources.ask_title
 import io.github.dejitarunoseireinoapuri.kioku.resources.clarification_hint
 import io.github.dejitarunoseireinoapuri.kioku.resources.clarification_pending
+import io.github.dejitarunoseireinoapuri.kioku.resources.control_corrected
+import io.github.dejitarunoseireinoapuri.kioku.resources.control_forgotten
 import io.github.dejitarunoseireinoapuri.kioku.resources.exam_clarification
 import io.github.dejitarunoseireinoapuri.kioku.resources.exam_story
 import io.github.dejitarunoseireinoapuri.kioku.resources.forget_preview_notice
@@ -145,6 +147,8 @@ fun FeedbackMessage(feedback: PreviewFeedback) {
             PreviewFeedback.DeclinedExample -> Res.string.offer_declined_example
             PreviewFeedback.ForgetUnavailable -> Res.string.forget_preview_notice
             PreviewFeedback.QueryUnavailable -> Res.string.query_unavailable
+            PreviewFeedback.Corrected -> Res.string.control_corrected
+            PreviewFeedback.Forgotten -> Res.string.control_forgotten
         }
     Text(
         stringResource(text),

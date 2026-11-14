@@ -316,7 +316,12 @@ export class FirestoreCaptureStore implements CaptureStore {
   async source(
     uid: string,
     id: string,
-  ): Promise<{ sourceId: string; text: string; receivedAt: string }> {
+  ): Promise<{
+    sourceId: string;
+    text: string;
+    receivedAt: string;
+    sourceKind?: "retained" | "correction";
+  }> {
     return this.db.runTransaction(async (tx) => {
       await this.owner(tx, uid);
       const [snapshot, retired] = await tx.getAll(
@@ -330,10 +335,18 @@ export class FirestoreCaptureStore implements CaptureStore {
         typeof snapshot.get("receivedAt") !== "string"
       )
         throw new AccountError("failed-precondition");
+      const sourceKind: unknown = snapshot.get("sourceKind");
+      if (
+        sourceKind !== undefined &&
+        sourceKind !== "retained" &&
+        sourceKind !== "correction"
+      )
+        throw new AccountError("failed-precondition");
       return {
         sourceId: id,
         text: snapshot.get("text") as string,
         receivedAt: snapshot.get("receivedAt") as string,
+        ...(sourceKind ? { sourceKind } : {}),
       };
     });
   }

@@ -1,14 +1,19 @@
 package io.github.dejitarunoseireinoapuri.kioku.feature.conversation
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingNotice
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
@@ -27,19 +32,9 @@ fun ConversationScreen(
     loading: StringResource? = null,
     onSource: (String) -> Unit,
 ) {
-    val scroll = rememberScrollState()
-    val newest =
-        state.query.messages
-            .lastOrNull()
-            ?.id
-    LaunchedEffect(newest, state.capture, loading, scroll.maxValue) {
-        if (state.showingQuery || state.showingCapture || loading != null) scroll.animateScrollTo(scroll.maxValue)
-    }
+    val scroll = conversationScroll(state, loading)
     Column(Modifier.fillMaxSize()) {
-        TopBar(
-            title = stringResource(Res.string.app_name),
-            trailing = { SettingsAction(onSettings) },
-        )
+        ConversationHeader(onSettings)
         Column(
             Modifier
                 .weight(1f)
@@ -48,10 +43,48 @@ fun ConversationScreen(
                 .padding(KiokuSpacing.Large),
             verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large),
         ) {
-            ConversationBody(state, onEvent, onSource)
-            state.feedback?.let { FeedbackMessage(it) }
+            if (!state.concealingMemory) {
+                ConversationBody(state, onEvent, onSource)
+                state.feedback?.let { FeedbackMessage(it) }
+            }
             if (loading != null) ContentLoadingNotice(stringResource(loading))
         }
-        if (state.scenario == PreviewScenario.Locked) LockedActions(onEvent) else ConversationComposer(state, onEvent)
+        if (state.scenario == PreviewScenario.Locked) {
+            LockedActions(onEvent)
+        } else {
+            ConversationComposer(if (state.concealingMemory) state.copy(draft = "") else state, onEvent)
+        }
+    }
+}
+
+@Composable
+private fun conversationScroll(
+    state: ConversationState,
+    loading: StringResource?,
+): ScrollState {
+    val scroll = rememberScrollState()
+    val newest =
+        state.query.messages
+            .lastOrNull()
+            ?.id
+    LaunchedEffect(newest, state.capture, state.feedback, loading, scroll.maxValue) {
+        val hasConversation = state.showingQuery || state.showingCapture
+        if (hasConversation || state.feedback != null || loading != null) {
+            scroll.animateScrollTo(scroll.maxValue)
+        }
+    }
+    return scroll
+}
+
+@Composable
+private fun ConversationHeader(onSettings: () -> Unit) {
+    BoxWithConstraints {
+        val keyboardVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
+        if (!keyboardVisible || maxHeight >= KiokuSpacing.CompactContentHeight) {
+            TopBar(
+                title = stringResource(Res.string.app_name),
+                trailing = { SettingsAction(onSettings) },
+            )
+        }
     }
 }

@@ -28,9 +28,15 @@ function version(document: DocumentSnapshot): string {
 export class FirestoreQueryStore implements QueryStore {
   private readonly db: Firestore;
   private readonly now: () => number;
-  constructor(db: Firestore, now = Date.now) {
+  private readonly kind: "query" | "control";
+  constructor(
+    db: Firestore,
+    now = Date.now,
+    kind: "query" | "control" = "query",
+  ) {
     this.db = db;
     this.now = now;
+    this.kind = kind;
   }
   private root(uid: string) {
     return this.db.doc(`accounts/${uid}`);
@@ -39,6 +45,18 @@ export class FirestoreQueryStore implements QueryStore {
     const owner = await tx.get(this.db.doc("privateConfiguration/owner"));
     if (owner.get("uid") !== uid || owner.get("enabled") !== true)
       throw new AccountError("permission-denied");
+  }
+  async revision(uid: string): Promise<number> {
+    return this.db.runTransaction(async (tx) => {
+      await this.owner(tx, uid);
+      const record = await tx.get(
+        this.root(uid).collection("runtime").doc("memory"),
+      );
+      const value = Number(record.get("revision") ?? 0);
+      if (!Number.isSafeInteger(value) || value < 0)
+        throw new AccountError("failed-precondition");
+      return value;
+    });
   }
   async begin(uid: string, input: QueryInput) {
     const operation = this.root(uid)
@@ -70,7 +88,7 @@ export class FirestoreQueryStore implements QueryStore {
           throw new AccountError("failed-precondition");
         if (previous?.exists) {
           if (
-            previous.get("kind") !== "query" ||
+            previous.get("kind") !== this.kind ||
             previous.get("inputHash") !== hash
           )
             throw new AccountError("failed-precondition");
@@ -91,7 +109,7 @@ export class FirestoreQueryStore implements QueryStore {
           throw new AccountError("resource-exhausted");
         const nonce = randomUUID();
         tx.set(operation, {
-          kind: "query",
+          kind: this.kind,
           inputHash: hash,
           state: "processing",
           nonce,

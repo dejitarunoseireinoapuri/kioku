@@ -5,6 +5,9 @@ import androidx.lifecycle.viewModelScope
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureCommand
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureRepository
+import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
+import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChange
+import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryControlRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.ReadReferencedSource
 import io.github.dejitarunoseireinoapuri.kioku.domain.SourceResult
@@ -18,8 +21,14 @@ class ConversationViewModel(
     private val readSource: ReadReferencedSource,
     private val captures: CaptureRepository? = null,
     queries: QueryRepository? = null,
+    controls: MemoryControlRepository? = null,
 ) : ViewModel() {
-    private val mutableState = MutableStateFlow(ConversationState())
+    private val mutableState =
+        MutableStateFlow(
+            ConversationState(
+                memoryVisibility = if (controls == null) MemoryVisibility.Visible else MemoryVisibility.Hidden,
+            ),
+        )
     val state = mutableState.asStateFlow()
     private var command: CaptureCommand? = null
     private var captureJob: Job? = null
@@ -34,6 +43,56 @@ class ConversationViewModel(
                 )
             }
         }
+
+    private val visibility =
+        MemoryVisibilitySession(
+            controls,
+            viewModelScope,
+            { visibility -> mutableState.update { it.copy(memoryVisibility = visibility) } },
+            { result ->
+                val draft = state.value.draft
+                if (result.resetContent) memoryChanged()
+                result.revision?.let(query::setRevision)
+                if (result.resetContent && result.preserveDraft) mutableState.update { it.copy(draft = draft) }
+                if (result.revision == null) feedback(PreviewFeedback.QueryUnavailable)
+            },
+        )
+
+    fun checkMemory(
+        visible: Boolean = true,
+        onReady: () -> Unit = {},
+    ) {
+        if (visible) visibility.check(onReady = onReady) else visibility.hide()
+    }
+
+    fun memoryChanged(result: MemoryChange.Confirmed? = null) {
+        operationGeneration++
+        captureJob?.cancel()
+        command = null
+        query.reset(clearDraft = true)
+        result?.memoryRevision?.let {
+            visibility.accept(it)
+            query.setRevision(it)
+        }
+        mutableState.update {
+            it.copy(
+                source = null,
+                capture = null,
+                capturing = false,
+                draft = "",
+                feedback =
+                    result?.let { change ->
+                        if (change.action ==
+                            ChangeAction.Correct
+                        ) {
+                            PreviewFeedback.Corrected
+                        } else {
+                            PreviewFeedback.Forgotten
+                        }
+                    },
+            )
+        }
+    }
 
     fun onEvent(event: ConversationEvent) {
         when (event) {
@@ -54,7 +113,7 @@ class ConversationViewModel(
             }
 
             ConversationEvent.Submit -> {
-                submit()
+                visibility.check(preserveDraft = true) { submit() }
             }
 
             ConversationEvent.RecoverCapture -> {

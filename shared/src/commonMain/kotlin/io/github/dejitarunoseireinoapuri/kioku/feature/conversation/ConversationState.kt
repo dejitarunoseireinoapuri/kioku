@@ -5,6 +5,8 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.MemorySource
 
 enum class MemoryIntent { Tell, Ask }
 
+enum class MemoryVisibility { Visible, Checking, Hidden }
+
 enum class PreviewScenario { Ready, Locked, Clarification, Saved, Answer, Offer, Corrected, Offline }
 
 enum class PreviewFeedback {
@@ -14,6 +16,8 @@ enum class PreviewFeedback {
     DeclinedExample,
     ForgetUnavailable,
     QueryUnavailable,
+    Corrected,
+    Forgotten,
 }
 
 data class ConversationState(
@@ -25,12 +29,19 @@ data class ConversationState(
     val capture: CaptureOutcome? = null,
     val capturing: Boolean = false,
     val query: QueryState = QueryState(),
+    val memoryVisibility: MemoryVisibility = MemoryVisibility.Visible,
 ) {
+    val checkingMemory: Boolean
+        get() = memoryVisibility != MemoryVisibility.Visible
+
+    val concealingMemory: Boolean
+        get() = memoryVisibility == MemoryVisibility.Hidden
+
     val captureLocked: Boolean
         get() = capturing || capture is CaptureOutcome.Failed || capture == CaptureOutcome.Processing
 
     val canEdit: Boolean
-        get() = scenario != PreviewScenario.Offline && !captureLocked && !query.busy
+        get() = scenario != PreviewScenario.Offline && !captureLocked && !query.busy && !checkingMemory
 
     val canSwitchIntent: Boolean
         get() = canEdit && capture !is CaptureOutcome.Clarification && !query.awaitingClarification

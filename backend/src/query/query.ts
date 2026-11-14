@@ -3,6 +3,7 @@ import { answerSchema } from "#memory-core/domain";
 import type { MemoryIntelligence } from "#memory-core/domain";
 import { AccountError } from "../account/contracts.js";
 import type { QueryInput, QueryResult, QueryStore } from "./contracts.js";
+import { currentQueryText } from "./context.js";
 
 /** Questions and generated answers live only in this request and the mobile session. */
 export class QueryMemory {
@@ -23,10 +24,14 @@ export class QueryMemory {
     if ("status" in work) return work;
     try {
       const intelligence = await provider();
-      const vector = (await intelligence.embed([input.text]))[0];
+      const question = currentQueryText(
+        input.text,
+        await this.store.revision(uid),
+      );
+      const vector = (await intelligence.embed([question]))[0];
       if (!vector || vector.length !== 512 || !vector.every(Number.isFinite))
         throw new AccountError("unavailable");
-      const evidence = await this.store.retrieve(uid, input.text, vector);
+      const evidence = await this.store.retrieve(uid, question, vector);
       const engine = new MemoryEngine(
         {
           load: async () => evidence.snapshot,
@@ -42,7 +47,7 @@ export class QueryMemory {
       );
       const answer = evidence.snapshot.memories.length
         ? answerSchema.parse(
-            (await engine.ask(input.text, new Date(this.now()).toISOString()))
+            (await engine.ask(question, new Date(this.now()).toISOString()))
               .answer,
           )
         : {

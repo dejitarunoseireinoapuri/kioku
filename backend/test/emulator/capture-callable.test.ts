@@ -3,8 +3,13 @@ import { randomUUID } from "node:crypto";
 import { after, beforeEach, test } from "node:test";
 import { deleteApp } from "firebase-admin/app";
 import { adminApp, callConfiguration, db, signInGoogle } from "./helpers.js";
+import { fixture } from "./retirement-fixtures.js";
+import { searchProjection } from "../../src/query/search-projection.js";
+import { z } from "zod";
 
 beforeEach(async () => {
+  const fixtureOwner = await signInGoogle("capture-http-owner");
+  await db.recursiveDelete(db.doc(`accounts/${fixtureOwner.localId}`));
   await db.doc("privateConfiguration/owner").delete();
   await db.doc("privateConfiguration/ai").delete();
 });
@@ -37,6 +42,8 @@ test("memory endpoints refuse missing/foreign identity before any payload or pro
     "getOperation",
     "getSource",
     "queryMemory",
+    "getSourceDetails",
+    "changeMemory",
   ]) {
     assert.equal((await call(name, { apiVersion: 1 })).status, 401);
     assert.equal(
@@ -47,6 +54,83 @@ test("memory endpoints refuse missing/foreign identity before any payload or pro
   assert.equal(
     (await db.doc("privateConfiguration/owner").get()).exists,
     false,
+  );
+});
+
+test("protected source details and full withdrawal work without provider access, with confirmed replay", async () => {
+  const identity = await signInGoogle("control-http-owner");
+  await callConfiguration(identity.idToken);
+  await db
+    .doc("privateConfiguration/search")
+    .set({ uid: identity.localId, schema: 1, ready: true });
+  const { source, memories } = fixture();
+  const root = db.doc(`accounts/${identity.localId}`);
+  await root.collection("sources").doc(source.id).set(source);
+  for (const memory of memories)
+    await root
+      .collection("memories")
+      .doc(memory.id)
+      .set({ ...memory, ...searchProjection(memory) });
+  const details = await call(
+    "getSourceDetails",
+    { apiVersion: 1, sourceId: source.id },
+    identity.idToken,
+  );
+  assert.equal(details.status, 200);
+  const data = z
+    .object({
+      result: z.object({
+        version: z.string(),
+        items: z.array(z.object({ id: z.string() })),
+      }),
+    })
+    .parse(details.body).result;
+  assert.equal(data.items.length, 2);
+  const input = {
+    apiVersion: 1,
+    requestId: randomUUID(),
+    sourceId: source.id,
+    expectedVersion: data.version,
+    memoryIds: data.items.map((item) => item.id),
+    action: "forget",
+    correction: null,
+    zone: "Europe/Madrid",
+  };
+  assert.equal(
+    (await call("changeMemory", { ...input, uid: "other" }, identity.idToken))
+      .status,
+    400,
+  );
+  const result = await call("changeMemory", input, identity.idToken);
+  assert.equal(result.status, 200);
+  assert.equal(
+    z
+      .object({
+        result: z.object({
+          status: z.literal("forgotten"),
+          memoryEpoch: z.literal(1),
+        }),
+      })
+      .safeParse(result.body).success,
+    true,
+  );
+  assert.deepEqual(
+    (await call("changeMemory", input, identity.idToken)).body,
+    result.body,
+  );
+  assert.equal(
+    (await root.collection("sources").doc(source.id).get()).exists,
+    false,
+  );
+  assert.equal(
+    (
+      await call(
+        "getSourceDetails",
+        { apiVersion: 1, sourceId: source.id },
+        identity.idToken,
+      )
+    ).status,
+    400,
   );
 });
 

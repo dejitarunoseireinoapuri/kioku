@@ -37,6 +37,7 @@ export interface QueryResult {
   sources: { sourceId: string; receivedAt: string }[];
 }
 export interface QueryStore {
+  revision(uid: string): Promise<number>;
   begin(uid: string, input: QueryInput): Promise<QueryLease | QueryResult>;
   retrieve(
     uid: string,

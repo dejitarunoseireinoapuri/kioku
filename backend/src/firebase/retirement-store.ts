@@ -6,6 +6,12 @@ import type {
   Transaction,
 } from "firebase-admin/firestore";
 import { AccountError } from "../account/contracts.js";
+import { snapshotVersion } from "#memory-core/domain";
+import type { Snapshot } from "#memory-core/domain";
+import type { QueryLease } from "../query/contracts.js";
+import { searchProjection } from "../query/search-projection.js";
+import { validateReplacement } from "../memory-control/replacement.js";
+import { correctionNotice } from "../memory-control/selection.js";
 import {
   retirementScope,
   validateRetirement,
@@ -87,14 +93,39 @@ export class FirestoreSourceRetirementStore implements SourceRetirementStore {
     requestId: string,
     input: RetirementScope,
   ): Promise<RetirementResult> {
+    return this.replace(uid, requestId, input, {
+      snapshot: { version: snapshotVersion, sources: [], memories: [] },
+      status: "forgotten",
+    });
+  }
+
+  async replace(
+    uid: string,
+    requestId: string,
+    input: RetirementScope,
+    change: {
+      snapshot: Snapshot;
+      status: "corrected" | "forgotten";
+      lease?: QueryLease;
+    },
+  ): Promise<RetirementResult> {
     const scope = validateRetirement(uid, requestId, input);
+    const replacement = validateReplacement(change.snapshot, scope.sourceId);
     const root = this.db.doc(`accounts/${uid}`);
     const sourceRef = root.collection("sources").doc(scope.sourceId);
     const revocation = root.collection("revocations").doc(scope.sourceId);
     const operation = root.collection("operations").doc(requestId);
     // Only opaque IDs, database versions and expiry are hashed, never source text.
     const inputHash = createHash("sha256")
-      .update(JSON.stringify([uid, requestId, scope]))
+      .update(
+        JSON.stringify([
+          uid,
+          requestId,
+          scope,
+          change.status,
+          replacement.sources.map((source) => source.id),
+        ]),
+      )
       .digest("hex");
     return this.db.runTransaction(
       async (tx) => {
@@ -122,8 +153,19 @@ export class FirestoreSourceRetirementStore implements SourceRetirementStore {
             Number(retired.get("removedCount")),
           );
         }
+        const leased = change.lease !== undefined;
         if (
-          previous?.exists ||
+          leased &&
+          (change.lease!.requestId !== requestId ||
+            previous?.get("kind") !== "control" ||
+            previous?.get("state") !== "processing" ||
+            previous.get("nonce") !== change.lease!.nonce ||
+            lock?.get("nonce") !== change.lease!.nonce ||
+            Number(lock.get("expiresAtMs")) <= this.now())
+        )
+          throw new AccountError("failed-precondition");
+        if (
+          (!leased && previous?.exists) ||
           !source?.exists ||
           source.get("id") !== scope.sourceId ||
           version(source) !== scope.sourceVersion ||
@@ -170,9 +212,49 @@ export class FirestoreSourceRetirementStore implements SourceRetirementStore {
             ...(original?.exists ? [original] : []),
           ].map((entry) => [entry.id, entry]),
         );
+        const nextSources = replacement.sources.map((item) =>
+          root.collection("sources").doc(item.id),
+        );
+        const nextMemories = replacement.memories.map((item) =>
+          root.collection("memories").doc(item.id),
+        );
+        const nextRevocations = replacement.sources.map((item) =>
+          root.collection("revocations").doc(item.id),
+        );
+        const [epoch, ...collisions] = await tx.getAll(
+          root.collection("runtime").doc("memory"),
+          ...nextSources,
+          ...nextMemories,
+          ...nextRevocations,
+        );
+        if (collisions.some((entry) => entry.exists))
+          throw new AccountError("failed-precondition");
+        const currentEpoch = Number(epoch?.get("revision") ?? 0);
+        if (
+          !Number.isSafeInteger(currentEpoch) ||
+          currentEpoch < 0 ||
+          currentEpoch >= Number.MAX_SAFE_INTEGER
+        )
+          throw new AccountError("failed-precondition");
         // All reads precede writes. A version conflict aborts the whole removal.
         tx.delete(sourceRef);
         for (const entry of memories.docs) tx.delete(entry.ref);
+        for (const source of replacement.sources)
+          tx.create(root.collection("sources").doc(source.id), {
+            ...source,
+            sourceKind: source.text.startsWith(correctionNotice)
+              ? "correction"
+              : "retained",
+            memoryCount: replacement.memories.filter(
+              (memory) => memory.sourceId === source.id,
+            ).length,
+            requestHash: inputHash,
+          });
+        for (const memory of replacement.memories)
+          tx.create(root.collection("memories").doc(memory.id), {
+            ...memory,
+            ...searchProjection(memory),
+          });
         for (const entry of linked.values()) {
           tx.set(entry.ref, {
             kind: "retired",
@@ -180,12 +262,16 @@ export class FirestoreSourceRetirementStore implements SourceRetirementStore {
           });
         }
         if (
+          leased ||
           [...linked.values()].some(
             (entry) =>
               entry.get("nonce") === lock?.get("nonce") && lock?.exists,
           )
         )
           tx.delete(root.collection("runtime").doc("capture"));
+        tx.set(root.collection("runtime").doc("memory"), {
+          revision: currentEpoch + 1,
+        });
         const result = this.result(requestId, scope.sourceId, memories.size);
         tx.create(revocation, {
           operationId: requestId,
@@ -193,12 +279,28 @@ export class FirestoreSourceRetirementStore implements SourceRetirementStore {
           removedCount: memories.size,
           retiredAtMs: this.now(),
         });
-        tx.create(operation, {
-          kind: "sourceRetirement",
-          inputHash,
-          ...result,
-          expiresAt: Timestamp.fromMillis(this.now() + 7 * DAY),
-        });
+        const references = replacement.sources.map((source) => ({
+          sourceId: source.id,
+          receivedAt: source.receivedAt,
+        }));
+        if (leased)
+          tx.update(operation, {
+            state: "finished",
+            controlStatus: change.status,
+            references,
+            memoryEpoch: currentEpoch + 1,
+            expiresAtMs: this.now() + 7 * DAY,
+            expiresAt: Timestamp.fromMillis(this.now() + 7 * DAY),
+          });
+        else
+          tx.create(operation, {
+            kind: "sourceRetirement",
+            inputHash,
+            ...result,
+            references,
+            memoryEpoch: currentEpoch + 1,
+            expiresAt: Timestamp.fromMillis(this.now() + 7 * DAY),
+          });
         return result;
       },
       { maxAttempts: 3 },

@@ -9,8 +9,8 @@ Operaciones autenticadas, versionadas y ligadas al UID verificado; el cliente no
 | `resolveClarification` | requestId, clarificationId, respuesta, expectedRevision | Continuación del turno original |
 | `queryMemory` | requestId, pregunta, referencias de contexto autorizadas | Respuesta y evidencias o insuficiencia/aclaración |
 | `resolveProposal` | requestId, proposalId, accept, expectedRevision | Guardado una vez o rechazo sin mutación |
-| `correctMemory` | requestId, targetId, expectedRevision, corrección explícita | Revisión canónica y fuentes afectadas |
-| `forgetMemory` | requestId, targetId/alcance resuelto, expectedRevision | Estado de borrado y referencias mínimas |
+| `getSourceDetails` | sourceId opcional | Datos seleccionables y versión; sin sourceId, solo revisión global |
+| `changeMemory` | requestId, sourceId, expectedVersion, memoryIds, action, correction, zone | Corrección/olvido confirmado o aclaración; unifica los correctMemory/forgetMemory previstos |
 | `getSource` | sourceId, referencia/revisión | Texto propio vigente permitido, con correcciones distinguidas |
 | `getOperation` | requestId propio | Estado confirmado para recuperar un resultado incierto |
 
@@ -84,11 +84,30 @@ El mismo ID con otra entrada es conflicto. Fallo o concesión caducada admite ha
 
 Abrir una fuente usa `getSource` protegido con el ID referenciado, no una URL ni una copia cacheada de la respuesta. El cliente rechaza ID distinto, campos extra, fechas/longitudes malformadas y estados sin la evidencia requerida. Datos nuevos, correcciones y borrados conversacionales siguen fuera de K3.
 
-## Primera frontera interna K4 (sin HTTP)
+## Primera frontera interna K4 (histórica, sin HTTP)
 
 La primitiva privada `SourceRetirementStore` resuelve y retira exclusivamente fuente completa con sus 1–8 fragmentos, versiones exactas y vencimiento de cinco minutos. No se exporta desde Functions ni recibe instrucciones del móvil/modelo. No implementa aún `correctMemory`, `forgetMemory` o `resolveProposal`: el contrato de esas operaciones sigue previsto. [ADR-011](../02-architecture/ADR/ADR-011-memory-control.md) delimita autorización conversacional y retirada selectiva pendientes.
 
 Los adaptadores K2/K3 se preparan para revocaciones: `getSource` rechaza la fuente retirada con `failed-precondition`; `getOperation` no devuelve `saved` de un recibo retirado, sino `expired` sin referencia ni texto. Un replay de captura/consulta con un ID original revocado falla cerrado. Una consulta no entrega evidencia retirada durante la inferencia. No añade campos o estados al HTTP actual ni está desplegado este cambio.
+
+## Frontera K4 · selección desde la fuente (activación pendiente)
+
+Dos callables preparados en Bélgica. Ambos requieren identidad Google permitida/verificada, token no revocado, UID autorizado habilitado y App Check de app registrada. No se permite elegir propietario, ruta, clave o modelo. Reautorización tras IA y dentro del commit. Recibos ligados a UID+requestId+entrada; las peticiones exactas repetidas no vuelven a mutar ni a llamar al proveedor. Misma concesión costosa, presupuestos y máximo de tres intentos que K2/K3. Sin reintentos pagados automáticos.
+
+| Callable | Entrada exacta y límites |
+| --- | --- |
+| `getSourceDetails` | `{apiVersion:1,sourceId?:UUID}`; cuerpo máximo 256 bytes, 15 s. Sin sourceId devuelve `{apiVersion:1,memoryEpoch:enteroSeguroNoNegativo}` |
+| `changeMemory` | `{apiVersion:1,requestId:UUID,sourceId:UUID,expectedVersion:hex64,memoryIds:string[],action:"correct"\|"forget",correction:string\|null,zone:IANA}`; cuerpo máximo 16000 bytes, 180 s |
+
+Detalles con fuente: `{apiVersion:1,sourceId,version,text,receivedAt,memoryEpoch,items:[{id,text}],sourceKind?}`. Una fuente propia vigente y 1–8 datos. La versión opaca de 64 caracteres hexadecimales cubre versiones exactas de fuente y todos sus datos; no es hash del contenido. Texto/revisión se leen juntos. IDs seleccionados únicos y pertenecientes a esa fuente (1–8, hasta 40 caracteres cada uno). Corregir exige exactamente un dato y una afirmación actual no vacía hasta 2000 caracteres; olvidar exige `correction:null`. `sourceKind` solo puede ser `retained` o `correction`; ausente significa original. No se acepta ese campo en una escritura cliente.
+
+Resultado de cambio: `{apiVersion:1,operationId,status,text,sources:[{sourceId,receivedAt}],memoryEpoch}`. Estados `corrected` / `forgotten` solo después del commit; hasta dos fuentes actuales (cero si se retiró todo). `processing`: mismo ID sigue ocupado, sin texto/fuentes y sin éxito supuesto. `needsClarification`: no hubo cambio; revisar alcance o escribir corrección completa, con nuevo ID si cambia la entrada. Error seguro tipado conserva el comando para comprobación explícita con el mismo ID. Una entrada distinta con el mismo ID es conflicto. El cliente valida forma exacta, IDs, fechas, época y correlación operación/acción. No usa `getOperation` de captura para comprobar controles: repite `changeMemory` con la entrada estable.
+
+Original y todos sus fragmentos quedan revocados al reemplazarlos; se conserva el resto del relato en otra fuente y la corrección en una nueva con fecha propia. Las citas antiguas fallan cerrado y los recibos no devuelven texto retirado. No significa olvidar otras fuentes que repitan ese dato. Una retirada completa explícita no llama a OpenAI. Una retirada parcial/corrección exige revisión positiva de preservación y ausencia de dato objetivo; no se ejecuta si el alcance es inseguro.
+
+`getSource` y `saved.source` conservan sus campos y admiten `sourceKind` opcional para las fuentes derivadas; originales mantienen la forma anterior. La UI distingue «Texto original», «Texto que conservas» y «Fragmento de tu corrección». En contexto JSON de `queryMemory`, `memory_revision` es opcional y se valida como entero seguro no negativo. Si difiere de la revisión del servidor, se descartan preguntas anteriores antes de recuperar; clientes sin el campo se consideran revisión 0. La pregunta actual siempre se mantiene como dato no confiable, nunca como hecho guardado. El campo no sustituye autorización ni decide escrituras.
+
+No se implementan aún `resolveProposal` ni interpretación de órdenes naturales. El transporte HTTPS público de los dos callables no da acceso a contenido sin superar estas comprobaciones. Estado de despliegue, índice y pruebas nativas en [K4_VALIDATION](../09-planning/K4_VALIDATION.md).
 
 ## Frontera interna comprobada en M0 v4
 

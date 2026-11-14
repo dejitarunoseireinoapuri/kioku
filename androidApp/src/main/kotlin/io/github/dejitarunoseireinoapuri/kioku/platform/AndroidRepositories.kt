@@ -4,6 +4,7 @@ import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModel
 import io.github.dejitarunoseireinoapuri.kioku.domain.AccountRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureRepository
+import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryControlRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryRepository
 
 /** Native dependencies share the Activity's retained lifetime without retaining an Activity instance. */
@@ -12,6 +13,7 @@ internal class AndroidRepositories(
     val capture: CaptureRepository?,
     private val accountPort: AndroidAccountPort?,
     val queries: QueryRepository? = null,
+    val controls: MemoryControlRepository? = null,
 ) : ViewModel() {
     fun attach(activity: ComponentActivity) = accountPort?.attach(activity)
 

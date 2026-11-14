@@ -98,7 +98,12 @@ export interface CaptureStore {
   source(
     uid: string,
     id: string,
-  ): Promise<{ sourceId: string; text: string; receivedAt: string }>;
+  ): Promise<{
+    sourceId: string;
+    text: string;
+    receivedAt: string;
+    sourceKind?: "retained" | "correction";
+  }>;
 }
 export function parseInput<T>(schema: z.ZodType<T>, input: unknown): T {
   const parsed = schema.safeParse(input);

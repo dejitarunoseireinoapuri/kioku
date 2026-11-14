@@ -1,8 +1,8 @@
-param([string]$FunctionsNode = '', [switch]$LiveCaptureSmoke, [switch]$LiveQuerySmoke, [switch]$LiveQueryReserve)
+param([string]$FunctionsNode = '', [switch]$LiveCaptureSmoke, [switch]$LiveQuerySmoke, [switch]$LiveQueryReserve, [switch]$LiveControlSmoke)
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
-if (([int]$LiveCaptureSmoke.IsPresent + [int]$LiveQuerySmoke.IsPresent + [int]$LiveQueryReserve.IsPresent) -gt 1) {
+if (([int]$LiveCaptureSmoke.IsPresent + [int]$LiveQuerySmoke.IsPresent + [int]$LiveQueryReserve.IsPresent + [int]$LiveControlSmoke.IsPresent) -gt 1) {
     throw 'Choose one isolated live smoke.'
 }
 $kiokuRoot = Split-Path -Parent $PSScriptRoot
@@ -39,6 +39,7 @@ try {
             'node tooling/run-backend-emulator-tests.mjs --live-capture'
         } elseif ($LiveQuerySmoke) { 'node tooling/run-backend-emulator-tests.mjs --live-query' }
         elseif ($LiveQueryReserve) { 'node tooling/run-backend-emulator-tests.mjs --live-query-fresh' }
+        elseif ($LiveControlSmoke) { 'node tooling/run-backend-emulator-tests.mjs --live-control' }
         else { 'node tooling/run-backend-emulator-tests.mjs' }
         & $FunctionsNode 'backend/node_modules/firebase-tools/lib/bin/firebase.js' emulators:exec `
             --config firebase.local.json --project demo-kioku-local --only auth,firestore,functions `

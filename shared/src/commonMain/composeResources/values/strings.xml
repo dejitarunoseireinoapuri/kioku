@@ -109,4 +109,27 @@
     <string name="capture_limited">Se ha alcanzado el límite de uso o hay otro recuerdo procesándose. Inténtalo de nuevo más tarde.</string>
     <string name="capture_invalid">No se ha aceptado el texto de este recuerdo.</string>
     <string name="capture_configuration">No se ha podido preparar esta operación. Comprueba el estado de la IA en Ajustes.</string>
+    <string name="control_title">Cambiar un recuerdo</string>
+    <string name="control_manage">Gestionar</string>
+    <string name="control_explanation">Cada dato conserva su propio alcance. Corregir sustituye algo que contaste mal; si ha cambiado con el tiempo, explícalo como un recuerdo nuevo.</string>
+    <string name="control_loading">Leyendo los datos actuales...</string>
+    <string name="control_unavailable">No puedo cargar este recuerdo. Puede haber cambiado o haberse olvidado.</string>
+    <string name="control_reload">Volver a cargar</string>
+    <string name="control_edit">Corregir este dato</string>
+    <string name="control_forget_item">Olvidar este dato</string>
+    <string name="control_forget_all">Olvidar todo este texto y sus recuerdos</string>
+    <string name="control_correction_hint">Escribe el dato correcto en una frase completa. Por ejemplo: Mi examen de japonés es el viernes.</string>
+    <string name="control_apply">Aplicar corrección</string>
+    <string name="control_cancel">Cancelar</string>
+    <string name="control_retry">Comprobar de nuevo</string>
+    <string name="control_correcting">Aplicando la corrección...</string>
+    <string name="control_forgetting">Retirando el recuerdo...</string>
+    <string name="control_corrected">Dato corregido.</string>
+    <string name="control_forgotten">He olvidado lo que has seleccionado.</string>
+    <string name="control_uncertain">El cambio sigue pendiente. Comprueba su estado antes de hacer otro.</string>
+    <string name="control_failed">No he podido confirmar el cambio. Puedes comprobarlo de nuevo o cargar la versión actual.</string>
+    <string name="control_checking">Comprobando cambios en tu memoria...</string>
+    <string name="source_current_title">Fuente actual</string>
+    <string name="source_retained_label">Texto que conservas</string>
+    <string name="source_corrected_label">Fragmento de tu corrección</string>
 </resources>

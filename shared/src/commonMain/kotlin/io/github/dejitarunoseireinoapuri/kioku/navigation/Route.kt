@@ -19,6 +19,11 @@ sealed interface Route : NavKey {
     data class Source(
         val id: String,
     ) : Route
+
+    @Serializable
+    data class Control(
+        val id: String,
+    ) : Route
 }
 
 val navigationConfiguration =
@@ -29,6 +34,7 @@ val navigationConfiguration =
                     subclass(Route.Conversation::class, Route.Conversation.serializer())
                     subclass(Route.Settings::class, Route.Settings.serializer())
                     subclass(Route.Source::class, Route.Source.serializer())
+                    subclass(Route.Control::class, Route.Control.serializer())
                 }
             }
     }

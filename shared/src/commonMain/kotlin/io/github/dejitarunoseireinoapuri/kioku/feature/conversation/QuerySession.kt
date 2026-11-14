@@ -43,6 +43,11 @@ internal class QuerySession(
     private val previousQuestions = ArrayDeque<String>()
     private var messages = emptyList<QueryMessage>()
     private var messageId = 0L
+    private var memoryRevision = 0L
+
+    fun setRevision(value: Long) {
+        memoryRevision = value
+    }
 
     fun submit(text: String): Boolean {
         val queries = repository ?: return false
@@ -54,7 +59,11 @@ internal class QuerySession(
                 publish(state.copy(outcome = QueryOutcome.Failed(CaptureIssue.MoreContext)))
             } else {
                 if (state.awaitingClarification) clarifications++ else clarifications = 0
-                command = queries.prepare(question).copy(previousQuestions = previousQuestions.toList())
+                command =
+                    queries
+                        .prepare(
+                            question,
+                        ).copy(previousQuestions = previousQuestions.toList(), memoryRevision = memoryRevision)
                 appendMessage(QueryMessage.Question(++messageId, text))
                 execute(clearDraft = true)
             }

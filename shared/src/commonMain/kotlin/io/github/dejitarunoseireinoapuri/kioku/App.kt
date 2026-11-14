@@ -11,6 +11,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.rememberViewModelStoreOwner
@@ -24,6 +26,7 @@ import io.github.dejitarunoseireinoapuri.kioku.di.ConversationDependencies
 import io.github.dejitarunoseireinoapuri.kioku.di.appModule
 import io.github.dejitarunoseireinoapuri.kioku.domain.AccountRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureRepository
+import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryControlRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryRepository
 import io.github.dejitarunoseireinoapuri.kioku.feature.account.AccountScreen
 import io.github.dejitarunoseireinoapuri.kioku.feature.account.AccountState
@@ -33,6 +36,7 @@ import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.Conversation
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.ConversationViewModel
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.contentLoadingStatus
 import io.github.dejitarunoseireinoapuri.kioku.feature.settings.SettingsScreen
+import io.github.dejitarunoseireinoapuri.kioku.feature.source.SourceControlRoute
 import io.github.dejitarunoseireinoapuri.kioku.feature.source.SourceScreen
 import io.github.dejitarunoseireinoapuri.kioku.navigation.Route
 import io.github.dejitarunoseireinoapuri.kioku.navigation.navigationConfiguration
@@ -47,6 +51,7 @@ fun KiokuApp(
     accountRepository: AccountRepository = remember { DisconnectedAccountRepository() },
     captureRepository: CaptureRepository? = null,
     queryRepository: QueryRepository? = null,
+    controlRepository: MemoryControlRepository? = null,
 ) {
     val platform =
         remember(accountRepository, captureRepository) {
@@ -59,7 +64,12 @@ fun KiokuApp(
         KiokuTheme {
             Surface(color = KiokuColors.Background, contentColor = KiokuColors.Text) {
                 Column(Modifier.fillMaxSize().safeDrawingPadding()) {
-                    CompositionViewModels { AccountGate(accountRepository, captureRepository, queryRepository) }
+                    CompositionViewModels {
+                        AccountGate(
+                            accountRepository,
+                            ConversationDependencies(captureRepository, queryRepository, controlRepository),
+                        )
+                    }
                 }
             }
         }
@@ -69,8 +79,7 @@ fun KiokuApp(
 @Composable
 private fun AccountGate(
     accountRepository: AccountRepository,
-    captureRepository: CaptureRepository?,
-    queryRepository: QueryRepository?,
+    dependencies: ConversationDependencies,
     viewModel: AccountViewModel = koinViewModel(parameters = { parametersOf(accountRepository) }),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -85,8 +94,7 @@ private fun AccountGate(
                         authorized,
                         viewModel::signOut,
                         viewModel::refresh,
-                        captureRepository,
-                        queryRepository,
+                        dependencies,
                     )
                 }
             }
@@ -95,7 +103,7 @@ private fun AccountGate(
 }
 
 @Composable
-private fun CompositionViewModels(content: @Composable () -> Unit) {
+internal fun CompositionViewModels(content: @Composable () -> Unit) {
     val owner = rememberViewModelStoreOwner()
     CompositionLocalProvider(LocalViewModelStoreOwner provides owner, content = content)
 }
@@ -105,53 +113,35 @@ private fun KiokuNavigation(
     account: AccountState.Authorized,
     onSignOut: () -> Unit,
     onRefresh: () -> Unit,
-    captureRepository: CaptureRepository?,
-    queryRepository: QueryRepository?,
+    dependencies: ConversationDependencies,
     viewModel: ConversationViewModel =
         koinViewModel(
-            parameters = { parametersOf(ConversationDependencies(captureRepository, queryRepository)) },
+            parameters = { parametersOf(dependencies) },
         ),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val backStack = rememberNavBackStack(navigationConfiguration, Route.Conversation)
-    val loading = contentLoadingStatus(state, account.refreshing)
-    val back: () -> Unit = { if (backStack.size > 1) backStack.removeLastOrNull() }
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.checkMemory() }
+    LifecycleEventEffect(Lifecycle.Event.ON_PAUSE) { viewModel.checkMemory(visible = false) }
+
+    val back: () -> Unit = {
+        if (backStack.lastOrNull() is Route.Control) {
+            viewModel.memoryChanged()
+            backStack.clear()
+            backStack.add(Route.Conversation)
+        } else if (backStack.size > 1) {
+            backStack.removeLastOrNull()
+        }
+    }
+    val actions =
+        NavigationActions(onSignOut, onRefresh, back, { backStack.add(it) }, { result ->
+            viewModel.memoryChanged(result)
+            backStack.clear()
+            backStack.add(Route.Conversation)
+        }, backStack.lastOrNull())
     NavDisplay(
         backStack = backStack,
         onBack = back,
-        entryProvider =
-            entryProvider {
-                entry<Route.Conversation> {
-                    ConversationScreen(
-                        state,
-                        viewModel::onEvent,
-                        { backStack.add(Route.Settings) },
-                        loading = loading.takeIf { backStack.lastOrNull() == Route.Conversation },
-                    ) { id ->
-                        if (viewModel.openSource(id)) backStack.add(Route.Source(id))
-                    }
-                }
-                entry<Route.Settings> {
-                    SettingsScreen(
-                        account,
-                        onSignOut,
-                        onRefresh,
-                        back,
-                        examplesEnabled = loading == null,
-                    ) { scenario ->
-                        viewModel.onEvent(ConversationEvent.ShowExample(scenario))
-                        back()
-                    }
-                }
-                entry<Route.Source> { route ->
-                    SourceScreen(
-                        state.source?.takeIf { it.id == route.id },
-                        state.feedback,
-                        back,
-                        viewModel::sourceActionUnavailable,
-                        loading = state.query.sourceLoading,
-                    )
-                }
-            },
+        entryProvider = kiokuEntries(state, account, viewModel, dependencies, actions),
     )
 }
