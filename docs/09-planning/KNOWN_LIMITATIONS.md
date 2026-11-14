@@ -2,7 +2,7 @@
 
 ## Disponible
 
-**Corrección temporal y estados de captura preparada:** fallo de dos fechas distintas en una oración reproducido y corregido; cada dato usa su propio literal temporal. Captura distingue fallo confirmado, concesión vigente y resultado desconocido, con consulta de recibos sin reenviar y chat utilizable. 89 pruebas del núcleo, 88 de emuladores, 89 host y 12 de UI Honor correctas; reserva nueva IA 3/3, con un falso negativo de rúbrica anterior conservado. Actualización productiva de cinco funciones y prueba nativa nueva pendientes de autorización. iOS pendiente. [Evidencia](K4_VALIDATION.md).
+**Corrección temporal y estados de captura activa:** fallo de dos fechas distintas en una oración reproducido y corregido; cada dato usa su propio literal temporal. Captura distingue fallo confirmado, concesión vigente y resultado desconocido, con consulta de recibos sin reenviar y chat utilizable. 89 pruebas del núcleo, 88 de emuladores, 89 host y 12 de UI Honor correctas; reserva nueva IA 3/3, con un falso negativo de rúbrica anterior conservado. Cinco funciones actualizadas con autorización; prueba nativa productiva correcta en Honor y datos ficticios retirados. iOS pendiente. [Evidencia](K4_VALIDATION.md).
 
 **Confirmación de olvido solicitada tras la aceptación:** la app compartida añade popup con objetivo/alcance y advertencia antes de borrar desde Gestionar o conversación. Cancelar no aplica; el éxito nombra el recuerdo solo en RAM de presentación. 83 host y 13 pruebas de interfaz afectadas en Honor correctas; captura sintética revisada. No cambia el backend desplegado ni demuestra el build iOS. [Evidencia y alcance](K4_VALIDATION.md).
 
