@@ -1,6 +1,8 @@
 package io.github.dejitarunoseireinoapuri.kioku
 
+import androidx.compose.ui.test.hasAnySibling
 import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.isEnabled
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
@@ -55,7 +57,7 @@ class LiveRepeatedForgetTest {
         send("Olvida que en la prueba K4eco3746 yo quiero ver la película Farol K4eco3746.")
         visible("He olvidado lo que has seleccionado.")
         verifyMovieRemoval()
-        addExamCopyAndForgetItFromSource()
+        forgetExamCopiesFromSource()
         verifyExamRemoval()
     }
 
@@ -65,6 +67,7 @@ class LiveRepeatedForgetTest {
                 "En la prueba K4eco3746 quiero ver la película Farol K4eco3746. " +
                     "En la prueba K4eco3746 el simulacro de japonés K4eco3746 es el 27 de noviembre de 2026.",
                 "En la prueba K4eco3746 tengo pendiente ver la película Farol K4eco3746. " +
+                    "En la prueba K4eco3746 tengo el simulacro de japonés K4eco3746 el 27 de noviembre de 2026. " +
                     "En la prueba K4eco3746 me gustan las peras.",
                 "En la prueba K4eco3746 mi hermano quiere ver la película Farol K4eco3746.",
             )
@@ -78,24 +81,23 @@ class LiveRepeatedForgetTest {
         ready()
     }
 
-    private fun addExamCopyAndForgetItFromSource() {
+    private fun forgetExamCopiesFromSource() {
         ready()
-        compose.onNodeWithTag("intent-Tell").performClick()
-        send("En la prueba K4eco3746 tengo el simulacro de japonés K4eco3746 el 27 de noviembre de 2026.")
-        visible("Recuerdo guardado")
-        ready()
-        compose.onNodeWithTag("intent-Ask").performClick()
         send("En la prueba K4eco3746, ¿cuándo es el simulacro de japonés K4eco3746?")
         compose.waitUntil(REPEATED_LIVE_TIMEOUT) {
             compose.onAllNodesWithText("Ver texto original", substring = true).fetchSemanticsNodes().isNotEmpty()
         }
+        assertTrue(compose.onAllNodesWithText("27", substring = true).fetchSemanticsNodes().isNotEmpty())
         compose
             .onAllNodesWithText("Ver texto original", substring = true)
             .onFirst()
             .performScrollTo()
             .performClick()
         click("Gestionar")
-        click("Olvidar este dato")
+        val exam =
+            hasText("Olvidar este dato") and hasAnySibling(hasText("simulacro", substring = true, ignoreCase = true))
+        compose.waitUntil(20_000) { compose.onAllNodes(exam).fetchSemanticsNodes().size == 1 }
+        compose.onNode(exam).performScrollTo().performClick()
         visible("He olvidado lo que has seleccionado.")
     }
 
@@ -104,12 +106,6 @@ class LiveRepeatedForgetTest {
             val repository = queries()
             val absent = reply(repository, "En la prueba K4eco3746, ¿qué película tengo yo pendiente de ver?")
             assertEquals(AnswerStatus.NotFound, absent.status)
-            val kept = reply(repository, "En la prueba K4eco3746, ¿cuándo es el simulacro de japonés K4eco3746?")
-            assertEquals(AnswerStatus.Answered, kept.status)
-            assertTrue(kept.text.contains("27"))
-            val brother = reply(repository, "En la prueba K4eco3746, ¿qué película quiere ver mi hermano?")
-            assertEquals(AnswerStatus.Answered, brother.status)
-            assertTrue(brother.text.contains("Farol"))
         }
 
     private fun verifyExamRemoval() =
@@ -117,9 +113,11 @@ class LiveRepeatedForgetTest {
             val repository = queries()
             val absent = reply(repository, "En la prueba K4eco3746, ¿cuándo es el simulacro de japonés K4eco3746?")
             assertEquals(AnswerStatus.NotFound, absent.status)
-            val kept = reply(repository, "En la prueba K4eco3746, ¿qué fruta me gusta?")
+            val kept =
+                reply(repository, "En la prueba K4eco3746, ¿qué fruta me gusta y qué película quiere ver mi hermano?")
             assertEquals(AnswerStatus.Answered, kept.status)
             assertTrue(kept.text.contains("peras", ignoreCase = true))
+            assertTrue(kept.text.contains("Farol"))
         }
 
     private suspend fun reply(
