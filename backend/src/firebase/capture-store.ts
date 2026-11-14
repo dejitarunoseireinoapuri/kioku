@@ -46,13 +46,16 @@ export class FirestoreCaptureStore implements CaptureStore {
     return this.db.runTransaction(
       async (tx): Promise<CaptureWork> => {
         await this.owner(tx, uid);
-        const [existing, lock, source] = await tx.getAll(
+        const [existing, lock, source, retired] = await tx.getAll(
           operation,
           root.collection("runtime").doc("capture"),
           root.collection("sources").doc(input.requestId),
+          root.collection("revocations").doc(input.requestId),
         );
         if (!existing || !lock || !source)
           throw new AccountError("unavailable");
+        if (retired?.exists || existing.get("kind") === "retired")
+          throw new AccountError("failed-precondition");
         if (source.exists && "mode" in input) {
           if (source.get("requestHash") !== hash)
             throw new AccountError("failed-precondition");
@@ -69,6 +72,12 @@ export class FirestoreCaptureStore implements CaptureStore {
         const previous = existing.exists
           ? readRecord(existing.data())
           : undefined;
+        if (
+          previous?.sourceId &&
+          (await tx.get(root.collection("revocations").doc(previous.sourceId)))
+            .exists
+        )
+          throw new AccountError("failed-precondition");
         if (previous && previous.inputHash !== hash)
           throw new AccountError("failed-precondition");
         const stale =
@@ -83,6 +92,11 @@ export class FirestoreCaptureStore implements CaptureStore {
         const pending =
           previous?.pending ?? (await this.pending(tx, uid, input, hash, now));
         if (!pending) throw new AccountError("failed-precondition");
+        if (
+          (await tx.get(root.collection("revocations").doc(pending.turn.id)))
+            .exists
+        )
+          throw new AccountError("failed-precondition");
         const nonce = randomUUID();
         const record: CaptureRecord = {
           inputHash: hash,
@@ -174,10 +188,11 @@ export class FirestoreCaptureStore implements CaptureStore {
     return this.db.runTransaction(
       async (tx) => {
         await this.owner(tx, uid);
-        const [operation, lock, source] = await tx.getAll(
+        const [operation, lock, source, retired] = await tx.getAll(
           target,
           root.collection("runtime").doc("capture"),
           root.collection("sources").doc(lease.pending.turn.id),
+          root.collection("revocations").doc(lease.pending.turn.id),
         );
         if (!operation || !lock || !source)
           throw new AccountError("unavailable");
@@ -187,7 +202,8 @@ export class FirestoreCaptureStore implements CaptureStore {
           record.nonce !== lease.nonce ||
           lock.get("nonce") !== lease.nonce ||
           Number(lock.get("expiresAtMs")) <= now ||
-          source.exists
+          source.exists ||
+          retired?.exists
         )
           throw new AccountError("failed-precondition");
         const saved = extraction.status === "saved";
@@ -277,7 +293,18 @@ export class FirestoreCaptureStore implements CaptureStore {
         );
         if (!snapshot.exists)
           return { apiVersion: 1, status: "expired", operationId: id };
+        if (snapshot.get("kind") === "retired")
+          return { apiVersion: 1, status: "expired", operationId: id };
         const record = readRecord(snapshot.data());
+        if (
+          record.sourceId &&
+          (
+            await tx.get(
+              this.root(uid).collection("revocations").doc(record.sourceId),
+            )
+          ).exists
+        )
+          return { apiVersion: 1, status: "expired", operationId: id };
         if (record.state !== "continued" || !record.continuationId)
           return recordResult(current, record, this.now());
         current = record.continuationId;
@@ -292,11 +319,13 @@ export class FirestoreCaptureStore implements CaptureStore {
   ): Promise<{ sourceId: string; text: string; receivedAt: string }> {
     return this.db.runTransaction(async (tx) => {
       await this.owner(tx, uid);
-      const snapshot = await tx.get(
+      const [snapshot, retired] = await tx.getAll(
         this.root(uid).collection("sources").doc(id),
+        this.root(uid).collection("revocations").doc(id),
       );
       if (
-        !snapshot.exists ||
+        !snapshot?.exists ||
+        retired?.exists ||
         typeof snapshot.get("text") !== "string" ||
         typeof snapshot.get("receivedAt") !== "string"
       )

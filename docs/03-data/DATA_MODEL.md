@@ -47,6 +47,14 @@ Los recibos K3 reutilizan `accounts/{uid}/operations/{UUID}` con `kind:query`, d
 
 Antes de entregar una respuesta, se comprueba de nuevo la versión exacta de los fragmentos y fuentes usados, además de identidad/propietario/concesión. Abrir el original lo lee otra vez del canónico autorizado. Los índices no autorizan respuestas por sí mismos; K4 deberá retirar proyecciones al modificar/olvidar.
 
+## Base interna de retirada K4
+
+Implementada localmente, sin endpoint o despliegue: `accounts/{uid}/revocations/{sourceUuid}` conserva únicamente `retiredAtMs`, `operationId`, `removedCount` y digest de IDs/versiones/vencimiento, nunca texto o hash del texto. Sin TTL para impedir que una captura antigua renazca después de caducar su recibo. La transacción de fuente completa retira original y todos sus 1–8 fragmentos con proyección; sustituye recibos/textos pendientes vinculados por `{kind:retired, expiresAt}` (24 h) y crea un recibo sin contenido de retirada (siete días). El resto de fuentes/trabajos permanece intacto.
+
+Captura y consulta verifican revocación además de las versiones y de la concesión de trabajo. La resolución interna conserva versiones de todos los documentos y dura cinco minutos. No es todavía la representación de corrección ni de borrado selectivo de una fuente compartida; contratos completos pendientes en [ADR-011](../02-architecture/ADR/ADR-011-memory-control.md).
+
+`firestore.indexes.json` prepara un índice ascendente de colección exclusivamente para `operations.pending.turn.id`, que permite localizar pendientes vinculados por UUID. El resto del mapa `pending`, preguntas y textos siguen excluidos. Ese índice y la frontera K4 no están desplegados; los emuladores no validan su disponibilidad remota.
+
 ## Frontera privada K1
 
 `privateConfiguration/owner` contiene exactamente `uid`, `enabled`, `window` (minuto de servidor) y `count` (1–30). Es una vinculación privada inmutable de propietario, más admisión acotada, no un perfil ni una credencial. No guarda correo, texto, clave, token o historial. El servidor vincula el primer UID autorizado mediante transacción; otra identidad o una configuración inválida falla cerrada. El cliente tiene lectura/escritura denegadas, incluida esta ruta. Probado con fixtures y propietario real vinculado tras Google/App Check válidos.

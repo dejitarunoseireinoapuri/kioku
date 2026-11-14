@@ -14,5 +14,6 @@ Una decisión aceptada define la dirección de implementación, no afirma que es
 | [ADR-008](ADR-008-k1-native-access-and-credentials.md) | Android/emuladores comprobados; remoto/iOS pendientes | Acceso nativo, sesiones aisladas y configuración de clave administrativa |
 | [ADR-009](ADR-009-text-capture.md) | Integrada en main; Android aceptado, iOS pendiente | Núcleo M0 compartido, captura textual transaccional, aclaración e idempotencia |
 | [ADR-010](ADR-010-text-query.md) | Implementada y activada; aceptación móvil pendiente | Consulta híbrida, evidencia vigente y preguntas solo de sesión |
+| [ADR-011](ADR-011-memory-control.md) | En curso; frontera interna inicial | Revocación canónica, retirada atómica y secuencia del control conversacional |
 
 Una nueva ADR recoge contexto, decisión, alternativas, consecuencias y estado. No copiar la numeración ni las decisiones de regalos/comercio de Wonderdrop. No modificar retroactivamente una decisión incompatible: sustituirla con otra que la cite.

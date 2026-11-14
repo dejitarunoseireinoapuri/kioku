@@ -16,6 +16,8 @@ Corrección: cambiar canónico y revisión; retirar de búsqueda derivados obsol
 
 Un tombstone no incluye el contenido borrado. El éxito comunicado debe corresponder al estado confirmado; no describir como eliminación física global lo que sea una revocación seguida de limpieza. Reejecutar un job viejo o un recibo no resucita el dato.
 
+Primera frontera K4, solo local: retirada de fuente completa con todos sus fragmentos y proyecciones en el mismo commit, sin contenido en la revocación duradera. Los recibos/textos pendientes vinculados se reemplazan y caducan en 24 h; el recibo mínimo de retirada, siete días. La marca `revocations/{sourceUuid}` no tiene TTL, para que caducar el recibo no permita resucitar una captura. No habilita todavía borrado selectivo/corrección o limpieza del chat entre dispositivos; no se debe exponer a una petición de fragmento como si autorizara eliminar todo el relato. [ADR-011](../02-architecture/ADR/ADR-011-memory-control.md).
+
 ## Recuperación
 
 La misma identidad recupera la memoria guardada en otro móvil. No equivale a restaurar un estado anterior ni a recuperar un borrado. Una futura política de restauración deberá respetar las revocaciones.

@@ -14,6 +14,8 @@ Solo el texto constituye el archivo de memoria. La transcripción y la respuesta
 
 ## Controles y retención
 
+La primera base K4 prepara retirada atómica de fuente completa y revocaciones sin contenido, no un historial de lo borrado. Los marcadores mínimos sin TTL impiden reintroducir capturas antiguas; los recibos operativos no conservan el texto objetivo. Esta pieza no está expuesta/desplegada ni resuelve por sí sola el olvido selectivo o la eliminación del chat en otros dispositivos: esos controles deben completarse antes de anunciar el recorrido. [Alcance y validación](../09-planning/K4_VALIDATION.md).
+
 Corregir y olvidar por conversación. Confirmar el alcance antes de borrar únicamente si es ambiguo. Borrado de cuenta, exportación completa y recuperación de un estado anterior no se añaden por copiar funciones de Wonderdrop; deben definirse si se requieren antes de distribución.
 
 Audio transitorio, recibos, propuestas, contexto, backups y metadatos necesitan retenciones concretas antes de conectarse a datos reales. La recuperación en otro móvil usa la misma cuenta; no deben entrar recuerdos en backups locales del sistema por accidente.

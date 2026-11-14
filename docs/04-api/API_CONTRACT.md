@@ -84,6 +84,12 @@ El mismo ID con otra entrada es conflicto. Fallo o concesión caducada admite ha
 
 Abrir una fuente usa `getSource` protegido con el ID referenciado, no una URL ni una copia cacheada de la respuesta. El cliente rechaza ID distinto, campos extra, fechas/longitudes malformadas y estados sin la evidencia requerida. Datos nuevos, correcciones y borrados conversacionales siguen fuera de K3.
 
+## Primera frontera interna K4 (sin HTTP)
+
+La primitiva privada `SourceRetirementStore` resuelve y retira exclusivamente fuente completa con sus 1–8 fragmentos, versiones exactas y vencimiento de cinco minutos. No se exporta desde Functions ni recibe instrucciones del móvil/modelo. No implementa aún `correctMemory`, `forgetMemory` o `resolveProposal`: el contrato de esas operaciones sigue previsto. [ADR-011](../02-architecture/ADR/ADR-011-memory-control.md) delimita autorización conversacional y retirada selectiva pendientes.
+
+Los adaptadores K2/K3 se preparan para revocaciones: `getSource` rechaza la fuente retirada con `failed-precondition`; `getOperation` no devuelve `saved` de un recibo retirado, sino `expired` sin referencia ni texto. Un replay de captura/consulta con un ID original revocado falla cerrado. Una consulta no entrega evidencia retirada durante la inferencia. No añade campos o estados al HTTP actual ni está desplegado este cambio.
+
 ## Frontera interna comprobada en M0 v4
 
 El prototipo local limita la salida del proveedor a evidenceIds de los candidatos seleccionados y deriva las citas sourceIds en código. Generación y verificación contrastan el alcance de la pregunta (recuerdo, contenido citado o ambos). El texto citado no acredita datos personales. Para consultas exclusivamente de citas, el resultado se materializa desde el literal autorizado tras la verificación. Esto no publica endpoints ni sustituye autorización por UID/revisión en el backend previsto.

@@ -12,7 +12,7 @@ Este documento define el alcance y el cierre de las fases. Los [requisitos](../0
 | K1 · Cuenta y configuración | Acceso privado y configuración segura de la clave propia | Acceso y clave activos; propietario confirma Android/iOS, quedan comprobaciones de cierre detalladas |
 | K2 · Contar por escrito | Separar asuntos, aclarar dudas y guardar automáticamente | Implementada y desplegada, integrada en `main` por petición del propietario; recorrido Android aceptado, validación del nuevo build iOS pendiente |
 | K3 · Preguntar por escrito | Encontrar recuerdos y responder con sus fuentes | Implementada y activada desde `codex/k3-text-query`; pruebas locales/IA real correctas, aceptación móvil pendiente |
-| K4 · Control de memoria | Ofrecer guardar un dato, corregir y olvidar conversando | Pendiente |
+| K4 · Control de memoria | Ofrecer guardar un dato, corregir y olvidar conversando | En curso en `codex/k4-memory-control`; primera frontera interna de retirada, sin activar control móvil |
 | K5 · Voz | Contar y preguntar hablando, con pulsación y bloqueo | Pendiente |
 | K6 · V1 de uso personal | Recorrido completo comprobado en Android e iOS | Pendiente |
 
@@ -132,6 +132,8 @@ Cuarta iteración y decisión actual: [evidencia v4](../../prototypes/memory/evi
 **Fuera:** no declarar que recuerda cualquier cosa por resolver un ejemplo. El control conversacional completo llega en K4.
 
 ## K4 · Control conversacional de memoria
+
+**Estado actual:** iniciada desde K3 `6b264e7`, sin integrar K3 en `main` ni declarar resueltas sus comprobaciones pendientes. Primer bloque: retirada atómica interna de una fuente completa, revocaciones sin contenido y bloqueo de replays/trabajadores antiguos en K2/K3. No hay nuevas acciones móviles, endpoints o despliegue. [ADR-011](../02-architecture/ADR/ADR-011-memory-control.md) fija la secuencia restante: retirada selectiva/correcciones, resolver/propuestas, fronteras/cliente y evaluación/dispositivos. [Evidencia](K4_VALIDATION.md).
 
 **Resultado:** controlar lo guardado sin abandonar la conversación. Cubre UC-006, UC-007 y UC-008 por texto.
 

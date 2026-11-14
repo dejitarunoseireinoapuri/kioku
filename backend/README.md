@@ -1,5 +1,7 @@
 # Backend de cuenta y configuración K1
 
+K4 en curso: primera primitiva interna de retirada de fuente completa, sin nuevos callables o despliegue. Guardado/consulta consultan revocaciones para rechazar replays y evidencia retirada. [Alcance y pruebas](../docs/09-planning/K4_VALIDATION.md); no habilita aún corregir/olvidar/ofertas desde el móvil. Los comandos normales siguientes incluyen sus pruebas locales sin claves.
+
 `getConfiguration` v1: Google personal, vinculación de UID, estado seguro de IA y revisión. Producción exige App Check/proyecto/apps exactos; las mutaciones de clave son administrativas, sin endpoint móvil. [Decisión](../docs/02-architecture/ADR/ADR-008-k1-native-access-and-credentials.md), [contrato](../docs/04-api/API_CONTRACT.md) y [evidencia actual](../docs/09-planning/K1_INTEGRATION_VALIDATION.md). K1 sigue abierta hasta las comprobaciones reales e iOS.
 
 Desde la raíz del repositorio, Node 24.12+ y la herramienta npm verificada de M0:

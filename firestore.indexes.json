@@ -26,6 +26,11 @@
       "indexes": []
     },
     { "collectionGroup": "operations", "fieldPath": "pending", "indexes": [] },
+    {
+      "collectionGroup": "operations",
+      "fieldPath": "pending.turn.id",
+      "indexes": [{ "order": "ASCENDING", "queryScope": "COLLECTION" }]
+    },
     { "collectionGroup": "operations", "fieldPath": "question", "indexes": [] },
     { "collectionGroup": "sources", "fieldPath": "text", "indexes": [] },
     { "collectionGroup": "memories", "fieldPath": "vector", "indexes": [] },

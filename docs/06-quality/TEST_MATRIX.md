@@ -14,7 +14,7 @@ Los casos de integración de la app siguen **pendientes de validación**. TEST-E
 | TEST-AUD-003 | FR-014, AC-014 | Audio temporal privado y limpieza; sin reproductor de archivo original |
 | TEST-MEM-001 | FR-005, FR-007, AC-005, AC-007 | Examen ambiguo, varios asuntos, zona temporal, deseo vs hecho |
 | TEST-MEM-002 | FR-006, AC-006 | Guardado sin confirmación extra, sin duplicado al recuperar operación |
-| TEST-MEM-003 | FR-011, FR-012, AC-011, AC-012 | Corrección/olvido eliminan recuperabilidad, incluidas fuentes mixtas y jobs tardíos |
+| TEST-MEM-003 | FR-011, FR-012, AC-011, AC-012 | Corrección/olvido eliminan recuperabilidad, incluidas fuentes mixtas y jobs tardíos. [Base K4](../09-planning/K4_VALIDATION.md): retirada completa local, replay, versiones y trabajos tardíos comprobados; fragmentos, correcciones, chat/dispositivos y remoto pendientes |
 | TEST-REC-001 | FR-008, AC-008 | Película y Gemma, padre la semana anterior, gustos, examen y deberes |
 | TEST-REC-002 | FR-009, AC-009 | Evidencia válida; ausencia reconocida; voz con texto y parada de respuesta |
 | TEST-REC-003 | FR-008, FR-009 | Seguimientos en Preguntar tras ausencia, varios turnos, cambio de persona/tema, preguntas no convertidas en hechos, límites/reintento y limpieza de contexto. [Evidencia K3](../09-planning/K3_VALIDATION.md) distingue pruebas de app y evaluación sintética con proveedor real |

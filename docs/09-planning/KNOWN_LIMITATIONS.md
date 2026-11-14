@@ -2,6 +2,8 @@
 
 ## Disponible
 
+**K4 iniciada:** `codex/k4-memory-control`, primera frontera privada del servidor para retirar fuente completa y evitar replays/respuestas antiguas; [alcance](K4_VALIDATION.md), [decisión](../02-architecture/ADR/ADR-011-memory-control.md). No está expuesta ni desplegada y no habilita aún correcciones/olvido/ofertas en la app. Retirada selectiva y limpieza del chat de dispositivos pendientes; no se sustituye borrar un fragmento por eliminar todos los asuntos. Sin gasto OpenAI o datos reales modificados. Honor seleccionado para próximas pruebas móviles; iOS y reporte temporal K3 continúan pendientes.
+
 **Último refinamiento de conversación:** teclado con solo el compositor encima, envío coral cuando hay texto y carga bajo el último mensaje con desplazamiento automático. Preguntar conserva hasta 40 mensajes visibles en RAM; cambiar intención/reiniciar/cerrar cuenta o ámbito los limpia. No es historial permanente ni entre dispositivos; el contexto interpretativo sigue limitado a cuatro preguntas. 43 host tests y 31/31 pruebas Android correctos; [alcance, capturas y APK](K3_VALIDATION.md). Sin llamadas OpenAI nuevas ni cambios remotos. iOS actual y el reporte temporal anterior siguen pendientes; K3 permanece abierta.
 
 **Última corrección de Preguntar:** el campo se vacía al enviar, sin duplicar la pregunta mientras carga; el comando conserva el reintento y otro borrador no enviado se respeta. 41 host tests y 6 de interfaz correctos; [evidencia](K3_VALIDATION.md). El reporte temporal requiere aclarar en qué turno/modo se indicó la fecha: el original inspeccionado no contiene el marcador referido y no se ha modificado. No se declara resuelto ese reporte; iOS sigue pendiente.

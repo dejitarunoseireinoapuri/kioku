@@ -52,14 +52,15 @@ export class FirestoreQueryStore implements QueryStore {
     return this.db.runTransaction(
       async (tx) => {
         await this.owner(tx, uid);
-        const [previous, currentLock, readiness, captureSource] =
+        const [previous, currentLock, readiness, captureSource, retired] =
           await tx.getAll(
             operation,
             lock,
             this.db.doc("privateConfiguration/search"),
             this.root(uid).collection("sources").doc(input.requestId),
+            this.root(uid).collection("revocations").doc(input.requestId),
           );
-        if (captureSource?.exists)
+        if (captureSource?.exists || retired?.exists)
           throw new AccountError("failed-precondition");
         if (
           readiness?.get("uid") !== uid ||
@@ -157,6 +158,15 @@ export class FirestoreQueryStore implements QueryStore {
           ),
         )
       : [];
+    const retired = sourceIds.length
+      ? await this.db.getAll(
+          ...sourceIds.map((id) =>
+            this.root(uid).collection("revocations").doc(id),
+          ),
+        )
+      : [];
+    if (retired.some((document) => document.exists))
+      throw new AccountError("failed-precondition");
     const versions: EvidenceVersion[] = selected.map((memory) => ({
       collection: "memories",
       id: memory.id,
@@ -196,18 +206,24 @@ export class FirestoreQueryStore implements QueryStore {
     await this.db.runTransaction(
       async (tx) => {
         await this.owner(tx, uid);
-        const [operation, currentLock, ...current] = await tx.getAll(
+        const [operation, currentLock, ...documents] = await tx.getAll(
           target,
           lock,
           ...evidence.versions.map((entry) =>
             root.collection(entry.collection).doc(entry.id),
           ),
+          ...evidence.snapshot.sources.map((source) =>
+            root.collection("revocations").doc(source.id),
+          ),
         );
+        const current = documents.slice(0, evidence.versions.length);
+        const retired = documents.slice(evidence.versions.length);
         if (
           operation?.get("state") !== "processing" ||
           operation.get("nonce") !== lease.nonce ||
           currentLock?.get("nonce") !== lease.nonce ||
           Number(currentLock.get("expiresAtMs")) <= this.now() ||
+          retired.some((document) => document.exists) ||
           current.some(
             (document, index) =>
               !document.exists ||

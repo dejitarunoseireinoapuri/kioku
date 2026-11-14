@@ -37,6 +37,12 @@ Fuente/fragmentos se preparan fuera de la transacción y se confirman juntos. Lo
 
 No se guardan preguntas/respuestas en Firestore: recibos con digest ligado al ID aleatorio, nonce y datos numéricos, TTL 24 h. Repetir una consulta terminada no ejecuta automáticamente otra llamada de pago. No se activa un historial de chat ni se ofrecen escrituras K4. Antes de habilitar la búsqueda se necesita índice y preparación completa; no se ocultan datos antiguos sin proyección. [Evidencia K3](../09-planning/K3_VALIDATION.md) separa emulador, IA real, activación y móviles.
 
+## Frontera interna de retirada K4
+
+`FirestoreSourceRetirementStore` no está exportada como callable o herramienta. Comprueba propietario habilitado en la transacción, incluso durante replays, versiones de fuente y de todos los fragmentos, caducidad y colisiones. Solo acepta IDs opacos, alcance de fuente completa y metadatos estrictos; no rutas o texto de modelo. La futura entrada pública deberá añadir la autenticación/revocación/App Check y resolución de intención de K4 antes de invocarla.
+
+Revocaciones y datos canónicos permanecen denegados a clientes por las reglas. Un reintento antiguo no recrea el origen y una consulta con evidencia retirada no termina correctamente. Recibos vinculados se limpian sin conservar pregunta/relato; la marca sin TTL no guarda contenido ni huella del contenido. Los casos locales positivos/negativos están en [K4_VALIDATION](../09-planning/K4_VALIDATION.md); no acreditan aún seguridad de un endpoint K4 productivo o sincronización de dispositivos.
+
 ## Incidentes
 
 Contener acceso, revocar/rotar credenciales afectadas, revisar el uso mediante evidencias mínimas autorizadas, corregir y probar. No exponer material sensible en issues públicas. La política de comunicación y contacto del operador sigue pendiente antes de distribuir.
