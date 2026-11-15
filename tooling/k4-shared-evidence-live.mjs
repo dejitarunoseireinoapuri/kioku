@@ -31,6 +31,33 @@ const cases = [
         reported: true,
     },
     {
+        id: "shared-occasion-with-other-stories",
+        text: "Durante el retiro Brisa704 iré a grabado el 18 de diciembre y visitaré el vivero el 20 de diciembre.",
+        facts: [
+            "Durante el retiro Brisa704 iré a grabado el 18 de diciembre.",
+            "Durante el retiro Brisa704 visitaré el vivero el 20 de diciembre.",
+        ],
+        dates: ["18", "20"],
+        removed: "grabado",
+        context: "Brisa704",
+        copies: 1,
+        background: true,
+    },
+    {
+        id: "shared-occasion-and-informant",
+        text: "Nora me dijo que, durante el festival Mirto905, irá a acuarela el 22 de diciembre y visitará el jardín el 24 de diciembre.",
+        facts: [
+            "Nora irá a acuarela durante el festival Mirto905 el 22 de diciembre.",
+            "Nora visitará el jardín durante el festival Mirto905 el 24 de diciembre.",
+        ],
+        dates: ["22", "24"],
+        removed: "acuarela",
+        context: "Mirto905",
+        copies: 1,
+        reported: true,
+        background: true,
+    },
+    {
         id: "dependent-fact-must-stay-unchanged",
         text: "Iré al museo el 19 de diciembre. Mi excursión al faro del 20 de diciembre empezará después de mi visita al museo del 19 de diciembre.",
         facts: [
@@ -76,6 +103,35 @@ function inventory(row) {
             vector: Array.from({ length: 512 }, () => 0.1),
         })),
     );
+    if (row.background) {
+        for (const text of [
+            "Me gustan las ciruelas.",
+            "Tengo una mochila de lona.",
+            "Mi color favorito es el verde.",
+        ]) {
+            const id = randomUUID();
+            sources.push({ id, text, receivedAt: at, zone: "Europe/Madrid" });
+            memories.push({
+                ...memories[0],
+                id: `${id}-1`,
+                sourceId: id,
+                text,
+                quote: text,
+                entities: [],
+                kind: "fact",
+                time: {
+                    precision: "unknown",
+                    value: null,
+                    end: null,
+                    quote: null,
+                },
+                provenance: "personal",
+                attribution: null,
+                attributionEvidence: null,
+                eventStatus: "unspecified",
+            });
+        }
+    }
     return { sources, memories, targets: [memories[0]] };
 }
 async function main() {
@@ -112,25 +168,31 @@ async function main() {
                 passed = row.refuse === true;
             } else {
                 const ids = new Set(selection.memoryIds);
+                const expectedIds = new Set(
+                    raw.sources.slice(0, row.copies).map((s) => `${s.id}-1`),
+                );
                 if (
                     ids.size !== row.copies ||
-                    raw.memories.some(
-                        (m, index) => ids.has(m.id) !== (index % 2 === 0),
-                    )
+                    [...ids].some((id) => !expectedIds.has(id))
                 )
                     throw Error("SELECTION_SCOPE_FAILED");
-                const changes = raw.sources.map((source) => {
+                const changes = raw.sources.flatMap((source) => {
                     const units = raw.memories.filter(
                         (m) => m.sourceId === source.id,
                     );
-                    return separateForgetEvidence(
-                        source,
-                        units,
-                        units.filter((m) => ids.has(m.id)).map((m) => m.id),
-                        selection.evidence.filter((e) =>
-                            units.some((m) => m.id === e.memoryId),
-                        ),
-                    );
+                    const matched = units.filter((m) => ids.has(m.id));
+                    return matched.length
+                        ? [
+                              separateForgetEvidence(
+                                  source,
+                                  units,
+                                  matched.map((m) => m.id),
+                                  selection.evidence.filter((e) =>
+                                      units.some((m) => m.id === e.memoryId),
+                                  ),
+                              ),
+                          ]
+                        : [];
                 });
                 const input = {
                     ...data,
@@ -154,6 +216,10 @@ async function main() {
                               input.retainedSources,
                               input.retainedMemories,
                           ]).includes(row.removed) &&
+                          (!row.context ||
+                              input.retainedSources.some((s) =>
+                                  s.text.includes(row.context),
+                              )) &&
                           input.retainedMemories.length === row.copies &&
                           input.retainedMemories.every(
                               (m) =>

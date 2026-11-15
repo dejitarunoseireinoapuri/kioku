@@ -1,0 +1,30 @@
+{
+  "model": "gpt-6.1-sol",
+  "reasoning": "medium",
+  "corpusHash": "2a165463eba1bf9a47a10c607a02d49779999086c9c6e468ce55b56c9594f8d8",
+  "scope": "Synthetic regression in RAM; actual provider; no production or native proof",
+  "rows": [
+    {
+      "id": "two-plans-two-dates",
+      "passed": true
+    },
+    {
+      "id": "reported-independent-plans",
+      "passed": true
+    },
+    {
+      "id": "shared-occasion-with-other-stories",
+      "passed": true
+    },
+    {
+      "id": "shared-occasion-and-informant",
+      "passed": true
+    },
+    {
+      "id": "dependent-fact-must-stay-unchanged",
+      "passed": true
+    }
+  ],
+  "calls": 9,
+  "estimatedUsd": 0.06111749999999816
+}

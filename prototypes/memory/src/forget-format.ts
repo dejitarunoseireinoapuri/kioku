@@ -32,6 +32,12 @@ su campo original, sin redactar ni añadir palabras. Los nulos originales siguen
 fecha ni la atribución para separar. No cambies el hecho, sujeto, fecha resuelta, negación o condición.
 Acota quote del objetivo a su propia cláusula para retirar TODAS sus apariciones del relato. Acota
 quote del dato ajeno a su evidencia independiente, conservando contexto temporal y atribución literal.
+Conserva también el MARCO COMPARTIDO: lugar, ocasión, sujeto, informante o condición introductoria que
+sigue sustentando los hechos ajenos. Que aparezca al principio de la cita del objetivo no lo convierte
+en parte exclusiva del dato a olvidar. Por ejemplo, «Durante el taller ...» puede enmarcar ambos planes:
+retira solo la cláusula del objetivo, dejando ese marco literalmente en la fuente. Comprueba el texto
+que quedaría al retirar TODAS las apariciones de quote del objetivo; los recuerdos ajenos deben seguir
+teniendo allí su contexto completo. No pidas aclaración sobre cómo conservar ese marco interno.
 Si no cambia una evidencia, omite su entrada; evidence vacío cuando no hace falta. No pidas al usuario
 permiso para recortar una cita interna si ambos hechos son independientes y separables. Si el propio
 hecho ajeno (no solo su cita amplia) revela el objetivo, unresolved true: no lo reescribas ni elimines.

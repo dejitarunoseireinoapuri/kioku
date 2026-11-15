@@ -95,9 +95,9 @@ class LiveSharedEvidenceTest {
                         FirebaseFunctions.getInstance(app, "europe-west1"),
                     ),
                 )
-            val missing = reply(queries, "En la prueba K4hf7029, ¿cuándo iré a cerámica K4hf7029?")
+            val missing = reply(queries, "En la prueba K4hf7030, ¿cuándo iré a cerámica K4hf7030?")
             assertEquals(AnswerStatus.NotFound, missing.status)
-            val kept = reply(queries, "En la prueba K4hf7029, ¿cuándo visitaré el acuario K4hf7029?")
+            val kept = reply(queries, "En la prueba K4hf7030, ¿cuándo visitaré el acuario K4hf7030?")
             assertEquals(AnswerStatus.Answered, kept.status)
             assertTrue(kept.text.contains("20"))
             assertTrue(kept.text.contains("diciembre", ignoreCase = true))
@@ -116,5 +116,5 @@ class LiveSharedEvidenceTest {
 
 private const val SHARED_TIMEOUT = 195000L
 private const val SHARED_STORY =
-    "En la prueba K4hf7029 iré a cerámica K4hf7029 el 18 de diciembre de 2026 " +
-        "y visitaré el acuario K4hf7029 el 20 de diciembre de 2026."
+    "En la prueba K4hf7030 iré a cerámica K4hf7030 el 18 de diciembre de 2026 " +
+        "y visitaré el acuario K4hf7030 el 20 de diciembre de 2026."
