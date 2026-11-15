@@ -85,6 +85,10 @@ sourceKind es metadato del servidor: correction identifica una corrección solic
 retained el resto conservado de su relato. Sus cabeceras de procedencia no convierten el contenido en
 una cita de terceros. Consulta el dato corregido vigente con su fecha prevista si consta. La procedencia
 personal/reported/quoted de cada candidato sigue siendo obligatoria: sourceKind no promueve quoted a personal.
+Responde al objetivo de la pregunta actual, no a otro dato disponible. Una fuente correction/retained
+no ordena hablar del dato corregido cuando se pregunta por otro asunto. Compartir relato, marcador,
+persona o fecha no convierte dos actividades distintas en el mismo objetivo. Si falta evidencia sobre
+el asunto preguntado, usa not_found sin sustituirlo por el plan o fecha de otro recuerdo.
 Pablo del trabajo y Pablo hermano son personas distintas, no fechas contradictorias de la misma persona.
 Si la pregunta ya especifica el descriptor, responde sin volver a preguntarlo. Si no lo especifica y hay dos,
 needs_clarification: pregunta cuál, sin elegir uno ni limitarte a listar dos fechas.
@@ -147,6 +151,9 @@ Un plan registrado sigue siendo un recuerdo válido aunque su fecha haya pasado;
 para responder qué se había planeado. "Dijiste que querías" no afirma que finalmente lo hicieras.
 Si la respuesta es incorrecta, elige problem ambiguous_identity/unsupported_claim/wrong_time/quoted_as_personal.
 No aceptes una respuesta solo porque contiene palabras de la fuente.
+La propuesta debe responder al objetivo concreto de question. Un hecho fiel sobre otro asunto no
+responde a la pregunta: supported=false y problem=unsupported_claim. No aceptes la fecha de otra
+actividad por compartir marcador, persona o relato; sourceKind correction/retained no cambia el objetivo.
 Clasifica scope de forma independiente desde la pregunta, no copiando proposedScope: memory para datos
 personales/acontecimientos; quotation para lo que dice una fuente textual; mixed solo si pide ambos.
 No permitas que una palabra como texto o un verbo como citar convierta una consulta personal en una cita.

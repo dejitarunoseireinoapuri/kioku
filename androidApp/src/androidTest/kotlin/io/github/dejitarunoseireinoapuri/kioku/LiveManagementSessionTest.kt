@@ -2,8 +2,10 @@ package io.github.dejitarunoseireinoapuri.kioku
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
+import androidx.compose.ui.test.isEnabled
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithTag
@@ -53,8 +55,7 @@ class LiveManagementSessionTest {
 
     @Test
     fun aCorrectedAndForgottenStoryKeepsItsOriginalFeedAndContinuesWithCurrentMemories() {
-        visible("Explicar")
-        click("Explicar")
+        awaitReady()
         compose.onNodeWithTag("text-composer").performTextInput(MANAGEMENT_STORY)
         compose.onNodeWithTag("text-composer").performImeAction()
         compose.waitUntil(LIVE_MANAGEMENT_TIMEOUT) {
@@ -78,12 +79,20 @@ class LiveManagementSessionTest {
         assertTrue(compose.onAllNodesWithText("21", substring = true).fetchSemanticsNodes().isNotEmpty())
         compose.onNodeWithText("Gestionar un recuerdo").assertIsDisplayed()
         compose.onNodeWithTag("text-composer").assertDoesNotExist()
-        verifyMemory()
         compose.onNodeWithContentDescription("Volver").performClick()
         compose.onNodeWithTag("conversation-messages").performScrollToNode(hasText(MANAGEMENT_STORY))
         compose.onNodeWithText(MANAGEMENT_STORY).assertIsDisplayed()
         compose.onNodeWithText(MANAGEMENT_STORY).assertIsNotEnabled()
         compose.onNodeWithContentDescription("Gestionar este recuerdo").assertDoesNotExist()
+        verifyMemory()
+    }
+
+    private fun awaitReady() {
+        visible("Explicar")
+        click("Explicar")
+        compose.waitUntil(LIVE_MANAGEMENT_TIMEOUT) {
+            compose.onAllNodes(hasTestTag("text-composer") and isEnabled()).fetchSemanticsNodes().size == 1
+        }
     }
 
     private fun readyItems(expected: Int) {
@@ -106,14 +115,14 @@ class LiveManagementSessionTest {
                 )
             val kept =
                 queries.execute(
-                    queries.prepare("En la prueba K4mg8142, ¿cuándo quiero visitar el planetario K4mg8142?"),
+                    queries.prepare("En la prueba K4mg8143, ¿cuándo quiero visitar el planetario K4mg8143?"),
                 )
             assertTrue(kept is QueryOutcome.Reply)
             assertEquals(AnswerStatus.Answered, (kept as QueryOutcome.Reply).status)
             assertTrue(kept.text.contains("21"))
             val absent =
                 queries.execute(
-                    queries.prepare("En la prueba K4mg8142, ¿cuándo iré a encuadernación K4mg8142?"),
+                    queries.prepare("En la prueba K4mg8143, ¿cuándo iré a encuadernación K4mg8143?"),
                 )
             assertTrue(absent is QueryOutcome.Reply)
             assertEquals(AnswerStatus.NotFound, (absent as QueryOutcome.Reply).status)
@@ -134,7 +143,7 @@ class LiveManagementSessionTest {
 
 private const val LIVE_MANAGEMENT_TIMEOUT = 195000L
 private const val MANAGEMENT_STORY =
-    "En la prueba K4mg8142 quiero visitar el planetario K4mg8142 el 20 de diciembre de 2026. " +
-        "En la prueba K4mg8142 iré a encuadernación K4mg8142 el 18 de diciembre de 2026."
+    "En la prueba K4mg8143 quiero visitar el planetario K4mg8143 el 20 de diciembre de 2026. " +
+        "En la prueba K4mg8143 iré a encuadernación K4mg8143 el 18 de diciembre de 2026."
 private const val MANAGEMENT_CORRECTION =
-    "En la prueba K4mg8142 quiero visitar el planetario K4mg8142 el 21 de diciembre de 2026."
+    "En la prueba K4mg8143 quiero visitar el planetario K4mg8143 el 21 de diciembre de 2026."
