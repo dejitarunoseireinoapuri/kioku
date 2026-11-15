@@ -135,7 +135,9 @@ Cuarta iteración y decisión actual: [evidencia v4](../../prototypes/memory/evi
 
 ## K4 · Control conversacional de memoria
 
-**Estado actual:** iniciada desde K3 `6b264e7`, sin integrar K3 en `main` ni declarar resueltas sus comprobaciones pendientes. Control selectivo, órdenes naturales y ofertas activos y comprobados en Honor. El olvido de copias entre relatos queda validado en Android/backend dentro de sus cotas: 84 pruebas de emuladores, 77 host, 41 de interfaz Honor y recorrido nativo productivo adicional correctos. Tres funciones existentes actualizadas con autorización, sin nuevos recursos/permisos; datos ficticios retirados. Conserva asuntos ajenos y rechaza el conjunto ante ambigüedad, exceso o concurrencia. No es borrado global. [ADR-011](../02-architecture/ADR/ADR-011-memory-control.md), [evaluación con IA real, fallos y límites](K4_VALIDATION.md). K4 completa continúa abierta por la comprobación de este build en iOS.
+**Decisión del propietario · 15 de noviembre:** aplazar la comprobación de iOS hasta más adelante. No bloquea el cierre de K4 para Android/backend ni el comienzo de K5; no equivale a declarar validado ese build iOS y se mantiene la arquitectura compartida. Las funcionalidades K4 y sus últimas correcciones ya están activas y aceptadas en Honor. Antes del cierre formal se recomienda una última pasada conjunta del recorrido completo sobre la versión final, registrar el resultado e integrar la rama; esa pasada/integración todavía no se han realizado por esta decisión. El reporte temporal antiguo no corroborado y el objetivo de latencia se conservan como seguimientos, sin declararlos resueltos.
+
+**Estado actual:** funcionalidades de texto y últimas correcciones activas y aceptadas en Honor/backend: ofertas, corrección, olvido selectivo y entre relatos, gestión continuada y reformulación de entradas ambiguas. Rama codex/k4-memory-control con evidencia local y productiva en [K4_VALIDATION](K4_VALIDATION.md). No faltan funcionalidades K4 previstas; se recomienda una aceptación conjunta final antes de registrar su cierre e integrar la rama. iOS se comprobará más adelante por elección expresa del propietario y no bloquea K5. [ADR-011](../02-architecture/ADR/ADR-011-memory-control.md).
 
 **Resultado:** controlar lo guardado sin abandonar la conversación. Cubre UC-006, UC-007 y UC-008 por texto. Tras aceptar el recorrido Honor, el propietario solicita confirmar siempre el olvido mediante popup; cancelar no aplica y el aviso final nombra el objetivo solo en RAM, después del servidor. Esta decisión sustituye el olvido inequívoco sin diálogo inicial.
 
@@ -145,7 +147,7 @@ Ampliación actual: copias semánticas entre relatos activas y aceptadas en Hono
 
 **Antes de empezar:** K2/K3 y estrategia consistente de versiones, derivados y limpieza.
 
-**Cierre:** probar aceptación/rechazo, ofertas caducadas, referencias ambiguas, versiones antiguas, cambios concurrentes y trabajos tardíos. Comprobar que lo olvidado no reaparece y no se borra información no solicitada. Verificar backend con casos positivos/negativos y recorrido Android/iOS.
+**Cierre:** probar aceptación/rechazo, ofertas caducadas, referencias ambiguas, versiones antiguas, cambios concurrentes y trabajos tardíos. Comprobar que lo olvidado no reaparece y no se borra información no solicitada. Verificar backend con casos positivos/negativos y recorrido Android. La comprobación iOS queda registrada como diferida por el propietario, sin atribuirle resultados Android ni bloquear el avance a K5.
 
 **Fuera:** órdenes por voz, que reutilizarán estos contratos en K5.
 

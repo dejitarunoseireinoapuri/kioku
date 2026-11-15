@@ -1,5 +1,7 @@
 # K4 · Control conversacional de memoria
 
+Decisión posterior del propietario, 15 de noviembre: difiere la prueba de iOS y permite avanzar a voz sin usarla como bloqueo del cierre Android/backend. Las menciones históricas de cierre global pendiente por iOS no representan ya el criterio de avance. No se acreditan nuevas pruebas por esta decisión documental. Se recomienda una pasada conjunta final de guardar/consultar/corregir/olvidar y ofertas de guardado, con conservación de asuntos ajenos, antes de registrar el cierre e integrar la rama. Esa pasada y la integración siguen pendientes; no son nuevas funcionalidades K4. El reporte temporal antiguo no corroborado y la latencia se mantienen como seguimientos abiertos.
+
 ## Escritura ambigua y corrección de evidencia compartida · activa y aceptada en Honor, 15 de noviembre
 
 Estado actual: preparación, activación y aceptación real completadas. Los primeros apartados conservan las comprobaciones previas; el resultado productivo autorizado se registra al final de esta sección.
