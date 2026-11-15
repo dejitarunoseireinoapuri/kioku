@@ -63,10 +63,10 @@ export class PresentSourceMemories {
         lifecycle,
       }),
     );
-    const ai = await provider();
-    const presentation = presentationSchema.parse(
-      await ai.presentMemories({ memories }),
-    );
+    const ai = bundle.ownerTextVersion === 1 ? null : await provider();
+    const presentation = ai
+      ? presentationSchema.parse(await ai.presentMemories({ memories }))
+      : { items: memories.map(({ id, text }) => ({ id, text })) };
     const ids = new Set(memories.map((item) => item.id));
     if (
       presentation.items.length !== ids.size ||
@@ -74,9 +74,11 @@ export class PresentSourceMemories {
       presentation.items.some((item) => !ids.has(item.id))
     )
       throw new AccountError("unavailable");
-    reviewSchema.parse(
-      await ai.reviewMemoryPresentation({ memories, presentation }),
-    );
+    if (ai) {
+      reviewSchema.parse(
+        await ai.reviewMemoryPresentation({ memories, presentation }),
+      );
+    }
     await reauthorize();
     const current = await this.store.bundle(uid, id);
     if (

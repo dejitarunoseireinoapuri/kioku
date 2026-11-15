@@ -16,6 +16,7 @@ export interface MemoryInventory {
   snapshot: Snapshot;
   versions: EvidenceVersion[];
   memoryEpoch: number;
+  ownerTextSourceIds?: string[];
 }
 export interface ForgetReplacement {
   bundle: SourceBundle;

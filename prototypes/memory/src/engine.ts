@@ -14,9 +14,9 @@ import type {
   Turn,
 } from "./domain.ts";
 import { retrieve } from "./search.ts";
-import { validateTime, canonicalTime, unknownTime } from "./temporal.ts";
+import { validateTime } from "./temporal.ts";
 import { selectEvidence } from "./evidence.ts";
-import { literalQuote } from "./literal.ts";
+import { normalizeCapture } from "./capture-normalization.ts";
 import { requiredClarification } from "./clarification.ts";
 import { validateAttribution } from "./capture-evidence.ts";
 
@@ -88,35 +88,13 @@ export class MemoryEngine {
     const sourceText = clarification
       ? `${turn.text}\nAclaración: ${clarification}`
       : turn.text;
-    const extracted = {
-      ...parsed,
-      items: parsed.items.map((item) => {
-        const quote = literalQuote(item.quote, sourceText);
-        const time =
-          item.provenance === "quoted"
-            ? unknownTime
-            : canonicalTime(item.time, quote, sourceText, {
-                receivedAt: turn.receivedAt,
-                zone: turn.zone,
-                clarification,
-              });
-        return {
-          ...item,
-          eventStatus:
-            item.provenance === "quoted"
-              ? ("unspecified" as const)
-              : item.eventStatus,
-          quote,
-          time,
-          text:
-            time.precision !== item.time.precision ||
-            time.value !== item.time.value ||
-            time.end !== item.time.end
-              ? quote
-              : item.text,
-        };
-      }),
-    };
+    const extracted = await normalizeCapture(
+      parsed,
+      sourceText,
+      turn,
+      this.intelligence,
+      clarification,
+    );
     this.validateExtraction(extracted, sourceText, turn);
     if (extracted.status !== "saved") return extracted;
     const vectors = await this.intelligence.embed(

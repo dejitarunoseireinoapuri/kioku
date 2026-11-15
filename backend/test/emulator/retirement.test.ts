@@ -6,6 +6,7 @@ import { FirestoreSourceRetirementStore } from "../../src/firebase/retirement-st
 import { FirestoreCaptureStore } from "../../src/firebase/capture-store.js";
 import { FirestoreQueryStore } from "../../src/firebase/query-store.js";
 import { at, fixture, seed, uid, vector } from "./retirement-fixtures.js";
+import { correctionNotice } from "../../src/memory-control/selection.js";
 import { adminApp, db } from "./helpers.js";
 
 let now = at;
@@ -27,6 +28,107 @@ beforeEach(async () => {
 after(async () => {
   await db.terminate();
   await deleteApp(adminApp);
+});
+
+test("an approved representation repair replaces only its version-bound source, preserving original time", async () => {
+  const target = await seed();
+  const unrelated = await seed();
+  await root
+    .collection("memories")
+    .doc(target.memories[0]!.id)
+    .update({ text: target.source.text });
+  const scope = await store.inspect(uid, target.source.id);
+  const nextId = randomUUID();
+  const before = await root
+    .collection("sources")
+    .doc(unrelated.source.id)
+    .get();
+  const snapshot = {
+    version: 4 as const,
+    sources: [
+      {
+        id: nextId,
+        text: correctionNotice + target.source.text,
+        receivedAt: target.source.receivedAt,
+        zone: target.source.zone,
+      },
+    ],
+    memories: target.memories.map((memory, index) => ({
+      ...memory,
+      id: `${nextId}-${index + 1}`,
+      sourceId: nextId,
+      revision: 2,
+    })),
+  };
+  await store.replace(uid, randomUUID(), scope, {
+    snapshot,
+    status: "corrected",
+  });
+  const repaired = await root.collection("sources").doc(nextId).get();
+  assert.equal(repaired.get("ownerTextVersion"), 1);
+  assert.equal(repaired.get("sourceKind"), "correction");
+  assert.equal(repaired.get("receivedAt"), target.source.receivedAt);
+  assert.equal(repaired.get("zone"), target.source.zone);
+  assert.equal(
+    (await root.collection("sources").doc(target.source.id).get()).exists,
+    false,
+  );
+  assert.equal(
+    (await root.collection("revocations").doc(target.source.id).get()).exists,
+    true,
+  );
+  const units = await root
+    .collection("memories")
+    .where("sourceId", "==", nextId)
+    .get();
+  assert.deepEqual(
+    units.docs.map((d) => d.get("text")).sort(),
+    target.memories.map((m) => m.text).sort(),
+  );
+  assert.equal(
+    (
+      await root.collection("sources").doc(unrelated.source.id).get()
+    ).updateTime!.isEqual(before.updateTime!),
+    true,
+  );
+});
+
+test("a representation repair cannot commit from a source modified after its reviewed scope", async () => {
+  const target = await seed();
+  const scope = await store.inspect(uid, target.source.id);
+  await root
+    .collection("memories")
+    .doc(target.memories[0]!.id)
+    .update({ text: "Un cambio concurrente." });
+  const nextId = randomUUID();
+  const snapshot = {
+    version: 4 as const,
+    sources: [
+      {
+        id: nextId,
+        text: correctionNotice + target.source.text,
+        receivedAt: target.source.receivedAt,
+        zone: target.source.zone,
+      },
+    ],
+    memories: target.memories.map((memory, index) => ({
+      ...memory,
+      id: `${nextId}-${index + 1}`,
+      sourceId: nextId,
+      revision: 2,
+    })),
+  };
+  await assert.rejects(
+    store.replace(uid, randomUUID(), scope, { snapshot, status: "corrected" }),
+  );
+  assert.equal(
+    (await root.collection("sources").doc(target.source.id).get()).exists,
+    true,
+  );
+  assert.equal(
+    (await root.collection("sources").doc(nextId).get()).exists,
+    false,
+  );
 });
 
 test("a confirmed K2 capture stops being saved/readable after retirement, including stale lease completion", async () => {

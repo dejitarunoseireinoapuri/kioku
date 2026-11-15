@@ -27,6 +27,7 @@ class Duplicates extends ConversationIntelligence {
   selected: string[] | null = null;
   reviewAllowed = true;
   unresolved = false;
+  question = "¿Qué Loto?";
   evidence: ForgetEvidence[] = [];
   afterSelection: () => Promise<void> = async () => {};
   batches = 0;
@@ -42,7 +43,7 @@ class Duplicates extends ConversationIntelligence {
         data.memories.filter((m) => m.text.includes("Loto")).map((m) => m.id),
       unresolved: this.unresolved,
       evidence: this.evidence,
-      question: this.unresolved ? "¿Qué Loto?" : null,
+      question: this.unresolved ? this.question : null,
     };
   }
   async reviewDuplicateFacts() {
@@ -229,6 +230,13 @@ async function shareEvidence() {
 
 test("shared evidence is separated atomically across copies, retaining only the independent facts", async () => {
   const { command, entries } = await shareEvidence();
+  await root
+    .collection("sources")
+    .doc(entries[0]!.source.id)
+    .update({ ownerTextVersion: 1 });
+  command.expectedVersion = (
+    await store.details(uid, command.sourceId)
+  ).version;
   const result = await service.execute(uid, command, provider, allowed);
   assert.equal(result.status, "forgotten");
   assert.equal(result.memoryEpoch, 1);
@@ -242,6 +250,10 @@ test("shared evidence is separated atomically across copies, retaining only the 
   }
   const retained = await root.collection("sources").get();
   assert.equal(retained.size, 2);
+  assert.equal(
+    retained.docs.filter((s) => s.get("ownerTextVersion") === 1).length,
+    1,
+  );
   assert.ok(
     retained.docs.every((s) => !JSON.stringify(s.data()).includes("Loto")),
   );
@@ -253,6 +265,20 @@ test("shared evidence is separated atomically across copies, retaining only the 
     result,
   );
   assert.equal(model.calls, calls);
+});
+
+test("an unresolved provider question cannot expose internal memory identifiers", async () => {
+  const { command, entries } = await seedCopies();
+  model.unresolved = true;
+  model.question = `El recuerdo ${entries[0]!.memories[0]!.id} incluye otro dato. ¿Cómo se separa?`;
+  const result = await service.execute(uid, command, provider, allowed);
+  assert.equal(result.status, "needsClarification");
+  assert.equal(
+    result.text,
+    "No he olvidado nada. No puedo separar ese dato con seguridad.",
+  );
+  assert.ok(!result.text.includes(command.sourceId));
+  await unchanged(2);
 });
 
 test("a rejected or fabricated separation leaves every shared source and fact intact", async () => {

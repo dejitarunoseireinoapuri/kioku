@@ -11,7 +11,7 @@ export const unknownTime: MemoryTime = {
 const monthNames =
   "enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre";
 const relative =
-  /\b(hoy|ayer|anteayer|mañana|pasado mañana|lunes|martes|miércoles|jueves|viernes|sábado|domingo)\b/iu;
+  /\b(esta mañana|esta tarde|esta noche|hoy|ayer|anteayer|mañana|pasado mañana|lunes|martes|miércoles|jueves|viernes|sábado|domingo)\b/iu;
 
 /** Canonicalize precision and values from literal evidence bound to the item or its clarification. */
 export function canonicalTime(
@@ -100,7 +100,7 @@ function anchoredRelativeDay(
   anchor: { receivedAt: string; zone: string },
 ): string | null {
   const match =
-    /^(anteayer|pasado mañana|ayer|mañana|hoy)(?=\s|[.,;:]|$)/iu.exec(
+    /^(esta mañana|esta tarde|esta noche|anteayer|pasado mañana|ayer|mañana|hoy)(?=\s|[.,;:]|$)/iu.exec(
       quote.trim(),
     );
   if (!match) return null;
@@ -110,6 +110,9 @@ function anchoredRelativeDay(
     ayer: -1,
     mañana: 1,
     hoy: 0,
+    "esta mañana": 0,
+    "esta tarde": 0,
+    "esta noche": 0,
   };
   const day = new Intl.DateTimeFormat("sv-SE", {
     timeZone: anchor.zone,
@@ -239,17 +242,19 @@ export function validateTime(
   }
   if (time.precision === "day" && anchor && !hasYear) {
     const phrase = evidence.toLowerCase();
-    const offset = phrase.includes("anteayer")
-      ? -2
-      : phrase.includes("pasado mañana")
-        ? 2
-        : /\bayer\b/u.test(phrase)
-          ? -1
-          : /\bmañana\b/u.test(phrase)
-            ? 1
-            : /\bhoy\b/u.test(phrase)
-              ? 0
-              : null;
+    const offset = /\besta (mañana|tarde|noche)\b/u.test(phrase)
+      ? 0
+      : phrase.includes("anteayer")
+        ? -2
+        : phrase.includes("pasado mañana")
+          ? 2
+          : /\bayer\b/u.test(phrase)
+            ? -1
+            : /\bmañana\b/u.test(phrase)
+              ? 1
+              : /\bhoy\b/u.test(phrase)
+                ? 0
+                : null;
     if (offset !== null) {
       const day = new Intl.DateTimeFormat("sv-SE", {
         timeZone: anchor.zone,

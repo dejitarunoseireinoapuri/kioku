@@ -168,6 +168,9 @@ export class FirestoreForgetStore {
             tx.create(root.collection("sources").doc(source.id), {
               ...source,
               sourceKind: "retained",
+              ...(current.ownerTextSourceIds?.includes(change.bundle.source.id)
+                ? { ownerTextVersion: 1 }
+                : {}),
               memoryCount: change.snapshot.memories.filter(
                 (m) => m.sourceId === source.id,
               ).length,

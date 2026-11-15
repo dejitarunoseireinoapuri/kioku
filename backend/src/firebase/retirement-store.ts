@@ -237,6 +237,7 @@ export class FirestoreSourceRetirementStore implements SourceRetirementStore {
         )
           throw new AccountError("failed-precondition");
         // All reads precede writes. A version conflict aborts the whole removal.
+        const ownerText = source?.get("ownerTextVersion") === 1;
         tx.delete(sourceRef);
         for (const entry of memories.docs) tx.delete(entry.ref);
         for (const source of replacement.sources)
@@ -245,6 +246,9 @@ export class FirestoreSourceRetirementStore implements SourceRetirementStore {
             sourceKind: source.text.startsWith(correctionNotice)
               ? "correction"
               : "retained",
+            ...(ownerText || source.text.startsWith(correctionNotice)
+              ? { ownerTextVersion: 1 }
+              : {}),
             memoryCount: replacement.memories.filter(
               (memory) => memory.sourceId === source.id,
             ).length,

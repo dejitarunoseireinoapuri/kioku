@@ -57,6 +57,7 @@ export interface SourceBundle {
   memories: SelectiveChange["removed"];
   memoryEpoch: number;
   sourceKind?: "retained" | "correction";
+  ownerTextVersion?: 1;
 }
 export interface ChangeIntelligence
   extends MemoryIntelligence,

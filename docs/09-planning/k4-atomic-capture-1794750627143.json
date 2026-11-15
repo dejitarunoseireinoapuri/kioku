@@ -1,0 +1,71 @@
+{
+  "at": "2026-11-15T12:00:00Z",
+  "kind": "synthetic-atomic-capture-regression",
+  "apiCalls": 3,
+  "injectedDrafts": 0,
+  "estimatedUsd": 0.0046722000000016806,
+  "rows": [
+    {
+      "id": "post-canonical-text-review",
+      "passed": true,
+      "source": {
+        "id": "3b781393-a0bd-4b59-bbbb-71ee2575b9cd",
+        "text": "Quiero visitar el vivero el 16 de noviembre de 2026 y leer un cómic el 17 de noviembre de 2026.",
+        "receivedAt": "2026-11-15T12:00:00Z",
+        "zone": "Europe/Madrid"
+      },
+      "items": [
+        {
+          "text": "Quiero visitar el vivero el 16 de noviembre de 2026.",
+          "quote": "Quiero visitar el vivero el 16 de noviembre de 2026 y leer un cómic el 17 de noviembre de 2026.",
+          "kind": "intention",
+          "entities": [
+            "vivero"
+          ],
+          "time": {
+            "precision": "day",
+            "value": "2026-11-16",
+            "end": null,
+            "quote": "16 de noviembre de 2026"
+          },
+          "provenance": "personal",
+          "attribution": null,
+          "attributionEvidence": null,
+          "eventStatus": "planned",
+          "lifecycle": "current",
+          "id": "3b781393-a0bd-4b59-bbbb-71ee2575b9cd-1",
+          "sourceId": "3b781393-a0bd-4b59-bbbb-71ee2575b9cd",
+          "revision": 1,
+          "receivedAt": "2026-11-15T12:00:00Z",
+          "zone": "Europe/Madrid"
+        },
+        {
+          "text": "Quiero leer un cómic el 17 de noviembre de 2026.",
+          "quote": "Quiero visitar el vivero el 16 de noviembre de 2026 y leer un cómic el 17 de noviembre de 2026.",
+          "kind": "intention",
+          "entities": [
+            "cómic"
+          ],
+          "time": {
+            "precision": "day",
+            "value": "2026-11-17",
+            "end": null,
+            "quote": "17 de noviembre de 2026"
+          },
+          "provenance": "personal",
+          "attribution": null,
+          "attributionEvidence": null,
+          "eventStatus": "planned",
+          "lifecycle": "current",
+          "id": "3b781393-a0bd-4b59-bbbb-71ee2575b9cd-2",
+          "sourceId": "3b781393-a0bd-4b59-bbbb-71ee2575b9cd",
+          "revision": 1,
+          "receivedAt": "2026-11-15T12:00:00Z",
+          "zone": "Europe/Madrid"
+        }
+      ],
+      "captureReview": null,
+      "changes": null
+    }
+  ]
+}

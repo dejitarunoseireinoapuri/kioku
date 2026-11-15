@@ -69,7 +69,12 @@ export class ForgetRepeatedMemory {
           uid,
           work,
           reauthorize,
-          selection.question ?? clarify,
+          selection.question &&
+            !/[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/iu.test(
+              selection.question,
+            )
+            ? selection.question
+            : "No he olvidado nada. No puedo separar ese dato con seguridad.",
         );
       const ids = new Set(selection.memoryIds);
       if (

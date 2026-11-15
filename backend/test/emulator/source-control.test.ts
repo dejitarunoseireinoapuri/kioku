@@ -153,6 +153,14 @@ test("correction stores only the new owner-written fact, keeps the other subject
   assert.equal(corrected.sourceKind, "correction");
   assert.equal(preserved.sourceKind, "retained");
   assert.equal(
+    (await store.bundle(uid, corrected.sourceId)).ownerTextVersion,
+    1,
+  );
+  assert.equal(
+    (await store.bundle(uid, preserved.sourceId)).ownerTextVersion,
+    undefined,
+  );
+  assert.equal(
     (await root.collection("memories").doc(corrected.items[0]!.id).get()).get(
       "revision",
     ),

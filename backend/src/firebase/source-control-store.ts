@@ -100,6 +100,9 @@ export class FirestoreSourceControlStore implements SourceControlStore {
         scope,
         memoryEpoch,
         ...(sourceKind ? { sourceKind } : {}),
+        ...(source.get("ownerTextVersion") === 1
+          ? { ownerTextVersion: 1 as const }
+          : {}),
         source: sourceSchema.parse({
           id,
           text: source.get("text"),

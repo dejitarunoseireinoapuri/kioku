@@ -102,6 +102,9 @@ export async function readMemoryInventory(
   return {
     snapshot: { version: snapshotVersion, sources, memories },
     memoryEpoch,
+    ownerTextSourceIds: sourceDocs.docs
+      .filter((entry) => entry.get("ownerTextVersion") === 1)
+      .map((entry) => entry.id),
     versions: [
       ...sourceDocs.docs.map((entry) => ({
         collection: "sources" as const,

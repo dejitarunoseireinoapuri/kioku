@@ -246,6 +246,7 @@ export class FirestoreCaptureStore implements CaptureStore {
             ...snapshot.sources[0]!,
             requestHash: lease.pending.rootHash,
             memoryCount: snapshot.memories.length,
+            ownerTextVersion: 1,
           });
           for (const memory of snapshot.memories) {
             if (memory.sourceId !== lease.pending.turn.id)

@@ -1,11 +1,22 @@
 import { z } from "zod";
 import { MemoryError } from "./domain.ts";
-import type { Candidate, MemoryIntelligence, Turn, Source } from "./domain.ts";
+import type {
+  Candidate,
+  MemoryIntelligence,
+  Turn,
+  Source,
+  Extraction,
+} from "./domain.ts";
 import { Budget, rates } from "./budget.ts";
 import { calendarContext } from "./calendar.ts";
 import { captureFormat } from "./capture-format.ts";
 import { answerFormat, constrainScope } from "./answer-format.ts";
 import { modelProfile } from "./model-config.ts";
+import {
+  captureRepairInstructions,
+  captureRepairSchema,
+  captureTextInstructions,
+} from "./capture-repair-format.ts";
 import {
   perspectiveSchema,
   perspectiveInstructions,
@@ -230,6 +241,60 @@ export class OpenAiMemory implements MemoryIntelligence {
         problem: "scope_boundary",
       };
     return constrained ?? checked;
+  }
+
+  async refineCapture(
+    original: Turn,
+    normalized: Extraction,
+  ): Promise<Extraction> {
+    const memories = normalized.items.map((item, index) => ({
+      ...item,
+      id: `c${index + 1}`,
+    }));
+    const presentation = await this.structured(
+      captureTextInstructions,
+      { original, memories },
+      perspectiveSchema,
+      "capture_time_text",
+      4000,
+    );
+    const textById = new Map(
+      presentation.items.map((item) => [item.id, item.text]),
+    );
+    if (
+      presentation.items.length !== memories.length ||
+      textById.size !== memories.length ||
+      memories.some((item) => !textById.has(item.id))
+    )
+      throw new MemoryError("CAPTURE_REFINEMENT_IDS_INVALID");
+    const after = memories.map((item) => ({
+      ...item,
+      text: textById.get(item.id)!,
+    }));
+    const review = await this.reviewCaptureRepair({
+      original,
+      before: memories,
+      after,
+    });
+    if (!Object.values(review).every((value) => value === true))
+      throw new MemoryError("CAPTURE_REFINEMENT_REJECTED");
+    return {
+      ...normalized,
+      items: normalized.items.map((item, index) => ({
+        ...item,
+        text: after[index]!.text,
+      })),
+    };
+  }
+
+  async reviewCaptureRepair(data: unknown) {
+    return this.structured(
+      captureRepairInstructions,
+      data,
+      captureRepairSchema,
+      "capture_repair_review",
+      1600,
+    );
   }
 
   async embed(texts: string[]): Promise<number[][]> {

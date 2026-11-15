@@ -74,6 +74,7 @@ export type Turn = {
 
 export interface MemoryIntelligence {
   extract(turn: Turn, clarification: string | null): Promise<Extraction>;
+  refineCapture?(turn: Turn, normalized: Extraction): Promise<Extraction>;
   embed(texts: string[]): Promise<number[][]>;
   answer(
     question: string,

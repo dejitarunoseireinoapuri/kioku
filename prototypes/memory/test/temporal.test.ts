@@ -299,3 +299,21 @@ test("an explicit ISO date retains day precision instead of degrading to its yea
   assert.equal(time.precision, "day");
   assert.equal(time.value, "2026-12-18");
 });
+
+test("this morning, afternoon and evening anchor to the reception day in the owner's zone", () => {
+  const anchor = { receivedAt: "2026-11-15T23:30:00Z", zone: "Europe/Madrid" };
+  for (const quote of ["esta mañana", "esta tarde", "esta noche"]) {
+    const time = canonicalTime(
+      { precision: "day", value: "2026-11-15", end: null, quote },
+      quote,
+      quote,
+      anchor,
+    );
+    assert.equal(time.precision, "day");
+    assert.equal(time.value, "2026-11-16");
+    assert.throws(
+      () => validateTime({ ...time, value: "2026-11-17" }, quote, anchor),
+      /TIME_RELATIVE_MISMATCH/,
+    );
+  }
+});

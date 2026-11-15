@@ -76,6 +76,12 @@ test("source/items and receipt commit together; replay is idempotent and conflic
   assert.equal((await db.collection(`accounts/${uid}/sources`).get()).size, 1);
   assert.equal((await db.collection(`accounts/${uid}/memories`).get()).size, 1);
   assert.equal((await store.source(uid, turn.requestId)).text, turn.text);
+  assert.equal(
+    (await db.doc(`accounts/${uid}/sources/${turn.requestId}`).get()).get(
+      "ownerTextVersion",
+    ),
+    1,
+  );
   await assert.rejects(
     capture.execute(uid, { ...turn, text: "Otro relato" }, provider, allowed),
     { message: "failed-precondition" },

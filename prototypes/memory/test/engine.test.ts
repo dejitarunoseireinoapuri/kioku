@@ -324,7 +324,13 @@ test("a generated wrong date cannot survive in normalized text after canonical c
     };
     const engine = new MemoryEngine(
       f.repository,
-      fake({ extract: async () => extraction }),
+      fake({
+        extract: async () => extraction,
+        refineCapture: async (_turn, normalized) => ({
+          ...normalized,
+          items: normalized.items.map((item) => ({ ...item, text: literal })),
+        }),
+      }),
     );
     await engine.tell({ ...turn, text: literal });
     const memory = (await f.repository.load()).memories[0]!;
