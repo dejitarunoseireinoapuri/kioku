@@ -49,7 +49,7 @@ internal fun ConversationFeed(
     LazyColumn(
         modifier.testTag("conversation-messages"),
         state = scroll,
-        contentPadding = PaddingValues(KiokuSpacing.Large),
+        contentPadding = PaddingValues(horizontal = KiokuSpacing.Medium, vertical = KiokuSpacing.Large),
         verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large),
     ) {
         items(messages, key = {

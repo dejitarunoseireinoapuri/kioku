@@ -1,5 +1,6 @@
 package io.github.dejitarunoseireinoapuri.kioku.feature.source
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -7,8 +8,10 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
@@ -22,6 +25,7 @@ import io.github.dejitarunoseireinoapuri.kioku.design.ActionButton
 import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingNotice
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
+import io.github.dejitarunoseireinoapuri.kioku.design.Panel
 import io.github.dejitarunoseireinoapuri.kioku.design.rememberButtonFeedback
 import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryItem
@@ -47,11 +51,10 @@ internal fun SourceControlContent(
     val ready = (state as? SourceControlState.Working)?.previous ?: state as SourceControlState.Ready
     val working = state is SourceControlState.Working
     val enabled = !working && ready.feedback != ControlFeedback.Processing && ready.forget == null
-    var index = 0
     ready.sources.forEach { source ->
         SourceRecordedDate(source.source)
         source.items.forEach { item ->
-            ControlItem(item, index++, ready, enabled, onEvent)
+            ControlItem(item, ready, enabled, onEvent)
         }
     }
     ready.notice?.let { ControlChangeNotice(it, ready.description) }
@@ -74,25 +77,20 @@ internal fun SourceControlContent(
 @Composable
 private fun ControlItem(
     item: MemoryItem,
-    index: Int,
     ready: SourceControlState.Ready,
     enabled: Boolean,
     onEvent: (SourceControlEvent) -> Unit,
 ) {
-    Column(
+    Panel(
         Modifier.fillMaxWidth().testTag("memory-item-${item.id}"),
-        verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Medium),
+        emphasized = ready.editing == item.id,
     ) {
-        Row(horizontalArrangement = Arrangement.spacedBy(KiokuSpacing.Medium)) {
-            Text((index + 1).toString().padStart(2, '0'), color = KiokuColors.Secondary)
-            Text(item.text, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
-        }
+        Text(item.text, fontWeight = FontWeight.SemiBold)
         if (ready.editing == item.id) {
             CorrectionEditor(ready, enabled, onEvent)
         } else {
             ControlItemActions(item.id, enabled, onEvent)
         }
-        Divider(color = KiokuColors.Rule)
     }
 }
 
@@ -147,8 +145,8 @@ private fun CorrectionEditor(
             TextFieldDefaults.textFieldColors(
                 textColor = KiokuColors.Text,
                 backgroundColor = KiokuColors.Surface,
-                cursorColor = KiokuColors.Coral,
-                focusedIndicatorColor = KiokuColors.Coral,
+                cursorColor = KiokuColors.Accent,
+                focusedIndicatorColor = KiokuColors.Accent,
             ),
     )
     ControlHint(Res.string.control_new_fact_help)
@@ -167,13 +165,17 @@ private fun ControlTextAction(
     enabled: Boolean,
     onClick: () -> Unit,
 ) {
-    val feedback = rememberButtonFeedback(KiokuColors.Text)
-    TextButton(
+    val feedback =
+        rememberButtonFeedback(
+            if (label == Res.string.control_forget_item) KiokuColors.Danger else KiokuColors.Text,
+        )
+    OutlinedButton(
         onClick = onClick,
         enabled = enabled,
         interactionSource = feedback.interactionSource,
-        contentPadding = PaddingValues(),
-        modifier = Modifier.sizeIn(minHeight = KiokuSpacing.TouchTarget),
+        colors = ButtonDefaults.outlinedButtonColors(backgroundColor = KiokuColors.Surface),
+        border = BorderStroke(KiokuSpacing.Stroke, KiokuColors.Rule),
+        modifier = Modifier.fillMaxWidth().sizeIn(minHeight = KiokuSpacing.TouchTarget),
     ) {
         Text(stringResource(label), color = if (enabled) feedback.contentColor else KiokuColors.Secondary)
     }

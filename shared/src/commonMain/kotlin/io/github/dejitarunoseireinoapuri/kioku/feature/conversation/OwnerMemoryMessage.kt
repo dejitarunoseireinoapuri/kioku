@@ -1,5 +1,6 @@
 package io.github.dejitarunoseireinoapuri.kioku.feature.conversation
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -21,7 +22,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
-import io.github.dejitarunoseireinoapuri.kioku.design.Panel
+import io.github.dejitarunoseireinoapuri.kioku.design.TranscriptMessage
 import io.github.dejitarunoseireinoapuri.kioku.design.rememberButtonFeedback
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextOutcome
@@ -65,7 +66,10 @@ internal fun OwnerMemoryMessage(
     val savedLabel = stringResource(Res.string.memory_saved)
     val historicalLabel = stringResource(Res.string.memory_historical)
     Row(horizontalArrangement = Arrangement.spacedBy(KiokuSpacing.Small)) {
-        Panel(Modifier.weight(1f).semantics { if (sourceId != null && !historical) stateDescription = savedLabel }) {
+        TranscriptMessage(
+            Modifier.weight(1f).semantics { if (sourceId != null && !historical) stateDescription = savedLabel },
+            owner = true,
+        ) {
             Text(
                 text,
                 color = if (historical) KiokuColors.Secondary else KiokuColors.Text,
@@ -105,7 +109,11 @@ internal fun MemoryActionsMenu(
                 tint = if (enabled) feedback.contentColor else KiokuColors.Rule,
             )
         }
-        DropdownMenu(expanded && enabled, { expanded = false }, modifier = Modifier.testTag("saved-memory-menu")) {
+        DropdownMenu(
+            expanded && enabled,
+            { expanded = false },
+            modifier = Modifier.border(KiokuSpacing.Stroke, KiokuColors.Rule).testTag("saved-memory-menu"),
+        ) {
             DropdownMenuItem(
                 onClick = {
                     expanded = false

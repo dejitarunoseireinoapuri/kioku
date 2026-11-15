@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Kioku</string>
     <string name="settings">Ajustes</string>
-    <string name="settings_action">[ Ajustes ]</string>
+    <string name="settings_action">Ajustes</string>
     <string name="back">Volver</string>
     <string name="tell_heading">Que no se pierda</string>
     <string name="ask_heading">Tira del hilo</string>
@@ -74,9 +74,9 @@
     <string name="retry">Reintentar</string>
     <string name="read_answer">Escuchar respuesta</string>
     <string name="google_continue">Continuar con Google</string>
-    <string name="brand_wordmark">kioku</string>
-    <string name="login_title">Cuéntalo hoy.\nRecuérdalo cuando quieras.</string>
-    <string name="login_description">Por voz o por texto, guarda lo que quieras recordar.</string>
+    <string name="brand_wordmark">Kioku</string>
+    <string name="login_title">Lo que vives, contigo.</string>
+    <string name="login_description">Guarda lo que vives. Recupéralo cuando lo necesites.</string>
     <string name="account_loading">Entrando...</string>
     <string name="account_loading_label">Entrando</string>
     <string name="loading_dots">...</string>

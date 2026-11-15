@@ -47,7 +47,7 @@ internal fun SendAction(
         Box(
             Modifier
                 .size(KiokuSpacing.SendBackground)
-                .background(if (enabled) KiokuColors.Coral else Color.Transparent, MaterialTheme.shapes.small),
+                .background(if (enabled) KiokuColors.Accent else Color.Transparent, MaterialTheme.shapes.small),
             contentAlignment = Alignment.Center,
         ) {
             Icon(painterResource(Res.drawable.icon_send), stringResource(Res.string.send), tint = tint)

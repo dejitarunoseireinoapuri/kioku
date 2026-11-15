@@ -84,7 +84,11 @@ private fun AiSettings(
     val ready = account.ai == AiConfiguration.Ready
     Column(verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Medium)) {
         SettingsCaption(stringResource(Res.string.ai_section))
-        Text(stringResource(if (ready) Res.string.ai_ready else Res.string.ai_missing), fontWeight = FontWeight.Bold)
+        Text(
+            stringResource(if (ready) Res.string.ai_ready else Res.string.ai_missing),
+            fontWeight = FontWeight.Bold,
+            color = if (ready) KiokuColors.Accent else KiokuColors.Secondary,
+        )
         if (!ready) {
             Text(stringResource(Res.string.key_setup_hint), color = KiokuColors.Secondary)
         }

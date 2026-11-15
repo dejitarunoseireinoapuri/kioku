@@ -34,13 +34,21 @@ fun ActionButton(
     primary: Boolean = false,
     enabled: Boolean = true,
 ) {
-    val feedback = rememberButtonFeedback(if (primary) KiokuColors.Text else KiokuColors.Secondary)
+    if (primary) {
+        AccentButton(label, onClick, modifier, enabled)
+        return
+    }
+    val feedback = rememberButtonFeedback(KiokuColors.Secondary)
     OutlinedButton(
         enabled = enabled,
         onClick = onClick,
         modifier = modifier.sizeIn(minHeight = KiokuSpacing.TouchTarget),
-        border = BorderStroke(1.dp, if (primary) KiokuColors.Coral else KiokuColors.Rule),
-        colors = ButtonDefaults.outlinedButtonColors(contentColor = feedback.contentColor),
+        border = BorderStroke(1.dp, KiokuColors.Rule),
+        colors =
+            ButtonDefaults.outlinedButtonColors(
+                backgroundColor = KiokuColors.Surface,
+                contentColor = feedback.contentColor,
+            ),
         interactionSource = feedback.interactionSource,
     ) { Text(label) }
 }
@@ -64,12 +72,13 @@ fun IconAction(
 @Composable
 fun Panel(
     modifier: Modifier = Modifier,
+    emphasized: Boolean = false,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.medium,
-        border = BorderStroke(1.dp, KiokuColors.Rule),
+        border = BorderStroke(KiokuSpacing.Stroke, if (emphasized) KiokuColors.Accent else KiokuColors.Rule),
         elevation = 0.dp,
     ) {
         Column(Modifier.padding(KiokuSpacing.Medium), verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -91,11 +100,14 @@ fun TopBar(
     title: String,
     leading: @Composable () -> Unit = { KiokuMark(Modifier.size(24.dp)) },
     trailing: @Composable () -> Unit = {},
-    titleStyle: TextStyle = MaterialTheme.typography.h5,
+    titleStyle: TextStyle =
+        MaterialTheme.typography.body1.copy(
+            fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
+        ),
 ) {
     Column {
         Row(
-            Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+            Modifier.fillMaxWidth().padding(horizontal = KiokuSpacing.Medium),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
         ) {

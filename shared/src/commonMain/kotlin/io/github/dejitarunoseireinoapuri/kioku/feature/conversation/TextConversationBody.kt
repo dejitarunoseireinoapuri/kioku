@@ -10,6 +10,7 @@ import io.github.dejitarunoseireinoapuri.kioku.design.ActionButton
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
 import io.github.dejitarunoseireinoapuri.kioku.design.Panel
+import io.github.dejitarunoseireinoapuri.kioku.design.TranscriptMessage
 import io.github.dejitarunoseireinoapuri.kioku.design.memoryChangeText
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureIssue
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryOutcome
@@ -83,7 +84,7 @@ internal fun TextOutcomeBody(
         }
 
         is TextOutcome.Clarification -> {
-            Panel { Text(outcome.question) }
+            TranscriptMessage { Text(outcome.question) }
         }
 
         is TextOutcome.Changed -> {
@@ -199,7 +200,7 @@ private fun TextProblem(
     interactive: Boolean,
     onEvent: (ConversationEvent) -> Unit,
 ) {
-    Text(stringResource(text), color = KiokuColors.Coral)
+    Text(stringResource(text), color = KiokuColors.Danger)
     if (interactive) {
         MessageButton(
             action,

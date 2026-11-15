@@ -17,7 +17,7 @@ data class ButtonFeedback(
 @Composable
 fun rememberButtonFeedback(
     restingColor: Color,
-    pressedColor: Color = KiokuColors.Coral,
+    pressedColor: Color = KiokuColors.Accent,
 ): ButtonFeedback {
     val interaction = remember { MutableInteractionSource() }
     val pressed by interaction.collectIsPressedAsState()

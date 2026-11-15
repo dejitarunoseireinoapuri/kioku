@@ -42,8 +42,8 @@ fun ContentLoadingScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            LoadingMark(Modifier.size(KiokuSpacing.LoadingMark))
-            Column(Modifier.padding(top = KiokuSpacing.Large)) { KiokuWordmark(32.sp) }
+            TerminalBrandMark()
+            Column(Modifier.padding(top = KiokuSpacing.Large)) { KiokuWordmark() }
             LoadingStatusText(status, Modifier.padding(top = KiokuSpacing.Medium))
         }
     }

@@ -1,5 +1,7 @@
 # Pantallas y estados
 
+**Estética vigente desde el 15 de noviembre:** el propietario elige Matrix A · Terminal y solicita además lluvia de símbolos verdes sobre negro. [Referencia y adaptación](STITCH_SOURCE.md). El negro/coral y los radios anteriores que aparecen más abajo son historial: en la nueva entrega el acento es verde fósforo y los radios son de 2 dp. El fondo animado se pausa fuera de primer plano y queda estático al desactivar animaciones; no desplaza contenido ni añade opciones o datos de memoria.
+
 El [contrato de Stitch](STITCH_SOURCE.md) gobierna la consulta visual. Estos estados no son ocho destinos de navegación.
 
 | Estado visual | Contenido y acciones | Regla |

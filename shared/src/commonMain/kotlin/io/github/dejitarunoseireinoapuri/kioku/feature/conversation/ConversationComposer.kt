@@ -23,11 +23,14 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
@@ -64,16 +67,14 @@ fun ConversationComposer(
         onEvent(event)
     }
     Surface(color = KiokuColors.Surface) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Column {
             Divider(color = KiokuColors.Rule)
-            TextComposer(state, enabled, inputEvent)
+            Column(Modifier.padding(horizontal = KiokuSpacing.Medium, vertical = KiokuSpacing.Small)) {
+                TextComposer(state, enabled, inputEvent)
+            }
             if (!keyboardVisible) {
+                Divider(color = KiokuColors.Rule)
                 IntentControls(state.intent, state.canSwitchIntent, onEvent)
-                Text(
-                    stringResource(Res.string.voice_hint),
-                    style = MaterialTheme.typography.body2,
-                    color = KiokuColors.Secondary,
-                )
             }
         }
     }
@@ -92,8 +93,8 @@ private fun IntentControls(
     val width = maxOf(measurer.measure(tell, style).size.width, measurer.measure(ask, style).size.width)
     val minimumButtonWidth = with(LocalDensity.current) { width.toDp() } + KiokuSpacing.Medium * 2
     BoxWithConstraints(Modifier.fillMaxWidth()) {
-        if ((maxWidth - 12.dp) / 2 >= minimumButtonWidth) {
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        if ((maxWidth - KiokuSpacing.Stroke) / 2 >= minimumButtonWidth) {
+            Row(horizontalArrangement = Arrangement.spacedBy(KiokuSpacing.Stroke)) {
                 IntentButton(MemoryIntent.Tell, selected, enabled, Modifier.weight(1f), onEvent)
                 IntentButton(MemoryIntent.Ask, selected, enabled, Modifier.weight(1f), onEvent)
             }
@@ -114,14 +115,19 @@ private fun TextComposer(
 ) {
     Surface(shape = MaterialTheme.shapes.small, border = BorderStroke(1.dp, KiokuColors.Rule)) {
         Row(Modifier.fillMaxWidth().padding(start = 16.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                ">",
+                modifier = Modifier.padding(end = KiokuSpacing.Small).clearAndSetSemantics {},
+                color = KiokuColors.Secondary,
+            )
             BasicTextField(
                 value = state.draft,
                 onValueChange = { onEvent(ConversationEvent.EditDraft(it)) },
-                modifier = Modifier.weight(1f).padding(vertical = 16.dp).testTag("text-composer"),
+                modifier = Modifier.weight(1f).padding(vertical = 12.dp).testTag("text-composer"),
                 enabled = enabled,
                 maxLines = 4,
                 textStyle = MaterialTheme.typography.body1.copy(color = KiokuColors.Text),
-                cursorBrush = SolidColor(KiokuColors.Coral),
+                cursorBrush = SolidColor(KiokuColors.Accent),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
                 keyboardActions = KeyboardActions(onSend = { onEvent(ConversationEvent.Submit) }),
                 decorationBox = { field ->
@@ -156,14 +162,24 @@ private fun IntentButton(
         modifier =
             modifier
                 .sizeIn(minHeight = KiokuSpacing.IntentHeight)
-                .semantics { this.selected = active }
+                .drawWithContent {
+                    drawContent()
+                    if (active) {
+                        drawLine(
+                            KiokuColors.Accent,
+                            Offset(0f, size.height),
+                            Offset(size.width, size.height),
+                            2.dp.toPx(),
+                        )
+                    }
+                }.semantics { this.selected = active }
                 .testTag("intent-${intent.name}"),
         elevation = null,
-        border = if (active) null else BorderStroke(1.dp, KiokuColors.Rule),
+        border = null,
         colors =
             ButtonDefaults.buttonColors(
-                backgroundColor = if (active) KiokuColors.Coral else KiokuColors.Surface,
-                contentColor = if (active) KiokuColors.Background else KiokuColors.Secondary,
+                backgroundColor = if (active) KiokuColors.Raised else KiokuColors.Surface,
+                contentColor = if (active) KiokuColors.Accent else KiokuColors.Secondary,
             ),
     ) {
         Text(

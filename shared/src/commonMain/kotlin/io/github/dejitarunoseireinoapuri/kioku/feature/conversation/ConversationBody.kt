@@ -124,7 +124,7 @@ private fun PreviewConversationBody(
 @Composable
 private fun ReadyContent(intent: MemoryIntent) {
     val tell = intent == MemoryIntent.Tell
-    Text(stringResource(if (tell) Res.string.tell_heading else Res.string.ask_heading), color = KiokuColors.Coral)
+    Text(stringResource(if (tell) Res.string.tell_heading else Res.string.ask_heading), color = KiokuColors.Accent)
     ScreenHeading(stringResource(if (tell) Res.string.ready_title else Res.string.ask_title))
     Text(stringResource(if (tell) Res.string.ready_hint else Res.string.ask_hint), color = KiokuColors.Secondary)
 }
@@ -157,7 +157,7 @@ private fun AnswerExample(
 
 @Composable
 private fun ClarificationExample() {
-    Text(stringResource(Res.string.clarification_pending), color = KiokuColors.Coral)
+    Text(stringResource(Res.string.clarification_pending), color = KiokuColors.Accent)
     Panel { Text(stringResource(Res.string.exam_story)) }
     Panel { Text(stringResource(Res.string.exam_clarification)) }
     Text(stringResource(Res.string.clarification_hint), color = KiokuColors.Secondary)
@@ -185,7 +185,7 @@ fun FeedbackMessage(
         } else {
             stringResource(text)
         },
-        color = KiokuColors.Coral,
+        color = KiokuColors.Accent,
         style = MaterialTheme.typography.body2,
         modifier = Modifier.padding(top = 16.dp),
     )

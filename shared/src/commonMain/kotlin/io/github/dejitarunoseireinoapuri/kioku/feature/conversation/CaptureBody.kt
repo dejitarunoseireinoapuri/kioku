@@ -66,7 +66,7 @@ fun CaptureBody(
                 }
 
                 is CaptureOutcome.Failed -> {
-                    Text(stringResource(captureError(outcome.issue)), color = KiokuColors.Coral)
+                    Text(stringResource(captureError(outcome.issue)), color = KiokuColors.Danger)
                     if (outcome.issue != CaptureIssue.MoreContext) {
                         ActionButton(stringResource(Res.string.retry), { onEvent(ConversationEvent.Submit) })
                     }
@@ -99,7 +99,7 @@ private fun SavedCapture(
 
 @Composable
 private fun PendingClarification(outcome: CaptureOutcome.Clarification) {
-    Text(stringResource(Res.string.clarification_pending), color = KiokuColors.Coral)
+    Text(stringResource(Res.string.clarification_pending), color = KiokuColors.Accent)
     Panel { Text(outcome.question) }
     Text(stringResource(Res.string.clarification_hint), color = KiokuColors.Secondary)
 }

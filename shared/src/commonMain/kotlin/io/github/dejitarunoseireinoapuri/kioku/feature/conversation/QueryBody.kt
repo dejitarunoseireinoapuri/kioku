@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import io.github.dejitarunoseireinoapuri.kioku.design.ActionButton
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
-import io.github.dejitarunoseireinoapuri.kioku.design.Panel
+import io.github.dejitarunoseireinoapuri.kioku.design.TranscriptMessage
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureIssue
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryOutcome
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
@@ -30,7 +30,7 @@ fun QueryBody(
         state.messages.forEach { message ->
             when (message) {
                 is QueryMessage.Question -> {
-                    Panel { Text(message.text) }
+                    TranscriptMessage(owner = true) { Text(message.text) }
                 }
 
                 is QueryMessage.Result -> {
@@ -74,7 +74,7 @@ private fun QueryResultBody(
             val limited = (outcome as? QueryOutcome.Failed)?.issue == CaptureIssue.MoreContext
             Text(
                 stringResource(if (limited) Res.string.query_limit else Res.string.query_error),
-                color = KiokuColors.Coral,
+                color = KiokuColors.Danger,
             )
             if (interactive) {
                 ActionButton(stringResource(if (limited) Res.string.query_reset else Res.string.retry), {

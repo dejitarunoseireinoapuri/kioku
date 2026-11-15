@@ -6,6 +6,7 @@ import io.github.dejitarunoseireinoapuri.kioku.design.ActionButton
 import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingNotice
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.Panel
+import io.github.dejitarunoseireinoapuri.kioku.design.TranscriptMessage
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureIssue
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
@@ -29,7 +30,7 @@ internal fun TextCaptureBody(
         is CaptureOutcome.Saved -> {}
 
         is CaptureOutcome.Clarification -> {
-            Panel { Text(capture.question) }
+            TranscriptMessage { Text(capture.question) }
         }
 
         CaptureOutcome.Ignored -> {
@@ -37,7 +38,7 @@ internal fun TextCaptureBody(
         }
 
         CaptureOutcome.Expired -> {
-            Text(stringResource(Res.string.capture_expired), color = KiokuColors.Coral)
+            Text(stringResource(Res.string.capture_expired), color = KiokuColors.Danger)
         }
 
         CaptureOutcome.Processing, CaptureOutcome.Unconfirmed -> {
@@ -45,7 +46,7 @@ internal fun TextCaptureBody(
         }
 
         is CaptureOutcome.Failed -> {
-            Text(stringResource(captureError(capture.issue)), color = KiokuColors.Coral)
+            Text(stringResource(captureError(capture.issue)), color = KiokuColors.Danger)
             if (interactive && capture.issue != CaptureIssue.MoreContext) {
                 ActionButton(
                     stringResource(Res.string.retry),

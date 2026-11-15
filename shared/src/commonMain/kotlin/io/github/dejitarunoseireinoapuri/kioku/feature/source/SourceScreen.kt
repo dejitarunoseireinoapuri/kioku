@@ -100,7 +100,7 @@ private fun SourceContent(source: MemorySource) {
     }
     source.correction?.let { correction ->
         Panel {
-            Text(stringResource(Res.string.correction_label), color = KiokuColors.Coral)
+            Text(stringResource(Res.string.correction_label), color = KiokuColors.Accent)
             Text(correction.instruction)
             Text(correction.currentSummary, color = KiokuColors.Secondary)
         }

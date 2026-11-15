@@ -104,7 +104,7 @@ class ManagementFlowTest {
     private fun forget(text: String) {
         compose.onNode(hasText("Olvidar") and memoryItemContaining(text)).performScrollTo().performClick()
         val image = compose.onNodeWithTag("forget-confirm-action").captureToImage().toPixelMap()
-        assertEquals(KiokuColors.Coral.toArgb(), image[image.width / 8, image.height / 2].toArgb())
+        assertEquals(KiokuColors.Accent.toArgb(), image[image.width / 8, image.height / 2].toArgb())
         captureBrandScreen(compose.activity, "kioku-forget-filled.png") {
             compose.onNodeWithTag("forget-confirmation").captureToImage()
         }

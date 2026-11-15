@@ -1,5 +1,11 @@
 # Cambios
 
+## Sin versión publicada · 2026-11-15 · Matrix Terminal
+
+- El propietario elige A de las tres propuestas Matrix. Tema compartido negro/verde fósforo, logo 憶 e iconos Android/iOS, acceso centrado, transcripción sin burbujas, modos compactos y gestión con tarjetas rectas. Google conserva su marca. Ajustes real muestra cuenta/estado de IA sin recorridos ficticios.
+- Fondo con lluvia de glifos sintéticos, intensidades de verde y cabezas claras: sin entrada de datos, gestos ni red; se detiene fuera de primer plano y respeta la escala de animación. Los mensajes usan una base legible sobre el fondo. Conserva teclado, confirmaciones, feed y autoridad de los recuerdos.
+- Rama `codex/matrix-terminal`; sin cambios de servidor o API. Referencia y límites en [STITCH_SOURCE](docs/01-functional/STITCH_SOURCE.md). Validación iOS nativa pendiente de Mac.
+
 ## Sin versión publicada · 2026-11-14
 
 - Corrección activa de captura con dos fechas en una oración: evidencia temporal literal por asunto, sin debilitar el validador. App distingue fallo confirmado, procesamiento y transporte desconocido; consulta recibos sin reenviar, permite continuar y conserva tarjetas pendientes en RAM entre modos. Concesiones caducadas dejan de figurar como processing y no pueden confirmar tarde. Pruebas locales/IA real/Honor correctas; cinco funciones actualizadas con autorización y recorrido nativo productivo correcto, con datos ficticios retirados. iOS pendiente. [Evidencia](docs/09-planning/K4_VALIDATION.md).

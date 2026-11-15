@@ -5,7 +5,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.MemoryChangeNotice
-import io.github.dejitarunoseireinoapuri.kioku.design.Panel
+import io.github.dejitarunoseireinoapuri.kioku.design.TranscriptMessage
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextOutcome
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.history_reply
@@ -35,13 +35,13 @@ internal fun TextMessageContent(
         }
 
         is TextMessage.PastReply -> {
-            Panel {
+            TranscriptMessage {
                 Text(
                     stringResource(Res.string.history_reply),
                     style = MaterialTheme.typography.caption,
                     color = KiokuColors.Secondary,
                 )
-                Text(message.text)
+                Text(message.text, color = KiokuColors.Secondary)
             }
         }
 

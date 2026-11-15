@@ -22,6 +22,7 @@ import androidx.navigation3.ui.NavDisplay
 import io.github.dejitarunoseireinoapuri.kioku.data.DisconnectedAccountRepository
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuTheme
+import io.github.dejitarunoseireinoapuri.kioku.design.MatrixBackdrop
 import io.github.dejitarunoseireinoapuri.kioku.di.ConversationDependencies
 import io.github.dejitarunoseireinoapuri.kioku.di.appModule
 import io.github.dejitarunoseireinoapuri.kioku.domain.AccountRepository
@@ -65,17 +66,19 @@ fun KiokuApp(
     KoinApplication(configuration = koinConfiguration { modules(application, platform) }) {
         KiokuTheme {
             Surface(color = KiokuColors.Background, contentColor = KiokuColors.Text) {
-                Column(Modifier.fillMaxSize().safeDrawingPadding()) {
-                    CompositionViewModels {
-                        AccountGate(
-                            accountRepository,
-                            ConversationDependencies(
-                                captureRepository,
-                                queryRepository,
-                                controlRepository,
-                                conversationRepository,
-                            ),
-                        )
+                MatrixBackdrop {
+                    Column(Modifier.fillMaxSize().safeDrawingPadding()) {
+                        CompositionViewModels {
+                            AccountGate(
+                                accountRepository,
+                                ConversationDependencies(
+                                    captureRepository,
+                                    queryRepository,
+                                    controlRepository,
+                                    conversationRepository,
+                                ),
+                            )
+                        }
                     }
                 }
             }

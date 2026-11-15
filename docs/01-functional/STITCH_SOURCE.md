@@ -1,6 +1,30 @@
 # Fuente visual y autoridad
 
-- Proyecto vigente: **Kioku · B — memoria conversacional**.
+## Matrix A · Terminal — elegida (2026-11-15)
+
+El propietario solicita un rediseño completo en Stitch y tres alternativas; después elige **A · Terminal** y autoriza aplicarla en una rama nueva. B y C son alternativas descartadas para esta entrega. Las referencias anteriores se conservan como historial, no como autoridad de color/disposición vigente.
+
+| Propuesta | Dirección visual | Proyecto en Stitch |
+| --- | --- | --- |
+| A · Terminal | Negro, verde fósforo, JetBrains Mono y geometría de terminal | [Abrir A](https://stitch.google.com/projects/9967462127248946713) |
+| B · Constructo | Sala blanca de Matrix, tinta oscura, verde ácido y composición editorial | [Abrir B](https://stitch.google.com/projects/15669495284714502750) |
+| C · Señal | Negro esmeralda, verde menta, tipografía mixta y formas suaves | [Abrir C](https://stitch.google.com/projects/15439214358451460442) |
+
+Cada proyecto contiene once estados: Acceso, Entrando, Explicar, Preguntar, Aclaración con teclado, Gestionar y corregir, Confirmar olvido, Ofrecer guardar, Ajustes, Sin conexión y Voz bloqueada. El último es una propuesta para K5, no una función ya implementada. Son maquetas estáticas con datos ficticios; su revisión visual no acredita accesibilidad nativa, animaciones, navegación funcional ni pruebas Android/iOS. Las reglas funcionales vigentes prevalecen sobre textos o interacciones ilustrativas.
+
+Antes de implementar se inspeccionan por MCP el inventario de A y las imágenes de Acceso, Explicar y Gestionar; el servicio rechaza la descarga de Confirmar olvido en esa consulta, por lo que se conserva la confirmación funcional existente y el acento/forma de A. No se edita Stitch durante la implementación. La petición posterior añade **fondo negro con columnas de símbolos cayendo en tonos verdes y cabezas más claras**, no un fondo verde liso. Esta animación es una adaptación autorizada de la app; no se atribuye a las maquetas estáticas.
+
+Paleta vigente: fondo `#020604`, superficie `#08110B`, elevación `#142319`, acento `#55FF89`, texto `#E5F4E9`, secundario `#9DB5A3`, divisores `#294333`. Se usan divisores más visibles que los de la referencia para preservar legibilidad. JetBrains Mono y el kanji vectorial 憶 se mantienen; Google conserva sus recursos originales y Google Sans. Radios de 2 dp, botones de al menos 48 dp y transcripción con prefijo «>» para entradas/regla verde para respuestas. Los tamaños crecen y los controles se apilan con texto ampliado; no se copia una captura de 390 px como un lienzo fijo.
+
+La lluvia es decorativa, no expone texto del usuario ni captura gestos. Tiene columnas/trazas acotadas y glifos medidos una sola vez por configuración; invalida el dibujo sin recomponer el chat por fotograma. Se retira el reloj de animación cuando el host pierde RESUMED y respeta MotionDurationScale. Los mensajes llevan una base casi opaca para leerlos sobre el fondo. No se añade micrófono operativo ni se alteran persistencia, API, modelos o permisos. En uso conectado, Ajustes no ofrece recorridos ficticios; siguen disponibles en fixtures de desarrollo.
+
+Implementación y comprobaciones en la rama `codex/matrix-terminal`. La compilación/firma iOS y la revisión de Reduce Motion/VoiceOver en un iPhone siguen pendientes de Mac; el código compartido no demuestra esos resultados.
+
+Validación Android ejecutada: `mobileCheck` (formato, límites Detekt, arquitectura, Android Lint y **111 host tests**) y APK de app/tests correctos. En Honor: **48 casos de interfaz** de cuenta, teclado, feed, menús, gestión y confirmación; después de los últimos ajustes de color/semántica se revalidan **17 casos afectados**, incluidos movimiento, pausa/reanudación y MotionDurationScale cero. Ventana pequeña y texto al 200 % incluidos en la batería. Solo fixtures; no se envían recuerdos a OpenAI ni se despliegan funciones. Las capturas se recuperan por nombre del directorio de pruebas, sin inspeccionar datos personales. [Acceso y gestión reales del build Android con datos ficticios](../assets/branding/kioku-matrix-terminal-honor.png). La imagen es estática; las pruebas de movimiento comparan dibujos al avanzar un reloj controlado, sin esperas arbitrarias. Esto no acredita rendimiento medido, auditoría completa TalkBack o ejecución nativa Apple.
+
+## Historial de la referencia B anterior
+
+- Proyecto anterior: **Kioku · B — memoria conversacional**.
 - ID: `11852641719392883248`.
 - URL: https://stitch.google.com/projects/11852641719392883248
 - Referencia estética: B, carbón `#14171B`, coral `#FF674F` y esquinas de 4–8 dp. Por petición posterior del propietario, la fuente actual de la app es **JetBrains Mono**, con pesos normal/seminegrita/negrita. Google conserva Google Sans y su G oficial; el kanji sigue siendo el contorno Noto Sans JP 900 elegido. Las maquetas históricas usan IBM Plex.

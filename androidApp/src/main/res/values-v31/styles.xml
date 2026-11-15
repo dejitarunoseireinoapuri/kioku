@@ -4,9 +4,9 @@
         <item name="android:windowActionModeOverlay">true</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar">false</item>
-        <item name="android:windowBackground">#14171B</item>
-        <item name="android:colorAccent">#FF674F</item>
-        <item name="android:windowSplashScreenBackground">#14171B</item>
+        <item name="android:windowBackground">#020604</item>
+        <item name="android:colorAccent">#55FF89</item>
+        <item name="android:windowSplashScreenBackground">#020604</item>
         <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_kioku</item>
     </style>
 </resources>

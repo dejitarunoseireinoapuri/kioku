@@ -90,5 +90,5 @@ internal fun AccountIssueText(issue: AccountIssue) {
             AccountIssue.Unavailable -> Res.string.account_unavailable
             AccountIssue.SetupRequired -> Res.string.account_setup
         }
-    Text(stringResource(resource), color = KiokuColors.Secondary)
+    Text(stringResource(resource), color = KiokuColors.Danger)
 }

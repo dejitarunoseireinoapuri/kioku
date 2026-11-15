@@ -57,7 +57,7 @@ internal fun kiokuEntries(
             actions.signOut,
             actions.refresh,
             actions.back,
-            examplesEnabled = loading == null,
+            examplesEnabled = loading == null && dependencies.conversation == null && dependencies.captures == null,
         ) { scenario ->
             model.onEvent(ConversationEvent.ShowExample(scenario))
             actions.back()

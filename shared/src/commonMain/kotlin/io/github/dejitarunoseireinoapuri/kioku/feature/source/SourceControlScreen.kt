@@ -183,7 +183,7 @@ internal fun ControlFeedbackNotice(
         null -> {}
 
         is ControlFeedback.Clarification -> {
-            Text(feedback.text)
+            Text(feedback.text, color = KiokuColors.Danger)
         }
 
         else -> {

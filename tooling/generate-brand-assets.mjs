@@ -38,7 +38,7 @@ const path = glyph.path
     .transform(scale, 0, 0, -scale, dx, dy)
     .mapPoints((x, y) => [Number(x.toFixed(3)), Number(y.toFixed(3))])
     .toSVG();
-const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><path fill="#FF674F" d="${path}"/></svg>\n`;
+const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><path fill="#55FF89" d="${path}"/></svg>\n`;
 await save("docs/assets/branding/kioku-kanji.svg", svg);
 const vector = (
     size,
@@ -52,17 +52,17 @@ ${group ? "</group>" : ""}
 </vector>\n`;
 await save(
     "shared/src/commonMain/composeResources/drawable/kioku_mark.xml",
-    vector(112, "#FF674F"),
+    vector(112, "#55FF89"),
 );
 await save(
     "androidApp/src/main/res/drawable/ic_kioku.xml",
-    vector(108, "#FF674F", true),
+    vector(108, "#55FF89", true),
 );
 await save(
     "androidApp/src/main/res/drawable/ic_launcher_foreground.xml",
-    vector(108, "#14171B", true),
+    vector(108, "#55FF89", true),
 );
-const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024"><rect width="1024" height="1024" fill="#FF674F"/><g transform="translate(256 256) scale(.512)"><path fill="#14171B" d="${path}"/></g></svg>`;
+const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024"><rect width="1024" height="1024" fill="#020604"/><g transform="translate(256 256) scale(.512)"><path fill="#55FF89" d="${path}"/></g></svg>`;
 const iconDirectory = "iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/";
 const images = [];
 const slots = [

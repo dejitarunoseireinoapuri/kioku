@@ -13,14 +13,16 @@ fun AccentButton(
     label: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
 ) {
     val feedback = rememberButtonFeedback(KiokuColors.Background, Color.Black)
     Button(
         onClick = onClick,
+        enabled = enabled,
         modifier = modifier.sizeIn(minHeight = KiokuSpacing.TouchTarget),
         colors =
             ButtonDefaults.buttonColors(
-                backgroundColor = KiokuColors.Coral,
+                backgroundColor = KiokuColors.Accent,
                 contentColor = feedback.contentColor,
             ),
         elevation = null,

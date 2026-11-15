@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.dejitarunoseireinoapuri.kioku.design.ActionButton
 import io.github.dejitarunoseireinoapuri.kioku.design.IconAction
+import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
 import io.github.dejitarunoseireinoapuri.kioku.design.ScreenHeading
 import io.github.dejitarunoseireinoapuri.kioku.design.TopBar
 import io.github.dejitarunoseireinoapuri.kioku.feature.account.AccountState
@@ -46,18 +47,19 @@ fun SettingsScreen(
             IconAction(Res.drawable.icon_back, stringResource(Res.string.back), onBack)
         })
         Column(
-            Modifier.verticalScroll(rememberScrollState()).padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
+            Modifier.verticalScroll(rememberScrollState()).padding(KiokuSpacing.Medium),
+            verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large),
         ) {
             AccountSettings(account, onRefresh, onSignOut)
-            ScreenHeading(stringResource(Res.string.examples_heading))
-            PreviewScenario.entries.forEach { scenario ->
-                ActionButton(
-                    stringResource(scenarioLabel(scenario)),
-                    { onExample(scenario) },
-                    Modifier.fillMaxWidth(),
-                    enabled = examplesEnabled,
-                )
+            if (examplesEnabled) {
+                ScreenHeading(stringResource(Res.string.examples_heading))
+                PreviewScenario.entries.forEach { scenario ->
+                    ActionButton(
+                        stringResource(scenarioLabel(scenario)),
+                        { onExample(scenario) },
+                        Modifier.fillMaxWidth(),
+                    )
+                }
             }
         }
     }

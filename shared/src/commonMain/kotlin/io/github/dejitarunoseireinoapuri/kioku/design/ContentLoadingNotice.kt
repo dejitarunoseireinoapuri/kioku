@@ -1,7 +1,9 @@
 package io.github.dejitarunoseireinoapuri.kioku.design
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -51,16 +53,16 @@ fun ContentLoadingNotice(
                     liveRegion = LiveRegionMode.Polite
                     progressBarRangeInfo = ProgressBarRangeInfo.Indeterminate
                 },
-        color = KiokuColors.Raised,
+        color = KiokuColors.Surface,
         shape = MaterialTheme.shapes.small,
         border = BorderStroke(KiokuSpacing.Stroke, KiokuColors.Rule),
     ) {
         Row(
-            Modifier.padding(KiokuSpacing.Medium),
-            horizontalArrangement = Arrangement.spacedBy(KiokuSpacing.Medium),
+            Modifier.padding(KiokuSpacing.Small),
+            horizontalArrangement = Arrangement.spacedBy(KiokuSpacing.Small),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            LoadingMark(Modifier.size(KiokuSpacing.InlineLoadingMark))
+            Box(Modifier.size(KiokuSpacing.InlineLoadingMark).background(KiokuColors.Accent))
             ProvideTextStyle(MaterialTheme.typography.body2) {
                 LoadingStatusText(status, Modifier.weight(1f), textAlign = TextAlign.Start)
             }
