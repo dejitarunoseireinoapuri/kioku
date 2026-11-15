@@ -110,7 +110,7 @@ class LiveRepeatedForgetTest {
         }
 
     private fun confirmForget(expected: String) {
-        click("Sí, borrar")
+        click("Sí, olvidar")
         compose.waitUntil(REPEATED_LIVE_TIMEOUT) {
             compose
                 .onAllNodes(

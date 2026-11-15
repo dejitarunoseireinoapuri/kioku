@@ -65,7 +65,7 @@ class LiveConversationTest {
         savedVisible()
         ready()
         send("Olvida lo del museo Nube de la prueba K4nube9261.")
-        click("Sí, borrar")
+        click("Sí, olvidar")
         compose.waitUntil(CONVERSATION_LIVE_TIMEOUT) {
             compose.onAllNodesWithText("He olvidado «", substring = true).fetchSemanticsNodes().isNotEmpty()
         }

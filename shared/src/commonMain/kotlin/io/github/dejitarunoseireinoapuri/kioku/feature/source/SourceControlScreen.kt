@@ -74,6 +74,7 @@ fun SourceControlScreen(
 ) {
     val scroll = rememberScrollState()
     val working = state is SourceControlState.Working
+    val feedback = (state as? SourceControlState.Ready)?.feedback
     val forward = controlInputEvents(onEvent)
     (state as? SourceControlState.Ready)?.forget?.let { pending ->
         ForgetConfirmationDialog(
@@ -82,7 +83,9 @@ fun SourceControlScreen(
             { forward(SourceControlEvent.CancelForget) },
         )
     }
-    LaunchedEffect(working, scroll.maxValue) { if (working) scroll.animateScrollTo(scroll.maxValue) }
+    LaunchedEffect(working, feedback, scroll.maxValue) {
+        if (working || feedback != null) scroll.animateScrollTo(scroll.maxValue)
+    }
     Column(Modifier.fillMaxSize()) {
         TopBar(
             stringResource(Res.string.control_title),

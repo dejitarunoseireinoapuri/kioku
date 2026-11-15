@@ -16,6 +16,7 @@ import { FirestoreRoutingStore } from "../../src/firebase/routing-store.js";
 import { ApplyMessage } from "../../src/conversation/apply.js";
 import { turn } from "./conversation-fixtures.js";
 import { selectiveChange } from "../../src/memory-control/selection.js";
+import type { ForgetEvidence } from "#memory-core/forget-format";
 
 let now = at;
 const root = db.doc(`accounts/${uid}`),
@@ -26,6 +27,7 @@ class Duplicates extends ConversationIntelligence {
   selected: string[] | null = null;
   reviewAllowed = true;
   unresolved = false;
+  evidence: ForgetEvidence[] = [];
   afterSelection: () => Promise<void> = async () => {};
   batches = 0;
   async selectDuplicateFacts(data: {
@@ -39,6 +41,7 @@ class Duplicates extends ConversationIntelligence {
         this.selected ??
         data.memories.filter((m) => m.text.includes("Loto")).map((m) => m.id),
       unresolved: this.unresolved,
+      evidence: this.evidence,
       question: this.unresolved ? "¿Qué Loto?" : null,
     };
   }
@@ -154,6 +157,80 @@ test("scope source remains narrow, and a changed input cannot reuse an all-occur
     1,
   );
   await assert.rejects(service.execute(uid, command, provider, allowed));
+});
+
+async function shareEvidence() {
+  const seeded = await seedCopies();
+  const write = db.batch();
+  for (const entry of seeded.entries) {
+    for (const memory of entry.memories) {
+      write.update(root.collection("memories").doc(memory.id), {
+        quote: entry.source.text,
+        entities: memory.text.includes("examen") ? ["examen"] : ["Loto"],
+      });
+      model.evidence.push({
+        memoryId: memory.id,
+        quote: memory.quote,
+        timeQuote: memory.time.quote,
+        attributionEvidence: memory.attributionEvidence,
+      });
+    }
+  }
+  await write.commit();
+  seeded.command.expectedVersion = (
+    await store.details(uid, seeded.command.sourceId)
+  ).version;
+  return seeded;
+}
+
+test("shared evidence is separated atomically across copies, retaining only the independent facts", async () => {
+  const { command, entries } = await shareEvidence();
+  const result = await service.execute(uid, command, provider, allowed);
+  assert.equal(result.status, "forgotten");
+  assert.equal(result.memoryEpoch, 1);
+  const saved = await root.collection("memories").get();
+  assert.equal(saved.size, 2);
+  for (const entry of saved.docs) {
+    assert.equal(entry.get("text"), "El examen ficticio es el martes.");
+    assert.equal(entry.get("quote"), entry.get("text"));
+    assert.equal(entry.get("revision"), 2);
+    assert.ok(!JSON.stringify(entry.data()).includes("Loto"));
+  }
+  const retained = await root.collection("sources").get();
+  assert.equal(retained.size, 2);
+  assert.ok(
+    retained.docs.every((s) => !JSON.stringify(s.data()).includes("Loto")),
+  );
+  for (const entry of entries)
+    await assert.rejects(store.details(uid, entry.source.id));
+  const calls = model.calls;
+  assert.deepEqual(
+    await service.execute(uid, command, provider, allowed),
+    result,
+  );
+  assert.equal(model.calls, calls);
+});
+
+test("a rejected or fabricated separation leaves every shared source and fact intact", async () => {
+  const { command } = await shareEvidence();
+  model.reviewAllowed = false;
+  assert.equal(
+    (await service.execute(uid, command, provider, allowed)).status,
+    "needsClarification",
+  );
+  await unchanged(2);
+  assert.equal((await root.collection("memories").get()).size, 4);
+  model.reviewAllowed = true;
+  model.evidence[0]!.quote = "Un literal inventado.";
+  await assert.rejects(
+    service.execute(
+      uid,
+      { ...command, requestId: randomUUID() },
+      provider,
+      allowed,
+    ),
+  );
+  await unchanged(2);
 });
 
 test("ambiguity, negative review and malformed selections never mutate the first prepared source", async () => {

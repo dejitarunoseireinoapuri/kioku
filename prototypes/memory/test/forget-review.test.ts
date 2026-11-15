@@ -8,7 +8,7 @@ for (const selection of [true, false])
     test(`duplicate ${selection ? "selection" : "review"} is bounded, private and strict: invalid=${invalid}`, async () => {
       let calls = 0;
       const valid = selection
-        ? { memoryIds: [], unresolved: false, question: null }
+        ? { memoryIds: [], evidence: [], unresolved: false, question: null }
         : { allowed: true };
       const provider = new OpenAiMemory(
         "sk-synthetic-test-only",
@@ -20,7 +20,7 @@ for (const selection of [true, false])
           assert.equal(body.model, model);
           assert.deepEqual(body.reasoning, { effort: modelProfile.reasoning });
           assert.equal(body.store, false);
-          assert.equal(body.max_output_tokens, selection ? 2000 : 1000);
+          assert.equal(body.max_output_tokens, selection ? 6000 : 1000);
           assert.equal(body.text.format.strict, true);
           assert.equal(
             body.text.format.name,

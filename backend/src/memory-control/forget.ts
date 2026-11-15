@@ -10,7 +10,7 @@ import type {
   SourceControlStore,
 } from "./contracts.js";
 import { scopeVersion } from "./retirement.js";
-import { selectiveChange } from "./selection.js";
+import { separateForgetEvidence } from "./forget-evidence.js";
 import { forgetLimits, withoutVectors } from "./forget-contracts.js";
 import type { MemoryInventory, ForgetReplacement } from "./forget-contracts.js";
 
@@ -79,7 +79,18 @@ export class ForgetRepeatedMemory {
           (target) =>
             batch.memories.some((m) => m.id === target.id) &&
             !ids.has(target.id),
-        )
+        ) ||
+        new Set(selection.evidence.map((item) => item.memoryId)).size !==
+          selection.evidence.length ||
+        selection.evidence.some((item) => {
+          const memory = batch.memories.find((m) => m.id === item.memoryId);
+          return (
+            !memory ||
+            !batch.memories.some(
+              (m) => m.sourceId === memory.sourceId && ids.has(m.id),
+            )
+          );
+        })
       ) {
         throw new AccountError("failed-precondition");
       }
@@ -88,10 +99,13 @@ export class ForgetRepeatedMemory {
         const matched = memories.filter((memory) => ids.has(memory.id));
         return matched.length
           ? [
-              selectiveChange(
+              separateForgetEvidence(
                 source,
                 memories,
                 matched.map((m) => m.id),
+                selection.evidence.filter((item) =>
+                  memories.some((m) => m.id === item.memoryId),
+                ),
               ),
             ]
           : [];
@@ -100,6 +114,10 @@ export class ForgetRepeatedMemory {
         ...data,
         selectedIds: [...ids],
         retainedSources: changes.flatMap((c) => c.replacement.sources),
+        retainedMemories: withoutVectors(
+          changes.flatMap((c) => c.replacement.memories),
+        ),
+        evidence: selection.evidence,
       };
       if (JSON.stringify(reviewInput).length > forgetLimits.batchCharacters)
         throw new AccountError("resource-exhausted");
@@ -121,6 +139,9 @@ export class ForgetRepeatedMemory {
           bundle,
           snapshot: change.replacement,
           selectedIds: change.removed.map((item) => item.id),
+          evidence: selection.evidence.filter((item) =>
+            bundle.memories.some((m) => m.id === item.memoryId),
+          ),
         });
       }
       for (const id of ids) selected.add(id);
@@ -167,6 +188,13 @@ export function inventoryBatches(
         memories: withoutVectors(units),
         selectedIds: units.map((m) => m.id),
         retainedSources: entries,
+        retainedMemories: withoutVectors(units),
+        evidence: units.map((m) => ({
+          memoryId: m.id,
+          quote: m.quote,
+          timeQuote: m.time.quote,
+          attributionEvidence: m.attributionEvidence,
+        })),
       }).length +
       entries.length * 512;
     const cost = batchCost([source], items);

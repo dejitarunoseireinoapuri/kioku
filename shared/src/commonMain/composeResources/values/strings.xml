@@ -137,7 +137,7 @@
     <string name="forget_confirm_title">¿Borrar este recuerdo?</string>
     <string name="forget_confirm_copies">Este recuerdo y sus copias en otros relatos dejarán de estar accesibles. Los demás datos se conservarán.</string>
     <string name="forget_confirm_source">Este texto y sus recuerdos dejarán de estar accesibles. Las copias en otros relatos se conservarán.</string>
-    <string name="forget_confirm">Sí, borrar</string>
+    <string name="forget_confirm">Sí, olvidar</string>
     <string name="forget_cancelled">No he borrado ningún recuerdo.</string>
     <string name="control_uncertain">El cambio sigue pendiente. Comprueba su estado antes de hacer otro.</string>
     <string name="control_failed">No he podido confirmar el cambio. Puedes comprobarlo de nuevo o cargar la versión actual.</string>

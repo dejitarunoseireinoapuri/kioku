@@ -6,7 +6,7 @@ import type { MemoryInventory, ForgetReplacement } from "./forget-contracts.js";
 import { forgetLimits } from "./forget-contracts.js";
 import { scopeVersion } from "./retirement.js";
 import { validateReplacement } from "./replacement.js";
-import { selectiveChange } from "./selection.js";
+import { separateForgetEvidence } from "./forget-evidence.js";
 
 function normalize(snapshot: Snapshot) {
   return {
@@ -72,10 +72,11 @@ export function validateForgetChanges(
     )
       throw new AccountError("failed-precondition");
     const prepared = validateReplacement(change.snapshot, id);
-    const expected = selectiveChange(
+    const expected = separateForgetEvidence(
       original,
       memories,
       change.selectedIds,
+      change.evidence,
     ).replacement;
     if (!isDeepStrictEqual(normalize(prepared), normalize(expected)))
       throw new AccountError("failed-precondition");

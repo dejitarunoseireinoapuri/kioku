@@ -314,7 +314,7 @@ export class OpenAiMemory implements MemoryIntelligence {
       data,
       duplicateSelectionSchema,
       "memory_duplicates",
-      2000,
+      6000,
     );
   }
 

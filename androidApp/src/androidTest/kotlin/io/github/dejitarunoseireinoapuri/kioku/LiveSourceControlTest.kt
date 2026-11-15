@@ -80,8 +80,8 @@ class LiveSourceControlTest {
         compose.onNodeWithText("Gestionar").performClick()
         waitVisible("Olvidar")
         compose.onNodeWithText("Olvidar").performScrollTo().performClick()
-        waitVisible("Sí, borrar")
-        compose.onNodeWithText("Sí, borrar").performScrollTo().performClick()
+        waitVisible("Sí, olvidar")
+        compose.onNodeWithText("Sí, olvidar").performScrollTo().performClick()
         compose.waitUntil(LIVE_TIMEOUT) {
             compose.onAllNodesWithText("He olvidado «", substring = true).fetchSemanticsNodes().isNotEmpty()
         }

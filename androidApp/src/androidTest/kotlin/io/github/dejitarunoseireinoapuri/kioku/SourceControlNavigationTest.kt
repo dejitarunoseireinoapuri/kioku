@@ -156,7 +156,7 @@ class SourceControlNavigationTest {
         captureBrandScreen(compose.activity, "kioku-forget-confirmation.png") {
             compose.onNodeWithTag("forget-confirmation").captureToImage()
         }
-        compose.onNodeWithText("Sí, borrar").performScrollTo().performClick()
+        compose.onNodeWithText("Sí, olvidar").performScrollTo().performClick()
         compose.waitUntil(5000) { controls.commands.size == 1 }
         compose.onNodeWithTag("forget-confirmation").assertDoesNotExist()
         compose.onNodeWithText("He olvidado «Película Loto.».").assertDoesNotExist()
@@ -189,7 +189,7 @@ class SourceControlNavigationTest {
                     "Los demás datos se conservarán.",
             ).assertIsDisplayed()
         assertEquals(0, controls.commands.size)
-        compose.onNodeWithText("Sí, borrar").performScrollTo().performClick()
+        compose.onNodeWithText("Sí, olvidar").performScrollTo().performClick()
         compose.waitUntil(5000) { compose.onNodeWithText("He olvidado «Examen el martes.».").isDisplayed() }
         assertEquals(1, controls.commands.size)
         assertEquals(listOf("$CONTROL_ID-2"), controls.commands.single().memoryIds)

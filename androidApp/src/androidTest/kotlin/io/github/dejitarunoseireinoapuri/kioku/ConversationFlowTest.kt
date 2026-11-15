@@ -213,7 +213,7 @@ class ConversationFlowTest {
         visible("¿Borrar este recuerdo?")
         assertEquals(2, repository.commands.size)
         repository.answer = { TextOutcome.Changed(MemoryChange.Confirmed(ChangeAction.Forget, 1)) }
-        click("Sí, borrar")
+        click("Sí, olvidar")
         visible("He olvidado «Examen de mi primo Pablo.».")
         assertTrue(
             repository.commands

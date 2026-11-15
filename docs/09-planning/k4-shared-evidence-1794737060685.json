@@ -1,0 +1,18 @@
+{
+  "model": "gpt-6.1-sol",
+  "reasoning": "medium",
+  "corpusHash": "472fdc612e261496e04bec747d2494fec252c4c66544fbf3d3659725e9db9a1b",
+  "scope": "Synthetic regression in RAM; actual provider; no production or native proof",
+  "rows": [
+    {
+      "id": "two-plans-two-dates",
+      "passed": true
+    },
+    {
+      "id": "reported-independent-plans",
+      "passed": true
+    }
+  ],
+  "calls": 5,
+  "estimatedUsd": 0.030435000000000656
+}

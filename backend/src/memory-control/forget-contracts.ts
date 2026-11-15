@@ -1,4 +1,5 @@
 import type { Snapshot, Memory } from "#memory-core/domain";
+import type { ForgetEvidence } from "#memory-core/forget-format";
 import type { QueryLease, EvidenceVersion } from "../query/contracts.js";
 import type { ChangeInput, ChangeResult, SourceBundle } from "./contracts.js";
 
@@ -20,6 +21,7 @@ export interface ForgetReplacement {
   bundle: SourceBundle;
   snapshot: Snapshot;
   selectedIds: string[];
+  evidence?: ForgetEvidence[];
 }
 export interface ForgetStore {
   inventory(uid: string, lease: QueryLease): Promise<MemoryInventory>;
@@ -35,6 +37,7 @@ export interface ForgetStore {
 export interface ForgetIntelligence {
   selectDuplicateFacts(data: unknown): Promise<{
     memoryIds: string[];
+    evidence: ForgetEvidence[];
     unresolved: boolean;
     question: string | null;
   }>;

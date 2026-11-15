@@ -4,6 +4,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.captureToImage
@@ -19,6 +20,7 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.EditableSource
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryItem
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemorySource
 import io.github.dejitarunoseireinoapuri.kioku.domain.SourceKind
+import io.github.dejitarunoseireinoapuri.kioku.feature.source.ControlFeedback
 import io.github.dejitarunoseireinoapuri.kioku.feature.source.SourceControlEvent
 import io.github.dejitarunoseireinoapuri.kioku.feature.source.SourceControlScreen
 import io.github.dejitarunoseireinoapuri.kioku.feature.source.SourceControlState
@@ -71,6 +73,18 @@ class MemoryManagementLayoutTest {
         compose.onNodeWithText("Leer el relato").assertDoesNotExist()
         compose.onNodeWithText("Cerrar el relato").assertDoesNotExist()
         compose.onNodeWithText("Olvidar este relato").assertDoesNotExist()
+    }
+
+    @Test
+    fun feedbackAppearingAfterAChangeScrollsIntoViewWithoutASecondGesture() {
+        val ready =
+            SourceControlState.Ready(
+                source().copy(items = (1..8).map { MemoryItem("fixture-$it", "Recuerdo ficticio $it. ".repeat(4)) }),
+            )
+        val state = mutableStateOf(ready)
+        compose.setContent { ManagementFixture(state.value) }
+        compose.runOnIdle { state.value = ready.copy(feedback = ControlFeedback.Clarification("No he olvidado nada.")) }
+        compose.onNodeWithText("No he olvidado nada.").assertIsDisplayed()
     }
 
     private fun source() =
