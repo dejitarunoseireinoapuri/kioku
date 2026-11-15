@@ -1,6 +1,8 @@
 # K4 · Control conversacional de memoria
 
-## Escritura ambigua y corrección de evidencia compartida · preparada 15 de noviembre
+## Escritura ambigua y corrección de evidencia compartida · activa y aceptada en Honor, 15 de noviembre
+
+Estado actual: preparación, activación y aceptación real completadas. Los primeros apartados conservan las comprobaciones previas; el resultado productivo autorizado se registra al final de esta sección.
 
 El propietario comunica palabras unidas/errores al explicar y editar; aporta «quiero jugary prender» y señala el aviso abierto del Honor. Se observa únicamente el mensaje técnico genérico de Gestión. Inspección administrativa acotada y de solo lectura: los dos recuerdos de la fuente más reciente comparten evidencia y la preparación determinista anterior rechaza editar cualquiera antes del proveedor. Solo se emiten estados, recuentos y resultados booleanos; ningún texto real se imprime, conserva en un diagnóstico o envía a OpenAI. Esto reproduce un bloqueo estructural, aunque no identifica con certeza la excepción de aquella operación histórica sin diagnóstico propio. No se reintenta ni modifica el recuerdo real.
 
@@ -23,9 +25,28 @@ Validación local: TypeScript strict/formato correctos, 102 núcleo y 40 backend
 
 Honor Android 14/API 34, UI con repositorios de prueba: **3/3, 12,164 s**, aclaración ligada al pendiente, edición rechazada con aviso/borrador disponible y sustitución posterior mediante un ID nuevo, recuperación de un fallo técnico conservando el comando. No prueba el nuevo servidor. Compilación de instrumentación, formato, arquitectura, Detekt y Android Lint correctos; host tests reutilizados por Gradle al no cambiar el cliente principal. La nueva prueba real LiveWritingTest queda preparada con opt-in antes de abrir MainActivity; todavía no se ejecuta en producción. Una importación no válida de esa prueba se corrige antes de la compilación final. No se cambia APK principal, firma ni cuenta; iOS no se compila en Windows.
 
-Pendiente: autorización específica para actualizar únicamente submitTurn, resolveClarification, applyMessage y changeMemory en kioku-9454f/europe-west1; después ejecutar LiveWritingTest con un relato ficticio nuevo, comprobar conservación de los datos anteriores y retirar solo los ficticios mediante el servicio protegido. No reintentar automáticamente el recuerdo real. No se despliega por el mero hecho de pasar las pruebas ni se integra en main.
+La activación prevista en la preparación requería autorización específica de submitTurn, resolveClarification, applyMessage y changeMemory en kioku-9454f/europe-west1, seguida de LiveWritingTest y retirada protegida del relato ficticio. Esa autorización se concede después; no incluye reintentar el recuerdo real ni integrar en main. Resultado a continuación.
 
 Documentación consultada y adaptada: AGENTS, convenciones/calidad/guía de desarrollo, reglas/requisitos, modelo/API/seguridad, matriz de pruebas y planificación/limitaciones K4; ADR-010 consultada sin cambio de decisión arquitectónica. Referencias Stitch de aclaración y fuente inspeccionadas; no se edita Stitch ni se introduce otro diseño.
+
+### Activación autorizada y aceptación real de escritura
+
+El propietario autoriza expresamente las cuatro funciones propuestas y el recorrido ficticio del Honor, con retirada posterior, sin reenviar ni modificar su recuerdo real. Se despliega **a46cb1f** en kioku-9454f/europe-west1: submitTurn, resolveClarification, applyMessage y changeMemory quedan ACTIVE/nodejs22, build **923015c7-759d-4cdd-a216-aed5fe30ccf8**, identidad kioku-runtime esperada y cero stateMessages. Las otras seis funciones conservan sus compilaciones exactas. Build TypeScript y formato de predeploy correctos. Sin nuevas funciones, IAM, índices, claves o copias históricas. Sol medium permanece fijado; la separación de evidencia compartida añade solo su llamada condicional ya descrita.
+
+Ocho comprobaciones HTTPS negativas, dos por función: sin sesión/atestación y con atestación inválida. Todas devuelven **401 UNAUTHENTICATED sin result**. No se envía un recuerdo en estas comprobaciones. Antes del recorrido se registra una referencia de **catorce fuentes/diecinueve recuerdos**, exclusivamente IDs/versiones, con el marcador K4texto1834 ausente.
+
+**LiveWritingTest: 1/1, 59,065 s**, Honor FNE_NX9 Android 14/API 34, sesión Google/App Check/servidor reales. Opt-in de proyecto comprobado antes de abrir MainActivity; sin ese opt-in se había comprobado su omisión en 0,049 s, que no cuenta como aceptación real. El recorrido autorizado:
+
+- Envía una frase ficticia con palabras unidas y recibe una petición de reformulación, sin gestión de un recuerdo guardado inexistente.
+- Reformula con dos planes y los ve por separado en Gestionar.
+- Intenta corregir uno mediante texto ambiguo; recibe el aviso de que no se ha modificado y mantiene el editor con su borrador.
+- Reescribe la corrección claramente; cambia vivero por planetario y permanece en Gestionar, con dos datos actuales y el cómic conservado.
+
+Inspección canónica limitada a los ficticios: dos fuentes (retained/correction), dos recuerdos, primera persona y estado planned; fechas **20 y 21 de diciembre de 2026** conservadas. El literal vivero ya no figura en esas fuentes o metadatos. No se ejecuta una consulta global ni se manda evidencia personal anterior al proveedor para esta aceptación.
+
+Limpieza mediante FirestoreSourceRetirementStore con versiones verificadas y validación del contenido ficticio autorizado antes de retirar: **dos fuentes ficticias retiradas, cero fuentes/recuerdos con marcador, cero fuentes nuevas sin contabilizar y las catorce fuentes/diecinueve recuerdos anteriores con IDs/versiones exactos**. La app se abre normalmente después: Explicar y Preguntar disponibles, sesión Google conservada, sin pantalla de login ni marcador. Instalación/firma/APK principal y Samsung preservados; solo se actualiza el APK de instrumentación.
+
+Entrega aceptada en Android/backend, sin reinstalación necesaria del cliente principal. La documentación de estado/contrato/modelo/seguridad se actualiza y comprueba. No hay compilación ni aceptación nueva de iOS en Windows, saldo API real o coste desglosado de la ejecución productiva. No se integra en main ni se cierra globalmente K4 por esta incidencia.
 
 Rama: `codex/k4-memory-control`, desde la entrega K3 `6b264e7`. **Control por fuente, conversación y olvido de copias entre relatos activos y comprobados en Honor real.** Este bloque de olvido queda validado en Android/backend dentro de sus cotas. K3 conserva la comprobación iOS actual y la aclaración del reporte temporal pendientes. No se integran ramas en `main` por esta ejecución. K4 completa continúa pendiente de iOS.
 

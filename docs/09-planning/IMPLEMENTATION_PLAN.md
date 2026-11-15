@@ -1,6 +1,6 @@
 # Fases de Kioku
 
-Incidencia K4 en preparación (15 de noviembre): reformulación de textos ambiguos, fechas sin diacríticos y edición de un dato con evidencia compartida. Backend, pruebas sintéticas Sol medio y UI Honor con dobles comprobados; activación de submitTurn/resolveClarification/applyMessage/changeMemory y nuevo recorrido productivo pendientes de autorización específica. No cierra K4 ni adelanta voz. Detalle en [K4_VALIDATION](K4_VALIDATION.md).
+Incidencia K4 resuelta en Android/backend (15 de noviembre): reformulación de textos ambiguos, fechas sin diacríticos y edición de un dato con evidencia compartida. Backend, pruebas sintéticas Sol medio y UI Honor con dobles comprobados; cuatro funciones activadas con autorización y recorrido productivo Honor correcto. Prueba ficticia retirada; catorce fuentes/diecinueve recuerdos previos con versiones intactas. No requiere otro APK principal. No cierra K4 globalmente ni acredita iOS actual. Detalle en [K4_VALIDATION](K4_VALIDATION.md).
 
 Este documento define el alcance y el cierre de las fases. Los [requisitos](../01-functional/FUNCTIONAL_REQUIREMENTS.md) gobiernan el comportamiento; las [limitaciones](KNOWN_LIMITATIONS.md) registran las decisiones pendientes. Planificar no equivale a implementar.
 
