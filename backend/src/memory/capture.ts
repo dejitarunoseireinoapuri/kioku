@@ -11,6 +11,9 @@ import type {
   CaptureStore,
   ClarificationInput,
 } from "./contracts.js";
+import { captureFailure } from "./diagnostics.js";
+import type { CaptureStage } from "./diagnostics.js";
+import { observedCapture } from "./processing.js";
 
 /** Stages only the current turn. The store commits its source/items and receipt atomically. */
 class StagedCapture implements MemoryRepository {
@@ -37,14 +40,24 @@ export class CaptureMemory {
   ): Promise<CaptureResult> {
     const work = await this.store.begin(uid, input);
     if ("result" in work) return work.result;
+    let stage: CaptureStage = "credentials";
     try {
       const repository = new StagedCapture();
-      const engine = new MemoryEngine(repository, await intelligence());
+      const ai = await intelligence();
+      stage = "validation";
+      const engine = new MemoryEngine(
+        repository,
+        observedCapture(ai, (value) => {
+          stage = value;
+        }),
+      );
       const extracted = await engine.tell(
         work.lease.pending.turn,
         work.lease.pending.clarification,
       );
+      stage = "authorization";
       await reauthorize();
+      stage = "commit";
       return await this.store.finish(
         uid,
         work.lease,
@@ -53,7 +66,9 @@ export class CaptureMemory {
       );
     } catch (error) {
       // Uncertain commits remain inspectable; failure never overwrites a completed receipt.
-      await this.store.fail(uid, work.lease).catch(() => undefined);
+      await this.store
+        .fail(uid, work.lease, captureFailure(stage, error))
+        .catch(() => undefined);
       throw error;
     }
   }

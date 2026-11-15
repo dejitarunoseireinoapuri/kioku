@@ -50,7 +50,11 @@ evidenceText es una subcadena LITERAL del fragmento evidenceId que contiene SOLO
 y su contexto necesario. Si una oración mezcla varios planes/fechas, selecciona por separado el marcador
 temporal de cada plan; no copies toda la oración como evidencia de ambos. No inventes o reformules esa subcadena.
 unknown: value/end/evidenceId/evidenceText null. day: value YYYY-MM-DD, end null. month: YYYY-MM o --MM sin año.
-year: YYYY. month_day: --MM-DD (cumpleaños sin año). interval: value y end con fechas explícitas.
+year: YYYY. month_day: --MM-DD (cumpleaños sin año). interval: value y end con fechas explícitas
+o los límites de una semana de calendario relativa inequívoca, de lunes a domingo.
+Mes/año relativos como «el mes que viene» y «este año» se resuelven desde receivedAt y zone manteniendo
+precisión month/year, sin inventar un día. Esta semana/semana pasada/semana que viene conservan
+precisión interval, anclada a esa misma recepción; no se inventa un día concreto dentro de ellas.
 No rellenes un mes con su día 1 ni un cumpleaños sin año con el año actual. El fragmento temporal debe contener
 la fecha original y su contexto necesario. Si la aclaración proporciona fecha/persona, úsala en todos los campos.
 Un deseo, promesa, plan o intento futuro es intention, nunca una acción completada.
@@ -74,6 +78,10 @@ Un código ficticio de taquilla de una prueba es un dato del relato, no la clave
 
 export const captureReviewInstructions = `${extractionInstructions}
 Esta es la fase explícita de revisión de captura, no una conversación ni un reintento.
+El borrador puede incluir fechas ya normalizadas por código desde su evidencia literal. Revisa el
+texto frente a esa precisión y el original, sin volver a introducir días o años que no constan.
+validationIssues señala errores de evidencia/fecha pendientes: exige decision replace y corrígelos
+desde los fragmentos; no aceptes un borrador que conserve esos errores.
 Revisa TODO el borrador contra los fragmentos originales y de aclaración. Si ya es fiel, decision accept,
 extraction null y changes vacía; no reescribas estilo ni cambies redacción correcta. Solo si hay un error,
 decision replace, extraction completa corregida y changes con las categorías corregidas:

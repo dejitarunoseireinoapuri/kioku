@@ -1,0 +1,321 @@
+{
+  "at": "2026-11-15T12:00:00Z",
+  "kind": "synthetic-atomic-capture-regression",
+  "apiCalls": 15,
+  "injectedDrafts": 1,
+  "estimatedUsd": 0.06833943999999903,
+  "rows": [
+    {
+      "id": "shared-want-two-times",
+      "passed": true,
+      "source": {
+        "id": "a207da00-9190-4719-bcc2-8f8e35a038c0",
+        "text": "Quiero visitar el vivero esta tarde y leer un cómic mañana.",
+        "receivedAt": "2026-11-15T12:00:00Z",
+        "zone": "Europe/Madrid"
+      },
+      "items": [
+        {
+          "text": "Quiero visitar el vivero esta tarde.",
+          "quote": "Quiero visitar el vivero esta tarde y leer un cómic mañana.",
+          "kind": "intention",
+          "entities": [
+            "vivero"
+          ],
+          "time": {
+            "precision": "day",
+            "value": "2026-11-15",
+            "end": null,
+            "quote": "esta tarde"
+          },
+          "provenance": "personal",
+          "attribution": null,
+          "attributionEvidence": null,
+          "eventStatus": "planned",
+          "lifecycle": "current",
+          "id": "a207da00-9190-4719-bcc2-8f8e35a038c0-1",
+          "sourceId": "a207da00-9190-4719-bcc2-8f8e35a038c0",
+          "revision": 1,
+          "receivedAt": "2026-11-15T12:00:00Z",
+          "zone": "Europe/Madrid"
+        },
+        {
+          "text": "Quiero leer un cómic mañana.",
+          "quote": "Quiero visitar el vivero esta tarde y leer un cómic mañana.",
+          "kind": "intention",
+          "entities": [
+            "cómic"
+          ],
+          "time": {
+            "precision": "day",
+            "value": "2026-11-16",
+            "end": null,
+            "quote": "mañana"
+          },
+          "provenance": "personal",
+          "attribution": null,
+          "attributionEvidence": null,
+          "eventStatus": "planned",
+          "lifecycle": "current",
+          "id": "a207da00-9190-4719-bcc2-8f8e35a038c0-2",
+          "sourceId": "a207da00-9190-4719-bcc2-8f8e35a038c0",
+          "revision": 1,
+          "receivedAt": "2026-11-15T12:00:00Z",
+          "zone": "Europe/Madrid"
+        }
+      ],
+      "captureReview": "accept",
+      "changes": []
+    },
+    {
+      "id": "forget-only-second-action",
+      "passed": true,
+      "selection": {
+        "memoryIds": [
+          "a207da00-9190-4719-bcc2-8f8e35a038c0-2"
+        ],
+        "evidence": [
+          {
+            "memoryId": "a207da00-9190-4719-bcc2-8f8e35a038c0-1",
+            "quote": "Quiero visitar el vivero esta tarde",
+            "timeQuote": "esta tarde",
+            "attributionEvidence": null
+          },
+          {
+            "memoryId": "a207da00-9190-4719-bcc2-8f8e35a038c0-2",
+            "quote": "y leer un cómic mañana.",
+            "timeQuote": "mañana",
+            "attributionEvidence": null
+          }
+        ],
+        "unresolved": false,
+        "question": null
+      },
+      "retained": {
+        "sources": [
+          {
+            "id": "27876ce2-e07d-4f30-ba5b-ff16a84d4823",
+            "text": "[Texto conservado tras un cambio solicitado por ti]\nQuiero visitar el vivero esta tarde \n[Fragmento retirado]\n",
+            "receivedAt": "2026-11-15T12:00:00Z",
+            "zone": "Europe/Madrid"
+          }
+        ],
+        "memories": [
+          {
+            "text": "Quiero visitar el vivero esta tarde.",
+            "quote": "Quiero visitar el vivero esta tarde",
+            "kind": "intention",
+            "entities": [
+              "vivero"
+            ],
+            "time": {
+              "precision": "day",
+              "value": "2026-11-15",
+              "end": null,
+              "quote": "esta tarde"
+            },
+            "provenance": "personal",
+            "attribution": null,
+            "attributionEvidence": null,
+            "eventStatus": "planned",
+            "lifecycle": "current",
+            "id": "27876ce2-e07d-4f30-ba5b-ff16a84d4823-1",
+            "sourceId": "27876ce2-e07d-4f30-ba5b-ff16a84d4823",
+            "revision": 2,
+            "receivedAt": "2026-11-15T12:00:00Z",
+            "zone": "Europe/Madrid"
+          }
+        ],
+        "review": {
+          "allowed": true
+        }
+      }
+    },
+    {
+      "id": "whole-source-repair-keeps-both-facts",
+      "passed": true,
+      "review": {
+        "sameFacts": true,
+        "independentItems": true,
+        "attributionPreserved": true,
+        "timePreserved": true
+      }
+    },
+    {
+      "id": "whole-source-repair-rejects-a-lost-plan",
+      "passed": true,
+      "review": {
+        "sameFacts": false,
+        "independentItems": true,
+        "attributionPreserved": true,
+        "timePreserved": false
+      }
+    },
+    {
+      "id": "mixed-draft-must-be-replaced",
+      "passed": true,
+      "source": {
+        "id": "3b040909-7706-4696-8128-67fb5bdf849f",
+        "text": "Quiero visitar el vivero esta tarde y leer un cómic mañana.",
+        "receivedAt": "2026-11-15T12:00:00Z",
+        "zone": "Europe/Madrid"
+      },
+      "items": [
+        {
+          "text": "Quiero visitar el vivero esta tarde.",
+          "quote": "Quiero visitar el vivero esta tarde y leer un cómic mañana.",
+          "kind": "intention",
+          "entities": [
+            "vivero"
+          ],
+          "time": {
+            "precision": "day",
+            "value": "2026-11-15",
+            "end": null,
+            "quote": "esta tarde"
+          },
+          "provenance": "personal",
+          "attribution": null,
+          "attributionEvidence": null,
+          "eventStatus": "planned",
+          "lifecycle": "current",
+          "id": "3b040909-7706-4696-8128-67fb5bdf849f-1",
+          "sourceId": "3b040909-7706-4696-8128-67fb5bdf849f",
+          "revision": 1,
+          "receivedAt": "2026-11-15T12:00:00Z",
+          "zone": "Europe/Madrid"
+        },
+        {
+          "text": "Quiero leer un cómic mañana.",
+          "quote": "Quiero visitar el vivero esta tarde y leer un cómic mañana.",
+          "kind": "intention",
+          "entities": [
+            "cómic"
+          ],
+          "time": {
+            "precision": "day",
+            "value": "2026-11-16",
+            "end": null,
+            "quote": "mañana"
+          },
+          "provenance": "personal",
+          "attribution": null,
+          "attributionEvidence": null,
+          "eventStatus": "planned",
+          "lifecycle": "current",
+          "id": "3b040909-7706-4696-8128-67fb5bdf849f-2",
+          "sourceId": "3b040909-7706-4696-8128-67fb5bdf849f",
+          "revision": 1,
+          "receivedAt": "2026-11-15T12:00:00Z",
+          "zone": "Europe/Madrid"
+        }
+      ],
+      "captureReview": "replace",
+      "changes": [
+        "completeness",
+        "time"
+      ]
+    },
+    {
+      "id": "reported-shared-subject",
+      "passed": true,
+      "source": {
+        "id": "3447b0f2-7c3c-47cb-a49b-17be240ea226",
+        "text": "Nora me dijo que quiere visitar el vivero esta tarde y leer un cómic mañana.",
+        "receivedAt": "2026-11-15T12:00:00Z",
+        "zone": "Europe/Madrid"
+      },
+      "items": [
+        {
+          "text": "Nora quiere visitar el vivero esta tarde.",
+          "quote": "Nora me dijo que quiere visitar el vivero esta tarde y leer un cómic mañana.",
+          "kind": "intention",
+          "entities": [
+            "Nora"
+          ],
+          "time": {
+            "precision": "day",
+            "value": "2026-11-15",
+            "end": null,
+            "quote": "esta tarde"
+          },
+          "provenance": "reported",
+          "attribution": "Nora",
+          "attributionEvidence": "Nora me dijo que quiere visitar el vivero esta tarde y leer un cómic mañana.",
+          "eventStatus": "planned",
+          "lifecycle": "current",
+          "id": "3447b0f2-7c3c-47cb-a49b-17be240ea226-1",
+          "sourceId": "3447b0f2-7c3c-47cb-a49b-17be240ea226",
+          "revision": 1,
+          "receivedAt": "2026-11-15T12:00:00Z",
+          "zone": "Europe/Madrid"
+        },
+        {
+          "text": "Nora quiere leer un cómic mañana.",
+          "quote": "Nora me dijo que quiere visitar el vivero esta tarde y leer un cómic mañana.",
+          "kind": "intention",
+          "entities": [
+            "Nora"
+          ],
+          "time": {
+            "precision": "day",
+            "value": "2026-11-16",
+            "end": null,
+            "quote": "mañana"
+          },
+          "provenance": "reported",
+          "attribution": "Nora",
+          "attributionEvidence": "Nora me dijo que quiere visitar el vivero esta tarde y leer un cómic mañana.",
+          "eventStatus": "planned",
+          "lifecycle": "current",
+          "id": "3447b0f2-7c3c-47cb-a49b-17be240ea226-2",
+          "sourceId": "3447b0f2-7c3c-47cb-a49b-17be240ea226",
+          "revision": 1,
+          "receivedAt": "2026-11-15T12:00:00Z",
+          "zone": "Europe/Madrid"
+        }
+      ],
+      "captureReview": "accept",
+      "changes": []
+    },
+    {
+      "id": "condition-is-not-an-independent-fact",
+      "passed": true,
+      "source": {
+        "id": "f8dacafd-44b7-4813-98cc-cbdb4a658599",
+        "text": "Cuando Nora regrese, quiero visitar el vivero esta tarde.",
+        "receivedAt": "2026-11-15T12:00:00Z",
+        "zone": "Europe/Madrid"
+      },
+      "items": [
+        {
+          "text": "Cuando Nora regrese, quiero visitar el vivero esta tarde.",
+          "quote": "Cuando Nora regrese, quiero visitar el vivero esta tarde.",
+          "kind": "intention",
+          "entities": [
+            "Nora",
+            "vivero"
+          ],
+          "time": {
+            "precision": "day",
+            "value": "2026-11-15",
+            "end": null,
+            "quote": "esta tarde"
+          },
+          "provenance": "personal",
+          "attribution": null,
+          "attributionEvidence": null,
+          "eventStatus": "planned",
+          "lifecycle": "current",
+          "id": "f8dacafd-44b7-4813-98cc-cbdb4a658599-1",
+          "sourceId": "f8dacafd-44b7-4813-98cc-cbdb4a658599",
+          "revision": 1,
+          "receivedAt": "2026-11-15T12:00:00Z",
+          "zone": "Europe/Madrid"
+        }
+      ],
+      "captureReview": "accept",
+      "changes": []
+    }
+  ]
+}

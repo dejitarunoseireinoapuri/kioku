@@ -1,0 +1,498 @@
+{
+  "kind": "synthetic-processing-diagnosis",
+  "rows": [
+    {
+      "id": "next-tuesday-agenda",
+      "passed": true,
+      "source": {
+        "id": "cab368d1-ceaa-46bc-b2d9-a5c83252712b",
+        "text": "El próximo martes tengo una revisión en el observatorio Loto.",
+        "receivedAt": "2026-11-15T14:00:00Z",
+        "zone": "Europe/Madrid"
+      },
+      "result": {
+        "status": "saved",
+        "clarification": null,
+        "items": [
+          {
+            "text": "Tengo una revisión en el observatorio Loto el martes 17 de noviembre de 2026.",
+            "quote": "El próximo martes tengo una revisión en el observatorio Loto.",
+            "kind": "fact",
+            "entities": [
+              "observatorio Loto"
+            ],
+            "time": {
+              "precision": "day",
+              "value": "2026-11-17",
+              "end": null,
+              "quote": "El próximo martes"
+            },
+            "provenance": "personal",
+            "attribution": null,
+            "attributionEvidence": null,
+            "eventStatus": "planned",
+            "lifecycle": "current"
+          }
+        ]
+      },
+      "stages": [
+        {
+          "stage": "memory_extraction",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "status": "saved",
+            "clarification": null,
+            "items": [
+              {
+                "text": "Tengo una revisión en el observatorio Loto el martes 17 de noviembre de 2026.",
+                "kind": "fact",
+                "entities": [
+                  "observatorio Loto"
+                ],
+                "provenance": "personal",
+                "attribution": null,
+                "eventStatus": "planned",
+                "lifecycle": "current",
+                "evidenceId": "s1",
+                "attributionEvidenceId": null,
+                "time": {
+                  "precision": "day",
+                  "value": "2026-11-17",
+                  "end": null,
+                  "evidenceId": "s1",
+                  "evidenceText": "El próximo martes"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "stage": "memory_capture_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "decision": "accept",
+            "extraction": null,
+            "changes": []
+          }
+        },
+        {
+          "stage": "embeddings",
+          "http": 200
+        }
+      ]
+    },
+    {
+      "id": "tuesday-that-comes",
+      "passed": true,
+      "source": {
+        "id": "e34d925b-4db7-46d4-87b1-9856cb589bac",
+        "text": "El martes que viene tengo una revisión en el observatorio Loto.",
+        "receivedAt": "2026-11-15T14:00:00Z",
+        "zone": "Europe/Madrid"
+      },
+      "result": {
+        "status": "saved",
+        "clarification": null,
+        "items": [
+          {
+            "text": "Tengo una revisión en el observatorio Loto el martes 17 de noviembre de 2026.",
+            "quote": "El martes que viene tengo una revisión en el observatorio Loto.",
+            "kind": "fact",
+            "entities": [
+              "observatorio Loto"
+            ],
+            "time": {
+              "precision": "day",
+              "value": "2026-11-17",
+              "end": null,
+              "quote": "El martes que viene"
+            },
+            "provenance": "personal",
+            "attribution": null,
+            "attributionEvidence": null,
+            "eventStatus": "planned",
+            "lifecycle": "current"
+          }
+        ]
+      },
+      "stages": [
+        {
+          "stage": "memory_extraction",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "status": "saved",
+            "clarification": null,
+            "items": [
+              {
+                "text": "Tengo una revisión en el observatorio Loto el martes 17 de noviembre de 2026.",
+                "kind": "fact",
+                "entities": [
+                  "observatorio Loto"
+                ],
+                "provenance": "personal",
+                "attribution": null,
+                "eventStatus": "planned",
+                "lifecycle": "current",
+                "evidenceId": "s1",
+                "attributionEvidenceId": null,
+                "time": {
+                  "precision": "day",
+                  "value": "2026-11-17",
+                  "end": null,
+                  "evidenceId": "s1",
+                  "evidenceText": "El martes que viene"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "stage": "memory_capture_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "decision": "accept",
+            "extraction": null,
+            "changes": []
+          }
+        },
+        {
+          "stage": "embeddings",
+          "http": 200
+        }
+      ]
+    },
+    {
+      "id": "next-tuesday-intention",
+      "passed": true,
+      "source": {
+        "id": "1f96d0d7-9b00-4158-b585-9fd7355e29b5",
+        "text": "El próximo martes quiero visitar el observatorio Loto.",
+        "receivedAt": "2026-11-15T14:00:00Z",
+        "zone": "Europe/Madrid"
+      },
+      "result": {
+        "status": "saved",
+        "clarification": null,
+        "items": [
+          {
+            "text": "Quiero visitar el observatorio Loto el próximo martes.",
+            "quote": "El próximo martes quiero visitar el observatorio Loto.",
+            "kind": "intention",
+            "entities": [
+              "observatorio Loto"
+            ],
+            "time": {
+              "precision": "day",
+              "value": "2026-11-17",
+              "end": null,
+              "quote": "El próximo martes"
+            },
+            "provenance": "personal",
+            "attribution": null,
+            "attributionEvidence": null,
+            "eventStatus": "planned",
+            "lifecycle": "current"
+          }
+        ]
+      },
+      "stages": [
+        {
+          "stage": "memory_extraction",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "status": "saved",
+            "clarification": null,
+            "items": [
+              {
+                "text": "Quiero visitar el observatorio Loto el próximo martes.",
+                "kind": "intention",
+                "entities": [
+                  "observatorio Loto"
+                ],
+                "provenance": "personal",
+                "attribution": null,
+                "eventStatus": "planned",
+                "lifecycle": "current",
+                "evidenceId": "s1",
+                "attributionEvidenceId": null,
+                "time": {
+                  "precision": "day",
+                  "value": "2026-11-17",
+                  "end": null,
+                  "evidenceId": "s1",
+                  "evidenceText": "El próximo martes"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "stage": "memory_capture_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "decision": "accept",
+            "extraction": null,
+            "changes": []
+          }
+        },
+        {
+          "stage": "embeddings",
+          "http": 200
+        }
+      ]
+    },
+    {
+      "id": "next-tuesday-errand",
+      "passed": true,
+      "source": {
+        "id": "660c9b74-d8f8-4121-8a1b-9195fd041301",
+        "text": "El martes que viene voy a llevar una maqueta al taller Loto.",
+        "receivedAt": "2026-11-15T14:00:00Z",
+        "zone": "Europe/Madrid"
+      },
+      "result": {
+        "status": "saved",
+        "clarification": null,
+        "items": [
+          {
+            "text": "El martes que viene voy a llevar una maqueta al taller Loto.",
+            "quote": "El martes que viene voy a llevar una maqueta al taller Loto.",
+            "kind": "intention",
+            "entities": [
+              "taller Loto"
+            ],
+            "time": {
+              "precision": "day",
+              "value": "2026-11-17",
+              "end": null,
+              "quote": "El martes que viene"
+            },
+            "provenance": "personal",
+            "attribution": null,
+            "attributionEvidence": null,
+            "eventStatus": "planned",
+            "lifecycle": "current"
+          }
+        ]
+      },
+      "stages": [
+        {
+          "stage": "memory_extraction",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "status": "saved",
+            "clarification": null,
+            "items": [
+              {
+                "text": "El martes que viene voy a llevar una maqueta al taller Loto.",
+                "kind": "intention",
+                "entities": [
+                  "taller Loto"
+                ],
+                "provenance": "personal",
+                "attribution": null,
+                "eventStatus": "planned",
+                "lifecycle": "current",
+                "evidenceId": "s1",
+                "attributionEvidenceId": null,
+                "time": {
+                  "precision": "day",
+                  "value": "2026-11-17",
+                  "end": null,
+                  "evidenceId": "s1",
+                  "evidenceText": "El martes que viene"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "stage": "memory_capture_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "decision": "accept",
+            "extraction": null,
+            "changes": []
+          }
+        },
+        {
+          "stage": "embeddings",
+          "http": 200
+        }
+      ]
+    },
+    {
+      "id": "next-tuesday-exam",
+      "passed": true,
+      "source": {
+        "id": "5c9440d3-67f1-4bce-8ed6-f722b65cf030",
+        "text": "El próximo martes tengo un examen práctico de ingeniería ficticia.",
+        "receivedAt": "2026-11-15T14:00:00Z",
+        "zone": "Europe/Madrid"
+      },
+      "result": {
+        "status": "saved",
+        "clarification": null,
+        "items": [
+          {
+            "text": "Tengo un examen práctico de ingeniería ficticia el próximo martes.",
+            "quote": "El próximo martes tengo un examen práctico de ingeniería ficticia.",
+            "kind": "fact",
+            "entities": [
+              "examen práctico de ingeniería ficticia"
+            ],
+            "time": {
+              "precision": "day",
+              "value": "2026-11-17",
+              "end": null,
+              "quote": "El próximo martes"
+            },
+            "provenance": "personal",
+            "attribution": null,
+            "attributionEvidence": null,
+            "eventStatus": "planned",
+            "lifecycle": "current"
+          }
+        ]
+      },
+      "stages": [
+        {
+          "stage": "memory_extraction",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "status": "saved",
+            "clarification": null,
+            "items": [
+              {
+                "text": "Tengo un examen práctico de ingeniería ficticia el próximo martes.",
+                "kind": "fact",
+                "entities": [
+                  "examen práctico de ingeniería ficticia"
+                ],
+                "provenance": "personal",
+                "attribution": null,
+                "eventStatus": "planned",
+                "lifecycle": "current",
+                "evidenceId": "s1",
+                "attributionEvidenceId": null,
+                "time": {
+                  "precision": "day",
+                  "value": "2026-11-17",
+                  "end": null,
+                  "evidenceId": "s1",
+                  "evidenceText": "El próximo martes"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "stage": "memory_capture_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "decision": "accept",
+            "extraction": null,
+            "changes": []
+          }
+        },
+        {
+          "stage": "embeddings",
+          "http": 200
+        }
+      ]
+    },
+    {
+      "id": "undated-control",
+      "passed": true,
+      "source": {
+        "id": "d004a60c-f91b-440a-a26c-d84d0641ee16",
+        "text": "Tengo una libreta de papel reciclado.",
+        "receivedAt": "2026-11-15T14:00:00Z",
+        "zone": "Europe/Madrid"
+      },
+      "result": {
+        "status": "saved",
+        "clarification": null,
+        "items": [
+          {
+            "text": "Tengo una libreta de papel reciclado.",
+            "quote": "Tengo una libreta de papel reciclado.",
+            "kind": "fact",
+            "entities": [
+              "libreta de papel reciclado"
+            ],
+            "time": {
+              "precision": "unknown",
+              "value": null,
+              "end": null,
+              "quote": null
+            },
+            "provenance": "personal",
+            "attribution": null,
+            "attributionEvidence": null,
+            "eventStatus": "unspecified",
+            "lifecycle": "current"
+          }
+        ]
+      },
+      "stages": [
+        {
+          "stage": "memory_extraction",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "status": "saved",
+            "clarification": null,
+            "items": [
+              {
+                "text": "Tengo una libreta de papel reciclado.",
+                "kind": "fact",
+                "entities": [
+                  "libreta de papel reciclado"
+                ],
+                "provenance": "personal",
+                "attribution": null,
+                "eventStatus": "unspecified",
+                "lifecycle": "current",
+                "evidenceId": "s1",
+                "attributionEvidenceId": null,
+                "time": {
+                  "precision": "unknown",
+                  "value": null,
+                  "end": null,
+                  "evidenceId": null,
+                  "evidenceText": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "stage": "memory_capture_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "decision": "accept",
+            "extraction": null,
+            "changes": []
+          }
+        },
+        {
+          "stage": "embeddings",
+          "http": 200
+        }
+      ]
+    }
+  ],
+  "estimatedUsd": 0.07860965999999792
+}

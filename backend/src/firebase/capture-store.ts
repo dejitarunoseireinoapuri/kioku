@@ -15,6 +15,9 @@ import type {
 import { inputHash, readRecord, recordResult } from "../memory/records.js";
 import type { CaptureRecord } from "../memory/records.js";
 import { searchProjection } from "../query/search-projection.js";
+import { captureFailure, captureFailureSchema } from "../memory/diagnostics.js";
+import { MemoryError } from "#memory-core/domain";
+import type { CaptureFailure } from "../memory/diagnostics.js";
 
 const DAY = 86_400_000;
 const LEASE = 240_000;
@@ -103,11 +106,33 @@ export class FirestoreCaptureStore implements CaptureStore {
           throw new AccountError("failed-precondition");
         const stale =
           previous?.state === "processing" &&
-          Number(lock.get("expiresAtMs") ?? 0) <= now;
+          (lock.get("nonce") !== previous.nonce ||
+            Number(lock.get("expiresAtMs") ?? 0) <= now);
         if (previous && previous.state !== "failed" && !stale)
           return { result: recordResult(input.requestId, previous, now) };
-        if (previous && (previous.attempts >= 3 || previous.expiresAtMs <= now))
-          throw new AccountError("failed-precondition");
+        if (
+          previous &&
+          (previous.expiresAtMs <= now ||
+            (previous.state === "failed" && previous.attempts >= 3))
+        )
+          return { result: recordResult(input.requestId, previous, now) };
+        if (previous && stale && previous.attempts >= 3) {
+          tx.update(operation, {
+            state: "failed",
+            failure: captureFailure(
+              "lease",
+              new MemoryError("CAPTURE_LEASE_EXPIRED"),
+            ),
+          });
+          if (lock.get("nonce") === previous.nonce) tx.delete(lock.ref);
+          return {
+            result: recordResult(
+              input.requestId,
+              { ...previous, state: "failed" },
+              now,
+            ),
+          };
+        }
         if (lock.exists && Number(lock.get("expiresAtMs")) > now)
           throw new AccountError("resource-exhausted");
         const pending =
@@ -286,7 +311,13 @@ export class FirestoreCaptureStore implements CaptureStore {
     );
   }
 
-  async fail(uid: string, lease: CaptureLease): Promise<void> {
+  async fail(
+    uid: string,
+    lease: CaptureLease,
+    failure?: CaptureFailure,
+  ): Promise<void> {
+    const diagnostic =
+      failure === undefined ? undefined : captureFailureSchema.parse(failure);
     const root = this.root(uid),
       target = root.collection("operations").doc(lease.requestId);
     await this.db.runTransaction(
@@ -300,7 +331,10 @@ export class FirestoreCaptureStore implements CaptureStore {
           operation.get("state") === "processing" &&
           operation.get("nonce") === lease.nonce
         )
-          tx.update(target, { state: "failed" });
+          tx.update(target, {
+            state: "failed",
+            ...(diagnostic ? { failure: diagnostic } : {}),
+          });
         if (lock.get("nonce") === lease.nonce)
           tx.delete(root.collection("runtime").doc("capture"));
       },
@@ -349,9 +383,19 @@ export class FirestoreCaptureStore implements CaptureStore {
             Number(lock.get("expiresAtMs") ?? 0) <= this.now()
           ) {
             // A lost/expired lease cannot commit. Never remove a different worker's lease.
-            tx.update(snapshot.ref, { state: "failed" });
+            tx.update(snapshot.ref, {
+              state: "failed",
+              failure: captureFailure(
+                "lease",
+                new MemoryError("CAPTURE_LEASE_EXPIRED"),
+              ),
+            });
             if (lock.get("nonce") === record.nonce) tx.delete(lock.ref);
-            return { apiVersion: 1, status: "failed", operationId: current };
+            return recordResult(
+              current,
+              { ...record, state: "failed" },
+              this.now(),
+            );
           }
         }
         if (record.state !== "continued" || !record.continuationId)

@@ -18,6 +18,10 @@ K1 autoriza la cuenta y configura una clave privada. K2 debe convertir el recorr
 
 ## Límites y retención
 
+Refinamiento compatible de calendario/fiabilidad (15 de noviembre, preparado; activación pendiente): un único resolver portable interpreta períodos relativos mes/año/semana tanto para canonicalizar como para validar. Conserva la precisión conocida y ancla semanas naturales lunes–domingo en la zona original. La canonicalización se prepara antes de la revisión independiente de captura, de modo que esta revisa juntos texto y metadatos definitivos en la segunda llamada existente. Evidencia inválida se señala con un código fijo; aceptar sin resolverla se rechaza. Sigue disponible la revisión excepcional de solo texto si una sustitución posterior vuelve a cambiar la fecha. No hay caída a una cita amplia ni reintento ciego.
+
+Los fallos de captura incorporan únicamente fase/motivo/código enumerados al recibo privado, sin mensaje, stack ni entrada/salida del proveedor. Repetir un ID con tres fallos confirmados devuelve needsRetelling, sin inferencia; caducado devuelve expired. Una concesión distinta también hace obsoleto al trabajador anterior; cerrar ese recibo jamás retira la concesión nueva. Sin cambios de endpoints, identidad, clave o respuestas públicas. [Evidencia y límites K4](../../09-planning/K4_VALIDATION.md).
+
 Texto inicial hasta 8000 caracteres; entrada HTTP hasta 40 KB; contexto original más aclaraciones acotados. Tiempo callable 180 s, SDK 185 s y suspensión compartida 195 s: son límites de seguridad, no objetivos de espera. Sigue abierto el objetivo de guardado p95 de 15 s. Una petición puede cobrarse aunque falle su respuesta.
 
 Reservas conservadoras de hasta 1 USD y ocho llamadas por intento; hasta tres intentos explícitos por operación y 10 USD estimados por día UTC, persistidos transaccionalmente sin texto. Las reservas de peticiones inciertas no se liberan a ciegas. Los contadores numéricos caducan a los 30 días. No equivalen al saldo promocional ni a un tope de facturación del proveedor/Firebase.

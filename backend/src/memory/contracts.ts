@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { AccountError } from "../account/contracts.js";
 import type { Turn, Snapshot, Extraction } from "#memory-core/domain";
+import type { CaptureFailure } from "./diagnostics.js";
 
 const text = z
   .string()
@@ -94,7 +95,11 @@ export interface CaptureStore {
     extraction: Extraction,
     snapshot: Snapshot,
   ): Promise<CaptureResult>;
-  fail(uid: string, lease: CaptureLease): Promise<void>;
+  fail(
+    uid: string,
+    lease: CaptureLease,
+    failure?: CaptureFailure,
+  ): Promise<void>;
   operation(uid: string, id: string): Promise<CaptureResult>;
   source(
     uid: string,

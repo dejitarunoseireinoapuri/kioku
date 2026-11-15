@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { MemoryError } from "./domain.ts";
 import type { MemoryTime } from "./domain.ts";
+import { relativeCalendarPeriod } from "./relative-calendar.ts";
 
 export const unknownTime: MemoryTime = {
   precision: "unknown",
@@ -42,6 +43,12 @@ export function canonicalTime(
   )
     return { ...unknownTime };
   const evidence = time.quote;
+  const period = relativeCalendarPeriod(evidence, anchor);
+  if (period !== null) {
+    const resolved = { ...period, quote: evidence };
+    validateTime(resolved, source, anchor);
+    return resolved;
+  }
   const dates = dateParts(evidence);
   if (dates.length === 1) {
     const date = dates[0]!;
@@ -160,6 +167,16 @@ export function validateTime(
   if (!time.quote || !time.value)
     throw new MemoryError("TIME_EVIDENCE_REQUIRED");
   const evidence = time.quote;
+  const period = anchor ? relativeCalendarPeriod(evidence, anchor) : null;
+  if (period !== null) {
+    if (
+      time.precision !== period.precision ||
+      time.value !== period.value ||
+      time.end !== period.end
+    )
+      throw new MemoryError("TIME_RELATIVE_MISMATCH");
+    return;
+  }
   const hasYear = /\b(?:19|20)\d{2}\b/u.test(evidence);
   const hasMonth = new RegExp(`\\b(${monthNames})\\b`, "iu").test(evidence);
   const hasDay =

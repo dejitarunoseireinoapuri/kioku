@@ -110,7 +110,7 @@
     <string name="operation_uncertain">No he podido comprobar el resultado de esta operación. Comprueba su estado antes de volver a intentarla.</string>
     <string name="capture_check">Comprobar estado</string>
     <string name="capture_restart">Volver a explicarlo</string>
-    <string name="capture_more_context">Sigo sin tener suficiente contexto y no he guardado este recuerdo. Vuelve a explicarlo con las personas y fechas que conoces.</string>
+    <string name="capture_more_context">No he guardado este recuerdo. Vuelve a explicarlo como un mensaje nuevo.</string>
     <string name="capture_ignored">No he encontrado un dato que guardar en este mensaje. No se ha creado ningún recuerdo.</string>
     <string name="capture_expired">Esta operación ha caducado. No puedo recuperar su resultado desde aquí.</string>
     <string name="capture_error">No se ha guardado este recuerdo. Puedes reintentarlo o seguir usando Kioku.</string>

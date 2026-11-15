@@ -10,6 +10,7 @@ import type {
 import { Budget, rates } from "./budget.ts";
 import { calendarContext } from "./calendar.ts";
 import { captureFormat } from "./capture-format.ts";
+import { prepareCaptureReview } from "./capture-review.ts";
 import { answerFormat, constrainScope } from "./answer-format.ts";
 import { modelProfile } from "./model-config.ts";
 import {
@@ -145,9 +146,10 @@ export class OpenAiMemory implements MemoryIntelligence {
         throw new MemoryError("EXTRACTION_STATE_INVALID");
       return format.materialize(draft);
     }
+    const prepared = prepareCaptureReview(draft, format, turn, clarification);
     const reviewed = await this.structured(
       captureReviewInstructions,
-      { ...input, draft },
+      { ...input, ...prepared },
       z.strictObject({
         decision: z.enum(["accept", "replace"]),
         extraction: format.schema.nullable(),
@@ -164,8 +166,10 @@ export class OpenAiMemory implements MemoryIntelligence {
       throw new MemoryError("MODEL_OUTPUT_INVALID");
     this.lastCaptureReview = reviewed.changes;
     this.lastCaptureReviewDecision = reviewed.decision;
+    if (reviewed.decision === "accept" && prepared.validationIssues.length)
+      throw new MemoryError("CAPTURE_REVIEW_VALIDATION_UNRESOLVED");
     return format.materialize(
-      reviewed.decision === "accept" ? draft : reviewed.extraction!,
+      reviewed.decision === "accept" ? prepared.draft : reviewed.extraction!,
     );
   }
 

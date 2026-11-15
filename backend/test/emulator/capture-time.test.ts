@@ -168,7 +168,7 @@ for (const invalid of [false, true])
           async () => {},
         );
       if (invalid) {
-        await assert.rejects(execute(), /QUOTE_NOT_IN_SOURCE/);
+        await assert.rejects(execute(), /CAPTURE_REVIEW_VALIDATION_UNRESOLVED/);
         assert.equal(
           (await store.operation(uid, input.requestId)).status,
           "failed",

@@ -4,13 +4,12 @@ import { canonicalTime, unknownTime } from "./temporal.ts";
 import { literalQuote } from "./literal.ts";
 
 /** Canonical time must never replace one fact's text with a broader, shared evidence sentence. */
-export async function normalizeCapture(
+export function canonicalizeCapture(
   parsed: Extraction,
   source: string,
   turn: Turn,
-  intelligence: MemoryIntelligence,
   clarification: string | null,
-): Promise<Extraction> {
+) {
   let changed = false;
   const normalized: Extraction = {
     ...parsed,
@@ -37,6 +36,22 @@ export async function normalizeCapture(
       };
     }),
   };
+  return { extraction: normalized, changed };
+}
+
+export async function normalizeCapture(
+  parsed: Extraction,
+  source: string,
+  turn: Turn,
+  intelligence: MemoryIntelligence,
+  clarification: string | null,
+): Promise<Extraction> {
+  const { extraction: normalized, changed } = canonicalizeCapture(
+    parsed,
+    source,
+    turn,
+    clarification,
+  );
   if (!changed || parsed.status !== "saved") return normalized;
   if (!intelligence.refineCapture)
     throw new MemoryError("CAPTURE_TIME_TEXT_REVIEW_REQUIRED");

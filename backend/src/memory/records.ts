@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { z } from "zod";
 import { sourceSchema } from "#memory-core/domain";
 import { AccountError } from "../account/contracts.js";
+import { captureFailureSchema } from "./diagnostics.js";
 import type {
   CaptureInput,
   CaptureResult,
@@ -39,6 +40,7 @@ export const recordSchema = z.object({
   sourceId: z.uuid().nullable(),
   memoryCount: z.number().int().min(0).max(8),
   continuationId: z.uuid().nullable(),
+  failure: captureFailureSchema.optional(),
 });
 export type CaptureRecord = z.infer<typeof recordSchema>;
 export function inputHash(
@@ -70,6 +72,8 @@ export function recordResult(
     };
   }
   if (record.expiresAtMs <= now) return { ...common, status: "expired" };
+  if (record.state === "failed" && record.attempts >= 3)
+    return { ...common, status: "needsRetelling" };
   if (
     record.state === "needsClarification" &&
     record.pending &&

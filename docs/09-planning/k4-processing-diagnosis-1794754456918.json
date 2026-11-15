@@ -1,0 +1,939 @@
+{
+  "kind": "synthetic-processing-diagnosis",
+  "rows": [
+    {
+      "id": "next-month",
+      "passed": false,
+      "source": {
+        "id": "413225f6-9911-43e1-ab68-4c4459a81f09",
+        "text": "El mes que viene quiero empezar cerámica.",
+        "receivedAt": "2026-11-15T14:00:00Z",
+        "zone": "Europe/Madrid"
+      },
+      "errorCode": "CAPTURE_REFINEMENT_REJECTED",
+      "stages": [
+        {
+          "stage": "memory_extraction",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "status": "saved",
+            "clarification": null,
+            "items": [
+              {
+                "text": "Quiero empezar cerámica el mes que viene.",
+                "kind": "intention",
+                "entities": [
+                  "cerámica"
+                ],
+                "provenance": "personal",
+                "attribution": null,
+                "eventStatus": "planned",
+                "lifecycle": "current",
+                "evidenceId": "s1",
+                "attributionEvidenceId": null,
+                "time": {
+                  "precision": "month",
+                  "value": "2026-12",
+                  "end": null,
+                  "evidenceId": "s1",
+                  "evidenceText": "El mes que viene"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "stage": "memory_capture_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "decision": "accept",
+            "extraction": null,
+            "changes": []
+          }
+        },
+        {
+          "stage": "capture_time_text",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "items": [
+              {
+                "id": "c1",
+                "text": "Quiero empezar cerámica el mes que viene."
+              }
+            ]
+          }
+        },
+        {
+          "stage": "capture_repair_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "sameFacts": true,
+            "independentItems": true,
+            "attributionPreserved": true,
+            "timePreserved": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "current-month",
+      "passed": false,
+      "source": {
+        "id": "76a2e779-1b9f-4eb9-bd11-17b20cc73389",
+        "text": "Este mes quiero terminar una maqueta.",
+        "receivedAt": "2026-11-15T14:00:00Z",
+        "zone": "Europe/Madrid"
+      },
+      "errorCode": "CAPTURE_REFINEMENT_REJECTED",
+      "stages": [
+        {
+          "stage": "memory_extraction",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "status": "saved",
+            "clarification": null,
+            "items": [
+              {
+                "text": "Este mes quiero terminar una maqueta.",
+                "kind": "intention",
+                "entities": [
+                  "maqueta"
+                ],
+                "provenance": "personal",
+                "attribution": null,
+                "eventStatus": "planned",
+                "lifecycle": "current",
+                "evidenceId": "s1",
+                "attributionEvidenceId": null,
+                "time": {
+                  "precision": "month",
+                  "value": "2026-11",
+                  "end": null,
+                  "evidenceId": "s1",
+                  "evidenceText": "Este mes"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "stage": "memory_capture_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "decision": "accept",
+            "extraction": null,
+            "changes": []
+          }
+        },
+        {
+          "stage": "capture_time_text",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "items": [
+              {
+                "id": "c1",
+                "text": "Quiero terminar una maqueta."
+              }
+            ]
+          }
+        },
+        {
+          "stage": "capture_repair_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "sameFacts": true,
+            "independentItems": true,
+            "attributionPreserved": true,
+            "timePreserved": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "previous-month",
+      "passed": false,
+      "source": {
+        "id": "1705ff5c-9202-48de-82fc-4572e7446dbc",
+        "text": "El mes pasado empecé a construir una maqueta.",
+        "receivedAt": "2026-11-15T14:00:00Z",
+        "zone": "Europe/Madrid"
+      },
+      "errorCode": "CAPTURE_REFINEMENT_REJECTED",
+      "stages": [
+        {
+          "stage": "memory_extraction",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "status": "saved",
+            "clarification": null,
+            "items": [
+              {
+                "text": "El mes pasado empecé a construir una maqueta.",
+                "kind": "fact",
+                "entities": [
+                  "maqueta"
+                ],
+                "provenance": "personal",
+                "attribution": null,
+                "eventStatus": "completed",
+                "lifecycle": "current",
+                "evidenceId": "s1",
+                "attributionEvidenceId": null,
+                "time": {
+                  "precision": "month",
+                  "value": "2026-10",
+                  "end": null,
+                  "evidenceId": "s1",
+                  "evidenceText": "El mes pasado"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "stage": "memory_capture_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "decision": "accept",
+            "extraction": null,
+            "changes": []
+          }
+        },
+        {
+          "stage": "capture_time_text",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "items": [
+              {
+                "id": "c1",
+                "text": "El mes pasado empecé a construir una maqueta."
+              }
+            ]
+          }
+        },
+        {
+          "stage": "capture_repair_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "sameFacts": true,
+            "independentItems": true,
+            "attributionPreserved": true,
+            "timePreserved": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "next-year",
+      "passed": false,
+      "source": {
+        "id": "86ca9424-be37-4a72-a545-b73a236377b9",
+        "text": "El año que viene quiero visitar un vivero.",
+        "receivedAt": "2026-11-15T14:00:00Z",
+        "zone": "Europe/Madrid"
+      },
+      "errorCode": "CAPTURE_REFINEMENT_REJECTED",
+      "stages": [
+        {
+          "stage": "memory_extraction",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "status": "saved",
+            "clarification": null,
+            "items": [
+              {
+                "text": "El año que viene quiero visitar un vivero.",
+                "kind": "intention",
+                "entities": [
+                  "vivero"
+                ],
+                "provenance": "personal",
+                "attribution": null,
+                "eventStatus": "planned",
+                "lifecycle": "current",
+                "evidenceId": "s1",
+                "attributionEvidenceId": null,
+                "time": {
+                  "precision": "year",
+                  "value": "2027",
+                  "end": null,
+                  "evidenceId": "s1",
+                  "evidenceText": "El año que viene"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "stage": "memory_capture_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "decision": "accept",
+            "extraction": null,
+            "changes": []
+          }
+        },
+        {
+          "stage": "capture_time_text",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "items": [
+              {
+                "id": "c1",
+                "text": "El año que viene quiero visitar un vivero."
+              }
+            ]
+          }
+        },
+        {
+          "stage": "capture_repair_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "sameFacts": true,
+            "independentItems": true,
+            "attributionPreserved": true,
+            "timePreserved": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "current-year",
+      "passed": false,
+      "source": {
+        "id": "3f8940a5-4d64-459e-96d8-05ad3fcfc530",
+        "text": "Este año quiero aprender grabado.",
+        "receivedAt": "2026-11-15T14:00:00Z",
+        "zone": "Europe/Madrid"
+      },
+      "errorCode": "CAPTURE_REFINEMENT_REJECTED",
+      "stages": [
+        {
+          "stage": "memory_extraction",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "status": "saved",
+            "clarification": null,
+            "items": [
+              {
+                "text": "Este año quiero aprender grabado.",
+                "kind": "intention",
+                "entities": [
+                  "grabado"
+                ],
+                "provenance": "personal",
+                "attribution": null,
+                "eventStatus": "planned",
+                "lifecycle": "current",
+                "evidenceId": "s1",
+                "attributionEvidenceId": null,
+                "time": {
+                  "precision": "year",
+                  "value": "2026",
+                  "end": null,
+                  "evidenceId": "s1",
+                  "evidenceText": "Este año"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "stage": "memory_capture_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "decision": "accept",
+            "extraction": null,
+            "changes": []
+          }
+        },
+        {
+          "stage": "capture_time_text",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "items": [
+              {
+                "id": "c1",
+                "text": "Este año quiero aprender grabado."
+              }
+            ]
+          }
+        },
+        {
+          "stage": "capture_repair_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "sameFacts": true,
+            "independentItems": true,
+            "attributionPreserved": true,
+            "timePreserved": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "previous-year",
+      "passed": false,
+      "source": {
+        "id": "fd4f0b4b-1370-41e6-9e21-b9104e70e696",
+        "text": "El año pasado aprendí a hacer una maqueta.",
+        "receivedAt": "2026-11-15T14:00:00Z",
+        "zone": "Europe/Madrid"
+      },
+      "errorCode": "CAPTURE_REFINEMENT_REJECTED",
+      "stages": [
+        {
+          "stage": "memory_extraction",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "status": "saved",
+            "clarification": null,
+            "items": [
+              {
+                "text": "El año pasado aprendí a hacer una maqueta.",
+                "kind": "fact",
+                "entities": [
+                  "maqueta"
+                ],
+                "provenance": "personal",
+                "attribution": null,
+                "eventStatus": "completed",
+                "lifecycle": "historical",
+                "evidenceId": "s1",
+                "attributionEvidenceId": null,
+                "time": {
+                  "precision": "year",
+                  "value": "2025",
+                  "end": null,
+                  "evidenceId": "s1",
+                  "evidenceText": "El año pasado"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "stage": "memory_capture_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "decision": "accept",
+            "extraction": null,
+            "changes": []
+          }
+        },
+        {
+          "stage": "capture_time_text",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "items": [
+              {
+                "id": "c1",
+                "text": "El año pasado aprendí a hacer una maqueta."
+              }
+            ]
+          }
+        },
+        {
+          "stage": "capture_repair_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "sameFacts": true,
+            "independentItems": true,
+            "attributionPreserved": true,
+            "timePreserved": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "next-week",
+      "passed": false,
+      "source": {
+        "id": "78544e0f-3fc1-4487-9ffe-f5fb7fa7270c",
+        "text": "La semana que viene quiero visitar el observatorio Loto.",
+        "receivedAt": "2026-11-15T14:00:00Z",
+        "zone": "Europe/Madrid"
+      },
+      "errorCode": "CAPTURE_REFINEMENT_REJECTED",
+      "stages": [
+        {
+          "stage": "memory_extraction",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "status": "saved",
+            "clarification": null,
+            "items": [
+              {
+                "text": "Quiero visitar el observatorio Loto la semana que viene.",
+                "kind": "intention",
+                "entities": [
+                  "observatorio Loto"
+                ],
+                "provenance": "personal",
+                "attribution": null,
+                "eventStatus": "planned",
+                "lifecycle": "current",
+                "evidenceId": "s1",
+                "attributionEvidenceId": null,
+                "time": {
+                  "precision": "interval",
+                  "value": "2026-11-16",
+                  "end": "2026-11-22",
+                  "evidenceId": "s1",
+                  "evidenceText": "La semana que viene"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "stage": "memory_capture_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "decision": "accept",
+            "extraction": null,
+            "changes": []
+          }
+        },
+        {
+          "stage": "capture_time_text",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "items": [
+              {
+                "id": "c1",
+                "text": "Quiero visitar el observatorio Loto la semana que viene."
+              }
+            ]
+          }
+        },
+        {
+          "stage": "capture_repair_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "sameFacts": true,
+            "independentItems": true,
+            "attributionPreserved": true,
+            "timePreserved": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "current-week",
+      "passed": false,
+      "source": {
+        "id": "93c1ef43-b3bc-452d-8706-4e61609b1e7f",
+        "text": "Esta semana quiero terminar la maqueta Loto.",
+        "receivedAt": "2026-11-15T14:00:00Z",
+        "zone": "Europe/Madrid"
+      },
+      "errorCode": "CAPTURE_REFINEMENT_REJECTED",
+      "stages": [
+        {
+          "stage": "memory_extraction",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "status": "saved",
+            "clarification": null,
+            "items": [
+              {
+                "text": "Esta semana quiero terminar la maqueta Loto.",
+                "kind": "intention",
+                "entities": [
+                  "maqueta Loto"
+                ],
+                "provenance": "personal",
+                "attribution": null,
+                "eventStatus": "planned",
+                "lifecycle": "current",
+                "evidenceId": "s1",
+                "attributionEvidenceId": null,
+                "time": {
+                  "precision": "interval",
+                  "value": "2026-11-09",
+                  "end": "2026-11-15",
+                  "evidenceId": "s1",
+                  "evidenceText": "Esta semana"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "stage": "memory_capture_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "decision": "accept",
+            "extraction": null,
+            "changes": []
+          }
+        },
+        {
+          "stage": "capture_time_text",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "items": [
+              {
+                "id": "c1",
+                "text": "Quiero terminar la maqueta Loto."
+              }
+            ]
+          }
+        },
+        {
+          "stage": "capture_repair_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "sameFacts": true,
+            "independentItems": true,
+            "attributionPreserved": true,
+            "timePreserved": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "previous-week",
+      "passed": false,
+      "source": {
+        "id": "74e6269d-7ca8-40e9-b552-ac70b1113e9d",
+        "text": "La semana pasada visité el vivero Loto.",
+        "receivedAt": "2026-11-15T14:00:00Z",
+        "zone": "Europe/Madrid"
+      },
+      "errorCode": "CAPTURE_REFINEMENT_REJECTED",
+      "stages": [
+        {
+          "stage": "memory_extraction",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "status": "saved",
+            "clarification": null,
+            "items": [
+              {
+                "text": "La semana pasada visité el vivero Loto.",
+                "kind": "fact",
+                "entities": [
+                  "vivero Loto"
+                ],
+                "provenance": "personal",
+                "attribution": null,
+                "eventStatus": "completed",
+                "lifecycle": "current",
+                "evidenceId": "s1",
+                "attributionEvidenceId": null,
+                "time": {
+                  "precision": "interval",
+                  "value": "2026-11-02",
+                  "end": "2026-11-08",
+                  "evidenceId": "s1",
+                  "evidenceText": "La semana pasada"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "stage": "memory_capture_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "decision": "accept",
+            "extraction": null,
+            "changes": []
+          }
+        },
+        {
+          "stage": "capture_time_text",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "items": [
+              {
+                "id": "c1",
+                "text": "La semana pasada visité el vivero Loto."
+              }
+            ]
+          }
+        },
+        {
+          "stage": "capture_repair_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "sameFacts": true,
+            "independentItems": true,
+            "attributionPreserved": true,
+            "timePreserved": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "next-month-and-tuesday",
+      "passed": false,
+      "source": {
+        "id": "3cdc3c0a-4d49-4c48-ac09-cd47af632d3c",
+        "text": "Quiero empezar cerámica el mes que viene, la matrícula es el próximo martes.",
+        "receivedAt": "2026-11-15T14:00:00Z",
+        "zone": "Europe/Madrid"
+      },
+      "result": {
+        "status": "saved",
+        "clarification": null,
+        "items": [
+          {
+            "text": "Quiero empezar cerámica el mes que viene.",
+            "quote": "Quiero empezar cerámica el mes que viene, la matrícula es el próximo martes.",
+            "kind": "intention",
+            "entities": [
+              "cerámica"
+            ],
+            "time": {
+              "precision": "unknown",
+              "value": null,
+              "end": null,
+              "quote": "el mes que viene"
+            },
+            "provenance": "personal",
+            "attribution": null,
+            "attributionEvidence": null,
+            "eventStatus": "planned",
+            "lifecycle": "current"
+          },
+          {
+            "text": "La matrícula de cerámica es el 17 de noviembre de 2026.",
+            "quote": "Quiero empezar cerámica el mes que viene, la matrícula es el próximo martes.",
+            "kind": "fact",
+            "entities": [
+              "cerámica"
+            ],
+            "time": {
+              "precision": "day",
+              "value": "2026-11-17",
+              "end": null,
+              "quote": "el próximo martes"
+            },
+            "provenance": "personal",
+            "attribution": null,
+            "attributionEvidence": null,
+            "eventStatus": "planned",
+            "lifecycle": "current"
+          }
+        ]
+      },
+      "stages": [
+        {
+          "stage": "memory_extraction",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "status": "saved",
+            "clarification": null,
+            "items": [
+              {
+                "text": "Quiero empezar cerámica el mes que viene.",
+                "kind": "intention",
+                "entities": [
+                  "cerámica"
+                ],
+                "provenance": "personal",
+                "attribution": null,
+                "eventStatus": "planned",
+                "lifecycle": "current",
+                "evidenceId": "s1",
+                "attributionEvidenceId": null,
+                "time": {
+                  "precision": "month",
+                  "value": "2026-12",
+                  "end": null,
+                  "evidenceId": "s1",
+                  "evidenceText": "el mes que viene"
+                }
+              },
+              {
+                "text": "La matrícula de cerámica es el próximo martes.",
+                "kind": "fact",
+                "entities": [
+                  "cerámica"
+                ],
+                "provenance": "personal",
+                "attribution": null,
+                "eventStatus": "planned",
+                "lifecycle": "current",
+                "evidenceId": "s1",
+                "attributionEvidenceId": null,
+                "time": {
+                  "precision": "day",
+                  "value": "2026-11-17",
+                  "end": null,
+                  "evidenceId": "s1",
+                  "evidenceText": "el próximo martes"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "stage": "memory_capture_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "decision": "accept",
+            "extraction": null,
+            "changes": []
+          }
+        },
+        {
+          "stage": "capture_time_text",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "items": [
+              {
+                "id": "c1",
+                "text": "Quiero empezar cerámica el mes que viene."
+              },
+              {
+                "id": "c2",
+                "text": "La matrícula de cerámica es el 17 de noviembre de 2026."
+              }
+            ]
+          }
+        },
+        {
+          "stage": "capture_repair_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "sameFacts": true,
+            "independentItems": true,
+            "attributionPreserved": true,
+            "timePreserved": true
+          }
+        },
+        {
+          "stage": "embeddings",
+          "http": 200
+        }
+      ]
+    },
+    {
+      "id": "indefinite-future",
+      "passed": true,
+      "source": {
+        "id": "65bdfa00-f85c-4f09-83f7-25de7b4d5f9d",
+        "text": "Algún día quiero visitar el vivero Loto.",
+        "receivedAt": "2026-11-15T14:00:00Z",
+        "zone": "Europe/Madrid"
+      },
+      "result": {
+        "status": "saved",
+        "clarification": null,
+        "items": [
+          {
+            "text": "Algún día quiero visitar el vivero Loto.",
+            "quote": "Algún día quiero visitar el vivero Loto.",
+            "kind": "intention",
+            "entities": [
+              "vivero Loto"
+            ],
+            "time": {
+              "precision": "unknown",
+              "value": null,
+              "end": null,
+              "quote": null
+            },
+            "provenance": "personal",
+            "attribution": null,
+            "attributionEvidence": null,
+            "eventStatus": "planned",
+            "lifecycle": "current"
+          }
+        ]
+      },
+      "stages": [
+        {
+          "stage": "memory_extraction",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "status": "saved",
+            "clarification": null,
+            "items": [
+              {
+                "text": "Algún día quiero visitar el vivero Loto.",
+                "kind": "intention",
+                "entities": [
+                  "vivero Loto"
+                ],
+                "provenance": "personal",
+                "attribution": null,
+                "eventStatus": "planned",
+                "lifecycle": "current",
+                "evidenceId": "s1",
+                "attributionEvidenceId": null,
+                "time": {
+                  "precision": "unknown",
+                  "value": null,
+                  "end": null,
+                  "evidenceId": null,
+                  "evidenceText": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "stage": "memory_capture_review",
+          "http": 200,
+          "providerState": "completed",
+          "result": {
+            "decision": "accept",
+            "extraction": null,
+            "changes": []
+          }
+        },
+        {
+          "stage": "embeddings",
+          "http": 200
+        }
+      ]
+    }
+  ],
+  "estimatedUsd": 0.19305731999999765
+}
