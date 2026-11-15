@@ -1,6 +1,6 @@
 # Pantallas y estados
 
-**Estética vigente desde el 15 de noviembre:** el propietario elige Matrix A · Terminal y solicita además lluvia de símbolos verdes sobre negro. [Referencia y adaptación](STITCH_SOURCE.md). El negro/coral y los radios anteriores que aparecen más abajo son historial: en la nueva entrega el acento es verde fósforo y los radios son de 2 dp. El fondo animado se pausa fuera de primer plano y queda estático al desactivar animaciones; no desplaza contenido ni añade opciones o datos de memoria.
+**Estética vigente desde el 15 de noviembre:** el propietario elige Matrix A · Terminal y solicita además lluvia de símbolos verdes sobre negro. [Referencia y adaptación](STITCH_SOURCE.md). El negro/coral y los radios anteriores que aparecen más abajo son historial: en la nueva entrega el acento es verde fósforo y los radios son de 2 dp. Su petición posterior hace transparentes mensajes, editores, cabeceras, tarjetas, menús y botones propios para ver una única lluvia continua también bajo ellos. Las acciones disponibles y la confirmación «Sí, olvidar» usan contorno/texto de acento, sin relleno; el modo seleccionado conserva texto y subrayado verde. Google mantiene su botón oficial blanco. El fondo animado se pausa fuera de primer plano y queda estático al desactivar animaciones; no desplaza contenido ni añade opciones o datos de memoria.
 
 El [contrato de Stitch](STITCH_SOURCE.md) gobierna la consulta visual. Estos estados no son ocho destinos de navegación.
 

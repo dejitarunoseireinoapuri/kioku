@@ -2,6 +2,7 @@ package io.github.dejitarunoseireinoapuri.kioku.design
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.LocalElevationOverlay
 import androidx.compose.material.LocalRippleConfiguration
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Shapes
@@ -23,9 +24,6 @@ import org.jetbrains.compose.resources.Font
 
 object KiokuColors {
     val Background = Color(0xFF020604)
-    val ReadingSurface = Background.copy(alpha = 0.94f)
-    val Surface = Color(0xFF08110B)
-    val Raised = Color(0xFF142319)
     val Text = Color(0xFFE5F4E9)
     val Secondary = Color(0xFF9DB5A3)
     val BrandSecondary = Color(0xFFB9D8C2)
@@ -74,7 +72,7 @@ fun KiokuTheme(content: @Composable () -> Unit) {
                 onPrimary = KiokuColors.Background,
                 background = KiokuColors.Background,
                 onBackground = KiokuColors.Text,
-                surface = KiokuColors.Surface,
+                surface = Color.Transparent,
                 onSurface = KiokuColors.Text,
                 secondary = KiokuColors.Accent,
             ),
@@ -87,6 +85,7 @@ fun KiokuTheme(content: @Composable () -> Unit) {
         content = {
             CompositionLocalProvider(
                 LocalContentAlpha provides 1f,
+                LocalElevationOverlay provides null,
                 LocalRippleConfiguration provides null,
                 content = content,
             )

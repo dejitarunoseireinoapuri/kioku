@@ -49,7 +49,7 @@ fun ContentLoadingScreen(
 
 @Composable
 private fun LoadingIdentity(status: String) {
-    Column(Modifier.matrixReadingSurface(), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
         TerminalBrandMark()
         Column(Modifier.padding(top = KiokuSpacing.Large)) { KiokuWordmark() }
         LoadingStatusText(status, Modifier.padding(top = KiokuSpacing.Medium))

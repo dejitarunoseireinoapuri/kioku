@@ -16,13 +16,13 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingNotice
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
-import io.github.dejitarunoseireinoapuri.kioku.design.matrixReadingSurface
 import io.github.dejitarunoseireinoapuri.kioku.design.rememberButtonFeedback
 import io.github.dejitarunoseireinoapuri.kioku.domain.AiConfiguration
 import io.github.dejitarunoseireinoapuri.kioku.feature.account.AccountState
@@ -48,7 +48,7 @@ internal fun AccountSettings(
     onSignOut: () -> Unit,
 ) {
     val feedback = rememberButtonFeedback(KiokuColors.Secondary)
-    Column(Modifier.matrixReadingSurface(), verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large)) {
+    Column(verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large)) {
         AccountIdentity(account.session.label)
         Divider(color = KiokuColors.Rule)
         AiSettings(account, onRefresh)
@@ -112,7 +112,7 @@ private fun RefreshConfiguration(
         border = BorderStroke(1.dp, KiokuColors.Rule),
         colors =
             ButtonDefaults.outlinedButtonColors(
-                backgroundColor = KiokuColors.Raised,
+                backgroundColor = Color.Transparent,
                 contentColor = feedback.contentColor,
             ),
         interactionSource = feedback.interactionSource,

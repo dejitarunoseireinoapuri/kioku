@@ -2,6 +2,8 @@
 
 ## Sin versión publicada · 2026-11-15 · Matrix Terminal
 
+- Fondos transparentes en mensajes, editor, cabecera, tarjetas, cargas, menús y botones propios: la misma lluvia Matrix continúa bajo todos ellos. Acciones principales/envío con contorno y texto/icono verde; modo activo subrayado. Google conserva su botón oficial. Se mantienen las confirmaciones y el funcionamiento de teclado, feed y gestión.
+
 - Refinamiento de la lluvia a petición del propietario: más columnas y colas largas, distinta velocidad/desfase, cabeza que avanza por filas, símbolos que mutan en su sitio y reflejos, y transición continua entre verde vivo y tono tenue. Bases de lectura sobre el fondo más luminoso; pausa y reducción de animaciones conservadas.
 
 - El propietario elige A de las tres propuestas Matrix. Tema compartido negro/verde fósforo, logo 憶 e iconos Android/iOS, acceso centrado, transcripción sin burbujas, modos compactos y gestión con tarjetas rectas. Google conserva su marca. Ajustes real muestra cuenta/estado de IA sin recorridos ficticios.

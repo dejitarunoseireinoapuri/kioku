@@ -75,7 +75,7 @@ class ComposerInteractionTest {
     }
 
     @Test
-    fun sendUsesAnAccentBackgroundOnlyForNonBlankTextAndRemainsAnAccessibleTarget() {
+    fun sendUsesAnAccentOutlineOnlyForNonBlankTextAndRemainsAnAccessibleTarget() {
         compose.onNodeWithTag("send-action").assertIsNotEnabled()
         compose.onNodeWithTag("text-composer").performTextInput("   ")
         compose.onNodeWithTag("send-action").assertIsNotEnabled()
@@ -83,10 +83,15 @@ class ComposerInteractionTest {
         compose.onNodeWithTag("text-composer").performTextInput("Pregunta ficticia")
         val action = compose.onNodeWithTag("send-action").assertIsEnabled().assertIsDisplayed()
         val image = action.captureToImage()
-        val pixel = image.toPixelMap()[image.width / 6, image.height / 2]
+        val pixels = image.toPixelMap()
+        val pixel = pixels[image.width / 12 + 1, image.height / 2]
         assertEquals(85f / 255, pixel.red, 0.01f)
         assertEquals(1f, pixel.green, 0.01f)
         assertEquals(137f / 255, pixel.blue, 0.01f)
+        assertTrue(
+            "The send interior must let the rain through",
+            pixels[image.width / 4, image.height / 4].green < 0.8f,
+        )
         val bounds = action.fetchSemanticsNode().boundsInRoot
         val minimum = 48 * compose.activity.resources.displayMetrics.density
         assertTrue(bounds.width >= minimum && bounds.height >= minimum)

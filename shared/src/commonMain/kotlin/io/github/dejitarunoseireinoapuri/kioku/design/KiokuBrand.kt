@@ -1,7 +1,6 @@
 package io.github.dejitarunoseireinoapuri.kioku.design
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
@@ -30,7 +29,7 @@ fun KiokuMark(modifier: Modifier = Modifier.size(KiokuSpacing.Mark)) {
 @Composable
 fun TerminalBrandMark(modifier: Modifier = Modifier) {
     Box(
-        modifier.size(KiokuSpacing.BrandFrame).background(KiokuColors.Background.copy(alpha = 0.95f)).drawBehind {
+        modifier.size(KiokuSpacing.BrandFrame).drawBehind {
             val arm = 9.dp.toPx()
             val stroke = KiokuSpacing.Stroke.toPx()
             listOf(Offset.Zero, Offset(size.width, 0f), Offset(0f, size.height), Offset(size.width, size.height))

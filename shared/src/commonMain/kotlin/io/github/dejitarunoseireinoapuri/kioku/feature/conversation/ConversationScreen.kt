@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingNotice
@@ -36,8 +37,9 @@ fun ConversationScreen(
     onSource: (String) -> Unit,
 ) {
     val scroll = conversationScroll(state, loading)
+    val confirming = !state.checkingMemory && state.conversation?.confirmingForget == true
     ConversationForgetConfirmation(state, onEvent)
-    Column(Modifier.fillMaxSize()) {
+    Column(Modifier.fillMaxSize().graphicsLayer { alpha = if (confirming) 0f else 1f }) {
         ConversationHeader(onSettings)
         if (state.showingConversation) {
             ConversationFeed(

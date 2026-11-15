@@ -19,7 +19,6 @@ import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingScreen
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuMark
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuWordmark
-import io.github.dejitarunoseireinoapuri.kioku.design.matrixReadingSurface
 import io.github.dejitarunoseireinoapuri.kioku.domain.AccountIssue
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.account_denied
@@ -91,5 +90,5 @@ internal fun AccountIssueText(issue: AccountIssue) {
             AccountIssue.Unavailable -> Res.string.account_unavailable
             AccountIssue.SetupRequired -> Res.string.account_setup
         }
-    Text(stringResource(resource), modifier = Modifier.matrixReadingSurface(), color = KiokuColors.Danger)
+    Text(stringResource(resource), color = KiokuColors.Danger)
 }

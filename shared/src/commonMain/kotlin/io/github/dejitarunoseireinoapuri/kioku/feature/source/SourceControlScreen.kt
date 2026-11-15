@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
@@ -84,6 +85,7 @@ fun SourceControlScreen(
     val working = state is SourceControlState.Working
     val feedback = (state as? SourceControlState.Ready)?.feedback
     val notice = (state as? SourceControlState.Ready)?.notice
+    val confirming = (state as? SourceControlState.Ready)?.forget != null
     val forward = controlInputEvents(onEvent)
     (state as? SourceControlState.Ready)?.forget?.let { pending ->
         ForgetConfirmationDialog(
@@ -95,7 +97,7 @@ fun SourceControlScreen(
     LaunchedEffect(working, feedback, notice, scroll.maxValue) {
         if (working || feedback != null || notice != null) scroll.animateScrollTo(scroll.maxValue)
     }
-    Column(Modifier.fillMaxSize()) {
+    Column(Modifier.fillMaxSize().graphicsLayer { alpha = if (confirming) 0f else 1f }) {
         TopBar(
             stringResource(Res.string.control_title),
             leading = { IconAction(Res.drawable.icon_back, stringResource(Res.string.back), onBack) },

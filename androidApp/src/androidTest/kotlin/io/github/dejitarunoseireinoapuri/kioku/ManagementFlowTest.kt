@@ -1,6 +1,7 @@
 package io.github.dejitarunoseireinoapuri.kioku
 
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.toPixelMap
 import androidx.compose.ui.test.assertIsDisplayed
@@ -21,11 +22,13 @@ import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
+import androidx.test.platform.app.InstrumentationRegistry
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextOutcome
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
@@ -103,18 +106,38 @@ class ManagementFlowTest {
 
     private fun forget(text: String) {
         compose.onNode(hasText("Olvidar") and memoryItemContaining(text)).performScrollTo().performClick()
+        assertUnderlyingHeadingIsHidden()
         val image = compose.onNodeWithTag("forget-confirm-action").captureToImage().toPixelMap()
-        assertEquals(KiokuColors.Accent.toArgb(), image[image.width / 8, image.height / 2].toArgb())
-        captureBrandScreen(compose.activity, "kioku-forget-filled.png") {
+        assertEquals(KiokuColors.Accent.toArgb(), image[0, image.height / 2].toArgb())
+        captureBrandScreen(compose.activity, "kioku-forget-outline.png") {
             compose.onNodeWithTag("forget-confirmation").captureToImage()
+        }
+        captureBrandScreen(compose.activity, "kioku-forget-window.png") {
+            InstrumentationRegistry
+                .getInstrumentation()
+                .uiAutomation
+                .takeScreenshot()
+                .asImageBitmap()
         }
         click("Sí, olvidar")
         visible("Recuerdo borrado")
+        compose.onNodeWithText("Gestionar un recuerdo").assertIsDisplayed()
     }
 
     private fun click(text: String) {
         visible(text)
         compose.onNodeWithText(text).performClick()
+    }
+
+    private fun assertUnderlyingHeadingIsHidden() {
+        val image = compose.onNodeWithText("Gestionar un recuerdo").captureToImage()
+        val pixels = image.toPixelMap()
+        for (y in 0 until image.height step 2) {
+            for (x in 0 until image.width step 2) {
+                val pixel = pixels[x, y]
+                assertTrue("The underlying heading must not compete with the dialog", pixel.red < 0.8f)
+            }
+        }
     }
 
     private fun visible(text: String) {

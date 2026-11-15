@@ -1,6 +1,5 @@
 package io.github.dejitarunoseireinoapuri.kioku.design
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -24,7 +23,7 @@ fun TranscriptMessage(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Row(
-        modifier.fillMaxWidth().background(KiokuColors.Background.copy(alpha = 0.95f)),
+        modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(KiokuSpacing.Small),
     ) {
         if (owner) {

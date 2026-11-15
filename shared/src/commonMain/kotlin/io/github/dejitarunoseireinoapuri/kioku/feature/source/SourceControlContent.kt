@@ -18,6 +18,7 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
@@ -144,7 +145,7 @@ private fun CorrectionEditor(
         colors =
             TextFieldDefaults.textFieldColors(
                 textColor = KiokuColors.Text,
-                backgroundColor = KiokuColors.Surface,
+                backgroundColor = Color.Transparent,
                 cursorColor = KiokuColors.Accent,
                 focusedIndicatorColor = KiokuColors.Accent,
             ),
@@ -173,7 +174,7 @@ private fun ControlTextAction(
         onClick = onClick,
         enabled = enabled,
         interactionSource = feedback.interactionSource,
-        colors = ButtonDefaults.outlinedButtonColors(backgroundColor = KiokuColors.Surface),
+        colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Color.Transparent),
         border = BorderStroke(KiokuSpacing.Stroke, KiokuColors.Rule),
         modifier = Modifier.fillMaxWidth().sizeIn(minHeight = KiokuSpacing.TouchTarget),
     ) {

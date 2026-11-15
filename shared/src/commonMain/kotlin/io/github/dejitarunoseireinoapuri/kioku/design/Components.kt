@@ -19,6 +19,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
@@ -46,7 +47,7 @@ fun ActionButton(
         border = BorderStroke(1.dp, KiokuColors.Rule),
         colors =
             ButtonDefaults.outlinedButtonColors(
-                backgroundColor = KiokuColors.Surface,
+                backgroundColor = Color.Transparent,
                 contentColor = feedback.contentColor,
             ),
         interactionSource = feedback.interactionSource,
@@ -105,7 +106,7 @@ fun TopBar(
             fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
         ),
 ) {
-    Column(Modifier.matrixReadingSurface()) {
+    Column {
         Row(
             Modifier.fillMaxWidth().padding(horizontal = KiokuSpacing.Medium),
             horizontalArrangement = Arrangement.spacedBy(8.dp),

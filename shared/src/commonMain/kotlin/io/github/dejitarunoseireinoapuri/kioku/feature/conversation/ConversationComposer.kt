@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
@@ -66,7 +67,7 @@ fun ConversationComposer(
         }
         onEvent(event)
     }
-    Surface(color = KiokuColors.Surface) {
+    Surface(color = Color.Transparent) {
         Column {
             Divider(color = KiokuColors.Rule)
             Column(Modifier.padding(horizontal = KiokuSpacing.Medium, vertical = KiokuSpacing.Small)) {
@@ -113,7 +114,11 @@ private fun TextComposer(
     enabled: Boolean,
     onEvent: (ConversationEvent) -> Unit,
 ) {
-    Surface(shape = MaterialTheme.shapes.small, border = BorderStroke(1.dp, KiokuColors.Rule)) {
+    Surface(
+        modifier = Modifier.testTag("composer-frame"),
+        shape = MaterialTheme.shapes.small,
+        border = BorderStroke(1.dp, KiokuColors.Rule),
+    ) {
         Row(Modifier.fillMaxWidth().padding(start = 16.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(
                 ">",
@@ -178,7 +183,8 @@ private fun IntentButton(
         border = null,
         colors =
             ButtonDefaults.buttonColors(
-                backgroundColor = if (active) KiokuColors.Raised else KiokuColors.Surface,
+                backgroundColor = Color.Transparent,
+                disabledBackgroundColor = Color.Transparent,
                 contentColor = if (active) KiokuColors.Accent else KiokuColors.Secondary,
             ),
     ) {

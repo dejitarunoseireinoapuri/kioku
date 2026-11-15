@@ -88,9 +88,7 @@ fun MatrixBackdrop(content: @Composable () -> Unit) {
     }
 }
 
-/** Keeps foreground reading groups distinct while the wallpaper remains visible around them. */
-fun Modifier.matrixReadingSurface(): Modifier = background(KiokuColors.ReadingSurface)
-
+/** Draws the single decorative layer beneath the transparent foreground. */
 @Composable
 internal fun MatrixRain(
     active: Boolean,

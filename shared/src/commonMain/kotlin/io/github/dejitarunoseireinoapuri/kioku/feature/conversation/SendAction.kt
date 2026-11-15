@@ -1,6 +1,6 @@
 package io.github.dejitarunoseireinoapuri.kioku.feature.conversation
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -35,8 +35,8 @@ internal fun SendAction(
     val tint =
         when {
             !enabled -> KiokuColors.Secondary
-            pressed || focused -> KiokuColors.Background.copy(alpha = 0.7f)
-            else -> KiokuColors.Background
+            pressed || focused -> KiokuColors.Text
+            else -> KiokuColors.Accent
         }
     IconButton(
         onClick = onSend,
@@ -47,7 +47,11 @@ internal fun SendAction(
         Box(
             Modifier
                 .size(KiokuSpacing.SendBackground)
-                .background(if (enabled) KiokuColors.Accent else Color.Transparent, MaterialTheme.shapes.small),
+                .border(
+                    KiokuSpacing.Stroke,
+                    if (enabled) KiokuColors.Accent else Color.Transparent,
+                    MaterialTheme.shapes.small,
+                ),
             contentAlignment = Alignment.Center,
         ) {
             Icon(painterResource(Res.drawable.icon_send), stringResource(Res.string.send), tint = tint)
