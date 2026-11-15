@@ -80,6 +80,7 @@ class LiveManagementSessionTest {
         compose.onNodeWithText("Gestionar un recuerdo").assertIsDisplayed()
         compose.onNodeWithTag("text-composer").assertDoesNotExist()
         compose.onNodeWithContentDescription("Volver").performClick()
+        awaitInput()
         compose.onNodeWithTag("conversation-messages").performScrollToNode(hasText(MANAGEMENT_STORY))
         compose.onNodeWithText(MANAGEMENT_STORY).assertIsDisplayed()
         compose.onNodeWithText(MANAGEMENT_STORY).assertIsNotEnabled()
@@ -90,6 +91,10 @@ class LiveManagementSessionTest {
     private fun awaitReady() {
         visible("Explicar")
         click("Explicar")
+        awaitInput()
+    }
+
+    private fun awaitInput() {
         compose.waitUntil(LIVE_MANAGEMENT_TIMEOUT) {
             compose.onAllNodes(hasTestTag("text-composer") and isEnabled()).fetchSemanticsNodes().size == 1
         }
@@ -115,14 +120,14 @@ class LiveManagementSessionTest {
                 )
             val kept =
                 queries.execute(
-                    queries.prepare("En la prueba K4mg8143, ¿cuándo quiero visitar el planetario K4mg8143?"),
+                    queries.prepare("En la prueba K4mg8144, ¿cuándo quiero visitar el planetario K4mg8144?"),
                 )
             assertTrue(kept is QueryOutcome.Reply)
             assertEquals(AnswerStatus.Answered, (kept as QueryOutcome.Reply).status)
             assertTrue(kept.text.contains("21"))
             val absent =
                 queries.execute(
-                    queries.prepare("En la prueba K4mg8143, ¿cuándo iré a encuadernación K4mg8143?"),
+                    queries.prepare("En la prueba K4mg8144, ¿cuándo iré a encuadernación K4mg8144?"),
                 )
             assertTrue(absent is QueryOutcome.Reply)
             assertEquals(AnswerStatus.NotFound, (absent as QueryOutcome.Reply).status)
@@ -143,7 +148,7 @@ class LiveManagementSessionTest {
 
 private const val LIVE_MANAGEMENT_TIMEOUT = 195000L
 private const val MANAGEMENT_STORY =
-    "En la prueba K4mg8143 quiero visitar el planetario K4mg8143 el 20 de diciembre de 2026. " +
-        "En la prueba K4mg8143 iré a encuadernación K4mg8143 el 18 de diciembre de 2026."
+    "En la prueba K4mg8144 quiero visitar el planetario K4mg8144 el 20 de diciembre de 2026. " +
+        "En la prueba K4mg8144 iré a encuadernación K4mg8144 el 18 de diciembre de 2026."
 private const val MANAGEMENT_CORRECTION =
-    "En la prueba K4mg8143 quiero visitar el planetario K4mg8143 el 21 de diciembre de 2026."
+    "En la prueba K4mg8144 quiero visitar el planetario K4mg8144 el 21 de diciembre de 2026."
