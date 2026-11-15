@@ -1,0 +1,496 @@
+{
+  "kind": "synthetic-answer-perspective",
+  "at": "2026-11-15T12:00:00Z",
+  "profile": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "verbosity": "low",
+    "baseInput": 0.000002,
+    "inputCeiling": 0.0000025,
+    "output": 0.00001
+  },
+  "resolvedModel": "gpt-6.1-sol",
+  "apiCalls": 18,
+  "estimatedUsd": 0.07093499999999864,
+  "rows": [
+    {
+      "id": "owner-intention",
+      "passed": true,
+      "question": "¿Qué quiero hacer hoy?",
+      "facts": [
+        {
+          "source": {
+            "id": "address-play",
+            "text": "Hoy quiero jugar a la Play.",
+            "receivedAt": "2026-11-15T12:00:00Z",
+            "zone": "Europe/Madrid"
+          },
+          "memory": {
+            "id": "address-play-1",
+            "sourceId": "address-play",
+            "revision": 1,
+            "text": "Hoy quiero jugar a la Play.",
+            "quote": "Hoy quiero jugar a la Play.",
+            "kind": "intention",
+            "entities": [],
+            "time": {
+              "precision": "day",
+              "value": "2026-11-15",
+              "end": null,
+              "quote": "Hoy"
+            },
+            "provenance": "personal",
+            "attribution": null,
+            "attributionEvidence": null,
+            "eventStatus": "planned",
+            "lifecycle": "current",
+            "receivedAt": "2026-11-15T12:00:00Z",
+            "zone": "Europe/Madrid",
+            "vector": [
+              1
+            ]
+          }
+        }
+      ],
+      "answer": {
+        "status": "answered",
+        "answer": "Hoy, 15 de noviembre de 2026, quieres jugar a la Play.",
+        "sourceIds": [
+          "address-play"
+        ]
+      },
+      "verification": {
+        "supported": true,
+        "status": "answered",
+        "problem": "none",
+        "scope": "memory"
+      }
+    },
+    {
+      "id": "owner-past-plan",
+      "passed": true,
+      "question": "¿Qué tenía previsto hacer el 14 de noviembre?",
+      "facts": [
+        {
+          "source": {
+            "id": "address-past",
+            "text": "Tenía previsto visitar el vivero el 14 de noviembre de 2026.",
+            "receivedAt": "2026-11-15T12:00:00Z",
+            "zone": "Europe/Madrid"
+          },
+          "memory": {
+            "id": "address-past-1",
+            "sourceId": "address-past",
+            "revision": 1,
+            "text": "Tenía previsto visitar el vivero el 14 de noviembre de 2026.",
+            "quote": "Tenía previsto visitar el vivero el 14 de noviembre de 2026.",
+            "kind": "intention",
+            "entities": [],
+            "time": {
+              "precision": "day",
+              "value": "2026-11-14",
+              "end": null,
+              "quote": "el 14 de noviembre de 2026"
+            },
+            "provenance": "personal",
+            "attribution": null,
+            "attributionEvidence": null,
+            "eventStatus": "planned",
+            "lifecycle": "current",
+            "receivedAt": "2026-11-15T12:00:00Z",
+            "zone": "Europe/Madrid",
+            "vector": [
+              1
+            ]
+          }
+        }
+      ],
+      "answer": {
+        "status": "answered",
+        "answer": "Tenías previsto visitar el vivero el 14 de noviembre de 2026; no consta si lo hiciste.",
+        "sourceIds": [
+          "address-past"
+        ]
+      },
+      "verification": {
+        "supported": true,
+        "status": "answered",
+        "problem": "none",
+        "scope": "memory"
+      }
+    },
+    {
+      "id": "owner-completed-and-relative",
+      "passed": true,
+      "question": "¿A quién llamé hoy?",
+      "facts": [
+        {
+          "source": {
+            "id": "address-call",
+            "text": "Hoy llamé a mi padre.",
+            "receivedAt": "2026-11-15T12:00:00Z",
+            "zone": "Europe/Madrid"
+          },
+          "memory": {
+            "id": "address-call-1",
+            "sourceId": "address-call",
+            "revision": 1,
+            "text": "Hoy llamé a mi padre.",
+            "quote": "Hoy llamé a mi padre.",
+            "kind": "fact",
+            "entities": [],
+            "time": {
+              "precision": "day",
+              "value": "2026-11-15",
+              "end": null,
+              "quote": "Hoy"
+            },
+            "provenance": "personal",
+            "attribution": null,
+            "attributionEvidence": null,
+            "eventStatus": "completed",
+            "lifecycle": "current",
+            "receivedAt": "2026-11-15T12:00:00Z",
+            "zone": "Europe/Madrid",
+            "vector": [
+              1
+            ]
+          }
+        }
+      ],
+      "answer": {
+        "status": "answered",
+        "answer": "Hoy, 15 de noviembre de 2026, llamaste a tu padre.",
+        "sourceIds": [
+          "address-call"
+        ]
+      },
+      "verification": {
+        "supported": true,
+        "status": "answered",
+        "problem": "none",
+        "scope": "memory"
+      }
+    },
+    {
+      "id": "owner-negative-preference",
+      "passed": true,
+      "question": "¿Me gusta el apio?",
+      "facts": [
+        {
+          "source": {
+            "id": "address-taste",
+            "text": "No me gusta el apio.",
+            "receivedAt": "2026-11-15T12:00:00Z",
+            "zone": "Europe/Madrid"
+          },
+          "memory": {
+            "id": "address-taste-1",
+            "sourceId": "address-taste",
+            "revision": 1,
+            "text": "No me gusta el apio.",
+            "quote": "No me gusta el apio.",
+            "kind": "opinion",
+            "entities": [],
+            "time": {
+              "precision": "unknown",
+              "value": null,
+              "end": null,
+              "quote": null
+            },
+            "provenance": "personal",
+            "attribution": null,
+            "attributionEvidence": null,
+            "eventStatus": "unspecified",
+            "lifecycle": "current",
+            "receivedAt": "2026-11-15T12:00:00Z",
+            "zone": "Europe/Madrid",
+            "vector": [
+              1
+            ]
+          }
+        }
+      ],
+      "answer": {
+        "status": "answered",
+        "answer": "No, no te gusta el apio.",
+        "sourceIds": [
+          "address-taste"
+        ]
+      },
+      "verification": {
+        "supported": true,
+        "status": "answered",
+        "problem": "none",
+        "scope": "memory"
+      }
+    },
+    {
+      "id": "third-person-and-possessive",
+      "passed": true,
+      "question": "¿Cuándo tiene un examen mi madre?",
+      "facts": [
+        {
+          "source": {
+            "id": "address-mother",
+            "text": "Mi madre tiene un examen el 17 de noviembre de 2026.",
+            "receivedAt": "2026-11-15T12:00:00Z",
+            "zone": "Europe/Madrid"
+          },
+          "memory": {
+            "id": "address-mother-1",
+            "sourceId": "address-mother",
+            "revision": 1,
+            "text": "Mi madre tiene un examen el 17 de noviembre de 2026.",
+            "quote": "Mi madre tiene un examen el 17 de noviembre de 2026.",
+            "kind": "fact",
+            "entities": [],
+            "time": {
+              "precision": "day",
+              "value": "2026-11-17",
+              "end": null,
+              "quote": "el 17 de noviembre de 2026"
+            },
+            "provenance": "personal",
+            "attribution": null,
+            "attributionEvidence": null,
+            "eventStatus": "planned",
+            "lifecycle": "current",
+            "receivedAt": "2026-11-15T12:00:00Z",
+            "zone": "Europe/Madrid",
+            "vector": [
+              1
+            ]
+          }
+        }
+      ],
+      "answer": {
+        "status": "answered",
+        "answer": "Tu madre tiene previsto un examen el 17 de noviembre de 2026.",
+        "sourceIds": [
+          "address-mother"
+        ]
+      },
+      "verification": {
+        "supported": true,
+        "status": "answered",
+        "problem": "none",
+        "scope": "memory"
+      }
+    },
+    {
+      "id": "reported-desire-not-owner",
+      "passed": true,
+      "question": "¿Qué me dijo Pablo que quiere hacer?",
+      "facts": [
+        {
+          "source": {
+            "id": "address-pablo",
+            "text": "Pablo me dijo que quiere ir al cine.",
+            "receivedAt": "2026-11-15T12:00:00Z",
+            "zone": "Europe/Madrid"
+          },
+          "memory": {
+            "id": "address-pablo-1",
+            "sourceId": "address-pablo",
+            "revision": 1,
+            "text": "Pablo me dijo que quiere ir al cine.",
+            "quote": "Pablo me dijo que quiere ir al cine.",
+            "kind": "intention",
+            "entities": [],
+            "time": {
+              "precision": "unknown",
+              "value": null,
+              "end": null,
+              "quote": null
+            },
+            "provenance": "reported",
+            "attribution": "Pablo",
+            "attributionEvidence": "Pablo me dijo",
+            "eventStatus": "planned",
+            "lifecycle": "current",
+            "receivedAt": "2026-11-15T12:00:00Z",
+            "zone": "Europe/Madrid",
+            "vector": [
+              1
+            ]
+          }
+        }
+      ],
+      "answer": {
+        "status": "answered",
+        "answer": "Pablo te dijo que quiere ir al cine.",
+        "sourceIds": [
+          "address-pablo"
+        ]
+      },
+      "verification": {
+        "supported": true,
+        "status": "answered",
+        "problem": "none",
+        "scope": "memory"
+      }
+    },
+    {
+      "id": "literal-first-person-quotation",
+      "passed": true,
+      "question": "¿Qué decía el cuento que leí?",
+      "facts": [
+        {
+          "source": {
+            "id": "address-quotation",
+            "text": "Leí en un cuento: «Quiero ir a la Luna».",
+            "receivedAt": "2026-11-15T12:00:00Z",
+            "zone": "Europe/Madrid"
+          },
+          "memory": {
+            "id": "address-quotation-1",
+            "sourceId": "address-quotation",
+            "revision": 1,
+            "text": "Leí en un cuento: «Quiero ir a la Luna».",
+            "quote": "Leí en un cuento: «Quiero ir a la Luna».",
+            "kind": "fact",
+            "entities": [],
+            "time": {
+              "precision": "unknown",
+              "value": null,
+              "end": null,
+              "quote": null
+            },
+            "provenance": "quoted",
+            "attribution": "un cuento",
+            "attributionEvidence": "un cuento",
+            "eventStatus": "unspecified",
+            "lifecycle": "current",
+            "receivedAt": "2026-11-15T12:00:00Z",
+            "zone": "Europe/Madrid",
+            "vector": [
+              1
+            ]
+          }
+        }
+      ],
+      "answer": {
+        "status": "answered",
+        "answer": "El contenido citado decía: «Leí en un cuento: «Quiero ir a la Luna».». Es una cita, no un dato personal confirmado.",
+        "sourceIds": [
+          "address-quotation"
+        ]
+      },
+      "verification": {
+        "supported": true,
+        "status": "answered",
+        "problem": "scope_boundary",
+        "scope": "quotation"
+      }
+    },
+    {
+      "id": "two-subjects",
+      "passed": true,
+      "question": "¿Qué quiero hacer yo y qué quiere hacer Pablo?",
+      "facts": [
+        {
+          "source": {
+            "id": "address-play",
+            "text": "Hoy quiero jugar a la Play.",
+            "receivedAt": "2026-11-15T12:00:00Z",
+            "zone": "Europe/Madrid"
+          },
+          "memory": {
+            "id": "address-play-1",
+            "sourceId": "address-play",
+            "revision": 1,
+            "text": "Hoy quiero jugar a la Play.",
+            "quote": "Hoy quiero jugar a la Play.",
+            "kind": "intention",
+            "entities": [],
+            "time": {
+              "precision": "day",
+              "value": "2026-11-15",
+              "end": null,
+              "quote": "Hoy"
+            },
+            "provenance": "personal",
+            "attribution": null,
+            "attributionEvidence": null,
+            "eventStatus": "planned",
+            "lifecycle": "current",
+            "receivedAt": "2026-11-15T12:00:00Z",
+            "zone": "Europe/Madrid",
+            "vector": [
+              1
+            ]
+          }
+        },
+        {
+          "source": {
+            "id": "address-pablo",
+            "text": "Pablo me dijo que quiere ir al cine.",
+            "receivedAt": "2026-11-15T12:00:00Z",
+            "zone": "Europe/Madrid"
+          },
+          "memory": {
+            "id": "address-pablo-1",
+            "sourceId": "address-pablo",
+            "revision": 1,
+            "text": "Pablo me dijo que quiere ir al cine.",
+            "quote": "Pablo me dijo que quiere ir al cine.",
+            "kind": "intention",
+            "entities": [],
+            "time": {
+              "precision": "unknown",
+              "value": null,
+              "end": null,
+              "quote": null
+            },
+            "provenance": "reported",
+            "attribution": "Pablo",
+            "attributionEvidence": "Pablo me dijo",
+            "eventStatus": "planned",
+            "lifecycle": "current",
+            "receivedAt": "2026-11-15T12:00:00Z",
+            "zone": "Europe/Madrid",
+            "vector": [
+              1
+            ]
+          }
+        }
+      ],
+      "answer": {
+        "status": "answered",
+        "answer": "Quieres jugar a la Play el 15 de noviembre de 2026, y Pablo te dijo que quiere ir al cine.",
+        "sourceIds": [
+          "address-play",
+          "address-pablo"
+        ]
+      },
+      "verification": {
+        "supported": true,
+        "status": "answered",
+        "problem": "none",
+        "scope": "memory"
+      }
+    },
+    {
+      "id": "management-stays-first-person",
+      "passed": true,
+      "presentation": {
+        "items": [
+          {
+            "id": "address-play-1",
+            "text": "Hoy, 15 de noviembre de 2026, quiero jugar a la Play."
+          },
+          {
+            "id": "address-pablo-1",
+            "text": "Pablo me dijo que quiere ir al cine."
+          }
+        ]
+      },
+      "review": {
+        "faithful": true,
+        "ownerPerspective": true,
+        "attributionPreserved": true
+      }
+    }
+  ]
+}

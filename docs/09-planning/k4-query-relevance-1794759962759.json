@@ -1,0 +1,182 @@
+{
+  "kind": "synthetic-query-relevance-regression",
+  "at": "2026-11-15T12:00:00Z",
+  "apiCalls": 9,
+  "injectedDrafts": 1,
+  "estimatedUsd": 0.03781749999999917,
+  "sources": [
+    {
+      "id": "relevance-planetarium",
+      "text": "[Fragmento de una corrección tuya]\nEn la prueba Loto quiero visitar el planetario el 21 de diciembre de 2026.",
+      "receivedAt": "2026-11-15T12:00:00Z",
+      "zone": "Europe/Madrid",
+      "sourceKind": "correction"
+    },
+    {
+      "id": "relevance-bookbinding",
+      "text": "En la prueba Loto iré a encuadernación el 18 de diciembre de 2026.",
+      "receivedAt": "2026-11-15T12:00:00Z",
+      "zone": "Europe/Madrid"
+    }
+  ],
+  "memories": [
+    {
+      "id": "relevance-planetarium-1",
+      "sourceId": "relevance-planetarium",
+      "revision": 2,
+      "text": "Quiero visitar el planetario el 21 de diciembre de 2026.",
+      "quote": "En la prueba Loto quiero visitar el planetario el 21 de diciembre de 2026.",
+      "kind": "intention",
+      "entities": [
+        "prueba Loto",
+        "planetario"
+      ],
+      "time": {
+        "precision": "day",
+        "value": "2026-12-21",
+        "end": null,
+        "quote": "el 21 de diciembre de 2026"
+      },
+      "provenance": "personal",
+      "attribution": null,
+      "attributionEvidence": null,
+      "eventStatus": "planned",
+      "lifecycle": "current",
+      "receivedAt": "2026-11-15T12:00:00Z",
+      "zone": "Europe/Madrid",
+      "vector": [
+        1
+      ]
+    },
+    {
+      "id": "relevance-bookbinding-1",
+      "sourceId": "relevance-bookbinding",
+      "revision": 2,
+      "text": "En la prueba Loto iré a encuadernación el 18 de diciembre de 2026.",
+      "quote": "En la prueba Loto iré a encuadernación el 18 de diciembre de 2026.",
+      "kind": "intention",
+      "entities": [
+        "prueba Loto",
+        "encuadernación"
+      ],
+      "time": {
+        "precision": "day",
+        "value": "2026-12-18",
+        "end": null,
+        "quote": "el 18 de diciembre de 2026"
+      },
+      "provenance": "personal",
+      "attribution": null,
+      "attributionEvidence": null,
+      "eventStatus": "planned",
+      "lifecycle": "current",
+      "receivedAt": "2026-11-15T12:00:00Z",
+      "zone": "Europe/Madrid",
+      "vector": [
+        1
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "id": "absent-with-corrected-distractor",
+      "passed": true,
+      "question": "En la prueba Loto, ¿cuándo iré a encuadernación?",
+      "answer": {
+        "status": "not_found",
+        "answer": "No consta cuándo tienes previsto ir a encuadernación en la prueba Loto.",
+        "sourceIds": []
+      },
+      "verification": {
+        "supported": true,
+        "status": "not_found",
+        "problem": "none",
+        "scope": "memory"
+      },
+      "selected": [],
+      "resolvedModel": "gpt-6.1-sol"
+    },
+    {
+      "id": "current-correction-answers-own-question",
+      "passed": true,
+      "question": "En la prueba Loto, ¿cuándo quiero visitar el planetario?",
+      "answer": {
+        "status": "answered",
+        "answer": "Quieres visitar el planetario el 21 de diciembre de 2026.",
+        "sourceIds": [
+          "relevance-planetarium"
+        ]
+      },
+      "verification": {
+        "supported": true,
+        "status": "answered",
+        "problem": "none",
+        "scope": "memory"
+      },
+      "selected": [
+        "relevance-planetarium-1"
+      ],
+      "resolvedModel": "gpt-6.1-sol"
+    },
+    {
+      "id": "absent-with-retained-distractor",
+      "passed": true,
+      "question": "En la prueba Loto, ¿cuándo iré a encuadernación?",
+      "answer": {
+        "status": "not_found",
+        "answer": "No consta cuándo tienes previsto ir a encuadernación en la prueba Loto.",
+        "sourceIds": []
+      },
+      "verification": {
+        "supported": true,
+        "status": "not_found",
+        "problem": "none",
+        "scope": "memory"
+      },
+      "selected": [],
+      "resolvedModel": "gpt-6.1-sol"
+    },
+    {
+      "id": "same-marker-different-activities",
+      "passed": true,
+      "question": "En la prueba Loto, ¿cuándo iré a encuadernación?",
+      "answer": {
+        "status": "answered",
+        "answer": "Tienes previsto ir a encuadernación el 18 de diciembre de 2026.",
+        "sourceIds": [
+          "relevance-bookbinding"
+        ]
+      },
+      "verification": {
+        "supported": true,
+        "status": "answered",
+        "problem": "none",
+        "scope": "memory"
+      },
+      "selected": [
+        "relevance-bookbinding-1"
+      ],
+      "resolvedModel": "gpt-6.1-sol"
+    },
+    {
+      "id": "review-rejects-faithful-wrong-topic",
+      "passed": true,
+      "question": "En la prueba Loto, ¿cuándo iré a encuadernación?",
+      "answer": {
+        "status": "not_found",
+        "answer": "No tengo evidencia suficiente para responder con ese dato.",
+        "sourceIds": []
+      },
+      "verification": {
+        "supported": false,
+        "status": "not_found",
+        "problem": "unsupported_claim",
+        "scope": "memory"
+      },
+      "selected": [
+        "relevance-planetarium-1"
+      ],
+      "resolvedModel": "gpt-6.1-sol"
+    }
+  ]
+}

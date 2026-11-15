@@ -5,6 +5,7 @@
 - **BR-003:** guardar automáticamente solo cuando el contenido esté suficientemente determinado; si falta contexto relevante, aclarar por el mismo canal. Nunca exigir aprobar cada resumen correcto.
 - **BR-004:** conservar el relato textual y la procedencia; separar asuntos manteniendo sus relaciones. No convertir una intención en un hecho realizado.
 - **BR-005:** toda respuesta factual sobre la memoria debe apoyarse en fuentes autorizadas. Sin evidencia, reconocer la ausencia de información: no afirmar que algo no ocurrió.
+- Al responder a Preguntar, Kioku se dirige al propietario de tú. Sus recuerdos y las fichas de Gestionar conservan primera persona; la adaptación de pronombres/posesivos de la respuesta no cambia sujeto, atribución, literal de citas ni hechos. La primera persona de la IA para sus propios límites («No tengo ese recuerdo») no expresa una vivencia del propietario.
 - **BR-006:** interpretar referencias relativas desde el momento y zona correspondientes; distinguir fecha del evento y fecha de registro. No inventar precisión. Cada asunto usa su propio literal temporal aunque comparta oración con otras fechas.
 - Meses/años relativos inequívocos conservan esa precisión; una semana natural se interpreta de lunes a domingo en la zona del registro. El mes que viene no significa el primer día de ese mes. El calendario se canonicaliza antes de revisar el texto, sin mezclar asuntos distintos.
 - **BR-007:** un dato nuevo durante Preguntar requiere una oferta y aceptación explícita antes de guardarse. Rechazar no cambia la memoria.
