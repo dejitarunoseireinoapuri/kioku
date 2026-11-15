@@ -1,6 +1,8 @@
 package io.github.dejitarunoseireinoapuri.kioku
 
 import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.isEnabled
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
@@ -47,27 +49,24 @@ class LiveAnswerPerspectiveTest {
         openManagement()
         assertManagementPerspective()
         compose.onNodeWithContentDescription("Volver").performClick()
-        visible("Preguntar")
-        compose.onNodeWithText("Preguntar").performClick()
+        selectAsk()
         send("En la prueba K4tu1534, ¿qué quiero hacer hoy?")
         compose.waitUntil(PERSPECTIVE_TIMEOUT) {
-            compose
-                .onAllNodesWithText(
-                    "quieres",
-                    substring = true,
-                    ignoreCase = true,
-                ).fetchSemanticsNodes()
-                .isNotEmpty()
+            compose.onAllNodesWithContentDescription("Gestionar este recuerdo").fetchSemanticsNodes().size == 1 &&
+                compose
+                    .onAllNodesWithText("vivero", substring = true, ignoreCase = true)
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
         }
         val answer =
             compose
-                .onAllNodesWithText("quieres", substring = true, ignoreCase = true)
+                .onAllNodesWithText("vivero", substring = true, ignoreCase = true)
                 .fetchSemanticsNodes()
                 .single()
                 .config[SemanticsProperties.Text]
                 .joinToString { it.text }
         assertTrue(answer.contains("vivero", true))
-        assertFalse(Regex("\\bquiero\\b", RegexOption.IGNORE_CASE).containsMatchIn(answer))
+        assertSecondPerson(answer)
         compose.onNodeWithText("Ver texto original", substring = true).assertDoesNotExist()
         openManagement()
         assertManagementPerspective()
@@ -79,6 +78,14 @@ class LiveAnswerPerspectiveTest {
         }
         compose.onNodeWithTag("text-composer").performTextInput(text)
         compose.onNodeWithTag("text-composer").performImeAction()
+    }
+
+    private fun selectAsk() {
+        compose.waitUntil(PERSPECTIVE_TIMEOUT) {
+            compose.onAllNodes(hasTestTag("intent-Ask") and isEnabled()).fetchSemanticsNodes().size == 1
+        }
+        compose.onNodeWithTag("intent-Ask").performClick()
+        compose.onNodeWithTag("intent-Ask").assert(SemanticsMatcher.expectValue(SemanticsProperties.Selected, true))
     }
 
     private fun openManagement() {
@@ -101,6 +108,20 @@ class LiveAnswerPerspectiveTest {
         assertTrue(memory.contains("vivero", true))
         assertFalse(Regex("\\bquieres\\b", RegexOption.IGNORE_CASE).containsMatchIn(memory))
     }
+
+    private fun assertSecondPerson(answer: String) {
+        assertTrue("The cited plan must address its owner in second person", hasSecondPerson(answer))
+        assertFalse("The assistant must not take ownership of the owner's plan", hasFirstPerson(answer))
+    }
+
+    private fun hasSecondPerson(text: String) =
+        Regex(
+            """\b(?:quieres|querías|tienes|tenías|planeas|planeabas)\b""",
+            RegexOption.IGNORE_CASE,
+        ).containsMatchIn(text)
+
+    private fun hasFirstPerson(text: String) =
+        Regex("""\b(?:quiero|quería|tengo|tenía|planeo|planeaba)\b""", RegexOption.IGNORE_CASE).containsMatchIn(text)
 
     private fun visible(text: String) {
         compose.waitUntil(PERSPECTIVE_TIMEOUT) { compose.onAllNodesWithText(text).fetchSemanticsNodes().isNotEmpty() }
