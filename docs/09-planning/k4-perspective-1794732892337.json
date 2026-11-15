@@ -1,0 +1,29 @@
+{
+  "model": "gpt-6.1-sol",
+  "reasoning": "medium",
+  "corpusHash": "382b88b2e0e7e1cc9f4d8f66d383f88722b32418c59fc10608dfaee0bcafe242",
+  "scope": "Synthetic fixtures in RAM; actual provider; no production or native proof",
+  "rows": [
+    {
+      "id": "owner-and-brother",
+      "passed": true,
+      "ms": 3980
+    },
+    {
+      "id": "negation-and-condition",
+      "passed": true,
+      "ms": 3517
+    },
+    {
+      "id": "quote-is-not-owner",
+      "passed": true,
+      "ms": 4795
+    },
+    {
+      "id": "owner-answer",
+      "passed": true
+    }
+  ],
+  "calls": 8,
+  "estimatedUsd": 0.0167575000000042
+}

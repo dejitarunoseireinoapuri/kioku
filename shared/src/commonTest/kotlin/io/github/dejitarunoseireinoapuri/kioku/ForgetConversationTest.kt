@@ -11,6 +11,7 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.TextOutcome
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.ConversationEvent
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.ConversationViewModel
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.MessageAction
+import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.TextMessage
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,6 +24,7 @@ import kotlinx.coroutines.test.setMain
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertIs
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -66,9 +68,17 @@ class ForgetConversationTest {
             pending.complete(TextOutcome.Changed(MemoryChange.Confirmed(ChangeAction.Forget, 1)))
             runCurrent()
             assertEquals(preview.text, model.state.value.forgottenText)
+            val notice =
+                assertIs<TextMessage.Notice>(
+                    model.state.value.conversation!!
+                        .messages
+                        .single(),
+                )
+            assertEquals(ChangeAction.Forget, notice.action)
             assertTrue(
                 model.state.value.conversation!!
                     .messages
+                    .filterIsInstance<TextMessage.Owner>()
                     .isEmpty(),
             )
             repository.reply = { TextOutcome.ForgetCancelled }

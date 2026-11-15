@@ -59,6 +59,7 @@ fun ConversationBody(
                 onEvent,
                 onSource,
                 onManage,
+                state.forgottenText,
             )
         }
 

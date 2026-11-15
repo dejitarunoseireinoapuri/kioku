@@ -92,6 +92,7 @@ class CaptureRotationTest {
         savedVisible()
         rotate()
         compose.onNodeWithContentDescription("Gestionar este recuerdo").performScrollTo().performClick()
+        compose.onNodeWithText("Gestionar").performClick()
         rotate()
         compose.onNodeWithText("Quiero ver una película ficticia.").performScrollTo().assertIsDisplayed()
         compose.onNodeWithContentDescription("Volver").performClick()

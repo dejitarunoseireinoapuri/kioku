@@ -95,12 +95,13 @@ class ConversationViewModel(
         captureJob?.cancel()
         command = null
         query.reset(clearDraft = true)
-        messages.reset(clearDraft = true)
+        messages.reset(clearDraft = true, notice = result?.action)
         result?.memoryRevision?.let {
             visibility.accept(it)
             query.setRevision(it)
             messages.setRevision(it)
         }
+        val showFeedback = state.value.conversation == null
         mutableState.update {
             it.copy(
                 source = null,
@@ -109,7 +110,7 @@ class ConversationViewModel(
                 draft = "",
                 forgottenText = forgottenText.takeIf { result?.action == ChangeAction.Forget },
                 feedback =
-                    result?.let { change ->
+                    result?.takeIf { showFeedback }?.let { change ->
                         if (change.action ==
                             ChangeAction.Correct
                         ) {
@@ -204,8 +205,8 @@ class ConversationViewModel(
         val current = state.value
         if (current.canSwitchIntent) {
             if (intent != current.intent) {
-                query.reset()
-                messages.reset(preservePending = true)
+                query.concealSource()
+                messages.selectIntent(intent.textIntent)
             }
             mutableState.update {
                 it.copy(

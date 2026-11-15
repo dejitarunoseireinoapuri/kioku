@@ -159,15 +159,16 @@ class TextConversationViewModelTest {
             repository.reply = { TextOutcome.Changed(MemoryChange.Confirmed(ChangeAction.Correct, 1)) }
             send(model, "Corrige ese dato.")
             runCurrent()
-            assertTrue(
-                model.state.value.conversation
-                    ?.messages
-                    .orEmpty()
-                    .isEmpty(),
-            )
+            val notice =
+                assertIs<TextMessage.Notice>(
+                    model.state.value.conversation!!
+                        .messages
+                        .single(),
+                )
+            assertEquals(ChangeAction.Correct, notice.action)
             assertNull(model.state.value.source)
             assertEquals("", model.state.value.draft)
-            assertEquals(PreviewFeedback.Corrected, model.state.value.feedback)
+            assertNull(model.state.value.feedback)
         }
 
     @Test

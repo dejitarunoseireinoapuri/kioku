@@ -144,12 +144,7 @@ class QueryViewModelTest {
             model.onEvent(ConversationEvent.SelectIntent(MemoryIntent.Ask))
             send(model, "Consulta separada")
             runCurrent()
-            assertTrue(
-                repo.commands
-                    .last()
-                    .previousQuestions
-                    .isEmpty(),
-            )
+            assertEquals(listOf("Otra consulta"), repo.commands.last().previousQuestions)
         }
 
     @Test
@@ -160,8 +155,8 @@ class QueryViewModelTest {
                 runCurrent()
             }
             val messages = model.state.value.query.messages
-            assertEquals(40, messages.size)
-            assertEquals("Pregunta ficticia 5", assertIs<QueryMessage.Question>(messages.first()).text)
+            assertEquals(20, messages.size)
+            assertEquals("Pregunta ficticia 15", assertIs<QueryMessage.Question>(messages.first()).text)
             model.onEvent(ConversationEvent.Query(QueryAction.Reset))
             assertTrue(
                 model.state.value.query.messages

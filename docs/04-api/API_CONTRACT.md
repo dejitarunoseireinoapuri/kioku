@@ -138,3 +138,9 @@ Se requiere actualizar la app; clientes antiguos no saben aplicar el nuevo campo
 ## Frontera interna comprobada en M0 v4
 
 El prototipo local limita la salida del proveedor a evidenceIds de los candidatos seleccionados y deriva las citas sourceIds en código. Generación y verificación contrastan el alcance de la pregunta (recuerdo, contenido citado o ambos). El texto citado no acredita datos personales. Para consultas exclusivamente de citas, el resultado se materializa desde el literal autorizado tras la verificación. Esto no publica endpoints ni sustituye autorización por UID/revisión en el backend previsto.
+
+## Presentación de recuerdos en primera persona
+
+getSourceDetails con sourceId conserva el esquema de respuesta y sus IDs/versiones; items.text pasa a ser presentación efímera en primera persona para datos propios. El texto fuente y la versión permanecen canónicos. Un servicio de solo lectura proyecta hasta ocho fragmentos sin vectores, exige IDs exactos y revisión positiva de fidelidad/perspectiva/atribución y reautoriza/contrasta época y todas las versiones al terminar. Un resultado no comprobado, datos retirados o una clave no configurada fallan cerrado; no devuelven una paráfrasis no autorizada ni modifican recuerdos. Sin sourceId sigue devolviendo solo la época, sin proveedor.
+
+La lectura con presentación usa el mismo proveedor/presupuesto privado, dos llamadas de redacción/revisión, store:false y la identidad existente. La función admite 180 s y concurrencia cuatro dentro del máximo de una instancia; Google, App Check y cuenta permitida siguen obligatorios. No se añaden entradas, permisos, claves o índices. La captura nueva y las respuestas incorporan la misma perspectiva sin cambiar sus esquemas, garantías temporales o fuentes de evidencia. La activación productiva requiere autorización concreta.

@@ -98,6 +98,28 @@ class SourceControlNavigationTest {
     }
 
     @Test
+    fun leavingAnUnconfirmedWriteAfterRotationClearsEarlierHistory() {
+        val pending = CompletableDeferred<MemoryChange>()
+        controls.change = { pending.await() }
+        editExam()
+        compose.onNodeWithText("Aplicar corrección").performScrollTo().performClick()
+        compose.waitUntil(5000) { compose.onNodeWithTag("content-loading").isDisplayed() }
+        compose.runOnUiThread { compose.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE }
+        compose.waitUntil(5000) {
+            compose.activity.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
+                compose.onNodeWithTag("content-loading").isDisplayed()
+        }
+        InstrumentationRegistry.getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_BACK)
+        compose.waitUntil(5000) { compose.onNodeWithTag("text-composer").isDisplayed() }
+        compose.onNodeWithText(OLD_QUESTION).assertDoesNotExist()
+        compose.onNodeWithText("Examen el martes.").assertDoesNotExist()
+        pending.complete(MemoryChange.Confirmed(ChangeAction.Correct, 1))
+        compose.waitForIdle()
+        compose.onNodeWithText(OLD_QUESTION).assertDoesNotExist()
+        assertEquals(1, controls.commands.size)
+    }
+
+    @Test
     fun correctionSurvivesRecreationAndClearsOldConversationOnlyAfterConfirmation() {
         val pending = CompletableDeferred<MemoryChange>()
         controls.change = { pending.await() }

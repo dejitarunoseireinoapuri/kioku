@@ -2,6 +2,7 @@ package io.github.dejitarunoseireinoapuri.kioku
 
 import io.github.dejitarunoseireinoapuri.kioku.domain.AnswerStatus
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
+import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemorySource
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryReference
@@ -22,6 +23,100 @@ import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SavedMessageSessionTest {
+    @Test
+    fun aConfirmedChangeLeavesOnlyContentFreeNoticesInBothModesAndNeverEntersContext() =
+        sessionTest { repo, session, state ->
+            repo.reply = { saved("old-source") }
+            session.submit("Dato anterior.", TextIntent.Tell)
+            runCurrent()
+            session.selectIntent(TextIntent.Ask)
+            repo.reply = { TextOutcome.Asked(QueryOutcome.Reply(AnswerStatus.NotFound, "No consta.", emptyList())) }
+            session.submit("¿Qué dije?", TextIntent.Ask)
+            runCurrent()
+            session.reset(notice = ChangeAction.Forget)
+            assertEquals(
+                listOf(ChangeAction.Forget),
+                state().messages.filterIsInstance<TextMessage.Notice>().map { it.action },
+            )
+            assertTrue(state().messages.filterIsInstance<TextMessage.Owner>().isEmpty())
+            session.selectIntent(TextIntent.Tell)
+            assertEquals(1, state().messages.filterIsInstance<TextMessage.Notice>().size)
+            assertTrue(state().savedMessageSources().isEmpty())
+            session.submit("Nueva consulta.", TextIntent.Tell)
+            runCurrent()
+            assertTrue(
+                repo.commands
+                    .last()
+                    .context.questions
+                    .isEmpty(),
+            )
+            assertTrue(
+                repo.commands
+                    .last()
+                    .context.sourceIds
+                    .isEmpty(),
+            )
+            assertEquals(1, state().messages.filterIsInstance<TextMessage.Notice>().size)
+        }
+
+    @Test
+    fun eachModeRestoresItsOwnHistoryAndFollowUpContextDuringTheSession() =
+        sessionTest { repo, session, state ->
+            repo.reply = { saved("tell-source") }
+            session.submit("Quiero ir al parque.", TextIntent.Tell)
+            runCurrent()
+            val told = state().messages
+            session.selectIntent(TextIntent.Ask)
+            assertTrue(state().messages.isEmpty())
+            repo.reply = { TextOutcome.Asked(QueryOutcome.Reply(AnswerStatus.NotFound, "No consta.", emptyList())) }
+            session.submit("¿Qué vi ayer?", TextIntent.Ask)
+            runCurrent()
+            val asked = state().messages
+            session.selectIntent(TextIntent.Tell)
+            assertEquals(told, state().messages)
+            session.selectIntent(TextIntent.Ask)
+            assertEquals(asked, state().messages)
+            session.submit("¿Y hoy?", TextIntent.Ask)
+            runCurrent()
+            assertEquals(
+                listOf("¿Qué vi ayer?"),
+                repo.commands
+                    .last()
+                    .context.questions,
+            )
+            session.reset()
+            session.selectIntent(TextIntent.Tell)
+            assertTrue(state().messages.isEmpty())
+            assertTrue(state().savedMessageSources().isEmpty())
+        }
+
+    @Test
+    fun eachModeRetainsOnlyItsTenLatestOwnerExchanges() =
+        sessionTest { repo, session, state ->
+            repo.reply = { saved("tell-source") }
+            repeat(12) {
+                session.submit("Relato $it", TextIntent.Tell)
+                runCurrent()
+            }
+            assertEquals(
+                (2..11).map { "Relato $it" },
+                state().messages.filterIsInstance<TextMessage.Owner>().map { it.text },
+            )
+            session.selectIntent(TextIntent.Ask)
+            repo.reply = { TextOutcome.Asked(QueryOutcome.Reply(AnswerStatus.NotFound, "No consta.", emptyList())) }
+            repeat(12) {
+                session.submit("Pregunta $it", TextIntent.Ask)
+                runCurrent()
+            }
+            assertEquals(
+                (2..11).map { "Pregunta $it" },
+                state().messages.filterIsInstance<TextMessage.Owner>().map { it.text },
+            )
+            session.selectIntent(TextIntent.Tell)
+            assertEquals(10, state().messages.filterIsInstance<TextMessage.Owner>().size)
+            assertTrue(state().messages.size <= 40)
+        }
+
     @Test
     fun onlyConfirmedSavesAttachToTheirOwnMessagesAndQuestionsStayUnmanaged() =
         sessionTest { repo, session, state ->

@@ -48,6 +48,7 @@ fun SourceControlRoute(
     repository: MemoryControlRepository,
     onBack: () -> Unit,
     viewModel: SourceControlViewModel = koinViewModel(parameters = { parametersOf(repository, sourceId) }),
+    onMutation: () -> Unit = {},
     onChanged: (MemoryChange.Confirmed, String?) -> Unit,
 ) {
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.check() }
@@ -55,7 +56,14 @@ fun SourceControlRoute(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val done = state as? SourceControlState.Done
     LaunchedEffect(done) { done?.let { onChanged(it.result, it.forgottenText) } }
-    SourceControlScreen(state, viewModel::onEvent, onBack)
+    SourceControlScreen(state, { event ->
+        if (event == SourceControlEvent.Apply || event == SourceControlEvent.ConfirmForget ||
+            event == SourceControlEvent.Retry
+        ) {
+            onMutation()
+        }
+        viewModel.onEvent(event)
+    }, onBack)
 }
 
 @Composable

@@ -7,6 +7,12 @@ import { captureFormat } from "./capture-format.ts";
 import { answerFormat, constrainScope } from "./answer-format.ts";
 import { modelProfile } from "./model-config.ts";
 import {
+  perspectiveSchema,
+  perspectiveInstructions,
+  perspectiveReviewInstructions,
+  perspectiveReviewSchema,
+} from "./perspective-format.ts";
+import {
   duplicateSelectionSchema,
   duplicateInstructions,
   duplicateReviewInstructions,
@@ -319,6 +325,26 @@ export class OpenAiMemory implements MemoryIntelligence {
       z.strictObject({ allowed: z.boolean() }),
       "memory_duplicates_review",
       1000,
+    );
+  }
+
+  async presentMemories(data: unknown) {
+    return this.structured(
+      perspectiveInstructions,
+      data,
+      perspectiveSchema,
+      "memory_perspective",
+      5000,
+    );
+  }
+
+  async reviewMemoryPresentation(data: unknown) {
+    return this.structured(
+      perspectiveReviewInstructions,
+      data,
+      perspectiveReviewSchema,
+      "memory_perspective_review",
+      1200,
     );
   }
 

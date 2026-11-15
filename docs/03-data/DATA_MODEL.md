@@ -113,3 +113,5 @@ El estado se aplica al acontecimiento que registra el fragmento: una recomendaci
 
 
 Origen y estado son independientes: las recomendaciones/sugerencias recibidas conservan reported y su autor aunque su recepción sea un acto completed. Un dato propio que el usuario comunicó a otra persona sigue siendo personal; el destinatario no se convierte en informante.
+
+Presentación en primera persona: getSourceDetails mantiene IDs/versiones canónicos pero items.text es una redacción efímera para lectura. Usa los fragmentos y su atribución/estado, sin vectores, verifica correspondencia exacta de IDs y revisión semántica, y revalida autorización/época/versiones después de IA. No reescribe fuentes, índices, embeddings o hechos anteriores ni crea una copia histórica. Los nuevos text de captura y las respuestas se redactan en primera persona cuando el sujeto es el propietario, preservando los demás ejes. Snapshot 4 y esquema persistente permanecen.

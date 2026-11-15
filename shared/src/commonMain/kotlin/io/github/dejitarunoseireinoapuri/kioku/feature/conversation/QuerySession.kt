@@ -132,6 +132,12 @@ internal class QuerySession(
         return true
     }
 
+    fun concealSource() {
+        sourceGeneration++
+        sourceJob?.cancel()
+        publish(state.copy(source = null, sourceLoading = false))
+    }
+
     fun reset(clearDraft: Boolean = false) {
         generation++
         sourceGeneration++
@@ -159,7 +165,18 @@ internal class QuerySession(
     }
 
     private fun appendMessage(message: QueryMessage) {
-        messages = (messages + message).takeLast(MAX_QUERY_MESSAGES).dropWhile { it is QueryMessage.Result }
+        val next = messages + message
+        val first =
+            next
+                .filterIsInstance<QueryMessage.Question>()
+                .takeLast(SESSION_EXCHANGES)
+                .firstOrNull()
+                ?.id
+        messages =
+            next
+                .dropWhile { it.id != first }
+                .takeLast(MAX_QUERY_MESSAGES)
+                .dropWhile { it is QueryMessage.Result }
     }
 }
 

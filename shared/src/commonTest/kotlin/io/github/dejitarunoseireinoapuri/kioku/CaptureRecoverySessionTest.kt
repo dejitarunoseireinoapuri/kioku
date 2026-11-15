@@ -67,13 +67,14 @@ class CaptureRecoverySessionTest {
             repo.reply = { TextOutcome.Asked(QueryOutcome.Reply(AnswerStatus.NotFound, "No consta.", emptyList())) }
             send(model, "¿Qué otra cosa?")
             runCurrent()
+            model.onEvent(ConversationEvent.SelectIntent(MemoryIntent.Tell))
             repo.recovery = { saved() }
             model.onEvent(ConversationEvent.CheckCapture(pending.id))
             runCurrent()
             assertEquals(2, repo.commands.size)
             assertEquals(repo.commands.first().ids, repo.recoveries.single().ids)
             assertEquals(
-                4,
+                2,
                 model.state.value.conversation!!
                     .messages.size,
             )

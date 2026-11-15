@@ -37,11 +37,16 @@ fun TextConversationBody(
     onEvent: (ConversationEvent) -> Unit,
     onSource: (String) -> Unit,
     onManage: (String) -> Unit = onSource,
+    forgottenText: String? = null,
 ) {
     val saved = state.savedMessageSources()
     Column(verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large)) {
         state.messages.forEach { message ->
             when (message) {
+                is TextMessage.Notice -> {
+                    Panel { Text(memoryChangeText(message.action, forgottenText)) }
+                }
+
                 is TextMessage.Owner -> {
                     OwnerMemoryMessage(
                         message.text,

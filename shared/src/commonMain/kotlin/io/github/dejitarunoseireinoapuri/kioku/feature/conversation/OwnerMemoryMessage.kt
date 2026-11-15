@@ -1,13 +1,21 @@
 package io.github.dejitarunoseireinoapuri.kioku.feature.conversation
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
@@ -17,6 +25,7 @@ import io.github.dejitarunoseireinoapuri.kioku.design.rememberButtonFeedback
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextOutcome
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
+import io.github.dejitarunoseireinoapuri.kioku.resources.control_manage
 import io.github.dejitarunoseireinoapuri.kioku.resources.icon_more
 import io.github.dejitarunoseireinoapuri.kioku.resources.memory_manage
 import io.github.dejitarunoseireinoapuri.kioku.resources.memory_saved
@@ -45,19 +54,41 @@ internal fun OwnerMemoryMessage(
             Text(text)
         }
         if (sourceId != null) {
-            val feedback = rememberButtonFeedback(KiokuColors.Secondary)
-            IconButton(
-                onClick = { onManage(sourceId) },
-                enabled = enabled,
-                interactionSource = feedback.interactionSource,
-                modifier = Modifier.sizeIn(KiokuSpacing.TouchTarget, KiokuSpacing.TouchTarget),
-            ) {
-                Icon(
-                    painterResource(Res.drawable.icon_more),
-                    stringResource(Res.string.memory_manage),
-                    tint = if (enabled) feedback.contentColor else KiokuColors.Rule,
-                )
-            }
+            SavedMemoryMenu(sourceId, enabled, onManage)
+        }
+    }
+}
+
+@Composable
+private fun SavedMemoryMenu(
+    sourceId: String,
+    enabled: Boolean,
+    onManage: (String) -> Unit,
+) {
+    var expanded by remember(sourceId, enabled) { mutableStateOf(false) }
+    val feedback = rememberButtonFeedback(KiokuColors.Secondary)
+    val menuFeedback = rememberButtonFeedback(KiokuColors.Text)
+    Box {
+        IconButton(
+            onClick = { expanded = true },
+            enabled = enabled,
+            interactionSource = feedback.interactionSource,
+            modifier = Modifier.sizeIn(KiokuSpacing.TouchTarget, KiokuSpacing.TouchTarget),
+        ) {
+            Icon(
+                painterResource(Res.drawable.icon_more),
+                stringResource(Res.string.memory_manage),
+                tint = if (enabled) feedback.contentColor else KiokuColors.Rule,
+            )
+        }
+        DropdownMenu(expanded && enabled, { expanded = false }, modifier = Modifier.testTag("saved-memory-menu")) {
+            DropdownMenuItem(
+                onClick = {
+                    expanded = false
+                    onManage(sourceId)
+                },
+                interactionSource = menuFeedback.interactionSource,
+            ) { Text(stringResource(Res.string.control_manage), color = menuFeedback.contentColor) }
         }
     }
 }

@@ -12,6 +12,7 @@ import { memoryProvider } from "../credential/memory-provider.js";
 import { parseInput } from "../memory/contracts.js";
 import { changeInput, detailsInput } from "./contracts.js";
 import { ChangeMemory } from "./change.js";
+import { PresentSourceMemories } from "./presentation.js";
 
 export function controlCallables(
   app: App,
@@ -20,6 +21,7 @@ export function controlCallables(
 ) {
   const store = new FirestoreSourceControlStore(db);
   const change = new ChangeMemory(store);
+  const presentation = new PresentSourceMemories(store);
   const access = new GetConfiguration(
     runtime.allowedEmail,
     new FirestoreOwnerAccess(db),
@@ -80,10 +82,15 @@ export function controlCallables(
       },
     );
   return {
-    getSourceDetails: protect(false, async (uid, data) => {
+    getSourceDetails: protect(true, async (uid, data, reauthorize) => {
       const input = parseInput(detailsInput, data);
       return input.sourceId
-        ? store.details(uid, input.sourceId)
+        ? presentation.execute(
+            uid,
+            input.sourceId,
+            () => memoryProvider(db, uid),
+            reauthorize,
+          )
         : { apiVersion: 1, memoryEpoch: await store.epoch(uid) };
     }),
     changeMemory: protect(true, async (uid, data, reauthorize) => {

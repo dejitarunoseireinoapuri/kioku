@@ -2,6 +2,7 @@ package io.github.dejitarunoseireinoapuri.kioku.feature.conversation
 
 import io.github.dejitarunoseireinoapuri.kioku.domain.AnswerStatus
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
+import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemorySource
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextCommand
@@ -21,6 +22,12 @@ sealed interface TextMessage {
         val outcome: TextOutcome,
         val captureCommand: TextCommand? = null,
         val ownerId: Long? = null,
+    ) : TextMessage
+
+    /** A local status marker without memory text, source IDs or provider evidence. */
+    data class Notice(
+        override val id: Long,
+        val action: ChangeAction,
     ) : TextMessage
 }
 

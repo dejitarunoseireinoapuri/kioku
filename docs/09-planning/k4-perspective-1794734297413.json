@@ -1,0 +1,15 @@
+{
+  "model": "gpt-6.1-sol",
+  "reasoning": "medium",
+  "corpusHash": "f6e8d20d4952b124c3f2b5981283c7644c2ca387b42cae2e59766337e590b812",
+  "scope": "Synthetic fixtures in RAM; actual provider; no production or native proof",
+  "rows": [
+    {
+      "id": "reported-attribution",
+      "passed": true,
+      "ms": 5126
+    }
+  ],
+  "calls": 2,
+  "estimatedUsd": 0.0031199999999991235
+}

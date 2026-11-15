@@ -147,7 +147,7 @@ test("authenticated conversation tickets reject tampering and decline through HT
   );
 });
 
-test("protected source details and full withdrawal work without provider access, with confirmed replay", async () => {
+test("source presentation requires configured AI; revision and full withdrawal remain provider-free with replay", async () => {
   const identity = await signInGoogle("control-http-owner");
   await callConfiguration(identity.idToken);
   await db
@@ -166,15 +166,18 @@ test("protected source details and full withdrawal work without provider access,
     { apiVersion: 1, sourceId: source.id },
     identity.idToken,
   );
-  assert.equal(details.status, 200);
-  const data = z
-    .object({
-      result: z.object({
-        version: z.string(),
-        items: z.array(z.object({ id: z.string() })),
-      }),
-    })
-    .parse(details.body).result;
+  // A source presentation needs configured AI; this isolated HTTP fixture deliberately has none.
+  assert.equal(details.status, 400);
+  const epoch = await call(
+    "getSourceDetails",
+    { apiVersion: 1 },
+    identity.idToken,
+  );
+  assert.equal(epoch.status, 200);
+  const data = await new FirestoreSourceControlStore(db).details(
+    identity.localId,
+    source.id,
+  );
   assert.equal(data.items.length, 2);
   const input = {
     apiVersion: 1,

@@ -128,12 +128,17 @@ private fun KiokuNavigation(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val backStack = rememberNavBackStack(navigationConfiguration, Route.Conversation)
+    val controlChanged =
+        androidx.compose.runtime.saveable.rememberSaveable {
+            androidx.compose.runtime.mutableStateOf(false)
+        }
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.checkMemory() }
     LifecycleEventEffect(Lifecycle.Event.ON_PAUSE) { viewModel.checkMemory(visible = false) }
 
     val back: () -> Unit = {
         if (backStack.lastOrNull() is Route.Control) {
-            viewModel.memoryChanged()
+            if (controlChanged.value) viewModel.memoryChanged()
+            viewModel.checkMemory()
             backStack.clear()
             backStack.add(Route.Conversation)
         } else if (backStack.size > 1) {
@@ -141,11 +146,14 @@ private fun KiokuNavigation(
         }
     }
     val actions =
-        NavigationActions(onSignOut, onRefresh, back, { backStack.add(it) }, { result, forgottenText ->
+        NavigationActions(onSignOut, onRefresh, back, {
+            if (it is Route.Control) controlChanged.value = false
+            backStack.add(it)
+        }, { result, forgottenText ->
             viewModel.memoryChanged(result, forgottenText)
             backStack.clear()
             backStack.add(Route.Conversation)
-        }, backStack.lastOrNull())
+        }, backStack.lastOrNull(), { controlChanged.value = true })
     NavDisplay(
         backStack = backStack,
         onBack = back,

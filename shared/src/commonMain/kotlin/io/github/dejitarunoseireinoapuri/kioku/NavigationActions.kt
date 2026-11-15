@@ -25,6 +25,7 @@ internal data class NavigationActions(
     val navigate: (Route) -> Unit,
     val changed: (MemoryChange.Confirmed, String?) -> Unit,
     val current: NavKey?,
+    val markMemoryChange: () -> Unit = {},
 )
 
 @Composable
@@ -87,7 +88,15 @@ private fun ControlDestination(
     actions: NavigationActions,
 ) {
     dependencies.controls?.let { repository ->
-        CompositionViewModels { SourceControlRoute(id, repository, actions.back, onChanged = actions.changed) }
+        CompositionViewModels {
+            SourceControlRoute(
+                id,
+                repository,
+                actions.back,
+                onMutation = actions.markMemoryChange,
+                onChanged = actions.changed,
+            )
+        }
     }
 }
 

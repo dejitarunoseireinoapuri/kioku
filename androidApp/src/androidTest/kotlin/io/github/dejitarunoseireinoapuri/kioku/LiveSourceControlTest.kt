@@ -55,6 +55,7 @@ class LiveSourceControlTest {
         send(STORY)
         savedVisible()
         compose.onNodeWithContentDescription("Gestionar este recuerdo").performScrollTo().performClick()
+        compose.onNodeWithText("Gestionar").performClick()
         val movie = memoryItemContaining("Loto")
         compose.waitUntil(20_000) {
             compose.onAllNodes(hasText("Corregir") and movie).fetchSemanticsNodes().size == 1

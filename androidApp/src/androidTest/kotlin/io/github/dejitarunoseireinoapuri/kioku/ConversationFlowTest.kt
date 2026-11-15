@@ -89,6 +89,36 @@ class ConversationFlowTest {
     }
 
     @Test
+    fun eachModeRestoresItsOwnTenLatestExchanges() {
+        repository.answer = {
+            TextOutcome.Asked(QueryOutcome.Reply(AnswerStatus.NotFound, "Respuesta de la consulta.", emptyList()))
+        }
+        send("Primera pregunta.")
+        visible("Respuesta de la consulta.")
+        compose.onNodeWithTag("intent-Tell").performClick()
+        repository.answer = { command ->
+            TextOutcome.Captured(CaptureOutcome.Saved(MemorySource(command.ids.action, command.text, "2026-11-15"), 1))
+        }
+        repeat(11) { index ->
+            send("Recuerdo $index")
+            compose.waitUntil(5000) {
+                compose.onAllNodesWithContentDescription("Gestionar este recuerdo").fetchSemanticsNodes().size ==
+                    minOf(index + 1, 10)
+            }
+        }
+        compose.onNodeWithText("Recuerdo 0").assertDoesNotExist()
+        compose.onNodeWithText("Recuerdo 1").assertExists()
+        compose.onNodeWithText("Recuerdo 10").assertExists()
+        compose.onNodeWithText("Primera pregunta.").assertDoesNotExist()
+        compose.onNodeWithTag("intent-Ask").performClick()
+        visible("Respuesta de la consulta.")
+        compose.onNodeWithText("Recuerdo 10").assertDoesNotExist()
+        compose.onNodeWithTag("intent-Tell").performClick()
+        compose.onNodeWithText("Recuerdo 1").assertExists()
+        compose.onNodeWithText("Recuerdo 0").assertDoesNotExist()
+    }
+
+    @Test
     fun offerRequiresAcceptanceThenShowsOnlyTheConfirmedSavedState() {
         send("Me gusta el miso.")
         visible("Sí, recuérdalo")
@@ -105,6 +135,7 @@ class ConversationFlowTest {
         assertEquals(OfferDecision.Accept, repository.commands.last().decision)
         compose.onNodeWithTag("intent-Ask").assert(SemanticsMatcher.expectValue(SemanticsProperties.Selected, true))
         compose.onNodeWithContentDescription("Gestionar este recuerdo").performClick()
+        compose.onNodeWithText("Gestionar").performClick()
         visible("Gestionar un recuerdo")
         visible("Dato de prueba: me gusta el miso.")
     }
@@ -192,6 +223,9 @@ class ConversationFlowTest {
         )
         compose.onNodeWithText("Olvida lo del examen de Pablo.").assertDoesNotExist()
         compose.onNodeWithText("¿Qué Pablo?").assertDoesNotExist()
+        compose.onNodeWithTag("text-composer").performTextInput("Texto nuevo sin enviar")
+        compose.onNodeWithText("He olvidado «Examen de mi primo Pablo.».").assertDoesNotExist()
+        compose.onNodeWithText("He olvidado el recuerdo.").assertExists()
     }
 
     @Test
@@ -253,10 +287,12 @@ class ConversationFlowTest {
             { TextOutcome.Asked(QueryOutcome.Reply(AnswerStatus.NotFound, "No consta otra cosa.", emptyList())) }
         send("¿Qué otra cosa?")
         visible("No consta otra cosa.")
+        compose.onNodeWithTag("intent-Tell").performClick()
         repository.recovered = repository.saved()
         click("Comprobar estado")
         savedVisible()
-        compose.onNodeWithText("No consta otra cosa.").assertExists()
+        compose.onNodeWithTag("intent-Ask").performClick()
+        visible("No consta otra cosa.")
         assertEquals(2, repository.commands.size)
         assertEquals(repository.commands.first().ids, repository.recoveries.single().ids)
     }

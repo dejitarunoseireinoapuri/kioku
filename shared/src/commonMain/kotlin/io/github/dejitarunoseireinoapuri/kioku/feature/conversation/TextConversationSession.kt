@@ -3,6 +3,7 @@ package io.github.dejitarunoseireinoapuri.kioku.feature.conversation
 import io.github.dejitarunoseireinoapuri.kioku.domain.AnswerStatus
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureIssue
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
+import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChange
 import io.github.dejitarunoseireinoapuri.kioku.domain.OfferDecision
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryOutcome
@@ -24,6 +25,8 @@ internal class TextConversationSession(
     private val onRevision: (Long) -> Unit,
 ) {
     private var state = TextConversationState()
+    private var intent = TextIntent.Tell
+    private val histories = mutableMapOf<TextIntent, TextSessionSnapshot>()
     private var revision = 0L
     private var generation = 0
     private var sourceGeneration = 0
@@ -87,9 +90,9 @@ internal class TextConversationSession(
             if (capture !=
                 null
             ) {
-                repository.clarify(text, capture, intent, context())
+                repository.clarify(text, capture, intent, context)
             } else {
-                repository.prepare(combined, intent, context())
+                repository.prepare(combined, intent, context)
             }
         if (state.clarification) clarifications++ else clarifications = 0
         ownerId =
@@ -118,7 +121,7 @@ internal class TextConversationSession(
             cancelForget()
         } else {
             (state.status as? TextStatus.Ready)?.let { ready ->
-                ready.nextCommand(action, repository, context())?.let { execute(it) }
+                ready.nextCommand(action, repository, context)?.let { execute(it) }
             }
         }
     }
@@ -155,7 +158,7 @@ internal class TextConversationSession(
         publish(state.copy(status = TextStatus.Ready(ready.command, TextOutcome.ForgetCancelled)))
     }
 
-    private fun context() = TextContext(revision, questions.toList(), references)
+    private val context get() = TextContext(revision, questions.toList(), references)
 
     private fun execute(
         command: TextCommand,
@@ -206,6 +209,7 @@ internal class TextConversationSession(
         command.plan?.stamp?.revision?.takeIf { it > revision }?.let { value ->
             val last = state.messages.filterIsInstance<TextMessage.Owner>().lastOrNull()
             state = state.copy(messages = listOfNotNull(last), source = null)
+            histories.clear()
             ownerId = last?.id
             questions.clear()
             references = emptyList()
@@ -253,29 +257,54 @@ internal class TextConversationSession(
     fun reset(
         clearDraft: Boolean = false,
         preservePending: Boolean = false,
+        notice: ChangeAction? = null,
     ) {
         val pending = if (preservePending) state.pendingCaptureMessages() else emptyList()
+        histories.clear()
         generation++
         sourceGeneration++
         job?.cancel()
         sourceJob?.cancel()
+        recoveryJob?.cancel()
         clarifications = 0
         messageId = pending.maxOfOrNull { it.id } ?: 0
         ownerId = null
         questions.clear()
         references = emptyList()
-        publish(TextConversationState(messages = pending), clearDraft)
+        val next =
+            TextConversationState(
+                messages =
+                    notice?.let { listOf(TextMessage.Notice(++messageId, it)) } ?: pending,
+            )
+        if (notice != null) {
+            val other = if (intent == TextIntent.Tell) TextIntent.Ask else TextIntent.Tell
+            histories[other] = TextSessionSnapshot(next)
+        }
+        publish(next, clearDraft)
     }
 
     private fun append(message: TextMessage) {
-        state =
-            state.copy(
-                messages =
-                    (state.messages + message)
-                        .takeLast(
-                            MAX_MESSAGE_HISTORY,
-                        ).dropWhile { it is TextMessage.Result },
-            )
+        state = state.appending(message)
+    }
+
+    fun selectIntent(next: TextIntent) {
+        if (intent == next) return
+        if (state.busy || state.confirmingForget || state.clarification) return
+        val clean = state.copy(source = null, sourceLoading = false, checkingCapture = null)
+        histories[intent] = TextSessionSnapshot(clean, questions.toList(), references, ownerId, clarifications)
+        generation++
+        sourceGeneration++
+        job?.cancel()
+        sourceJob?.cancel()
+        recoveryJob?.cancel()
+        val saved = histories.remove(next) ?: TextSessionSnapshot(TextConversationState())
+        intent = next
+        questions.clear()
+        questions.addAll(saved.questions)
+        references = saved.references
+        ownerId = saved.ownerId
+        clarifications = saved.clarifications
+        publish(saved.state)
     }
 
     private fun publish(
@@ -287,7 +316,6 @@ internal class TextConversationSession(
     }
 }
 
-private const val MAX_MESSAGE_HISTORY = 40
 private const val MAX_MESSAGE_CONTEXT = 4
 private const val MAX_MESSAGE_QUERY = 2000
 private const val MAX_MESSAGE_TELL = 8000

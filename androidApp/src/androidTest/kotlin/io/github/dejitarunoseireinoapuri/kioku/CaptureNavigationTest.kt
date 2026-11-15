@@ -59,6 +59,11 @@ class CaptureNavigationTest {
         compose.onNodeWithContentDescription("Gestionar este recuerdo").assertIsDisplayed()
         captureBrandScreen(compose.activity, "kioku-live-saved.png") { compose.onRoot().captureToImage() }
         compose.onNodeWithContentDescription("Gestionar este recuerdo").performScrollTo().performClick()
+        compose.onNodeWithText("Gestionar un recuerdo").assertDoesNotExist()
+        captureBrandScreen(compose.activity, "kioku-memory-menu.png") {
+            compose.onNodeWithTag("saved-memory-menu").captureToImage()
+        }
+        compose.onNodeWithText("Gestionar").assertIsDisplayed().performClick()
         compose.onNodeWithText("Gestionar un recuerdo").assertIsDisplayed()
         compose.onNodeWithText("Texto original").assertDoesNotExist()
         compose.onNodeWithText("Leer el relato").assertDoesNotExist()
@@ -67,6 +72,7 @@ class CaptureNavigationTest {
         compose.onAllNodesWithText("Quiero ver una película ficticia.").onFirst().assertIsDisplayed()
         compose.onNodeWithContentDescription("Volver").performClick()
         compose.onNodeWithTag("text-composer").assertIsDisplayed()
+        savedVisible()
     }
 
     @Test
