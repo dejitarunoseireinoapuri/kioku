@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingNotice
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
+import io.github.dejitarunoseireinoapuri.kioku.design.matrixReadingSurface
 import io.github.dejitarunoseireinoapuri.kioku.design.rememberButtonFeedback
 import io.github.dejitarunoseireinoapuri.kioku.domain.AiConfiguration
 import io.github.dejitarunoseireinoapuri.kioku.feature.account.AccountState
@@ -47,7 +48,7 @@ internal fun AccountSettings(
     onSignOut: () -> Unit,
 ) {
     val feedback = rememberButtonFeedback(KiokuColors.Secondary)
-    Column(verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large)) {
+    Column(Modifier.matrixReadingSurface(), verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large)) {
         AccountIdentity(account.session.label)
         Divider(color = KiokuColors.Rule)
         AiSettings(account, onRefresh)

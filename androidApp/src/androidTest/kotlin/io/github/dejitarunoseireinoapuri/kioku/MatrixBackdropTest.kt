@@ -80,6 +80,36 @@ class MatrixBackdropTest {
     }
 
     private fun fingerprint(): Long = imageFingerprint(compose.onNodeWithTag("rain-fixture").captureToImage())
+
+    @Test
+    fun denseRainContainsBothVividAndMutedGreenAcrossTheBackground() {
+        compose.mainClock.autoAdvance = false
+        compose.setContent {
+            KiokuTheme {
+                Box(Modifier.size(180.dp, 300.dp).testTag("rain-fixture")) { MatrixBackdrop {} }
+            }
+        }
+        compose.mainClock.advanceTimeBy(1200)
+        val image = compose.onNodeWithTag("rain-fixture").captureToImage()
+        val pixels = image.toPixelMap()
+        var vivid = 0
+        var muted = 0
+        for (y in 0 until image.height step 3) {
+            for (x in 0 until image.width step 3) {
+                val color = pixels[x, y]
+                val green = color.green > color.red * 1.5f && color.blue < color.green * 0.75f
+                if (green && color.green > 0.17f) vivid++
+                if (green && color.green in 0.03f..0.12f) muted++
+            }
+        }
+        assertTrue("The rain must visibly include bright green glyphs", vivid > 30)
+        assertTrue("The rain must also include the quiet trailing tone", muted > 100)
+        captureBrandScreen(compose.activity, "kioku-rain-dense.png") { image }
+        compose.mainClock.advanceTimeBy(800)
+        captureBrandScreen(compose.activity, "kioku-rain-dense-next.png") {
+            compose.onNodeWithTag("rain-fixture").captureToImage()
+        }
+    }
 }
 
 internal fun imageFingerprint(image: ImageBitmap): Long {

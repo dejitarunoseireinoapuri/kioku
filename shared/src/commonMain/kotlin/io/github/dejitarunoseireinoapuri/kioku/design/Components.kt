@@ -105,7 +105,7 @@ fun TopBar(
             fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
         ),
 ) {
-    Column {
+    Column(Modifier.matrixReadingSurface()) {
         Row(
             Modifier.fillMaxWidth().padding(horizontal = KiokuSpacing.Medium),
             horizontalArrangement = Arrangement.spacedBy(8.dp),

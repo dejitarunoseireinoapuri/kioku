@@ -42,9 +42,16 @@ fun ContentLoadingScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            TerminalBrandMark()
-            Column(Modifier.padding(top = KiokuSpacing.Large)) { KiokuWordmark() }
-            LoadingStatusText(status, Modifier.padding(top = KiokuSpacing.Medium))
+            LoadingIdentity(status)
         }
+    }
+}
+
+@Composable
+private fun LoadingIdentity(status: String) {
+    Column(Modifier.matrixReadingSurface(), horizontalAlignment = Alignment.CenterHorizontally) {
+        TerminalBrandMark()
+        Column(Modifier.padding(top = KiokuSpacing.Large)) { KiokuWordmark() }
+        LoadingStatusText(status, Modifier.padding(top = KiokuSpacing.Medium))
     }
 }

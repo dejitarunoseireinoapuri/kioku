@@ -24,6 +24,7 @@ import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuWordmark
 import io.github.dejitarunoseireinoapuri.kioku.design.TerminalBrandMark
+import io.github.dejitarunoseireinoapuri.kioku.design.matrixReadingSurface
 import io.github.dejitarunoseireinoapuri.kioku.domain.AccountIssue
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.login_description
@@ -62,7 +63,7 @@ internal fun LoginScreen(
 
 @Composable
 private fun LoginIntroduction() {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(Modifier.matrixReadingSurface(), horizontalAlignment = Alignment.CenterHorizontally) {
         TerminalBrandMark()
         Column(Modifier.padding(top = KiokuSpacing.Medium)) { KiokuWordmark() }
         Text(

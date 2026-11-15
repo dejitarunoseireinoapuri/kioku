@@ -23,6 +23,7 @@ import org.jetbrains.compose.resources.Font
 
 object KiokuColors {
     val Background = Color(0xFF020604)
+    val ReadingSurface = Background.copy(alpha = 0.94f)
     val Surface = Color(0xFF08110B)
     val Raised = Color(0xFF142319)
     val Text = Color(0xFFE5F4E9)
@@ -52,8 +53,8 @@ object KiokuSpacing {
     val LoadingVertical = 48.dp
     val LoginHeadlineGap = 24.dp
     val BrandFrame = 96.dp
-    val RainCell = 28.dp
-    val RainLine = 22.dp
+    val RainCell = 18.dp
+    val RainLine = 18.dp
     val ConfirmationMaxHeight = 560.dp
     val ConfirmationTextHeight = 200.dp
 }

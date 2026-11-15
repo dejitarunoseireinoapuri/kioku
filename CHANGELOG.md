@@ -2,6 +2,8 @@
 
 ## Sin versión publicada · 2026-11-15 · Matrix Terminal
 
+- Refinamiento de la lluvia a petición del propietario: más columnas y colas largas, distinta velocidad/desfase, cabeza que avanza por filas, símbolos que mutan en su sitio y reflejos, y transición continua entre verde vivo y tono tenue. Bases de lectura sobre el fondo más luminoso; pausa y reducción de animaciones conservadas.
+
 - El propietario elige A de las tres propuestas Matrix. Tema compartido negro/verde fósforo, logo 憶 e iconos Android/iOS, acceso centrado, transcripción sin burbujas, modos compactos y gestión con tarjetas rectas. Google conserva su marca. Ajustes real muestra cuenta/estado de IA sin recorridos ficticios.
 - Fondo con lluvia de glifos sintéticos, intensidades de verde y cabezas claras: sin entrada de datos, gestos ni red; se detiene fuera de primer plano y respeta la escala de animación. Los mensajes usan una base legible sobre el fondo. Conserva teclado, confirmaciones, feed y autoridad de los recuerdos.
 - Rama `codex/matrix-terminal`; sin cambios de servidor o API. Referencia y límites en [STITCH_SOURCE](docs/01-functional/STITCH_SOURCE.md). Validación iOS nativa pendiente de Mac.

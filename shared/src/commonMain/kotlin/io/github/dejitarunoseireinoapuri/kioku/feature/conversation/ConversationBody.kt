@@ -10,8 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.dejitarunoseireinoapuri.kioku.design.ActionButton
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
+import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
 import io.github.dejitarunoseireinoapuri.kioku.design.Panel
 import io.github.dejitarunoseireinoapuri.kioku.design.ScreenHeading
+import io.github.dejitarunoseireinoapuri.kioku.design.matrixReadingSurface
 import io.github.dejitarunoseireinoapuri.kioku.design.memoryChangeText
 import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
@@ -124,9 +126,11 @@ private fun PreviewConversationBody(
 @Composable
 private fun ReadyContent(intent: MemoryIntent) {
     val tell = intent == MemoryIntent.Tell
-    Text(stringResource(if (tell) Res.string.tell_heading else Res.string.ask_heading), color = KiokuColors.Accent)
-    ScreenHeading(stringResource(if (tell) Res.string.ready_title else Res.string.ask_title))
-    Text(stringResource(if (tell) Res.string.ready_hint else Res.string.ask_hint), color = KiokuColors.Secondary)
+    Column(Modifier.matrixReadingSurface(), verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large)) {
+        Text(stringResource(if (tell) Res.string.tell_heading else Res.string.ask_heading), color = KiokuColors.Accent)
+        ScreenHeading(stringResource(if (tell) Res.string.ready_title else Res.string.ask_title))
+        Text(stringResource(if (tell) Res.string.ready_hint else Res.string.ask_hint), color = KiokuColors.Secondary)
+    }
 }
 
 @Composable
