@@ -14,26 +14,17 @@ import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.heading
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import io.github.dejitarunoseireinoapuri.kioku.design.ActionButton
 import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingNotice
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
-import io.github.dejitarunoseireinoapuri.kioku.design.Panel
 import io.github.dejitarunoseireinoapuri.kioku.design.rememberButtonFeedback
 import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryItem
-import io.github.dejitarunoseireinoapuri.kioku.domain.MemorySource
-import io.github.dejitarunoseireinoapuri.kioku.domain.SourceKind
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_apply
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_cancel
@@ -41,18 +32,10 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.control_correcting
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_correction_hint
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_edit
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_edit_help
-import io.github.dejitarunoseireinoapuri.kioku.resources.control_forget_all
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_forget_help
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_forget_item
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_forgetting
-import io.github.dejitarunoseireinoapuri.kioku.resources.control_hide_story
-import io.github.dejitarunoseireinoapuri.kioku.resources.control_items
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_new_fact_help
-import io.github.dejitarunoseireinoapuri.kioku.resources.control_read_story
-import io.github.dejitarunoseireinoapuri.kioku.resources.control_story_help
-import io.github.dejitarunoseireinoapuri.kioku.resources.original_label
-import io.github.dejitarunoseireinoapuri.kioku.resources.source_corrected_label
-import io.github.dejitarunoseireinoapuri.kioku.resources.source_retained_label
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -64,24 +47,9 @@ internal fun SourceControlContent(
     val ready = (state as? SourceControlState.Working)?.previous ?: state as SourceControlState.Ready
     val working = state is SourceControlState.Working
     val enabled = !working && ready.feedback != ControlFeedback.Processing && ready.forget == null
-    ControlStory(ready.source.source)
-    Text(
-        stringResource(Res.string.control_items),
-        style = MaterialTheme.typography.body2,
-        color = KiokuColors.Coral,
-        fontWeight = FontWeight.SemiBold,
-        modifier = Modifier.semantics { heading() },
-    )
+    SourceRecordedDate(ready.source.source)
     ready.source.items.forEachIndexed { index, item ->
         ControlItem(item, index, ready, enabled, onEvent)
-    }
-    Column(verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Small)) {
-        ActionButton(
-            stringResource(Res.string.control_forget_all),
-            { onEvent(SourceControlEvent.Forget()) },
-            enabled = enabled,
-        )
-        ControlHint(Res.string.control_story_help)
     }
     if (working) {
         ContentLoadingNotice(
@@ -97,31 +65,6 @@ internal fun SourceControlContent(
         )
     }
     ControlFeedbackNotice(ready.feedback, working, onEvent)
-}
-
-@Composable
-private fun ControlStory(source: MemorySource) {
-    var expanded by rememberSaveable(source.id) { mutableStateOf(false) }
-    Column(verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Small)) {
-        SourceRecordedDate(source)
-        ControlTextAction(
-            if (expanded) Res.string.control_hide_story else Res.string.control_read_story,
-            true,
-            { expanded = !expanded },
-        )
-        if (expanded) {
-            Panel {
-                val label =
-                    when (source.kind) {
-                        SourceKind.Original -> Res.string.original_label
-                        SourceKind.Retained -> Res.string.source_retained_label
-                        SourceKind.Correction -> Res.string.source_corrected_label
-                    }
-                ControlHint(label)
-                Text(source.originalText)
-            }
-        }
-    }
 }
 
 @Composable

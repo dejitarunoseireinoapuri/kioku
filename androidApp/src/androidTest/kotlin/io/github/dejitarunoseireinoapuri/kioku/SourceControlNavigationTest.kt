@@ -11,6 +11,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.hasAnyDescendant
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
@@ -146,26 +147,30 @@ class SourceControlNavigationTest {
     }
 
     @Test
-    fun fullTextWithdrawalHasExplicitScopeAndUsesOneCommand() {
+    fun eachMemoryHasItsOwnActionsAndOnlyTheSelectedMemoryReachesThePopup() {
         controls.change = { MemoryChange.Confirmed(ChangeAction.Forget, 1) }
-        captureBrandScreen(compose.activity, "kioku-source-controls.png") { compose.onRoot().captureToImage() }
-        compose.onNodeWithText("Olvidar este relato").performScrollTo().performClick()
+        compose.onNodeWithText("Película Loto.").assertIsDisplayed()
+        compose.onNodeWithText("Examen el martes.").assertIsDisplayed()
+        compose.onNodeWithText("Leer el relato").assertDoesNotExist()
+        compose.onNodeWithText("Olvidar este relato").assertDoesNotExist()
+        assertEquals(2, compose.onAllNodesWithText("Corregir").fetchSemanticsNodes().size)
+        assertEquals(2, compose.onAllNodesWithText("Olvidar").fetchSemanticsNodes().size)
+        captureBrandScreen(compose.activity, "kioku-manage-items.png") { compose.onRoot().captureToImage() }
+        compose
+            .onNode(hasText("Olvidar") and memoryItemContaining("Examen el martes."))
+            .performScrollTo()
+            .performClick()
+        compose.onNodeWithTag("forget-confirmation").assert(hasAnyDescendant(hasText("Examen el martes.")))
         compose
             .onNodeWithText(
-                "Este texto y sus recuerdos dejarán de estar accesibles. Las copias en otros relatos se conservarán.",
+                "Este recuerdo y sus copias en otros relatos dejarán de estar accesibles. " +
+                    "Los demás datos se conservarán.",
             ).assertIsDisplayed()
         assertEquals(0, controls.commands.size)
         compose.onNodeWithText("Sí, borrar").performScrollTo().performClick()
-        compose.waitUntil(5000) {
-            compose.onNodeWithText("He olvidado «Película Loto. Examen el martes.».").isDisplayed()
-        }
+        compose.waitUntil(5000) { compose.onNodeWithText("He olvidado «Examen el martes.».").isDisplayed() }
         assertEquals(1, controls.commands.size)
-        assertEquals(
-            2,
-            controls.commands
-                .single()
-                .memoryIds.size,
-        )
+        assertEquals(listOf("$CONTROL_ID-2"), controls.commands.single().memoryIds)
     }
 
     @Test

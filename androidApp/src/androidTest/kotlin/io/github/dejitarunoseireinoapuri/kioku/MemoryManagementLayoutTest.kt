@@ -31,7 +31,7 @@ class MemoryManagementLayoutTest {
     val compose = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun largeTextKeepsEachActionReachableAndItsScopeDistinct() {
+    fun largeTextShowsTheMemoryDirectlyAndKeepsItsTwoActionsReachable() {
         val events = mutableListOf<SourceControlEvent>()
         compose.setContent {
             val density = LocalDensity.current
@@ -40,34 +40,37 @@ class MemoryManagementLayoutTest {
             }
         }
         compose.onNodeWithText("Gestionar un recuerdo").assertIsDisplayed()
+        compose.onNodeWithText("Me apetece ver Loto el martes.").assertIsDisplayed()
+        compose.onNodeWithText("Leer el relato").assertDoesNotExist()
+        compose.onNodeWithText("Olvidar este relato").assertDoesNotExist()
         compose.onNodeWithText("Corregir").performScrollTo().performClick()
         assertEquals(listOf(SourceControlEvent.Edit("fixture-item")), events)
         compose.onNodeWithText("Olvidar").performScrollTo().performClick()
         assertEquals(SourceControlEvent.Forget("fixture-item"), events.last())
-        compose.onNodeWithText("Olvidar este relato").performScrollTo().performClick()
-        assertEquals(SourceControlEvent.Forget(), events.last())
-        compose
-            .onNodeWithText("Retira este texto y sus datos. Conserva las copias de otros relatos.")
-            .performScrollTo()
-            .assertIsDisplayed()
         captureBrandScreen(compose.activity, "kioku-manage-large-text.png") { compose.onRoot().captureToImage() }
     }
 
     @Test
-    fun readingARetainedStoryDoesNotPresentItAsAnIntactOriginal() {
+    fun aRetainedStoryDisplaysItsCurrentMemoryWithoutExposingTheSourceText() {
         compose.setContent {
             ManagementFixture(
                 SourceControlState.Ready(
-                    source().copy(source = source().source.copy(kind = SourceKind.Retained)),
+                    source().copy(
+                        source =
+                            source().source.copy(
+                                kind = SourceKind.Retained,
+                                originalText = "Resto de relato ficticio distinto.",
+                            ),
+                    ),
                 ),
             )
         }
 
-        compose.onNodeWithText("Leer el relato").performClick()
-        compose.onNodeWithText("Texto que conservas").assertIsDisplayed()
-        compose.onNodeWithText("LO QUE DIJISTE ORIGINALMENTE").assertDoesNotExist()
-        compose.onNodeWithText("Cerrar el relato").performClick()
-        compose.onNodeWithText("Texto que conservas").assertDoesNotExist()
+        compose.onNodeWithText("Me apetece ver Loto el martes.").assertIsDisplayed()
+        compose.onNodeWithText("Resto de relato ficticio distinto.").assertDoesNotExist()
+        compose.onNodeWithText("Leer el relato").assertDoesNotExist()
+        compose.onNodeWithText("Cerrar el relato").assertDoesNotExist()
+        compose.onNodeWithText("Olvidar este relato").assertDoesNotExist()
     }
 
     private fun source() =

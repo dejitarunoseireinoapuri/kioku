@@ -120,13 +120,11 @@
     <string name="capture_configuration">No se ha podido preparar esta operación. Comprueba el estado de la IA en Ajustes.</string>
     <string name="control_title">Gestionar un recuerdo</string>
     <string name="control_manage">Gestionar</string>
-    <string name="control_explanation">Olvidar un dato retira también sus copias en otros relatos. Olvidar todo este texto solo afecta a este relato. Corregir sustituye algo que contaste mal; si ha cambiado con el tiempo, explícalo como un recuerdo nuevo.</string>
     <string name="control_loading">Leyendo los datos actuales...</string>
     <string name="control_unavailable">No puedo cargar este recuerdo. Puede haber cambiado o haberse olvidado.</string>
     <string name="control_reload">Volver a cargar</string>
     <string name="control_edit">Corregir</string>
     <string name="control_forget_item">Olvidar</string>
-    <string name="control_forget_all">Olvidar este relato</string>
     <string name="control_correction_hint">Escribe el dato correcto en una frase completa.</string>
     <string name="control_apply">Aplicar corrección</string>
     <string name="control_cancel">Cancelar</string>
@@ -149,11 +147,7 @@
     <string name="source_corrected_label">Fragmento de tu corrección</string>
     <string name="memory_manage">Gestionar este recuerdo</string>
     <string name="memory_saved">Guardado</string>
-    <string name="control_items">Datos de este recuerdo</string>
-    <string name="control_read_story">Leer el relato</string>
-    <string name="control_hide_story">Cerrar el relato</string>
     <string name="control_edit_help">Sustituye un dato erróneo.</string>
     <string name="control_forget_help">También borra sus copias.</string>
-    <string name="control_story_help">Retira este texto y sus datos. Conserva las copias de otros relatos.</string>
     <string name="control_new_fact_help">Si algo ha cambiado con el tiempo, cuéntalo como un recuerdo nuevo.</string>
 </resources>
