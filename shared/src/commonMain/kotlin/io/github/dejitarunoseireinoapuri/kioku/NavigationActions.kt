@@ -5,6 +5,7 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import io.github.dejitarunoseireinoapuri.kioku.di.ConversationDependencies
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
+import io.github.dejitarunoseireinoapuri.kioku.domain.EditableSource
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChange
 import io.github.dejitarunoseireinoapuri.kioku.feature.account.AccountState
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.ConversationEvent
@@ -23,7 +24,7 @@ internal data class NavigationActions(
     val refresh: () -> Unit,
     val back: () -> Unit,
     val navigate: (Route) -> Unit,
-    val changed: (MemoryChange.Confirmed, String?) -> Unit,
+    val changed: (MemoryChange.Confirmed) -> Unit,
     val current: NavKey?,
     val markMemoryChange: () -> Unit = {},
 )
@@ -78,7 +79,9 @@ internal fun kiokuEntries(
             manageable = dependencies.controls != null,
         )
     }
-    entry<Route.Control> { route -> ControlDestination(route.id, dependencies, actions) }
+    entry<Route.Control> { route ->
+        ControlDestination(route.id, dependencies, actions)
+    }
 }
 
 @Composable

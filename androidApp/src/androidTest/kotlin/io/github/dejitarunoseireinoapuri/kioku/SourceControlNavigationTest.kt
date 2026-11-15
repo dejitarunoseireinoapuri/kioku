@@ -120,7 +120,7 @@ class SourceControlNavigationTest {
     }
 
     @Test
-    fun correctionSurvivesRecreationAndClearsOldConversationOnlyAfterConfirmation() {
+    fun correctionSurvivesRecreationAndStaysInManagementAfterConfirmation() {
         val pending = CompletableDeferred<MemoryChange>()
         controls.change = { pending.await() }
         editExam()
@@ -137,7 +137,8 @@ class SourceControlNavigationTest {
         assertEquals(listOf("$CONTROL_ID-2"), controls.commands.single().memoryIds)
         captureBrandScreen(compose.activity, "kioku-correction-pending.png") { compose.onRoot().captureToImage() }
         pending.complete(MemoryChange.Confirmed(ChangeAction.Correct, 1))
-        compose.waitUntil(5000) { compose.onNodeWithText("Dato corregido.").isDisplayed() }
+        compose.waitUntil(5000) { compose.onNodeWithText("Recuerdo modificado").isDisplayed() }
+        compose.onNodeWithText("Gestionar un recuerdo").assertIsDisplayed()
         compose.onNodeWithText(OLD_QUESTION).assertDoesNotExist()
         compose.onNodeWithText("Texto original").assertDoesNotExist()
     }
@@ -161,7 +162,8 @@ class SourceControlNavigationTest {
         compose.onNodeWithTag("forget-confirmation").assertDoesNotExist()
         compose.onNodeWithText("He olvidado «Película Loto.».").assertDoesNotExist()
         pending.complete(MemoryChange.Confirmed(ChangeAction.Forget, 1))
-        compose.waitUntil(5000) { compose.onNodeWithText("He olvidado «Película Loto.».").isDisplayed() }
+        compose.waitUntil(5000) { compose.onNodeWithText("Recuerdo borrado").isDisplayed() }
+        compose.onNodeWithText("Gestionar un recuerdo").assertIsDisplayed()
         assertEquals(1, controls.commands.size)
         assertEquals(listOf("$CONTROL_ID-1"), controls.commands.single().memoryIds)
         assertEquals(ChangeAction.Forget, controls.commands.single().action)
@@ -190,7 +192,7 @@ class SourceControlNavigationTest {
             ).assertIsDisplayed()
         assertEquals(0, controls.commands.size)
         compose.onNodeWithText("Sí, olvidar").performScrollTo().performClick()
-        compose.waitUntil(5000) { compose.onNodeWithText("He olvidado «Examen el martes.».").isDisplayed() }
+        compose.waitUntil(5000) { compose.onNodeWithText("Recuerdo borrado").isDisplayed() }
         assertEquals(1, controls.commands.size)
         assertEquals(listOf("$CONTROL_ID-2"), controls.commands.single().memoryIds)
     }
@@ -237,7 +239,7 @@ class SourceControlNavigationTest {
         compose.onNodeWithTag("correction-input").performScrollTo().assertIsDisplayed()
         controls.change = { MemoryChange.Confirmed(ChangeAction.Correct, 1) }
         compose.onNodeWithText("Comprobar de nuevo").performScrollTo().performClick()
-        compose.waitUntil(5000) { compose.onNodeWithText("Dato corregido.").isDisplayed() }
+        compose.waitUntil(5000) { compose.onNodeWithText("Recuerdo modificado").isDisplayed() }
         assertEquals(controls.commands[0], controls.commands[1])
     }
 

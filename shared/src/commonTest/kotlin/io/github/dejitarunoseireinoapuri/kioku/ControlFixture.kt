@@ -23,11 +23,12 @@ internal class ControlFixture : MemoryControlRepository {
         )
     val commands = mutableListOf<MemoryChangeCommand>()
     var read: suspend () -> EditableSource? = { source }
+    var readSource: suspend (String) -> EditableSource? = { read() }
     var revisionRead: suspend () -> Long? = { 0 }
     var change: suspend () -> MemoryChange = { MemoryChange.Confirmed(ChangeAction.Correct, 1) }
     private var ids = 0
 
-    override suspend fun details(id: String) = read()
+    override suspend fun details(id: String) = readSource(id)
 
     override suspend fun revision() = revisionRead()
 

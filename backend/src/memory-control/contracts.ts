@@ -21,6 +21,7 @@ export const changeInput = z
     correction: z.string().max(2000).nullable(),
     zone: captureInput.shape.zone,
     forgetScope: z.enum(["source", "allOccurrences"]).optional(),
+    continueManagement: z.boolean().optional(),
   })
   .refine((input) =>
     input.action === "correct"
@@ -48,6 +49,7 @@ export interface ChangeResult {
   text: string;
   sources: { sourceId: string; receivedAt: string }[];
   memoryEpoch: number;
+  changes?: { sourceId: string; sourceIds: string[] }[];
 }
 export interface SourceBundle {
   scope: RetirementScope;

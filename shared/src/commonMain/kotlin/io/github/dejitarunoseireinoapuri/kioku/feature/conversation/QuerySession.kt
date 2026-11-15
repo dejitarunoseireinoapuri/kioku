@@ -165,20 +165,8 @@ internal class QuerySession(
     }
 
     private fun appendMessage(message: QueryMessage) {
-        val next = messages + message
-        val first =
-            next
-                .filterIsInstance<QueryMessage.Question>()
-                .takeLast(SESSION_EXCHANGES)
-                .firstOrNull()
-                ?.id
-        messages =
-            next
-                .dropWhile { it.id != first }
-                .takeLast(MAX_QUERY_MESSAGES)
-                .dropWhile { it is QueryMessage.Result }
+        messages = messages + message
     }
 }
 
 private const val MAX_CONTEXT_QUESTIONS = 4
-private const val MAX_QUERY_MESSAGES = 40

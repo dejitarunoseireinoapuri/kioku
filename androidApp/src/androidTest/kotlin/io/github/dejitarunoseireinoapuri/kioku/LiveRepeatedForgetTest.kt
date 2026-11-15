@@ -99,7 +99,7 @@ class LiveRepeatedForgetTest {
             hasText("Olvidar") and memoryItemContaining("simulacro")
         compose.waitUntil(20_000) { compose.onAllNodes(exam).fetchSemanticsNodes().size == 1 }
         compose.onNode(exam).performScrollTo().performClick()
-        confirmForget("simulacro")
+        confirmForget("simulacro", fromManagement = true)
     }
 
     private fun verifyMovieRemoval() =
@@ -109,9 +109,19 @@ class LiveRepeatedForgetTest {
             assertEquals(AnswerStatus.NotFound, absent.status)
         }
 
-    private fun confirmForget(expected: String) {
+    private fun confirmForget(
+        expected: String,
+        fromManagement: Boolean = false,
+    ) {
         click("Sí, olvidar")
         compose.waitUntil(REPEATED_LIVE_TIMEOUT) {
+            if (fromManagement) {
+                return@waitUntil compose
+                    .onAllNodesWithText(
+                        "Recuerdo borrado",
+                    ).fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
             compose
                 .onAllNodes(
                     hasText("He olvidado «", substring = true) and

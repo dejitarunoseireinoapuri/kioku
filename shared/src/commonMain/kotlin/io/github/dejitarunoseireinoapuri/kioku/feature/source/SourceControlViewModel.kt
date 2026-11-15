@@ -14,6 +14,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 
 sealed interface ControlFeedback {
     data object Unavailable : ControlFeedback
@@ -36,7 +37,11 @@ sealed interface SourceControlState {
         val draft: String = "",
         val feedback: ControlFeedback? = null,
         val forget: PendingSourceForget? = null,
-    ) : SourceControlState
+        val related: List<EditableSource> = emptyList(),
+        val notice: ChangeAction? = null,
+    ) : SourceControlState {
+        val sources: List<EditableSource> get() = listOf(source) + related
+    }
 
     data class Working(
         val previous: Ready,
@@ -45,7 +50,14 @@ sealed interface SourceControlState {
 
     data class Done(
         val result: MemoryChange.Confirmed,
-        val forgottenText: String? = null,
+    ) : SourceControlState
+
+    data class Refreshing(
+        val result: MemoryChange.Confirmed,
+    ) : SourceControlState
+
+    data class RefreshFailed(
+        val result: MemoryChange.Confirmed,
     ) : SourceControlState
 }
 
@@ -87,10 +99,15 @@ class SourceControlViewModel(
     private val mutableState = MutableStateFlow<SourceControlState>(SourceControlState.Loading)
     val state = mutableState.asStateFlow()
     private var command: MemoryChangeCommand? = null
-    private var approvedForgetText: String? = null
     private var job: Job? = null
     private var generation = 0
     private var paused: SourceControlState? = null
+    private var sourceIds = listOf(sourceId)
+    private var confirmed: MemoryChange.Confirmed? = null
+    private val mutableChanges = MutableStateFlow<MemoryChange.Confirmed?>(null)
+    val changes = mutableChanges.asStateFlow()
+
+    fun consumeChange(): MemoryChange.Confirmed? = mutableChanges.value.also { mutableChanges.value = null }
 
     init {
         load()
@@ -188,7 +205,7 @@ class SourceControlViewModel(
         ready: SourceControlState.Ready,
         id: String,
     ) {
-        if (ready.source.items.any { it.id == id }) {
+        if (ready.sources.any { source -> source.items.any { it.id == id } }) {
             command = null
             mutableState.value = ready.copy(editing = id, draft = "", feedback = null)
         }
@@ -198,11 +215,11 @@ class SourceControlViewModel(
         ready: SourceControlState.Ready,
         id: String?,
     ) {
-        val ids = id?.let { listOf(it) } ?: ready.source.items.map { it.id }
+        val source = ready.sources.firstOrNull { item -> id == null || item.items.any { it.id == id } } ?: return
+        val ids = id?.let { listOf(it) } ?: source.items.map { it.id }
         val scope = if (id == null) ForgetScope.Source else ForgetScope.AllOccurrences
-        ready.source.previewForget(ids, scope)?.let { preview ->
+        source.previewForget(ids, scope)?.let { preview ->
             command = null
-            approvedForgetText = null
             mutableState.value = ready.copy(forget = PendingSourceForget(ids, preview), feedback = null)
         }
     }
@@ -238,17 +255,12 @@ class SourceControlViewModel(
         val epoch = ++generation
         job?.cancel()
         command = null
-        approvedForgetText = null
-        if (paused != null) paused = SourceControlState.Loading
-        mutableState.value = SourceControlState.Loading
+        val waiting = confirmed?.let { SourceControlState.Refreshing(it) } ?: SourceControlState.Loading
+        if (paused != null) paused = waiting
+        mutableState.value = waiting
         job =
             viewModelScope.launch {
-                val source = repository.details(sourceId)
-                if (epoch ==
-                    generation
-                ) {
-                    present(source?.let { SourceControlState.Ready(it) } ?: SourceControlState.Missing)
-                }
+                refreshContent(epoch)
             }
     }
 
@@ -258,15 +270,10 @@ class SourceControlViewModel(
         action: ChangeAction,
         forgetScope: ForgetScope = ForgetScope.Source,
     ) {
-        approvedForgetText =
-            ready.forget
-                ?.preview
-                ?.text
-                .takeIf { action == ChangeAction.Forget }
         val pending =
             repository
                 .prepare(
-                    ready.source,
+                    ready.sources.first { source -> ids.all { id -> source.items.any { it.id == id } } },
                     ids,
                     action,
                     ready.draft.takeIf { action == ChangeAction.Correct },
@@ -280,16 +287,20 @@ class SourceControlViewModel(
         ready: SourceControlState.Ready,
     ) {
         val epoch = ++generation
-        val previous = ready.copy(feedback = null, forget = null)
+        val previous = ready.copy(feedback = null, forget = null, notice = null)
         mutableState.value = SourceControlState.Working(previous, pending.action)
         job =
             viewModelScope.launch {
                 val result = repository.execute(pending)
                 if (epoch != generation) return@launch
+                if (result is MemoryChange.Confirmed) {
+                    confirmedChange(pending, ready, result, epoch)
+                    return@launch
+                }
                 present(
                     when (result) {
                         is MemoryChange.Confirmed -> {
-                            SourceControlState.Done(result, approvedForgetText)
+                            error("Confirmed changes are refreshed before presentation")
                         }
 
                         is MemoryChange.Clarification -> {
@@ -310,14 +321,71 @@ class SourceControlViewModel(
             }
     }
 
+    private suspend fun confirmedChange(
+        pending: MemoryChangeCommand,
+        previous: SourceControlState.Ready,
+        result: MemoryChange.Confirmed,
+        epoch: Int,
+    ) {
+        command = null
+        confirmed = result.copy(previousSourceId = pending.sourceId)
+        mutableChanges.value = confirmed
+        sourceIds =
+            previous.sources
+                .flatMap { source ->
+                    result.replacements.firstOrNull { it.sourceId == source.source.id }?.sourceIds
+                        ?: if (source.source.id == pending.sourceId) result.sourceIds else listOf(source.source.id)
+                }.distinct()
+        present(SourceControlState.Refreshing(result))
+        refreshContent(epoch, notify = true)
+    }
+
+    private suspend fun refreshContent(
+        epoch: Int,
+        notify: Boolean = false,
+    ) {
+        val sources =
+            withTimeoutOrNull(CONTROL_REFRESH_TIMEOUT_MS) {
+                sourceIds.map { repository.details(it) }
+            } ?: sourceIds.map { null }
+        if (epoch != generation) return
+        val current = sources.filterNotNull()
+        val result = confirmed
+        val unavailable = if (result == null) SourceControlState.Missing else SourceControlState.RefreshFailed(result)
+        present(
+            when {
+                sources.any { it == null } || current.map { it.memoryRevision }.distinct().size > 1 ||
+                    (notify && current.any { result != null && it.memoryRevision != result.memoryRevision }) -> {
+                    unavailable
+                }
+
+                current.isNotEmpty() -> {
+                    SourceControlState.Ready(
+                        current.first(),
+                        related = current.drop(1),
+                        notice = result?.action,
+                    )
+                }
+
+                result != null -> {
+                    SourceControlState.Done(result)
+                }
+
+                else -> {
+                    SourceControlState.Missing
+                }
+            },
+        )
+    }
+
     override fun onCleared() {
         generation++
         job?.cancel()
         command = null
-        approvedForgetText = null
         paused = null
         mutableState.value = SourceControlState.Missing
     }
 }
 
 private const val MAX_CORRECTION_LENGTH = 2000
+private const val CONTROL_REFRESH_TIMEOUT_MS = 195000L

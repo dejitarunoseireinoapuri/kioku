@@ -39,19 +39,23 @@ fun ConversationScreen(
     ConversationForgetConfirmation(state, onEvent)
     Column(Modifier.fillMaxSize()) {
         ConversationHeader(onSettings)
-        Column(
-            Modifier
-                .weight(1f)
-                .testTag("conversation-messages")
-                .verticalScroll(scroll)
-                .padding(KiokuSpacing.Large),
-            verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large),
-        ) {
-            if (!state.concealingMemory) {
-                ConversationBody(state, onEvent, onSource, onManage ?: onSource)
-                state.feedback?.let { FeedbackMessage(it, state.forgottenText) }
+        if (state.showingConversation) {
+            ConversationFeed(state, FeedActions(onEvent, onSource, onManage ?: onSource), loading, Modifier.weight(1f))
+        } else {
+            Column(
+                Modifier
+                    .weight(1f)
+                    .testTag("conversation-messages")
+                    .verticalScroll(scroll)
+                    .padding(KiokuSpacing.Large),
+                verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large),
+            ) {
+                if (!state.concealingMemory) {
+                    ConversationBody(state, onEvent, onSource, onManage ?: onSource)
+                    state.feedback?.let { FeedbackMessage(it, state.forgottenText) }
+                }
+                if (loading != null) ContentLoadingNotice(stringResource(loading))
             }
-            if (loading != null) ContentLoadingNotice(stringResource(loading))
         }
         if (state.scenario == PreviewScenario.Locked) {
             LockedActions(onEvent)

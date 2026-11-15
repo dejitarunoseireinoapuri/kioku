@@ -58,6 +58,7 @@ internal fun decisionPayload(command: TextCommand): String =
         put("requestId", command.ids.action)
         put("turn", routingPayload(command))
         put("plan", planPayload(requireNotNull(command.plan)))
+        if (command.plan is TextPlan.Change) put("continueManagement", true)
         put(
             "decision",
             when (command.decision) {

@@ -39,51 +39,28 @@ fun TextConversationBody(
     onManage: (String) -> Unit = onSource,
     forgottenText: String? = null,
 ) {
-    val saved = state.savedMessageSources()
+    val presentation = MessageFeedPresentation(state, state.savedMessageSources(), forgottenText)
     Column(verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large)) {
         state.messages.forEach { message ->
-            when (message) {
-                is TextMessage.Notice -> {
-                    Panel { Text(memoryChangeText(message.action, forgottenText)) }
-                }
-
-                is TextMessage.Owner -> {
-                    OwnerMemoryMessage(
-                        message.text,
-                        saved[message.id],
-                        !state.busy && !state.confirmingForget,
-                        onManage,
-                    )
-                }
-
-                is TextMessage.Result -> {
-                    message.visibleOutcome(saved)?.let { outcome ->
-                        TextOutcomeBody(
-                            outcome,
-                            interactive = !state.busy && message.id == state.messages.lastOrNull()?.id,
-                            onEvent,
-                            onSource,
-                            message.captureCommand?.let {
-                                CaptureRecoveryUi(message.id, state.checkingCapture == message.id, !state.busy)
-                            },
-                        )
-                    }
-                }
-            }
+            TextMessageContent(message, presentation, onEvent, onSource, onManage)
         }
-        val last = (state.messages.lastOrNull() as? TextMessage.Result)?.outcome
-        state.outcome?.takeIf { !state.busy && it != last }?.let { TextOutcomeBody(it, true, onEvent, onSource) }
-        if (state.clarification) MessageButton(MessageAction.Reset, stringResource(Res.string.capture_restart), onEvent)
+        TextConversationTail(state, onEvent, onSource)
     }
 }
 
-private fun TextMessage.Result.visibleOutcome(saved: Map<Long, String>): TextOutcome? {
-    val offer = outcome as? TextOutcome.Offered
-    return if (offer != null && ownerId in saved) offer.answer?.let { TextOutcome.Asked(it) } else outcome
+@Composable
+internal fun TextConversationTail(
+    state: TextConversationState,
+    onEvent: (ConversationEvent) -> Unit,
+    onSource: (String) -> Unit,
+) {
+    val last = (state.messages.lastOrNull() as? TextMessage.Result)?.outcome
+    state.outcome?.takeIf { !state.busy && it != last }?.let { TextOutcomeBody(it, true, onEvent, onSource) }
+    if (state.clarification) MessageButton(MessageAction.Reset, stringResource(Res.string.capture_restart), onEvent)
 }
 
 @Composable
-private fun TextOutcomeBody(
+internal fun TextOutcomeBody(
     outcome: TextOutcome,
     interactive: Boolean,
     onEvent: (ConversationEvent) -> Unit,

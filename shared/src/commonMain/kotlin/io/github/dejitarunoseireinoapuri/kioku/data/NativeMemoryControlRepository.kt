@@ -63,6 +63,7 @@ class NativeMemoryControlRepository(
                 put("action", if (command.action == ChangeAction.Forget) "forget" else "correct")
                 put("correction", command.correction?.let { JsonPrimitive(it) } ?: JsonNull)
                 put("zone", command.zone)
+                put("continueManagement", true)
                 if (command.action == ChangeAction.Forget) {
                     put(
                         "forgetScope",
@@ -79,8 +80,13 @@ class NativeMemoryControlRepository(
         return when (val reply = request(MemoryEndpoint.Change, payload)) {
             is NativeMemoryReply.Received -> {
                 runCatching {
-                    parseMemoryChange(reply.json, command.requestId).also { result ->
+                    parseMemoryChange(reply.json, command.requestId).let { result ->
                         require(result !is MemoryChange.Confirmed || result.action == command.action)
+                        if (result is MemoryChange.Confirmed) {
+                            result.forSource(command.sourceId)
+                        } else {
+                            result
+                        }
                     }
                 }.getOrDefault(MemoryChange.Failed(CaptureIssue.Unavailable))
             }

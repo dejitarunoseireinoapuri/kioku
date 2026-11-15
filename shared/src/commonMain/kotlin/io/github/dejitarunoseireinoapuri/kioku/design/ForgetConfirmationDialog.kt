@@ -58,11 +58,10 @@ fun ForgetConfirmationDialog(
                 verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Small),
             ) {
                 ActionButton(stringResource(Res.string.control_cancel), onCancel, Modifier.fillMaxWidth())
-                ActionButton(
+                AccentButton(
                     stringResource(Res.string.forget_confirm),
                     onConfirm,
-                    Modifier.fillMaxWidth(),
-                    primary = true,
+                    Modifier.fillMaxWidth().testTag("forget-confirm-action"),
                 )
             }
         }

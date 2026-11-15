@@ -65,6 +65,36 @@ class NativeMemoryControlRepositoryTest {
         }
 
     @Test
+    fun continuationMustMatchTheSelectedSourceAndOnlyContainsCurrentIds() =
+        runTest {
+            val port = ControlPort()
+            val repository = NativeMemoryControlRepository(port)
+            val command =
+                repository.prepare(
+                    ControlFixture().source,
+                    listOf("$CONTROL_SOURCE-1"),
+                    ChangeAction.Forget,
+                    null,
+                )
+            val current = "55c71022-d326-4287-bd74-93413809da74"
+            val reply =
+                """
+                {"apiVersion":1,"operationId":"$CONTROL_REQUEST","status":"forgotten",
+                "text":"Cambio confirmado","sources":[{"sourceId":"$current","receivedAt":"2026-11-15T12:00:00Z"}],
+                "memoryEpoch":1,"changes":[{"sourceId":"$CONTROL_SOURCE","sourceIds":["$current"]}]}
+                """.trimIndent()
+            port.response = reply
+            val confirmed = assertIs<MemoryChange.Confirmed>(repository.execute(command))
+            assertEquals(listOf(current), confirmed.sourceIds)
+            assertEquals(CONTROL_SOURCE, confirmed.previousSourceId)
+            assertTrue(port.payload.contains("\"continueManagement\":true"))
+            port.response = reply.replace("\"sourceIds\":[\"$current\"]", "\"sourceIds\":[]")
+            assertIs<MemoryChange.Failed>(repository.execute(command))
+            port.response = reply.replace("\"sourceId\":\"$CONTROL_SOURCE\"", "\"sourceId\":\"$CONTROL_REQUEST\"")
+            assertIs<MemoryChange.Failed>(repository.execute(command))
+        }
+
+    @Test
     fun cancellationDiscardsNativeCallbacksAndCancelsTheHandle() =
         runTest {
             val port = ControlPort().apply { deferred = true }

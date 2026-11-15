@@ -25,6 +25,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertNotEquals
+import kotlin.test.assertNull
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SourceControlViewModelTest {
@@ -183,7 +184,9 @@ class SourceControlViewModelTest {
             model.onEvent(SourceControlEvent.Retry)
             runCurrent()
             assertEquals(repository.commands[0], repository.commands[1])
-            assertEquals("Examen el martes.", assertIs<SourceControlState.Done>(model.state.value).forgottenText)
+            assertEquals(ChangeAction.Forget, assertIs<SourceControlState.Done>(model.state.value).result.action)
+            assertEquals(CONTROL_SOURCE, model.consumeChange()!!.previousSourceId)
+            assertNull(model.consumeChange())
         }
 
     @Test

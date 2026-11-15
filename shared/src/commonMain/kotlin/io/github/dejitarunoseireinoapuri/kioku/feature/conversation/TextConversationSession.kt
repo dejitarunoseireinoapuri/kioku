@@ -235,7 +235,9 @@ internal class TextConversationSession(
     }
 
     fun openSource(id: String): Boolean {
-        val known = state.messages.filterIsInstance<TextMessage.Result>().any { id in it.outcome.references() }
+        val known =
+            id in state.savedMessageGroups().values.flatten() ||
+                state.messages.filterIsInstance<TextMessage.Result>().any { id in it.outcome.references() }
         val repository = repository?.takeIf { known } ?: return false
         val epoch = generation
         val sourceEpoch = ++sourceGeneration
@@ -258,7 +260,11 @@ internal class TextConversationSession(
         clearDraft: Boolean = false,
         preservePending: Boolean = false,
         notice: ChangeAction? = null,
+        change: MemoryChange.Confirmed? = null,
     ) {
+        val previous = state
+        val snapshots = histories.toMap()
+        val lastId = messageId
         val pending = if (preservePending) state.pendingCaptureMessages() else emptyList()
         histories.clear()
         generation++
@@ -271,12 +277,21 @@ internal class TextConversationSession(
         ownerId = null
         questions.clear()
         references = emptyList()
-        val next =
+        var next =
             TextConversationState(
                 messages =
                     notice?.let { listOf(TextMessage.Notice(++messageId, it)) } ?: pending,
             )
-        if (notice != null) {
+        if (change != null) {
+            messageId = lastId
+            snapshots.forEach { (mode, snapshot) ->
+                histories[mode] =
+                    TextSessionSnapshot(
+                        snapshot.state.afterChange(change).appending(TextMessage.Notice(++messageId, change.action)),
+                    )
+            }
+            next = previous.afterChange(change).appending(TextMessage.Notice(++messageId, change.action))
+        } else if (notice != null) {
             val other = if (intent == TextIntent.Tell) TextIntent.Ask else TextIntent.Tell
             histories[other] = TextSessionSnapshot(next)
         }

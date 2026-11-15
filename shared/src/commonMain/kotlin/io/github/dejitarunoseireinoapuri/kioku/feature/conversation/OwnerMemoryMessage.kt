@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.disabled
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
@@ -27,6 +28,7 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.TextOutcome
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_manage
 import io.github.dejitarunoseireinoapuri.kioku.resources.icon_more
+import io.github.dejitarunoseireinoapuri.kioku.resources.memory_historical
 import io.github.dejitarunoseireinoapuri.kioku.resources.memory_manage
 import io.github.dejitarunoseireinoapuri.kioku.resources.memory_saved
 import org.jetbrains.compose.resources.painterResource
@@ -34,12 +36,23 @@ import org.jetbrains.compose.resources.stringResource
 
 /** Only a confirmed server result associates a management action with its original owner turn. */
 internal fun TextConversationState.savedMessageSources(): Map<Long, String> =
-    messages
-        .filterIsInstance<TextMessage.Result>()
-        .mapNotNull { message ->
-            val saved = (message.outcome as? TextOutcome.Captured)?.capture as? CaptureOutcome.Saved
-            message.ownerId?.let { owner -> saved?.let { owner to it.source.id } }
-        }.toMap()
+    savedMessageGroups().mapValues { it.value.first() }
+
+internal fun TextConversationState.savedMessageGroups(): Map<Long, List<String>> {
+    val legacy =
+        messages
+            .filterIsInstance<TextMessage.Result>()
+            .mapNotNull { message ->
+                val saved = (message.outcome as? TextOutcome.Captured)?.capture as? CaptureOutcome.Saved
+                message.ownerId?.let { owner -> saved?.let { owner to it.source.id } }
+            }.toMap()
+    return messages
+        .filterIsInstance<TextMessage.Owner>()
+        .filterNot { it.historical }
+        .associate { owner ->
+            owner.id to (owner.sourceIds ?: listOfNotNull(legacy[owner.id]))
+        }.filterValues { it.isNotEmpty() }
+}
 
 @Composable
 internal fun OwnerMemoryMessage(
@@ -47,13 +60,25 @@ internal fun OwnerMemoryMessage(
     sourceId: String?,
     enabled: Boolean,
     onManage: (String) -> Unit,
+    historical: Boolean = false,
 ) {
     val savedLabel = stringResource(Res.string.memory_saved)
+    val historicalLabel = stringResource(Res.string.memory_historical)
     Row(horizontalArrangement = Arrangement.spacedBy(KiokuSpacing.Small)) {
-        Panel(Modifier.weight(1f).semantics { if (sourceId != null) stateDescription = savedLabel }) {
-            Text(text)
+        Panel(Modifier.weight(1f).semantics { if (sourceId != null && !historical) stateDescription = savedLabel }) {
+            Text(
+                text,
+                color = if (historical) KiokuColors.Secondary else KiokuColors.Text,
+                modifier =
+                    Modifier.semantics {
+                        if (historical) {
+                            disabled()
+                            stateDescription = historicalLabel
+                        }
+                    },
+            )
         }
-        if (sourceId != null) {
+        if (sourceId != null && !historical) {
             SavedMemoryMenu(sourceId, enabled, onManage)
         }
     }

@@ -149,10 +149,9 @@ private fun KiokuNavigation(
         NavigationActions(onSignOut, onRefresh, back, {
             if (it is Route.Control) controlChanged.value = false
             backStack.add(it)
-        }, { result, forgottenText ->
-            viewModel.memoryChanged(result, forgottenText)
-            backStack.clear()
-            backStack.add(Route.Conversation)
+        }, { result ->
+            viewModel.memoryChanged(result)
+            controlChanged.value = false
         }, backStack.lastOrNull(), { controlChanged.value = true })
     NavDisplay(
         backStack = backStack,

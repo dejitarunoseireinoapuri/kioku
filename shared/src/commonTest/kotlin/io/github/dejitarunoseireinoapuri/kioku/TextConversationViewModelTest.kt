@@ -150,7 +150,7 @@ class TextConversationViewModelTest {
         }
 
     @Test
-    fun confirmedMutationClearsEveryEarlierMessageDraftAndSource() =
+    fun confirmedMutationKeepsOriginalMessagesButRetiresTheirEvidenceDraftAndSource() =
         conversationTest { repository, model, _ ->
             repository.plan = { TextPlan.Ask(repository.stamp) }
             repository.reply = { TextOutcome.Asked(answer()) }
@@ -163,9 +163,22 @@ class TextConversationViewModelTest {
                 assertIs<TextMessage.Notice>(
                     model.state.value.conversation!!
                         .messages
-                        .single(),
+                        .last(),
                 )
             assertEquals(ChangeAction.Correct, notice.action)
+            assertEquals(
+                listOf("¿Qué película?", "Corrige ese dato."),
+                model.state.value.conversation!!
+                    .messages
+                    .filterIsInstance<TextMessage.Owner>()
+                    .map { it.text },
+            )
+            assertTrue(
+                model.state.value.conversation!!
+                    .messages
+                    .filterIsInstance<TextMessage.Result>()
+                    .isEmpty(),
+            )
             assertNull(model.state.value.source)
             assertEquals("", model.state.value.draft)
             assertNull(model.state.value.feedback)
@@ -205,7 +218,7 @@ class TextConversationViewModelTest {
             assertFalse(context.questions.any { it.contains("respuesta sintética") })
             assertTrue(
                 model.state.value.conversation!!
-                    .messages.size <= 40,
+                    .messages.size == 50,
             )
             assertIs<TextMessage.Owner>(
                 model.state.value.conversation!!

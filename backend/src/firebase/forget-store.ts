@@ -207,6 +207,14 @@ export class FirestoreForgetStore {
               receivedAt: source.receivedAt,
             })),
           ),
+          ...(input.continueManagement
+            ? {
+                managementChanges: changes.map((c) => ({
+                  sourceId: c.bundle.source.id,
+                  sourceIds: c.snapshot.sources.map((source) => source.id),
+                })),
+              }
+            : {}),
           memoryEpoch: current.memoryEpoch + 1,
           expiresAtMs: this.now() + 7 * DAY,
           expiresAt: Timestamp.fromMillis(this.now() + 7 * DAY),

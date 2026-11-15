@@ -15,6 +15,14 @@ sealed interface TextMessage {
     data class Owner(
         override val id: Long,
         val text: String,
+        val sourceIds: List<String>? = null,
+        val historical: Boolean = false,
+    ) : TextMessage
+
+    /** Read-only presentation from this session, never usable as current evidence or a command. */
+    data class PastReply(
+        override val id: Long,
+        val text: String,
     ) : TextMessage
 
     data class Result(

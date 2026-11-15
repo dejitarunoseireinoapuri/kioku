@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.time.Clock
 
 class ConversationViewModel(
     private val readSource: ReadReferencedSource,
@@ -24,6 +25,7 @@ class ConversationViewModel(
     queries: QueryRepository? = null,
     controls: MemoryControlRepository? = null,
     conversation: TextConversationRepository? = null,
+    sessionNow: () -> Long = { Clock.System.now().toEpochMilliseconds() },
 ) : ViewModel() {
     private val mutableState =
         MutableStateFlow(
@@ -80,11 +82,19 @@ class ConversationViewModel(
             },
         )
 
+    private val lifetime = FeedSessionLifetime(viewModelScope, { memoryChanged() }, sessionNow)
+
     fun checkMemory(
         visible: Boolean = true,
         onReady: () -> Unit = {},
     ) {
-        if (visible) visibility.check(onReady = onReady) else visibility.hide()
+        if (visible) {
+            lifetime.foreground()
+            visibility.check(onReady = onReady)
+        } else {
+            lifetime.background()
+            visibility.hide()
+        }
     }
 
     fun memoryChanged(
@@ -95,7 +105,7 @@ class ConversationViewModel(
         captureJob?.cancel()
         command = null
         query.reset(clearDraft = true)
-        messages.reset(clearDraft = true, notice = result?.action)
+        messages.reset(clearDraft = true, notice = result?.action, change = result)
         result?.memoryRevision?.let {
             visibility.accept(it)
             query.setRevision(it)
@@ -321,6 +331,7 @@ class ConversationViewModel(
     }
 
     override fun onCleared() {
+        lifetime.close()
         operationGeneration++
         captureJob?.cancel()
         command = null

@@ -21,6 +21,7 @@ import { scopeVersion } from "../memory-control/retirement.js";
 import { FirestoreQueryStore } from "./query-store.js";
 import { FirestoreSourceRetirementStore } from "./retirement-store.js";
 import { FirestoreForgetStore } from "./forget-store.js";
+import { managementChanges } from "../memory-control/continuation.js";
 import type {
   MemoryInventory,
   ForgetReplacement,
@@ -136,7 +137,12 @@ export class FirestoreSourceControlStore implements SourceControlStore {
     });
     if (!("status" in result)) return result;
     if (result.status === "repeatRequired")
-      return this.result(uid, input.requestId);
+      return this.result(
+        uid,
+        input.requestId,
+        input.continueManagement,
+        input.sourceId,
+      );
     return {
       apiVersion: 1,
       operationId: input.requestId,
@@ -158,7 +164,12 @@ export class FirestoreSourceControlStore implements SourceControlStore {
       status: input.action === "correct" ? "corrected" : "forgotten",
       lease,
     });
-    return this.result(uid, input.requestId);
+    return this.result(
+      uid,
+      input.requestId,
+      input.continueManagement,
+      input.sourceId,
+    );
   }
   async noChange(
     uid: string,
@@ -201,10 +212,20 @@ export class FirestoreSourceControlStore implements SourceControlStore {
       work,
       deadlineMs,
     );
-    return this.result(uid, input.requestId);
+    return this.result(
+      uid,
+      input.requestId,
+      input.continueManagement,
+      input.sourceId,
+    );
   }
 
-  private async result(uid: string, id: string): Promise<ChangeResult> {
+  private async result(
+    uid: string,
+    id: string,
+    continueManagement = false,
+    selectedSource?: string,
+  ): Promise<ChangeResult> {
     return this.db.runTransaction(async (tx) => {
       await this.owner(tx, uid);
       const root = this.db.doc(`accounts/${uid}`);
@@ -257,6 +278,24 @@ export class FirestoreSourceControlStore implements SourceControlStore {
         current.slice(ids.length).some((entry) => entry.exists)
       )
         throw new AccountError("failed-precondition");
+      const changes = continueManagement
+        ? managementChanges(
+            repeated
+              ? operation.get("managementChanges")
+              : [{ sourceId: selectedSource, sourceIds: ids }],
+            ids,
+            selectedSource,
+          )
+        : undefined;
+      const continuationIds =
+        changes?.find((c) => c.sourceId === selectedSource)?.sourceIds ?? [];
+      const visible = repeated
+        ? continueManagement
+          ? current
+              .slice(0, ids.length)
+              .filter((entry) => continuationIds.includes(entry.id))
+          : []
+        : current.slice(0, ids.length);
       return {
         apiVersion: 1,
         operationId: id,
@@ -265,13 +304,12 @@ export class FirestoreSourceControlStore implements SourceControlStore {
           status === "corrected"
             ? "Dato corregido."
             : "He olvidado lo que has seleccionado.",
-        sources: (repeated ? [] : current.slice(0, ids.length)).map(
-          (entry) => ({
-            sourceId: entry.id,
-            receivedAt: String(entry.get("receivedAt")),
-          }),
-        ),
+        sources: visible.map((entry) => ({
+          sourceId: entry.id,
+          receivedAt: String(entry.get("receivedAt")),
+        })),
         memoryEpoch,
+        ...(changes ? { changes } : {}),
       };
     });
   }

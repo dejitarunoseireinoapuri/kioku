@@ -16,7 +16,9 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.unit.Density
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuTheme
+import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.domain.EditableSource
+import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChange
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryItem
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemorySource
 import io.github.dejitarunoseireinoapuri.kioku.domain.SourceKind
@@ -73,6 +75,24 @@ class MemoryManagementLayoutTest {
         compose.onNodeWithText("Leer el relato").assertDoesNotExist()
         compose.onNodeWithText("Cerrar el relato").assertDoesNotExist()
         compose.onNodeWithText("Olvidar este relato").assertDoesNotExist()
+    }
+
+    @Test
+    fun aFailedRefreshKeepsTheConfirmedResultAndOffersOnlyReload() {
+        val events = mutableListOf<SourceControlEvent>()
+        compose.setContent {
+            ManagementFixture(
+                SourceControlState.RefreshFailed(MemoryChange.Confirmed(ChangeAction.Forget, 1)),
+                events::add,
+            )
+        }
+        compose.onNodeWithText("Recuerdo borrado").assertIsDisplayed()
+        compose
+            .onNodeWithText(
+                "El cambio está confirmado. No he podido cargar los recuerdos que quedan. Vuelve a intentarlo.",
+            ).assertIsDisplayed()
+        compose.onNodeWithText("Volver a cargar").performClick()
+        assertEquals(listOf(SourceControlEvent.Reload), events)
     }
 
     @Test

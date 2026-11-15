@@ -72,14 +72,14 @@ class ForgetConversationTest {
                 assertIs<TextMessage.Notice>(
                     model.state.value.conversation!!
                         .messages
-                        .single(),
+                        .last(),
                 )
             assertEquals(ChangeAction.Forget, notice.action)
             assertTrue(
                 model.state.value.conversation!!
                     .messages
                     .filterIsInstance<TextMessage.Owner>()
-                    .isEmpty(),
+                    .map { it.text } == listOf("Olvida esa película."),
             )
             repository.reply = { TextOutcome.ForgetCancelled }
             model.onEvent(ConversationEvent.EditDraft("¿Qué examen tengo?"))

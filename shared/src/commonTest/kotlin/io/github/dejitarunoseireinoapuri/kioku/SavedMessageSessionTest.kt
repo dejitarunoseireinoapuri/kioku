@@ -91,7 +91,7 @@ class SavedMessageSessionTest {
         }
 
     @Test
-    fun eachModeRetainsOnlyItsTenLatestOwnerExchanges() =
+    fun eachModeRetainsAllOwnerExchangesDuringTheSession() =
         sessionTest { repo, session, state ->
             repo.reply = { saved("tell-source") }
             repeat(12) {
@@ -99,7 +99,7 @@ class SavedMessageSessionTest {
                 runCurrent()
             }
             assertEquals(
-                (2..11).map { "Relato $it" },
+                (0..11).map { "Relato $it" },
                 state().messages.filterIsInstance<TextMessage.Owner>().map { it.text },
             )
             session.selectIntent(TextIntent.Ask)
@@ -109,12 +109,12 @@ class SavedMessageSessionTest {
                 runCurrent()
             }
             assertEquals(
-                (2..11).map { "Pregunta $it" },
+                (0..11).map { "Pregunta $it" },
                 state().messages.filterIsInstance<TextMessage.Owner>().map { it.text },
             )
             session.selectIntent(TextIntent.Tell)
-            assertEquals(10, state().messages.filterIsInstance<TextMessage.Owner>().size)
-            assertTrue(state().messages.size <= 40)
+            assertEquals(12, state().messages.filterIsInstance<TextMessage.Owner>().size)
+            assertEquals(24, state().messages.size)
         }
 
     @Test

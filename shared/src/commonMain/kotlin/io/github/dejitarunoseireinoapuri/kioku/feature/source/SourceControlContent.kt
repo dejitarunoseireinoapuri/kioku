@@ -48,9 +48,10 @@ internal fun SourceControlContent(
     val working = state is SourceControlState.Working
     val enabled = !working && ready.feedback != ControlFeedback.Processing && ready.forget == null
     SourceRecordedDate(ready.source.source)
-    ready.source.items.forEachIndexed { index, item ->
+    ready.sources.flatMap { it.items }.forEachIndexed { index, item ->
         ControlItem(item, index, ready, enabled, onEvent)
     }
+    ready.notice?.let { ControlChangeNotice(it) }
     if (working) {
         ContentLoadingNotice(
             stringResource(

@@ -48,6 +48,9 @@ export class ApplyMessage {
         action: plan.action,
         correction: plan.correction,
         zone: input.turn.zone,
+        ...(input.continueManagement !== undefined
+          ? { continueManagement: input.continueManagement }
+          : {}),
         ...(plan.action === "forget" && plan.forgetScope
           ? { forgetScope: plan.forgetScope }
           : {}),

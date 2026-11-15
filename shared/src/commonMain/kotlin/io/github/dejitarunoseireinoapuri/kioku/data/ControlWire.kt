@@ -5,6 +5,7 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.EditableSource
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChange
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryItem
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemorySource
+import io.github.dejitarunoseireinoapuri.kioku.domain.SourceReplacement
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -56,7 +57,8 @@ internal fun parseMemoryChange(
     requestId: String,
 ): MemoryChange {
     val value = controlObject(json)
-    require(value.keys == setOf("apiVersion", "operationId", "status", "text", "sources", "memoryEpoch"))
+    val fields = setOf("apiVersion", "operationId", "status", "text", "sources", "memoryEpoch")
+    require(value.keys - "changes" == fields)
     require(value.controlText("operationId") == requestId)
     val text = value.controlText("text")
     val sources = value.getValue("sources").jsonArray
@@ -70,23 +72,26 @@ internal fun parseMemoryChange(
         }
     require(ids.distinct().size == ids.size)
     val revision = controlRevision(value)
-    return when (value.controlText("status")) {
+    val changes = parseSourceReplacements(value)
+    val status = value.controlText("status")
+    if (status in setOf("needsClarification", "processing")) require(sources.isEmpty() && changes.isEmpty())
+    return when (status) {
         "corrected" -> {
             require(sources.isNotEmpty() && text.isNotBlank())
-            MemoryChange.Confirmed(ChangeAction.Correct, revision)
+            MemoryChange.Confirmed(ChangeAction.Correct, revision, ids, replacements = changes)
         }
 
         "forgotten" -> {
-            MemoryChange.Confirmed(ChangeAction.Forget, revision)
+            MemoryChange.Confirmed(ChangeAction.Forget, revision, ids, replacements = changes)
         }
 
         "needsClarification" -> {
-            require(text.isNotBlank() && sources.isEmpty())
+            require(text.isNotBlank())
             MemoryChange.Clarification(text)
         }
 
         "processing" -> {
-            require(text.isEmpty() && sources.isEmpty())
+            require(text.isEmpty())
             MemoryChange.Processing
         }
 
@@ -94,6 +99,28 @@ internal fun parseMemoryChange(
             error("Invalid memory change")
         }
     }
+}
+
+private fun parseSourceReplacements(value: JsonObject): List<SourceReplacement> {
+    val entries = value["changes"]?.jsonArray ?: return emptyList()
+    require(entries.size <= MAX_CONTROL_CHANGES)
+    val changes =
+        entries.map { entry ->
+            val item = entry.jsonObject
+            require(item.keys == setOf("sourceId", "sourceIds"))
+            val previous = item.controlText("sourceId").also { require(it.matches(CONTROL_UUID)) }
+            val ids =
+                item.getValue("sourceIds").jsonArray.map {
+                    require(it is JsonPrimitive && it.isString)
+                    it.content.also { id -> require(id.matches(CONTROL_UUID) && id != previous) }
+                }
+            require(ids.size <= 2 && ids.distinct().size == ids.size)
+            SourceReplacement(previous, ids)
+        }
+    require(changes.distinctBy { it.sourceId }.size == changes.size)
+    val ids = changes.flatMap { it.sourceIds }
+    require(ids.distinct().size == ids.size && changes.none { it.sourceId in ids })
+    return changes
 }
 
 private fun controlObject(json: String): JsonObject {
@@ -127,4 +154,5 @@ private const val MAX_CONTROL_ITEMS = 8
 private const val CONTROL_DATE_LENGTH = 10
 private const val MAX_CONTROL_ANSWER = 2400
 private const val MAX_CONTROL_PAYLOAD = 80000
+private const val MAX_CONTROL_CHANGES = 32
 private const val MAX_CONTROL_REVISION = 9007199254740991.0

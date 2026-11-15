@@ -148,15 +148,15 @@ class QueryViewModelTest {
         }
 
     @Test
-    fun visibleChatIsBoundedAndResetClearsItsSourcesAndMessages() =
+    fun visibleChatRetainsTheWholeSessionAndResetClearsItsSourcesAndMessages() =
         queryTest { _, model ->
             repeat(25) { index ->
                 send(model, "Pregunta ficticia $index")
                 runCurrent()
             }
             val messages = model.state.value.query.messages
-            assertEquals(20, messages.size)
-            assertEquals("Pregunta ficticia 15", assertIs<QueryMessage.Question>(messages.first()).text)
+            assertEquals(50, messages.size)
+            assertEquals("Pregunta ficticia 0", assertIs<QueryMessage.Question>(messages.first()).text)
             model.onEvent(ConversationEvent.Query(QueryAction.Reset))
             assertTrue(
                 model.state.value.query.messages

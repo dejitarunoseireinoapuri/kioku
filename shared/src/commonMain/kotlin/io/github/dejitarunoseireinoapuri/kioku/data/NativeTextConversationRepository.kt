@@ -221,7 +221,7 @@ class NativeTextConversationRepository(
             when (val result = parseMemoryChange(json, command.ids.action)) {
                 is MemoryChange.Confirmed -> {
                     require(result.action == command.plan.action)
-                    TextOutcome.Changed(result)
+                    TextOutcome.Changed(result.forSource(command.plan.sourceId))
                 }
 
                 is MemoryChange.Clarification -> {

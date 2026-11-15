@@ -15,9 +15,12 @@ data class ButtonFeedback(
 
 /** Pointer release/cancellation restores the label; keyboard focus remains visible without a halo. */
 @Composable
-fun rememberButtonFeedback(restingColor: Color): ButtonFeedback {
+fun rememberButtonFeedback(
+    restingColor: Color,
+    pressedColor: Color = KiokuColors.Coral,
+): ButtonFeedback {
     val interaction = remember { MutableInteractionSource() }
     val pressed by interaction.collectIsPressedAsState()
     val focused by interaction.collectIsFocusedAsState()
-    return ButtonFeedback(interaction, if (pressed || focused) KiokuColors.Coral else restingColor)
+    return ButtonFeedback(interaction, if (pressed || focused) pressedColor else restingColor)
 }

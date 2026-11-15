@@ -69,7 +69,7 @@ class LiveSharedEvidenceTest {
         selectForget()
         click("Sí, olvidar")
         compose.waitUntil(SHARED_TIMEOUT) {
-            compose.onAllNodesWithText("He olvidado «", substring = true).fetchSemanticsNodes().isNotEmpty()
+            compose.onAllNodesWithText("Recuerdo borrado").fetchSemanticsNodes().isNotEmpty()
         }
         verifyQueries()
     }

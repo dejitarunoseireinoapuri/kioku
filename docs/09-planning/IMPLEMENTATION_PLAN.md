@@ -180,4 +180,6 @@ Ampliación actual: copias semánticas entre relatos activas y aceptadas en Hono
 
 Estas opciones no comprometen fechas ni autorizan conexiones, escrituras externas o publicación.
 
+Refinamiento K4 solicitado el 15 de noviembre: permanecer en Gestionar tras cambios, confirmar con «Sí, olvidar» de fondo coral y refrescar los datos vigentes; conservar originales deshabilitados sin menú y avisos cronológicos en el feed, sin límite artificial de mensajes, solo en RAM hasta cerrar/reiniciar o pasar 30 minutos en segundo plano. El cliente y las dos funciones de control se coordinan mediante continueManagement optativo. La comprobación local/Honor con fixtures está completada; la activación de applyMessage/changeMemory y el recorrido productivo nuevo requieren autorización específica y siguen pendientes en la [evidencia K4](K4_VALIDATION.md). No cierra K4 ni acredita iOS.
+
 Las evaluaciones históricas conservan sus configuraciones, fallos e interrupciones; v4 no los reescribe. El cierre funcional usa revisión contra fuentes separada del diagnóstico automático, con las adjudicaciones por caso disponibles en el informe. Cualquier ajuste futuro basado en j lo convierte en regresión y requiere una reserva nueva para una nueva aceptación independiente. El rendimiento pendiente no se oculta cambiando el reloj, el razonamiento o el objetivo.

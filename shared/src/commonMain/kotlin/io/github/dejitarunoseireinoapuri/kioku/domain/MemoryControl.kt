@@ -16,6 +16,11 @@ enum class ChangeAction { Correct, Forget }
 
 enum class ForgetScope { Source, AllOccurrences }
 
+data class SourceReplacement(
+    val sourceId: String,
+    val sourceIds: List<String>,
+)
+
 data class MemoryChangeCommand(
     val requestId: String,
     val sourceId: String,
@@ -31,6 +36,9 @@ sealed interface MemoryChange {
     data class Confirmed(
         val action: ChangeAction,
         val memoryRevision: Long,
+        val sourceIds: List<String> = emptyList(),
+        val previousSourceId: String? = null,
+        val replacements: List<SourceReplacement> = emptyList(),
     ) : MemoryChange
 
     data class Clarification(

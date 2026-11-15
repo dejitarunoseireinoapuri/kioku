@@ -26,17 +26,22 @@ import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
 import io.github.dejitarunoseireinoapuri.kioku.design.TopBar
 import io.github.dejitarunoseireinoapuri.kioku.design.memoryChangeText
+import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
+import io.github.dejitarunoseireinoapuri.kioku.domain.EditableSource
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChange
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryControlRepository
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.back
+import io.github.dejitarunoseireinoapuri.kioku.resources.control_deleted
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_failed
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_loading
+import io.github.dejitarunoseireinoapuri.kioku.resources.control_refresh_failed
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_reload
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_retry
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_title
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_unavailable
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_uncertain
+import io.github.dejitarunoseireinoapuri.kioku.resources.control_updated
 import io.github.dejitarunoseireinoapuri.kioku.resources.icon_back
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -47,15 +52,16 @@ fun SourceControlRoute(
     sourceId: String,
     repository: MemoryControlRepository,
     onBack: () -> Unit,
-    viewModel: SourceControlViewModel = koinViewModel(parameters = { parametersOf(repository, sourceId) }),
+    viewModel: SourceControlViewModel =
+        koinViewModel(parameters = { parametersOf(repository, sourceId) }),
     onMutation: () -> Unit = {},
-    onChanged: (MemoryChange.Confirmed, String?) -> Unit,
+    onChanged: (MemoryChange.Confirmed) -> Unit,
 ) {
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.check() }
     LifecycleEventEffect(Lifecycle.Event.ON_PAUSE) { viewModel.conceal() }
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val done = state as? SourceControlState.Done
-    LaunchedEffect(done) { done?.let { onChanged(it.result, it.forgottenText) } }
+    val change by viewModel.changes.collectAsStateWithLifecycle()
+    LaunchedEffect(change) { viewModel.consumeChange()?.let(onChanged) }
     SourceControlScreen(state, { event ->
         if (event == SourceControlEvent.Apply || event == SourceControlEvent.ConfirmForget ||
             event == SourceControlEvent.Retry
@@ -75,6 +81,7 @@ fun SourceControlScreen(
     val scroll = rememberScrollState()
     val working = state is SourceControlState.Working
     val feedback = (state as? SourceControlState.Ready)?.feedback
+    val notice = (state as? SourceControlState.Ready)?.notice
     val forward = controlInputEvents(onEvent)
     (state as? SourceControlState.Ready)?.forget?.let { pending ->
         ForgetConfirmationDialog(
@@ -83,8 +90,8 @@ fun SourceControlScreen(
             { forward(SourceControlEvent.CancelForget) },
         )
     }
-    LaunchedEffect(working, feedback, scroll.maxValue) {
-        if (working || feedback != null) scroll.animateScrollTo(scroll.maxValue)
+    LaunchedEffect(working, feedback, notice, scroll.maxValue) {
+        if (working || feedback != null || notice != null) scroll.animateScrollTo(scroll.maxValue)
     }
     Column(Modifier.fillMaxSize()) {
         TopBar(
@@ -96,26 +103,50 @@ fun SourceControlScreen(
             Modifier.weight(1f).verticalScroll(scroll).padding(KiokuSpacing.Large),
             verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large),
         ) {
-            when (state) {
-                SourceControlState.Loading -> {
-                    ContentLoadingNotice(stringResource(Res.string.control_loading))
-                }
-
-                SourceControlState.Missing -> {
-                    Text(stringResource(Res.string.control_unavailable))
-                    ActionButton(stringResource(Res.string.control_reload), { onEvent(SourceControlEvent.Reload) })
-                }
-
-                is SourceControlState.Done -> {
-                    Text(memoryChangeText(state.result.action, state.forgottenText))
-                }
-
-                else -> {
-                    SourceControlContent(state, forward)
-                }
-            }
+            ControlScreenContent(state, forward)
         }
     }
+}
+
+@Composable
+private fun ControlScreenContent(
+    state: SourceControlState,
+    onEvent: (SourceControlEvent) -> Unit,
+) {
+    when (state) {
+        SourceControlState.Loading -> {
+            ContentLoadingNotice(stringResource(Res.string.control_loading))
+        }
+
+        SourceControlState.Missing -> {
+            Text(stringResource(Res.string.control_unavailable))
+            ActionButton(stringResource(Res.string.control_reload), { onEvent(SourceControlEvent.Reload) })
+        }
+
+        is SourceControlState.Done -> {
+            ControlChangeNotice(state.result.action)
+        }
+
+        is SourceControlState.Refreshing -> {
+            ControlChangeNotice(state.result.action)
+            ContentLoadingNotice(stringResource(Res.string.control_loading))
+        }
+
+        is SourceControlState.RefreshFailed -> {
+            ControlChangeNotice(state.result.action)
+            Text(stringResource(Res.string.control_refresh_failed))
+            ActionButton(stringResource(Res.string.control_reload), { onEvent(SourceControlEvent.Reload) })
+        }
+
+        else -> {
+            SourceControlContent(state, onEvent)
+        }
+    }
+}
+
+@Composable
+internal fun ControlChangeNotice(action: ChangeAction) {
+    Text(stringResource(if (action == ChangeAction.Forget) Res.string.control_deleted else Res.string.control_updated))
 }
 
 @Composable

@@ -63,7 +63,8 @@ class LiveSourceControlTest {
         compose.onNode(hasText("Corregir") and movie).performScrollTo().performClick()
         compose.onNodeWithTag("correction-input").performTextInput(CORRECTION)
         compose.onNodeWithText("Aplicar corrección").performScrollTo().performClick()
-        waitVisible("Dato corregido.")
+        waitVisible("Recuerdo modificado")
+        compose.onNodeWithContentDescription("Volver").performClick()
         awaitReady()
         compose.onNodeWithTag("intent-Ask").performClick()
         send("En la prueba K4farol8254, que pelicula quiero ver?")
@@ -83,7 +84,7 @@ class LiveSourceControlTest {
         waitVisible("Sí, olvidar")
         compose.onNodeWithText("Sí, olvidar").performScrollTo().performClick()
         compose.waitUntil(LIVE_TIMEOUT) {
-            compose.onAllNodesWithText("He olvidado «", substring = true).fetchSemanticsNodes().isNotEmpty()
+            compose.onAllNodesWithText("Recuerdo borrado").fetchSemanticsNodes().isNotEmpty()
         }
         verifyCurrentEvidence()
     }

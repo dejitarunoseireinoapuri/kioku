@@ -68,6 +68,7 @@ export const decisionInput = z.strictObject({
   turn: routingInput,
   plan: routingPlan,
   decision: z.enum(["apply", "accept", "reject"]),
+  continueManagement: z.boolean().optional(),
 });
 export type RoutingInput = z.infer<typeof routingInput>;
 export type RoutingPlan = z.infer<typeof routingPlan>;

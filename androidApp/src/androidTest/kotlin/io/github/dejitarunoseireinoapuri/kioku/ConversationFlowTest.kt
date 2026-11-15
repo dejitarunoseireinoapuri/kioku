@@ -9,11 +9,14 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.isEnabled
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
@@ -22,6 +25,7 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.text.AnnotatedString
 import io.github.dejitarunoseireinoapuri.kioku.domain.AnswerStatus
@@ -89,7 +93,7 @@ class ConversationFlowTest {
     }
 
     @Test
-    fun eachModeRestoresItsOwnTenLatestExchanges() {
+    fun eachModeRestoresItsEntireSessionAndEarlierMessagesRemainReachable() {
         repository.answer = {
             TextOutcome.Asked(QueryOutcome.Reply(AnswerStatus.NotFound, "Respuesta de la consulta.", emptyList()))
         }
@@ -102,20 +106,22 @@ class ConversationFlowTest {
         repeat(11) { index ->
             send("Recuerdo $index")
             compose.waitUntil(5000) {
-                compose.onAllNodesWithContentDescription("Gestionar este recuerdo").fetchSemanticsNodes().size ==
-                    minOf(index + 1, 10)
+                compose.onAllNodes(hasTestTag("text-composer") and isEnabled()).fetchSemanticsNodes().isNotEmpty()
             }
+            compose.onNodeWithTag("conversation-messages").performScrollToNode(hasText("Recuerdo $index"))
+            compose.onNodeWithText("Recuerdo $index").assertIsDisplayed()
         }
-        compose.onNodeWithText("Recuerdo 0").assertDoesNotExist()
-        compose.onNodeWithText("Recuerdo 1").assertExists()
+        compose.onNodeWithTag("conversation-messages").performScrollToNode(hasText("Recuerdo 0"))
+        compose.onNodeWithText("Recuerdo 0").assertIsDisplayed()
+        compose.onNodeWithTag("conversation-messages").performScrollToNode(hasText("Recuerdo 10"))
         compose.onNodeWithText("Recuerdo 10").assertExists()
         compose.onNodeWithText("Primera pregunta.").assertDoesNotExist()
         compose.onNodeWithTag("intent-Ask").performClick()
         visible("Respuesta de la consulta.")
         compose.onNodeWithText("Recuerdo 10").assertDoesNotExist()
         compose.onNodeWithTag("intent-Tell").performClick()
-        compose.onNodeWithText("Recuerdo 1").assertExists()
-        compose.onNodeWithText("Recuerdo 0").assertDoesNotExist()
+        compose.onNodeWithTag("conversation-messages").performScrollToNode(hasText("Recuerdo 0"))
+        compose.onNodeWithText("Recuerdo 0").assertIsDisplayed()
     }
 
     @Test
@@ -221,7 +227,8 @@ class ConversationFlowTest {
                 .text
                 .contains("Aclaración: Mi primo."),
         )
-        compose.onNodeWithText("Olvida lo del examen de Pablo.").assertDoesNotExist()
+        compose.onNodeWithTag("conversation-messages").performScrollToNode(hasText("Olvida lo del examen de Pablo."))
+        compose.onNodeWithText("Olvida lo del examen de Pablo.").assertIsDisplayed()
         compose.onNodeWithText("¿Qué Pablo?").assertDoesNotExist()
         compose.onNodeWithTag("text-composer").performTextInput("Texto nuevo sin enviar")
         compose.onNodeWithText("He olvidado «Examen de mi primo Pablo.».").assertDoesNotExist()
@@ -245,9 +252,13 @@ class ConversationFlowTest {
 
     private fun savedVisible() {
         compose.waitUntil(5000) {
-            compose.onAllNodesWithContentDescription("Gestionar este recuerdo").fetchSemanticsNodes().isNotEmpty()
+            compose.onAllNodesWithTag("content-loading").fetchSemanticsNodes().isEmpty()
         }
-        compose.onNodeWithContentDescription("Gestionar este recuerdo").performScrollTo().assertIsDisplayed()
+        compose
+            .onNodeWithTag(
+                "conversation-messages",
+            ).performScrollToNode(hasContentDescription("Gestionar este recuerdo"))
+        compose.onNodeWithContentDescription("Gestionar este recuerdo").assertIsDisplayed()
         compose.onNodeWithText("Recuerdo guardado").assertDoesNotExist()
         compose.onNodeWithText("Ver texto original").assertDoesNotExist()
     }
@@ -326,7 +337,7 @@ class ConversationFlowTest {
     }
 }
 
-private class ConversationFlowFixture : TextConversationRepository {
+internal class ConversationFlowFixture : TextConversationRepository {
     val commands = mutableListOf<TextCommand>()
     private var ids = 0
     var answer: suspend (TextCommand) -> TextOutcome = { TextOutcome.Offered(it.text) }

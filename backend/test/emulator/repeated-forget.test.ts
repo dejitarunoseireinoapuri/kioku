@@ -159,6 +159,50 @@ test("scope source remains narrow, and a changed input cannot reuse an all-occur
   await assert.rejects(service.execute(uid, command, provider, allowed));
 });
 
+test("management continuation exposes only the selected story's current remainder and preserves legacy replies", async () => {
+  const { command, entries } = await seedCopies(3);
+  const next = { ...command, continueManagement: true };
+  const result = await service.execute(uid, next, provider, allowed);
+  assert.equal(result.status, "forgotten");
+  assert.equal(result.sources.length, 1);
+  assert.ok(
+    !entries.some((entry) => entry.source.id === result.sources[0]!.sourceId),
+  );
+  const current = await store.details(uid, result.sources[0]!.sourceId);
+  assert.equal(result.changes?.length, 3);
+  assert.deepEqual(
+    result.changes?.find((c) => c.sourceId === command.sourceId)?.sourceIds,
+    [current.sourceId],
+  );
+  assert.equal(current.items.length, 1);
+  assert.equal(current.items[0]!.text, "El examen ficticio es el martes.");
+  assert.equal((await root.collection("sources").get()).size, 3);
+  const calls = model.calls;
+  assert.deepEqual(await service.execute(uid, next, provider, allowed), result);
+  assert.equal(model.calls, calls);
+  await assert.rejects(
+    service.execute(
+      uid,
+      { ...next, continueManagement: false },
+      provider,
+      allowed,
+    ),
+  );
+  await assert.rejects(
+    service.execute("different-owner", next, provider, allowed),
+  );
+  await root
+    .collection("operations")
+    .doc(command.requestId)
+    .update({
+      managementChanges: [
+        { sourceId: command.sourceId, sourceIds: [randomUUID()] },
+      ],
+    });
+  await assert.rejects(service.execute(uid, next, provider, allowed));
+  assert.equal((await root.collection("sources").get()).size, 3);
+});
+
 async function shareEvidence() {
   const seeded = await seedCopies();
   const write = db.batch();
