@@ -54,9 +54,9 @@ internal fun ConversationFeed(
     ) {
         items(messages, key = {
             it.id
-        }) { TextMessageContent(it, presentation, actions.onEvent, actions.onSource, actions.onManage) }
+        }) { TextMessageContent(it, presentation, actions.onEvent, actions.onManage) }
         if (visible) {
-            item("status") { TextConversationTail(conversation, actions.onEvent, actions.onSource) }
+            item("status") { TextConversationTail(conversation, actions.onEvent, actions.onManage) }
             state.feedback?.let { feedback -> item("feedback") { FeedbackMessage(feedback, state.forgottenText) } }
         }
         if (loading != null) item("loading") { ContentLoadingNotice(stringResource(loading)) }
@@ -66,5 +66,5 @@ internal fun ConversationFeed(
 internal data class FeedActions(
     val onEvent: (ConversationEvent) -> Unit,
     val onSource: (String) -> Unit,
-    val onManage: (String) -> Unit,
+    val onManage: (List<String>) -> Unit,
 )

@@ -7,11 +7,13 @@ import io.github.dejitarunoseireinoapuri.kioku.di.ConversationDependencies
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.EditableSource
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChange
+import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChangeDescription
 import io.github.dejitarunoseireinoapuri.kioku.feature.account.AccountState
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.ConversationEvent
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.ConversationScreen
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.ConversationState
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.ConversationViewModel
+import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.canManage
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.contentLoadingStatus
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.savedMessageSources
 import io.github.dejitarunoseireinoapuri.kioku.feature.settings.SettingsScreen
@@ -24,7 +26,7 @@ internal data class NavigationActions(
     val refresh: () -> Unit,
     val back: () -> Unit,
     val navigate: (Route) -> Unit,
-    val changed: (MemoryChange.Confirmed) -> Unit,
+    val changed: (MemoryChange.Confirmed, MemoryChangeDescription?) -> Unit,
     val current: NavKey?,
     val markMemoryChange: () -> Unit = {},
 )
@@ -80,20 +82,20 @@ internal fun kiokuEntries(
         )
     }
     entry<Route.Control> { route ->
-        ControlDestination(route.id, dependencies, actions)
+        ControlDestination(route.ids, dependencies, actions)
     }
 }
 
 @Composable
 private fun ControlDestination(
-    id: String,
+    ids: List<String>,
     dependencies: ConversationDependencies,
     actions: NavigationActions,
 ) {
     dependencies.controls?.let { repository ->
         CompositionViewModels {
             SourceControlRoute(
-                id,
+                ids,
                 repository,
                 actions.back,
                 onMutation = actions.markMemoryChange,
@@ -104,22 +106,16 @@ private fun ControlDestination(
 }
 
 private fun manageSavedSource(
-    id: String,
+    ids: List<String>,
     model: ConversationViewModel,
     dependencies: ConversationDependencies,
     actions: NavigationActions,
 ) {
     model.checkMemory {
         val current = model.state.value
-        val known =
-            id in
-                current.conversation
-                    ?.savedMessageSources()
-                    .orEmpty()
-                    .values ||
-                (current.capture as? CaptureOutcome.Saved)?.source?.id == id
+        val known = current.canManage(ids)
         if (known && dependencies.controls != null) {
-            actions.navigate(Route.Control(id))
+            actions.navigate(Route.Control(ids))
         } else {
             model.sourceActionUnavailable()
         }

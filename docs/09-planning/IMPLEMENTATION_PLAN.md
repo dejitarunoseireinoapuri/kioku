@@ -171,6 +171,8 @@ Ampliación actual: copias semánticas entre relatos activas y aceptadas en Hono
 
 **Fuera:** publicar en tiendas, monetizar o conectar otras aplicaciones no es necesario para uso personal.
 
+Refinamiento de presentación K4 entregado antes de avanzar: avisos con dato olvidado/cambio X→Y dentro de su misma caja y tres puntos → Gestionar desde las respuestas actuales de Preguntar, sin enlace al original. Múltiples fuentes, sus fechas y selección individual; los avisos solo permanecen en RAM del feed y nunca son contexto. 111 host y 29 casos UI Honor correctos; ajuste de fechas validado en 19 casos afectados. Sin backend nuevo, IA de prueba o datos reales modificados. iOS sigue requiriendo compilación/validación en Mac. Ver [evidencia K4](K4_VALIDATION.md).
+
 ## Después de la V1
 
 | Posible fase | Cuándo se define | Alcance por concretar |

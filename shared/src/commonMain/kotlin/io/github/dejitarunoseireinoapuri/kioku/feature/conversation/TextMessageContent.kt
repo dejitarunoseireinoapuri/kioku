@@ -4,8 +4,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
+import io.github.dejitarunoseireinoapuri.kioku.design.MemoryChangeNotice
 import io.github.dejitarunoseireinoapuri.kioku.design.Panel
-import io.github.dejitarunoseireinoapuri.kioku.design.memoryChangeText
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextOutcome
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.history_reply
@@ -16,16 +16,12 @@ internal fun TextMessageContent(
     message: TextMessage,
     presentation: MessageFeedPresentation,
     onEvent: (ConversationEvent) -> Unit,
-    onSource: (String) -> Unit,
-    onManage: (String) -> Unit,
+    onManage: (List<String>) -> Unit,
 ) {
     val state = presentation.state
     when (message) {
         is TextMessage.Notice -> {
-            Panel {
-                val text = presentation.forgottenText.takeIf { message.id == state.messages.lastOrNull()?.id }
-                Text(memoryChangeText(message.action, text))
-            }
+            MemoryChangeNotice(message.action, message.description)
         }
 
         is TextMessage.Owner -> {
@@ -33,7 +29,7 @@ internal fun TextMessageContent(
                 message.text,
                 presentation.sources[message.id],
                 !state.busy && !state.confirmingForget,
-                onManage,
+                { onManage(listOf(it)) },
                 message.historical,
             )
         }
@@ -50,7 +46,7 @@ internal fun TextMessageContent(
         }
 
         is TextMessage.Result -> {
-            TextResultContent(message, presentation, onEvent, onSource)
+            TextResultContent(message, presentation, onEvent, onManage)
         }
     }
 }
@@ -60,7 +56,7 @@ private fun TextResultContent(
     message: TextMessage.Result,
     presentation: MessageFeedPresentation,
     onEvent: (ConversationEvent) -> Unit,
-    onSource: (String) -> Unit,
+    onManage: (List<String>) -> Unit,
 ) {
     val state = presentation.state
     val offer = message.outcome as? TextOutcome.Offered
@@ -75,7 +71,7 @@ private fun TextResultContent(
             it,
             !state.busy && message.id == state.messages.lastOrNull()?.id,
             onEvent,
-            onSource,
+            AnswerManagement(!state.busy && !state.confirmingForget, onManage),
             message.captureCommand?.let {
                 CaptureRecoveryUi(
                     message.id,

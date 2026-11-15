@@ -10,6 +10,7 @@ import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -25,6 +26,7 @@ import androidx.compose.ui.test.swipeDown
 import androidx.compose.ui.text.AnnotatedString
 import io.github.dejitarunoseireinoapuri.kioku.domain.AnswerStatus
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureIssue
+import io.github.dejitarunoseireinoapuri.kioku.domain.EditableSource
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemorySource
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryCommand
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryOutcome
@@ -42,10 +44,14 @@ class QueryNavigationTest {
     val compose = createAndroidComposeRule<LifecycleTestActivity>()
     private val account = FixtureAccount()
     private val queries = QueryNavigationFixture()
+    private val controls = QueryManagementFixture()
 
     @Before
     fun openQueries() {
-        compose.runOnUiThread { LifecycleTestActivity.content = { KiokuApp(account, queryRepository = queries) } }
+        compose.runOnUiThread {
+            LifecycleTestActivity.content =
+                { KiokuApp(account, queryRepository = queries, controlRepository = controls) }
+        }
         compose.activityRule.scenario.recreate()
         compose.waitUntil(5000) { compose.onNodeWithTag("intent-Ask").isDisplayed() }
         compose.onNodeWithTag("intent-Ask").performClick()
@@ -61,8 +67,9 @@ class QueryNavigationTest {
         val longAnswer = "Respuesta ficticia extensa.\n".repeat(45)
         queries.answer = { queries.reply().copy(text = longAnswer) }
         send("Primera pregunta de prueba")
-        val reference = "Ver texto original 1 · 2026-11-13"
-        compose.waitUntil(5000) { compose.onAllNodesWithText(reference).onLast().isDisplayed() }
+        compose.waitUntil(
+            5000,
+        ) { compose.onAllNodesWithContentDescription("Gestionar este recuerdo").onLast().isDisplayed() }
         compose.onNodeWithTag("conversation-messages").performTouchInput { swipeDown() }
         val pending = CompletableDeferred<QueryOutcome>()
         queries.answer = { pending.await() }
@@ -72,16 +79,18 @@ class QueryNavigationTest {
         captureBrandScreen(compose.activity, "kioku-chat-inline-loading.png") { compose.onRoot().captureToImage() }
         assertEquals(1, compose.onAllNodesWithText(longAnswer).fetchSemanticsNodes().size)
         pending.complete(queries.reply())
-        compose.waitUntil(5000) { compose.onAllNodesWithText(reference).onLast().isDisplayed() }
+        compose.waitUntil(
+            5000,
+        ) { compose.onAllNodesWithContentDescription("Gestionar este recuerdo").onLast().isDisplayed() }
         compose.onNodeWithText("Primera pregunta de prueba").performScrollTo().assertIsDisplayed()
     }
 
     @Test
     fun answerWaitsForEvidenceAndLoadsTheCurrentSourceOnOpening() {
         val response = CompletableDeferred<QueryOutcome>()
-        val source = CompletableDeferred<MemorySource?>()
+        val source = CompletableDeferred<EditableSource?>()
         queries.answer = { response.await() }
-        queries.read = { source.await() }
+        controls.read = { source.await() }
         send("¿Qué película quiero ver?")
         visible("Buscando en tu memoria...")
         compose.onNodeWithTag("content-loading").assertIsDisplayed()
@@ -92,43 +101,36 @@ class QueryNavigationTest {
         captureBrandScreen(compose.activity, "kioku-compact-query.png") { compose.onRoot().captureToImage() }
         response.complete(queries.reply())
         visible("Quieres ver la película ficticia Loto.")
-        compose.onNodeWithText("Ver texto original 1 · 2026-11-13").performScrollTo().performClick()
-        visible("Cargando texto original...")
+        openManagement()
+        visible("Leyendo los datos actuales...")
         compose.onNodeWithTag("content-loading").assertIsDisplayed()
         compose.onNodeWithContentDescription("Volver").assertIsDisplayed()
-        source.complete(
-            MemorySource(
-                "fixture-query-source",
-                "Quiero ver la película ficticia Loto.",
-                "2026-11-13",
-                receivedAt = "2026-11-13T12:00:00Z",
-            ),
-        )
+        source.complete(controls.source())
         visible("Quiero ver la película ficticia Loto.")
         compose.onNodeWithText("Lo contaste el 13/11/2026").assertIsDisplayed()
         captureBrandScreen(compose.activity, "kioku-source-date.png") { compose.onRoot().captureToImage() }
         compose.onNodeWithContentDescription("Volver").performClick()
         visible("Quieres ver la película ficticia Loto.")
         assertEquals(1, queries.commands.size)
-        assertEquals(1, queries.sourceReads)
+        assertEquals(1, controls.reads)
     }
 
     @Test
     fun returningFromAPendingSourceKeepsTheAnswerAndDoesNotResubmit() {
-        val source = CompletableDeferred<MemorySource?>()
-        queries.read = { source.await() }
+        val source = CompletableDeferred<EditableSource?>()
+        controls.read = { source.await() }
         send("¿Qué película quiero ver?")
         visible("Quieres ver la película ficticia Loto.")
-        compose.onNodeWithText("Ver texto original 1 · 2026-11-13").performScrollTo().performClick()
-        visible("Cargando texto original...")
+        openManagement()
+        visible("Leyendo los datos actuales...")
         compose.onNodeWithContentDescription("Volver").performClick()
         visible("Quieres ver la película ficticia Loto.")
-        compose.onNodeWithTag("content-loading").assertIsDisplayed()
-        source.complete(MemorySource("fixture-query-source", "Quiero ver la película ficticia Loto.", "2026-11-13"))
+        compose.onNodeWithTag("content-loading").assertDoesNotExist()
+        source.complete(controls.source())
         compose.waitUntil(5000) { !compose.onNodeWithTag("content-loading").isDisplayed() }
         visible("Quieres ver la película ficticia Loto.")
         assertEquals(1, queries.commands.size)
-        assertEquals(1, queries.sourceReads)
+        assertEquals(1, controls.reads)
     }
 
     @Test
@@ -209,6 +211,12 @@ class QueryNavigationTest {
     private fun send(text: String) {
         compose.onNodeWithTag("text-composer").performTextInput(text)
         compose.onNodeWithTag("text-composer").performImeAction()
+    }
+
+    private fun openManagement() {
+        compose.onNodeWithText("Ver texto original 1 · 2026-11-13").assertDoesNotExist()
+        compose.onNodeWithContentDescription("Gestionar este recuerdo").performScrollTo().performClick()
+        compose.onNodeWithText("Gestionar").performClick()
     }
 
     private fun visible(text: String) {

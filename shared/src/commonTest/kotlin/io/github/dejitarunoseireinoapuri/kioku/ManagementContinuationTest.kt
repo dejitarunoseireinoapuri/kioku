@@ -36,6 +36,7 @@ class ManagementContinuationTest {
             val ready = assertIs<SourceControlState.Ready>(model.state.value)
             assertEquals(listOf("Examen el martes."), ready.source.items.map { it.text })
             assertEquals(ChangeAction.Forget, ready.notice)
+            assertEquals("Película Loto.", ready.description?.previousText)
             assertEquals(listOf("survivor"), model.consumeChange()!!.sourceIds)
             assertNull(model.consumeChange())
             model.onEvent(SourceControlEvent.Edit("survivor-1"))
@@ -63,6 +64,8 @@ class ManagementContinuationTest {
                 ready.sources.flatMap { it.items }.map { it.text },
             )
             assertEquals(ChangeAction.Correct, ready.notice)
+            assertEquals("Examen el martes.", ready.description?.previousText)
+            assertEquals("Examen el viernes.", ready.description?.replacementText)
             model.onEvent(SourceControlEvent.Forget("corrected-1"))
             assertEquals(
                 "Examen el viernes.",

@@ -25,7 +25,7 @@ fun appModule() =
             )
         }
         viewModel { parameters ->
-            SourceControlViewModel(parameters.get<MemoryControlRepository>(), parameters.get<String>())
+            SourceControlViewModel(parameters.get<MemoryControlRepository>(), parameters.get<List<String>>())
         }
         viewModel { (account: AccountRepository) -> AccountViewModel(account) }
     }

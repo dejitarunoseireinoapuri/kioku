@@ -24,11 +24,13 @@ import io.github.dejitarunoseireinoapuri.kioku.design.ForgetConfirmationDialog
 import io.github.dejitarunoseireinoapuri.kioku.design.IconAction
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
+import io.github.dejitarunoseireinoapuri.kioku.design.MemoryChangeNotice
 import io.github.dejitarunoseireinoapuri.kioku.design.TopBar
 import io.github.dejitarunoseireinoapuri.kioku.design.memoryChangeText
 import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.domain.EditableSource
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChange
+import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChangeDescription
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryControlRepository
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.back
@@ -49,19 +51,19 @@ import org.koin.core.parameter.parametersOf
 
 @Composable
 fun SourceControlRoute(
-    sourceId: String,
+    sourceIds: List<String>,
     repository: MemoryControlRepository,
     onBack: () -> Unit,
     viewModel: SourceControlViewModel =
-        koinViewModel(parameters = { parametersOf(repository, sourceId) }),
+        koinViewModel(parameters = { parametersOf(repository, sourceIds) }),
     onMutation: () -> Unit = {},
-    onChanged: (MemoryChange.Confirmed) -> Unit,
+    onChanged: (MemoryChange.Confirmed, MemoryChangeDescription?) -> Unit,
 ) {
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.check() }
     LifecycleEventEffect(Lifecycle.Event.ON_PAUSE) { viewModel.conceal() }
     val state by viewModel.state.collectAsStateWithLifecycle()
     val change by viewModel.changes.collectAsStateWithLifecycle()
-    LaunchedEffect(change) { viewModel.consumeChange()?.let(onChanged) }
+    LaunchedEffect(change) { viewModel.consumeChange()?.let { onChanged(it, viewModel.changeDescription) } }
     SourceControlScreen(state, { event ->
         if (event == SourceControlEvent.Apply || event == SourceControlEvent.ConfirmForget ||
             event == SourceControlEvent.Retry
@@ -124,16 +126,16 @@ private fun ControlScreenContent(
         }
 
         is SourceControlState.Done -> {
-            ControlChangeNotice(state.result.action)
+            ControlChangeNotice(state.result.action, state.description)
         }
 
         is SourceControlState.Refreshing -> {
-            ControlChangeNotice(state.result.action)
+            ControlChangeNotice(state.result.action, state.description)
             ContentLoadingNotice(stringResource(Res.string.control_loading))
         }
 
         is SourceControlState.RefreshFailed -> {
-            ControlChangeNotice(state.result.action)
+            ControlChangeNotice(state.result.action, state.description)
             Text(stringResource(Res.string.control_refresh_failed))
             ActionButton(stringResource(Res.string.control_reload), { onEvent(SourceControlEvent.Reload) })
         }
@@ -145,8 +147,15 @@ private fun ControlScreenContent(
 }
 
 @Composable
-internal fun ControlChangeNotice(action: ChangeAction) {
-    Text(stringResource(if (action == ChangeAction.Forget) Res.string.control_deleted else Res.string.control_updated))
+internal fun ControlChangeNotice(
+    action: ChangeAction,
+    description: MemoryChangeDescription?,
+) {
+    MemoryChangeNotice(
+        action,
+        description,
+        stringResource(if (action == ChangeAction.Forget) Res.string.control_deleted else Res.string.control_updated),
+    )
 }
 
 @Composable

@@ -16,7 +16,6 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.query_limit
 import io.github.dejitarunoseireinoapuri.kioku.resources.query_repeat
 import io.github.dejitarunoseireinoapuri.kioku.resources.query_reset
 import io.github.dejitarunoseireinoapuri.kioku.resources.query_restart
-import io.github.dejitarunoseireinoapuri.kioku.resources.query_source
 import io.github.dejitarunoseireinoapuri.kioku.resources.retry
 import org.jetbrains.compose.resources.stringResource
 
@@ -25,6 +24,7 @@ fun QueryBody(
     state: QueryState,
     onEvent: (ConversationEvent) -> Unit,
     onSource: (String) -> Unit,
+    onManage: (List<String>) -> Unit = { onSource(it.first()) },
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large)) {
         state.messages.forEach { message ->
@@ -37,7 +37,7 @@ fun QueryBody(
                     QueryResultBody(
                         message.outcome,
                         onEvent,
-                        onSource,
+                        AnswerManagement(!state.busy, onManage),
                         interactive =
                             !state.busy && message.id == state.messages.lastOrNull()?.id &&
                                 state.outcome == message.outcome,
@@ -47,7 +47,7 @@ fun QueryBody(
         }
         val last = (state.messages.lastOrNull() as? QueryMessage.Result)?.outcome
         if (!state.busy && state.outcome != null && last != state.outcome) {
-            QueryResultBody(state.outcome, onEvent, onSource)
+            QueryResultBody(state.outcome, onEvent, AnswerManagement(!state.busy, onManage))
         }
         if (state.awaitingClarification) {
             ActionButton(
@@ -62,18 +62,12 @@ fun QueryBody(
 private fun QueryResultBody(
     outcome: QueryOutcome?,
     onEvent: (ConversationEvent) -> Unit,
-    onSource: (String) -> Unit,
+    management: AnswerManagement,
     interactive: Boolean = true,
 ) {
     when (outcome) {
         is QueryOutcome.Reply -> {
-            Panel { Text(outcome.text) }
-            outcome.sources.forEachIndexed { index, source ->
-                ActionButton(
-                    stringResource(Res.string.query_source, index + 1, source.recordedOn),
-                    { onSource(source.sourceId) },
-                )
-            }
+            AnswerMemoryMessage(outcome, management)
         }
 
         is QueryOutcome.Failed, QueryOutcome.Processing -> {

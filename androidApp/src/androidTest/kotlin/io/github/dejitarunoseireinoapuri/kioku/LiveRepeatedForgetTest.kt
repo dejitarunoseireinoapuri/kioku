@@ -86,11 +86,11 @@ class LiveRepeatedForgetTest {
         ready()
         send("En la prueba K4eco3746, ¿cuándo es el simulacro de japonés K4eco3746?")
         compose.waitUntil(REPEATED_LIVE_TIMEOUT) {
-            compose.onAllNodesWithText("Ver texto original", substring = true).fetchSemanticsNodes().isNotEmpty()
+            compose.onAllNodesWithContentDescription("Gestionar este recuerdo").fetchSemanticsNodes().isNotEmpty()
         }
         assertTrue(compose.onAllNodesWithText("27", substring = true).fetchSemanticsNodes().isNotEmpty())
         compose
-            .onAllNodesWithText("Ver texto original", substring = true)
+            .onAllNodesWithContentDescription("Gestionar este recuerdo")
             .onFirst()
             .performScrollTo()
             .performClick()

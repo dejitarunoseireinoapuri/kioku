@@ -6,6 +6,7 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.domain.ForgetScope
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChange
+import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChangeDescription
 import io.github.dejitarunoseireinoapuri.kioku.domain.OfferDecision
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryCommand
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextCommand
@@ -16,6 +17,7 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.TextIntent
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextPlan
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextWorkIds
+import io.github.dejitarunoseireinoapuri.kioku.domain.describeChange
 import io.github.dejitarunoseireinoapuri.kioku.domain.previewForget
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -79,6 +81,7 @@ class NativeTextConversationRepository(
         val resolved = resolve(command)
         resolved.outcome?.let { return TextExecution(resolved.command, it) }
         onPrepared(resolved.command)
+        val description = describeChange(resolved.command)
         val result =
             try {
                 perform(resolved.command)
@@ -95,7 +98,27 @@ class NativeTextConversationRepository(
             } else {
                 result
             }
-        return TextExecution(resolved.command, outcome)
+        return TextExecution(resolved.command, outcome, description.takeIf { outcome is TextOutcome.Changed })
+    }
+
+    private suspend fun describeChange(command: TextCommand): MemoryChangeDescription? {
+        val plan = command.plan as? TextPlan.Change
+        return when {
+            plan == null -> {
+                null
+            }
+
+            plan.action == ChangeAction.Forget -> {
+                command.forgetApproval?.let { MemoryChangeDescription(it.text) }
+            }
+
+            else -> {
+                controls
+                    .details(plan.sourceId)
+                    ?.takeIf { it.version == plan.version && it.memoryRevision == plan.stamp.revision }
+                    ?.describeChange(plan.memoryIds, plan.correction)
+            }
+        }
     }
 
     private suspend fun resolve(command: TextCommand): RoutingResolution {

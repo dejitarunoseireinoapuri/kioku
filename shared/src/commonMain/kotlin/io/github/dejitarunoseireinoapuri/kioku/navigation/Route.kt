@@ -22,8 +22,10 @@ sealed interface Route : NavKey {
 
     @Serializable
     data class Control(
-        val id: String,
-    ) : Route
+        val ids: List<String>,
+    ) : Route {
+        constructor(id: String) : this(listOf(id))
+    }
 }
 
 val navigationConfiguration =

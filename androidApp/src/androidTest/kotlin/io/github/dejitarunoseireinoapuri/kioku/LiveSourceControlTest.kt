@@ -5,6 +5,7 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.isEnabled
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -69,11 +70,11 @@ class LiveSourceControlTest {
         compose.onNodeWithTag("intent-Ask").performClick()
         send("En la prueba K4farol8254, que pelicula quiero ver?")
         compose.waitUntil(LIVE_TIMEOUT) {
-            compose.onAllNodesWithText("Ver texto original", substring = true).fetchSemanticsNodes().isNotEmpty()
+            compose.onAllNodesWithContentDescription("Gestionar este recuerdo").fetchSemanticsNodes().isNotEmpty()
         }
         assertTrue(compose.onAllNodesWithText("Niebla", substring = true).fetchSemanticsNodes().isNotEmpty())
         compose
-            .onAllNodesWithText("Ver texto original", substring = true)
+            .onAllNodesWithContentDescription("Gestionar este recuerdo")
             .onFirst()
             .performScrollTo()
             .performClick()

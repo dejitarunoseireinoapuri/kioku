@@ -7,6 +7,7 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChange
+import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChangeDescription
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryControlRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.ReadReferencedSource
@@ -75,7 +76,7 @@ class ConversationViewModel(
                     }
                 }
             },
-            ::memoryChanged,
+            { result, description -> memoryChanged(result, description = description) },
             { revision ->
                 query.setRevision(revision)
                 visibility.accept(revision)
@@ -100,12 +101,14 @@ class ConversationViewModel(
     fun memoryChanged(
         result: MemoryChange.Confirmed? = null,
         forgottenText: String? = null,
+        description: MemoryChangeDescription? = null,
     ) {
         operationGeneration++
         captureJob?.cancel()
         command = null
         query.reset(clearDraft = true)
-        messages.reset(clearDraft = true, notice = result?.action, change = result)
+        val details = description ?: forgottenText?.let { MemoryChangeDescription(it) }
+        messages.reset(clearDraft = true, notice = result?.action, change = result, description = details)
         result?.memoryRevision?.let {
             visibility.accept(it)
             query.setRevision(it)
@@ -118,7 +121,7 @@ class ConversationViewModel(
                 capture = null,
                 capturing = false,
                 draft = "",
-                forgottenText = forgottenText.takeIf { result?.action == ChangeAction.Forget },
+                forgottenText = details?.previousText.takeIf { result?.action == ChangeAction.Forget },
                 feedback =
                     result?.takeIf { showFeedback }?.let { change ->
                         if (change.action ==

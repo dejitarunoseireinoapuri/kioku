@@ -107,6 +107,7 @@ sealed interface TextOutcome {
 data class TextExecution(
     val command: TextCommand,
     val outcome: TextOutcome,
+    val changeDescription: MemoryChangeDescription? = null,
 )
 
 interface TextConversationRepository {

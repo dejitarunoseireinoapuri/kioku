@@ -132,6 +132,8 @@
     <string name="control_correcting">Aplicando la corrección...</string>
     <string name="control_forgetting">Retirando el recuerdo...</string>
     <string name="control_corrected">Dato corregido.</string>
+    <string name="control_corrected_detail">Se ha modificado el recuerdo «%1$s» a «%2$s».</string>
+    <string name="control_corrected_target">Se ha modificado el recuerdo «%1$s».</string>
     <string name="control_forgotten">He olvidado «%1$s».</string>
     <string name="control_forgotten_fallback">He olvidado el recuerdo.</string>
     <string name="forget_confirm_title">¿Borrar este recuerdo?</string>

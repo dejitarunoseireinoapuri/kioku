@@ -231,7 +231,7 @@ class ConversationFlowTest {
         compose.onNodeWithText("Olvida lo del examen de Pablo.").assertIsDisplayed()
         compose.onNodeWithText("¿Qué Pablo?").assertDoesNotExist()
         compose.onNodeWithTag("text-composer").performTextInput("Texto nuevo sin enviar")
-        compose.onNodeWithText("He olvidado «Examen de mi primo Pablo.».").assertDoesNotExist()
+        compose.onNodeWithText("He olvidado «Examen de mi primo Pablo.».").assertExists()
         compose.onNodeWithText("He olvidado el recuerdo.").assertExists()
     }
 

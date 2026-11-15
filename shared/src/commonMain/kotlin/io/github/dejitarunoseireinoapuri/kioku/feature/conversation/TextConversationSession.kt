@@ -5,6 +5,7 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureIssue
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChange
+import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChangeDescription
 import io.github.dejitarunoseireinoapuri.kioku.domain.OfferDecision
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextCommand
@@ -21,7 +22,7 @@ internal class TextConversationSession(
     private val repository: TextConversationRepository?,
     private val scope: CoroutineScope,
     private val onState: (TextConversationState, Boolean) -> Unit,
-    private val onChanged: (MemoryChange.Confirmed, String?) -> Unit,
+    private val onChanged: (MemoryChange.Confirmed, MemoryChangeDescription?) -> Unit,
     private val onRevision: (Long) -> Unit,
 ) {
     private var state = TextConversationState()
@@ -191,7 +192,11 @@ internal class TextConversationSession(
                 if (epoch != generation) return@launch
                 val outcome = execution.outcome
                 if (outcome is TextOutcome.Changed) {
-                    onChanged(outcome.result, execution.command.forgetApproval?.text)
+                    val description =
+                        execution.changeDescription ?: execution.command.forgetApproval?.let {
+                            MemoryChangeDescription(it.text)
+                        }
+                    onChanged(outcome.result, description)
                     return@launch
                 }
                 alignRevision(execution.command)
@@ -261,6 +266,7 @@ internal class TextConversationSession(
         preservePending: Boolean = false,
         notice: ChangeAction? = null,
         change: MemoryChange.Confirmed? = null,
+        description: MemoryChangeDescription? = null,
     ) {
         val previous = state
         val snapshots = histories.toMap()
@@ -280,17 +286,20 @@ internal class TextConversationSession(
         var next =
             TextConversationState(
                 messages =
-                    notice?.let { listOf(TextMessage.Notice(++messageId, it)) } ?: pending,
+                    notice?.let { listOf(TextMessage.Notice(++messageId, it, description)) } ?: pending,
             )
         if (change != null) {
             messageId = lastId
             snapshots.forEach { (mode, snapshot) ->
                 histories[mode] =
                     TextSessionSnapshot(
-                        snapshot.state.afterChange(change).appending(TextMessage.Notice(++messageId, change.action)),
+                        snapshot.state
+                            .afterChange(
+                                change,
+                            ).appending(TextMessage.Notice(++messageId, change.action, description)),
                     )
             }
-            next = previous.afterChange(change).appending(TextMessage.Notice(++messageId, change.action))
+            next = previous.afterChange(change).appending(TextMessage.Notice(++messageId, change.action, description))
         } else if (notice != null) {
             val other = if (intent == TextIntent.Tell) TextIntent.Ask else TextIntent.Tell
             histories[other] = TextSessionSnapshot(next)

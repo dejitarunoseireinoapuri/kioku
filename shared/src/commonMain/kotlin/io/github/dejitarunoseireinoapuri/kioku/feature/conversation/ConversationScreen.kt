@@ -32,7 +32,7 @@ fun ConversationScreen(
     onEvent: (ConversationEvent) -> Unit,
     onSettings: () -> Unit,
     loading: StringResource? = null,
-    onManage: ((String) -> Unit)? = null,
+    onManage: ((List<String>) -> Unit)? = null,
     onSource: (String) -> Unit,
 ) {
     val scroll = conversationScroll(state, loading)
@@ -40,7 +40,18 @@ fun ConversationScreen(
     Column(Modifier.fillMaxSize()) {
         ConversationHeader(onSettings)
         if (state.showingConversation) {
-            ConversationFeed(state, FeedActions(onEvent, onSource, onManage ?: onSource), loading, Modifier.weight(1f))
+            ConversationFeed(
+                state,
+                FeedActions(
+                    onEvent,
+                    onSource,
+                    onManage ?: {
+                        onSource(it.first())
+                    },
+                ),
+                loading,
+                Modifier.weight(1f),
+            )
         } else {
             Column(
                 Modifier
@@ -51,7 +62,7 @@ fun ConversationScreen(
                 verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large),
             ) {
                 if (!state.concealingMemory) {
-                    ConversationBody(state, onEvent, onSource, onManage ?: onSource)
+                    ConversationBody(state, onEvent, onSource, onManage ?: { onSource(it.first()) })
                     state.feedback?.let { FeedbackMessage(it, state.forgottenText) }
                 }
                 if (loading != null) ContentLoadingNotice(stringResource(loading))

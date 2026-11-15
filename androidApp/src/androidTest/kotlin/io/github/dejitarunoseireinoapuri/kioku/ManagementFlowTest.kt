@@ -6,6 +6,8 @@ import androidx.compose.ui.graphics.toPixelMap
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.hasAnyDescendant
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
@@ -47,6 +49,7 @@ class ManagementFlowTest {
         compose.onNodeWithTag("text-composer").assertDoesNotExist()
         captureBrandScreen(compose.activity, "kioku-management-updated.png") { compose.onRoot().captureToImage() }
         returnToFeed()
+        assertChangeDetails()
         compose.onNodeWithText(STORY).assertIsNotEnabled()
         compose.onNodeWithContentDescription("Gestionar este recuerdo").assertDoesNotExist()
         assertEquals(2, controls.commands.size)
@@ -83,6 +86,19 @@ class ManagementFlowTest {
         compose.onNodeWithTag("conversation-messages").performScrollToNode(hasText(STORY))
         compose.onNodeWithText(STORY).assertIsDisplayed()
         captureBrandScreen(compose.activity, "kioku-session-feed-changes.png") { compose.onRoot().captureToImage() }
+    }
+
+    private fun assertChangeDetails() {
+        val detail = "Se ha modificado el recuerdo «Examen el martes.» a «Examen el viernes.»."
+        compose.onNodeWithTag("conversation-messages").performScrollToNode(hasText(detail))
+        compose.onNodeWithText(detail).assertIsDisplayed()
+        compose
+            .onNode(
+                hasTestTag("memory-change-notice") and hasAnyDescendant(hasText(detail)) and
+                    hasAnyDescendant(hasText("Dato corregido.")),
+            ).assertExists()
+        compose.onNodeWithText("He olvidado «Película Loto.».").performScrollTo().assertIsDisplayed()
+        captureBrandScreen(compose.activity, "kioku-change-details.png") { compose.onRoot().captureToImage() }
     }
 
     private fun forget(text: String) {

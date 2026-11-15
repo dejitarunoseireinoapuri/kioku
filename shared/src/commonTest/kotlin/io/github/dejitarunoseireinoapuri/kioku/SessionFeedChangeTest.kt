@@ -4,6 +4,7 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.AnswerStatus
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChange
+import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChangeDescription
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemorySource
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.SourceReplacement
@@ -37,11 +38,16 @@ class SessionFeedChangeTest {
                 { TextOutcome.Asked(QueryOutcome.Reply(AnswerStatus.NotFound, "Respuesta antigua.", emptyList())) }
             session.submit("¿Cuándo es mi examen?", TextIntent.Ask)
             runCurrent()
-            session.reset(change = correction())
-            val question = state.messages.filterIsInstance<TextMessage.Owner>().single()
-            val answer = state.messages.filterIsInstance<TextMessage.PastReply>().single()
-            assertEquals("¿Cuándo es mi examen?", question.text)
-            assertEquals("Respuesta antigua.", answer.text)
+            val description = MemoryChangeDescription("Mi examen es el martes.", "Mi examen es el viernes.")
+            session.reset(change = correction(), description = description)
+            assertEquals(
+                description,
+                state.messages
+                    .filterIsInstance<TextMessage.Notice>()
+                    .single()
+                    .description,
+            )
+            assertArchivedAnswer(state)
             session.selectIntent(TextIntent.Tell)
             val owner = state.messages.filterIsInstance<TextMessage.Owner>().single()
             assertEquals("Mi examen es el martes.", owner.text)
@@ -56,6 +62,19 @@ class SessionFeedChangeTest {
             val context = repository.commands.last().context
             assertTrue(context.questions.isEmpty())
             assertTrue(context.sourceIds.isEmpty())
+            assertEquals(
+                description,
+                state.messages
+                    .filterIsInstance<TextMessage.Notice>()
+                    .single()
+                    .description,
+            )
+            assertFalse(
+                repository.commands
+                    .last()
+                    .text
+                    .contains(description.previousText),
+            )
         }
 
     @Test
@@ -133,6 +152,23 @@ class SessionFeedChangeTest {
             session.reset()
             assertTrue(state.messages.isEmpty())
         }
+
+    private fun assertArchivedAnswer(state: TextConversationState) {
+        assertEquals(
+            "¿Cuándo es mi examen?",
+            state.messages
+                .filterIsInstance<TextMessage.Owner>()
+                .single()
+                .text,
+        )
+        assertEquals(
+            "Respuesta antigua.",
+            state.messages
+                .filterIsInstance<TextMessage.PastReply>()
+                .single()
+                .text,
+        )
+    }
 
     private fun saved(id: String) =
         TextOutcome.Captured(

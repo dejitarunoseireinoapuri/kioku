@@ -20,6 +20,7 @@ import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onLast
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
@@ -69,9 +70,9 @@ class SourceControlNavigationTest {
         compose.onNodeWithTag("text-composer").performTextInput(OLD_QUESTION)
         compose.onNodeWithTag("text-composer").assertTextContains(OLD_QUESTION)
         compose.onNodeWithTag("text-composer").performImeAction()
-        val source = "Ver texto original 1 · 2026-11-14"
+        val source = "Gestionar este recuerdo"
         try {
-            compose.waitUntil(5000) { compose.onAllNodesWithText(source).fetchSemanticsNodes().isNotEmpty() }
+            compose.waitUntil(5000) { compose.onNodeWithContentDescription(source).isDisplayed() }
         } catch (failure: ComposeTimeoutException) {
             captureBrandScreen(compose.activity, "kioku-control-failure.png") { compose.onRoot().captureToImage() }
             throw AssertionError(
@@ -79,7 +80,7 @@ class SourceControlNavigationTest {
                 failure,
             )
         }
-        compose.onNodeWithText(source).performScrollTo().performClick()
+        compose.onNodeWithContentDescription(source).performScrollTo().performClick()
         compose.waitUntil(5000) { compose.onNodeWithText("Gestionar").isDisplayed() }
         compose.onNodeWithText("Gestionar").performClick()
         compose.waitUntil(5000) {

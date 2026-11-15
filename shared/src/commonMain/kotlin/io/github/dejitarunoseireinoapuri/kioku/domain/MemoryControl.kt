@@ -14,6 +14,23 @@ data class EditableSource(
 
 enum class ChangeAction { Correct, Forget }
 
+const val MAX_MANAGEMENT_SOURCES = 6
+
+/** Selected values for local feedback only; never serialized as evidence or a command. */
+data class MemoryChangeDescription(
+    val previousText: String,
+    val replacementText: String? = null,
+)
+
+fun EditableSource.describeChange(
+    ids: List<String>,
+    replacement: String?,
+): MemoryChangeDescription? {
+    val selected = items.filter { it.id in ids }
+    if (ids.isEmpty() || ids.size != ids.distinct().size || selected.size != ids.size) return null
+    return MemoryChangeDescription(selected.joinToString("\n") { it.text }, replacement)
+}
+
 enum class ForgetScope { Source, AllOccurrences }
 
 data class SourceReplacement(

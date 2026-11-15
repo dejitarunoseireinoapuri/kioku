@@ -4,11 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.dejitarunoseireinoapuri.kioku.domain.ChangeAction
 import io.github.dejitarunoseireinoapuri.kioku.domain.EditableSource
-import io.github.dejitarunoseireinoapuri.kioku.domain.ForgetPreview
 import io.github.dejitarunoseireinoapuri.kioku.domain.ForgetScope
+import io.github.dejitarunoseireinoapuri.kioku.domain.MAX_MANAGEMENT_SOURCES
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChange
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChangeCommand
+import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChangeDescription
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryControlRepository
+import io.github.dejitarunoseireinoapuri.kioku.domain.describeChange
 import io.github.dejitarunoseireinoapuri.kioku.domain.previewForget
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,93 +18,21 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 
-sealed interface ControlFeedback {
-    data object Unavailable : ControlFeedback
-
-    data object Processing : ControlFeedback
-
-    data class Clarification(
-        val text: String,
-    ) : ControlFeedback
-}
-
-sealed interface SourceControlState {
-    data object Loading : SourceControlState
-
-    data object Missing : SourceControlState
-
-    data class Ready(
-        val source: EditableSource,
-        val editing: String? = null,
-        val draft: String = "",
-        val feedback: ControlFeedback? = null,
-        val forget: PendingSourceForget? = null,
-        val related: List<EditableSource> = emptyList(),
-        val notice: ChangeAction? = null,
-    ) : SourceControlState {
-        val sources: List<EditableSource> get() = listOf(source) + related
-    }
-
-    data class Working(
-        val previous: Ready,
-        val action: ChangeAction,
-    ) : SourceControlState
-
-    data class Done(
-        val result: MemoryChange.Confirmed,
-    ) : SourceControlState
-
-    data class Refreshing(
-        val result: MemoryChange.Confirmed,
-    ) : SourceControlState
-
-    data class RefreshFailed(
-        val result: MemoryChange.Confirmed,
-    ) : SourceControlState
-}
-
-data class PendingSourceForget(
-    val ids: List<String>,
-    val preview: ForgetPreview,
-)
-
-sealed interface SourceControlEvent {
-    data class Edit(
-        val id: String,
-    ) : SourceControlEvent
-
-    data class Draft(
-        val text: String,
-    ) : SourceControlEvent
-
-    data class Forget(
-        val id: String? = null,
-    ) : SourceControlEvent
-
-    data object Apply : SourceControlEvent
-
-    data object ConfirmForget : SourceControlEvent
-
-    data object CancelForget : SourceControlEvent
-
-    data object Cancel : SourceControlEvent
-
-    data object Retry : SourceControlEvent
-
-    data object Reload : SourceControlEvent
-}
-
 class SourceControlViewModel(
     private val repository: MemoryControlRepository,
-    private val sourceId: String,
+    initialSourceIds: List<String>,
 ) : ViewModel() {
+    constructor(repository: MemoryControlRepository, sourceId: String) : this(repository, listOf(sourceId))
+
     private val mutableState = MutableStateFlow<SourceControlState>(SourceControlState.Loading)
     val state = mutableState.asStateFlow()
     private var command: MemoryChangeCommand? = null
     private var job: Job? = null
     private var generation = 0
     private var paused: SourceControlState? = null
-    private var sourceIds = listOf(sourceId)
+    private var sourceIds = initialSourceIds.distinct()
+    var changeDescription: MemoryChangeDescription? = null
+        private set
     private var confirmed: MemoryChange.Confirmed? = null
     private val mutableChanges = MutableStateFlow<MemoryChange.Confirmed?>(null)
     val changes = mutableChanges.asStateFlow()
@@ -110,6 +40,7 @@ class SourceControlViewModel(
     fun consumeChange(): MemoryChange.Confirmed? = mutableChanges.value.also { mutableChanges.value = null }
 
     init {
+        require(sourceIds.isNotEmpty() && sourceIds.size <= MAX_MANAGEMENT_SOURCES)
         load()
     }
 
@@ -255,7 +186,8 @@ class SourceControlViewModel(
         val epoch = ++generation
         job?.cancel()
         command = null
-        val waiting = confirmed?.let { SourceControlState.Refreshing(it) } ?: SourceControlState.Loading
+        val waiting =
+            confirmed?.let { SourceControlState.Refreshing(it, changeDescription) } ?: SourceControlState.Loading
         if (paused != null) paused = waiting
         mutableState.value = waiting
         job =
@@ -287,7 +219,7 @@ class SourceControlViewModel(
         ready: SourceControlState.Ready,
     ) {
         val epoch = ++generation
-        val previous = ready.copy(feedback = null, forget = null, notice = null)
+        val previous = ready.copy(feedback = null, forget = null, notice = null, description = null)
         mutableState.value = SourceControlState.Working(previous, pending.action)
         job =
             viewModelScope.launch {
@@ -329,6 +261,10 @@ class SourceControlViewModel(
     ) {
         command = null
         confirmed = result.copy(previousSourceId = pending.sourceId)
+        changeDescription =
+            previous.sources
+                .firstOrNull { it.source.id == pending.sourceId }
+                ?.describeChange(pending.memoryIds, pending.correction)
         mutableChanges.value = confirmed
         sourceIds =
             previous.sources
@@ -336,7 +272,7 @@ class SourceControlViewModel(
                     result.replacements.firstOrNull { it.sourceId == source.source.id }?.sourceIds
                         ?: if (source.source.id == pending.sourceId) result.sourceIds else listOf(source.source.id)
                 }.distinct()
-        present(SourceControlState.Refreshing(result))
+        present(SourceControlState.Refreshing(result, changeDescription))
         refreshContent(epoch, notify = true)
     }
 
@@ -351,7 +287,14 @@ class SourceControlViewModel(
         if (epoch != generation) return
         val current = sources.filterNotNull()
         val result = confirmed
-        val unavailable = if (result == null) SourceControlState.Missing else SourceControlState.RefreshFailed(result)
+        val unavailable =
+            if (result ==
+                null
+            ) {
+                SourceControlState.Missing
+            } else {
+                SourceControlState.RefreshFailed(result, changeDescription)
+            }
         present(
             when {
                 sources.any { it == null } || current.map { it.memoryRevision }.distinct().size > 1 ||
@@ -364,11 +307,12 @@ class SourceControlViewModel(
                         current.first(),
                         related = current.drop(1),
                         notice = result?.action,
+                        description = changeDescription,
                     )
                 }
 
                 result != null -> {
-                    SourceControlState.Done(result)
+                    SourceControlState.Done(result, changeDescription)
                 }
 
                 else -> {
@@ -382,6 +326,7 @@ class SourceControlViewModel(
         generation++
         job?.cancel()
         command = null
+        changeDescription = null
         paused = null
         mutableState.value = SourceControlState.Missing
     }

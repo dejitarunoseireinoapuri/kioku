@@ -50,7 +50,7 @@ fun ConversationBody(
     state: ConversationState,
     onEvent: (ConversationEvent) -> Unit,
     onSource: (String) -> Unit,
-    onManage: (String) -> Unit = onSource,
+    onManage: (List<String>) -> Unit = { onSource(it.first()) },
 ) {
     when {
         state.showingConversation -> {
@@ -64,11 +64,11 @@ fun ConversationBody(
         }
 
         state.showingQuery -> {
-            QueryBody(state.query, onEvent, onSource)
+            QueryBody(state.query, onEvent, onSource, onManage)
         }
 
         state.showingCapture -> {
-            CaptureBody(state, onEvent, onManage)
+            CaptureBody(state, onEvent, { onManage(listOf(it)) })
         }
 
         else -> {

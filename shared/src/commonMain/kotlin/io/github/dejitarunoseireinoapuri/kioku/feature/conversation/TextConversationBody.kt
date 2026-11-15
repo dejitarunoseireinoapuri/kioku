@@ -23,7 +23,6 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.offer_accept
 import io.github.dejitarunoseireinoapuri.kioku.resources.offer_decline
 import io.github.dejitarunoseireinoapuri.kioku.resources.offer_title
 import io.github.dejitarunoseireinoapuri.kioku.resources.operation_uncertain
-import io.github.dejitarunoseireinoapuri.kioku.resources.query_source
 import io.github.dejitarunoseireinoapuri.kioku.resources.text_declined
 import io.github.dejitarunoseireinoapuri.kioku.resources.text_expired
 import io.github.dejitarunoseireinoapuri.kioku.resources.text_failure
@@ -36,15 +35,15 @@ fun TextConversationBody(
     state: TextConversationState,
     onEvent: (ConversationEvent) -> Unit,
     onSource: (String) -> Unit,
-    onManage: (String) -> Unit = onSource,
+    onManage: (List<String>) -> Unit = { onSource(it.first()) },
     forgottenText: String? = null,
 ) {
     val presentation = MessageFeedPresentation(state, state.savedMessageSources(), forgottenText)
     Column(verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large)) {
         state.messages.forEach { message ->
-            TextMessageContent(message, presentation, onEvent, onSource, onManage)
+            TextMessageContent(message, presentation, onEvent, onManage)
         }
-        TextConversationTail(state, onEvent, onSource)
+        TextConversationTail(state, onEvent, onManage)
     }
 }
 
@@ -52,10 +51,12 @@ fun TextConversationBody(
 internal fun TextConversationTail(
     state: TextConversationState,
     onEvent: (ConversationEvent) -> Unit,
-    onSource: (String) -> Unit,
+    onManage: (List<String>) -> Unit,
 ) {
     val last = (state.messages.lastOrNull() as? TextMessage.Result)?.outcome
-    state.outcome?.takeIf { !state.busy && it != last }?.let { TextOutcomeBody(it, true, onEvent, onSource) }
+    state.outcome?.takeIf { !state.busy && it != last }?.let {
+        TextOutcomeBody(it, true, onEvent, AnswerManagement(!state.confirmingForget, onManage))
+    }
     if (state.clarification) MessageButton(MessageAction.Reset, stringResource(Res.string.capture_restart), onEvent)
 }
 
@@ -64,12 +65,12 @@ internal fun TextOutcomeBody(
     outcome: TextOutcome,
     interactive: Boolean,
     onEvent: (ConversationEvent) -> Unit,
-    onSource: (String) -> Unit,
+    management: AnswerManagement,
     recovery: CaptureRecoveryUi? = null,
 ) {
     when (outcome) {
         is TextOutcome.Asked -> {
-            TextAnswer(outcome.answer, interactive, onEvent, onSource)
+            TextAnswer(outcome.answer, interactive, onEvent, management)
         }
 
         is TextOutcome.Captured -> {
@@ -77,7 +78,7 @@ internal fun TextOutcomeBody(
         }
 
         is TextOutcome.Offered -> {
-            outcome.answer?.let { TextAnswer(it, false, onEvent, onSource) }
+            outcome.answer?.let { TextAnswer(it, false, onEvent, management) }
             MemoryOffer(outcome.fact, interactive, onEvent)
         }
 
@@ -171,16 +172,10 @@ private fun TextAnswer(
     answer: QueryOutcome,
     interactive: Boolean,
     onEvent: (ConversationEvent) -> Unit,
-    onSource: (String) -> Unit,
+    management: AnswerManagement,
 ) {
     if (answer is QueryOutcome.Reply) {
-        Panel { Text(answer.text) }
-        answer.sources.forEachIndexed { index, source ->
-            ActionButton(
-                stringResource(Res.string.query_source, index + 1, source.recordedOn),
-                { onSource(source.sourceId) },
-            )
-        }
+        AnswerMemoryMessage(answer, management)
     } else {
         TextProblem(
             Res.string.text_failure,

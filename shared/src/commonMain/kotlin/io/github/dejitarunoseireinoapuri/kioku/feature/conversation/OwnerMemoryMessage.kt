@@ -79,18 +79,17 @@ internal fun OwnerMemoryMessage(
             )
         }
         if (sourceId != null && !historical) {
-            SavedMemoryMenu(sourceId, enabled, onManage)
+            MemoryActionsMenu(enabled) { onManage(sourceId) }
         }
     }
 }
 
 @Composable
-private fun SavedMemoryMenu(
-    sourceId: String,
+internal fun MemoryActionsMenu(
     enabled: Boolean,
-    onManage: (String) -> Unit,
+    onManage: () -> Unit,
 ) {
-    var expanded by remember(sourceId, enabled) { mutableStateOf(false) }
+    var expanded by remember(enabled) { mutableStateOf(false) }
     val feedback = rememberButtonFeedback(KiokuColors.Secondary)
     val menuFeedback = rememberButtonFeedback(KiokuColors.Text)
     Box {
@@ -110,7 +109,7 @@ private fun SavedMemoryMenu(
             DropdownMenuItem(
                 onClick = {
                     expanded = false
-                    onManage(sourceId)
+                    onManage()
                 },
                 interactionSource = menuFeedback.interactionSource,
             ) { Text(stringResource(Res.string.control_manage), color = menuFeedback.contentColor) }
