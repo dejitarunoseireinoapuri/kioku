@@ -1,5 +1,7 @@
 # Contrato backend previsto · v1
 
+Refinamiento compatible de interpretación (preparado el 15 de noviembre): captura usa needsClarification/question y edición usa needsClarification/text para pedir una reformulación sin escribir canónico. La edición aclara expresamente que no se ha modificado el recuerdo. Solo rechazos concretos de interpretación/fecha pueden pedir reformular; transporte, cuota, autorización, formato o evidencia ajena siguen fallando por su vía técnica. No cambia ningún DTO público. Al corregir evidencia compartida, el servidor prepara una separación literal del único ID elegido y relee su versión antes de validar lo conservado y confirmar; el cliente no recibe ni envía ese plan interno. Activación y aceptación productiva pendientes según K4_VALIDATION.
+
 Operaciones autenticadas, versionadas y ligadas al UID verificado; el cliente no elige otro propietario. App Check y límites de abuso se aplican al entorno remoto. La tabla conserva el contrato de conjunto. `getConfiguration` está activo en K1; captura, aclaración, recuperación y fuente están desplegadas en K2 según el apartado siguiente, con aceptación móvil del nuevo build pendiente.
 
 | Operación | Entrada relevante | Resultado |

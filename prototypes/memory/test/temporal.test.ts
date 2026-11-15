@@ -2,6 +2,47 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { validateTime, canonicalTime, unknownTime } from "../src/temporal.ts";
 
+test("unaccented day markers keep literal evidence and the same zone-anchored date", () => {
+  const anchor = { receivedAt: "2026-11-15T23:30:00Z", zone: "Europe/Madrid" };
+  for (const [quote, value] of [
+    ["manana", "2026-11-17"],
+    ["pasado manana", "2026-11-18"],
+    ["esta manana", "2026-11-16"],
+    ["miercoles", "2026-11-18"],
+    ["sabado", "2026-11-21"],
+  ]) {
+    const input = {
+      precision: "day" as const,
+      value: value!,
+      end: null,
+      quote: quote!,
+    };
+    assert.deepEqual(canonicalTime(input, quote!, quote!, anchor), input);
+    assert.throws(
+      () => validateTime({ ...input, value: "2026-11-19" }, quote!, anchor),
+      /TIME_RELATIVE_MISMATCH/,
+    );
+  }
+  assert.throws(
+    () =>
+      validateTime(
+        { precision: "day", value: "2026-11-17", end: null, quote: "mañana" },
+        "manana",
+        anchor,
+      ),
+    /TIME_QUOTE_NOT_IN_SOURCE/,
+  );
+  assert.throws(
+    () =>
+      validateTime(
+        { precision: "day", value: "2026-11-17", end: null, quote: "mananaz" },
+        "mananaz",
+        anchor,
+      ),
+    /TIME_UNSUPPORTED_PRECISION/,
+  );
+});
+
 test("month, annual birthday and unknown dates retain their original precision", () => {
   validateTime(
     {

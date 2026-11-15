@@ -1,5 +1,7 @@
 # Matriz de aceptación y evidencia prevista
 
+Refinamiento de TEST-MEM-001/003 y TEST-UI-005: texto ambiguo sin escritura, reformulación completa tras uno o varios intentos, conservación de asuntos ajenos, tolerancia de marcadores temporales sin diacríticos con literal exacto, fecha inválida sin guardado, edición rechazada con editor disponible y corrección aislada de evidencia compartida. Prueba de almacenamiento contra cambios inventados de texto/cita/fecha/vector/revisión; revocación y modificación concurrente bloquean el commit. [Evidencia K4](../09-planning/K4_VALIDATION.md) distingue modelo real en RAM, Firebase local, UI Honor con dobles y aceptación productiva aún pendiente.
+
 Los casos de integración de la app siguen **pendientes de validación**. TEST-EVAL-001 supera el criterio funcional temprano en M0 v4; sus evaluaciones reales se registran por separado y no cierran los casos de la app. Registrar comando, commit, plataforma/entorno, resultado y límites al ejecutar. Véase el [estado actual](../09-planning/KNOWN_LIMITATIONS.md).
 
 | Caso | Cubre | Evidencia requerida |

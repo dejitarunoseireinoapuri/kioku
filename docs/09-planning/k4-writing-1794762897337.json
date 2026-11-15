@@ -1,0 +1,294 @@
+{
+  "kind": "synthetic-writing-and-rephrasing",
+  "profile": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "verbosity": "low",
+    "baseInput": 0.000002,
+    "inputCeiling": 0.0000025,
+    "output": 0.00001
+  },
+  "resolvedModel": "gpt-6.1-sol",
+  "at": "2026-11-15T13:00:00Z",
+  "firebaseWrites": 0,
+  "apiCalls": 25,
+  "estimatedUsd": 0.1254569600000046,
+  "rows": [
+    {
+      "id": "joined-ambiguous",
+      "passed": true,
+      "result": {
+        "extraction": {
+          "status": "needs_clarification",
+          "clarification": "No he entendido «jugary prender». ¿Puedes reescribir la frase completa con las palabras separadas?",
+          "items": []
+        }
+      }
+    },
+    {
+      "id": "complete-rephrasing",
+      "passed": true,
+      "result": {
+        "extraction": {
+          "status": "saved",
+          "clarification": null,
+          "items": [
+            {
+              "text": "Quiero jugar a la Play.",
+              "quote": "Quiero jugar a la Play y aprender japonés.",
+              "kind": "intention",
+              "entities": [
+                "Play"
+              ],
+              "time": {
+                "precision": "unknown",
+                "value": null,
+                "end": null,
+                "quote": null
+              },
+              "provenance": "personal",
+              "attribution": null,
+              "attributionEvidence": null,
+              "eventStatus": "planned",
+              "lifecycle": "current"
+            },
+            {
+              "text": "Quiero aprender japonés.",
+              "quote": "Quiero jugar a la Play y aprender japonés.",
+              "kind": "intention",
+              "entities": [
+                "japonés"
+              ],
+              "time": {
+                "precision": "unknown",
+                "value": null,
+                "end": null,
+                "quote": null
+              },
+              "provenance": "personal",
+              "attribution": null,
+              "attributionEvidence": null,
+              "eventStatus": "planned",
+              "lifecycle": "current"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "latest-rephrasing",
+      "passed": true,
+      "result": {
+        "extraction": {
+          "status": "saved",
+          "clarification": null,
+          "items": [
+            {
+              "text": "Quiero jugar a la Play.",
+              "quote": "Quiero jugar a la Play y aprender japonés.",
+              "kind": "intention",
+              "entities": [
+                "Play"
+              ],
+              "time": {
+                "precision": "unknown",
+                "value": null,
+                "end": null,
+                "quote": null
+              },
+              "provenance": "personal",
+              "attribution": null,
+              "attributionEvidence": null,
+              "eventStatus": "planned",
+              "lifecycle": "current"
+            },
+            {
+              "text": "Quiero aprender japonés.",
+              "quote": "Quiero jugar a la Play y aprender japonés.",
+              "kind": "intention",
+              "entities": [
+                "japonés"
+              ],
+              "time": {
+                "precision": "unknown",
+                "value": null,
+                "end": null,
+                "quote": null
+              },
+              "provenance": "personal",
+              "attribution": null,
+              "attributionEvidence": null,
+              "eventStatus": "planned",
+              "lifecycle": "current"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "unrelated-fact-survives-rephrasing",
+      "passed": true,
+      "result": {
+        "extraction": {
+          "status": "saved",
+          "clarification": null,
+          "items": [
+            {
+              "text": "Quiero jugar a la Play.",
+              "quote": "La primera frase era: quiero jugar a la Play.",
+              "kind": "intention",
+              "entities": [
+                "Play"
+              ],
+              "time": {
+                "precision": "unknown",
+                "value": null,
+                "end": null,
+                "quote": null
+              },
+              "provenance": "personal",
+              "attribution": null,
+              "attributionEvidence": null,
+              "eventStatus": "planned",
+              "lifecycle": "current"
+            },
+            {
+              "text": "Tengo el examen de japonés el 20 de noviembre de 2026.",
+              "quote": "El examen de japonés es el 20 de noviembre de 2026.",
+              "kind": "fact",
+              "entities": [
+                "examen de japonés"
+              ],
+              "time": {
+                "precision": "day",
+                "value": "2026-11-20",
+                "end": null,
+                "quote": "el 20 de noviembre de 2026"
+              },
+              "provenance": "personal",
+              "attribution": null,
+              "attributionEvidence": null,
+              "eventStatus": "planned",
+              "lifecycle": "current"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ordinary-typing-errors",
+      "passed": true,
+      "result": {
+        "extraction": {
+          "status": "saved",
+          "clarification": null,
+          "items": [
+            {
+              "text": "Quiero jugar a la play mañana.",
+              "quote": "manana qiero jugar a la play",
+              "kind": "intention",
+              "entities": [
+                "la play"
+              ],
+              "time": {
+                "precision": "day",
+                "value": "2026-11-16",
+                "end": null,
+                "quote": "manana"
+              },
+              "provenance": "personal",
+              "attribution": null,
+              "attributionEvidence": null,
+              "eventStatus": "planned",
+              "lifecycle": "current"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "unaccented-weekday",
+      "passed": true,
+      "result": {
+        "extraction": {
+          "status": "saved",
+          "clarification": null,
+          "items": [
+            {
+              "text": "Tengo un examen de japonés el sábado.",
+              "quote": "El sabado tengo un examen de japonés.",
+              "kind": "fact",
+              "entities": [
+                "examen de japonés"
+              ],
+              "time": {
+                "precision": "day",
+                "value": "2026-11-21",
+                "end": null,
+                "quote": "El sabado"
+              },
+              "provenance": "personal",
+              "attribution": null,
+              "attributionEvidence": null,
+              "eventStatus": "planned",
+              "lifecycle": "current"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "invalid-date-needs-rephrasing",
+      "passed": true,
+      "result": {
+        "extraction": {
+          "status": "needs_clarification",
+          "clarification": "El 31 de febrero de 2026 no existe. ¿Qué fecha querías indicar para ir a clase?",
+          "items": []
+        }
+      }
+    },
+    {
+      "id": "management-rejects-ambiguous-edit-and-accepts-rewrite",
+      "passed": true,
+      "result": {
+        "rejected": {
+          "apiVersion": 1,
+          "operationId": "65c54bbb-757e-4ed6-8b76-d20ed9cb5b1e",
+          "status": "needsClarification",
+          "text": "No he modificado el recuerdo. No he entendido «jugary prender». ¿Puedes reescribir la frase completa con las palabras separadas?",
+          "sources": [],
+          "memoryEpoch": 0
+        },
+        "corrected": [
+          {
+            "text": "Quiero jugar al ajedrez mañana.",
+            "quote": "manana qiero jugar al ajedrez",
+            "kind": "intention",
+            "entities": [
+              "ajedrez"
+            ],
+            "time": {
+              "precision": "day",
+              "value": "2026-11-16",
+              "end": null,
+              "quote": "manana"
+            },
+            "provenance": "personal",
+            "attribution": null,
+            "attributionEvidence": null,
+            "eventStatus": "planned",
+            "lifecycle": "current",
+            "id": "c2644df1-ccd9-4f9f-b888-4d744bdc10a7-1",
+            "sourceId": "c2644df1-ccd9-4f9f-b888-4d744bdc10a7",
+            "revision": 2,
+            "receivedAt": "2026-11-15T13:00:00.000Z",
+            "zone": "Europe/Madrid"
+          }
+        ],
+        "commits": 1,
+        "noChanges": 1
+      }
+    }
+  ]
+}

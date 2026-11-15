@@ -12,7 +12,7 @@ export const unknownTime: MemoryTime = {
 const monthNames =
   "enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre";
 const relative =
-  /\b(esta mañana|esta tarde|esta noche|hoy|ayer|anteayer|mañana|pasado mañana|lunes|martes|miércoles|jueves|viernes|sábado|domingo)\b/iu;
+  /\b(esta ma[ñn]ana|esta tarde|esta noche|hoy|ayer|anteayer|ma[ñn]ana|pasado ma[ñn]ana|lunes|martes|mi[eé]rcoles|jueves|viernes|s[aá]bado|domingo)\b/iu;
 
 /** Canonicalize precision and values from literal evidence bound to the item or its clarification. */
 export function canonicalTime(
@@ -107,17 +107,17 @@ function anchoredRelativeDay(
   anchor: { receivedAt: string; zone: string },
 ): string | null {
   const match =
-    /^(esta mañana|esta tarde|esta noche|anteayer|pasado mañana|ayer|mañana|hoy)(?=\s|[.,;:]|$)/iu.exec(
+    /^(esta ma[ñn]ana|esta tarde|esta noche|anteayer|pasado ma[ñn]ana|ayer|ma[ñn]ana|hoy)(?=\s|[.,;:]|$)/iu.exec(
       quote.trim(),
     );
   if (!match) return null;
   const offsets: Record<string, number> = {
     anteayer: -2,
-    "pasado mañana": 2,
+    "pasado manana": 2,
     ayer: -1,
-    mañana: 1,
+    manana: 1,
     hoy: 0,
-    "esta mañana": 0,
+    "esta manana": 0,
     "esta tarde": 0,
     "esta noche": 0,
   };
@@ -125,7 +125,7 @@ function anchoredRelativeDay(
     timeZone: anchor.zone,
   }).format(new Date(anchor.receivedAt));
   const date = new Date(`${day}T12:00:00Z`);
-  date.setUTCDate(date.getUTCDate() + offsets[match[1]!.toLowerCase()]!);
+  date.setUTCDate(date.getUTCDate() + offsets[foldDiacritics(match[1]!)]!);
   return date.toISOString().slice(0, 10);
 }
 
@@ -258,16 +258,16 @@ export function validateTime(
       throw new MemoryError("TIME_VALUE_NOT_SUPPORTED");
   }
   if (time.precision === "day" && anchor && !hasYear) {
-    const phrase = evidence.toLowerCase();
-    const offset = /\besta (mañana|tarde|noche)\b/u.test(phrase)
+    const phrase = foldDiacritics(evidence);
+    const offset = /\besta (manana|tarde|noche)\b/u.test(phrase)
       ? 0
       : phrase.includes("anteayer")
         ? -2
-        : phrase.includes("pasado mañana")
+        : phrase.includes("pasado manana")
           ? 2
           : /\bayer\b/u.test(phrase)
             ? -1
-            : /\bmañana\b/u.test(phrase)
+            : /\bmanana\b/u.test(phrase)
               ? 1
               : /\bhoy\b/u.test(phrase)
                 ? 0
@@ -290,9 +290,8 @@ export function validateTime(
       "viernes",
       "sabado",
     ];
-    const normalized = phrase.normalize("NFD").replace(/\p{Diacritic}/gu, "");
     const weekday = weekdayNames.findIndex((name) =>
-      new RegExp(`\\b${name}\\b`, "u").test(normalized),
+      new RegExp(`\\b${name}\\b`, "u").test(phrase),
     );
     if (weekday >= 0) {
       const valueDate = new Date(`${time.value}T12:00:00Z`);
@@ -315,4 +314,12 @@ export function validateTime(
   ) {
     throw new MemoryError("TIME_INVALID_DATE");
   }
+}
+
+/** Comparison only: the stored evidence always retains the owner's exact spelling. */
+function foldDiacritics(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "");
 }

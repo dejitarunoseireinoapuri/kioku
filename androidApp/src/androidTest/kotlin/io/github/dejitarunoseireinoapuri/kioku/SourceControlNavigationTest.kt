@@ -28,6 +28,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTextReplacement
 import androidx.lifecycle.Lifecycle
 import androidx.test.platform.app.InstrumentationRegistry
 import io.github.dejitarunoseireinoapuri.kioku.domain.AnswerStatus
@@ -242,6 +243,23 @@ class SourceControlNavigationTest {
         compose.onNodeWithText("Comprobar de nuevo").performScrollTo().performClick()
         compose.waitUntil(5000) { compose.onNodeWithText("Recuerdo modificado").isDisplayed() }
         assertEquals(controls.commands[0], controls.commands[1])
+    }
+
+    @Test
+    fun unclearCorrectionExplainsNoChangeAndKeepsTheEditorUsable() {
+        val notice = "No he modificado el recuerdo. Reescribe la frase completa con las palabras separadas."
+        controls.change = { MemoryChange.Clarification(notice) }
+        editExam()
+        compose.onNodeWithTag("correction-input").performTextReplacement("quiero jugary prender")
+        compose.onNodeWithText("Aplicar corrección").performScrollTo().performClick()
+        compose.onNodeWithText(notice).performScrollTo().assertIsDisplayed()
+        compose.onNodeWithTag("correction-input").performScrollTo().assertTextContains("quiero jugary prender")
+        compose.onNodeWithTag("correction-input").performTextReplacement("Mi examen es el sábado.")
+        controls.change = { MemoryChange.Confirmed(ChangeAction.Correct, 1) }
+        compose.onNodeWithText("Aplicar corrección").performScrollTo().performClick()
+        compose.waitUntil(5000) { compose.onNodeWithText("Recuerdo modificado").isDisplayed() }
+        assertEquals("Mi examen es el sábado.", controls.commands.last().correction)
+        assertEquals(false, controls.commands[0].requestId == controls.commands[1].requestId)
     }
 
     @Test

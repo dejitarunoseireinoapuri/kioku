@@ -1,5 +1,7 @@
 # Prototipo de memoria · M0
 
+Regresión acotada de escritura y reformulación: tras `node tooling/backend.mjs build`, `node tooling/k4-writing-live.mjs --live` comprueba clasificación, captura y edición con fixtures fijos; `--live --routing` aísla el recorrido de clasificación y `--live --shared` las correcciones de evidencia compartida. Usan Sol medium y la clave local privada existente, con contador/bloqueo/límite acumulados; todo canónico es staging RAM y no acceden a Firebase ni aceptan recuerdos arbitrarios. Los informes sintéticos se conservan en docs/09-planning; casos, fallos del comprobador y límites en [K4_VALIDATION](../../docs/09-planning/K4_VALIDATION.md). No equivale a aceptación productiva o iOS.
+
 Herramienta local por texto para comprobar interpretación, persistencia, recuperación y respuesta antes de construir la app. Solo datos ficticios. No es un backend desplegado ni una implementación móvil/offline de Kioku. El criterio de avance está en [M0](../../docs/09-planning/IMPLEMENTATION_PLAN.md#m0--prueba-temprana-de-memoria).
 
 **M0 supera el criterio de viabilidad funcional** en la [evaluación v4](evidence/2026-11-12-v4.md): tres rondas reales con Sol medio, 32 relatos/64 consultas por ronda y revisión contra fuentes. 96/96 capturas, recuperación completa, 192/192 respuestas correctas y cero fallos críticos detectados. Pasan 74 pruebas locales. El objetivo p95 de guardado de 15 segundos sigue abierto (17,25/14,79/19,09 s); consultas 7,02/6,83/6,64 s. No es una garantía para recuerdos futuros ni valida la app móvil. K0 no ha empezado.

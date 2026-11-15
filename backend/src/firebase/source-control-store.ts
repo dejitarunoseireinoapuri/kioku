@@ -5,6 +5,7 @@ import type {
 } from "firebase-admin/firestore";
 import { sourceSchema } from "#memory-core/domain";
 import type { Snapshot } from "#memory-core/domain";
+import type { ForgetEvidence } from "#memory-core/forget-format";
 import { AccountError } from "../account/contracts.js";
 import { canonicalMemory } from "../query/search-projection.js";
 import type { QueryLease } from "../query/contracts.js";
@@ -22,6 +23,7 @@ import { FirestoreQueryStore } from "./query-store.js";
 import { FirestoreSourceRetirementStore } from "./retirement-store.js";
 import { FirestoreForgetStore } from "./forget-store.js";
 import { managementChanges } from "../memory-control/continuation.js";
+import { validateCorrectionRetention } from "../memory-control/correction-selection.js";
 import type {
   MemoryInventory,
   ForgetReplacement,
@@ -161,7 +163,14 @@ export class FirestoreSourceControlStore implements SourceControlStore {
     scope: RetirementScope,
     snapshot: Snapshot,
     lease: QueryLease,
+    evidence: ForgetEvidence[] = [],
   ): Promise<ChangeResult> {
+    if (input.action === "correct") {
+      const current = await this.bundle(uid, input.sourceId);
+      if (scopeVersion(current.scope) !== scopeVersion(scope))
+        throw new AccountError("failed-precondition");
+      validateCorrectionRetention(current, input.memoryIds, evidence, snapshot);
+    }
     await this.retirements.replace(uid, input.requestId, scope, {
       snapshot,
       status: input.action === "correct" ? "corrected" : "forgotten",

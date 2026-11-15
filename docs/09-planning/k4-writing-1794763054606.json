@@ -1,0 +1,69 @@
+{
+  "kind": "synthetic-writing-and-rephrasing",
+  "profile": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "verbosity": "low",
+    "baseInput": 0.000002,
+    "inputCeiling": 0.0000025,
+    "output": 0.00001
+  },
+  "resolvedModel": "gpt-6.1-sol",
+  "at": "2026-11-15T13:00:00Z",
+  "firebaseWrites": 0,
+  "apiCalls": 7,
+  "estimatedUsd": 0.022423439999997186,
+  "rows": [
+    {
+      "id": "main-message-routing-and-full-rephrasing",
+      "passed": true,
+      "result": {
+        "firstRoute": "ready",
+        "extraction": {
+          "status": "saved",
+          "clarification": null,
+          "items": [
+            {
+              "text": "Quiero jugar a la Play.",
+              "quote": "Aclaración: Quiero jugar a la Play y aprender japonés.",
+              "kind": "intention",
+              "entities": [
+                "Play"
+              ],
+              "time": {
+                "precision": "unknown",
+                "value": null,
+                "end": null,
+                "quote": null
+              },
+              "provenance": "personal",
+              "attribution": null,
+              "attributionEvidence": null,
+              "eventStatus": "planned",
+              "lifecycle": "current"
+            },
+            {
+              "text": "Quiero aprender japonés.",
+              "quote": "Aclaración: Quiero jugar a la Play y aprender japonés.",
+              "kind": "intention",
+              "entities": [
+                "japonés"
+              ],
+              "time": {
+                "precision": "unknown",
+                "value": null,
+                "end": null,
+                "quote": null
+              },
+              "provenance": "personal",
+              "attribution": null,
+              "attributionEvidence": null,
+              "eventStatus": "planned",
+              "lifecycle": "current"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

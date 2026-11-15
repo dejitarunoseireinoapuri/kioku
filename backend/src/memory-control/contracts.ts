@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { MemoryIntelligence, Snapshot } from "#memory-core/domain";
 import type { QueryLease } from "../query/contracts.js";
+import type { ForgetEvidence } from "#memory-core/forget-format";
 import type { RetirementScope } from "./retirement.js";
 import type { SelectiveChange } from "./selection.js";
 import { captureInput } from "../memory/contracts.js";
@@ -79,6 +80,7 @@ export interface SourceControlStore extends ForgetStore {
     scope: RetirementScope,
     snapshot: Snapshot,
     lease: QueryLease,
+    evidence?: ForgetEvidence[],
   ): Promise<ChangeResult>;
   noChange(uid: string, lease: QueryLease, text: string): Promise<ChangeResult>;
   fail(uid: string, lease: QueryLease): Promise<void>;

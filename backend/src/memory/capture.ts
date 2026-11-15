@@ -14,6 +14,7 @@ import type {
 import { captureFailure } from "./diagnostics.js";
 import type { CaptureStage } from "./diagnostics.js";
 import { observedCapture } from "./processing.js";
+import { interpretCapture } from "./interpretation.js";
 
 /** Stages only the current turn. The store commits its source/items and receipt atomically. */
 class StagedCapture implements MemoryRepository {
@@ -51,7 +52,8 @@ export class CaptureMemory {
           stage = value;
         }),
       );
-      const extracted = await engine.tell(
+      const extracted = await interpretCapture(
+        engine,
         work.lease.pending.turn,
         work.lease.pending.clarification,
       );

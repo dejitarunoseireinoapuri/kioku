@@ -12,6 +12,9 @@ import type {
 import { correctionNotice, selectiveChange } from "./selection.js";
 import { scopeVersion } from "./retirement.js";
 import { ForgetRepeatedMemory } from "./forget.js";
+import { interpretCapture } from "../memory/interpretation.js";
+import { correctionSelection } from "./correction-selection.js";
+import type { ForgetEvidence } from "#memory-core/forget-format";
 
 export class ChangeMemory {
   private readonly store: SourceControlStore;
@@ -43,63 +46,91 @@ export class ChangeMemory {
           reauthorize,
         );
       }
-      const change = selectiveChange(
-        bundle.source,
-        bundle.memories,
-        input.memoryIds,
-      );
-      let snapshot = change.replacement;
-      if (input.action === "correct" || change.kept.length) {
-        const intelligence = await provider();
-        if (input.action === "correct") {
-          let staged: Snapshot = {
-            version: snapshotVersion,
-            sources: [],
-            memories: [],
-          };
-          const engine = new MemoryEngine(
-            {
-              load: async () => staged,
-              save: async (next) => {
-                staged = next;
-              },
+      let intelligence: ChangeIntelligence | undefined;
+      let corrected: Snapshot | undefined;
+      if (input.action === "correct") {
+        if (
+          input.memoryIds.length !== 1 ||
+          !bundle.memories.some((m) => m.id === input.memoryIds[0])
+        )
+          throw new AccountError("failed-precondition");
+        intelligence = await provider();
+        let staged: Snapshot = {
+          version: snapshotVersion,
+          sources: [],
+          memories: [],
+        };
+        const engine = new MemoryEngine(
+          {
+            load: async () => staged,
+            save: async (next) => {
+              staged = next;
             },
-            intelligence,
+          },
+          intelligence,
+        );
+        const extraction = await interpretCapture(engine, {
+          id: randomUUID(),
+          text: input.correction!,
+          zone: input.zone,
+          receivedAt: new Date(this.now()).toISOString(),
+        });
+        if (extraction.status !== "saved") {
+          await reauthorize();
+          return await this.store.noChange(
+            uid,
+            work,
+            "No he modificado el recuerdo. " +
+              (extraction.clarification ??
+                "Escribe el dato correcto en una frase completa, con las palabras separadas."),
           );
-          const extraction = await engine.tell({
-            id: randomUUID(),
-            text: input.correction!,
-            zone: input.zone,
-            receivedAt: new Date(this.now()).toISOString(),
-          });
-          if (extraction.status !== "saved") {
-            await reauthorize();
-            return await this.store.noChange(
-              uid,
-              work,
-              extraction.clarification ??
-                "Escribe el dato correcto en una frase completa.",
-            );
-          }
-          snapshot = {
-            version: snapshotVersion,
-            sources: [
-              ...snapshot.sources,
-              ...staged.sources.map((source) => ({
-                ...source,
-                text: correctionNotice + source.text,
-              })),
-            ],
-            memories: [
-              ...snapshot.memories,
-              ...staged.memories.map((memory) => ({
-                ...memory,
-                revision:
-                  Math.max(...change.removed.map((item) => item.revision)) + 1,
-              })),
-            ],
-          };
         }
+        corrected = staged;
+      }
+      const selection =
+        input.action === "correct"
+          ? await correctionSelection(bundle, input.memoryIds, intelligence!)
+          : {
+              change: selectiveChange(
+                bundle.source,
+                bundle.memories,
+                input.memoryIds,
+              ),
+              evidence: [],
+            };
+      if (!selection) {
+        await reauthorize();
+        return this.store.noChange(
+          uid,
+          work,
+          "No he modificado el recuerdo. No puedo cambiar este dato sin alterar otro recuerdo relacionado.",
+        );
+      }
+      const change = selection.change;
+      const evidence: ForgetEvidence[] = selection.evidence;
+      let snapshot = change.replacement;
+      if (corrected) {
+        snapshot = {
+          version: snapshotVersion,
+          sources: [
+            ...snapshot.sources,
+            ...corrected.sources.map((source) => ({
+              ...source,
+              text: correctionNotice + source.text,
+            })),
+          ],
+          memories: [
+            ...snapshot.memories,
+            ...corrected.memories.map((memory) => ({
+              ...memory,
+              revision:
+                Math.max(...change.removed.map((item) => item.revision)) + 1,
+            })),
+          ],
+        };
+      }
+      if (input.action === "correct" || change.kept.length) {
+        intelligence ??= await provider();
         const review = await intelligence.reviewSourceChange({
           action: input.action,
           source: bundle.source,
@@ -126,7 +157,14 @@ export class ChangeMemory {
         }
       }
       await reauthorize();
-      return await this.store.commit(uid, input, bundle.scope, snapshot, work);
+      return await this.store.commit(
+        uid,
+        input,
+        bundle.scope,
+        snapshot,
+        work,
+        evidence,
+      );
     } catch (error) {
       if (
         input.forgetScope === "allOccurrences" &&

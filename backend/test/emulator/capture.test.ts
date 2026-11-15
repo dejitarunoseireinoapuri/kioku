@@ -7,6 +7,7 @@ import { FirestoreCaptureStore } from "../../src/firebase/capture-store.js";
 import { FirestoreMemoryBudget } from "../../src/firebase/memory-budget.js";
 import type { CaptureInput } from "../../src/memory/contracts.js";
 import type { MemoryIntelligence, Turn } from "#memory-core/domain";
+import { MemoryError } from "#memory-core/domain";
 import { adminApp, db } from "./helpers.js";
 
 const uid = "capture-owner";
@@ -60,6 +61,88 @@ beforeEach(async () => {
 after(async () => {
   await db.terminate();
   await deleteApp(adminApp);
+});
+
+test("an unverifiable capture can be rewritten and only the clarified revision saves", async () => {
+  const turn = input("quiero jugary prender");
+  const pending = await capture.execute(
+    uid,
+    turn,
+    async () => ({
+      ...intelligence,
+      extract: async () => {
+        throw new MemoryError("CAPTURE_REFINEMENT_REJECTED");
+      },
+    }),
+    allowed,
+  );
+  assert.equal(pending.status, "needsClarification");
+  if (pending.status !== "needsClarification")
+    throw Error("Expected clarification");
+  assert.match(pending.question, /Reescríbelo/);
+  assert.equal(
+    (await db.collection(`accounts/${uid}/sources`).get()).empty,
+    true,
+  );
+  const correction = "Quiero aprender japonés.";
+  const result = await capture.execute(
+    uid,
+    {
+      apiVersion: 1,
+      requestId: randomUUID(),
+      clarificationId: pending.clarificationId,
+      expectedRevision: pending.revision,
+      text: correction,
+    },
+    async () => ({
+      ...intelligence,
+      extract: async (original, clarified) => {
+        assert.equal(original.text, turn.text);
+        assert.equal(clarified, correction);
+        return intelligence.extract({ ...original, text: correction }, null);
+      },
+    }),
+    allowed,
+  );
+  assert.equal(result.status, "saved");
+  const memories = await db.collection(`accounts/${uid}/memories`).get();
+  assert.equal(memories.size, 1);
+  assert.equal(memories.docs[0]!.get("text"), correction);
+});
+
+test("a rewrite request is reauthorized and technical failures remain failed, not clarification", async () => {
+  for (const technical of [false, true]) {
+    const turn = input("quiero jugary prender");
+    await assert.rejects(
+      capture.execute(
+        uid,
+        turn,
+        async () => ({
+          ...intelligence,
+          extract: async () => {
+            throw new MemoryError(
+              technical ? "OPENAI_NETWORK_OR_RESPONSE" : "TIME_INVALID_DATE",
+            );
+          },
+        }),
+        async () => {
+          throw Error("Identity revoked");
+        },
+      ),
+    );
+    const receipt = await db
+      .doc(`accounts/${uid}/operations/${turn.requestId}`)
+      .get();
+    assert.equal(receipt.get("state"), "failed");
+    assert.equal(
+      (await db.collection(`accounts/${uid}/sources`).get()).empty,
+      true,
+    );
+    assert.equal(
+      (await db.collection(`accounts/${uid}/memories`).get()).empty,
+      true,
+    );
+  }
 });
 
 test("source/items and receipt commit together; replay is idempotent and conflicting reuse fails", async () => {

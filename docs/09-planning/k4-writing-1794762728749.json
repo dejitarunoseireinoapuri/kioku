@@ -1,0 +1,52 @@
+{
+  "kind": "synthetic-writing-and-rephrasing",
+  "profile": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "verbosity": "low",
+    "baseInput": 0.000002,
+    "inputCeiling": 0.0000025,
+    "output": 0.00001
+  },
+  "resolvedModel": "gpt-6.1-sol",
+  "at": "2026-11-15T13:00:00Z",
+  "firebaseWrites": 0,
+  "apiCalls": 25,
+  "estimatedUsd": 0.12519692000001115,
+  "rows": [
+    {
+      "id": "joined-ambiguous",
+      "passed": true
+    },
+    {
+      "id": "complete-rephrasing",
+      "passed": false,
+      "code": "ACCEPTANCE_CHECK_FAILED"
+    },
+    {
+      "id": "latest-rephrasing",
+      "passed": false,
+      "code": "ACCEPTANCE_CHECK_FAILED"
+    },
+    {
+      "id": "unrelated-fact-survives-rephrasing",
+      "passed": true
+    },
+    {
+      "id": "ordinary-typing-errors",
+      "passed": true
+    },
+    {
+      "id": "unaccented-weekday",
+      "passed": true
+    },
+    {
+      "id": "invalid-date-needs-rephrasing",
+      "passed": true
+    },
+    {
+      "id": "management-rejects-ambiguous-edit-and-accepts-rewrite",
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,191 @@
+{
+  "kind": "synthetic-writing-and-rephrasing",
+  "profile": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "verbosity": "low",
+    "baseInput": 0.000002,
+    "inputCeiling": 0.0000025,
+    "output": 0.00001
+  },
+  "resolvedModel": "gpt-6.1-sol",
+  "at": "2026-11-15T13:00:00Z",
+  "firebaseWrites": 0,
+  "apiCalls": 24,
+  "estimatedUsd": 0.11724241999999663,
+  "rows": [
+    {
+      "id": "shared-correction-after-rephrasing",
+      "passed": true,
+      "result": {
+        "result": "corrected",
+        "items": [
+          {
+            "text": "Quiero leer un cómic pasado mañana.",
+            "quote": "leer un cómic pasado mañana.",
+            "kind": "intention",
+            "entities": [],
+            "time": {
+              "precision": "day",
+              "value": "2026-11-17",
+              "end": null,
+              "quote": "pasado mañana"
+            },
+            "provenance": "personal",
+            "attribution": null,
+            "attributionEvidence": null,
+            "eventStatus": "planned",
+            "lifecycle": "current",
+            "id": "1cefdf25-b3af-4bd3-9dbb-c7d2b18a7d88-1",
+            "sourceId": "1cefdf25-b3af-4bd3-9dbb-c7d2b18a7d88",
+            "revision": 2,
+            "receivedAt": "2026-11-15T13:00:00Z",
+            "zone": "Europe/Madrid"
+          },
+          {
+            "text": "Quiero visitar el planetario mañana.",
+            "quote": "Quiero visitar el planetario mañana.",
+            "kind": "intention",
+            "entities": [
+              "planetario"
+            ],
+            "time": {
+              "precision": "day",
+              "value": "2026-11-16",
+              "end": null,
+              "quote": "mañana"
+            },
+            "provenance": "personal",
+            "attribution": null,
+            "attributionEvidence": null,
+            "eventStatus": "planned",
+            "lifecycle": "current",
+            "id": "749f8131-1b1d-43e9-a12f-51061499ffb2-1",
+            "sourceId": "749f8131-1b1d-43e9-a12f-51061499ffb2",
+            "revision": 2,
+            "receivedAt": "2026-11-15T13:00:00.000Z",
+            "zone": "Europe/Madrid"
+          }
+        ],
+        "evidenceCount": 2
+      }
+    },
+    {
+      "id": "shared-owner-correction",
+      "passed": true,
+      "result": {
+        "result": "corrected",
+        "items": [
+          {
+            "text": "Quiero leer un cómic pasado mañana.",
+            "quote": "leer un cómic pasado mañana.",
+            "kind": "intention",
+            "entities": [
+              "cómic"
+            ],
+            "time": {
+              "precision": "day",
+              "value": "2026-11-17",
+              "end": null,
+              "quote": "pasado mañana"
+            },
+            "provenance": "personal",
+            "attribution": null,
+            "attributionEvidence": null,
+            "eventStatus": "planned",
+            "lifecycle": "current",
+            "id": "e436c73f-2322-42bf-bff6-15ce549a623e-1",
+            "sourceId": "e436c73f-2322-42bf-bff6-15ce549a623e",
+            "revision": 2,
+            "receivedAt": "2026-11-15T13:00:00Z",
+            "zone": "Europe/Madrid"
+          },
+          {
+            "text": "Quiero visitar el planetario mañana.",
+            "quote": "Quiero visitar el planetario mañana.",
+            "kind": "intention",
+            "entities": [
+              "planetario"
+            ],
+            "time": {
+              "precision": "day",
+              "value": "2026-11-16",
+              "end": null,
+              "quote": "mañana"
+            },
+            "provenance": "personal",
+            "attribution": null,
+            "attributionEvidence": null,
+            "eventStatus": "planned",
+            "lifecycle": "current",
+            "id": "c8a7de95-9fe8-4de8-b1db-9fab97914ba7-1",
+            "sourceId": "c8a7de95-9fe8-4de8-b1db-9fab97914ba7",
+            "revision": 2,
+            "receivedAt": "2026-11-15T13:00:00.000Z",
+            "zone": "Europe/Madrid"
+          }
+        ],
+        "evidenceCount": 2
+      }
+    },
+    {
+      "id": "shared-reported-correction",
+      "passed": true,
+      "result": {
+        "result": "corrected",
+        "items": [
+          {
+            "text": "Pablo quiere leer un cómic pasado mañana.",
+            "quote": "leer un cómic pasado mañana.",
+            "kind": "intention",
+            "entities": [
+              "Pablo"
+            ],
+            "time": {
+              "precision": "day",
+              "value": "2026-11-17",
+              "end": null,
+              "quote": "pasado mañana"
+            },
+            "provenance": "reported",
+            "attribution": "Pablo",
+            "attributionEvidence": "Pablo me dijo",
+            "eventStatus": "planned",
+            "lifecycle": "current",
+            "id": "7be680ef-0da1-47d9-be61-01e0f57853f4-1",
+            "sourceId": "7be680ef-0da1-47d9-be61-01e0f57853f4",
+            "revision": 2,
+            "receivedAt": "2026-11-15T13:00:00Z",
+            "zone": "Europe/Madrid"
+          },
+          {
+            "text": "Pablo quiere visitar el planetario mañana.",
+            "quote": "Pablo me dijo que quiere visitar el planetario mañana.",
+            "kind": "intention",
+            "entities": [
+              "Pablo",
+              "planetario"
+            ],
+            "time": {
+              "precision": "day",
+              "value": "2026-11-16",
+              "end": null,
+              "quote": "mañana"
+            },
+            "provenance": "reported",
+            "attribution": "Pablo",
+            "attributionEvidence": "Pablo me dijo que quiere visitar el planetario mañana.",
+            "eventStatus": "planned",
+            "lifecycle": "current",
+            "id": "1a71c6ea-4aa1-4371-b6ee-8e6855aaf95d-1",
+            "sourceId": "1a71c6ea-4aa1-4371-b6ee-8e6855aaf95d",
+            "revision": 2,
+            "receivedAt": "2026-11-15T13:00:00.000Z",
+            "zone": "Europe/Madrid"
+          }
+        ],
+        "evidenceCount": 2
+      }
+    }
+  ]
+}

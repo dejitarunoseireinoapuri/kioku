@@ -3,6 +3,7 @@ import { randomUUID } from "node:crypto";
 import { after, beforeEach, test } from "node:test";
 import { deleteApp } from "firebase-admin/app";
 import type { Turn } from "#memory-core/domain";
+import { MemoryError } from "#memory-core/domain";
 import { ChangeMemory } from "../../src/memory-control/change.js";
 import { changeInput } from "../../src/memory-control/contracts.js";
 import type {
@@ -210,6 +211,48 @@ test("a semantic preservation failure or incomplete correction makes no canonica
     );
     assert.equal(await store.epoch(uid), 0);
     assert.equal((await root.collection("revocations").get()).empty, true);
+  }
+});
+
+test("an ambiguous or rejected edit explains that nothing changed and permits a fresh correction", async () => {
+  for (const ambiguous of [true, false]) {
+    const input = {
+      ...(await command("correct")),
+      correction: "quiero jugary prender",
+    };
+    const original = await store.details(uid, input.sourceId);
+    const result = await service.execute(
+      uid,
+      input,
+      async () => ({
+        ...intelligence,
+        extract: async () => {
+          if (!ambiguous) throw new MemoryError("CAPTURE_REFINEMENT_REJECTED");
+          return {
+            status: "needs_clarification",
+            clarification:
+              "Reescribe la frase completa con las palabras separadas.",
+            items: [],
+          };
+        },
+      }),
+      allowed,
+    );
+    assert.equal(result.status, "needsClarification");
+    assert.match(result.text, /^No he modificado el recuerdo\./);
+    assert.match(result.text, /[Rr]eescr[ií]b/);
+    assert.deepEqual(await store.details(uid, input.sourceId), original);
+    const corrected = await service.execute(
+      uid,
+      {
+        ...input,
+        requestId: randomUUID(),
+        correction: "Quiero aprender japonés.",
+      },
+      async () => intelligence,
+      allowed,
+    );
+    assert.equal(corrected.status, "corrected");
   }
 });
 
