@@ -89,7 +89,14 @@ export class EvaluationBudget implements Meter {
           );
       }
       const window = await activeBudgetWindow();
-      if (window && ledger.spentUsd < window.baselineSpentUsd)
+      if (
+        window &&
+        ledger.spentUsd <
+          Math.max(
+            window.baselineSpentUsd,
+            window.balanceReference?.baselineSpentUsd ?? 0,
+          )
+      )
         throw new InterpretationError("BUDGET_BASELINE_MISMATCH");
       return new EvaluationBudget(
         ledger,

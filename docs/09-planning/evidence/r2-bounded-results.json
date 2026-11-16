@@ -7,22 +7,27 @@
     "id": "bounded-v9",
     "baselineSpentUsd": 92.84179999999952,
     "baselineReservedUsd": 1.7889500000000214,
-    "additionalUsd": 20
+    "additionalUsd": 25,
+    "balanceReference": {
+      "baselineSpentUsd": 110.73268499999888,
+      "reportedBalanceUsd": 15,
+      "minimumBalanceUsd": 5
+    }
   },
   "budget": {
-    "spentUsd": 105.73110499999918,
-    "reservedUsd": 1.788950000000022,
-    "calls": 21199,
-    "input": 36381158,
-    "output": 1477821,
+    "spentUsd": 111.0797274999989,
+    "reservedUsd": 1.7889500000000242,
+    "calls": 22071,
+    "input": 38144387,
+    "output": 1571876,
     "previousM0Spent": 21.719885440000006,
     "previousM0Reserved": 0.20756491999999982
   },
-  "additionalSpentUsd": 12.889304999999652,
-  "additionalCommittedUsd": 12.88930499999966,
+  "additionalSpentUsd": 18.237927499999373,
+  "additionalCommittedUsd": 18.23792749999938,
   "notices": {
-    "additionalSpentUsd": 26.276594999999347,
-    "notifiedIncrements": 2,
+    "additionalSpentUsd": 31.625217499999067,
+    "notifiedIncrements": 3,
     "intervalUsd": 10
   },
   "pilot": {
@@ -4203,6 +4208,7 @@
       "name": "bounded-scoped-pilot",
       "complete": true,
       "independent": false,
+      "evaluatedCodeCommit": "f2143d7",
       "profile": {
         "model": "gpt-6.1-sol",
         "reasoning": "high",
@@ -4302,6 +4308,1455 @@
           "error": null,
           "failures": [],
           "queryCount": 4
+        }
+      ]
+    },
+    {
+      "name": "bounded-scoped-full",
+      "complete": true,
+      "independent": false,
+      "evaluatedCodeCommit": "f2143d7",
+      "profile": {
+        "model": "gpt-6.1-sol",
+        "reasoning": "high",
+        "inputRate": 0.0000025,
+        "outputRate": 0.00001
+      },
+      "resolvedModel": "gpt-6.1-sol",
+      "fingerprint": "22383e1dbff64f548c24a45dfba4a09f7d483ce7ac5911fd6d834854f8c32dfe",
+      "reportSha256": "554dad192b26116ae46e821c0627756535a69931c7bd888661034b280ead6451",
+      "total": 60,
+      "passed": 59,
+      "queriesReturned": 246,
+      "criticalChecksFailed": 0,
+      "latency": {
+        "capture": {
+          "attempts": 60,
+          "p50": 10048.8195,
+          "p95": 17765.964699999982
+        },
+        "clarification": {
+          "attempts": 4,
+          "p50": 20663.289899999974,
+          "p95": 26566.969900000026
+        },
+        "correction": {
+          "attempts": 6,
+          "p50": 14131.432900000014,
+          "p95": 18735.771999999997
+        },
+        "query": {
+          "attempts": 246,
+          "p50": 4748.8921000000555,
+          "p95": 7974.7929
+        },
+        "forget": {
+          "attempts": 58,
+          "p50": 0.31310000002849847,
+          "p95": 0.631699999968987
+        }
+      },
+      "calls": 630,
+      "spentUsd": 3.785887499999774,
+      "uncertainReservationDeltaUsd": 8.881784197001252e-16,
+      "cases": [
+        {
+          "id": "j01",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j02",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j03",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j04",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j05",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j06",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j07",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j08",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j09",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j10",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j11",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j12",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j13",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j14",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j15",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j16",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j17",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j18",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j19",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j20",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j21",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j22",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j23",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j24",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j25",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j26",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j27",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j28",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j29",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j30",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j31",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j32",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j33",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j34",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j35",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j36",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j37",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j38",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j39",
+          "family": "similar",
+          "passed": false,
+          "error": "REVIEW_time",
+          "failures": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "queryCount": 0,
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "fact",
+                "intention"
+              ],
+              "polarities": [
+                "positive",
+                "positive"
+              ],
+              "existingIndices": [
+                null,
+                null
+              ],
+              "supportMatches": [
+                {
+                  "unitIndex": 0,
+                  "goldIndex": 0,
+                  "normalized": [
+                    true,
+                    true,
+                    true,
+                    true
+                  ],
+                  "evidence": [
+                    true,
+                    true,
+                    true,
+                    true
+                  ]
+                },
+                {
+                  "unitIndex": 0,
+                  "goldIndex": 1,
+                  "normalized": [
+                    true,
+                    true,
+                    true,
+                    true
+                  ],
+                  "evidence": [
+                    true,
+                    true,
+                    true,
+                    true
+                  ]
+                },
+                {
+                  "unitIndex": 1,
+                  "goldIndex": 0,
+                  "normalized": [
+                    true,
+                    true,
+                    true,
+                    true
+                  ],
+                  "evidence": [
+                    true,
+                    true,
+                    true,
+                    true
+                  ]
+                },
+                {
+                  "unitIndex": 1,
+                  "goldIndex": 1,
+                  "normalized": [
+                    true,
+                    true,
+                    true,
+                    true
+                  ],
+                  "evidence": [
+                    true,
+                    true,
+                    true,
+                    true
+                  ]
+                }
+              ],
+              "relations": [],
+              "expectedMatches": [
+                {
+                  "unitIndex": 0,
+                  "goldIndex": 0,
+                  "terms": true,
+                  "time": true,
+                  "attribution": true,
+                  "polarity": true
+                },
+                {
+                  "unitIndex": 0,
+                  "goldIndex": 1,
+                  "terms": true,
+                  "time": false,
+                  "attribution": true,
+                  "polarity": true
+                },
+                {
+                  "unitIndex": 1,
+                  "goldIndex": 0,
+                  "terms": true,
+                  "time": false,
+                  "attribution": true,
+                  "polarity": true
+                },
+                {
+                  "unitIndex": 1,
+                  "goldIndex": 1,
+                  "terms": true,
+                  "time": true,
+                  "attribution": true,
+                  "polarity": true
+                }
+              ],
+              "timePrecisions": [
+                "day",
+                "day"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                12,
+                26,
+                28,
+                43,
+                57,
+                58
+              ],
+              "segmentRoles": [
+                "primary",
+                "time",
+                "separator",
+                "primary",
+                "time",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "id": "j40",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j41",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j42",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j43",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 5
+        },
+        {
+          "id": "j44",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 5
+        },
+        {
+          "id": "j45",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 5
+        },
+        {
+          "id": "j46",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 5
+        },
+        {
+          "id": "j47",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 5
+        },
+        {
+          "id": "j48",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 5
+        },
+        {
+          "id": "j49",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j50",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j51",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j52",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j53",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j54",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j55",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j56",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 6
+        },
+        {
+          "id": "j57",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j58",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j59",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j60",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 6
+        }
+      ]
+    }
+  ],
+  "timeRoleAudit": {
+    "complete": true,
+    "profile": {
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "inputRate": 0.0000025,
+      "outputRate": 0.00001
+    },
+    "fingerprint": "9c5534826335f474dbdd437177293aba6fbad120cf4658de42e22b5b983b2012",
+    "reportSha256": "27b3a16511b772bbacb73a065b940d3dfcda2c975ada0e71040ebf3e2d07d460",
+    "calls": 18,
+    "spentUsd": 0.23708999999999492,
+    "results": [
+      {
+        "attempt": 1,
+        "error": null,
+        "review": {
+          "accepted": true,
+          "issues": []
+        },
+        "diagnosis": {
+          "units": [
+            {
+              "index": 0,
+              "explicitSourceDateRole": "target_event",
+              "normalizedContentDateRole": "target_event",
+              "normalizedTimeMatchesRole": "target_event",
+              "unsupportedActionDateClaim": false,
+              "wrongDateValue": false,
+              "wrongOwner": false,
+              "lostTargetDate": false
+            },
+            {
+              "index": 1,
+              "explicitSourceDateRole": "target_event",
+              "normalizedContentDateRole": "target_event",
+              "normalizedTimeMatchesRole": "target_event",
+              "unsupportedActionDateClaim": false,
+              "wrongDateValue": false,
+              "wrongOwner": false,
+              "lostTargetDate": false
+            }
+          ],
+          "likelyTimeIssue": "none"
+        },
+        "diagnosisError": null
+      },
+      {
+        "attempt": 2,
+        "error": null,
+        "review": {
+          "accepted": true,
+          "issues": []
+        },
+        "diagnosis": {
+          "units": [
+            {
+              "index": 0,
+              "explicitSourceDateRole": "target_event",
+              "normalizedContentDateRole": "target_event",
+              "normalizedTimeMatchesRole": "target_event",
+              "unsupportedActionDateClaim": false,
+              "wrongDateValue": false,
+              "wrongOwner": false,
+              "lostTargetDate": false
+            },
+            {
+              "index": 1,
+              "explicitSourceDateRole": "target_event",
+              "normalizedContentDateRole": "target_event",
+              "normalizedTimeMatchesRole": "target_event",
+              "unsupportedActionDateClaim": false,
+              "wrongDateValue": false,
+              "wrongOwner": false,
+              "lostTargetDate": false
+            }
+          ],
+          "likelyTimeIssue": "none"
+        },
+        "diagnosisError": null
+      },
+      {
+        "attempt": 3,
+        "error": null,
+        "review": {
+          "accepted": true,
+          "issues": []
+        },
+        "diagnosis": {
+          "units": [
+            {
+              "index": 0,
+              "explicitSourceDateRole": "target_event",
+              "normalizedContentDateRole": "target_event",
+              "normalizedTimeMatchesRole": "target_event",
+              "unsupportedActionDateClaim": false,
+              "wrongDateValue": false,
+              "wrongOwner": false,
+              "lostTargetDate": false
+            },
+            {
+              "index": 1,
+              "explicitSourceDateRole": "target_event",
+              "normalizedContentDateRole": "target_event",
+              "normalizedTimeMatchesRole": "target_event",
+              "unsupportedActionDateClaim": false,
+              "wrongDateValue": false,
+              "wrongOwner": false,
+              "lostTargetDate": false
+            }
+          ],
+          "likelyTimeIssue": "none"
+        },
+        "diagnosisError": null
+      },
+      {
+        "attempt": 4,
+        "error": null,
+        "review": {
+          "accepted": true,
+          "issues": []
+        },
+        "diagnosis": {
+          "units": [
+            {
+              "index": 0,
+              "explicitSourceDateRole": "target_event",
+              "normalizedContentDateRole": "target_event",
+              "normalizedTimeMatchesRole": "target_event",
+              "unsupportedActionDateClaim": false,
+              "wrongDateValue": false,
+              "wrongOwner": false,
+              "lostTargetDate": false
+            },
+            {
+              "index": 1,
+              "explicitSourceDateRole": "target_event",
+              "normalizedContentDateRole": "target_event",
+              "normalizedTimeMatchesRole": "target_event",
+              "unsupportedActionDateClaim": false,
+              "wrongDateValue": false,
+              "wrongOwner": false,
+              "lostTargetDate": false
+            }
+          ],
+          "likelyTimeIssue": "none"
+        },
+        "diagnosisError": null
+      },
+      {
+        "attempt": 5,
+        "error": null,
+        "review": {
+          "accepted": true,
+          "issues": []
+        },
+        "diagnosis": {
+          "units": [
+            {
+              "index": 0,
+              "explicitSourceDateRole": "target_event",
+              "normalizedContentDateRole": "target_event",
+              "normalizedTimeMatchesRole": "target_event",
+              "unsupportedActionDateClaim": false,
+              "wrongDateValue": false,
+              "wrongOwner": false,
+              "lostTargetDate": false
+            },
+            {
+              "index": 1,
+              "explicitSourceDateRole": "target_event",
+              "normalizedContentDateRole": "target_event",
+              "normalizedTimeMatchesRole": "target_event",
+              "unsupportedActionDateClaim": false,
+              "wrongDateValue": false,
+              "wrongOwner": false,
+              "lostTargetDate": false
+            }
+          ],
+          "likelyTimeIssue": "none"
+        },
+        "diagnosisError": null
+      },
+      {
+        "attempt": 6,
+        "error": null,
+        "review": {
+          "accepted": true,
+          "issues": []
+        },
+        "diagnosis": {
+          "units": [
+            {
+              "index": 0,
+              "explicitSourceDateRole": "target_event",
+              "normalizedContentDateRole": "target_event",
+              "normalizedTimeMatchesRole": "target_event",
+              "unsupportedActionDateClaim": false,
+              "wrongDateValue": false,
+              "wrongOwner": false,
+              "lostTargetDate": false
+            },
+            {
+              "index": 1,
+              "explicitSourceDateRole": "target_event",
+              "normalizedContentDateRole": "target_event",
+              "normalizedTimeMatchesRole": "target_event",
+              "unsupportedActionDateClaim": false,
+              "wrongDateValue": false,
+              "wrongOwner": false,
+              "lostTargetDate": false
+            }
+          ],
+          "likelyTimeIssue": "none"
+        },
+        "diagnosisError": null
+      }
+    ]
+  },
+  "temporalRuns": [
+    {
+      "name": "bounded-time-baseline",
+      "complete": true,
+      "independent": false,
+      "profile": {
+        "model": "gpt-6.1-sol",
+        "reasoning": "high",
+        "inputRate": 0.0000025,
+        "outputRate": 0.00001
+      },
+      "fingerprint": "bb35cad93e4ecd3918ab515e6d27fa3437f68a0396223ec42c7ba43e763a158f",
+      "reportSha256": "d78cf20f260b1a00ad3b1fce79c47b247fa1828dffd4129465f40362e8834f86",
+      "total": 8,
+      "passed": 6,
+      "calls": 98,
+      "spentUsd": 0.5946650000000204,
+      "uncertainReservationDeltaUsd": -4.440892098500626e-16,
+      "queriesReturned": 40,
+      "latency": {
+        "capture": {
+          "attempts": 8,
+          "p50": 19085.086799999997,
+          "p95": 31260.5718
+        },
+        "clarification": {
+          "attempts": 0,
+          "p50": null,
+          "p95": null
+        },
+        "correction": {
+          "attempts": 0,
+          "p50": null,
+          "p95": null
+        },
+        "query": {
+          "attempts": 40,
+          "p50": 5007.2261,
+          "p95": 9372.3999
+        },
+        "forget": {
+          "attempts": 6,
+          "p50": 0.45530000000144355,
+          "p95": 0.7489999999961583
+        }
+      },
+      "criticalChecksFailed": 0,
+      "cases": [
+        {
+          "id": "td01",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "td02",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "td03",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "td04",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "td05",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "td06",
+          "passed": false,
+          "error": "REVIEW_time",
+          "failures": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "fact",
+                "fact"
+              ],
+              "polarities": [
+                "positive",
+                "positive"
+              ],
+              "existingIndices": [
+                null,
+                null
+              ],
+              "supportMatches": [
+                {
+                  "unitIndex": 0,
+                  "goldIndex": 0,
+                  "normalized": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "evidence": [
+                    true,
+                    true,
+                    false
+                  ]
+                },
+                {
+                  "unitIndex": 0,
+                  "goldIndex": 1,
+                  "normalized": [
+                    false,
+                    false,
+                    true,
+                    false
+                  ],
+                  "evidence": [
+                    false,
+                    false,
+                    true,
+                    false
+                  ]
+                },
+                {
+                  "unitIndex": 1,
+                  "goldIndex": 0,
+                  "normalized": [
+                    false,
+                    true,
+                    false
+                  ],
+                  "evidence": [
+                    false,
+                    true,
+                    false
+                  ]
+                },
+                {
+                  "unitIndex": 1,
+                  "goldIndex": 1,
+                  "normalized": [
+                    true,
+                    true,
+                    true,
+                    false
+                  ],
+                  "evidence": [
+                    true,
+                    true,
+                    true,
+                    false
+                  ]
+                }
+              ],
+              "relations": [],
+              "expectedMatches": [
+                {
+                  "unitIndex": 0,
+                  "goldIndex": 0,
+                  "terms": false,
+                  "time": true,
+                  "attribution": true,
+                  "polarity": true
+                },
+                {
+                  "unitIndex": 0,
+                  "goldIndex": 1,
+                  "terms": false,
+                  "time": false,
+                  "attribution": true,
+                  "polarity": true
+                },
+                {
+                  "unitIndex": 1,
+                  "goldIndex": 0,
+                  "terms": false,
+                  "time": false,
+                  "attribution": true,
+                  "polarity": true
+                },
+                {
+                  "unitIndex": 1,
+                  "goldIndex": 1,
+                  "terms": false,
+                  "time": true,
+                  "attribution": true,
+                  "polarity": true
+                }
+              ],
+              "timePrecisions": [
+                "day",
+                "day"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                0,
+                1,
+                8,
+                10,
+                25,
+                26,
+                39,
+                40
+              ],
+              "segmentRoles": [
+                "time",
+                "separator",
+                "primary",
+                "separator",
+                "primary",
+                "separator",
+                "time",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "id": "td07",
+          "passed": false,
+          "error": "REVIEW_time",
+          "failures": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "fact",
+                "fact"
+              ],
+              "polarities": [
+                "positive",
+                "positive"
+              ],
+              "existingIndices": [
+                null,
+                null
+              ],
+              "supportMatches": [
+                {
+                  "unitIndex": 0,
+                  "goldIndex": 0,
+                  "normalized": [
+                    true,
+                    true,
+                    true,
+                    true
+                  ],
+                  "evidence": [
+                    true,
+                    true,
+                    true,
+                    true
+                  ]
+                },
+                {
+                  "unitIndex": 0,
+                  "goldIndex": 1,
+                  "normalized": [
+                    false,
+                    false
+                  ],
+                  "evidence": [
+                    false,
+                    false
+                  ]
+                },
+                {
+                  "unitIndex": 1,
+                  "goldIndex": 0,
+                  "normalized": [
+                    false,
+                    false,
+                    false,
+                    false
+                  ],
+                  "evidence": [
+                    false,
+                    false,
+                    false,
+                    false
+                  ]
+                },
+                {
+                  "unitIndex": 1,
+                  "goldIndex": 1,
+                  "normalized": [
+                    true,
+                    true
+                  ],
+                  "evidence": [
+                    true,
+                    true
+                  ]
+                }
+              ],
+              "relations": [],
+              "expectedMatches": [
+                {
+                  "unitIndex": 0,
+                  "goldIndex": 0,
+                  "terms": true,
+                  "time": true,
+                  "attribution": true,
+                  "polarity": true
+                },
+                {
+                  "unitIndex": 0,
+                  "goldIndex": 1,
+                  "terms": false,
+                  "time": false,
+                  "attribution": true,
+                  "polarity": true
+                },
+                {
+                  "unitIndex": 1,
+                  "goldIndex": 0,
+                  "terms": false,
+                  "time": false,
+                  "attribution": true,
+                  "polarity": true
+                },
+                {
+                  "unitIndex": 1,
+                  "goldIndex": 1,
+                  "terms": true,
+                  "time": true,
+                  "attribution": true,
+                  "polarity": true
+                }
+              ],
+              "timePrecisions": [
+                "day",
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                13,
+                26,
+                28,
+                39,
+                40
+              ],
+              "segmentRoles": [
+                "primary",
+                "time",
+                "separator",
+                "primary",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "id": "td08",
+          "passed": true,
+          "error": null,
+          "failures": []
+        }
+      ]
+    },
+    {
+      "name": "bounded-time-fixed",
+      "complete": true,
+      "independent": false,
+      "profile": {
+        "model": "gpt-6.1-sol",
+        "reasoning": "high",
+        "inputRate": 0.0000025,
+        "outputRate": 0.00001
+      },
+      "fingerprint": "92a4d84d967eb0071645e06b0269f861760d7ebcdbb2d23f52898e6eca8bb7c3",
+      "reportSha256": "27a820019ea71bc2cb88887d96a1ffe61af509b87fccd658db46338026a81398",
+      "total": 8,
+      "passed": 8,
+      "calls": 126,
+      "spentUsd": 0.7309799999999314,
+      "uncertainReservationDeltaUsd": 4.440892098500626e-16,
+      "queriesReturned": 53,
+      "latency": {
+        "capture": {
+          "attempts": 8,
+          "p50": 12973.018199999999,
+          "p95": 17109.627600000003
+        },
+        "clarification": {
+          "attempts": 0,
+          "p50": null,
+          "p95": null
+        },
+        "correction": {
+          "attempts": 1,
+          "p50": 13953.860400000005,
+          "p95": 13953.860400000005
+        },
+        "query": {
+          "attempts": 53,
+          "p50": 4349.81259999999,
+          "p95": 7403.9158000000025
+        },
+        "forget": {
+          "attempts": 8,
+          "p50": 0.39130000000295695,
+          "p95": 0.6823999999905936
+        }
+      },
+      "criticalChecksFailed": 0,
+      "cases": [
+        {
+          "id": "td01",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "td02",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "td03",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "td04",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "td05",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "td06",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "td07",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "td08",
+          "passed": true,
+          "error": null,
+          "failures": []
         }
       ]
     }

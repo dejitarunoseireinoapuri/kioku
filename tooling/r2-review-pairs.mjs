@@ -18,6 +18,15 @@ async function main() {
         throw new InterpretationError("BUDGET_WINDOW_REQUIRED");
     if (profile.reasoning !== "high")
         throw new InterpretationError("PROFILE_REQUIRED");
+    const fixture = boundedReserve.find((c) => c.id === "j39");
+    const fingerprint = await finalFingerprint([fixture]);
+    // The compact payload came from that interpreter version. A later interpreter
+    // must not silently turn this historical comparison into two identical inputs.
+    if (
+        fingerprint !==
+        "deeef4652433b7fb3f034c0beec436c3249dc656a97c5d3ffdfded9d93b238f9"
+    )
+        throw new InterpretationError("DIAGNOSTIC_VERSION_CHANGED");
     // This is an exposed diagnostic, admitted only after all frozen rounds finish.
     for (let round = 1; round <= 3; round++) {
         const r = JSON.parse(
@@ -48,8 +57,6 @@ async function main() {
             budget,
             (m) => metrics.push({ ...m, mode }),
         );
-        const fixture = boundedReserve.find((c) => c.id === "j39");
-        const fingerprint = await finalFingerprint([fixture]);
         const report = () => ({
             profile,
             fingerprint,

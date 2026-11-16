@@ -208,8 +208,24 @@ for (const name of ["bounded-scoped-pilot", "bounded-scoped-full"]) {
     assert.equal(r.profile.model, "gpt-6.1-sol");
     assert.equal(r.profile.reasoning, "high");
     assert.ok(r.results.every((x) => ids.includes(x.id)));
+    assert.equal(
+        r.fingerprint,
+        name.endsWith("-full")
+            ? "22383e1dbff64f548c24a45dfba4a09f7d483ce7ac5911fd6d834854f8c32dfe"
+            : "c1c9b448d146a62d574005a13e2ed1cb1829452a82a9704024adfbd80e545e11",
+    );
     if (name.endsWith("-full") && r.complete)
         assert.deepEqual(r.results.map((x) => x.id).sort(), ids);
+    if (name.endsWith("-pilot") && r.complete)
+        assert.deepEqual(r.results.map((x) => x.id).sort(), [
+            "j12",
+            "j31",
+            "j39",
+            "j43",
+            "j48",
+            "j51",
+            "j53",
+        ]);
     const latency = Object.fromEntries(
         ["capture", "clarification", "correction", "query", "forget"].map(
             (stage) => {
@@ -237,6 +253,7 @@ for (const name of ["bounded-scoped-pilot", "bounded-scoped-full"]) {
         name,
         complete: r.complete,
         independent: false,
+        evaluatedCodeCommit: "f2143d7",
         profile: r.profile,
         resolvedModel: r.resolvedModel,
         fingerprint: r.fingerprint,
@@ -261,6 +278,100 @@ for (const name of ["bounded-scoped-pilot", "bounded-scoped-full"]) {
                 error: x.error,
                 failures: x.checks.filter((c) => !c.passed),
                 queryCount: x.queryCount,
+                ...(passed(x) ? {} : { observations: x.observations }),
+            })),
+    });
+}
+let timeRoleAudit = null;
+try {
+    const bytes = await readFile("local-data/r2/tuning-bounded-time-role.json");
+    const r = JSON.parse(bytes);
+    timeRoleAudit = {
+        complete: r.complete,
+        profile: r.profile,
+        fingerprint: r.fingerprint,
+        reportSha256: createHash("sha256").update(bytes).digest("hex"),
+        calls: r.metrics.length,
+        spentUsd: r.budget.spentUsd - r.baseline.spentUsd,
+        results: r.results,
+    };
+} catch (error) {
+    if (error?.code !== "ENOENT") throw error;
+}
+const temporalRuns = [];
+for (const name of [
+    "bounded-time-baseline",
+    "bounded-time-fixed",
+    "bounded-time-full",
+]) {
+    let bytes;
+    try {
+        bytes = await readFile(`local-data/r2/tuning-${name}.json`);
+    } catch (error) {
+        if (error?.code !== "ENOENT") throw error;
+        continue;
+    }
+    const r = JSON.parse(bytes);
+    assert.equal(r.profile.reasoning, "high");
+    assert.equal(
+        r.corpus,
+        name.endsWith("-full")
+            ? "regression-v9-exposed"
+            : "time-role-diagnostic",
+    );
+    const expectedIds = name.endsWith("-full")
+        ? ids
+        : Array.from({ length: 8 }, (_, i) => `td0${i + 1}`);
+    if (r.complete)
+        assert.deepEqual(r.results.map((x) => x.id).sort(), expectedIds);
+    const latency = Object.fromEntries(
+        ["capture", "clarification", "correction", "query", "forget"].map(
+            (stage) => {
+                const ms = r.results.flatMap((x) =>
+                    Object.entries(x.stages)
+                        .filter(([k]) =>
+                            stage === "query"
+                                ? /^(query|after|corrected_query)\d+$/u.test(k)
+                                : k === stage,
+                        )
+                        .map(([, v]) => v),
+                );
+                return [
+                    stage,
+                    {
+                        attempts: ms.length,
+                        p50: percentile(ms, 0.5),
+                        p95: percentile(ms, 0.95),
+                    },
+                ];
+            },
+        ),
+    );
+    temporalRuns.push({
+        name,
+        complete: r.complete,
+        independent: false,
+        profile: r.profile,
+        fingerprint: r.fingerprint,
+        reportSha256: createHash("sha256").update(bytes).digest("hex"),
+        total: r.results.length,
+        passed: r.results.filter(passed).length,
+        calls: r.metrics.length,
+        spentUsd: r.budget.spentUsd - r.baseline.spentUsd,
+        uncertainReservationDeltaUsd:
+            r.budget.reservedUsd - r.baseline.reservedUsd,
+        queriesReturned: r.results.reduce((n, x) => n + x.queryCount, 0),
+        latency,
+        criticalChecksFailed: r.results.flatMap((x) =>
+            x.checks.filter((c) => c.critical && !c.passed),
+        ).length,
+        cases: r.results
+            .toSorted((a, b) => a.id.localeCompare(b.id))
+            .map((x) => ({
+                id: x.id,
+                passed: passed(x),
+                error: x.error,
+                failures: x.checks.filter((c) => !c.passed),
                 ...(passed(x) ? {} : { observations: x.observations }),
             })),
     });
@@ -293,6 +404,8 @@ const result = {
     rounds,
     reviewPairs,
     scopedRegressions,
+    timeRoleAudit,
+    temporalRuns,
 };
 assert.ok(result.additionalCommittedUsd <= window.additionalUsd + 1e-8);
 await writeFile(
@@ -303,6 +416,26 @@ console.log(
     JSON.stringify({
         additionalSpentUsd: result.additionalSpentUsd,
         additionalCommittedUsd: result.additionalCommittedUsd,
+        temporalRuns: temporalRuns.map(
+            ({ name, complete, total, passed, spentUsd, latency }) => ({
+                name,
+                complete,
+                total,
+                passed,
+                spentUsd,
+                latency,
+            }),
+        ),
+        scopedRegressions: scopedRegressions.map(
+            ({ name, complete, total, passed, latency, spentUsd }) => ({
+                name,
+                complete,
+                total,
+                passed,
+                latency,
+                spentUsd,
+            }),
+        ),
         rounds: rounds.map(
             ({
                 round,

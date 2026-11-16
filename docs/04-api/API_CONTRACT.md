@@ -1,5 +1,7 @@
 # Contrato backend previsto · v1
 
+Precisión experimental R2: en compras/reservas `time` distingue por el contenido y soporte la fecha del acto y la fecha objetivo. Si solo consta la segunda puede anclarla, sin afirmar cuándo se realizó la compra ni que hubo asistencia; si constan ambas ancla la del acto y preserva también la objetivo. Consultar la fecha del acto exige su propia evidencia. Sin nuevos campos, colecciones, migración ni modificación de rutas activas. [Reglas y evaluación](../09-planning/R2_BOUNDED_VALIDATION.md).
+
 Refinamiento exclusivamente local R2: intérprete y revisión comparten polaridad del contenido citado, procedencia textual e identidad de reiteración; la consulta exige soporte vigente del predicado pedido, además del sujeto. Se mantienen revisión, materialización, revalidación y confirmación del motor. No modifica DTO HTTP, permisos ni rutas desplegadas. [Alcance y pruebas](../09-planning/R2_SCOPE_VALIDATION.md).
 
 R2 incorpora `queryCatalog` como frontera interna de prueba, sin HTTP nuevo: lectura paginada ligada a cuenta/época, máximo 32 referencias actuales por respuesta y estado de cobertura/truncado. Un pedido exhaustivo truncado pide acotar; una ausencia de coincidencias no demuestra ausencia universal. Las intervenciones de aclaración llevan calendario propio y procedencia de admisión. [Contrato local y límites](../09-planning/R2_INDEXED_VALIDATION.md).

@@ -49,7 +49,7 @@ test("additional budget includes parallel and uncertain reservations and survive
   await assert.rejects(() => nextRun.reserve(0.5), { message: "BUDGET_LIMIT" });
   await nextRun.reserve(0.3);
   assert.ok(nextRun.ledger.spentUsd + nextRun.ledger.reservedUsd <= w.ceiling);
-  for (const additionalUsd of [0, -1, 21, Infinity])
+  for (const additionalUsd of [0, -1, 26, Infinity])
     assert.throws(() =>
       parseBudgetWindow({
         id: "synthetic",
@@ -62,11 +62,31 @@ test("additional budget includes parallel and uncertain reservations and survive
     id: "synthetic",
     baselineSpentUsd: 10,
     baselineReservedUsd: 2,
-    additionalUsd: 20,
+    additionalUsd: 25,
   });
-  assert.equal(extended.ceiling, 32);
+  assert.equal(extended.ceiling, 37);
   assert.equal(extended.baselineSpentUsd, w.baselineSpentUsd);
   assert.equal(extended.baselineReservedUsd, w.baselineReservedUsd);
+  const floor = parseBudgetWindow({
+    id: "synthetic",
+    baselineSpentUsd: 10,
+    baselineReservedUsd: 2,
+    additionalUsd: 25,
+    balanceReference: {
+      baselineSpentUsd: 15,
+      reportedBalanceUsd: 15,
+      minimumBalanceUsd: 5,
+    },
+  });
+  assert.equal(floor.ceiling, 25);
+  const floorMeter = new EvaluationBudget(
+    { ...ledger, spentUsd: 23, reservedUsd: 2 },
+    floor.ceiling,
+    async () => undefined,
+  );
+  await assert.rejects(() => floorMeter.reserve(0.01), {
+    message: "BUDGET_LIMIT",
+  });
 });
 
 function capture() {

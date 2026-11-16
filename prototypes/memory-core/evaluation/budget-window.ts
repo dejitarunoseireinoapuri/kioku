@@ -6,16 +6,30 @@ const windowSchema = z.strictObject({
   id: z.string().regex(/^[a-z0-9-]{1,40}$/u),
   baselineSpentUsd: z.number().finite().nonnegative(),
   baselineReservedUsd: z.number().finite().nonnegative(),
-  additionalUsd: z.number().finite().positive().max(20),
+  additionalUsd: z.number().finite().positive().max(25),
+  balanceReference: z
+    .strictObject({
+      baselineSpentUsd: z.number().finite().nonnegative(),
+      reportedBalanceUsd: z.number().finite().positive(),
+      minimumBalanceUsd: z.number().finite().nonnegative(),
+    })
+    .refine((r) => r.reportedBalanceUsd > r.minimumBalanceUsd)
+    .optional(),
 });
 export function parseBudgetWindow(raw: unknown) {
   const window = windowSchema.parse(raw);
   return {
     ...window,
-    ceiling:
+    ceiling: Math.min(
       window.baselineSpentUsd +
-      window.baselineReservedUsd +
-      window.additionalUsd,
+        window.baselineReservedUsd +
+        window.additionalUsd,
+      window.balanceReference
+        ? window.balanceReference.baselineSpentUsd +
+            window.balanceReference.reportedBalanceUsd -
+            window.balanceReference.minimumBalanceUsd
+        : Infinity,
+    ),
   };
 }
 export async function activeBudgetWindow() {

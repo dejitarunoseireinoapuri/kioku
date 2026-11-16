@@ -127,6 +127,8 @@ Al finalizar, unidades, evidencia, proyecciones listas, membresías y recibo se 
 
 ## 6. Tiempo, contradicción y corrección
 
+Precisión del prototipo R2 en compras/reservas: la fecha normalizada puede anclar el evento objetivo explícito cuando no consta la fecha del acto de comprar/reservar. El contenido y soporte deben conservar ese papel («para»), sin convertirlo en fecha de compra ni en asistencia realizada. Si se expresan ambas fechas, `time` ancla la del acto y el contenido conserva también la fecha objetivo. Preguntar CUÁNDO se compró exige evidencia de ese acto; el campo normalizado por sí solo no la aporta. Sin fecha fiable sigue siendo `unknown`. No cambia el esquema ni el contrato remoto desplegado. [Validación y límites](../09-planning/R2_BOUNDED_VALIDATION.md).
+
 Cada evidencia conserva `recordedAt` de servidor y la zona del turno. El tiempo del acontecimiento tiene precisión, valor/intervalo, literal y base de resolución explícitos. Una aclaración tardía no desplaza «mañana» del relato original. Si introduce su propio «mañana», se registra qué intervención lo ancla y se pregunta si no queda claro.
 
 «El mes que viene» conserva precisión de mes; una condición futura no se convierte en evento ocurrido. Fechas de evento, registro y corrección son ejes distintos. Al editar un recuerdo antiguo, lo no editado mantiene su tiempo original; un nuevo marcador temporal usa el momento/zona de la edición salvo referencia explícita al original. Nunca se desplaza implícitamente un evento por volver a interpretar todo el texto a fecha de hoy.
