@@ -6,6 +6,7 @@ import { EvaluationBudget, executionLock, saveReport } from "./runtime.ts";
 import { executeCase } from "./execute.ts";
 import type { CaseResult } from "./execute.ts";
 import type { Scenario } from "./case.ts";
+import { activeBudgetWindow } from "./budget-window.ts";
 import {
   finalFingerprint,
   finalRound,
@@ -17,11 +18,15 @@ export async function runReserve(spec: {
   name: (round: number) => string;
   cases: Scenario[];
   reasoning?: "medium" | "high";
+  budgetWindow?: string;
 }) {
   const round = finalRound(process.argv.slice(2));
   // Historical reserve entry points remain pinned; use exposed regression for new profiles.
   if (profile.reasoning !== (spec.reasoning ?? "medium"))
     throw new InterpretationError("HISTORICAL_PROFILE_MISMATCH");
+  const window = await activeBudgetWindow();
+  if (spec.budgetWindow && window?.id !== spec.budgetWindow)
+    throw new InterpretationError("BUDGET_WINDOW_REQUIRED");
   const finish = await executionLock();
   try {
     const name = spec.name(round);
@@ -70,6 +75,7 @@ export async function runReserve(spec: {
       corpus: spec.corpus,
       profile,
       runCap,
+      authorizedWindow: window,
       fingerprint,
       baseline,
       budget: budget.ledger,

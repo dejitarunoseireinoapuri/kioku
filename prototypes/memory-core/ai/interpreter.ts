@@ -152,12 +152,24 @@ export class Interpreter {
         ? materialize(proposal, input, candidates)
         : null;
     const retainedEvidence = materializeRetention(proposal, input);
+    // The review receives exact expanded literals, not a second copy of token indexes.
+    // Those indexes are only needed by the generator to select spans.
+    const {
+      tokens: ignoredTokens,
+      evidence: indexedEvidence,
+      ...reviewData
+    } = data;
+    void ignoredTokens;
+    const evidence = indexedEvidence?.map(({ tokens: ignored, ...source }) => {
+      void ignored;
+      return source;
+    });
     const review = await this.model.call(
       "interpret_review",
       proposal.status === "clarify"
         ? clarificationReviewInstructions
         : reviewInstructions,
-      { ...data, proposal },
+      { ...reviewData, evidence, proposal },
       reviewSchema,
       1400,
     );

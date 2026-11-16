@@ -13,6 +13,7 @@ import { setTimeout as delay } from "node:timers/promises";
 import { profile } from "../ai/provider.ts";
 import { InterpretationError } from "../ai/contracts.ts";
 import type { Meter } from "../ai/provider.ts";
+import { activeBudgetWindow } from "./budget-window.ts";
 
 const directory = resolve("local-data/r2");
 const ledgerSchema = z.strictObject({
@@ -87,12 +88,20 @@ export class EvaluationBudget implements Meter {
             report.budget.reservedUsd,
           );
       }
-      return new EvaluationBudget(ledger);
+      const window = await activeBudgetWindow();
+      if (window && ledger.spentUsd < window.baselineSpentUsd)
+        throw new InterpretationError("BUDGET_BASELINE_MISMATCH");
+      return new EvaluationBudget(
+        ledger,
+        Math.min(120, window?.ceiling ?? 120),
+      );
     } catch (error) {
       if (
         !(error instanceof Error && "code" in error && error.code === "ENOENT")
       )
         throw new InterpretationError("BUDGET_READ");
+      if (await activeBudgetWindow())
+        throw new InterpretationError("BUDGET_BASELINE_MISMATCH");
       const previous = z
         .object({
           spentUsd: z.number().nonnegative(),
