@@ -1,5 +1,7 @@
 # Privacidad, datos y permisos
 
+La evaluación R2 envía a OpenAI exclusivamente relatos, preguntas y candidatos ficticios definidos en el repositorio; sus almacenes desaparecen al terminar cada escenario. Los informes conservan códigos, IDs ficticios, métricas y verificaciones, nunca el texto generado o fuentes personales. La autorización de esta evaluación no permite reanalizar ni migrar datos del propietario. [R2_VALIDATION](../09-planning/R2_VALIDATION.md).
+
 Diseño aceptado del 16 de noviembre: [núcleo v2](../02-architecture/MEMORY_CORE_V2.md) conserva palabras originales como evidencia con propiedad/contexto explícitos y retira la copia completa paralela. Mantiene el feed RAM autorizado, sin historial de valores erróneos o copias históricas. [R1](../09-planning/R1_VALIDATION.md) usa únicamente fixtures/RAM, sin proveedor ni datos personales. Reanalizar recuerdos existentes con OpenAI o migrarlos requiere autorización concreta según [R4–R5](../09-planning/MEMORY_CORE_REBUILD_PLAN.md); no se ha hecho ni se infiere de diagnósticos anteriores.
 
 ## Qué necesita Kioku

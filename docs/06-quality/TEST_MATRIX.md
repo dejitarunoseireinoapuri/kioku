@@ -2,6 +2,8 @@
 
 ## Revisión del núcleo v2 · evidencia local parcial y casos previstos
 
+La ejecución semántica R2 y su corpus reservado se registran en [R2_VALIDATION](../09-planning/R2_VALIDATION.md). Los nuevos tests locales comprueban el contrato de salida, rechazo de evidencia ajena/retirada, ausencia de reintentos de inferencia, calendario por zona, reserva duradera de presupuesto y el propio oráculo. No sustituyen los resultados de IA ni validan búsqueda a escala, producción o móvil.
+
 El [diseño aceptado](../02-architecture/MEMORY_CORE_V2.md) se evalúa con el [plan R0–R6](../09-planning/MEMORY_CORE_REBUILD_PLAN.md), cuya rúbrica fija rondas, corpus reservado y criterios. [R1](../09-planning/R1_VALIDATION.md) aporta 50 pruebas locales, incluyendo 80 secuencias/1600 pasos: cubre las invariantes deterministas de TEST-CORE-001/002/003/004/005 y parte generativa de TEST-CORE-008. No cierra sus verificaciones semánticas/remotas ni TEST-CORE-006/007. Las pruebas históricas K2–K4 tampoco acreditan el nuevo núcleo.
 
 | Caso | Cubre | Evidencia requerida |

@@ -1,5 +1,11 @@
 # Cambios
 
+## Evaluación aislada · 2026-11-16 · Interpretación R2
+
+- Adaptador Sol medio con salida estructurada, materialización literal, revisión de fidelidad, consultas de evidencia actual y presupuesto separado sin reiniciar M0. Solo corpus ficticio/RAM; no se toca Firebase, la app o recuerdos reales.
+- 12 escenarios de ajuste y 60 reservados × 3 rondas congeladas: 44/60, 43/60 y 44/60 pasan todos los controles; 663 consultas devueltas. Fallos preservados y resultados por caso, costes/latencias/limitaciones documentados. No se declara cerrada R2.
+- Diagnóstico sin IA confirma pérdida de evidencia de detalles no modificados al editar parcialmente. Catálogo pequeño sin validación de búsqueda a escala y oráculo con adjudicaciones pendientes; R3/voz siguen bloqueadas por estos criterios. [Evidencia R2](docs/09-planning/R2_VALIDATION.md).
+
 ## Prototipo aislado · 2026-11-16 · Núcleo de memoria R1
 
 - P1–P3 aceptadas expresamente por el propietario. Motor determinista local con identidad estable, evidencia segmentada, corrección, enriquecimiento temporal limitado, olvido, tickets/recibos y revocaciones; sin Firebase, proveedor de IA ni modificación de recuerdos reales.

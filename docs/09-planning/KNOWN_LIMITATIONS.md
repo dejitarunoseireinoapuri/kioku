@@ -2,7 +2,9 @@
 
 ## Prioridad vigente · revisión del núcleo (16 de noviembre)
 
-**Continuación actual:** P1–P3 aceptadas expresamente. Prototipo determinista R1 y pruebas ficticias implementados en `codex/memory-core-prototype`: 50 casos, incluyendo 80 secuencias/1600 pasos, sin IA/Firebase. [Evidencia R1](R1_VALIDATION.md). No valida aún comprensión de lenguaje, recuperación semántica, producción, móvil o migración. La especificación HTTP definitiva sigue pendiente; no se presenta como cierre de R2/R3 ni como arreglo de la app instalada.
+**R2 evaluada, sin cerrar:** Sol medio y tres rondas de 60 escenarios ficticios: 44/60, 43/60 y 44/60 pasan todos los controles. [Resultados por caso, costes y límites](R2_VALIDATION.md). Una prueba sin IA confirma pérdida de soporte literal de detalles no editados en correcciones parciales. También hay discrepancias semánticas y del oráculo pendientes de adjudicar; esas tasas no son una medida pura de acierto de Sol. Catálogo acotado a 32 unidades, sin prueba de recuperación a escala. No se pasa a R3/voz. App, Firebase y recuerdos personales intactos; sin correos.
+
+**Entrega anterior R1:** P1–P3 aceptadas expresamente. Prototipo determinista y pruebas ficticias implementados en `codex/memory-core-prototype`: 50 casos, incluyendo 80 secuencias/1600 pasos, sin IA/Firebase. [Evidencia R1](R1_VALIDATION.md). No validaba comprensión de lenguaje ni suficiencia semántica de los soportes de una edición parcial, ahora evaluadas en R2. Producción, móvil, migración y especificación HTTP definitiva siguen pendientes.
 
 Nueva incidencia de olvido inspeccionada en Honor: dos unidades conservan evidencia principal que abarca el relato completo. La operación terminó sin cambios y ambos datos siguieron vigentes. El mensaje corresponde al rechazo de la revisión de alcance; no hay motivo semántico detallado persistido para precisar su causa interna. No se reproduce aquí contenido personal. Se conserva la aceptación histórica de K4, pero no se considera resuelta esta fragilidad por aquellas pruebas.
 

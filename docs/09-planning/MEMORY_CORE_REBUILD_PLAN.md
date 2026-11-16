@@ -1,5 +1,7 @@
 # Reconstrucción del núcleo de memoria · R0–R6
 
+**Continuación autorizada y ejecutada:** R2 con Sol medio y datos ficticios completa tres rondas reservadas, sin superar el umbral de cierre; [protocolo, costes, defectos y resultados](R2_VALIDATION.md). No cambia permisos sobre datos personales/producción ni autoriza avisos por correo. R2 sigue abierta; R3–R6 permanecen pendientes.
+
 Fecha: 2026-11-16. Estado: **P1–P3 aceptadas; prototipo determinista y pruebas ficticias R1 implementados**. El propietario autoriza este bloque sin tocar recuerdos reales. [Evidencia y límites](R1_VALIDATION.md). No autoriza inferencia con datos personales, migración o despliegue; R2–R6 siguen pendientes.
 
 Dirección: [MEMORY_CORE_V2](../02-architecture/MEMORY_CORE_V2.md) y [ADR-012](../02-architecture/ADR/ADR-012-independent-memory-units.md). La [matriz de pruebas](../06-quality/TEST_MATRIX.md) identifica sus casos. Los contratos activos permanecen en [datos](../03-data/DATA_MODEL.md) y [API](../04-api/API_CONTRACT.md) hasta su sustitución expresa.

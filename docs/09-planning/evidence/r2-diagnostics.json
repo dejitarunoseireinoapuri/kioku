@@ -1,0 +1,80 @@
+{
+  "type": "post-reserve-diagnostics-not-a-new-reserve",
+  "deterministic": {
+    "providerCalls": 0,
+    "canonicalRetainsUnchangedDetail": true,
+    "literalRetainsUnchangedDetail": false,
+    "replacedValueAbsent": true
+  },
+  "firstAudit": {
+    "calls": 24,
+    "estimatedCostUsd": 0.0966174999999998,
+    "distinctEventResults": [
+      {
+        "id": "cross-date",
+        "completed": true,
+        "distinctIdentities": true,
+        "firstUnchanged": true
+      },
+      {
+        "id": "cross-person",
+        "completed": true,
+        "distinctIdentities": true,
+        "firstUnchanged": true
+      },
+      {
+        "id": "cross-object",
+        "completed": true,
+        "distinctIdentities": true,
+        "firstUnchanged": true
+      },
+      {
+        "id": "cross-event",
+        "completed": true,
+        "distinctIdentities": true,
+        "firstUnchanged": true
+      }
+    ],
+    "invalidatedCheck": "Initial old-value check scanned metadata and matched primary/opaque-ID digits; no conclusion about old content retained is drawn from it."
+  },
+  "correctedAudit": {
+    "calls": 8,
+    "estimatedCostUsd": 0.03318749999999948,
+    "results": [
+      {
+        "id": "r45",
+        "completed": true,
+        "retainedLiteralDetails": [
+          {
+            "index": 0,
+            "present": true
+          },
+          {
+            "index": 1,
+            "present": true
+          },
+          {
+            "index": 2,
+            "present": false
+          }
+        ],
+        "replacedValueInAnyStoredContent": false
+      },
+      {
+        "id": "r46",
+        "completed": true,
+        "retainedLiteralDetails": [
+          {
+            "index": 0,
+            "present": false
+          },
+          {
+            "index": 1,
+            "present": true
+          }
+        ],
+        "replacedValueInAnyStoredContent": false
+      }
+    ]
+  }
+}

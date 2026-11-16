@@ -1,6 +1,8 @@
 # Fases de Kioku
 
-**Actualización del 16 de noviembre:** se inserta [R0–R6 · Reconstrucción de memoria](MEMORY_CORE_REBUILD_PLAN.md) antes de K5. El propietario acepta P1–P3 del [diseño v2](../02-architecture/MEMORY_CORE_V2.md) y [ADR-012](../02-architecture/ADR/ADR-012-independent-memory-units.md); autoriza el prototipo ficticio. Motor determinista local y pruebas implementados según [R1_VALIDATION](R1_VALIDATION.md). Interpretación con IA, integración, migración y despliegue pendientes. La aceptación histórica de K4 no acredita que la incidencia nueva esté resuelta.
+**Continuación R2:** evaluación de Sol medio ejecutada exclusivamente con datos ficticios. Tres rondas reservadas 44/60, 43/60 y 44/60; [evidencia y límites](R2_VALIDATION.md). Fase abierta: corregir conservación de evidencia en ediciones parciales, adjudicar discrepancias del contrato/oráculo, evaluar búsqueda a escala y preparar otra reserva tras los cambios. No se pasa a R3 ni voz.
+
+**Actualización del 16 de noviembre:** se inserta [R0–R6 · Reconstrucción de memoria](MEMORY_CORE_REBUILD_PLAN.md) antes de K5. El propietario acepta P1–P3 del [diseño v2](../02-architecture/MEMORY_CORE_V2.md) y [ADR-012](../02-architecture/ADR/ADR-012-independent-memory-units.md); autoriza el prototipo ficticio. Motor determinista según [R1_VALIDATION](R1_VALIDATION.md); evaluación de interpretación abierta según R2. Integración, migración y despliegue pendientes. La aceptación histórica de K4 no acredita que la incidencia nueva esté resuelta.
 
 K4 cerrada para Android/backend con aceptación del propietario e integración en main (15 de noviembre). La comprobación de iOS se difiere expresamente y no bloquea K5; no se declara validada. Última incidencia de escritura/corrección resuelta, activada y aceptada en Honor con datos ficticios retirados y recuerdos anteriores intactos. No requiere otro APK principal. Detalle y límites en [K4_VALIDATION](K4_VALIDATION.md).
 

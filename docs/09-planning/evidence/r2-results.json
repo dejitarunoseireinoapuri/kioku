@@ -1,0 +1,2450 @@
+{
+  "experiment": "R2-frozen-reserve-2026-11-16",
+  "sourceCommit": "b6a147e",
+  "model": "gpt-6.1-sol",
+  "reasoning": "medium",
+  "acceptance": {
+    "globalMinimum": 0.95,
+    "perFamilyMinimum": 0.95,
+    "unresolvedCriticalAlertsAllowed": 0
+  },
+  "limitations": [
+    "Small RAM catalog; no search scale validation",
+    "Lexical oracle needs semantic adjudication",
+    "No personal data or production integration"
+  ],
+  "rounds": [
+    {
+      "run": "frozen-1",
+      "model": "gpt-6.1-sol",
+      "fingerprint": "881fb810927f7afa051e7e41a65e6a2121f60fee31c03562422381af66073f79",
+      "cases": 60,
+      "passed": 44,
+      "queriesCompleted": 232,
+      "criticalAlerts": [
+        "r03",
+        "r05",
+        "r21",
+        "r24",
+        "r37",
+        "r44"
+      ],
+      "failures": [
+        {
+          "id": "r06",
+          "code": "REVIEW_coverage"
+        },
+        {
+          "id": "r23",
+          "code": "REVIEW_modality"
+        },
+        {
+          "id": "r31",
+          "code": "REPEAT_NOT_READY"
+        }
+      ],
+      "families": {
+        "ambiguity": {
+          "passed": 6,
+          "total": 6
+        },
+        "attribution": {
+          "passed": 2,
+          "total": 6
+        },
+        "condition": {
+          "passed": 5,
+          "total": 6
+        },
+        "correction": {
+          "passed": 2,
+          "total": 6
+        },
+        "duplicate": {
+          "passed": 5,
+          "total": 6
+        },
+        "forget": {
+          "passed": 5,
+          "total": 6
+        },
+        "independent": {
+          "passed": 3,
+          "total": 6
+        },
+        "shared": {
+          "passed": 6,
+          "total": 6
+        },
+        "similar": {
+          "passed": 5,
+          "total": 6
+        },
+        "time": {
+          "passed": 5,
+          "total": 6
+        }
+      },
+      "calls": 610,
+      "estimatedCostUsd": 1.9864100000000016,
+      "inputTokens": 648848,
+      "outputTokens": 36429,
+      "latency": {
+        "capture": {
+          "count": 60,
+          "p50Seconds": 6.681,
+          "p95Seconds": 13.543
+        },
+        "correction": {
+          "count": 4,
+          "p50Seconds": 10.141,
+          "p95Seconds": 10.985
+        },
+        "query": {
+          "count": 232,
+          "p50Seconds": 4.16,
+          "p95Seconds": 6.251
+        },
+        "forget": {
+          "count": 56,
+          "p50Seconds": 0,
+          "p95Seconds": 0.001
+        }
+      },
+      "perCase": [
+        {
+          "id": "r01",
+          "family": "independent",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r02",
+          "family": "independent",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r03",
+          "family": "independent",
+          "passed": false,
+          "checks": 54,
+          "failedChecks": [
+            {
+              "name": "capture:unit_count",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "capture:tea:literal_details",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "remaining:unit_count",
+              "passed": false,
+              "critical": true
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r04",
+          "family": "independent",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r05",
+          "family": "independent",
+          "passed": false,
+          "checks": 54,
+          "failedChecks": [
+            {
+              "name": "capture:eye:kind",
+              "passed": false,
+              "critical": true
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r06",
+          "family": "independent",
+          "passed": false,
+          "checks": 1,
+          "failedChecks": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": "REVIEW_coverage",
+          "queriesCompleted": 0
+        },
+        {
+          "id": "r07",
+          "family": "shared",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r08",
+          "family": "shared",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r09",
+          "family": "shared",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r10",
+          "family": "shared",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r11",
+          "family": "shared",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r12",
+          "family": "shared",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r13",
+          "family": "condition",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r14",
+          "family": "condition",
+          "passed": false,
+          "checks": 36,
+          "failedChecks": [
+            {
+              "name": "after1:answer_status",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r15",
+          "family": "condition",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r16",
+          "family": "condition",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r17",
+          "family": "condition",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r18",
+          "family": "condition",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r19",
+          "family": "attribution",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r20",
+          "family": "attribution",
+          "passed": false,
+          "checks": 54,
+          "failedChecks": [
+            {
+              "name": "capture:self:literal_details",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "remaining:self:literal_details",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r21",
+          "family": "attribution",
+          "passed": false,
+          "checks": 54,
+          "failedChecks": [
+            {
+              "name": "capture:unit_count",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "capture:count:polarity",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "capture:count:literal_details",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "query1:answer_evidence",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "remaining:unit_count",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "remaining:count:polarity",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "remaining:count:literal_details",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "after0:answer_status",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "after0:answer_evidence",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "after1:answer_evidence",
+              "passed": false,
+              "critical": true
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r22",
+          "family": "attribution",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r23",
+          "family": "attribution",
+          "passed": false,
+          "checks": 1,
+          "failedChecks": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": "REVIEW_modality",
+          "queriesCompleted": 0
+        },
+        {
+          "id": "r24",
+          "family": "attribution",
+          "passed": false,
+          "checks": 54,
+          "failedChecks": [
+            {
+              "name": "capture:mural:kind",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "remaining:mural:kind",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "after0:answer_status",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "after0:answer_evidence",
+              "passed": false,
+              "critical": true
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r25",
+          "family": "time",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r26",
+          "family": "time",
+          "passed": false,
+          "checks": 36,
+          "failedChecks": [
+            {
+              "name": "query1:answer_status",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "query1:answer_evidence",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "query1:answer_details",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r27",
+          "family": "time",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r28",
+          "family": "time",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r29",
+          "family": "time",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r30",
+          "family": "time",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r31",
+          "family": "duplicate",
+          "passed": false,
+          "checks": 13,
+          "failedChecks": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": "REPEAT_NOT_READY",
+          "queriesCompleted": 0
+        },
+        {
+          "id": "r32",
+          "family": "duplicate",
+          "passed": true,
+          "checks": 49,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r33",
+          "family": "duplicate",
+          "passed": true,
+          "checks": 49,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r34",
+          "family": "duplicate",
+          "passed": true,
+          "checks": 49,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r35",
+          "family": "duplicate",
+          "passed": true,
+          "checks": 49,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r36",
+          "family": "duplicate",
+          "passed": true,
+          "checks": 49,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r37",
+          "family": "similar",
+          "passed": false,
+          "checks": 54,
+          "failedChecks": [
+            {
+              "name": "after0:answer_evidence",
+              "passed": false,
+              "critical": true
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r38",
+          "family": "similar",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r39",
+          "family": "similar",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r40",
+          "family": "similar",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r41",
+          "family": "similar",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r42",
+          "family": "similar",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r43",
+          "family": "correction",
+          "passed": false,
+          "checks": 53,
+          "failedChecks": [
+            {
+              "name": "after1:answer_status",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 5
+        },
+        {
+          "id": "r44",
+          "family": "correction",
+          "passed": false,
+          "checks": 80,
+          "failedChecks": [
+            {
+              "name": "capture:pottery:kind",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "corrected:pottery:kind",
+              "passed": false,
+              "critical": true
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 5
+        },
+        {
+          "id": "r45",
+          "family": "correction",
+          "passed": false,
+          "checks": 53,
+          "failedChecks": [
+            {
+              "name": "corrected:tickets:literal_details",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 5
+        },
+        {
+          "id": "r46",
+          "family": "correction",
+          "passed": false,
+          "checks": 53,
+          "failedChecks": [
+            {
+              "name": "corrected:lunch:literal_details",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 5
+        },
+        {
+          "id": "r47",
+          "family": "correction",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r48",
+          "family": "correction",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r49",
+          "family": "ambiguity",
+          "passed": true,
+          "checks": 55,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r50",
+          "family": "ambiguity",
+          "passed": true,
+          "checks": 37,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r51",
+          "family": "ambiguity",
+          "passed": true,
+          "checks": 37,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r52",
+          "family": "ambiguity",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r53",
+          "family": "ambiguity",
+          "passed": true,
+          "checks": 23,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r54",
+          "family": "ambiguity",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r55",
+          "family": "forget",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r56",
+          "family": "forget",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r57",
+          "family": "forget",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r58",
+          "family": "forget",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r59",
+          "family": "forget",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r60",
+          "family": "forget",
+          "passed": false,
+          "checks": 54,
+          "failedChecks": [
+            {
+              "name": "capture:radish:literal_details",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "remaining:radish:literal_details",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 4
+        }
+      ]
+    },
+    {
+      "run": "frozen-2",
+      "model": "gpt-6.1-sol",
+      "fingerprint": "881fb810927f7afa051e7e41a65e6a2121f60fee31c03562422381af66073f79",
+      "cases": 60,
+      "passed": 43,
+      "queriesCompleted": 212,
+      "criticalAlerts": [
+        "r03",
+        "r24",
+        "r37",
+        "r44"
+      ],
+      "failures": [
+        {
+          "id": "r06",
+          "code": "REVIEW_coverage"
+        },
+        {
+          "id": "r18",
+          "code": "REVIEW_modality"
+        },
+        {
+          "id": "r21",
+          "code": "REVIEW_coverage"
+        },
+        {
+          "id": "r25",
+          "code": "REVIEW_modality"
+        },
+        {
+          "id": "r31",
+          "code": "REPEAT_NOT_READY"
+        },
+        {
+          "id": "r34",
+          "code": "REVIEW_modality"
+        },
+        {
+          "id": "r43",
+          "code": "REVIEW_coverage"
+        },
+        {
+          "id": "r46",
+          "code": "ANSWER_REVIEW_time"
+        }
+      ],
+      "families": {
+        "ambiguity": {
+          "passed": 6,
+          "total": 6
+        },
+        "attribution": {
+          "passed": 3,
+          "total": 6
+        },
+        "condition": {
+          "passed": 4,
+          "total": 6
+        },
+        "correction": {
+          "passed": 2,
+          "total": 6
+        },
+        "duplicate": {
+          "passed": 4,
+          "total": 6
+        },
+        "forget": {
+          "passed": 5,
+          "total": 6
+        },
+        "independent": {
+          "passed": 4,
+          "total": 6
+        },
+        "shared": {
+          "passed": 6,
+          "total": 6
+        },
+        "similar": {
+          "passed": 5,
+          "total": 6
+        },
+        "time": {
+          "passed": 4,
+          "total": 6
+        }
+      },
+      "calls": 568,
+      "estimatedCostUsd": 1.890132499999996,
+      "inputTokens": 611361,
+      "outputTokens": 36173,
+      "latency": {
+        "capture": {
+          "count": 60,
+          "p50Seconds": 7.034,
+          "p95Seconds": 16.509
+        },
+        "correction": {
+          "count": 3,
+          "p50Seconds": 9.633,
+          "p95Seconds": 19.173
+        },
+        "query": {
+          "count": 213,
+          "p50Seconds": 4.411,
+          "p95Seconds": 6.531
+        },
+        "forget": {
+          "count": 51,
+          "p50Seconds": 0,
+          "p95Seconds": 0
+        }
+      },
+      "perCase": [
+        {
+          "id": "r01",
+          "family": "independent",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r02",
+          "family": "independent",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r03",
+          "family": "independent",
+          "passed": false,
+          "checks": 54,
+          "failedChecks": [
+            {
+              "name": "capture:unit_count",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "capture:tea:literal_details",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "remaining:unit_count",
+              "passed": false,
+              "critical": true
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r04",
+          "family": "independent",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r05",
+          "family": "independent",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r06",
+          "family": "independent",
+          "passed": false,
+          "checks": 1,
+          "failedChecks": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": "REVIEW_coverage",
+          "queriesCompleted": 0
+        },
+        {
+          "id": "r07",
+          "family": "shared",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r08",
+          "family": "shared",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r09",
+          "family": "shared",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r10",
+          "family": "shared",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r11",
+          "family": "shared",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r12",
+          "family": "shared",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r13",
+          "family": "condition",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r14",
+          "family": "condition",
+          "passed": false,
+          "checks": 36,
+          "failedChecks": [
+            {
+              "name": "after1:answer_status",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r15",
+          "family": "condition",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r16",
+          "family": "condition",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r17",
+          "family": "condition",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r18",
+          "family": "condition",
+          "passed": false,
+          "checks": 1,
+          "failedChecks": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": "REVIEW_modality",
+          "queriesCompleted": 0
+        },
+        {
+          "id": "r19",
+          "family": "attribution",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r20",
+          "family": "attribution",
+          "passed": false,
+          "checks": 54,
+          "failedChecks": [
+            {
+              "name": "capture:self:literal_details",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "remaining:self:literal_details",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r21",
+          "family": "attribution",
+          "passed": false,
+          "checks": 1,
+          "failedChecks": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": "REVIEW_coverage",
+          "queriesCompleted": 0
+        },
+        {
+          "id": "r22",
+          "family": "attribution",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r23",
+          "family": "attribution",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r24",
+          "family": "attribution",
+          "passed": false,
+          "checks": 54,
+          "failedChecks": [
+            {
+              "name": "capture:mural:kind",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "remaining:mural:kind",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "after0:answer_status",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "after0:answer_evidence",
+              "passed": false,
+              "critical": true
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r25",
+          "family": "time",
+          "passed": false,
+          "checks": 1,
+          "failedChecks": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": "REVIEW_modality",
+          "queriesCompleted": 0
+        },
+        {
+          "id": "r26",
+          "family": "time",
+          "passed": false,
+          "checks": 36,
+          "failedChecks": [
+            {
+              "name": "query1:answer_status",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "query1:answer_evidence",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "query1:answer_details",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r27",
+          "family": "time",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r28",
+          "family": "time",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r29",
+          "family": "time",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r30",
+          "family": "time",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r31",
+          "family": "duplicate",
+          "passed": false,
+          "checks": 13,
+          "failedChecks": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": "REPEAT_NOT_READY",
+          "queriesCompleted": 0
+        },
+        {
+          "id": "r32",
+          "family": "duplicate",
+          "passed": true,
+          "checks": 49,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r33",
+          "family": "duplicate",
+          "passed": true,
+          "checks": 49,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r34",
+          "family": "duplicate",
+          "passed": false,
+          "checks": 1,
+          "failedChecks": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": "REVIEW_modality",
+          "queriesCompleted": 0
+        },
+        {
+          "id": "r35",
+          "family": "duplicate",
+          "passed": true,
+          "checks": 49,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r36",
+          "family": "duplicate",
+          "passed": true,
+          "checks": 49,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r37",
+          "family": "similar",
+          "passed": false,
+          "checks": 54,
+          "failedChecks": [
+            {
+              "name": "after0:answer_evidence",
+              "passed": false,
+              "critical": true
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r38",
+          "family": "similar",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r39",
+          "family": "similar",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r40",
+          "family": "similar",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r41",
+          "family": "similar",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r42",
+          "family": "similar",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r43",
+          "family": "correction",
+          "passed": false,
+          "checks": 23,
+          "failedChecks": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": "REVIEW_coverage",
+          "queriesCompleted": 2
+        },
+        {
+          "id": "r44",
+          "family": "correction",
+          "passed": false,
+          "checks": 80,
+          "failedChecks": [
+            {
+              "name": "capture:pottery:kind",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "corrected:pottery:kind",
+              "passed": false,
+              "critical": true
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 5
+        },
+        {
+          "id": "r45",
+          "family": "correction",
+          "passed": false,
+          "checks": 53,
+          "failedChecks": [
+            {
+              "name": "corrected:tickets:literal_details",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 5
+        },
+        {
+          "id": "r46",
+          "family": "correction",
+          "passed": false,
+          "checks": 13,
+          "failedChecks": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": "ANSWER_REVIEW_time",
+          "queriesCompleted": 0
+        },
+        {
+          "id": "r47",
+          "family": "correction",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r48",
+          "family": "correction",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r49",
+          "family": "ambiguity",
+          "passed": true,
+          "checks": 55,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r50",
+          "family": "ambiguity",
+          "passed": true,
+          "checks": 37,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r51",
+          "family": "ambiguity",
+          "passed": true,
+          "checks": 37,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r52",
+          "family": "ambiguity",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r53",
+          "family": "ambiguity",
+          "passed": true,
+          "checks": 23,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r54",
+          "family": "ambiguity",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r55",
+          "family": "forget",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r56",
+          "family": "forget",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r57",
+          "family": "forget",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r58",
+          "family": "forget",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r59",
+          "family": "forget",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r60",
+          "family": "forget",
+          "passed": false,
+          "checks": 54,
+          "failedChecks": [
+            {
+              "name": "capture:radish:literal_details",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "remaining:radish:literal_details",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 4
+        }
+      ]
+    },
+    {
+      "run": "frozen-3",
+      "model": "gpt-6.1-sol",
+      "fingerprint": "881fb810927f7afa051e7e41a65e6a2121f60fee31c03562422381af66073f79",
+      "cases": 60,
+      "passed": 44,
+      "queriesCompleted": 219,
+      "criticalAlerts": [
+        "r24",
+        "r37",
+        "r44",
+        "r57"
+      ],
+      "failures": [
+        {
+          "id": "r03",
+          "code": "REVIEW_ownership"
+        },
+        {
+          "id": "r06",
+          "code": "REVIEW_coverage"
+        },
+        {
+          "id": "r18",
+          "code": "REVIEW_modality"
+        },
+        {
+          "id": "r21",
+          "code": "REVIEW_ownership"
+        },
+        {
+          "id": "r31",
+          "code": "REPEAT_NOT_READY"
+        },
+        {
+          "id": "r46",
+          "code": "ANSWER_REVIEW_time"
+        }
+      ],
+      "families": {
+        "ambiguity": {
+          "passed": 6,
+          "total": 6
+        },
+        "attribution": {
+          "passed": 3,
+          "total": 6
+        },
+        "condition": {
+          "passed": 4,
+          "total": 6
+        },
+        "correction": {
+          "passed": 2,
+          "total": 6
+        },
+        "duplicate": {
+          "passed": 5,
+          "total": 6
+        },
+        "forget": {
+          "passed": 4,
+          "total": 6
+        },
+        "independent": {
+          "passed": 4,
+          "total": 6
+        },
+        "shared": {
+          "passed": 6,
+          "total": 6
+        },
+        "similar": {
+          "passed": 5,
+          "total": 6
+        },
+        "time": {
+          "passed": 5,
+          "total": 6
+        }
+      },
+      "calls": 584,
+      "estimatedCostUsd": 1.9073825000000015,
+      "inputTokens": 619209,
+      "outputTokens": 35936,
+      "latency": {
+        "capture": {
+          "count": 60,
+          "p50Seconds": 6.858,
+          "p95Seconds": 15.862
+        },
+        "correction": {
+          "count": 3,
+          "p50Seconds": 7.119,
+          "p95Seconds": 10.186
+        },
+        "query": {
+          "count": 220,
+          "p50Seconds": 4.338,
+          "p95Seconds": 5.967
+        },
+        "forget": {
+          "count": 53,
+          "p50Seconds": 0,
+          "p95Seconds": 0.001
+        }
+      },
+      "perCase": [
+        {
+          "id": "r01",
+          "family": "independent",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r02",
+          "family": "independent",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r03",
+          "family": "independent",
+          "passed": false,
+          "checks": 1,
+          "failedChecks": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": "REVIEW_ownership",
+          "queriesCompleted": 0
+        },
+        {
+          "id": "r04",
+          "family": "independent",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r05",
+          "family": "independent",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r06",
+          "family": "independent",
+          "passed": false,
+          "checks": 1,
+          "failedChecks": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": "REVIEW_coverage",
+          "queriesCompleted": 0
+        },
+        {
+          "id": "r07",
+          "family": "shared",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r08",
+          "family": "shared",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r09",
+          "family": "shared",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r10",
+          "family": "shared",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r11",
+          "family": "shared",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r12",
+          "family": "shared",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r13",
+          "family": "condition",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r14",
+          "family": "condition",
+          "passed": false,
+          "checks": 36,
+          "failedChecks": [
+            {
+              "name": "after1:answer_status",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r15",
+          "family": "condition",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r16",
+          "family": "condition",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r17",
+          "family": "condition",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r18",
+          "family": "condition",
+          "passed": false,
+          "checks": 1,
+          "failedChecks": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": "REVIEW_modality",
+          "queriesCompleted": 0
+        },
+        {
+          "id": "r19",
+          "family": "attribution",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r20",
+          "family": "attribution",
+          "passed": false,
+          "checks": 54,
+          "failedChecks": [
+            {
+              "name": "capture:self:literal_details",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "remaining:self:literal_details",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r21",
+          "family": "attribution",
+          "passed": false,
+          "checks": 1,
+          "failedChecks": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": "REVIEW_ownership",
+          "queriesCompleted": 0
+        },
+        {
+          "id": "r22",
+          "family": "attribution",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r23",
+          "family": "attribution",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r24",
+          "family": "attribution",
+          "passed": false,
+          "checks": 54,
+          "failedChecks": [
+            {
+              "name": "capture:mural:kind",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "remaining:mural:kind",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "after0:answer_status",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "after0:answer_evidence",
+              "passed": false,
+              "critical": true
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r25",
+          "family": "time",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r26",
+          "family": "time",
+          "passed": false,
+          "checks": 36,
+          "failedChecks": [
+            {
+              "name": "query1:answer_status",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "query1:answer_evidence",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "query1:answer_details",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r27",
+          "family": "time",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r28",
+          "family": "time",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r29",
+          "family": "time",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r30",
+          "family": "time",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r31",
+          "family": "duplicate",
+          "passed": false,
+          "checks": 13,
+          "failedChecks": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": "REPEAT_NOT_READY",
+          "queriesCompleted": 0
+        },
+        {
+          "id": "r32",
+          "family": "duplicate",
+          "passed": true,
+          "checks": 49,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r33",
+          "family": "duplicate",
+          "passed": true,
+          "checks": 49,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r34",
+          "family": "duplicate",
+          "passed": true,
+          "checks": 49,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r35",
+          "family": "duplicate",
+          "passed": true,
+          "checks": 49,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r36",
+          "family": "duplicate",
+          "passed": true,
+          "checks": 49,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r37",
+          "family": "similar",
+          "passed": false,
+          "checks": 54,
+          "failedChecks": [
+            {
+              "name": "after0:answer_evidence",
+              "passed": false,
+              "critical": true
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r38",
+          "family": "similar",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r39",
+          "family": "similar",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r40",
+          "family": "similar",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r41",
+          "family": "similar",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r42",
+          "family": "similar",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r43",
+          "family": "correction",
+          "passed": false,
+          "checks": 53,
+          "failedChecks": [
+            {
+              "name": "after1:answer_status",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 5
+        },
+        {
+          "id": "r44",
+          "family": "correction",
+          "passed": false,
+          "checks": 80,
+          "failedChecks": [
+            {
+              "name": "capture:pottery:kind",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "corrected:pottery:kind",
+              "passed": false,
+              "critical": true
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 5
+        },
+        {
+          "id": "r45",
+          "family": "correction",
+          "passed": false,
+          "checks": 53,
+          "failedChecks": [
+            {
+              "name": "corrected:tickets:literal_details",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 5
+        },
+        {
+          "id": "r46",
+          "family": "correction",
+          "passed": false,
+          "checks": 13,
+          "failedChecks": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": "ANSWER_REVIEW_time",
+          "queriesCompleted": 0
+        },
+        {
+          "id": "r47",
+          "family": "correction",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r48",
+          "family": "correction",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r49",
+          "family": "ambiguity",
+          "passed": true,
+          "checks": 55,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r50",
+          "family": "ambiguity",
+          "passed": true,
+          "checks": 37,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r51",
+          "family": "ambiguity",
+          "passed": true,
+          "checks": 37,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r52",
+          "family": "ambiguity",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r53",
+          "family": "ambiguity",
+          "passed": true,
+          "checks": 23,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r54",
+          "family": "ambiguity",
+          "passed": true,
+          "checks": 36,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r55",
+          "family": "forget",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r56",
+          "family": "forget",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r57",
+          "family": "forget",
+          "passed": false,
+          "checks": 54,
+          "failedChecks": [
+            {
+              "name": "capture:whistle:polarity",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "remaining:whistle:polarity",
+              "passed": false,
+              "critical": true
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r58",
+          "family": "forget",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r59",
+          "family": "forget",
+          "passed": true,
+          "checks": 54,
+          "failedChecks": [],
+          "error": null,
+          "queriesCompleted": 4
+        },
+        {
+          "id": "r60",
+          "family": "forget",
+          "passed": false,
+          "checks": 54,
+          "failedChecks": [
+            {
+              "name": "capture:radish:literal_details",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "remaining:radish:literal_details",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "error": null,
+          "queriesCompleted": 4
+        }
+      ]
+    }
+  ]
+}
