@@ -16,8 +16,12 @@ export async function runReserve(spec: {
   corpus: string;
   name: (round: number) => string;
   cases: Scenario[];
+  reasoning?: "medium" | "high";
 }) {
   const round = finalRound(process.argv.slice(2));
+  // Historical reserve entry points remain pinned; use exposed regression for new profiles.
+  if (profile.reasoning !== (spec.reasoning ?? "medium"))
+    throw new InterpretationError("HISTORICAL_PROFILE_MISMATCH");
   const finish = await executionLock();
   try {
     const name = spec.name(round);
@@ -51,7 +55,7 @@ export async function runReserve(spec: {
     }
     const budget = await EvaluationBudget.open();
     const baseline = structuredClone(budget.ledger);
-    const runCap = 5;
+    const runCap = spec.reasoning === "high" ? 10 : 5;
     budget.runCeiling = baseline.spentUsd + baseline.reservedUsd + runCap;
     const metrics: CallMetric[] = [];
     const model = new SolProvider(

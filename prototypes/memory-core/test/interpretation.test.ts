@@ -176,7 +176,7 @@ test("R2 calendar uses capture zone across midnight and DST", () => {
     "2026-03-30",
   );
 });
-test("R2 provider pins medium, disables storage and counts unsuccessful completions", async () => {
+test("R2 provider pins owner-authorized high, disables storage and counts unsuccessful completions", async () => {
   let reserves = 0,
     settlements = 0,
     seen = false;
@@ -194,7 +194,7 @@ test("R2 provider pins medium, disables storage and counts unsuccessful completi
     async (_url, options) => {
       const body = JSON.parse(String(options?.body));
       assert.equal(body.model, "gpt-6.1-sol");
-      assert.equal(body.reasoning.effort, "medium");
+      assert.equal(body.reasoning.effort, "high");
       assert.equal(body.store, false);
       assert.equal(options?.redirect, "error");
       seen = true;

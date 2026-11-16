@@ -121,7 +121,7 @@ test("subsequent final rounds require complete preceding coverage and identical 
     { ...valid, fingerprint: "b".repeat(64) },
     { ...valid, results: valid.results.slice(1) },
     { ...valid, results: ids.map(() => ({ id: ids[0] })) },
-    { ...valid, profile: { ...profile, reasoning: "high" } },
+    { ...valid, profile: { ...profile, reasoning: "medium" } },
   ])
     assert.throws(() => validatePrevious(bad, 2, fingerprint, ids));
 });

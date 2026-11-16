@@ -1,0 +1,26 @@
+# R2 · Validación independiente con Sol alto
+
+Autorización directa del propietario del 16 de noviembre de 2026: continuar la validación independiente, corregir los problemas observados y usar Sol alto a partir de ahora, exclusivamente con datos ficticios. Sustituye el perfil medio del prototipo y autoriza este trabajo posterior al cierre de la cadena anterior. No autoriza tocar recuerdos reales, Firebase, móviles, producción, despliegue ni main. No se crean otras tareas. El perfil de producción se activará por separado; no se afirma que la app ya use alto.
+
+## Protocolo previo a las rondas
+
+- `gpt-6.1-sol`, razonamiento `high`, perfil explícito en cada informe, proveedor sin almacenamiento ni reintentos de inferencia. Se reutiliza `.env.local` comprobando solo presencia. Los informes históricos de medio permanecen intactos y sus ejecutores reservados rechazan otro perfil. Las regresiones expuestas sí usan el perfil actual y lo registran.
+- Corpus nuevo `high-v8`, i01–i60: diez familias con seis casos cada una, seis correcciones, siete repeticiones, cuatro aclaraciones (dos tardías), una pregunta sin captura, un olvido intermedio, uno total y un cierre de dependencia autorizado expresamente en la fixture. Datos/versiones permanecen en RAM aislada.
+- Expectativas independientes del circuito generador/revisor, escritas antes de observar las respuestas: unidades, términos/soportes, clases, fechas, condiciones, atribución, polaridad, relaciones, referencias de consulta, retiradas y vecinos conservados. Los casos no se envían al proveedor junto con sus expectativas. Es un conjunto elaborado en esta tarea, no auditoría externa ni muestra aleatoria; se verifica que los textos difieran de los corpus previos. Algunas estructuras continúan familias anteriores deliberadamente.
+- Congelar código, corpus, oráculo y perfil en commit local antes de la primera ronda. Tres rondas completas desde RAM vacía, sin cambios entre rondas, subconjuntos, cuarta ronda ni sobrescrituras. La huella incluye implementación, ejecutores y expectativas. Los fallos se conservan y se analizan después de las tres rondas; un fallo de transporte/presupuesto detiene admisión y conserva las reservas inciertas.
+- Criterio: al menos 95 % global y por familia en cada ronda, cero fallos críticos abiertos; con seis casos por familia exige seis éxitos. El objetivo p95 de captura/corrección sigue en 15 s y consulta en 8 s. El olvido medido es RAM, no servidor remoto ni app. No se cierra R2 solo por pruebas locales ni juicio del mismo modelo.
+- Si hay correcciones guiadas por i, ese corpus pasa a regresión. Las verificaciones posteriores no recalifican estas rondas ni acreditan una nueva reserva independiente. Si quedan problemas o validación pendiente, se documentan expresamente; no se inventa cierre.
+
+## Precomprobación y ajuste conocido
+
+Sol alto, con las instrucciones anteriores, obtiene 2/3 en h30/h49/h53: h30 y h53 pasan; h49 se detiene por `ANSWER_REVIEW_scope`. 26 llamadas, 0,1987325 USD. No se conserva la prosa ni se afirma el motivo interno del rechazo. El aumento de razonamiento por sí solo no elimina esa incidencia. Se precisa la regla común de respuesta/revisión sobre categorías generales y acciones específicas: una inclusión semántica pertinente no exige igualdad de verbos, pero no permite inventar realización, rotura, sujeto ni incluir un objeto ajeno a una pregunta específica. Las comprobaciones de evidencia exacta permanecen.
+
+Comprobación separada después del ajuste: h49/h53 pasan **2/2**, 32 llamadas y **0,2064325 USD**. No es una comparación controlada medio/alto, pues no se vuelve a ejecutar medio y el ajuste cambia instrucciones. No atribuir a alto las diferencias con informes históricos. Antes de la reserva pasan 226 pruebas raíz (124 del núcleo), TypeScript raíz/núcleo, formato y comprobación de 78 documentos/12 ADR. El corpus incluye dos cruces de fecha/zona (Madrid y Los Ángeles).
+
+## Presupuesto y ejecución
+
+Inicio: R2 **75,79987 USD**, reserva incierta **1,78895 USD**; M0 **21,71988544 USD** y reserva M0 **0,20756492 USD**, separados. Se comunica antes de ejecutar el aumento del tope acumulado de **80 a 120 USD**, con **10 USD por ronda nueva**; las regresiones mantienen su límite de 5 USD. No se reinician contadores, no se eliminan reservas y no se afirma saldo del proveedor. Costes estimados por tokens con las tarifas locales registradas, no factura. La prueba inicial añade 0,1987325 USD, sin nueva incertidumbre.
+
+Comandos de reserva: `node --env-file-if-exists=.env.local prototypes/memory-core/evaluation/high-run.ts --live --round 1`, luego `2` y `3`. Solo entradas ficticias versionadas; no admite textos ni rutas externas. Comprobaciones locales mediante `node tooling/m0.mjs check`, `core:check`, `test`, `format:check` y `pwsh -NoProfile -File tooling/check-docs.ps1`. Registrar resultados efectivamente ejecutados.
+
+Fuentes consultadas: AGENTS; convenciones y calidad; desarrollo; plan R0–R6 y criterios de aceptación; informe final R2 de asignación/soporte propio y su evidencia; proveedor, protocolos, oráculo, fixtures y pruebas existentes. Datos/API desplegados, privacidad y límites de acceso real permanecen vigentes. No es un cambio visual.

@@ -4,7 +4,7 @@ import type { StructuredModel } from "./contracts.ts";
 
 export const profile = Object.freeze({
   model: "gpt-6.1-sol",
-  reasoning: "medium",
+  reasoning: "high",
   inputRate: 2.5 / 1e6,
   outputRate: 10 / 1e6,
 });
