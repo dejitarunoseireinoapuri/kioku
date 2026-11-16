@@ -10,8 +10,26 @@ import { EvaluationBudget } from "../evaluation/runtime.ts";
 import { fresh } from "../evaluation/fresh.ts";
 import { holdout } from "../evaluation/holdout.ts";
 import { adjustment } from "../evaluation/adjustment.ts";
+import { spawnSync } from "node:child_process";
 
-test("third reserve is balanced, previously unused and defines two before/after questions per lifecycle", () => {
+test("exposed corpus cannot be launched as a new reserve, even with live enabled", () => {
+  const result = spawnSync(
+    process.execPath,
+    [
+      "prototypes/memory-core/evaluation/run.ts",
+      "--live",
+      "--reserve",
+      "--run",
+      "indexed-frozen-1",
+    ],
+    { encoding: "utf8" },
+  );
+  assert.equal(result.status, 1);
+  assert.equal(result.stdout, "");
+  assert.equal(result.stderr.trim(), "RESERVE_REFRESH_REQUIRED");
+});
+
+test("third historical corpus is balanced, distinct from earlier sets and defines two before/after questions per lifecycle", () => {
   assert.equal(holdout.length, 60);
   assert.equal(new Set(holdout.map((c) => c.id)).size, 60);
   assert.equal(new Set(holdout.map((c) => c.text)).size, 60);

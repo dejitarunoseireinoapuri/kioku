@@ -1,6 +1,8 @@
 # Fases de Kioku
 
-Continuación R2 en curso: selección de evidencia por tokens, procedencia por intervención y búsqueda paginada con fixtures hasta 10 000 unidades; [contratos, evaluación y límites](R2_INDEXED_VALIDATION.md). R2 no se da por cerrada hasta completar la nueva reserva; backend/app/datos reales permanecen sin cambios.
+Resultado vigente R2: regresión 60/60 y recuperación ficticia 18/18, pero reserva nueva 55/60, 54/60 y 58/60. R2 sigue abierta; [fallos, costes y siguiente trabajo](R2_INDEXED_VALIDATION.md). No se cambia la app ni producción.
+
+Continuación R2 ejecutada: selección de evidencia por tokens, procedencia por intervención y búsqueda paginada con fixtures hasta 10 000 unidades; [contratos, evaluación y límites](R2_INDEXED_VALIDATION.md). R2 no se da por cerrada hasta completar la nueva reserva; backend/app/datos reales permanecen sin cambios.
 
 **Continuación R2:** pérdida de evidencia en edición parcial corregida y nueva reserva de Sol medio: 54/60, 55/60 y 54/60. Ajuste posterior con 4/4 regresiones y 12/12 historias nuevas de identidad; [evidencia y límites](R2_RETENTION_VALIDATION.md). Fase abierta: reducir rechazos de interpretación/revisión, preparar otra reserva completa para la versión final, completar aclaraciones tardías y búsqueda a escala. Históricos sin regrading. No se pasa a R3 ni voz; solo datos ficticios.
 

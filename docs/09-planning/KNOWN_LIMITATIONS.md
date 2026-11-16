@@ -1,5 +1,7 @@
 # Estado real y decisiones pendientes
 
+Resultado vigente R2: regresión 60/60 y recuperación ficticia 18/18, pero reserva nueva 55/60, 54/60 y 58/60. R2 sigue abierta; [fallos, costes y siguiente trabajo](R2_INDEXED_VALIDATION.md). No se cambia la app ni producción.
+
 R2 añade recuperación paginada acotada y anclaje de aclaraciones tardías, pendientes del cierre de su [evaluación actual](R2_INDEXED_VALIDATION.md). El índice de 10 000 entradas no acredita mutaciones ni Firebase a esa escala; el almacén de mutaciones RAM sigue limitado a 256. No hay migración ni activación del nuevo núcleo.
 
 ## Prioridad vigente · revisión del núcleo (16 de noviembre)

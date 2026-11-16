@@ -1,6 +1,6 @@
 # Guía de desarrollo
 
-R2 actual: `core:eval --live --adjustment --run <id>` ejecuta aclaraciones ficticias; `--regression-v2` mantiene los casos expuestos. La tercera reserva usa únicamente `--reserve --run indexed-frozen-1`, `-2` y `-3` en orden, misma huella y sin subconjuntos. `node --env-file-if-exists=.env.local prototypes/memory-core/evaluation/scale-run.ts --live --run <id>` mide recuperación ficticia a escala. Requiere autorización de API vigente; no admite textos externos. [Topes, protocolo y resultados](../09-planning/R2_INDEXED_VALIDATION.md).
+R2 actual: `core:eval --live --adjustment --run <id>` ejecuta aclaraciones ficticias; `--regression-v2` mantiene los casos expuestos. La tercera reserva ya se ejecutó en `e3d03c2` y queda como `--regression-v3`. `--reserve` se bloquea hasta renovar el corpus; no repetir las historias conocidas como validación independiente. `node --env-file-if-exists=.env.local prototypes/memory-core/evaluation/scale-run.ts --live --run <id>` mide recuperación ficticia a escala. Requiere autorización de API vigente; no admite textos externos. [Topes, protocolo y resultados](../09-planning/R2_INDEXED_VALIDATION.md).
 
 ## Situación inicial
 
