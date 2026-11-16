@@ -68,20 +68,22 @@ test("first person is allowed only inside a declared literal with its explicit s
       false,
     );
   }
-  unit.content.attribution = null;
-  assert.equal(
-    gradeAnswer(
-      {
-        status: "answered",
-        text: "Tu vecina escribió: «Quiero perder el miedo y ganar paciencia»",
-        evidence: [0],
-        ids: [unit.id],
-      },
-      expected,
-      mapping,
-    ).find((c) => c.name === "answer_perspective")!.passed,
-    false,
-  );
+  for (const attribution of [null, "hermano"]) {
+    unit.content.attribution = attribution;
+    assert.equal(
+      gradeAnswer(
+        {
+          status: "answered",
+          text: "Tu vecina escribió: «Quiero perder el miedo y ganar paciencia»",
+          evidence: [0],
+          ids: [unit.id],
+        },
+        expected,
+        mapping,
+      ).find((c) => c.name === "answer_perspective")!.passed,
+      false,
+    );
+  }
 });
 
 test("explicit dislike variants accept second-person rejection and reject inverted or foreign preference", () => {

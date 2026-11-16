@@ -56,6 +56,7 @@ test("scope reserve has sixty new stories, ten complete families and predeclared
         assert.ok(q.labels.includes(quote.label));
         assert.ok(c.text.includes(quote.literal));
         assert.doesNotThrow(() => new RegExp(quote.introduction, "u"));
+        assert.doesNotThrow(() => new RegExp(quote.attribution, "u"));
       }
     }
   }

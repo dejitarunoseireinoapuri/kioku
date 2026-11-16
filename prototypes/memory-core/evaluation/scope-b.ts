@@ -256,6 +256,7 @@ export const scopeB = [
               literal: "Prefiero caminos lentos",
               introduction:
                 "(?:tu|la) prima (?:escribio|anoto)(?: en (?:una|la) postal)?",
+              attribution: "prima|postal",
             },
           ],
         },

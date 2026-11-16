@@ -34,6 +34,7 @@ export interface GoldQuery {
     label: string;
     literal: string;
     introduction: string;
+    attribution: string;
   }[];
 }
 export interface Scenario {

@@ -9,6 +9,7 @@ for (const query of [quoted.queries[1]!, quoted.after[1]!]) {
       label: "notebook",
       literal: "Quiero perder el miedo y ganar paciencia",
       introduction: "(?:tu|la) vecina (?:escribio|anoto)(?: en su cuaderno)?",
+      attribution: "vecina|cuaderno",
     },
   ];
 }

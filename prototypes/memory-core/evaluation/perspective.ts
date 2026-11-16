@@ -27,6 +27,9 @@ export function validAnswerPerspective(
           expected.labels.includes(quote.label) &&
           unit?.content.kind === "quotation" &&
           unit.content.attribution !== null &&
+          new RegExp(quote.attribution, "u").test(
+            normalize(unit.content.attribution),
+          ) &&
           answer.ids.includes(unit.id) &&
           literal === normalize(quote.literal) &&
           new RegExp(`(?:${quote.introduction})\\s*:?\\s*$`, "u").test(
