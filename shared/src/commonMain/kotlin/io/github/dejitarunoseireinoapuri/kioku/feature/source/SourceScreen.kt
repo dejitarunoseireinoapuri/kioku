@@ -1,5 +1,6 @@
 package io.github.dejitarunoseireinoapuri.kioku.feature.source
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +17,7 @@ import io.github.dejitarunoseireinoapuri.kioku.design.ActionButton
 import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingNotice
 import io.github.dejitarunoseireinoapuri.kioku.design.IconAction
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
+import io.github.dejitarunoseireinoapuri.kioku.design.MatrixReadingSurface
 import io.github.dejitarunoseireinoapuri.kioku.design.Panel
 import io.github.dejitarunoseireinoapuri.kioku.design.TopBar
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemorySource
@@ -109,14 +111,17 @@ private fun SourceContent(source: MemorySource) {
 
 @Composable
 internal fun SourceRecordedDate(source: MemorySource) {
-    val date =
-        source.receivedAt?.let { formatSourceDate(it) }
-            ?: formatSourceDate("${source.recordedOn}T12:00:00Z", "UTC")
-            ?: source.recordedOn
-    Text(
-        stringResource(Res.string.source_recorded_on, date),
-        color = KiokuColors.BrandSecondary,
-        style = MaterialTheme.typography.body2,
-        fontWeight = FontWeight.SemiBold,
-    )
+    MatrixReadingSurface { scrim ->
+        val date =
+            source.receivedAt?.let { formatSourceDate(it) }
+                ?: formatSourceDate("${source.recordedOn}T12:00:00Z", "UTC")
+                ?: source.recordedOn
+        Text(
+            modifier = Modifier.background(scrim),
+            text = stringResource(Res.string.source_recorded_on, date),
+            color = KiokuColors.BrandSecondary,
+            style = MaterialTheme.typography.body2,
+            fontWeight = FontWeight.SemiBold,
+        )
+    }
 }

@@ -1,6 +1,7 @@
 package io.github.dejitarunoseireinoapuri.kioku.design
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -19,7 +20,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
@@ -40,18 +40,20 @@ fun ActionButton(
         return
     }
     val feedback = rememberButtonFeedback(KiokuColors.Secondary)
-    OutlinedButton(
-        enabled = enabled,
-        onClick = onClick,
-        modifier = modifier.sizeIn(minHeight = KiokuSpacing.TouchTarget),
-        border = BorderStroke(1.dp, KiokuColors.Rule),
-        colors =
-            ButtonDefaults.outlinedButtonColors(
-                backgroundColor = Color.Transparent,
-                contentColor = feedback.contentColor,
-            ),
-        interactionSource = feedback.interactionSource,
-    ) { Text(label) }
+    MatrixReadingSurface { scrim ->
+        OutlinedButton(
+            enabled = enabled,
+            onClick = onClick,
+            modifier = modifier.sizeIn(minHeight = KiokuSpacing.TouchTarget),
+            border = BorderStroke(1.dp, KiokuColors.Rule),
+            colors =
+                ButtonDefaults.outlinedButtonColors(
+                    backgroundColor = scrim,
+                    contentColor = feedback.contentColor,
+                ),
+            interactionSource = feedback.interactionSource,
+        ) { Text(label) }
+    }
 }
 
 @Composable
@@ -60,13 +62,15 @@ fun IconAction(
     description: String,
     onClick: () -> Unit,
 ) {
-    val feedback = rememberButtonFeedback(KiokuColors.Secondary)
-    IconButton(
-        onClick = onClick,
-        modifier = Modifier.sizeIn(KiokuSpacing.TouchTarget, KiokuSpacing.TouchTarget),
-        interactionSource = feedback.interactionSource,
-    ) {
-        Icon(painterResource(icon), description, tint = feedback.contentColor)
+    MatrixReadingSurface { scrim ->
+        val feedback = rememberButtonFeedback(KiokuColors.Secondary)
+        IconButton(
+            onClick = onClick,
+            modifier = Modifier.background(scrim).sizeIn(KiokuSpacing.TouchTarget, KiokuSpacing.TouchTarget),
+            interactionSource = feedback.interactionSource,
+        ) {
+            Icon(painterResource(icon), description, tint = feedback.contentColor)
+        }
     }
 }
 
@@ -76,14 +80,17 @@ fun Panel(
     emphasized: Boolean = false,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    Surface(
-        modifier = modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.medium,
-        border = BorderStroke(KiokuSpacing.Stroke, if (emphasized) KiokuColors.Accent else KiokuColors.Rule),
-        elevation = 0.dp,
-    ) {
-        Column(Modifier.padding(KiokuSpacing.Medium), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            content()
+    MatrixReadingSurface { scrim ->
+        Surface(
+            modifier = modifier.fillMaxWidth(),
+            color = scrim,
+            shape = MaterialTheme.shapes.medium,
+            border = BorderStroke(KiokuSpacing.Stroke, if (emphasized) KiokuColors.Accent else KiokuColors.Rule),
+            elevation = 0.dp,
+        ) {
+            Column(Modifier.padding(KiokuSpacing.Medium), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                content()
+            }
         }
     }
 }
@@ -93,7 +100,9 @@ fun ScreenHeading(
     title: String,
     style: TextStyle = MaterialTheme.typography.h5,
 ) {
-    Text(title, style = style, modifier = Modifier.semantics { heading() })
+    MatrixReadingSurface { scrim ->
+        Text(title, style = style, modifier = Modifier.background(scrim).semantics { heading() })
+    }
 }
 
 @Composable
@@ -106,16 +115,18 @@ fun TopBar(
             fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
         ),
 ) {
-    Column {
-        Row(
-            Modifier.fillMaxWidth().padding(horizontal = KiokuSpacing.Medium),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
-        ) {
-            leading()
-            Column(Modifier.weight(1f)) { ScreenHeading(title, titleStyle) }
-            trailing()
+    MatrixReadingSurface { scrim ->
+        Column(Modifier.background(scrim)) {
+            Row(
+                Modifier.fillMaxWidth().padding(horizontal = KiokuSpacing.Medium),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+            ) {
+                leading()
+                Column(Modifier.weight(1f)) { ScreenHeading(title, titleStyle) }
+                trailing()
+            }
+            Divider(color = KiokuColors.Rule)
         }
-        Divider(color = KiokuColors.Rule)
     }
 }

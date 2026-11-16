@@ -1,6 +1,7 @@
 package io.github.dejitarunoseireinoapuri.kioku.feature.settings
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingNotice
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
+import io.github.dejitarunoseireinoapuri.kioku.design.MatrixReadingSurface
 import io.github.dejitarunoseireinoapuri.kioku.design.rememberButtonFeedback
 import io.github.dejitarunoseireinoapuri.kioku.domain.AiConfiguration
 import io.github.dejitarunoseireinoapuri.kioku.feature.account.AccountState
@@ -47,19 +49,21 @@ internal fun AccountSettings(
     onRefresh: () -> Unit,
     onSignOut: () -> Unit,
 ) {
-    val feedback = rememberButtonFeedback(KiokuColors.Secondary)
-    Column(verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large)) {
-        AccountIdentity(account.session.label)
-        Divider(color = KiokuColors.Rule)
-        AiSettings(account, onRefresh)
-        TextButton(
-            onClick = onSignOut,
-            modifier = Modifier.fillMaxWidth().sizeIn(minHeight = KiokuSpacing.TouchTarget),
-            shape = MaterialTheme.shapes.small,
-            colors = ButtonDefaults.textButtonColors(contentColor = feedback.contentColor),
-            interactionSource = feedback.interactionSource,
-        ) {
-            Text(stringResource(Res.string.sign_out))
+    MatrixReadingSurface { scrim ->
+        val feedback = rememberButtonFeedback(KiokuColors.Secondary)
+        Column(Modifier.background(scrim), verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large)) {
+            AccountIdentity(account.session.label)
+            Divider(color = KiokuColors.Rule)
+            AiSettings(account, onRefresh)
+            TextButton(
+                onClick = onSignOut,
+                modifier = Modifier.fillMaxWidth().sizeIn(minHeight = KiokuSpacing.TouchTarget),
+                shape = MaterialTheme.shapes.small,
+                colors = ButtonDefaults.textButtonColors(contentColor = feedback.contentColor),
+                interactionSource = feedback.interactionSource,
+            ) {
+                Text(stringResource(Res.string.sign_out))
+            }
         }
     }
 }

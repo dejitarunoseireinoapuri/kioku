@@ -1,5 +1,9 @@
 # Cambios
 
+## Sin versión publicada · 2026-11-16 · Lluvia bajo el contenido
+
+- Lluvia Matrix al 30 % bajo mensajes, editor, cabecera, tarjetas, grupos de lectura y controles propios; conserva la intensidad del fondo en las zonas libres. Texto, iconos y bordes mantienen su contraste. Las superficies anidadas no acumulan atenuación y los menús conservan su propia capa. Misma animación y selección de modos.
+
 ## Sin versión publicada · 2026-11-15 · Matrix Terminal
 
 - Fondos transparentes en mensajes, editor, cabecera, tarjetas, cargas, menús y botones propios: la misma lluvia Matrix continúa bajo todos ellos. Acciones principales/envío con contorno y texto/icono verde; modo activo subrayado. Google conserva su botón oficial. Se mantienen las confirmaciones y el funcionamiento de teclado, feed y gestión.

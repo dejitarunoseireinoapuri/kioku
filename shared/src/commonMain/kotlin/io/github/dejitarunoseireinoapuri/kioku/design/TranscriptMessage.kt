@@ -1,5 +1,6 @@
 package io.github.dejitarunoseireinoapuri.kioku.design
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -22,26 +23,28 @@ fun TranscriptMessage(
     owner: Boolean = false,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    Row(
-        modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(KiokuSpacing.Small),
-    ) {
-        if (owner) {
-            Text(
-                ">",
-                modifier = Modifier.clearAndSetSemantics {},
-                color = KiokuColors.Secondary,
-                style = MaterialTheme.typography.body1,
+    MatrixReadingSurface { scrim ->
+        Row(
+            modifier.fillMaxWidth().background(scrim),
+            horizontalArrangement = Arrangement.spacedBy(KiokuSpacing.Small),
+        ) {
+            if (owner) {
+                Text(
+                    ">",
+                    modifier = Modifier.clearAndSetSemantics {},
+                    color = KiokuColors.Secondary,
+                    style = MaterialTheme.typography.body1,
+                )
+            }
+            Column(
+                Modifier
+                    .weight(1f)
+                    .drawBehind {
+                        if (!owner) drawLine(KiokuColors.Accent, Offset.Zero, Offset(0f, size.height), 2.dp.toPx())
+                    }.padding(start = if (owner) 0.dp else KiokuSpacing.Medium, top = 4.dp, bottom = 4.dp),
+                verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Small),
+                content = content,
             )
         }
-        Column(
-            Modifier
-                .weight(1f)
-                .drawBehind {
-                    if (!owner) drawLine(KiokuColors.Accent, Offset.Zero, Offset(0f, size.height), 2.dp.toPx())
-                }.padding(start = if (owner) 0.dp else KiokuSpacing.Medium, top = 4.dp, bottom = 4.dp),
-            verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Small),
-            content = content,
-        )
     }
 }

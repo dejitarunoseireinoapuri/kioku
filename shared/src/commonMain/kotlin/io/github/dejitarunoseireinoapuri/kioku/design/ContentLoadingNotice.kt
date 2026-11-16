@@ -21,7 +21,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.LiveRegionMode
@@ -37,35 +36,37 @@ fun ContentLoadingNotice(
     status: String,
     modifier: Modifier = Modifier,
 ) {
-    val requester = remember { BringIntoViewRequester() }
-    val scope = rememberCoroutineScope()
-    var revealed by remember(status) { mutableStateOf(false) }
-    Surface(
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .testTag("content-loading")
-                .bringIntoViewRequester(requester)
-                .onGloballyPositioned {
-                    if (revealed) return@onGloballyPositioned
-                    revealed = true
-                    scope.launch { requester.bringIntoView() }
-                }.semantics(mergeDescendants = true) {
-                    liveRegion = LiveRegionMode.Polite
-                    progressBarRangeInfo = ProgressBarRangeInfo.Indeterminate
-                },
-        color = Color.Transparent,
-        shape = MaterialTheme.shapes.small,
-        border = BorderStroke(KiokuSpacing.Stroke, KiokuColors.Rule),
-    ) {
-        Row(
-            Modifier.padding(KiokuSpacing.Small),
-            horizontalArrangement = Arrangement.spacedBy(KiokuSpacing.Small),
-            verticalAlignment = Alignment.CenterVertically,
+    MatrixReadingSurface { scrim ->
+        val requester = remember { BringIntoViewRequester() }
+        val scope = rememberCoroutineScope()
+        var revealed by remember(status) { mutableStateOf(false) }
+        Surface(
+            modifier =
+                modifier
+                    .fillMaxWidth()
+                    .testTag("content-loading")
+                    .bringIntoViewRequester(requester)
+                    .onGloballyPositioned {
+                        if (revealed) return@onGloballyPositioned
+                        revealed = true
+                        scope.launch { requester.bringIntoView() }
+                    }.semantics(mergeDescendants = true) {
+                        liveRegion = LiveRegionMode.Polite
+                        progressBarRangeInfo = ProgressBarRangeInfo.Indeterminate
+                    },
+            color = scrim,
+            shape = MaterialTheme.shapes.small,
+            border = BorderStroke(KiokuSpacing.Stroke, KiokuColors.Rule),
         ) {
-            Box(Modifier.size(KiokuSpacing.InlineLoadingMark).background(KiokuColors.Accent))
-            ProvideTextStyle(MaterialTheme.typography.body2) {
-                LoadingStatusText(status, Modifier.weight(1f), textAlign = TextAlign.Start)
+            Row(
+                Modifier.padding(KiokuSpacing.Small),
+                horizontalArrangement = Arrangement.spacedBy(KiokuSpacing.Small),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Box(Modifier.size(KiokuSpacing.InlineLoadingMark).background(KiokuColors.Accent))
+                ProvideTextStyle(MaterialTheme.typography.body2) {
+                    LoadingStatusText(status, Modifier.weight(1f), textAlign = TextAlign.Start)
+                }
             }
         }
     }

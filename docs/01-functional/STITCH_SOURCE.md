@@ -1,5 +1,7 @@
 # Fuente visual y autoridad
 
+**Refinamiento vigente del 16 de noviembre:** lluvia al 30 % bajo los elementos de lectura y controles propios, conservando el fondo libre y el contraste del contenido. El apartado «Lluvia atenuada bajo los elementos» concreta esta petición, posterior a la transparencia total del día 15.
+
 ## Matrix A · Terminal — elegida (2026-11-15)
 
 El propietario solicita un rediseño completo en Stitch y tres alternativas; después elige **A · Terminal** y autoriza aplicarla en una rama nueva. B y C son alternativas descartadas para esta entrega. Las referencias anteriores se conservan como historial, no como autoridad de color/disposición vigente.
@@ -37,6 +39,14 @@ Se conservan texto claro, bordes, divisores y tamaños táctiles. Explicar/Pregu
 Validación de esta adaptación: `mobileCheck`, APK de app/tests y **111 host tests** correctos; **50 casos de interfaz en Honor** superados. Tras ajustar la separación visual del popup, se revalidan los **27 casos directamente afectados**: 25 de navegación/gestión/conversación y dos de corrección/olvido, estos últimos con comprobación de que el encabezado inferior deja de dibujarse y reaparece al finalizar. La regresión de transparencia compara los píxeles de la misma lluvia con y sin controles, con reloj fijo y tolerancia de un nivel de canal para redondeo de composición. El primer intento en Honor no pudo abrir contenido por estar bloqueado; el propietario lo desbloqueó antes de la validación válida. El emulador permitió revisar el aspecto mientras tanto y se cerró después.
 
 Se revisan [acceso, editor/menú, gestión y confirmación en Honor con datos ficticios](../assets/branding/kioku-matrix-transparent-honor.png). Las capturas no acreditan rendimiento ni auditoría completa de accesibilidad; la confirmación se captura también como ventana completa para verificar que no hay textos superpuestos. Instalación actualizada conservando datos. Sin llamadas a OpenAI ni despliegues; iOS comparte los cambios, pero su compilación y ejecución nativa siguen pendientes de Mac. Documentación y enlaces comprobados con `tooling/check-docs.ps1`.
+
+### Lluvia atenuada bajo los elementos (2026-11-16)
+
+El propietario encuentra excesiva la presencia del fondo bajo los controles y pide alpha **0,3** en esas zonas. Se vuelve a inspeccionar mediante MCP la pantalla 03 de A; Stitch no se edita. La implementación mantiene una única lluvia continua: una capa del color de fondo al 70 % deja ver el 30 % de la lluvia bajo mensajes, cabecera, editor/modos, tarjetas, marca, grupos de acceso/ajustes, cargas, acciones y menús. Los espacios libres mantienen la intensidad anterior. No se atenúan texto, iconos ni bordes, ni se alteran velocidad, densidad o colores de la animación.
+
+La cobertura se transmite dentro de cada grupo para que una tarjeta, sus botones y campos no multipliquen sucesivamente la atenuación. Cada menú nativo inicia una superficie propia; Google conserva su botón oficial. El popup de olvido mantiene oculta la pantalla inferior mientras está abierto y conserva la atenuación modal del sistema. La regresión visual comprueba alpha 0,3 también dentro de tarjetas anidadas, editor y modo seleccionado, y alpha 1 en una zona libre, con reloj controlado y composición de color sobre el mismo fotograma.
+
+Validación del refinamiento: `mobileCheck` y compilación de app/tests correctos, con **111 host tests**. En Honor pasan **49 recorridos de interfaz** de animación, acceso, teclado, ajustes, conversación, gestión y confirmación, más la **regresión específica de alpha 0,3**, reejecutada tras corregir su cálculo de composición y elegir una zona del editor con glifos visibles. El cálculo esperado usa mezcla alpha de canales, no interpolación perceptual de color. Se inspeccionan [capturas sintéticas del acceso, menú/editor, gestión y confirmación](../assets/branding/kioku-matrix-reading-alpha-honor.png). Actualización instalada conservando datos; sin llamadas a OpenAI ni cambios de servidor. iOS comparte el ajuste, pero su validación nativa sigue pendiente de Mac. Documentación comprobada con `tooling/check-docs.ps1`.
 
 ## Historial de la referencia B anterior
 

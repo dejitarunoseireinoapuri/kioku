@@ -1,5 +1,6 @@
 package io.github.dejitarunoseireinoapuri.kioku.design
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -49,9 +50,11 @@ fun ContentLoadingScreen(
 
 @Composable
 private fun LoadingIdentity(status: String) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        TerminalBrandMark()
-        Column(Modifier.padding(top = KiokuSpacing.Large)) { KiokuWordmark() }
-        LoadingStatusText(status, Modifier.padding(top = KiokuSpacing.Medium))
+    MatrixReadingSurface { scrim ->
+        Column(Modifier.background(scrim), horizontalAlignment = Alignment.CenterHorizontally) {
+            TerminalBrandMark()
+            Column(Modifier.padding(top = KiokuSpacing.Large)) { KiokuWordmark() }
+            LoadingStatusText(status, Modifier.padding(top = KiokuSpacing.Medium))
+        }
     }
 }

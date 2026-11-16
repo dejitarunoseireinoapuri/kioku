@@ -12,12 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.MotionDurationScale
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.toPixelMap
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.unit.dp
+import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuTheme
 import io.github.dejitarunoseireinoapuri.kioku.design.MatrixBackdrop
 import io.github.dejitarunoseireinoapuri.kioku.design.Panel
@@ -40,7 +42,7 @@ class MatrixTransparencyTest {
         )
 
     @Test
-    fun messagesPanelsComposerAndSelectedModeKeepTheSameRainVisibleUnderneath() {
+    fun readingGroupsKeepThirtyPercentOfTheSameRainWithoutCompoundingNestedSurfaces() {
         val foreground = mutableStateOf(false)
         compose.mainClock.autoAdvance = false
         openFixture(foreground)
@@ -50,23 +52,23 @@ class MatrixTransparencyTest {
         compose.mainClock.advanceTimeByFrame()
         val composed = compose.onNodeWithTag("transparent-fixture").captureToImage()
         val density = compose.activity.resources.displayMetrics.density
-        for (tag in listOf("transparent-panel", "transparent-message")) {
+        for (tag in listOf("nested-panel", "transparent-message")) {
             val bounds = compose.onNodeWithTag(tag).fetchSemanticsNode().boundsInRoot
-            assertUncovered(background, composed, bounds.deflate(8 * density))
+            assertRainAlpha(background, composed, bounds.deflate(8 * density))
         }
         val frame = compose.onNodeWithTag("composer-frame").fetchSemanticsNode().boundsInRoot
-        assertUncovered(
+        assertRainAlpha(
             background,
             composed,
             Rect(
-                frame.left + 8 * density,
-                frame.top + 3 * density,
-                frame.right - 8 * density,
-                frame.top + 7 * density,
+                frame.left + 48 * density,
+                frame.top + 4 * density,
+                frame.right - 56 * density,
+                frame.bottom - 4 * density,
             ),
         )
         val intent = compose.onNodeWithTag("intent-Tell").fetchSemanticsNode().boundsInRoot
-        assertUncovered(
+        assertRainAlpha(
             background,
             composed,
             Rect(
@@ -76,6 +78,7 @@ class MatrixTransparencyTest {
                 intent.top + 10 * density,
             ),
         )
+        assertRainAlpha(background, composed, Rect(8 * density, 450 * density, 312 * density, 492 * density), 1f)
     }
 
     private fun openFixture(foreground: State<Boolean>) {
@@ -85,11 +88,13 @@ class MatrixTransparencyTest {
                     MatrixBackdrop {
                         if (foreground.value) {
                             Column {
-                                Panel(Modifier.testTag("transparent-panel")) { Spacer(Modifier.height(48.dp)) }
+                                Panel {
+                                    Panel(Modifier.testTag("nested-panel")) { Spacer(Modifier.height(48.dp)) }
+                                }
                                 TranscriptMessage(Modifier.testTag("transparent-message")) {
                                     Spacer(Modifier.height(64.dp))
                                 }
-                                ConversationComposer(ConversationState()) {}
+                                ConversationComposer(ConversationState(draft = " ")) {}
                             }
                         }
                     }
@@ -99,22 +104,24 @@ class MatrixTransparencyTest {
     }
 }
 
-private fun assertUncovered(
+private fun assertRainAlpha(
     before: ImageBitmap,
     after: ImageBitmap,
     bounds: Rect,
+    alpha: Float = 0.3f,
 ) {
     val original = before.toPixelMap()
     val foreground = after.toPixelMap()
     var visibleGlyphPixels = 0
     for (y in bounds.top.toInt() until bounds.bottom.toInt() step 2) {
         for (x in bounds.left.toInt() until bounds.right.toInt() step 2) {
-            val message = "The foreground must not mask the shared rain at $x,$y"
-            // Transparent GPU layers can round a channel by one 8-bit level; matte fills cannot pass this bound.
+            val message = "The rain must retain alpha $alpha at $x,$y"
+            val expected = KiokuColors.Background.copy(alpha = 1f - alpha).compositeOver(original[x, y])
+            // GPU composition can round a channel by one 8-bit level.
             val tolerance = 1f / 255 + 0.0001f
-            assertEquals(message, original[x, y].red, foreground[x, y].red, tolerance)
-            assertEquals(message, original[x, y].green, foreground[x, y].green, tolerance)
-            assertEquals(message, original[x, y].blue, foreground[x, y].blue, tolerance)
+            assertEquals(message, expected.red, foreground[x, y].red, tolerance)
+            assertEquals(message, expected.green, foreground[x, y].green, tolerance)
+            assertEquals(message, expected.blue, foreground[x, y].blue, tolerance)
             if (original[x, y].green > 0.08f) visibleGlyphPixels++
         }
     }

@@ -1,5 +1,6 @@
 package io.github.dejitarunoseireinoapuri.kioku.feature.conversation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,6 +23,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
+import io.github.dejitarunoseireinoapuri.kioku.design.MatrixReadingSurface
 import io.github.dejitarunoseireinoapuri.kioku.design.TranscriptMessage
 import io.github.dejitarunoseireinoapuri.kioku.design.rememberButtonFeedback
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
@@ -97,30 +99,39 @@ internal fun MemoryActionsMenu(
     val feedback = rememberButtonFeedback(KiokuColors.Secondary)
     val menuFeedback = rememberButtonFeedback(KiokuColors.Text)
     Box {
-        IconButton(
-            onClick = { expanded = true },
-            enabled = enabled,
-            interactionSource = feedback.interactionSource,
-            modifier = Modifier.sizeIn(KiokuSpacing.TouchTarget, KiokuSpacing.TouchTarget),
-        ) {
-            Icon(
-                painterResource(Res.drawable.icon_more),
-                stringResource(Res.string.memory_manage),
-                tint = if (enabled) feedback.contentColor else KiokuColors.Rule,
-            )
+        MatrixReadingSurface { scrim ->
+            IconButton(
+                onClick = { expanded = true },
+                enabled = enabled,
+                interactionSource = feedback.interactionSource,
+                modifier = Modifier.background(scrim).sizeIn(KiokuSpacing.TouchTarget, KiokuSpacing.TouchTarget),
+            ) {
+                Icon(
+                    painterResource(Res.drawable.icon_more),
+                    stringResource(Res.string.memory_manage),
+                    tint = if (enabled) feedback.contentColor else KiokuColors.Rule,
+                )
+            }
         }
-        DropdownMenu(
-            expanded && enabled,
-            { expanded = false },
-            modifier = Modifier.border(KiokuSpacing.Stroke, KiokuColors.Rule).testTag("saved-memory-menu"),
-        ) {
-            DropdownMenuItem(
-                onClick = {
-                    expanded = false
-                    onManage()
-                },
-                interactionSource = menuFeedback.interactionSource,
-            ) { Text(stringResource(Res.string.control_manage), color = menuFeedback.contentColor) }
+        MatrixReadingSurface(separateWindow = true) { scrim ->
+            DropdownMenu(
+                expanded && enabled,
+                { expanded = false },
+                modifier =
+                    Modifier
+                        .background(
+                            scrim,
+                        ).border(KiokuSpacing.Stroke, KiokuColors.Rule)
+                        .testTag("saved-memory-menu"),
+            ) {
+                DropdownMenuItem(
+                    onClick = {
+                        expanded = false
+                        onManage()
+                    },
+                    interactionSource = menuFeedback.interactionSource,
+                ) { Text(stringResource(Res.string.control_manage), color = menuFeedback.contentColor) }
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package io.github.dejitarunoseireinoapuri.kioku.feature.conversation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -11,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import io.github.dejitarunoseireinoapuri.kioku.design.ActionButton
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
+import io.github.dejitarunoseireinoapuri.kioku.design.MatrixReadingSurface
 import io.github.dejitarunoseireinoapuri.kioku.design.Panel
 import io.github.dejitarunoseireinoapuri.kioku.design.ScreenHeading
 import io.github.dejitarunoseireinoapuri.kioku.design.memoryChangeText
@@ -124,11 +126,19 @@ private fun PreviewConversationBody(
 
 @Composable
 private fun ReadyContent(intent: MemoryIntent) {
-    val tell = intent == MemoryIntent.Tell
-    Column(verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large)) {
-        Text(stringResource(if (tell) Res.string.tell_heading else Res.string.ask_heading), color = KiokuColors.Accent)
-        ScreenHeading(stringResource(if (tell) Res.string.ready_title else Res.string.ask_title))
-        Text(stringResource(if (tell) Res.string.ready_hint else Res.string.ask_hint), color = KiokuColors.Secondary)
+    MatrixReadingSurface { scrim ->
+        val tell = intent == MemoryIntent.Tell
+        Column(Modifier.background(scrim), verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large)) {
+            Text(
+                stringResource(if (tell) Res.string.tell_heading else Res.string.ask_heading),
+                color = KiokuColors.Accent,
+            )
+            ScreenHeading(stringResource(if (tell) Res.string.ready_title else Res.string.ask_title))
+            Text(
+                stringResource(if (tell) Res.string.ready_hint else Res.string.ask_hint),
+                color = KiokuColors.Secondary,
+            )
+        }
     }
 }
 

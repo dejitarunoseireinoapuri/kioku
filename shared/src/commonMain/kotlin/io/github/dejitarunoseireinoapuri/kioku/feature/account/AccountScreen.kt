@@ -1,5 +1,6 @@
 package io.github.dejitarunoseireinoapuri.kioku.feature.account
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +20,7 @@ import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingScreen
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuMark
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuWordmark
+import io.github.dejitarunoseireinoapuri.kioku.design.MatrixReadingSurface
 import io.github.dejitarunoseireinoapuri.kioku.domain.AccountIssue
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.account_denied
@@ -90,5 +92,7 @@ internal fun AccountIssueText(issue: AccountIssue) {
             AccountIssue.Unavailable -> Res.string.account_unavailable
             AccountIssue.SetupRequired -> Res.string.account_setup
         }
-    Text(stringResource(resource), color = KiokuColors.Danger)
+    MatrixReadingSurface { scrim ->
+        Text(stringResource(resource), modifier = Modifier.background(scrim), color = KiokuColors.Danger)
+    }
 }

@@ -1,5 +1,6 @@
 package io.github.dejitarunoseireinoapuri.kioku.feature.account
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuWordmark
+import io.github.dejitarunoseireinoapuri.kioku.design.MatrixReadingSurface
 import io.github.dejitarunoseireinoapuri.kioku.design.TerminalBrandMark
 import io.github.dejitarunoseireinoapuri.kioku.domain.AccountIssue
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
@@ -62,22 +64,27 @@ internal fun LoginScreen(
 
 @Composable
 private fun LoginIntroduction() {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        TerminalBrandMark()
-        Column(Modifier.padding(top = KiokuSpacing.Medium)) { KiokuWordmark() }
-        Text(
-            stringResource(Res.string.login_title),
-            modifier = Modifier.padding(top = KiokuSpacing.LoginHeadlineGap).semantics { heading() },
-            style = MaterialTheme.typography.body1.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold),
-            color = KiokuColors.Accent,
-            textAlign = TextAlign.Center,
-        )
-        Text(
-            stringResource(Res.string.login_description),
-            modifier = Modifier.padding(top = KiokuSpacing.Medium),
-            color = KiokuColors.BrandSecondary,
-            style = MaterialTheme.typography.body1,
-            textAlign = TextAlign.Center,
-        )
+    MatrixReadingSurface { scrim ->
+        Column(Modifier.background(scrim), horizontalAlignment = Alignment.CenterHorizontally) {
+            TerminalBrandMark()
+            Column(Modifier.padding(top = KiokuSpacing.Medium)) { KiokuWordmark() }
+            Text(
+                stringResource(Res.string.login_title),
+                modifier = Modifier.padding(top = KiokuSpacing.LoginHeadlineGap).semantics { heading() },
+                style =
+                    MaterialTheme.typography.body1.copy(
+                        fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
+                    ),
+                color = KiokuColors.Accent,
+                textAlign = TextAlign.Center,
+            )
+            Text(
+                stringResource(Res.string.login_description),
+                modifier = Modifier.padding(top = KiokuSpacing.Medium),
+                color = KiokuColors.BrandSecondary,
+                style = MaterialTheme.typography.body1,
+                textAlign = TextAlign.Center,
+            )
+        }
     }
 }

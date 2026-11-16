@@ -39,6 +39,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
+import io.github.dejitarunoseireinoapuri.kioku.design.MatrixReadingSurface
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.ask
@@ -56,26 +57,28 @@ fun ConversationComposer(
     state: ConversationState,
     onEvent: (ConversationEvent) -> Unit,
 ) {
-    val enabled = state.canEdit
-    val keyboardVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
-    val focus = LocalFocusManager.current
-    val keyboard = LocalSoftwareKeyboardController.current
-    val inputEvent: (ConversationEvent) -> Unit = { event ->
-        if (event == ConversationEvent.Submit) {
-            focus.clearFocus()
-            keyboard?.hide()
-        }
-        onEvent(event)
-    }
-    Surface(color = Color.Transparent) {
-        Column {
-            Divider(color = KiokuColors.Rule)
-            Column(Modifier.padding(horizontal = KiokuSpacing.Medium, vertical = KiokuSpacing.Small)) {
-                TextComposer(state, enabled, inputEvent)
+    MatrixReadingSurface { scrim ->
+        val enabled = state.canEdit
+        val keyboardVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
+        val focus = LocalFocusManager.current
+        val keyboard = LocalSoftwareKeyboardController.current
+        val inputEvent: (ConversationEvent) -> Unit = { event ->
+            if (event == ConversationEvent.Submit) {
+                focus.clearFocus()
+                keyboard?.hide()
             }
-            if (!keyboardVisible) {
+            onEvent(event)
+        }
+        Surface(color = scrim) {
+            Column {
                 Divider(color = KiokuColors.Rule)
-                IntentControls(state.intent, state.canSwitchIntent, onEvent)
+                Column(Modifier.padding(horizontal = KiokuSpacing.Medium, vertical = KiokuSpacing.Small)) {
+                    TextComposer(state, enabled, inputEvent)
+                }
+                if (!keyboardVisible) {
+                    Divider(color = KiokuColors.Rule)
+                    IntentControls(state.intent, state.canSwitchIntent, onEvent)
+                }
             }
         }
     }
