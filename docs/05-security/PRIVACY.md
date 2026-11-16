@@ -1,5 +1,7 @@
 # Privacidad, datos y permisos
 
+Propuesta pendiente del 16 de noviembre: [núcleo v2](../02-architecture/MEMORY_CORE_V2.md) conserva palabras originales como evidencia con propiedad y contexto explícitos; elimina la copia completa paralela que podría revelar datos olvidados. Mantiene el feed RAM autorizado, sin historial de versiones erróneas o copias históricas. Reanalizar recuerdos existentes con OpenAI y migrarlos requiere autorización concreta según [R4–R5](../09-planning/MEMORY_CORE_REBUILD_PLAN.md); no se ha hecho en esta entrega ni se infiere de autorizaciones de diagnósticos anteriores.
+
 ## Qué necesita Kioku
 
 Identidad de acceso, textos que el usuario decide recordar, contexto temporal y datos mínimos derivados para encontrarlos. Las personas mencionadas son contenido del recuerdo, no una autorización para acceder a contactos, mensajes o calendario.

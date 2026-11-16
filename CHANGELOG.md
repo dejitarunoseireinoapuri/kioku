@@ -1,5 +1,11 @@
 # Cambios
 
+## Propuesta documental · 2026-11-16 · Revisión del núcleo de memoria
+
+- Diseño v2 de unidades con identidad estable, evidencia original segmentada, repeticiones/contexto explícitos y cambios por IDs/versiones; lectura de gestión y olvido explícito resuelto sin nuevas llamadas de IA. Decisiones de producto P1–P3 propuestas, todavía sin aceptar.
+- ADR-012, plan R0–R6 y criterios de ciclos completos antes de K5; migración con ensayo previo, mantenimiento, revocaciones y límites de reversión sin backups históricos. Contratos actuales conservados y mapa/estado documental enlazados.
+- Documentación únicamente: no cambia el comportamiento instalado, no soluciona todavía el incidente, no ejecuta pruebas del nuevo motor ni modifica/envía recuerdos reales. [Diseño](docs/02-architecture/MEMORY_CORE_V2.md), [plan](docs/09-planning/MEMORY_CORE_REBUILD_PLAN.md).
+
 ## Sin versión publicada · 2026-11-16 · Lluvia bajo el contenido
 
 - Lluvia Matrix al 30 % bajo mensajes, editor, cabecera, tarjetas, grupos de lectura y controles propios; conserva la intensidad del fondo en las zonas libres. Texto, iconos y bordes mantienen su contraste. Las superficies anidadas no acumulan atenuación y los menús conservan su propia capa. Misma animación y selección de modos.

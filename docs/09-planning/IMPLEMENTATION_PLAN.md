@@ -1,5 +1,7 @@
 # Fases de Kioku
 
+**Actualización del 16 de noviembre:** el propietario pide replantear el núcleo tras otra incidencia de olvido. Se inserta [R0–R6 · Reconstrucción de memoria](MEMORY_CORE_REBUILD_PLAN.md) antes de K5. [Diseño v2](../02-architecture/MEMORY_CORE_V2.md) y [ADR-012](../02-architecture/ADR/ADR-012-independent-memory-units.md) son propuestas documentales, sin código, migración o despliegue. La aceptación histórica de K4 que sigue no acredita que la incidencia nueva esté resuelta.
+
 K4 cerrada para Android/backend con aceptación del propietario e integración en main (15 de noviembre). La comprobación de iOS se difiere expresamente y no bloquea K5; no se declara validada. Última incidencia de escritura/corrección resuelta, activada y aceptada en Honor con datos ficticios retirados y recuerdos anteriores intactos. No requiere otro APK principal. Detalle y límites en [K4_VALIDATION](K4_VALIDATION.md).
 
 Este documento define el alcance y el cierre de las fases. Los [requisitos](../01-functional/FUNCTIONAL_REQUIREMENTS.md) gobiernan el comportamiento; las [limitaciones](KNOWN_LIMITATIONS.md) registran las decisiones pendientes. Planificar no equivale a implementar.
@@ -15,7 +17,8 @@ Este documento define el alcance y el cierre de las fases. Los [requisitos](../0
 | K2 · Contar por escrito | Separar asuntos, aclarar dudas y guardar automáticamente | Implementada y desplegada, integrada en `main` por petición del propietario; recorrido Android aceptado, validación del nuevo build iOS pendiente |
 | K3 · Preguntar por escrito | Encontrar recuerdos y responder con sus fuentes | Implementada y activada desde `codex/k3-text-query`; pruebas locales/IA real correctas, aceptación móvil pendiente |
 | K4 · Control de memoria | Ofrecer guardar un dato, corregir y olvidar conversando | Activa en `codex/k4-memory-control`; olvido entre relatos validado en Android/backend y Honor real dentro de sus cotas; iOS pendiente |
-| K5 · Voz | Contar y preguntar hablando, con pulsación y bloqueo | Pendiente |
+| R0–R6 · Revisión del núcleo | Evidencia independiente, corrección/olvido por identidad y migración comprobada | Propuesta documental preparada; decisiones P1–P3 y ejecución pendientes |
+| K5 · Voz | Contar y preguntar hablando, con pulsación y bloqueo | Pendiente; después de validar R0–R6 en el alcance acordado |
 | K6 · V1 de uso personal | Recorrido completo comprobado en Android e iOS | Pendiente |
 
 M0 supera el criterio funcional de viabilidad. K0 tiene base y navegación Android comprobadas; requiere validación iOS en Mac antes de declararla validada en ambos sistemas. La primera versión completa para uso personal llega en K6. La velocidad de guardado no se declara validada: se conserva el objetivo p95 de 15 segundos para su mejora y nueva medición al integrar K2. No se fijan fechas sin conocer herramientas, dependencias y resultados.

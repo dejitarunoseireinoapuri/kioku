@@ -1,5 +1,7 @@
 # Arquitectura
 
+Revisión propuesta del 16 de noviembre: [núcleo de memoria v2](MEMORY_CORE_V2.md) y [ADR-012](ADR/ADR-012-independent-memory-units.md). Conserva las fronteras de esta arquitectura y replantea la representación de evidencia, identidad y mutaciones. No está implementada; decisiones de producto y plan R0–R6 pendientes antes de sustituir K2–K4.
+
 Decisión adaptada de Wonderdrop por petición del propietario. [ADR-001](ADR/ADR-001-platform-strategy.md) y [ADR-002](ADR/ADR-002-clean-architecture.md) sustituyen la dirección Expo inicial.
 
 ```mermaid

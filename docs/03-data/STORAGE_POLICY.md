@@ -1,5 +1,7 @@
 # Persistencia y ciclo de vida
 
+Propuesta pendiente del 16 de noviembre: [núcleo v2](../02-architecture/MEMORY_CORE_V2.md) conserva evidencia literal segmentada y metadatos de procedencia sin archivo completo paralelo ni historial de valores corregidos. El [plan R4–R5](../09-planning/MEMORY_CORE_REBUILD_PLAN.md) especifica staging temporal, limpieza y límites de reversión sin backups históricos; requiere autorización antes de datos reales. No hay cambio de retención ni migración activa por documentarlo.
+
 ## Memoria
 
 Firestore conserva texto y referencias/contexto mínimos por cuenta. No hay base de negocio local ni lectura de memoria offline. Preferencias no sensibles de dispositivo y sesión nativa pueden persistir; no guardar claves permanentes en preferencias, backups o una colección legible.

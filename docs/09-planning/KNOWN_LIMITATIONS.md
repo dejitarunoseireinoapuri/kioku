@@ -1,5 +1,13 @@
 # Estado real y decisiones pendientes
 
+## Prioridad vigente · revisión del núcleo (16 de noviembre)
+
+Nueva incidencia de olvido inspeccionada en Honor: dos unidades conservan evidencia principal que abarca el relato completo. La operación terminó sin cambios y ambos datos siguieron vigentes. El mensaje corresponde al rechazo de la revisión de alcance; no hay motivo semántico detallado persistido para precisar su causa interna. No se reproduce aquí contenido personal. Se conserva la aceptación histórica de K4, pero no se considera resuelta esta fragilidad por aquellas pruebas.
+
+El propietario solicita replantear el núcleo antes de implementar: [propuesta](../02-architecture/MEMORY_CORE_V2.md), [ADR-012](../02-architecture/ADR/ADR-012-independent-memory-units.md) y [plan R0–R6](MEMORY_CORE_REBUILD_PLAN.md) preparados. P1–P3 pendientes de revisión; no hay núcleo v2 implementado, evaluación nueva, migración, despliegue ni arreglo del incidente. K5 se pospone a su validación. Esta entrega solo cambia documentación; no relee datos productivos ni los envía a OpenAI.
+
+La revisión conserva arquitectura móvil/backend, identidad, secretos y transacciones. Su objetivo es eliminar el acoplamiento de evidencia compartida y la interpretación de IA durante un olvido explícito resuelto. Reconocer paráfrasis seguirá siendo falible: alcance demostrable, pruebas reservadas y ausencia de falsas garantías forman parte de la propuesta.
+
 ## Disponible
 
 **K4 cerrada para Android/backend e integrada en main (15 de noviembre):** el propietario confirma que todo está OK y autoriza la integración. iOS se probará más adelante y no bloquea voz K5; esta decisión prevalece sobre las entradas históricas de K4 abierta por iOS. Se conserva la evidencia automatizada y real de Honor, sin presentar la aceptación del propietario como una nueva pasada instrumentada. iOS no validado, reporte temporal antiguo no corroborado y objetivo de latencia siguen visibles como seguimientos. K5 todavía no está implementada. [Cierre y alcance](K4_VALIDATION.md).

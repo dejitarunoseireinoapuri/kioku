@@ -1,5 +1,7 @@
 # Modelo lógico de datos
 
+**Esquema v2 propuesto, sin migrar:** [MEMORY_CORE_V2](../02-architecture/MEMORY_CORE_V2.md) define unidades con ID estable, ocurrencias de evidencia, fuentes segmentadas sin copia completa paralela, dependencias y membresías versionadas. Es la propuesta a revisar, no el esquema activo descrito más abajo. Los tipos/rutas físicos se fijarán en R1 y cualquier migración seguirá [R4–R5](../09-planning/MEMORY_CORE_REBUILD_PLAN.md), con autorización específica y conservación de revocaciones.
+
 Refinamiento activo de escritura/corrección: las variantes temporales sin diacríticos se comparan contra vocabulario conocido sin normalizar ni inventar el literal almacenado. Una interpretación rechazada no crea fuentes o recuerdos; puede generar un pendiente de aclaración con el TTL existente. La última reformulación explícita sustituye el fragmento erróneo en los hechos, conservando el relato de procedencia. Al corregir una cita compartida, solo pueden acotarse quote/time.quote/attributionEvidence a subcadenas exactas; texto, fecha, autor, vector y demás metadatos del recuerdo conservado permanecen iguales, con la revisión habitual. La prueba interna de separación vive en RAM, no en un campo nuevo ni en historial; no cambia snapshot 4 ni los índices.
 
 Contrato de diseño, no colecciones desplegadas. Cada documento está bajo identidad de propietario verificada por servidor. Los IDs son opacos; ningún nombre o dato privado aparece en una ruta.

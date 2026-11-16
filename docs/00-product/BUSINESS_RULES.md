@@ -1,5 +1,7 @@
 # Reglas de negocio
 
+**Revisión propuesta, no vigente todavía (16 de noviembre):** [núcleo v2](../02-architecture/MEMORY_CORE_V2.md) precisa BR-004/BR-008/BR-009 mediante evidencia original segmentada, identidad de repeticiones y alcance explícito de corrección/olvido. P1–P3 requieren revisión del propietario: no se reduce silenciosamente «todas las copias semánticas» a «las copias encontradas». Las reglas activas e históricas siguientes se conservan hasta aceptar el nuevo contrato. [Pasos y criterios](../09-planning/MEMORY_CORE_REBUILD_PLAN.md).
+
 - **BR-001:** intención de entrada explícita antes de captar o enviar. Una pregunta no se almacena como hecho por su entonación o contenido.
 - **BR-002:** no interrumpir al hablar. Soltar sin bloqueo termina el turno; soltar con bloqueo no lo termina. El silencio no finaliza una captura bloqueada.
 - **BR-003:** guardar automáticamente solo cuando el contenido esté suficientemente determinado; si falta contexto relevante, aclarar por el mismo canal. Nunca exigir aprobar cada resumen correcto.

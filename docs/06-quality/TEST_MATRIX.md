@@ -1,5 +1,22 @@
 # Matriz de aceptación y evidencia prevista
 
+## Revisión del núcleo v2 · casos previstos, no ejecutados
+
+La [propuesta](../02-architecture/MEMORY_CORE_V2.md) se evalúa con el [plan R0–R6](../09-planning/MEMORY_CORE_REBUILD_PLAN.md), cuya rúbrica fija rondas, corpus reservado, criterios críticos y rendimiento. Las pruebas históricas K2–K4 no acreditan este rediseño.
+
+| Caso | Cubre | Evidencia requerida |
+| --- | --- | --- |
+| TEST-CORE-001 | FR-005, FR-006, FR-007, BR-004, BR-006 | Partición/cobertura de todos los detalles, Unicode, citas propias, contexto común, condición indivisible, fechas independientes y aclaración tardía; cita amplia compartida rechazada sin falsa confirmación |
+| TEST-CORE-002 | FR-007, FR-011, FR-012, BR-008, BR-009 | Repetición por identidad frente a semejanza, homónimos, fechas/negaciones distintas, candidato ambiguo, corrección frente a evolución; medir fusiones erróneas y copias no detectadas |
+| TEST-CORE-003 | FR-011, FR-012, AC-011, AC-012 | Corregir/olvidar una unidad conserva vecinos, IDs, tiempo/atribución y contexto ajenos; limpia todos sus soportes/derivados y no necesita IA para olvidar un alcance resuelto; cancelación sin mutación |
+| TEST-CORE-004 | BR-010, FR-001, FR-006, FR-012 | Emuladores positivos/negativos de cuenta, ticket alterado/caducado, membresía concurrente, revocación, nonce antiguo, commit incierto, repetición después del TTL y trabajo tardío sin resurrección |
+| TEST-CORE-005 | FR-008, FR-009, AC-008, AC-009 | Consulta con soporte vigente de la unidad exacta, fecha/contexto, respuesta de tú, ausencia correcta tras olvido, relevancia tras corrección y abstención sin inventar ausencia de hechos |
+| TEST-CORE-006 | FR-005, FR-006, FR-011, FR-012 | Honor con fixtures: estados processing/desconocido/no aplicado/confirmado, error técnico distinguido de ambigüedad, consulta de recibo sin reenviar, editor recuperable, popup, gestión continuada y feed RAM sin acciones antiguas |
+| TEST-CORE-007 | BR-009, BR-010, AC-001, AC-012 | Migración ficticia con esquema mixto solo en mantenimiento, versión antigua bloqueada, etapas interrumpidas/reanudadas, revocaciones preservadas, cero rutas a staging/v1 retirado y TTL que nunca borra único canónico |
+| TEST-CORE-008 | FR-005–FR-012 | Ciclos completos reservados en tres rondas con Sol medio; revisión contra evidencia, pérdida de detalle/copias y fallos críticos; coste/p95 por etapa, fan-out e inventarios de 100/1000/10 000 unidades |
+
+## Evidencia anterior y contratos activos
+
 Refinamiento de TEST-MEM-001/003 y TEST-UI-005: texto ambiguo sin escritura, reformulación completa tras uno o varios intentos, conservación de asuntos ajenos, tolerancia de marcadores temporales sin diacríticos con literal exacto, fecha inválida sin guardado, edición rechazada con editor disponible y corrección aislada de evidencia compartida. Prueba de almacenamiento contra cambios inventados de texto/cita/fecha/vector/revisión; revocación y modificación concurrente bloquean el commit. [Evidencia K4](../09-planning/K4_VALIDATION.md) distingue modelo real en RAM, Firebase local, UI Honor con dobles y aceptación productiva aún pendiente.
 
 Los casos de integración de la app siguen **pendientes de validación**. TEST-EVAL-001 supera el criterio funcional temprano en M0 v4; sus evaluaciones reales se registran por separado y no cierran los casos de la app. Registrar comando, commit, plataforma/entorno, resultado y límites al ejecutar. Véase el [estado actual](../09-planning/KNOWN_LIMITATIONS.md).

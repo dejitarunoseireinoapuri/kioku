@@ -1,5 +1,7 @@
 # Seguridad técnica
 
+Revisión propuesta del 16 de noviembre: [núcleo v2](../02-architecture/MEMORY_CORE_V2.md) mantiene autenticación, cuenta, atestación y secreto actuales. Añade como diseño tickets ligados a alcance/versiones, membresías verificables, diagnóstico cerrado sin contenido y compatibilidad por esquema/generación. [R3–R5](../09-planning/MEMORY_CORE_REBUILD_PLAN.md) exigirán tests de aislamiento, concurrencia y no resurrección antes de activación; esta documentación no cambia funciones, reglas o permisos.
+
 Refinamiento activo de corrección compartida: el selector existente recibe solo el relato afectado y sus recuerdos, con un único objetivo ya autorizado. Su selección debe coincidir exactamente con ese ID; ambigüedad, IDs extra o evidencia inventada no autorizan cambios. Solo se aceptan subcadenas literales de los campos originales. La revisión semántica independiente comprueba conservación y ausencia del dato sustituido. La frontera de almacenamiento relee propietario y versiones, repite la transformación literal y coteja exactamente todos los metadatos conservados antes de la retirada atómica existente. El plan no llega al cliente ni se persiste. No añade permisos, entradas públicas o secretos. Una petición de reformulación no permite guardar algo cuya interpretación fue rechazada, ni convierte fallos técnicos o evidencia ajena en una acusación de mala ortografía.
 
 Kioku tratará recuerdos potencialmente íntimos y una credencial que permite consumo de pago. Seguridad y privacidad forman parte de cada caso de uso, aunque V1 sea personal.
