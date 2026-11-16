@@ -15,5 +15,5 @@
     "noEmit": true,
     "types": ["node"]
   },
-  "include": ["prototypes/memory/**/*.ts"]
+  "include": ["prototypes/memory/**/*.ts", "prototypes/memory-core/**/*.ts"]
 }

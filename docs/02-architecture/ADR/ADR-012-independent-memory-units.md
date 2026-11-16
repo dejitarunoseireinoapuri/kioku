@@ -1,15 +1,15 @@
 # ADR-012 · Unidades de memoria independientes y mutaciones por identidad
 
-- Estado: **propuesta**, solicitada para diseño el 2026-11-16; sin implementación, migración ni despliegue autorizados por este documento.
+- Estado: **aceptada para el nuevo núcleo** por el propietario el 2026-11-16, incluidas P1–P3. Prototipo con datos ficticios autorizado e implementado en su frontera determinista; integración, migración y despliegue pendientes. [Evidencia R1](../../09-planning/R1_VALIDATION.md).
 - Fecha: 2026-11-16.
-- Si se acepta, sustituye la representación de fuentes/mutaciones selectivas de [ADR-011](ADR-011-memory-control.md) y concreta evidencia/olvido de [ADR-005](ADR-005-memory-evidence-and-deletion.md). Conserva sus garantías de autorización, versiones y no resurrección.
+- Sustituye como dirección de diseño la representación de fuentes/mutaciones selectivas de [ADR-011](ADR-011-memory-control.md) y concreta evidencia/olvido de [ADR-005](ADR-005-memory-evidence-and-deletion.md). Conserva sus garantías de autorización, versiones y no resurrección; el despliegue anterior continúa activo hasta migrar.
 - Diseño detallado: [MEMORY_CORE_V2](../MEMORY_CORE_V2.md). Secuencia y aceptación: [plan de reconstrucción](../../09-planning/MEMORY_CORE_REBUILD_PLAN.md).
 
 ## Contexto
 
 El núcleo actual separa fichas pero permite que varias compartan el relato completo como cita. Corregir u olvidar una exige recortar/reconstruir fuentes y revisar con IA que ni revela el objetivo ni pierde contexto ajeno. El inventario semántico global de copias añade coste y motivos de rechazo a una acción explícita. El incidente del Honor del 16 de noviembre conserva ambos datos sin cambios: la protección evita pérdida, pero el recorrido básico no resulta fiable. No hay evidencia de un fallo de atomicidad ni del motivo semántico exacto del revisor.
 
-## Decisión propuesta
+## Decisión aceptada
 
 1. Unidad canónica con identidad estable y revisión, independiente del relato que la contiene. Conservar solo la versión vigente y retirar el contenido sustituido al corregir; conservar historia únicamente cuando se relató una evolución real.
 2. Evidencia literal segmentada con procedencia, contexto y propiedad explícitos. No mantener una copia monolítica paralela que obligue a reinterpretar o vuelva a revelar lo olvidado. Comprobar cobertura y significado al admitir.
@@ -36,7 +36,7 @@ El núcleo actual separa fichas pero permite que varias compartan el relato comp
 
 La partición, identidad semántica y fidelidad siguen siendo falibles. No se cambia una negativa genérica al borrar por guardados que pierdan detalles sin avisar. Las evaluaciones incluyen captura, aclaración, consulta, corrección, olvido y consulta posterior, con casos reservados y revisión contra evidencia.
 
-No se promete descubrir todas las paráfrasis desconocidas. P2 precisa el alcance demostrable; si el propietario exige otra semántica, debe resolverse antes de aceptar este ADR. P1 precisa la conservación del original segmentado y P3 corrección frente a evolución. Son decisiones pendientes explícitas en el diseño, no cambios ya aceptados de BR-004/BR-008/BR-009.
+No se promete descubrir todas las paráfrasis desconocidas. P2 precisa el alcance demostrable; P1 la conservación del original segmentado y P3 corrección frente a evolución. El propietario acepta las tres como contrato objetivo de BR-004/BR-008/BR-009. No se infiere que el servidor anterior haya adoptado ese contrato por aprobar el documento.
 
 Los límites de transacción se mantienen. Un cierre demasiado grande no se divide en borrados parciales silenciosos. Una futura purga asíncrona requeriría otro estado/contrato. La migración requiere autorización concreta antes de enviar recuerdos reales a IA y antes de escribir/retirar datos o desplegar. No se crea un backup histórico como atajo de recuperación.
 

@@ -7,10 +7,15 @@
     "node": ">=24.12.0 <25"
   },
   "scripts": {
+    "core:check": "tsc --noEmit -p prototypes/memory-core/tsconfig.json",
+    "core:test": "node --test prototypes/memory-core/test/*.test.ts",
+    "core:format": "prettier --write prototypes/memory-core package.json",
+    "core:format:check": "prettier --check prototypes/memory-core package.json",
+    "core:demo": "node prototypes/memory-core/src/demo.ts",
     "check": "tsc --noEmit",
-    "test": "node --test prototypes/memory/test/*.test.ts",
-    "format": "prettier --write prototypes/memory tooling/m0.mjs package.json tsconfig.json",
-    "format:check": "prettier --check prototypes/memory tooling/m0.mjs package.json tsconfig.json",
+    "test": "node --test prototypes/memory/test/*.test.ts prototypes/memory-core/test/*.test.ts",
+    "format": "prettier --write prototypes/memory prototypes/memory-core tooling/m0.mjs package.json tsconfig.json",
+    "format:check": "prettier --check prototypes/memory prototypes/memory-core tooling/m0.mjs package.json tsconfig.json",
     "m0": "node --env-file-if-exists=.env.local prototypes/memory/src/cli.ts",
     "m0:eval": "node --env-file-if-exists=.env.local prototypes/memory/src/evaluation/run.ts"
   },

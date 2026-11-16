@@ -1,5 +1,11 @@
 # Cambios
 
+## Prototipo aislado · 2026-11-16 · Núcleo de memoria R1
+
+- P1–P3 aceptadas expresamente por el propietario. Motor determinista local con identidad estable, evidencia segmentada, corrección, enriquecimiento temporal limitado, olvido, tickets/recibos y revocaciones; sin Firebase, proveedor de IA ni modificación de recuerdos reales.
+- 50 pruebas ficticias, incluidas 80 secuencias y 1600 pasos con oráculo independiente; fallos antes/después del commit, evidencia/dependencias compartidas, replays, límites y soportes obsoletos. Demo reproducible solo con contadores; tareas de calidad integradas sin dependencias nuevas.
+- Interpretaciones semánticas preparadas, sin evaluación de lenguaje natural o búsqueda real. Contrato HTTP, R2–R6 y la app instalada pendientes. [Guía](prototypes/memory-core/README.md), [evidencia](docs/09-planning/R1_VALIDATION.md).
+
 ## Propuesta documental · 2026-11-16 · Revisión del núcleo de memoria
 
 - Diseño v2 de unidades con identidad estable, evidencia original segmentada, repeticiones/contexto explícitos y cambios por IDs/versiones; lectura de gestión y olvido explícito resuelto sin nuevas llamadas de IA. Decisiones de producto P1–P3 propuestas, todavía sin aceptar.

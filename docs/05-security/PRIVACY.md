@@ -1,6 +1,6 @@
 # Privacidad, datos y permisos
 
-Propuesta pendiente del 16 de noviembre: [núcleo v2](../02-architecture/MEMORY_CORE_V2.md) conserva palabras originales como evidencia con propiedad y contexto explícitos; elimina la copia completa paralela que podría revelar datos olvidados. Mantiene el feed RAM autorizado, sin historial de versiones erróneas o copias históricas. Reanalizar recuerdos existentes con OpenAI y migrarlos requiere autorización concreta según [R4–R5](../09-planning/MEMORY_CORE_REBUILD_PLAN.md); no se ha hecho en esta entrega ni se infiere de autorizaciones de diagnósticos anteriores.
+Diseño aceptado del 16 de noviembre: [núcleo v2](../02-architecture/MEMORY_CORE_V2.md) conserva palabras originales como evidencia con propiedad/contexto explícitos y retira la copia completa paralela. Mantiene el feed RAM autorizado, sin historial de valores erróneos o copias históricas. [R1](../09-planning/R1_VALIDATION.md) usa únicamente fixtures/RAM, sin proveedor ni datos personales. Reanalizar recuerdos existentes con OpenAI o migrarlos requiere autorización concreta según [R4–R5](../09-planning/MEMORY_CORE_REBUILD_PLAN.md); no se ha hecho ni se infiere de diagnósticos anteriores.
 
 ## Qué necesita Kioku
 

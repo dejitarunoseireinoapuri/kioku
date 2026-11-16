@@ -46,6 +46,8 @@ Los ejemplos se recorren desde Ajustes → Recorridos de ejemplo. Los ocho estad
 
 ## Prototipo M0
 
+El nuevo [prototipo R1](../../prototypes/memory-core/README.md) vive en `prototypes/memory-core`, separado del motor M0 que sigue usando producción. `node tooling/m0.mjs core:check`, `core:test`, `core:format:check` y `core:demo` ejecutan sus comprobaciones/ejemplo sin cargar `.env` ni acceder a proveedores. Las tareas raíz `check`, `test` y `format:check` incluyen ambos prototipos; los scripts de evaluación M0 y compilación backend mantienen sus entradas anteriores. No usar R1 para procesar datos personales: requiere antes R2 y las fronteras R3. [Evidencia y límites](../09-planning/R1_VALIDATION.md).
+
 Para M0 se ha fijado Node 24 (mínimo 24.12), ejecución TypeScript nativa y comprobación con TypeScript 5.9.3. Comandos: `node tooling/m0.mjs install`, `check`, `test` y `format:check`. La [guía M0](../../prototypes/memory/README.md) detalla las evaluaciones reales con `--live`, credenciales privadas y límite de consumo; las pruebas locales no llaman a OpenAI. El runtime de Functions se decidirá al preparar ese despliegue, sin deducir compatibilidad del prototipo.
 
 Node/TypeScript mantienen sus lockfiles independientes: M0 en raíz, K1 en `backend/`. Las verificaciones Auth/Functions/Firestore locales se describen en la [guía backend](../../backend/README.md). La [evidencia de integración K1](../09-planning/K1_INTEGRATION_VALIDATION.md) distingue recursos remotos y tests locales; estos no prueban Google móvil, App Check remoto o iOS.

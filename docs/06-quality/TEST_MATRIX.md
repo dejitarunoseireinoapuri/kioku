@@ -1,8 +1,8 @@
 # Matriz de aceptación y evidencia prevista
 
-## Revisión del núcleo v2 · casos previstos, no ejecutados
+## Revisión del núcleo v2 · evidencia local parcial y casos previstos
 
-La [propuesta](../02-architecture/MEMORY_CORE_V2.md) se evalúa con el [plan R0–R6](../09-planning/MEMORY_CORE_REBUILD_PLAN.md), cuya rúbrica fija rondas, corpus reservado, criterios críticos y rendimiento. Las pruebas históricas K2–K4 no acreditan este rediseño.
+El [diseño aceptado](../02-architecture/MEMORY_CORE_V2.md) se evalúa con el [plan R0–R6](../09-planning/MEMORY_CORE_REBUILD_PLAN.md), cuya rúbrica fija rondas, corpus reservado y criterios. [R1](../09-planning/R1_VALIDATION.md) aporta 50 pruebas locales, incluyendo 80 secuencias/1600 pasos: cubre las invariantes deterministas de TEST-CORE-001/002/003/004/005 y parte generativa de TEST-CORE-008. No cierra sus verificaciones semánticas/remotas ni TEST-CORE-006/007. Las pruebas históricas K2–K4 tampoco acreditan el nuevo núcleo.
 
 | Caso | Cubre | Evidencia requerida |
 | --- | --- | --- |

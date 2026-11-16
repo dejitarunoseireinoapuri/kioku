@@ -1,6 +1,6 @@
 # Requisitos y aceptación
 
-Propuesta pendiente del 16 de noviembre: [núcleo v2](../02-architecture/MEMORY_CORE_V2.md) revisa cómo satisfacer FR-005–FR-012 sin reconstruir relatos compartidos al mutar. Mantiene los recorridos de captura/consulta/gestión; evidencia original y alcance de copias/corrección se resuelven en R0 antes de cambiar estas aceptaciones. Pruebas nuevas previstas en TEST_MATRIX y [plan R0–R6](../09-planning/MEMORY_CORE_REBUILD_PLAN.md); no se declaran implementadas.
+Diseño aceptado el 16 de noviembre: P1–P3 del [núcleo v2](../02-architecture/MEMORY_CORE_V2.md) revisan cómo satisfacer FR-005–FR-012 sin reconstruir relatos compartidos al mutar. Los recorridos se mantienen. [R1](../09-planning/R1_VALIDATION.md) prueba solo sus reglas deterministas con interpretaciones ficticias; las aceptaciones móviles, de IA y de almacenamiento remoto todavía no están verificadas para v2.
 
 Refinamiento de AC-005/AC-011: errores leves inequívocos se interpretan conservando el literal; palabras unidas ambiguas piden reescribir la frase completa. Una aclaración reformulada sustituye el fragmento erróneo sin duplicarlo ni perder otros asuntos. Una edición incierta explica que no se ha modificado el recuerdo y mantiene el editor disponible. Corregir un dato de una frase con varios recuerdos conserva los otros y sus fechas/autores, separando evidencia interna cuando sea seguro. Problemas de red, autorización o formato del proveedor no se presentan como faltas de ortografía.
 

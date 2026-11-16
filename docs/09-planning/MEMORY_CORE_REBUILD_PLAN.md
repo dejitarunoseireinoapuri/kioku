@@ -1,6 +1,6 @@
 # Reconstrucción del núcleo de memoria · R0–R6
 
-Fecha: 2026-11-16. Estado: **plan propuesto; solo documentación preparada**. Responde a la nueva incidencia de olvido y a la petición del propietario de revisar el diseño antes de tocar código. No acredita pruebas del núcleo nuevo ni autoriza inferencia con datos personales, migración o despliegue.
+Fecha: 2026-11-16. Estado: **P1–P3 aceptadas; prototipo determinista y pruebas ficticias R1 implementados**. El propietario autoriza este bloque sin tocar recuerdos reales. [Evidencia y límites](R1_VALIDATION.md). No autoriza inferencia con datos personales, migración o despliegue; R2–R6 siguen pendientes.
 
 Dirección: [MEMORY_CORE_V2](../02-architecture/MEMORY_CORE_V2.md) y [ADR-012](../02-architecture/ADR/ADR-012-independent-memory-units.md). La [matriz de pruebas](../06-quality/TEST_MATRIX.md) identifica sus casos. Los contratos activos permanecen en [datos](../03-data/DATA_MODEL.md) y [API](../04-api/API_CONTRACT.md) hasta su sustitución expresa.
 
@@ -12,8 +12,8 @@ No rehacer acceso, identidad, secretos, Compose o el diseño Matrix. No cambiar 
 
 | Paso | Entregable revisable | Puerta de salida |
 | --- | --- | --- |
-| R0 · Contrato de comportamiento | Decisiones P1–P3, ejemplos y rúbrica antes de medir | Propietario conoce qué se conserva, qué alcance tiene olvidar y cómo funciona corregir |
-| R1 · Modelo y motor puro | Tipos, validadores de evidencia, planes y mutaciones en memoria con datos ficticios | Invariantes deterministas, sin proveedor ni Firebase |
+| R0 · Contrato de comportamiento | Decisiones P1–P3, ejemplos y rúbrica antes de medir | Aceptado expresamente por el propietario |
+| R1 · Modelo y motor puro | Tipos, validadores, planes y mutaciones en memoria con datos ficticios | Motor/contratos locales probados; especificación de transporte definitivo pendiente, sin proveedor ni Firebase |
 | R2 · Interpretación y evaluación | Adaptador IA acotado y corpus completo de ciclos de vida | Reserva independiente, tres rondas, sin fallos críticos |
 | R3 · Backend y app | Esquema/versiones v2, adaptadores, API y UX sobre emuladores | Seguridad, concurrencia, recuperación y Honor con fixtures |
 | R4 · Ensayo de migración | Migrador con comprobación previa y simulación de cortes; inventario real solo si se autoriza | Mapeo completo, preservación, limpieza y reinicio demostrados |
@@ -38,14 +38,14 @@ Mientras exista compatibilidad v1, las dos rutas deben estar separadas por esque
 
 ## R0 · Acordar lo que significa cada acción
 
-Estado actual: propuesta documental preparada, decisiones pendientes de revisión.
+Estado actual: P1–P3 aceptadas expresamente por el propietario. Las siguientes decisiones describen el objetivo autorizado del prototipo.
 
 - P1: evidencia original en fragmentos con contexto, sin copia monolítica paralela; tras una edición/olvido no se conserva un «original completo» oculto. Feed original RAM sin cambios respecto a lo solicitado.
 - P2: alcance explícito por identidad, repeticiones vinculadas y dependencias resueltas; no promesa imposible de todas las paráfrasis desconocidas. Aclarar candidatos reales antes del popup.
 - P3: corregir toda la identidad errónea; conservar evolución temporal como hechos distintos. Preguntar solo si esa diferencia o sus dependencias no están claras.
 - Preparar ejemplos ficticios de cada caso y resultados esperados de captura, consulta, edición y olvido. Incluir una unidad indivisible y condiciones reales, para no reducir «atómico» a «una oración».
 
-P1–P3 están marcadas `[PENDING DECISION]` en el diseño. Una aceptación de este plan podrá resolverlas explícitamente. Si cambia el comportamiento recomendado, se revisan antes de implementar los contratos que dependan de esa decisión. No es necesario pedir autorización para cada decisión rutinaria de código una vez aprobado su alcance.
+La aceptación del propietario resuelve P1–P3. No volver a pedirlas al implementar el prototipo y sus pruebas ficticias. Un cambio de ese comportamiento sí requiere concretarlo antes de implementarlo. La autorización no alcanza recuerdos reales o producción.
 
 ## R1 · Modelo puro, sin proveedor ni cambios remotos
 
@@ -170,6 +170,6 @@ Medir preparación/IA/commit por separado, llamadas, tokens, coste estimado, p50
 
 Probar inventarios sintéticos de 100, 1000 y 10 000 unidades con repetición y contextos distribuidos; medir coste de admisión/reconciliación y recuperación además del commit. Si una escala rebasa límites, declararla no soportada antes de habilitarla; un truncado silencioso no es una optimización. Presupuesto por ronda y coste máximo de llamadas fijados antes de la evaluación real.
 
-## Estado de esta entrega documental
+## Historia de la entrega documental y continuación
 
-Se ha contrastado el diseño con el código de olvido/selección, los contratos de datos/API, reglas de producto, privacidad/retención, ADR-005/011 y plan de fases. Se ha consultado documentación oficial de Firestore sobre transacciones, TTL y límites, enlazada en el diseño. No se ha leído de nuevo el contenido productivo, consumido la API de IA, reintentado el olvido ni cambiado la app/backend. Validación de esta entrega: comprobador documental y revisión semántica; las puertas R1–R6 siguen sin ejecutar.
+La entrega de diseño se contrastó con el código de olvido/selección, datos/API, producto, privacidad/retención, ADR-005/011 y documentación oficial de Firestore enlazada. No leyó de nuevo producción ni cambió código. Tras aceptar P1–P3, el propietario autoriza el prototipo: [R1_VALIDATION](R1_VALIDATION.md) registra las pruebas locales nuevas y distingue el motor determinista de la interpretación pendiente de R2. La app, producción y recuerdos reales siguen sin cambios.

@@ -2,9 +2,11 @@
 
 ## Prioridad vigente · revisión del núcleo (16 de noviembre)
 
+**Continuación actual:** P1–P3 aceptadas expresamente. Prototipo determinista R1 y pruebas ficticias implementados en `codex/memory-core-prototype`: 50 casos, incluyendo 80 secuencias/1600 pasos, sin IA/Firebase. [Evidencia R1](R1_VALIDATION.md). No valida aún comprensión de lenguaje, recuperación semántica, producción, móvil o migración. La especificación HTTP definitiva sigue pendiente; no se presenta como cierre de R2/R3 ni como arreglo de la app instalada.
+
 Nueva incidencia de olvido inspeccionada en Honor: dos unidades conservan evidencia principal que abarca el relato completo. La operación terminó sin cambios y ambos datos siguieron vigentes. El mensaje corresponde al rechazo de la revisión de alcance; no hay motivo semántico detallado persistido para precisar su causa interna. No se reproduce aquí contenido personal. Se conserva la aceptación histórica de K4, pero no se considera resuelta esta fragilidad por aquellas pruebas.
 
-El propietario solicita replantear el núcleo antes de implementar: [propuesta](../02-architecture/MEMORY_CORE_V2.md), [ADR-012](../02-architecture/ADR/ADR-012-independent-memory-units.md) y [plan R0–R6](MEMORY_CORE_REBUILD_PLAN.md) preparados. P1–P3 pendientes de revisión; no hay núcleo v2 implementado, evaluación nueva, migración, despliegue ni arreglo del incidente. K5 se pospone a su validación. Esta entrega solo cambia documentación; no relee datos productivos ni los envía a OpenAI.
+El propietario pidió primero replantear el núcleo antes de implementar: [diseño](../02-architecture/MEMORY_CORE_V2.md), [ADR-012](../02-architecture/ADR/ADR-012-independent-memory-units.md) y [plan R0–R6](MEMORY_CORE_REBUILD_PLAN.md). Esa entrega fue únicamente documental; la continuación actual consta arriba. No hay migración, despliegue ni arreglo del incidente en la app. K5 se pospone a la validación del núcleo. No se releen datos productivos ni se envían a OpenAI.
 
 La revisión conserva arquitectura móvil/backend, identidad, secretos y transacciones. Su objetivo es eliminar el acoplamiento de evidencia compartida y la interpretación de IA durante un olvido explícito resuelto. Reconocer paráfrasis seguirá siendo falible: alcance demostrable, pruebas reservadas y ausencia de falsas garantías forman parte de la propuesta.
 

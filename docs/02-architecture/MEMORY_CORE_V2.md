@@ -1,6 +1,6 @@
 # Propuesta de núcleo de memoria v2
 
-Estado: **propuesta para revisión, no implementada ni autorizada para producción**. Fecha: 2026-11-16. La petición actual autoriza diseñar y documentar. La [ADR-012](ADR/ADR-012-independent-memory-units.md) recoge la decisión propuesta; el [plan R0–R6](../09-planning/MEMORY_CORE_REBUILD_PLAN.md) fija entregas y puertas de validación. Los contratos activos siguen siendo los de K2–K4 hasta una sustitución explícita.
+Estado: **diseño y decisiones P1–P3 aceptados por el propietario el 2026-11-16**. Autoriza el prototipo y pruebas ficticias, sin tocar recuerdos reales. La [ADR-012](ADR/ADR-012-independent-memory-units.md) recoge la decisión; el [plan R0–R6](../09-planning/MEMORY_CORE_REBUILD_PLAN.md) fija entregas y puertas. El [motor aislado R1](../09-planning/R1_VALIDATION.md) ya está implementado con pruebas locales; interpretación con IA, integración y migración siguen pendientes. Los contratos desplegados continúan siendo K2–K4.
 
 ## 1. Qué queremos conseguir
 
@@ -89,7 +89,7 @@ Un detalle adicional inequívoco sobre el mismo acontecimiento puede enriquecer 
 
 Al preparar un olvido, las repeticiones ya vinculadas se incluyen por referencias. Los candidatos ambiguos relevantes se muestran antes de confirmar, con una pregunta concreta sobre los datos afectados. No se pide al propietario que recorte citas internas. El cierre confirmado queda congelado y versionado. El clic final ejecuta ese cierre sin proveedor.
 
-**Límite semántico explícito:** un índice, un clasificador o un conjunto finito de pruebas no pueden demostrar que no existe una paráfrasis no reconocida en toda la memoria. La garantía determinista cubre la identidad seleccionada, sus repeticiones vinculadas y el alcance adicional resuelto explícitamente. No se anunciará «he eliminado cualquier mención posible» si solo se conoce ese conjunto. La decisión P2 al final debe aprobar esta precisión de BR-009 antes de sustituir el comportamiento vigente.
+**Límite semántico explícito:** un índice, un clasificador o un conjunto finito de pruebas no pueden demostrar que no existe una paráfrasis no reconocida en toda la memoria. La garantía determinista cubre la identidad seleccionada, sus repeticiones vinculadas y el alcance adicional resuelto explícitamente. No se anunciará «he eliminado cualquier mención posible» si solo se conoce ese conjunto. El propietario acepta esta precisión de BR-009 en P2; todavía no sustituye el backend desplegado.
 
 ## 5. Guardar
 
@@ -192,9 +192,9 @@ El coste de reconocer significados/repeticiones se traslada sobre todo a la admi
 
 Antes de implementar el adaptador se revisan [límites de Firestore](https://firebase.google.com/docs/firestore/quotas), tamaño real de documentos/índices y carga del corpus; no se confunde el límite de transformaciones por documento con un presupuesto de escrituras del producto. El plan incluye ampliar la memoria sintética y medir fan-out, latencia y coste antes de fijar capacidad de uso.
 
-## 12. Decisiones de producto propuestas
+## 12. Decisiones de producto aceptadas
 
-Todas son recomendaciones para revisar con el propietario; esta documentación no las declara aceptadas ni cambia el producto activo.
+P1, P2 y P3 aceptadas expresamente por el propietario el 2026-11-16. Se conservan las alternativas consideradas para explicar el criterio. Aceptar el diseño y probar con fixtures no autoriza transformar datos reales ni activar producción.
 
 | ID | Recomendación | Alternativa e impacto |
 | --- | --- | --- |
@@ -202,7 +202,7 @@ Todas son recomendaciones para revisar con el propietario; esta documentación n
 | P2 · Alcance de copias | Olvidar la identidad seleccionada y todas sus repeticiones vinculadas; resolver candidatos ambiguos y dependencias antes del popup. Explicar alcance real sin prometer exhaustividad semántica universal | Mantener la promesa de todas las paráfrasis desconocidas exige búsquedas/revisión global falibles y bloqueos, incluso con evidencia separada; no es garantía absoluta |
 | P3 · Corrección y evolución | Editar corrige toda esa identidad; un cambio real en el tiempo crea otro estado/acontecimiento. Solo aclarar si hay ambigüedad | Editar una sola ocurrencia mantendría copias contradictorias; borrar siempre el pasado perdería historia verdadera |
 
-`[PENDING DECISION]` P1–P3 bloquean sus contratos definitivos y la migración, no la revisión documental ni el prototipo sintético de alternativas. La propuesta no cambia otras decisiones: guardar claro automáticamente, confirmar todo olvido, preservar asuntos ajenos, internet obligatorio, una cuenta, sin audio archivado ni copias históricas.
+P1–P3 ya no requieren otra aprobación para desarrollar el alcance autorizado. Se mantienen las demás decisiones: guardar claro automáticamente, confirmar todo olvido, preservar asuntos ajenos, internet obligatorio, una cuenta, sin audio archivado ni copias históricas. La integración/migración conserva sus puertas específicas de validación y autorización.
 
 ## 13. Qué no resuelve por sí sola
 
