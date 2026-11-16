@@ -9,17 +9,22 @@ import type { CaseResult } from "./execute.ts";
 import { tuning } from "./tuning.ts";
 import { reserve } from "./reserve.ts";
 import { fresh } from "./fresh.ts";
+import { adjustment } from "./adjustment.ts";
+import { holdout } from "./holdout.ts";
 
 async function main() {
   const args = process.argv.slice(2);
   if (!args.includes("--live")) throw new InterpretationError("LIVE_REQUIRED");
-  if (args.includes("--reserve"))
-    throw new InterpretationError("RESERVE_REFRESH_REQUIRED");
-  const mode = "tuning";
+  const mode = args.includes("--reserve") ? "reserve" : "tuning";
   const position = args.indexOf("--run");
   const run = args[position + 1];
   if (position < 0 || !run || !/^[a-z0-9_-]{1,40}$/u.test(run))
     throw new InterpretationError("RUN_ID_REQUIRED");
+  if (
+    mode === "reserve" &&
+    (!/^indexed-frozen-[123]$/u.test(run) || args.includes("--cases"))
+  )
+    throw new InterpretationError("RESERVE_PROTOCOL");
   const finish = await executionLock();
   try {
     const name = `${mode}-${run}.json`;
@@ -35,7 +40,11 @@ async function main() {
     const budget = await EvaluationBudget.open();
     const baseline = structuredClone(budget.ledger);
     const runCap =
-      args.includes("--regression") || args.includes("--regression-v2") ? 5 : 2;
+      mode === "reserve" ||
+      args.includes("--regression") ||
+      args.includes("--regression-v2")
+        ? 5
+        : 2;
     budget.runCeiling = baseline.spentUsd + baseline.reservedUsd + runCap;
     const metrics: CallMetric[] = [];
     const model = new SolProvider(
@@ -45,13 +54,22 @@ async function main() {
     );
     const selection = args.indexOf("--cases");
     const wanted = selection < 0 ? null : args[selection + 1]?.split(",");
-    if (args.includes("--regression-v2") && args.includes("--regression"))
+    if (
+      ["--reserve", "--regression-v2", "--regression", "--adjustment"].filter(
+        (flag) => args.includes(flag),
+      ).length > 1
+    )
       throw new InterpretationError("CORPUS_SELECTION");
-    const corpus = args.includes("--regression-v2")
-      ? fresh
-      : args.includes("--regression")
-        ? reserve
-        : tuning;
+    const corpus =
+      mode === "reserve"
+        ? holdout
+        : args.includes("--adjustment")
+          ? adjustment
+          : args.includes("--regression-v2")
+            ? fresh
+            : args.includes("--regression")
+              ? reserve
+              : tuning;
     const cases = wanted ? corpus.filter((c) => wanted.includes(c.id)) : corpus;
     if (!cases.length || (wanted && cases.length !== new Set(wanted).size))
       throw new InterpretationError("CASE_SELECTION");
@@ -65,17 +83,32 @@ async function main() {
           .update(await readFile(`prototypes/memory-core/${folder}/${file}`));
     }
     const fingerprint = hash.digest("hex");
+    if (mode === "reserve" && run !== "indexed-frozen-1") {
+      const prior = JSON.parse(
+        await readFile(
+          `local-data/r2/reserve-indexed-frozen-${Number(run.at(-1)) - 1}.json`,
+          "utf8",
+        ),
+      ) as { complete?: boolean; fingerprint?: string };
+      if (!prior.complete || prior.fingerprint !== fingerprint)
+        throw new InterpretationError("RESERVE_CHANGED");
+    }
     const results: CaseResult[] = [];
     const report = () => ({
       profile,
       runCap,
       run,
       mode,
-      corpus: args.includes("--regression")
-        ? "regression-v1"
-        : args.includes("--regression-v2")
-          ? "regression-v2"
-          : "tuning-v1",
+      corpus:
+        mode === "reserve"
+          ? "holdout-v3"
+          : args.includes("--adjustment")
+            ? "adjustment-v3"
+            : args.includes("--regression")
+              ? "regression-v1"
+              : args.includes("--regression-v2")
+                ? "regression-v2"
+                : "tuning-v1",
       fingerprint,
       baseline,
       budget: budget.ledger,

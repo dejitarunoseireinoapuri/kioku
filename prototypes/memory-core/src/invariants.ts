@@ -133,6 +133,11 @@ export function checkChangeLimits(before: Snapshot, next: Snapshot): void {
 /** Admission must not create a catalog whose required deletion already exceeds capacity. */
 export function checkManageability(state: Snapshot): void {
   for (const unit of Object.values(state.units)) {
+    requireThat(
+      Object.values(state.fragments).filter((f) => f.owners.includes(unit.id))
+        .length <= limits.fragmentsPerTurn,
+      "scope_too_large",
+    );
     const ids = requiredClosure(state, [unit.id]);
     requireThat(ids.length <= limits.affectedUnits, "scope_too_large");
     const count = Object.values(state.occurrences).filter((o) =>

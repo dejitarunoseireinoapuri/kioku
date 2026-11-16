@@ -2,15 +2,17 @@ import { draftSchema } from "../src/contracts.ts";
 import type { Draft } from "../src/contracts.ts";
 import type { Unit } from "../src/model.ts";
 import { validateDraft } from "../src/evidence.ts";
-import {
-  InterpretationError,
-  interpretationSchema,
-  reviewSchema,
-} from "./contracts.ts";
+import { InterpretationError, reviewSchema } from "./contracts.ts";
 import type { Input, Interpretation, StructuredModel } from "./contracts.ts";
 import { calendar } from "./calendar.ts";
 import { interpretInstructions, reviewInstructions } from "./prompts.ts";
 import { materializeRetention } from "./retention.ts";
+import { interventions } from "./interventions.ts";
+import {
+  expandInterpretation,
+  indexedInterpretationSchema,
+  indexedText,
+} from "./indexed-evidence.ts";
 
 export function materialize(
   proposal: Interpretation,
@@ -64,6 +66,16 @@ export function materialize(
       };
     }),
     fragments,
+    ...(input.interventions
+      ? {
+          interventions: interventions(input)!.map(
+            ({ calendar: ignored, ...turn }) => {
+              void ignored;
+              return turn;
+            },
+          ),
+        }
+      : {}),
     relations: proposal.relations.map((relation) => {
       if ((relation.toKey === null) === (relation.toExisting === null))
         throw new InterpretationError("RELATION_REFERENCE");
@@ -77,7 +89,10 @@ export function materialize(
       };
     }),
   });
-  validateDraft(draft, input.mode === "correction");
+  validateDraft(
+    draft,
+    input.mode === "correction" || Boolean(draft.interventions),
+  );
   return draft;
 }
 
@@ -96,23 +111,27 @@ export class Interpreter {
       throw new InterpretationError("CORRECTION_EVIDENCE_REQUIRED");
     const data = {
       ...input,
+      tokens: indexedText(input.text),
       calendar: calendar(input.at, input.zone),
+      interventions: interventions(input),
       candidates: candidates.map((unit, index) => ({ index, ...unit })),
       evidence: input.evidence?.map(({ fragment, source }, index) => ({
         index,
         literal: fragment.text,
+        tokens: indexedText(fragment.text),
         role: fragment.role,
         recordedAt: source.recordedAt,
         zone: source.zone,
       })),
     };
-    const proposal = await this.model.call(
+    const wire = await this.model.call(
       "interpret",
       interpretInstructions,
       data,
-      interpretationSchema,
+      indexedInterpretationSchema,
       7000,
     );
+    const proposal = expandInterpretation(wire, input);
     if (
       (proposal.status === "clarify") !== Boolean(proposal.question) ||
       (proposal.status !== "ready" &&

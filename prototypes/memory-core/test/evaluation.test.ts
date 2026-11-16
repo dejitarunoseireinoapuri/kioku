@@ -8,6 +8,34 @@ import { twoPlans } from "../fixtures/scenarios.ts";
 import { unit, day } from "../evaluation/case.ts";
 import { EvaluationBudget } from "../evaluation/runtime.ts";
 import { fresh } from "../evaluation/fresh.ts";
+import { holdout } from "../evaluation/holdout.ts";
+import { adjustment } from "../evaluation/adjustment.ts";
+
+test("third reserve is balanced, previously unused and defines two before/after questions per lifecycle", () => {
+  assert.equal(holdout.length, 60);
+  assert.equal(new Set(holdout.map((c) => c.id)).size, 60);
+  assert.equal(new Set(holdout.map((c) => c.text)).size, 60);
+  const used = new Set(
+    [...reserve, ...fresh, ...tuning, ...adjustment].map((c) => c.text),
+  );
+  const families = new Map<string, number>();
+  for (const c of holdout) {
+    assert.ok(!used.has(c.text));
+    families.set(c.family, (families.get(c.family) ?? 0) + 1);
+    assert.equal(c.queries.length, 2);
+    assert.equal(c.after.length, 2);
+    assert.ok(c.status !== "clarify" || c.clarification);
+    for (const q of [...c.queries, ...c.after])
+      assert.ok(q.labels.every((l) => c.units.some((u) => u.label === l)));
+    for (const u of c.units) {
+      for (const pattern of [...u.terms, ...(u.forbidden ?? [])])
+        assert.doesNotThrow(() => new RegExp(pattern, "u"));
+    }
+  }
+  assert.equal(families.size, 10);
+  assert.ok([...families.values()].every((n) => n === 6));
+  assert.equal(holdout.filter((c) => c.clarificationAt).length, 3);
+});
 
 test("numeric obligations do not match a substring of a year, while exact days remain detectable", () => {
   assert.equal(matches("22 de julio de 2026", "20"), false);

@@ -90,6 +90,7 @@ export interface Input {
   target?: Unit;
   evidence?: { fragment: Fragment; source: SourceEnvelope }[];
   clarification?: { original: string; question: string };
+  interventions?: { text: string; at: string; zone: string }[];
 }
 export interface StructuredModel {
   call<T>(

@@ -39,6 +39,8 @@ export interface Scenario {
   units: GoldUnit[];
   queries: GoldQuery[];
   clarification?: string;
+  clarificationAt?: string;
+  clarificationZone?: string;
   repeat?: { text: string; count: number };
   correction?: {
     label: string;

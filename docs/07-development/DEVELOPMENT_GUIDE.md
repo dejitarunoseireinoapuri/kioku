@@ -1,5 +1,7 @@
 # Guía de desarrollo
 
+R2 actual: `core:eval --live --adjustment --run <id>` ejecuta aclaraciones ficticias; `--regression-v2` mantiene los casos expuestos. La tercera reserva usa únicamente `--reserve --run indexed-frozen-1`, `-2` y `-3` en orden, misma huella y sin subconjuntos. `node --env-file-if-exists=.env.local prototypes/memory-core/evaluation/scale-run.ts --live --run <id>` mide recuperación ficticia a escala. Requiere autorización de API vigente; no admite textos externos. [Topes, protocolo y resultados](../09-planning/R2_INDEXED_VALIDATION.md).
+
 ## Situación inicial
 
 La base documental, el [prototipo M0](../../prototypes/memory/README.md) y la base móvil K0 están preparados. `shared` contiene Compose/KMP; `androidApp` e `iosApp` son hosts delgados. M0 sigue separado y no es un backend Functions desplegado. La app K0 utiliza únicamente fixtures y no llama a OpenAI/Firebase. Estado y pruebas en [evidencia K0](../09-planning/K0_VALIDATION.md).

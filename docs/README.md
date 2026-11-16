@@ -31,3 +31,5 @@ Una fuente por tipo de decisión. Los documentos son el contrato previsto; el es
 | Evidencia de control | [K4_VALIDATION](09-planning/K4_VALIDATION.md) | Retirada interna y límites pendientes del control conversacional |
 
 Las conversaciones previas y los prototipos históricos sirven de evidencia de decisiones, no de segunda especificación vigente.
+
+- [R2: evidencia por posiciones, aclaraciones y búsqueda paginada](09-planning/R2_INDEXED_VALIDATION.md).

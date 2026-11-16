@@ -1,5 +1,7 @@
 # Reconstrucción del núcleo de memoria · R0–R6
 
+Continuación actual: [evidencia por posiciones, aclaraciones y recuperación paginada](R2_INDEXED_VALIDATION.md). Las cifras de la continuación anterior siguientes son históricas; R2 sigue abierta hasta resolver la nueva evaluación.
+
 **Continuación autorizada y ejecutada:** R2 con Sol medio corrige conservación literal en ediciones parciales y evalúa otra reserva: 54/60, 55/60 y 54/60. Ajuste final con cuatro regresiones correctas y doce historias nuevas correctas, sin otra reserva completa de esa versión; [protocolo, costes, defectos y resultados](R2_RETENTION_VALIDATION.md). No cambia permisos sobre datos personales/producción ni autoriza avisos por correo. R2 sigue abierta; R3–R6 permanecen pendientes.
 
 Fecha: 2026-11-16. Estado: **P1–P3 aceptadas; prototipo determinista y pruebas ficticias R1 implementados**. El propietario autoriza este bloque sin tocar recuerdos reales. [Evidencia y límites](R1_VALIDATION.md). No autoriza inferencia con datos personales, migración o despliegue; R2–R6 siguen pendientes.

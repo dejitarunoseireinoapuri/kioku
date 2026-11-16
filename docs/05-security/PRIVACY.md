@@ -1,5 +1,7 @@
 # Privacidad, datos y permisos
 
+R2 conserva instantes/zonas de cada intervención admitida sin añadir una copia completa del relato ni archivar la pregunta del asistente. Las palabras sustituidas se excluyen de todas las intervenciones. El índice paginado se deriva solo del contenido/evidencia vigente y se invalida ante cambios; no incorpora el feed. [Límites y evidencia](../09-planning/R2_INDEXED_VALIDATION.md).
+
 La evaluación R2 envía a OpenAI exclusivamente relatos, preguntas y candidatos ficticios definidos en el repositorio; sus almacenes desaparecen al terminar cada escenario. Los informes conservan códigos, IDs ficticios, métricas y verificaciones, nunca el texto generado o fuentes personales. La autorización de esta evaluación no permite reanalizar ni migrar datos del propietario. [R2_VALIDATION](../09-planning/R2_VALIDATION.md).
 
 La edición parcial del prototipo conserva exclusivamente palabras originales necesarias para la versión vigente, con sus propietarios y procedencia. El manifiesto de conservación no crea una copia histórica; olvidar retira también esos fragmentos. La nueva evaluación sigue usando solo fixtures y publica observaciones cerradas (estado, recuentos, modalidades), sin respuestas o texto fuente. [Continuación R2](../09-planning/R2_RETENTION_VALIDATION.md).

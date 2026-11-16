@@ -3,6 +3,7 @@ import type { Runtime, Snapshot, Unit } from "./model.ts";
 import { requireThat } from "./errors.ts";
 import { allocate, assertAcyclic, current, project } from "./catalog.ts";
 import { validateDraft } from "./evidence.ts";
+import { createSourceParts, materializeSourceParts } from "./source-parts.ts";
 
 function eventTime(unit: Draft["units"][number]): EventTime {
   const { precision, value, end } = unit.time;
@@ -36,36 +37,25 @@ export function capture(
   runtime: Runtime,
   replacement?: Replacement,
 ): string[] {
-  validateDraft(draft, Boolean(replacement));
-  const sourceId = allocate(state, runtime);
-  state.sources[sourceId] = {
-    id: sourceId,
-    kind: replacement?.kind ?? "capture",
-    recordedAt: runtime.now(),
-    zone: draft.zone,
-    length: draft.text.length,
-  };
+  requireThat(!replacement || !draft.interventions, "invalid_input");
+  validateDraft(draft, Boolean(replacement) || Boolean(draft.interventions));
+  const sources = createSourceParts(
+    state,
+    draft,
+    runtime,
+    replacement?.kind ?? "capture",
+  );
   const ids = materializeUnits(state, draft, runtime, replacement);
-  const fragments = materializeFragments(state, draft, sourceId, ids, runtime);
+  const fragments = materializeSourceParts(state, draft, sources, ids, runtime);
   for (const item of draft.units) {
     const id = ids.get(item.key)!;
-    const occurrenceId = allocate(state, runtime);
-    state.occurrences[occurrenceId] = {
-      id: occurrenceId,
-      unitId: id,
-      sourceId,
-      fragmentIds: fragments
-        .filter((f) => f.owners.includes(id))
-        .map((f) => f.id),
-    };
     const unit = state.units[id]!;
     if (!item.existing && !replacement?.preserveTime) {
       const index = item.time.fragment;
       unit.timeEvidenceId =
         index === null
           ? null
-          : fragments.find((f) => f.start === draft.fragments[index]!.start)!
-              .id;
+          : fragments.find((f) => f.draftIndex === index)!.fragment.id;
     }
     project(state, id);
   }
@@ -111,30 +101,6 @@ function materializeUnits(
     };
   }
   return ids;
-}
-
-function materializeFragments(
-  state: Snapshot,
-  draft: Draft,
-  sourceId: string,
-  ids: Map<string, string>,
-  runtime: Runtime,
-) {
-  return draft.fragments.flatMap((part) => {
-    if (part.role === "replaced") return [];
-    const id = allocate(state, runtime);
-    const fragment = {
-      id,
-      sourceId,
-      start: part.start,
-      end: part.end,
-      text: draft.text.slice(part.start, part.end),
-      role: part.role,
-      owners: part.owners.map((key) => ids.get(key)!),
-    };
-    state.fragments[id] = fragment;
-    return [fragment];
-  });
 }
 
 function addRelations(

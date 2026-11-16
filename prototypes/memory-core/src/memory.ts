@@ -193,6 +193,11 @@ export class MemoryPrototype {
     for (const ref of scope.refs) current(state, ref);
   }
 
+  releaseEvidence(actor: string, token: string): void {
+    this.read(actor);
+    this.evidenceScopes.delete(parseId(token));
+  }
+
   private read(actor: string): Snapshot {
     requireThat(this.authorized(actor), "not_authorized");
     const state = this.store.read();

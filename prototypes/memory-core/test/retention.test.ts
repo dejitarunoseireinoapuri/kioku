@@ -6,6 +6,26 @@ import { validateSnapshot } from "../src/invariants.ts";
 import { materializeRetention } from "../ai/retention.ts";
 import type { Interpretation, Input } from "../ai/contracts.ts";
 
+test("admission preserves editability: too many owned evidence fragments reject the repeat atomically", () => {
+  const h = harness(),
+    draft = single("ordenar piezas");
+  const parts = Array.from({ length: 70 }, (_, i) => `pieza${i} `);
+  draft.text = parts.join("");
+  let offset = 0;
+  draft.fragments = parts.map((text) => {
+    const start = offset;
+    offset += text.length;
+    return { start, end: offset, role: "primary", owners: ["a"] };
+  });
+  const saved = h.save(draft),
+    before = h.store.read();
+  draft.units[0]!.existing = saved.refs[0]!;
+  assert.throws(() => h.save(draft), { message: "scope_too_large" });
+  assert.deepEqual(h.store.read(), before);
+  h.erase(saved.refs);
+  assert.equal(Object.keys(h.store.read().fragments).length, 0);
+});
+
 function quantity() {
   const h = harness(),
     draft = single("guardar fichas");

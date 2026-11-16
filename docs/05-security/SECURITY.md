@@ -1,5 +1,7 @@
 # Seguridad técnica
 
+R2 indexa exclusivamente proyecciones ficticias paginadas bajo una cuenta/época comprobadas. Índice parcial, mezcla de cuentas/versiones o evidencia hidratada distinta se rechazan; después de IA se revalida la generación. Los límites de tokens seleccionados no otorgan autoridad sobre IDs, instantes o escrituras. [Alcance y pruebas](../09-planning/R2_INDEXED_VALIDATION.md).
+
 R2 usa únicamente el corpus ficticio versionado, con consentimiento del propietario y la credencial ya autorizada cargada solo por la ejecución local explícita. Endpoint OpenAI fijo, `store:false`, sin herramientas externas, sin reintentos de inferencia, presupuesto duradero antes de solicitar y errores cerrados sin eco del proveedor. No hay acceso Firebase, lectura de fuentes personales ni permisos nuevos. Los informes locales/Git contienen solo metadatos de evaluación. [Alcance y evidencia R2](../09-planning/R2_VALIDATION.md).
 
 La continuación de R2 valida la conservación literal contra fragmentos actuales del objetivo, sin aceptar IDs/posiciones elegidos libremente por el proveedor. Propiedad ajena, rangos fuera de límites, solapamientos, Unicode partido y versión obsoleta impiden el cambio completo. El modelo revisa suficiencia semántica pero no autoriza escrituras; la confirmación sigue sin IA. [Pruebas y límites actuales](../09-planning/R2_RETENTION_VALIDATION.md).

@@ -5,6 +5,7 @@ import {
 } from "./contracts.ts";
 import type { StructuredModel } from "./contracts.ts";
 import type { Harness } from "../fixtures/harness.ts";
+import type { MemoryPrototype } from "../src/memory.ts";
 import { calendar } from "./calendar.ts";
 import {
   answerInstructions,
@@ -31,11 +32,43 @@ export async function query(
     };
   const packet = ids.length ? h.engine.evidence(h.owner, ids) : null;
   const epoch = h.store.read().epoch;
+  try {
+    return await answerEvidence(
+      model,
+      packet?.items ?? [],
+      { question, at, zone, previousQuestion },
+      () => {
+        if (packet) h.engine.revalidate(h.owner, packet);
+        else if (epoch !== h.store.read().epoch)
+          throw new InterpretationError("ANSWER_STALE");
+      },
+    );
+  } finally {
+    if (packet) h.engine.releaseEvidence(h.owner, packet.token);
+  }
+}
+
+export async function answerEvidence(
+  model: StructuredModel,
+  items: ReturnType<MemoryPrototype["evidence"]>["items"],
+  context: {
+    question: string;
+    at: string;
+    zone: string;
+    previousQuestion?: string | undefined;
+    ranked?: boolean;
+  },
+  revalidate: () => void | Promise<void>,
+) {
+  if (items.length > 32) throw new InterpretationError("QUERY_CATALOG_LIMIT");
+  const ids = items.map((item) => item.unit.id);
+  const { question, at, zone, previousQuestion } = context;
   const input = {
     question,
     previousQuestion: previousQuestion ?? null,
     calendar: calendar(at, zone),
-    evidence: packet?.items.map((item, index) => ({ index, ...item })) ?? [],
+    coverage: context.ranked ? "ranked_candidates" : "complete_catalog",
+    evidence: items.map((item, index) => ({ index, ...item })),
   };
   const proposed = await model.call(
     "answer",
@@ -56,7 +89,9 @@ export async function query(
     proposed.status === "not_found"
       ? {
           status: "not_found" as const,
-          text: "No consta ese dato en tus recuerdos guardados.",
+          text: context.ranked
+            ? "No encuentro ese dato en los recuerdos recuperados."
+            : "No consta ese dato en tus recuerdos guardados.",
           evidence: [],
         }
       : proposed;
@@ -71,8 +106,6 @@ export async function query(
     throw new InterpretationError(
       `ANSWER_REVIEW_${review.issues.join("_") || "REJECTED"}`,
     );
-  if (packet) h.engine.revalidate(h.owner, packet);
-  else if (epoch !== h.store.read().epoch)
-    throw new InterpretationError("ANSWER_STALE");
+  await revalidate();
   return { ...answer, ids: answer.evidence.map((i) => ids[i]!) };
 }

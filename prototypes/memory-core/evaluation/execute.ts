@@ -2,7 +2,8 @@ import { harness } from "../fixtures/harness.ts";
 import type { Unit } from "../src/model.ts";
 import { Interpreter } from "../ai/interpreter.ts";
 import { query } from "../ai/query.ts";
-import { InterpretationError, interpretationSchema } from "../ai/contracts.ts";
+import { InterpretationError } from "../ai/contracts.ts";
+import { indexedInterpretationSchema } from "../ai/indexed-evidence.ts";
 import type { Input, StructuredModel } from "../ai/contracts.ts";
 import type { Scenario, GoldQuery } from "./case.ts";
 import { gradeUnits, gradeAnswer } from "./grade.ts";
@@ -65,7 +66,7 @@ export async function executeCase(
         outputLimit,
       );
       if (stage === "interpret") {
-        const p = interpretationSchema.parse(value);
+        const p = indexedInterpretationSchema.parse(value);
         result.observations.push({
           stage,
           status: p.status,
@@ -136,11 +137,20 @@ export async function executeCase(
       capture.proposal.status === "clarify" &&
       fixture.clarification
     ) {
+      const replyAt = fixture.clarificationAt ?? fixture.at;
+      const replyZone = fixture.clarificationZone ?? fixture.zone;
+      h.advance(Date.parse(replyAt) - h.runtime.now());
       capture = await timed("clarification", () =>
         interpreter.interpret(
           {
             ...input,
             text: `${fixture.text}\n${fixture.clarification}`,
+            at: replyAt,
+            zone: replyZone,
+            interventions: [
+              { text: fixture.text, at: fixture.at, zone: fixture.zone },
+              { text: fixture.clarification!, at: replyAt, zone: replyZone },
+            ],
             clarification: {
               original: fixture.text,
               question: capture.proposal.question!,

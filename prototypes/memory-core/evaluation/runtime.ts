@@ -56,12 +56,12 @@ export async function saveReport(name: string, value: unknown) {
 export class EvaluationBudget implements Meter {
   readonly ledger: Ledger;
   readonly cap: number;
-  runCeiling = 30;
+  runCeiling = 40;
   readonly persist: (ledger: Ledger) => Promise<void>;
   private tail: Promise<void> = Promise.resolve();
   constructor(
     ledger: Ledger,
-    cap = 30,
+    cap = 40,
     persist: (ledger: Ledger) => Promise<void> = (value) =>
       saveReport("budget.json", value),
   ) {

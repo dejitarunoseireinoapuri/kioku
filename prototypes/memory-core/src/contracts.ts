@@ -90,6 +90,18 @@ export const draftSchema = z.strictObject({
       }),
     )
     .max(32),
+  interventions: z
+    .array(
+      z.strictObject({
+        start: z.number().int().nonnegative(),
+        end: z.number().int().positive(),
+        recordedAt: z.number().int().nonnegative(),
+        zone: z.string().min(1).max(80),
+      }),
+    )
+    .min(2)
+    .max(4)
+    .optional(),
 });
 export const captureSchema = z.strictObject({
   kind: z.literal("capture"),

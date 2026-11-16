@@ -50,6 +50,27 @@ export function validateDraft(draft: Draft, correction: boolean): void {
     requireThat(false, "invalid_input");
   }
   const keys = new Set(draft.units.map((unit) => unit.key));
+  if (draft.interventions) {
+    let end = 0,
+      previous = -1;
+    for (const turn of draft.interventions) {
+      requireThat(
+        turn.start === end &&
+          turn.end > turn.start &&
+          turn.end <= draft.text.length &&
+          unicodeBoundary(draft.text, turn.end),
+      );
+      requireThat(turn.recordedAt >= previous);
+      try {
+        new Intl.DateTimeFormat("en", { timeZone: turn.zone });
+      } catch {
+        requireThat(false, "invalid_input");
+      }
+      end = turn.end;
+      previous = turn.recordedAt;
+    }
+    requireThat(end === draft.text.length);
+  }
   requireThat(keys.size === draft.units.length);
   let offset = 0;
   for (const fragment of draft.fragments) {
@@ -66,6 +87,13 @@ export function validateDraft(draft: Draft, correction: boolean): void {
       requireThat(correction && owners.size === 0);
     } else requireThat(owners.size > 0);
     if (fragment.role === "primary") requireThat(owners.size === 1);
+    if (fragment.role === "time" && draft.interventions)
+      requireThat(
+        draft.interventions.some(
+          (t) => t.start <= fragment.start && t.end >= fragment.end,
+        ),
+        "scope_unresolved",
+      );
     if (fragment.role !== "separator")
       requireThat(draft.text.slice(fragment.start, fragment.end).trim());
     if (fragment.role === "separator") {

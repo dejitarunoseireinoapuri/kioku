@@ -22,6 +22,7 @@ export interface CallMetric {
 }
 const envelope = z.object({
   status: z.string(),
+  incomplete_details: z.object({ reason: z.string() }).nullable().optional(),
   model: z.string().regex(/^gpt-[A-Za-z0-9._-]+$/u),
   output: z.array(
     z.object({
@@ -128,7 +129,13 @@ export class SolProvider implements StructuredModel {
         throw new InterpretationError("MODEL_CHANGED");
       this.resolvedModel = value.model;
       if (value.status !== "completed")
-        throw new InterpretationError("MODEL_INCOMPLETE");
+        throw new InterpretationError(
+          value.incomplete_details?.reason === "max_output_tokens"
+            ? "MODEL_OUTPUT_LIMIT"
+            : value.incomplete_details?.reason === "content_filter"
+              ? "MODEL_CONTENT_FILTER"
+              : "MODEL_INCOMPLETE",
+        );
       const content = value.output.flatMap((item) => item.content ?? []);
       if (content.some((item) => item.type === "refusal"))
         throw new InterpretationError("MODEL_REFUSAL");

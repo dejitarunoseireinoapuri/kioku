@@ -1,5 +1,7 @@
 # Estado real y decisiones pendientes
 
+R2 añade recuperación paginada acotada y anclaje de aclaraciones tardías, pendientes del cierre de su [evaluación actual](R2_INDEXED_VALIDATION.md). El índice de 10 000 entradas no acredita mutaciones ni Firebase a esa escala; el almacén de mutaciones RAM sigue limitado a 256. No hay migración ni activación del nuevo núcleo.
+
 ## Prioridad vigente · revisión del núcleo (16 de noviembre)
 
 **R2 corregida y reevaluada, sin cerrar:** el manifiesto de conservación literal corrige la pérdida de evidencia al editar. Nueva reserva: 54/60, 55/60 y 54/60; 13 ediciones aplicadas conservan la evidencia comprobada y dos se detienen antes del cambio. Ajuste posterior de identidad de ubicación/oráculo: regresión focalizada 4/4 y doce historias adicionales 12/12. [Evidencia actual y límites](R2_RETENTION_VALIDATION.md); [experimento anterior conservado](R2_VALIDATION.md). Quedan rechazos de partición/revisión, una salida incompleta, otra reserva completa para la versión final y recuperación a escala (catálogo actual máximo 32). Los fallos léxicos históricos no se recalculan como aprobados. No se pasa a R3/voz. App, Firebase y recuerdos personales intactos; sin correos.

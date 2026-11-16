@@ -1,5 +1,7 @@
 # Matriz de aceptación y evidencia prevista
 
+Continuación R2: cobertura/token Unicode, rechazos de límites, retención de fecha/zona por intervención, consulta paginada a 100/1000/10 000, cuentas/épocas incompatibles, resultado truncado explícito y revocación durante respuesta. [Protocolo y evidencia actual](../09-planning/R2_INDEXED_VALIDATION.md). Estas pruebas no acreditan persistencia ni dispositivos.
+
 ## Revisión del núcleo v2 · evidencia local parcial y casos previstos
 
 La ejecución semántica R2 y su corpus reservado se registran en [R2_VALIDATION](../09-planning/R2_VALIDATION.md). Los nuevos tests locales comprueban el contrato de salida, rechazo de evidencia ajena/retirada, ausencia de reintentos de inferencia, calendario por zona, reserva duradera de presupuesto y el propio oráculo. No sustituyen los resultados de IA ni validan búsqueda a escala, producción o móvil.
