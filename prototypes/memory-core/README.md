@@ -1,10 +1,10 @@
-# Prototipo R1 · Núcleo de memoria v2
+# Prototipo del núcleo de memoria v2 · R1 y R2
 
-Motor aislado de reglas con interpretaciones **ficticias ya preparadas**. Implementa la primera prueba determinista del [diseño aceptado](../../docs/02-architecture/MEMORY_CORE_V2.md), sin Firebase, OpenAI, credenciales, archivos de recuerdos o conexión con la app. No es todavía un intérprete de lenguaje natural ni un backend publicable.
+El motor `src/` implementa la prueba determinista R1 del [diseño aceptado](../../docs/02-architecture/MEMORY_CORE_V2.md), sin proveedor ni Firebase. `ai/` y `evaluation/` añaden el adaptador y la evaluación real R2 con Sol medio. Ambos usan datos ficticios/RAM y permanecen separados del backend activo. No es un backend publicable ni una migración de recuerdos.
 
 ## Ejecutar desde la raíz
 
-Usa Node 24 y las dependencias fijadas que ya utiliza M0; no añade paquetes. No carga `.env.local` ni lee configuraciones personales.
+Usa Node 24 y las dependencias fijadas que ya utiliza M0; no añade paquetes. Las siguientes comprobaciones locales no cargan `.env.local` ni acceden a la API.
 
 ```powershell
 node tooling/m0.mjs core:check
@@ -14,6 +14,12 @@ node tooling/m0.mjs core:demo
 ```
 
 La demo usa únicamente fixtures incluidas: guarda dos planes, corrige uno manteniendo su fecha, comprueba evidencia, lo olvida y verifica que el vecino permanece. Imprime contadores/estados, no textos ni claves. Todos los datos desaparecen al terminar el proceso. No acepta rutas, entradas personales o parámetros de producción.
+
+## Evaluación real R2 · tarea explícita con coste
+
+`node tooling/m0.mjs core:eval --live --run <id>` ejecuta el corpus de ajuste. `--reserve` selecciona la reserva, que no debe usarse para ajustar. Requiere una credencial existente autorizada; carga `.env.local` sin mostrarla. No admite archivos o textos externos. Los resultados y el contador quedan en `local-data/r2/`, fuera de Git, sin respuestas textuales. Tope adicional 30 USD, 2 por ajuste/5 por reserva. No reinicia el contador histórico M0. [Protocolo, evidencia y límites R2](../../docs/09-planning/R2_VALIDATION.md).
+
+La interpretación propone literales/propietarios, una revisión comprueba fidelidad y R1 valida/aplica. Las preguntas usan únicamente unidades/fragmentos actuales y revalidan versiones antes de devolver. No se ha integrado búsqueda semántica a escala: catálogo de evaluación completo hasta 32 unidades; más se rechaza, no se trunca. No usar este adaptador con datos personales ni conectarlo a producción por pasar los tests locales.
 
 ## Qué comprueba
 

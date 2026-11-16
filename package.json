@@ -12,6 +12,7 @@
     "core:format": "prettier --write prototypes/memory-core package.json",
     "core:format:check": "prettier --check prototypes/memory-core package.json",
     "core:demo": "node prototypes/memory-core/src/demo.ts",
+    "core:eval": "node --env-file-if-exists=.env.local prototypes/memory-core/evaluation/run.ts",
     "check": "tsc --noEmit",
     "test": "node --test prototypes/memory/test/*.test.ts prototypes/memory-core/test/*.test.ts",
     "format": "prettier --write prototypes/memory prototypes/memory-core tooling/m0.mjs package.json tsconfig.json",
