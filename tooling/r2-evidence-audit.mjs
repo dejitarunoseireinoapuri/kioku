@@ -80,6 +80,7 @@ function deterministicAudit() {
         relations: [],
     });
     const target = Object.values(h.store.read().units)[0];
+    const previous = Object.values(h.store.read().fragments)[0];
     const correction = "Eran cuatro fichas, no cinco.";
     const cut = correction.indexOf(",");
     const plan = h.prepare({
@@ -87,6 +88,14 @@ function deterministicAudit() {
         requestId: h.runtime.id(),
         target: { id: target.id, revision: target.revision },
         preserveTime: true,
+        retainedEvidence: [
+            { fragmentId: previous.id, start: 0, end: text.indexOf("cinco") },
+            {
+                fragmentId: previous.id,
+                start: text.indexOf(" fichas"),
+                end: text.length,
+            },
+        ],
         draft: {
             text: correction,
             zone: "Europe/Madrid",
@@ -205,7 +214,7 @@ async function liveAudit() {
     const finish = await executionLock();
     try {
         try {
-            await access("local-data/r2/evidence-audit-v2.json");
+            await access("local-data/r2/evidence-audit-v3.json");
             throw new InterpretationError("AUDIT_EXISTS");
         } catch (error) {
             if (
@@ -246,7 +255,20 @@ async function liveAudit() {
                 const target = Object.values(h.store.read().units)[0];
                 const edit = c.correction;
                 const next = await interpreter.interpret(
-                    { ...input, mode: "correction", text: edit.text, target },
+                    {
+                        ...input,
+                        mode: "correction",
+                        text: edit.text,
+                        target,
+                        evidence: Object.values(h.store.read().fragments)
+                            .filter((f) => f.owners.includes(target.id))
+                            .map((fragment) => ({
+                                fragment,
+                                source: h.store.read().sources[
+                                    fragment.sourceId
+                                ],
+                            })),
+                    },
                     [],
                 );
                 if (!next.draft)
@@ -256,6 +278,7 @@ async function liveAudit() {
                     requestId: h.runtime.id(),
                     target: { id: target.id, revision: target.revision },
                     preserveTime: next.proposal.preserveTime,
+                    retainedEvidence: next.retainedEvidence,
                     draft: next.draft,
                 });
                 h.engine.commit(h.owner, plan.id);
@@ -301,7 +324,7 @@ async function liveAudit() {
             baseline,
             budget: budget.ledger,
         };
-        await saveReport("evidence-audit-v2.json", report);
+        await saveReport("evidence-audit-v3.json", report);
         console.log(
             JSON.stringify({
                 results,

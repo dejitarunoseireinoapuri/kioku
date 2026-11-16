@@ -64,6 +64,15 @@ test("80 seeded sequences preserve an independent oracle through 1600 mixed tran
               requestId: h.runtime.id(),
               target,
               preserveTime: true,
+              retainedEvidence: Object.values(h.store.read().fragments)
+                .filter(
+                  (f) => f.id === h.store.read().units[id]!.timeEvidenceId,
+                )
+                .map((f) => ({
+                  fragmentId: f.id,
+                  start: 0,
+                  end: f.text.length,
+                })),
               draft,
             }).id,
           );

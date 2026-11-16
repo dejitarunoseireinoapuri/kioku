@@ -6,6 +6,7 @@ import { capture, sameContentMeaning } from "./capture.ts";
 import { forget, removeSupport, resolveScope } from "./removal.ts";
 import type { ScopeQuestion } from "./removal.ts";
 import { requireThat } from "./errors.ts";
+import { retainEvidence } from "./retention.ts";
 import {
   checkChangeLimits,
   checkManageability,
@@ -102,7 +103,7 @@ function correct(
   removeSupport(
     next,
     [previous.id],
-    command.preserveTime ? previous.timeEvidenceId : null,
+    retainEvidence(next, previous, command, runtime),
   );
   for (const relation of retainedRelations)
     next.relations[relation.id] = relation;

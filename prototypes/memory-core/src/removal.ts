@@ -60,10 +60,10 @@ function question(
 export function removeSupport(
   state: Snapshot,
   ids: string[],
-  keepTimeId?: string | null,
+  retained = new Set<string>(),
 ): void {
   for (const fragment of Object.values(state.fragments)) {
-    if (fragment.id === keepTimeId) continue;
+    if (retained.has(fragment.id)) continue;
     fragment.owners = fragment.owners.filter((id) => !ids.includes(id));
     if (!fragment.owners.length) delete state.fragments[fragment.id];
   }

@@ -101,6 +101,16 @@ export const correctionSchema = z.strictObject({
   requestId: z.uuid(),
   target: referenceSchema,
   preserveTime: z.boolean(),
+  retainedEvidence: z
+    .array(
+      z.strictObject({
+        fragmentId: z.uuid(),
+        start: z.number().int().nonnegative(),
+        end: z.number().int().positive(),
+      }),
+    )
+    .max(limits.fragmentsPerTurn)
+    .default([]),
   removeRelations: z.array(z.uuid()).max(32).default([]),
   draft: draftSchema,
 });

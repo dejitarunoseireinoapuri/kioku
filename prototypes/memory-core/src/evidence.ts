@@ -30,7 +30,7 @@ export function validateTime(time: EventTime): void {
   } else requireThat(end === null);
 }
 
-function unicodeBoundary(text: string, offset: number): boolean {
+export function unicodeBoundary(text: string, offset: number): boolean {
   if (offset === 0 || offset === text.length) return true;
   const before = text.charCodeAt(offset - 1),
     after = text.charCodeAt(offset);
@@ -91,6 +91,8 @@ function validateUnitEvidence(
   if (unit.time.precision === "unknown")
     requireThat(unit.time.fragment === null);
   else {
+    // A reviewed repeat can inherit its identity's temporal evidence; it does not invent a new quote.
+    if (unit.existing && unit.time.fragment === null) return;
     const fragment =
       unit.time.fragment === null
         ? undefined

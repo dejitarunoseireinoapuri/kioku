@@ -10,6 +10,7 @@ import {
 import type { Input, Interpretation, StructuredModel } from "./contracts.ts";
 import { calendar } from "./calendar.ts";
 import { interpretInstructions, reviewInstructions } from "./prompts.ts";
+import { materializeRetention } from "./retention.ts";
 
 export function materialize(
   proposal: Interpretation,
@@ -34,10 +35,34 @@ export function materialize(
   const draft = draftSchema.parse({
     text: input.text,
     zone: input.zone,
-    units: proposal.units.map((unit) => ({
-      ...unit,
-      existing: unit.existing === null ? null : reference(unit.existing),
-    })),
+    units: proposal.units.map((unit) => {
+      if (unit.existing === null) return unit;
+      const existing = reference(unit.existing);
+      const canonical = candidates[unit.existing]!;
+      for (const field of [
+        "kind",
+        "polarity",
+        "subject",
+        "attribution",
+        "condition",
+      ] as const) {
+        if (unit.content[field] !== canonical.content[field])
+          throw new InterpretationError("REPEAT_ANCHOR_MISMATCH");
+      }
+      const { fragment: ignored, ...time } = unit.time;
+      void ignored;
+      if (
+        time.precision !== "unknown" &&
+        JSON.stringify(time) !== JSON.stringify(canonical.time)
+      )
+        throw new InterpretationError("REPEAT_TIME_MISMATCH");
+      return {
+        ...unit,
+        existing,
+        content: canonical.content,
+        time: { ...canonical.time, fragment: unit.time.fragment },
+      };
+    }),
     fragments,
     relations: proposal.relations.map((relation) => {
       if ((relation.toKey === null) === (relation.toExisting === null))
@@ -64,10 +89,22 @@ export class Interpreter {
   async interpret(input: Input, candidates: Unit[]) {
     if (input.text.length > 8000 || candidates.length > 32)
       throw new InterpretationError("INPUT_LIMIT");
+    if (
+      input.mode === "correction" &&
+      (!input.target || !input.evidence?.length || input.evidence.length > 128)
+    )
+      throw new InterpretationError("CORRECTION_EVIDENCE_REQUIRED");
     const data = {
       ...input,
       calendar: calendar(input.at, input.zone),
-      candidates,
+      candidates: candidates.map((unit, index) => ({ index, ...unit })),
+      evidence: input.evidence?.map(({ fragment, source }, index) => ({
+        index,
+        literal: fragment.text,
+        role: fragment.role,
+        recordedAt: source.recordedAt,
+        zone: source.zone,
+      })),
     };
     const proposal = await this.model.call(
       "interpret",
@@ -82,6 +119,7 @@ export class Interpreter {
         (proposal.units.length ||
           proposal.segments.length ||
           proposal.relations.length ||
+          proposal.retention.length ||
           proposal.preserveTime))
     ) {
       throw new InterpretationError("INTERPRETATION_STATE");
@@ -90,6 +128,7 @@ export class Interpreter {
       proposal.status === "ready"
         ? materialize(proposal, input, candidates)
         : null;
+    const retainedEvidence = materializeRetention(proposal, input);
     const review = await this.model.call(
       "interpret_review",
       reviewInstructions,
@@ -101,6 +140,6 @@ export class Interpreter {
       throw new InterpretationError(
         `REVIEW_${review.issues.join("_") || "REJECTED"}`,
       );
-    return { proposal, draft };
+    return { proposal, draft, retainedEvidence };
   }
 }

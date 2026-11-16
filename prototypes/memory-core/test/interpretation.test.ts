@@ -20,6 +20,7 @@ function proposal(): Interpretation {
     status: "ready",
     question: null,
     preserveTime: false,
+    retention: [],
     units: draft.units.map((u) => ({ ...u, existing: null })),
     segments: draft.fragments.map((f) => ({
       literal: draft.text.slice(f.start, f.end),
@@ -66,6 +67,77 @@ test("R2 does not accept an interpretation rejected by the fidelity review", asy
   await assert.rejects(() => interpreter.interpret(input, []), {
     message: "REVIEW_ownership",
   });
+});
+
+test("R2 repeats reuse stable descriptors but cannot overwrite identity anchors", () => {
+  const h = harness(),
+    saved = h.save(twoPlans()),
+    candidates = Object.values(h.store.read().units);
+  const p = proposal();
+  p.units[0]!.existing = 0;
+  p.units[0]!.content.proposition = "Equivalent phrasing reviewed upstream";
+  const draft = materialize(p, input, candidates);
+  assert.deepEqual(draft.units[0]!.existing, saved.refs[0]);
+  assert.deepEqual(draft.units[0]!.content, candidates[0]!.content);
+  for (const change of ["subject", "kind", "time"] as const) {
+    const bad = structuredClone(p);
+    if (change === "subject") bad.units[0]!.content.subject = "someone else";
+    if (change === "kind") bad.units[0]!.content.kind = "fact";
+    if (change === "time") bad.units[0]!.time.value = "2031-01-02";
+    assert.throws(() => materialize(bad, input, candidates), {
+      message:
+        change === "time" ? "REPEAT_TIME_MISMATCH" : "REPEAT_ANCHOR_MISMATCH",
+    });
+  }
+});
+
+test("R2 an empty current catalog answers absence without inference or old conversational facts", async () => {
+  const h = harness();
+  const result = await query(
+    fake([]),
+    h,
+    "¿Y hoy?",
+    "2026-07-14T12:00:00Z",
+    "Europe/Madrid",
+    "¿Qué vi ayer?",
+  );
+  assert.equal(result.status, "not_found");
+  assert.deepEqual(result.ids, []);
+});
+
+test("R2 negative answers cannot add neighboring facts and are still reviewed against current evidence", async () => {
+  const h = harness();
+  h.save(twoPlans());
+  const result = await query(
+    fake([
+      {
+        status: "not_found",
+        text: "irrelevant neighboring detail",
+        evidence: [1],
+      },
+      accept,
+    ]),
+    h,
+    "¿Dónde está el alicate?",
+    "2026-07-14T12:00:00Z",
+    "Europe/Madrid",
+  );
+  assert.deepEqual(result.ids, []);
+  assert.ok(!result.text.includes("neighboring"));
+  await assert.rejects(
+    () =>
+      query(
+        fake([
+          { status: "not_found", text: "No", evidence: [] },
+          { accepted: false, issues: ["coverage"] },
+        ]),
+        h,
+        "¿Qué quiero hacer?",
+        "2026-07-14T12:00:00Z",
+        "Europe/Madrid",
+      ),
+    { message: "ANSWER_REVIEW_coverage" },
+  );
 });
 test("R2 question/clarification responses cannot smuggle units", async () => {
   const bad = { ...proposal(), status: "clarify", question: "¿Qué dato?" };

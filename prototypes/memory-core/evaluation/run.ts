@@ -8,6 +8,7 @@ import { executeCase } from "./execute.ts";
 import type { CaseResult } from "./execute.ts";
 import { tuning } from "./tuning.ts";
 import { reserve } from "./reserve.ts";
+import { fresh } from "./fresh.ts";
 
 async function main() {
   const args = process.argv.slice(2);
@@ -31,7 +32,7 @@ async function main() {
     }
     const budget = await EvaluationBudget.open();
     const baseline = structuredClone(budget.ledger);
-    const runCap = mode === "reserve" ? 5 : 2;
+    const runCap = mode === "reserve" || args.includes("--regression") ? 5 : 2;
     budget.runCeiling = baseline.spentUsd + baseline.reservedUsd + runCap;
     const metrics: CallMetric[] = [];
     const model = new SolProvider(
@@ -39,7 +40,19 @@ async function main() {
       budget,
       (m) => metrics.push(m),
     );
-    const cases = mode === "reserve" ? reserve : tuning;
+    const selection = args.indexOf("--cases");
+    const wanted = selection < 0 ? null : args[selection + 1]?.split(",");
+    if (mode === "reserve" && args.includes("--regression"))
+      throw new InterpretationError("CORPUS_SELECTION");
+    const corpus =
+      mode === "reserve"
+        ? fresh
+        : args.includes("--regression")
+          ? reserve
+          : tuning;
+    const cases = wanted ? corpus.filter((c) => wanted.includes(c.id)) : corpus;
+    if (!cases.length || (wanted && cases.length !== new Set(wanted).size))
+      throw new InterpretationError("CASE_SELECTION");
     const hash = createHash("sha256").update(JSON.stringify(cases));
     for (const folder of ["ai", "src", "evaluation", "fixtures"]) {
       for (const file of (await readdir(`prototypes/memory-core/${folder}`))
@@ -56,6 +69,11 @@ async function main() {
       runCap,
       run,
       mode,
+      corpus: args.includes("--regression")
+        ? "regression-v1"
+        : mode === "reserve"
+          ? "fresh-v2"
+          : "tuning-v1",
       fingerprint,
       baseline,
       budget: budget.ledger,

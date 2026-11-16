@@ -1,12 +1,28 @@
 import { z } from "zod";
 import { contentSchema, eventTimeSchema } from "../src/contracts.ts";
-import type { Unit } from "../src/model.ts";
+import type { Fragment, SourceEnvelope, Unit } from "../src/model.ts";
 
 const key = z.string().regex(/^[a-z][a-z0-9_-]{0,31}$/u);
 export const interpretationSchema = z.strictObject({
   status: z.enum(["ready", "clarify", "no_memory"]),
   question: z.string().max(500).nullable(),
   preserveTime: z.boolean(),
+  retention: z
+    .array(
+      z.strictObject({
+        index: z.number().int().nonnegative(),
+        parts: z
+          .array(
+            z.strictObject({
+              literal: z.string().min(1).max(8000),
+              keep: z.boolean(),
+            }),
+          )
+          .min(1)
+          .max(128),
+      }),
+    )
+    .max(128),
   units: z
     .array(
       z.strictObject({
@@ -72,6 +88,7 @@ export interface Input {
   zone: string;
   mode: "capture" | "correction";
   target?: Unit;
+  evidence?: { fragment: Fragment; source: SourceEnvelope }[];
   clarification?: { original: string; question: string };
 }
 export interface StructuredModel {

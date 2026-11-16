@@ -71,6 +71,9 @@ export function gradeUnits(state: Snapshot, gold: GoldUnit[]) {
       no_old_content: !(expected.forbidden ?? []).some((t) =>
         matches(JSON.stringify(u.content), t),
       ),
+      no_old_evidence: !(expected.forbidden ?? []).some((t) =>
+        matches(ownEvidence, t),
+      ),
       literal_details: expected.terms.every((t) => matches(ownEvidence, t)),
       no_foreign_fact: !foreignFact,
     }))
@@ -83,6 +86,7 @@ export function gradeUnits(state: Snapshot, gold: GoldUnit[]) {
           "attribution",
           "polarity",
           "no_old_content",
+          "no_old_evidence",
           "no_foreign_fact",
         ].includes(name),
       });

@@ -67,6 +67,9 @@ test("correction preserves identity and the original temporal anchor while retir
     requestId: h.runtime.id(),
     target: saved.refs[0],
     preserveTime: true,
+    retainedEvidence: Object.values(before.fragments)
+      .filter((f) => f.id === before.units[saved.refs[0]!.id]!.timeEvidenceId)
+      .map((f) => ({ fragmentId: f.id, start: 0, end: f.text.length })),
     draft: single("pintar acuarelas"),
   });
   const result = h.engine.commit(h.owner, plan.id);

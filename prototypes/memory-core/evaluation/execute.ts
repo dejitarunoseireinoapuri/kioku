@@ -2,7 +2,7 @@ import { harness } from "../fixtures/harness.ts";
 import type { Unit } from "../src/model.ts";
 import { Interpreter } from "../ai/interpreter.ts";
 import { query } from "../ai/query.ts";
-import { InterpretationError } from "../ai/contracts.ts";
+import { InterpretationError, interpretationSchema } from "../ai/contracts.ts";
 import type { Input, StructuredModel } from "../ai/contracts.ts";
 import type { Scenario, GoldQuery } from "./case.ts";
 import { gradeUnits, gradeAnswer } from "./grade.ts";
@@ -18,6 +18,13 @@ export interface CaseResult {
   milliseconds: number;
   stages: Record<string, number>;
   queryCount: number;
+  observations: {
+    stage: string;
+    status: string;
+    evidenceCount?: number;
+    unitCount?: number;
+    kinds?: string[];
+  }[];
 }
 function unchangedMeaning(before: Unit, after: Unit | undefined) {
   if (!after) return false;
@@ -28,7 +35,7 @@ function unchangedMeaning(before: Unit, after: Unit | undefined) {
   return JSON.stringify(a) === JSON.stringify(b);
 }
 export async function executeCase(
-  model: StructuredModel,
+  provider: StructuredModel,
   fixture: Scenario,
 ): Promise<CaseResult> {
   const started = performance.now();
@@ -40,6 +47,34 @@ export async function executeCase(
     milliseconds: 0,
     stages: {},
     queryCount: 0,
+    observations: [],
+  };
+  const model: StructuredModel = {
+    async call<T>(
+      stage: string,
+      instructions: string,
+      data: unknown,
+      schema: z.ZodType<T>,
+      outputLimit: number,
+    ): Promise<T> {
+      const value = await provider.call(
+        stage,
+        instructions,
+        data,
+        schema,
+        outputLimit,
+      );
+      if (stage === "interpret") {
+        const p = interpretationSchema.parse(value);
+        result.observations.push({
+          stage,
+          status: p.status,
+          unitCount: p.units.length,
+          kinds: p.units.map((u) => u.content.kind),
+        });
+      }
+      return value;
+    },
   };
   const h = harness();
   h.advance(Date.parse(fixture.at) - h.runtime.now());
@@ -70,6 +105,11 @@ export async function executeCase(
         query(model, h, q.text, fixture.at, fixture.zone, q.previous),
       );
       result.queryCount++;
+      result.observations.push({
+        stage: `${prefix}${i}`,
+        status: answer.status,
+        evidenceCount: answer.ids.length,
+      });
       record(`${prefix}${i}`, gradeAnswer(answer, q, mapping));
     }
   }
@@ -152,7 +192,18 @@ export async function executeCase(
       const before = h.store.read();
       const correction = await timed("correction", () =>
         interpreter.interpret(
-          { ...input, text: edit.text, mode: "correction", target },
+          {
+            ...input,
+            text: edit.text,
+            mode: "correction",
+            target,
+            evidence: Object.values(before.fragments)
+              .filter((f) => f.owners.includes(target.id))
+              .map((fragment) => ({
+                fragment,
+                source: before.sources[fragment.sourceId]!,
+              })),
+          },
           [],
         ),
       );
@@ -163,6 +214,7 @@ export async function executeCase(
         requestId: h.runtime.id(),
         target: { id: target.id, revision: target.revision },
         preserveTime: correction.proposal.preserveTime,
+        retainedEvidence: correction.retainedEvidence,
         draft: correction.draft,
       });
       h.engine.commit(h.owner, plan.id);

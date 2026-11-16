@@ -22,6 +22,13 @@ export async function query(
 ) {
   const ids = Object.keys(h.store.read().units);
   if (ids.length > 32) throw new InterpretationError("QUERY_CATALOG_LIMIT");
+  if (!ids.length)
+    return {
+      status: "not_found" as const,
+      text: "No encuentro ese dato en tu memoria.",
+      evidence: [],
+      ids: [],
+    };
   const packet = ids.length ? h.engine.evidence(h.owner, ids) : null;
   const epoch = h.store.read().epoch;
   const input = {
@@ -30,7 +37,7 @@ export async function query(
     calendar: calendar(at, zone),
     evidence: packet?.items.map((item, index) => ({ index, ...item })) ?? [],
   };
-  const answer = await model.call(
+  const proposed = await model.call(
     "answer",
     `${answerInstructions}\n${queryScopeInstructions}`,
     input,
@@ -38,11 +45,21 @@ export async function query(
     1500,
   );
   if (
-    new Set(answer.evidence).size !== answer.evidence.length ||
-    answer.evidence.some((i) => !ids[i]) ||
-    (answer.status === "answered" && answer.evidence.length === 0)
+    new Set(proposed.evidence).size !== proposed.evidence.length ||
+    proposed.evidence.some((i) => !ids[i]) ||
+    (proposed.status === "answered" && proposed.evidence.length === 0)
   )
     throw new InterpretationError("ANSWER_EVIDENCE");
+  // Absence never becomes a vehicle for disclosing a neighboring, unasked fact.
+  // The review still checks this negative result against the entire current packet.
+  const answer =
+    proposed.status === "not_found"
+      ? {
+          status: "not_found" as const,
+          text: "No consta ese dato en tus recuerdos guardados.",
+          evidence: [],
+        }
+      : proposed;
   const review = await model.call(
     "answer_review",
     answerReviewInstructions,

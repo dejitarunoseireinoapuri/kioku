@@ -7,6 +7,46 @@ import { harness } from "../fixtures/harness.ts";
 import { twoPlans } from "../fixtures/scenarios.ts";
 import { unit, day } from "../evaluation/case.ts";
 import { EvaluationBudget } from "../evaluation/runtime.ts";
+import { fresh } from "../evaluation/fresh.ts";
+
+test("R2 fresh reserve has sixty distinct stories, ten balanced families and independent expectations", () => {
+  assert.equal(fresh.length, 60);
+  assert.equal(new Set(fresh.map((c) => c.id)).size, 60);
+  assert.equal(new Set(fresh.map((c) => c.text)).size, 60);
+  const historical = new Set([...reserve, ...tuning].map((c) => c.text));
+  const families = new Map<string, number>();
+  for (const c of fresh) {
+    assert.ok(!historical.has(c.text));
+    families.set(c.family, (families.get(c.family) ?? 0) + 1);
+    assert.ok(c.queries.length >= 2 && c.after.length >= 2);
+    assert.ok(c.status !== "clarify" || c.clarification);
+    for (const q of [...c.queries, ...c.after])
+      assert.ok(q.labels.every((l) => c.units.some((u) => u.label === l)));
+  }
+  assert.equal(families.size, 10);
+  assert.ok([...families.values()].every((n) => n === 6));
+});
+
+test("the oracle detects an obsolete value surviving only in literal evidence", () => {
+  const h = harness();
+  h.save(twoPlans());
+  const state = h.store.read(),
+    u = Object.values(state.units)[0]!;
+  const f = Object.values(state.fragments).find((f) =>
+    f.owners.includes(u.id),
+  )!;
+  f.text += " obsoletevalue";
+  const result = gradeUnits(state, [
+    unit("first", ["dibujar"], u.content.kind, u.time, {
+      forbidden: ["obsoletevalue"],
+    }),
+  ]);
+  assert.ok(
+    result.checks.some(
+      (c) => c.name === "first:no_old_evidence" && !c.passed && c.critical,
+    ),
+  );
+});
 
 test("R2 reserved corpus is independent of tuning, complete and balanced", () => {
   assert.equal(reserve.length, 60);
