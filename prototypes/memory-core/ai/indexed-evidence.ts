@@ -30,7 +30,7 @@ export type IndexedInterpretation = z.infer<typeof indexedInterpretationSchema>;
 /** Lossless, Unicode-safe tokens. The model chooses boundaries, never copies evidence. */
 export function indexedText(text: string) {
   const tokens =
-    text.match(/[\p{L}\p{M}\p{N}]+|\s+|[^\p{L}\p{M}\p{N}\s]/gu) ?? [];
+    text.match(/[\p{L}\p{M}]+|\p{N}+|\s+|[^\p{L}\p{M}\p{N}\s]/gu) ?? [];
   return tokens.map((literal, index) => ({ index, literal }));
 }
 

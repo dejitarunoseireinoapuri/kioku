@@ -23,6 +23,10 @@ const empty = (): IndexedInterpretation => ({
 });
 
 test("indexed evidence is lossless across accents, emoji, repeated words and newlines", () => {
+  assert.deepEqual(
+    indexedText("12kg").map((t) => t.literal),
+    ["12", "kg"],
+  );
   for (const text of [
     input.text,
     "hola hola  hola",
