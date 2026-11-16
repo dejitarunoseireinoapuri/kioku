@@ -7,7 +7,7 @@ export const freshE = [
     [unit("paper", ["plegar", "papel"]), unit("swim", ["nadar"])],
     [
       ask("¿Qué quiero plegar?", ["paper"], ["papel"]),
-      ask("¿Qué deporte quiero practicar?", ["swim"], ["nadar"]),
+      ask("¿Qué deporte quiero practicar?", ["swim"], ["nadar|natacion"]),
     ],
     {
       status: "clarify",

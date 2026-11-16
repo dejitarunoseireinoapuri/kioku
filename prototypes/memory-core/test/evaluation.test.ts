@@ -2,12 +2,28 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { reserve } from "../evaluation/reserve.ts";
 import { tuning } from "../evaluation/tuning.ts";
-import { gradeUnits, gradeAnswer } from "../evaluation/grade.ts";
+import { gradeUnits, gradeAnswer, matches } from "../evaluation/grade.ts";
 import { harness } from "../fixtures/harness.ts";
 import { twoPlans } from "../fixtures/scenarios.ts";
 import { unit, day } from "../evaluation/case.ts";
 import { EvaluationBudget } from "../evaluation/runtime.ts";
 import { fresh } from "../evaluation/fresh.ts";
+
+test("numeric obligations do not match a substring of a year, while exact days remain detectable", () => {
+  assert.equal(matches("22 de julio de 2026", "20"), false);
+  assert.equal(matches("20 de julio de 2026", "20"), true);
+  assert.equal(matches("120 unidades", "20"), false);
+  assert.equal(matches("20/07/2026", "20"), true);
+});
+
+test("explicit answer variants accept equivalent wording but still reject different facts", () => {
+  const color = fresh.find((c) => c.id === "n11")!.queries[1]!.terms[0]!;
+  const sport = fresh.find((c) => c.id === "n49")!.queries[1]!.terms[0]!;
+  assert.ok(matches("amarillo", color) && matches("amarillas", color));
+  assert.equal(matches("verde", color), false);
+  assert.ok(matches("nadar", sport) && matches("natación", sport));
+  assert.equal(matches("correr", sport), false);
+});
 
 test("R2 fresh reserve has sixty distinct stories, ten balanced families and independent expectations", () => {
   assert.equal(fresh.length, 60);

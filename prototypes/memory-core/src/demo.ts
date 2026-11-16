@@ -4,6 +4,9 @@ import { validateSnapshot } from "./invariants.ts";
 
 const h = harness();
 const initial = h.save(twoPlans());
+const original = h.store.read();
+const timeAnchor =
+  original.fragments[original.units[initial.refs[0]!.id]!.timeEvidenceId!]!;
 const corrected = h.engine.commit(
   h.owner,
   h.prepare({
@@ -11,6 +14,9 @@ const corrected = h.engine.commit(
     requestId: h.runtime.id(),
     target: initial.refs[0],
     preserveTime: true,
+    retainedEvidence: [
+      { fragmentId: timeAnchor.id, start: 0, end: timeAnchor.text.length },
+    ],
     draft: single("pintar acuarelas"),
   }).id,
 );

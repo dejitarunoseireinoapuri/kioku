@@ -164,7 +164,7 @@ export const freshA = [
         ["card"],
         ["gris"],
       ),
-      ask("¿De qué color quiero pintar sus grúas?", ["cranes"], ["amarillas"], {
+      ask("¿De qué color quiero pintar sus grúas?", ["cranes"], ["amarill"], {
         previous: "¿Qué cartón necesito para la maqueta del puerto?",
       }),
     ],

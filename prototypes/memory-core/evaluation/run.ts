@@ -13,7 +13,9 @@ import { fresh } from "./fresh.ts";
 async function main() {
   const args = process.argv.slice(2);
   if (!args.includes("--live")) throw new InterpretationError("LIVE_REQUIRED");
-  const mode = args.includes("--reserve") ? "reserve" : "tuning";
+  if (args.includes("--reserve"))
+    throw new InterpretationError("RESERVE_REFRESH_REQUIRED");
+  const mode = "tuning";
   const position = args.indexOf("--run");
   const run = args[position + 1];
   if (position < 0 || !run || !/^[a-z0-9_-]{1,40}$/u.test(run))
@@ -32,7 +34,8 @@ async function main() {
     }
     const budget = await EvaluationBudget.open();
     const baseline = structuredClone(budget.ledger);
-    const runCap = mode === "reserve" || args.includes("--regression") ? 5 : 2;
+    const runCap =
+      args.includes("--regression") || args.includes("--regression-v2") ? 5 : 2;
     budget.runCeiling = baseline.spentUsd + baseline.reservedUsd + runCap;
     const metrics: CallMetric[] = [];
     const model = new SolProvider(
@@ -42,14 +45,13 @@ async function main() {
     );
     const selection = args.indexOf("--cases");
     const wanted = selection < 0 ? null : args[selection + 1]?.split(",");
-    if (mode === "reserve" && args.includes("--regression"))
+    if (args.includes("--regression-v2") && args.includes("--regression"))
       throw new InterpretationError("CORPUS_SELECTION");
-    const corpus =
-      mode === "reserve"
-        ? fresh
-        : args.includes("--regression")
-          ? reserve
-          : tuning;
+    const corpus = args.includes("--regression-v2")
+      ? fresh
+      : args.includes("--regression")
+        ? reserve
+        : tuning;
     const cases = wanted ? corpus.filter((c) => wanted.includes(c.id)) : corpus;
     if (!cases.length || (wanted && cases.length !== new Set(wanted).size))
       throw new InterpretationError("CASE_SELECTION");
@@ -71,8 +73,8 @@ async function main() {
       mode,
       corpus: args.includes("--regression")
         ? "regression-v1"
-        : mode === "reserve"
-          ? "fresh-v2"
+        : args.includes("--regression-v2")
+          ? "regression-v2"
           : "tuning-v1",
       fingerprint,
       baseline,

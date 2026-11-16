@@ -213,6 +213,57 @@ test("time preservation requires explicit retained support; stale retention cann
   assert.equal(Object.keys(h.store.read().fragments).length, 0);
 });
 
+test("a shared temporal anchor cannot be partially trimmed for another owner", () => {
+  const h = harness(),
+    draft = twoPlans();
+  const parts = [
+    "Mañana por la tarde ",
+    "quiero dibujar",
+    " y quiero aprender ajedrez.",
+  ];
+  draft.text = parts.join("");
+  let offset = 0;
+  draft.fragments = parts.map((part, index) => {
+    const start = offset;
+    offset += part.length;
+    return {
+      start,
+      end: offset,
+      role: index === 0 ? "time" : "primary",
+      owners: index === 0 ? ["a", "b"] : [index === 1 ? "a" : "b"],
+    };
+  });
+  for (const unit of draft.units)
+    unit.time = {
+      precision: "day",
+      value: "2026-05-11",
+      end: null,
+      fragment: 0,
+    };
+  const saved = h.save(draft),
+    before = h.store.read();
+  const anchor =
+    before.fragments[before.units[saved.refs[0]!.id]!.timeEvidenceId!]!;
+  const command = {
+    kind: "correct",
+    requestId: h.runtime.id(),
+    target: saved.refs[0],
+    preserveTime: true,
+    draft: single("pintar"),
+    retainedEvidence: [{ fragmentId: anchor.id, start: 0, end: 6 }],
+  };
+  assert.throws(() => h.prepare(command), { code: "scope_unresolved" });
+  assert.deepEqual(h.store.read(), before);
+  command.requestId = h.runtime.id();
+  command.retainedEvidence[0]!.end = anchor.text.length;
+  h.engine.commit(h.owner, h.prepare(command).id);
+  assert.deepEqual(
+    h.store.read().units[saved.refs[1]!.id],
+    before.units[saved.refs[1]!.id],
+  );
+  validateSnapshot(h.store.read());
+});
+
 test("model retention must cover every supplied fragment literally exactly once", () => {
   const { h, command, old } = quantity();
   const state = h.store.read();

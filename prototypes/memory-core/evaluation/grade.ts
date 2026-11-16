@@ -4,7 +4,10 @@ import type { Answer } from "../ai/contracts.ts";
 export const normalize = (value: string) =>
   value.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
 export const matches = (text: string, pattern: string) =>
-  new RegExp(pattern, "u").test(normalize(text));
+  new RegExp(
+    /^\d+$/u.test(pattern) ? `(?<!\\d)${pattern}(?!\\d)` : pattern,
+    "u",
+  ).test(normalize(text));
 export interface Check {
   name: string;
   passed: boolean;
