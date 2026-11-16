@@ -36,7 +36,7 @@ export async function finalFingerprint(cases: Scenario[]) {
 const previousSchema = z.object({
   round: z.number().int(),
   complete: z.literal(true),
-  corpus: z.literal(finalCorpus),
+  corpus: z.string().min(1),
   fingerprint: z.string().regex(/^[a-f0-9]{64}$/u),
   profile: z.object({
     model: z.literal(profile.model),
@@ -52,9 +52,14 @@ export function validatePrevious(
   round: number,
   fingerprint: string,
   ids: string[],
+  corpus: string = finalCorpus,
 ) {
   const parsed = previousSchema.safeParse(raw);
-  if (!parsed.success || parsed.data.round !== round - 1)
+  if (
+    !parsed.success ||
+    parsed.data.round !== round - 1 ||
+    parsed.data.corpus !== corpus
+  )
     throw new InterpretationError("PREVIOUS_ROUND_REQUIRED");
   const previous = parsed.data;
   if (previous.fingerprint !== fingerprint)

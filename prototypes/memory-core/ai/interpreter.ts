@@ -5,7 +5,11 @@ import { validateDraft } from "../src/evidence.ts";
 import { InterpretationError, reviewSchema } from "./contracts.ts";
 import type { Input, Interpretation, StructuredModel } from "./contracts.ts";
 import { calendar } from "./calendar.ts";
-import { interpretInstructions, reviewInstructions } from "./prompts.ts";
+import {
+  interpretInstructions,
+  reviewInstructions,
+  clarificationReviewInstructions,
+} from "./prompts.ts";
 import { materializeRetention } from "./retention.ts";
 import { interventions } from "./interventions.ts";
 import {
@@ -150,7 +154,9 @@ export class Interpreter {
     const retainedEvidence = materializeRetention(proposal, input);
     const review = await this.model.call(
       "interpret_review",
-      reviewInstructions,
+      proposal.status === "clarify"
+        ? clarificationReviewInstructions
+        : reviewInstructions,
       { ...data, proposal },
       reviewSchema,
       1400,

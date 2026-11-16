@@ -1,11 +1,16 @@
 import assert from "node:assert/strict";
 import { readFile, writeFile } from "node:fs/promises";
 
+const args = process.argv.slice(2);
+assert.ok(args.length === 0 || (args.length === 1 && args[0] === "--grouping"));
+const grouping = args[0] === "--grouping";
+const corpus = grouping ? "grouping-v6" : "independent-v5";
+const prefix = grouping ? "grouping" : "final";
 const rounds = await Promise.all(
     [1, 2, 3].map(async (round) =>
         JSON.parse(
             await readFile(
-                `local-data/r2/reserve-final-independent-${round}.json`,
+                `local-data/r2/reserve-${prefix}-independent-${round}.json`,
                 "utf8",
             ),
         ),
@@ -13,7 +18,7 @@ const rounds = await Promise.all(
 );
 const expectedIds = Array.from(
     { length: 60 },
-    (_, i) => `f${String(i + 1).padStart(2, "0")}`,
+    (_, i) => `${grouping ? "g" : "f"}${String(i + 1).padStart(2, "0")}`,
 );
 const passed = (r) => r.error === null && r.checks.every((c) => c.passed);
 const percentile = (values, p) =>
@@ -21,7 +26,7 @@ const percentile = (values, p) =>
 function summarize(run, index) {
     assert.equal(run.complete, true);
     assert.equal(run.round, index + 1);
-    assert.equal(run.corpus, "independent-v5");
+    assert.equal(run.corpus, corpus);
     assert.equal(run.expectedCases, 60);
     assert.equal(run.expectedQueries, 247);
     assert.equal(run.profile.model, "gpt-6.1-sol");
@@ -104,7 +109,7 @@ const summaries = rounds.map(summarize);
 const report = {
     profile: rounds[0].profile,
     resolvedModel: rounds[0].resolvedModel,
-    corpus: "independent-v5",
+    corpus,
     fingerprint: rounds[0].fingerprint,
     scope: "synthetic_only_no_firebase_no_mobile_no_migration",
     semanticGatePassed: summaries.every((r) => r.gatePassed),
@@ -132,7 +137,7 @@ function audit(value) {
 }
 audit(report);
 await writeFile(
-    "docs/09-planning/evidence/r2-final-results.json",
+    `docs/09-planning/evidence/r2-${prefix}-results.json`,
     JSON.stringify(report, null, 2) + "\n",
 );
 console.log(

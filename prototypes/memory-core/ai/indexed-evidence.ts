@@ -101,7 +101,13 @@ export function expandInterpretation(
   }
   return interpretationSchema.parse({
     ...wire,
-    segments: expand(input.text, wire.segments),
+    // Whitespace is layout, never semantic context. Keep spans, owners and indices
+    // intact, so temporal references and the full ownership validator still apply.
+    segments: expand(input.text, wire.segments).map((segment) =>
+      segment.role === "context" && !segment.literal.trim()
+        ? { ...segment, role: "separator" as const }
+        : segment,
+    ),
     retention: wire.retention.map(({ index, parts }) => {
       const evidence = input.evidence?.[index];
       if (!evidence) throw new InterpretationError("RETENTION_REFERENCE");
