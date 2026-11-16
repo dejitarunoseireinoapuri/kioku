@@ -3,7 +3,27 @@ import { readFile, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 
 // Fixed exposed runs, closed observations only. No provider calls or historical rewrites.
-const names = ["diagnostic", "targeted", "h-full", "g-controls"];
+const names = ["diagnostic", "targeted", "h-full", "g-controls", "h49-wording"];
+const expectedIds = {
+    diagnostic: ["h30", "h49", "h53"],
+    targeted: ["h26", "h30", "h43", "h49", "h52", "h53"],
+    "h-full": Array.from(
+        { length: 60 },
+        (_, i) => `h${String(i + 1).padStart(2, "0")}`,
+    ),
+    "g-controls": [
+        "g05",
+        "g23",
+        "g24",
+        "g33",
+        "g36",
+        "g38",
+        "g45",
+        "g53",
+        "g58",
+    ],
+    "h49-wording": ["h49"],
+};
 const percentile = (values, p) =>
     values.toSorted((a, b) => a - b)[Math.ceil(values.length * p) - 1] ?? null;
 const runs = [];
@@ -11,6 +31,16 @@ for (const name of names) {
     const bytes = await readFile(`local-data/r2/tuning-followup2-${name}.json`);
     const r = JSON.parse(bytes);
     assert.equal(r.complete, true);
+    assert.equal(r.run, `followup2-${name}`);
+    assert.deepEqual(r.results.map((x) => x.id).sort(), expectedIds[name]);
+    assert.equal(
+        r.corpus,
+        name === "diagnostic"
+            ? "regression-v7-original"
+            : name === "g-controls"
+              ? "regression-v6"
+              : "regression-v7-adapted",
+    );
     assert.equal(r.profile.model, "gpt-6.1-sol");
     assert.equal(r.profile.reasoning, "medium");
     assert.ok(r.resolvedModel);
@@ -72,12 +102,27 @@ for (const name of names) {
     });
 }
 const ledger = JSON.parse(await readFile("local-data/r2/budget.json", "utf8"));
+assert.ok(Math.abs(ledger.reservedUsd - 1.78895) < 1e-9);
+assert.ok(Math.abs(ledger.previousM0Spent - 21.71988544) < 1e-9);
+assert.ok(ledger.spentUsd + ledger.reservedUsd <= 80);
+assert.ok(
+    Math.abs(
+        runs.reduce((sum, r) => sum + r.spentUsd, 0) -
+            (ledger.spentUsd - 71.2454975),
+    ) < 1e-9,
+);
 const output = {
     status: "open",
     independentEvaluation: false,
     historicalReportsUnchanged: true,
     continuation: 2,
     finalContinuation: true,
+    evaluatedCodeCommit: "26175f81c8c3e83a1db6ee657ee551d4cc46f859",
+    postFreezeRevision: {
+        run: "followup2-h49-wording",
+        changed: "h49-specific-question-only",
+        fullRegressionRepeated: false,
+    },
     baselineSpentUsd: 71.2454975,
     spentWholeContinuationUsd: ledger.spentUsd - 71.2454975,
     budget: ledger,

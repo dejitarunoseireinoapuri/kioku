@@ -26,7 +26,7 @@ repair.queries.push(
   ),
 );
 repair.queries.push(
-  ask("¿Qué quiero arreglar del cerrojo?", ["lock"], ["cerrojo"], {
+  ask("¿Qué quiero hacer con el cerrojo?", ["lock"], ["arreglar", "cerrojo"], {
     forbidden: ["florero"],
   }),
 );
@@ -34,7 +34,7 @@ repair.after[1] = ask("¿Qué quiero arreglar?", ["lock"], ["cerrojo"], {
   forbidden: ["florero"],
 });
 repair.after.push(
-  ask("¿Qué quiero arreglar del cerrojo?", ["lock"], ["cerrojo"], {
+  ask("¿Qué quiero hacer con el cerrojo?", ["lock"], ["arreglar", "cerrojo"], {
     forbidden: ["florero"],
   }),
 );

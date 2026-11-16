@@ -15,8 +15,8 @@
     "core:eval": "node --env-file-if-exists=.env.local prototypes/memory-core/evaluation/run.ts",
     "check": "tsc --noEmit",
     "test": "node --test prototypes/memory/test/*.test.ts prototypes/memory-core/test/*.test.ts",
-    "format": "prettier --write prototypes/memory prototypes/memory-core tooling/m0.mjs tooling/r2-evidence-audit.mjs tooling/r2-report.mjs tooling/r2-continuation-report.mjs tooling/r2-identity-audit.mjs tooling/r2-indexed-report.mjs tooling/r2-reliability-report.mjs tooling/r2-final-report.mjs package.json tsconfig.json",
-    "format:check": "prettier --check prototypes/memory prototypes/memory-core tooling/m0.mjs tooling/r2-evidence-audit.mjs tooling/r2-report.mjs tooling/r2-continuation-report.mjs tooling/r2-identity-audit.mjs tooling/r2-indexed-report.mjs tooling/r2-reliability-report.mjs tooling/r2-final-report.mjs package.json tsconfig.json",
+    "format": "prettier --write prototypes/memory prototypes/memory-core tooling/m0.mjs tooling/r2-evidence-audit.mjs tooling/r2-report.mjs tooling/r2-continuation-report.mjs tooling/r2-identity-audit.mjs tooling/r2-indexed-report.mjs tooling/r2-reliability-report.mjs tooling/r2-final-report.mjs tooling/r2-assignment-report.mjs package.json tsconfig.json",
+    "format:check": "prettier --check prototypes/memory prototypes/memory-core tooling/m0.mjs tooling/r2-evidence-audit.mjs tooling/r2-report.mjs tooling/r2-continuation-report.mjs tooling/r2-identity-audit.mjs tooling/r2-indexed-report.mjs tooling/r2-reliability-report.mjs tooling/r2-final-report.mjs tooling/r2-assignment-report.mjs package.json tsconfig.json",
     "m0": "node --env-file-if-exists=.env.local prototypes/memory/src/cli.ts",
     "m0:eval": "node --env-file-if-exists=.env.local prototypes/memory/src/evaluation/run.ts",
     "core:final": "node --env-file-if-exists=.env.local prototypes/memory-core/evaluation/final-run.ts"

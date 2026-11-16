@@ -1,5 +1,7 @@
 # Matriz de aceptación y evidencia prevista
 
+Continuación final R2: asignación global única acotada, 512 grafos de control, rechazo de anclas/evidencia incorrectas, canónicos contaminados, tipos/dirección de relaciones y cierre de dependencias explícitamente autorizado en fixtures. 122 pruebas del núcleo y 224 raíz correctas. Las regresiones expuestas y sus límites constan en la [evidencia final](../09-planning/R2_ASSIGNMENT_VALIDATION.md); R2 sigue abierta y los resultados históricos siguientes no se recalifican.
+
 Polaridad/identidad/alcance R2: **117 pruebas locales correctas**, dirigida 9/9 y regresiones g/f 60/60 cada una. Reserva nueva h: **58/60, 57/60 y 57/60**, con la misma huella/perfil/oráculo. Pasan quince ediciones y 172 olvidos alcanzados, sin acreditar ciclos bloqueados ni copias no vinculadas. Fallan h30/h49/h53; no se recalifican históricos. **R2 abierta**, incluida latencia de captura/corrección pendiente. [Resultados, criterios, costes y relevo](../09-planning/R2_SCOPE_VALIDATION.md).
 
 Evaluación independiente final R2: 60 casos ficticios nuevos, diez familias y tres rondas sin cambios de versión/perfil/oráculo; 55/60, 56/60 y 57/60. **Criterio de cierre no superado.** Quedan diferencias de agrupación y rechazos de interpretación/aclaración. Quince ediciones aplicadas y dieciocho casos de olvido correctos dentro de sus controles; 104 pruebas locales del núcleo. [Resultados por familia, fallos, costes y límites](../09-planning/R2_FINAL_VALIDATION.md). No acredita Firebase, dispositivos ni datos reales.

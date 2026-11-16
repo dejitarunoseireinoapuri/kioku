@@ -1,5 +1,7 @@
 # Propuesta de núcleo de memoria v2
 
+La [continuación final R2](../09-planning/R2_ASSIGNMENT_VALIDATION.md) añade asignación global al comprobador, revisión del soporte propio de todos los campos canónicos y regresión de dependencias con alcance explícito. Son cambios del prototipo/evaluador aislado, sin modificar contratos desplegados. R2 permanece abierta; los resultados históricos siguientes se conservan.
+
 Implementación experimental R2 ampliada: límites de tokens y conservación literal, calendarios por intervención y recuperación con cobertura explícita. La [continuación de polaridad, identidad y alcance](../09-planning/R2_SCOPE_VALIDATION.md) pasa las regresiones expuestas g/f (60/60 cada una) y obtiene 58/60, 57/60 y 57/60 en la reserva nueva h. R2 permanece abierta por mapeo/alcance/propiedad y latencia; los [resultados de agrupación](../09-planning/R2_GROUPING_VALIDATION.md) permanecen históricos sin recalificación. No sustituye rutas desplegadas ni acredita reconocimiento de toda paráfrasis.
 
 Estado: **diseño y decisiones P1–P3 aceptados por el propietario el 2026-11-16**. Autoriza el prototipo y pruebas ficticias, sin tocar recuerdos reales. La [ADR-012](ADR/ADR-012-independent-memory-units.md) recoge la decisión; el [plan R0–R6](../09-planning/MEMORY_CORE_REBUILD_PLAN.md) fija entregas y puertas. El [motor aislado R1](../09-planning/R1_VALIDATION.md) ya está implementado con pruebas locales; interpretación con IA, integración y migración siguen pendientes. Los contratos desplegados continúan siendo K2–K4.

@@ -1,5 +1,11 @@
 # Cambios
 
+## Asignación global y soporte propio · 2026-11-16 · Continuación final R2 2 de 2
+
+- Comprobador con biyección única acotada y soporte propio; rechazo de canónicos contaminados, anclas incorrectas y ambigüedad real. Dependencias con clase/dirección comprobadas y cierre explícitamente autorizado en fixtures. Revisor conservado y reforzado sobre todos los campos normalizados.
+- 224 pruebas raíz, 122 del núcleo, TypeScript y formato correctos. Regresión h adaptada 59/60, controles g 9/9; una pregunta específica ambigua del comprobador se corrige después y pasa un ciclo separado h49 1/1. Históricos y fallos intactos; sin fusionar denominadores.
+- R2 sigue abierta por evaluación independiente, variabilidad de revisión y latencia. Coste R2 75,79987 USD más reserva incierta 1,78895 USD; sin aumento del tope. Última continuación terminada, sin otra tarea; subida pendiente de autorización y suspensión del PC solicitada. [Evidencia final y límites](docs/09-planning/R2_ASSIGNMENT_VALIDATION.md).
+
 ## Polaridad, identidad y alcance · 2026-11-16 · Continuación R2 1 de 2
 
 - Citas negativas conservan polaridad; la procedencia textual no exige inventar autor. Reiteraciones del mismo contenido vinculan evidencia y los planes sin enlace expreso mantienen su propio alcance temporal. La consulta distingue el predicado solicitado de otro hecho sobre el mismo sujeto.
