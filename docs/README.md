@@ -1,5 +1,7 @@
 # Mapa documental
 
+Estado R2 vigente: [polaridad, identidad, alcance y continuación final](09-planning/R2_SCOPE_VALIDATION.md). Conserva los informes anteriores; R2 permanece abierta.
+
 Una fuente por tipo de decisión. Los documentos son el contrato previsto; el estado real se registra en [KNOWN_LIMITATIONS.md](09-planning/KNOWN_LIMITATIONS.md). La evidencia ejecutable se añade al implementar cada fase. Una descripción de pruebas no equivale a una prueba superada.
 
 | Área | Entrada | Propietario del contenido |

@@ -1,5 +1,11 @@
 # Cambios
 
+## Polaridad, identidad y alcance · 2026-11-16 · Continuación R2 1 de 2
+
+- Citas negativas conservan polaridad; la procedencia textual no exige inventar autor. Reiteraciones del mismo contenido vinculan evidencia y los planes sin enlace expreso mantienen su propio alcance temporal. La consulta distingue el predicado solicitado de otro hecho sobre el mismo sujeto.
+- Comprobador con polaridad/atribución/sujeto, citas literales atribuidas y variantes explícitas de rechazo; positivos y negativos, sin cambiar los informes históricos. 117 pruebas locales correctas; dirigida 9/9 y regresiones g/f 60/60 cada una.
+- Nueva reserva h congelada: 58/60, 57/60 y 57/60. R2 abierta por mapeo/relaciones/alcance/propiedad y latencia. Queda una continuación final autorizada; sin Firebase, app, recuerdos reales, despliegue ni correo. [Evidencia, coste y límites](docs/09-planning/R2_SCOPE_VALIDATION.md).
+
 ## Corrección y reevaluación aislada · 2026-11-16 · Continuación R2
 
 - Ediciones parciales conservan rangos literales de detalles vigentes y su fecha/procedencia; retiran el valor sustituido sin reescribir vecinos. Repeticiones de ubicación enlazan la identidad, distinguiendo traslados, ocasiones, personas y modalidades diferentes.
