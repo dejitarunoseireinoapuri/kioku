@@ -1,5 +1,7 @@
 # R2 · Evaluación de interpretación del núcleo v2
 
+**Experimento histórico conservado.** La [continuación de R2](R2_RETENTION_VALIDATION.md) corrige la pérdida de soporte al editar y evalúa una reserva nueva. Los resultados de esta página no se sobrescriben; sus casos pasan a regresión.
+
 Fecha: 2026-11-16. Rama: `codex/memory-core-r2`. El propietario autoriza Sol con razonamiento medio y datos exclusivamente ficticios; revoca los avisos por correo. No se autoriza ni ejecuta ninguna lectura de recuerdos reales, migración, llamada Firebase o despliegue.
 
 ## Resultado · R2 permanece abierta

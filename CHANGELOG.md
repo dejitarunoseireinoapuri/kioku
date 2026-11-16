@@ -1,5 +1,11 @@
 # Cambios
 
+## Corrección y reevaluación aislada · 2026-11-16 · Continuación R2
+
+- Ediciones parciales conservan rangos literales de detalles vigentes y su fecha/procedencia; retiran el valor sustituido sin reescribir vecinos. Repeticiones de ubicación enlazan la identidad, distinguiendo traslados, ocasiones, personas y modalidades diferentes.
+- 179 tests locales; reserva nueva de 60 historias × tres rondas: 54/60, 55/60 y 54/60. Ajuste posterior del oráculo/identidad: 4/4 regresiones y 12/12 historias adicionales. Resultados históricos intactos, sin convertir esos ajustes en otra reserva. R2 sigue abierta por rechazos, nueva validación completa y escala pendiente.
+- Todo en el prototipo RAM, Sol medio, sin recuerdos reales, Firebase, app o correo. [Evidencia y costes](docs/09-planning/R2_RETENTION_VALIDATION.md).
+
 ## Evaluación aislada · 2026-11-16 · Interpretación R2
 
 - Adaptador Sol medio con salida estructurada, materialización literal, revisión de fidelidad, consultas de evidencia actual y presupuesto separado sin reiniciar M0. Solo corpus ficticio/RAM; no se toca Firebase, la app o recuerdos reales.

@@ -23,6 +23,7 @@ Una fuente por tipo de decisión. Los documentos son el contrato previsto; el es
 | Cambio del núcleo | [MEMORY_CORE_REBUILD_PLAN](09-planning/MEMORY_CORE_REBUILD_PLAN.md) | R0–R6: decisiones, prueba aislada, integración y migración antes de voz; sin autorización de producción |
 | Evidencia del nuevo núcleo | [R1_VALIDATION](09-planning/R1_VALIDATION.md), [prototipo](../prototypes/memory-core/README.md) | Motor aislado y datos ficticios; no acredita interpretación de IA ni producción |
 | Evaluación semántica del núcleo | [R2_VALIDATION](09-planning/R2_VALIDATION.md) | Sol medio, corpus ficticio separado, costes, resultados y límites de avance |
+| Continuación R2 | [R2_RETENTION_VALIDATION](09-planning/R2_RETENTION_VALIDATION.md) | Conservación de evidencia al editar y evaluación con nuevas historias ficticias |
 | Evidencia móvil | [K0_VALIDATION](09-planning/K0_VALIDATION.md) | Compilación/pruebas Android y límites iOS de la base K0 |
 | Evidencia de cuenta | [K1_VALIDATION](09-planning/K1_VALIDATION.md), [K1_INTEGRATION_VALIDATION](09-planning/K1_INTEGRATION_VALIDATION.md) | Primera frontera histórica e integración nativa/remota actual |
 | Evidencia de captura | [K2_VALIDATION](09-planning/K2_VALIDATION.md) | Guardado textual, aclaraciones y distinción entre pruebas locales y activación real |

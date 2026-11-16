@@ -1,6 +1,6 @@
 # Fases de Kioku
 
-**Continuación R2:** evaluación de Sol medio ejecutada exclusivamente con datos ficticios. Tres rondas reservadas 44/60, 43/60 y 44/60; [evidencia y límites](R2_VALIDATION.md). Fase abierta: corregir conservación de evidencia en ediciones parciales, adjudicar discrepancias del contrato/oráculo, evaluar búsqueda a escala y preparar otra reserva tras los cambios. No se pasa a R3 ni voz.
+**Continuación R2:** pérdida de evidencia en edición parcial corregida y nueva reserva de Sol medio: 54/60, 55/60 y 54/60. Ajuste posterior con 4/4 regresiones y 12/12 historias nuevas de identidad; [evidencia y límites](R2_RETENTION_VALIDATION.md). Fase abierta: reducir rechazos de interpretación/revisión, preparar otra reserva completa para la versión final, completar aclaraciones tardías y búsqueda a escala. Históricos sin regrading. No se pasa a R3 ni voz; solo datos ficticios.
 
 **Actualización del 16 de noviembre:** se inserta [R0–R6 · Reconstrucción de memoria](MEMORY_CORE_REBUILD_PLAN.md) antes de K5. El propietario acepta P1–P3 del [diseño v2](../02-architecture/MEMORY_CORE_V2.md) y [ADR-012](../02-architecture/ADR/ADR-012-independent-memory-units.md); autoriza el prototipo ficticio. Motor determinista según [R1_VALIDATION](R1_VALIDATION.md); evaluación de interpretación abierta según R2. Integración, migración y despliegue pendientes. La aceptación histórica de K4 no acredita que la incidencia nueva esté resuelta.
 

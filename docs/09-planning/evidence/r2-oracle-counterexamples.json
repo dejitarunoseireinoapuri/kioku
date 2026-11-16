@@ -1,0 +1,7 @@
+{
+  "type": "deterministic-oracle-counterexamples-not-response-adjudication",
+  "numericSubstringFalsePositive": true,
+  "colorInflectionFalseNegative": true,
+  "activityNominalizationFalseNegative": true,
+  "providerCalls": 0
+}
