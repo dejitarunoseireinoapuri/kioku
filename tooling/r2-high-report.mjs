@@ -133,6 +133,7 @@ for (const [name, count] of [
     ["high-targeted", 8],
     ["high-full", 60],
     ["high-controls", 3],
+    ["high-final-contrast", 5],
 ]) {
     let bytes;
     try {

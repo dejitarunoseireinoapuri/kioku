@@ -1,5 +1,5 @@
 import { highReserve } from "./high.ts";
-import { ask } from "./case.ts";
+import { ask, scenario, unit, unknown } from "./case.ts";
 
 // Exposed adaptations after all three frozen rounds. Historical expectations stay intact.
 export const highRegression = structuredClone(highReserve);
@@ -57,3 +57,43 @@ for (const [i, u] of reservation.units.entries()) {
 
 const quantity = highRegression.find((c) => c.id === "i43")!.correction!;
 quantity.expected.forbidden!.push("\\bno\\b");
+
+// Directed controls added after the sixty-case pass; never an independent reserve.
+const reversedContrast = structuredClone(
+  highRegression.find((c) => c.id === "i43")!,
+);
+reversedContrast.id = "i61";
+reversedContrast.correction!.text = "No eran 18 tuercas, eran 23.";
+highRegression.push(reversedContrast);
+highRegression.push(
+  scenario(
+    "i62",
+    "correction",
+    "No presté mi brújula de latón. El trípode está en el altillo.",
+    [
+      unit("loan", ["prest", "brujula", "laton"], "fact", unknown, {
+        polarity: "negative",
+      }),
+      unit("tripod", ["tripode", "altillo"], "fact"),
+    ],
+    [
+      ask("¿Presté mi brújula de latón?", ["loan"], ["no"]),
+      ask("¿Dónde está el trípode?", ["tripod"], ["altillo"]),
+    ],
+    {
+      correction: {
+        label: "loan",
+        text: "Era mi brújula de cobre, no de latón.",
+        expected: unit("loan", ["prest", "brujula", "cobre"], "fact", unknown, {
+          polarity: "negative",
+          forbidden: ["laton"],
+          evidenceTerms: ["\\bno\\b"],
+        }),
+        query: ask("¿Presté mi brújula de cobre?", ["loan"], ["no"], {
+          forbidden: ["laton"],
+        }),
+      },
+      expectedRelations: [],
+    },
+  ),
+);

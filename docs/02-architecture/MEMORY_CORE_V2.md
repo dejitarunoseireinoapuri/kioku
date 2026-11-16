@@ -1,5 +1,7 @@
 # Propuesta de núcleo de memoria v2
 
+**Estado vigente:** la [validación con Sol alto](../09-planning/R2_HIGH_VALIDATION.md) continúa R2 por nueva autorización del propietario. Solo cambia el prototipo/evaluador aislado; perfil y resultados del diseño original que siguen son históricos. No modifica contratos ni recursos desplegados.
+
 La [continuación final R2](../09-planning/R2_ASSIGNMENT_VALIDATION.md) añade asignación global al comprobador, revisión del soporte propio de todos los campos canónicos y regresión de dependencias con alcance explícito. Son cambios del prototipo/evaluador aislado, sin modificar contratos desplegados. R2 permanece abierta; los resultados históricos siguientes se conservan.
 
 Implementación experimental R2 ampliada: límites de tokens y conservación literal, calendarios por intervención y recuperación con cobertura explícita. La [continuación de polaridad, identidad y alcance](../09-planning/R2_SCOPE_VALIDATION.md) pasa las regresiones expuestas g/f (60/60 cada una) y obtiene 58/60, 57/60 y 57/60 en la reserva nueva h. R2 permanece abierta por mapeo/alcance/propiedad y latencia; los [resultados de agrupación](../09-planning/R2_GROUPING_VALIDATION.md) permanecen históricos sin recalificación. No sustituye rutas desplegadas ni acredita reconocimiento de toda paráfrasis.

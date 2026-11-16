@@ -184,3 +184,33 @@ test("positive quantity correction excludes the obsolete contrast negator from c
     ["18"],
   );
 });
+
+test("a partial correction must retain a genuine negation in both meaning and its own evidence", () => {
+  const c = highRegression.find((c) => c.id === "i62")!;
+  const gold = [c.correction!.expected, c.units[1]!];
+  const { state, units } = snapshot(gold, [
+    "No presté mi brújula de cobre.",
+    "El trípode está en el altillo.",
+  ]);
+  assert.ok(gradeUnits(state, gold).checks.every((c) => c.passed));
+  for (const change of ["polarity", "evidence", "obsoleteMaterial"]) {
+    const bad = structuredClone(state),
+      u = bad.units[units[0]!.id]!;
+    if (change === "polarity") u.content.polarity = "positive";
+    else if (change === "obsoleteMaterial") u.content.proposition += " latón";
+    else
+      for (const f of Object.values(bad.fragments).filter((f) =>
+        f.owners.includes(u.id),
+      ))
+        f.text = f.text.replace("No ", "");
+    assert.ok(
+      gradeUnits(bad, gold).checks.some((c) => !c.passed),
+      change,
+    );
+  }
+  assert.deepEqual(
+    highRegression.find((c) => c.id === "i61")!.correction!.expected.forbidden,
+    ["18", "\\bno\\b"],
+  );
+  assert.equal(highReserve.length, 60);
+});
