@@ -1,6 +1,6 @@
 # Guía de desarrollo
 
-Reserva final R2: `node tooling/m0.mjs core:final --live --round 1`, después `2` y `3`. Solo corpus ficticio nuevo completo; no admite selección de casos ni cuarta ronda. La anterior debe terminar con idéntica huella/perfil. No repetir como nueva reserva una evaluación ya observada. `node tooling/r2-final-report.mjs` consolida las tres sin API. Tope acumulado 50 USD y 5 por ronda; [protocolo y estado](../09-planning/R2_FINAL_VALIDATION.md).
+Reserva final R2 ya ejecutada en `6eb2eca`: `node tooling/m0.mjs core:final --live --round 1`, después `2` y `3`. Estos comandos documentan el protocolo; no repetir los casos observados como reserva nueva. No admite selección, sobrescritura ni cuarta ronda; exige anterior completa e idéntica huella/perfil. `node tooling/r2-final-report.mjs` consolida las tres sin API. Tope acumulado 50 USD y 5 por ronda; [resultados y bloqueos de cierre](../09-planning/R2_FINAL_VALIDATION.md).
 
 Fiabilidad R2: `core:eval --live --reliability --run <id>` selecciona doce ciclos ficticios dirigidos de captura/edición/olvido y consulta positiva/negativa; son regresión después de su primera ejecución, no una reserva completa. `node tooling/r2-reliability-report.mjs` exporta únicamente métricas/códigos de los intentos concretos documentados, sin llamar a la API. [Resultados y alcance](../09-planning/R2_RELIABILITY_VALIDATION.md).
 

@@ -1,6 +1,6 @@
 # Propuesta de núcleo de memoria v2
 
-Implementación experimental R2 ampliada: el modelo selecciona límites de tokens y el servidor conserva literales; las aclaraciones distinguen fuentes/calendarios; una frontera paginada recupera candidatos con cobertura explícita. [Resultados y límites actuales](../09-planning/R2_INDEXED_VALIDATION.md). No sustituye las rutas desplegadas ni garantiza reconocimiento de toda paráfrasis.
+Implementación experimental R2 ampliada: el modelo selecciona límites de tokens y el servidor conserva literales; las aclaraciones distinguen fuentes/calendarios; una frontera paginada recupera candidatos con cobertura explícita. La [evaluación independiente final](../09-planning/R2_FINAL_VALIDATION.md) obtiene 55/60, 56/60 y 57/60: siguen abiertos agrupación y rechazos, sin cambiar este contrato ni cerrar R2. La [evaluación indexada anterior](../09-planning/R2_INDEXED_VALIDATION.md) permanece histórica. No sustituye las rutas desplegadas ni garantiza reconocimiento de toda paráfrasis.
 
 Estado: **diseño y decisiones P1–P3 aceptados por el propietario el 2026-11-16**. Autoriza el prototipo y pruebas ficticias, sin tocar recuerdos reales. La [ADR-012](ADR/ADR-012-independent-memory-units.md) recoge la decisión; el [plan R0–R6](../09-planning/MEMORY_CORE_REBUILD_PLAN.md) fija entregas y puertas. El [motor aislado R1](../09-planning/R1_VALIDATION.md) ya está implementado con pruebas locales; interpretación con IA, integración y migración siguen pendientes. Los contratos desplegados continúan siendo K2–K4.
 

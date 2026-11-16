@@ -1,5 +1,7 @@
 # Matriz de aceptación y evidencia prevista
 
+Evaluación independiente final R2: 60 casos ficticios nuevos, diez familias y tres rondas sin cambios de versión/perfil/oráculo; 55/60, 56/60 y 57/60. **Criterio de cierre no superado.** Quedan diferencias de agrupación y rechazos de interpretación/aclaración. Quince ediciones aplicadas y dieciocho casos de olvido correctos dentro de sus controles; 104 pruebas locales del núcleo. [Resultados por familia, fallos, costes y límites](../09-planning/R2_FINAL_VALIDATION.md). No acredita Firebase, dispositivos ni datos reales.
+
 Fiabilidad R2: contrato de propietarios/fecha desconocida, diagnóstico cerrado, consulta con evidencia propia tras retirar un vecino, ausencia real, realización no acreditada, precisión desconocida, predicado común, registro frente a edición y soporte ajeno/calendario ausente. [Evidencia dirigida y límites de cierre](../09-planning/R2_RELIABILITY_VALIDATION.md). Las pruebas locales y los nuevos relatos no sustituyen la reserva completa del plan.
 
 Continuación R2: cobertura/token Unicode, rechazos de límites, retención de fecha/zona por intervención, consulta paginada a 100/1000/10 000, cuentas/épocas incompatibles, resultado truncado explícito y revocación durante respuesta. [Protocolo y evidencia actual](../09-planning/R2_INDEXED_VALIDATION.md). Estas pruebas no acreditan persistencia ni dispositivos.

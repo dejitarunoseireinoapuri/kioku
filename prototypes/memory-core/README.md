@@ -17,7 +17,7 @@ La demo usa únicamente fixtures incluidas: guarda dos planes, corrige uno mante
 
 ## Evaluación real R2 · tarea explícita con coste
 
-Reserva independiente `f01–f60`: `node tooling/m0.mjs core:final --live --round 1`, después `2` y `3`. No permite subconjuntos, sobrescrituras ni cambios de código/corpus entre rondas. [Protocolo fijado](../../docs/09-planning/R2_FINAL_VALIDATION.md). El exportador `node tooling/r2-final-report.mjs` solo lee los informes, sin API ni prosa generada.
+Reserva `f01–f60` ya ejecutada en `6eb2eca`: 55/60, 56/60 y 57/60; R2 abierta. Protocolo histórico: `node tooling/m0.mjs core:final --live --round 1`, después `2` y `3`. No permite subconjuntos, sobrescrituras ni cambios de código/corpus entre rondas. No reutilizar los casos observados como reserva nueva. [Resultados y límites](../../docs/09-planning/R2_FINAL_VALIDATION.md). El exportador `node tooling/r2-final-report.mjs` solo lee los informes, sin API ni prosa generada.
 
 `--reliability` selecciona doce historias ficticias dirigidas a rechazos, fechas y consulta de unidades conservadas. Son conocidas tras su primera ejecución, no otra reserva de sesenta. La vista de consulta conserva contenido, tiempo de evento, registro/edición y número de menciones vigentes; entrega los literales por fuente sin posiciones/longitud del relato ni identificadores internos. [Corrección y validación](../../docs/09-planning/R2_RELIABILITY_VALIDATION.md).
 

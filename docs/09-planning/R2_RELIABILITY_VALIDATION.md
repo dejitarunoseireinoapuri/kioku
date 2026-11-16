@@ -1,5 +1,7 @@
 # R2 · Rechazos y falsas ausencias
 
+Informe histórico anterior a la [evaluación independiente final](R2_FINAL_VALIDATION.md), que obtiene 55/60, 56/60 y 57/60 y mantiene R2 abierta. Los resultados y costes siguientes no se recalculan ni sustituyen por esa evaluación.
+
 Continuación autorizada del 16 de noviembre de 2026, rama `codex/memory-core-r2`. Perfil invariable `gpt-6.1-sol`, razonamiento `medium`, `store:false`, sin reintentos de inferencia. Únicamente escenarios ficticios y almacenes RAM. No se accede a Firebase, móviles ni recuerdos personales, no se despliega ni se envía correo. Los [resultados anteriores](R2_INDEXED_VALIDATION.md) permanecen históricos sin recalificarse.
 
 ## Causas investigadas y cambios

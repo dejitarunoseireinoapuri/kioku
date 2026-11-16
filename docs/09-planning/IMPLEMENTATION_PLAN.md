@@ -1,8 +1,8 @@
 # Fases de Kioku
 
-Resultado vigente R2: corregidos los rechazos reproducidos y la falsa ausencia tras olvidar un vecino. Regresión 60/60, doce historias nuevas 12/12 en tres pasadas y 100 pruebas locales; [protocolo, versiones, costes y límites](R2_RELIABILITY_VALIDATION.md). R2 sigue abierta hasta otra reserva independiente completa. App, Firebase y recuerdos reales permanecen intactos.
+Resultado vigente R2: evaluación independiente terminada con 60 historias nuevas y Sol medio, sin ajustes entre rondas: **55/60, 56/60 y 57/60**. Ninguna supera el criterio completo. Las quince ediciones y los casos de olvido pasan; siguen abiertas agrupación de valoraciones/citas, rechazos de interpretación y un fragmento vacío al aclarar. 104 pruebas locales correctas; [informe, costes y límites](R2_FINAL_VALIDATION.md). **R2 sigue abierta; no se avanza a R3 ni voz.** App, Firebase y recuerdos reales intactos. La regresión anterior 60/60 y las doce historias 12/12 en tres pasadas se conservan como [evidencia histórica](R2_RELIABILITY_VALIDATION.md).
 
-Continuación R2 ejecutada: selección de evidencia por tokens, procedencia por intervención y búsqueda paginada con fixtures hasta 10 000 unidades; [contratos, evaluación y límites](R2_INDEXED_VALIDATION.md). R2 no se da por cerrada hasta completar la nueva reserva; backend/app/datos reales permanecen sin cambios.
+Continuación R2 histórica: selección de evidencia por tokens, procedencia por intervención y búsqueda paginada con fixtures hasta 10 000 unidades; [contratos, evaluación y límites](R2_INDEXED_VALIDATION.md). El resultado vigente y los bloqueos de cierre constan arriba; backend/app/datos reales permanecen sin cambios.
 
 **Continuación R2:** pérdida de evidencia en edición parcial corregida y nueva reserva de Sol medio: 54/60, 55/60 y 54/60. Ajuste posterior con 4/4 regresiones y 12/12 historias nuevas de identidad; [evidencia y límites](R2_RETENTION_VALIDATION.md). Fase abierta: reducir rechazos de interpretación/revisión, preparar otra reserva completa para la versión final, completar aclaraciones tardías y búsqueda a escala. Históricos sin regrading. No se pasa a R3 ni voz; solo datos ficticios.
 
@@ -23,7 +23,7 @@ Este documento define el alcance y el cierre de las fases. Los [requisitos](../0
 | K2 · Contar por escrito | Separar asuntos, aclarar dudas y guardar automáticamente | Implementada y desplegada, integrada en `main` por petición del propietario; recorrido Android aceptado, validación del nuevo build iOS pendiente |
 | K3 · Preguntar por escrito | Encontrar recuerdos y responder con sus fuentes | Implementada y activada desde `codex/k3-text-query`; pruebas locales/IA real correctas, aceptación móvil pendiente |
 | K4 · Control de memoria | Ofrecer guardar un dato, corregir y olvidar conversando | Activa en `codex/k4-memory-control`; olvido entre relatos validado en Android/backend y Honor real dentro de sus cotas; iOS pendiente |
-| R0–R6 · Revisión del núcleo | Evidencia independiente, corrección/olvido por identidad y migración comprobada | R0 aceptada; motor aislado R1 y pruebas ficticias implementados; contrato HTTP definitivo y R2–R6 pendientes |
+| R0–R6 · Revisión del núcleo | Evidencia independiente, corrección/olvido por identidad y migración comprobada | R0 aceptada; motor aislado R1 implementado; R2 evaluada pero abierta por fallos; R3–R6 pendientes |
 | K5 · Voz | Contar y preguntar hablando, con pulsación y bloqueo | Pendiente; después de validar R0–R6 en el alcance acordado |
 | K6 · V1 de uso personal | Recorrido completo comprobado en Android e iOS | Pendiente |
 

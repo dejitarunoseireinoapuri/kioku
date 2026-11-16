@@ -1,8 +1,8 @@
 # Reconstrucción del núcleo de memoria · R0–R6
 
-Resultado vigente R2: corregidos los rechazos reproducidos y la falsa ausencia tras olvidar un vecino. Regresión 60/60, doce historias nuevas 12/12 en tres pasadas y 100 pruebas locales; [protocolo, versiones, costes y límites](R2_RELIABILITY_VALIDATION.md). R2 sigue abierta hasta otra reserva independiente completa. App, Firebase y recuerdos reales permanecen intactos.
+Resultado vigente R2: evaluación independiente terminada con 60 historias nuevas y Sol medio, sin ajustes entre rondas: **55/60, 56/60 y 57/60**. Ninguna supera el criterio completo. Las quince ediciones y los casos de olvido pasan; siguen abiertas agrupación de valoraciones/citas, rechazos de interpretación y un fragmento vacío al aclarar. 104 pruebas locales correctas; [informe, costes y límites](R2_FINAL_VALIDATION.md). **R2 sigue abierta; no se avanza a R3 ni voz.** App, Firebase y recuerdos reales intactos. La regresión anterior 60/60 y las doce historias 12/12 en tres pasadas se conservan como [evidencia histórica](R2_RELIABILITY_VALIDATION.md).
 
-Continuación actual: [rechazos y falsas ausencias](R2_RELIABILITY_VALIDATION.md). La [evaluación de evidencia indexada](R2_INDEXED_VALIDATION.md) se conserva como histórica. Las cifras de la continuación anterior siguientes son históricas; R2 sigue abierta hasta resolver la nueva evaluación.
+Evaluaciones anteriores: [rechazos y falsas ausencias](R2_RELIABILITY_VALIDATION.md) y [evidencia indexada](R2_INDEXED_VALIDATION.md). Las cifras de las continuaciones siguientes son históricas; el resultado vigente y los bloqueos de cierre constan arriba.
 
 **Continuación autorizada y ejecutada:** R2 con Sol medio corrige conservación literal en ediciones parciales y evalúa otra reserva: 54/60, 55/60 y 54/60. Ajuste final con cuatro regresiones correctas y doce historias nuevas correctas, sin otra reserva completa de esa versión; [protocolo, costes, defectos y resultados](R2_RETENTION_VALIDATION.md). No cambia permisos sobre datos personales/producción ni autoriza avisos por correo. R2 sigue abierta; R3–R6 permanecen pendientes.
 

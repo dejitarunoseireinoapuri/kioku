@@ -1,8 +1,8 @@
 # Estado real y decisiones pendientes
 
-Resultado vigente R2: corregidos los rechazos reproducidos y la falsa ausencia tras olvidar un vecino. Regresión 60/60, doce historias nuevas 12/12 en tres pasadas y 100 pruebas locales; [protocolo, versiones, costes y límites](R2_RELIABILITY_VALIDATION.md). R2 sigue abierta hasta otra reserva independiente completa. App, Firebase y recuerdos reales permanecen intactos.
+Resultado vigente R2: evaluación independiente terminada con 60 historias nuevas y Sol medio, sin ajustes entre rondas: **55/60, 56/60 y 57/60**. Ninguna supera el criterio completo. Las quince ediciones y los casos de olvido pasan; siguen abiertas agrupación de valoraciones/citas, rechazos de interpretación y un fragmento vacío al aclarar. 104 pruebas locales correctas; [informe, costes y límites](R2_FINAL_VALIDATION.md). **R2 sigue abierta; no se avanza a R3 ni voz.** App, Firebase y recuerdos reales intactos. La regresión anterior 60/60 y las doce historias 12/12 en tres pasadas se conservan como [evidencia histórica](R2_RELIABILITY_VALIDATION.md).
 
-R2 añade recuperación paginada acotada y anclaje de aclaraciones tardías, pendientes del cierre de su [evaluación actual](R2_RELIABILITY_VALIDATION.md). El índice de 10 000 entradas no acredita mutaciones ni Firebase a esa escala; el almacén de mutaciones RAM sigue limitado a 256. No hay migración ni activación del nuevo núcleo.
+R2 añade recuperación paginada acotada y anclaje de aclaraciones tardías; sus comprobaciones dirigidas constan en la [evaluación anterior](R2_RELIABILITY_VALIDATION.md). La reserva final detecta rechazos todavía abiertos al aclarar. El índice de 10 000 entradas no acredita mutaciones ni Firebase a esa escala; el almacén de mutaciones RAM sigue limitado a 256. No hay migración ni activación del nuevo núcleo.
 
 ## Prioridad vigente · revisión del núcleo (16 de noviembre)
 
