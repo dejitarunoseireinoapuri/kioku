@@ -14,6 +14,8 @@ import { holdout } from "./holdout.ts";
 import { reliability } from "./reliability.ts";
 import { finalReserve } from "./final.ts";
 import { groupingRegression } from "./grouping-regression.ts";
+import { scopeReserve } from "./scope.ts";
+import { scopeRegression } from "./scope-regression.ts";
 
 async function main() {
   const args = process.argv.slice(2);
@@ -41,6 +43,8 @@ async function main() {
     const baseline = structuredClone(budget.ledger);
     const runCap =
       args.includes("--regression-v6") ||
+      args.includes("--regression-v7") ||
+      args.includes("--scope-original") ||
       args.includes("--regression-v5") ||
       args.includes("--regression-v3") ||
       args.includes("--regression") ||
@@ -59,6 +63,8 @@ async function main() {
     if (
       [
         "--regression-v6",
+        "--regression-v7",
+        "--scope-original",
         "--regression-v3",
         "--regression-v5",
         "--regression-v2",
@@ -68,21 +74,25 @@ async function main() {
       ].filter((flag) => args.includes(flag)).length > 1
     )
       throw new InterpretationError("CORPUS_SELECTION");
-    const corpus = args.includes("--regression-v6")
-      ? groupingRegression
-      : args.includes("--regression-v5")
-        ? finalReserve
-        : args.includes("--reliability")
-          ? reliability
-          : args.includes("--regression-v3")
-            ? holdout
-            : args.includes("--adjustment")
-              ? adjustment
-              : args.includes("--regression-v2")
-                ? fresh
-                : args.includes("--regression")
-                  ? reserve
-                  : tuning;
+    const corpus = args.includes("--regression-v7")
+      ? scopeRegression
+      : args.includes("--scope-original")
+        ? scopeReserve
+        : args.includes("--regression-v6")
+          ? groupingRegression
+          : args.includes("--regression-v5")
+            ? finalReserve
+            : args.includes("--reliability")
+              ? reliability
+              : args.includes("--regression-v3")
+                ? holdout
+                : args.includes("--adjustment")
+                  ? adjustment
+                  : args.includes("--regression-v2")
+                    ? fresh
+                    : args.includes("--regression")
+                      ? reserve
+                      : tuning;
     const cases = wanted ? corpus.filter((c) => wanted.includes(c.id)) : corpus;
     if (!cases.length || (wanted && cases.length !== new Set(wanted).size))
       throw new InterpretationError("CASE_SELECTION");
@@ -102,21 +112,25 @@ async function main() {
       runCap,
       run,
       mode,
-      corpus: args.includes("--regression-v6")
-        ? "regression-v6"
-        : args.includes("--regression-v5")
-          ? "regression-v5"
-          : args.includes("--reliability")
-            ? "reliability-v4"
-            : args.includes("--regression-v3")
-              ? "regression-v3"
-              : args.includes("--adjustment")
-                ? "adjustment-v3"
-                : args.includes("--regression")
-                  ? "regression-v1"
-                  : args.includes("--regression-v2")
-                    ? "regression-v2"
-                    : "tuning-v1",
+      corpus: args.includes("--regression-v7")
+        ? "regression-v7-adapted"
+        : args.includes("--scope-original")
+          ? "regression-v7-original"
+          : args.includes("--regression-v6")
+            ? "regression-v6"
+            : args.includes("--regression-v5")
+              ? "regression-v5"
+              : args.includes("--reliability")
+                ? "reliability-v4"
+                : args.includes("--regression-v3")
+                  ? "regression-v3"
+                  : args.includes("--adjustment")
+                    ? "adjustment-v3"
+                    : args.includes("--regression")
+                      ? "regression-v1"
+                      : args.includes("--regression-v2")
+                        ? "regression-v2"
+                        : "tuning-v1",
       fingerprint,
       baseline,
       budget: budget.ledger,

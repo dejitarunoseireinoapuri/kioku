@@ -57,6 +57,8 @@ export interface Scenario {
     query: GoldQuery;
   };
   forget: string[];
+  /** Additional dependents explicitly authorized by this synthetic owner fixture. */
+  forgetClosure?: string[];
   after: GoldQuery[];
   expectedRelations?: {
     kind: "requires" | "possibleSameAs" | "evolvesFrom";

@@ -2,6 +2,7 @@ import type { Unit, Snapshot } from "../src/model.ts";
 import type { GoldUnit, GoldQuery, Scenario } from "./case.ts";
 import type { Answer } from "../ai/contracts.ts";
 import { validAnswerPerspective } from "./perspective.ts";
+import { uniqueAssignment } from "./assignment.ts";
 export const normalize = (value: string) =>
   value.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
 export const matches = (text: string, pattern: string) =>
@@ -36,6 +37,35 @@ export function gradeRelations(
 }
 export function gradeUnits(state: Snapshot, gold: GoldUnit[]) {
   const units = Object.values(state.units);
+  const evidence = (u: Unit) =>
+    Object.values(state.fragments)
+      .filter((f) => f.owners.includes(u.id))
+      .map((f) => f.text)
+      .join(" ");
+  const candidates = gold.map((expected) =>
+    units.map(
+      (u) =>
+        expected.terms.every(
+          (t) => matches(u.content.text, t) && matches(evidence(u), t),
+        ) &&
+        (expected.evidenceTerms ?? []).every((t) => matches(evidence(u), t)) &&
+        (Array.isArray(expected.kind)
+          ? expected.kind
+          : [expected.kind]
+        ).includes(u.content.kind) &&
+        JSON.stringify(u.time) === JSON.stringify(expected.time) &&
+        u.content.polarity === expected.polarity &&
+        (expected.subject === undefined ||
+          matches(u.content.subject, expected.subject)) &&
+        (expected.attribution === null
+          ? u.content.attribution === null
+          : matches(u.content.attribution ?? "", expected.attribution)) &&
+        (expected.condition === null
+          ? u.content.condition === null
+          : matches(u.content.condition ?? "", expected.condition)),
+    ),
+  );
+  const assignment = uniqueAssignment(candidates);
   const checks: Check[] = [
     {
       name: "unit_count",
@@ -44,28 +74,18 @@ export function gradeUnits(state: Snapshot, gold: GoldUnit[]) {
     },
   ];
   const mapping = new Map<string, Unit>();
-  for (const expected of gold) {
+  for (const [goldIndex, expected] of gold.entries()) {
     const lexical = units.filter((u) =>
       expected.terms.every((t) => matches(u.content.text, t)),
     );
     const kinds = Array.isArray(expected.kind)
       ? expected.kind
       : [expected.kind];
-    const exact = lexical.filter(
-      (u) =>
-        kinds.includes(u.content.kind) &&
-        JSON.stringify(u.time) === JSON.stringify(expected.time) &&
-        u.content.polarity === expected.polarity &&
-        (expected.subject === undefined ||
-          matches(u.content.subject, expected.subject)) &&
-        (expected.attribution === null
-          ? u.content.attribution === null
-          : matches(u.content.attribution ?? "", expected.attribution)),
-    );
-    const hits = exact.length === 1 ? exact : lexical;
+    // Lexical-only fallback exposes specific failures, but never establishes meaning.
+    const hits = assignment ? [units[assignment[goldIndex]!]!] : lexical;
     checks.push({
       name: `${expected.label}:meaning`,
-      passed: hits.length === 1,
+      passed: assignment !== null,
       critical: false,
     });
     if (hits.length !== 1) continue;
@@ -112,6 +132,17 @@ export function gradeUnits(state: Snapshot, gold: GoldUnit[]) {
         matches(ownEvidence, t),
       ),
       no_foreign_fact: !foreignFact,
+      no_foreign_content: !gold
+        .filter((other) => other.label !== expected.label)
+        .some((other) => {
+          const distinctive = other.terms.filter(
+            (t) => !expected.terms.includes(t),
+          );
+          return (
+            distinctive.length > 0 &&
+            distinctive.every((t) => matches(JSON.stringify(u.content), t))
+          );
+        }),
     }))
       checks.push({
         name: `${expected.label}:${name}`,
@@ -125,6 +156,7 @@ export function gradeUnits(state: Snapshot, gold: GoldUnit[]) {
           "no_old_content",
           "no_old_evidence",
           "no_foreign_fact",
+          "no_foreign_content",
         ].includes(name),
       });
   }

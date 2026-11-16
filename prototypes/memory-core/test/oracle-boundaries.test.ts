@@ -123,6 +123,10 @@ function people() {
     u.content.subject = i ? "Mi hermano" : "yo";
     u.content.polarity = i ? "positive" : "negative";
     u.time = gold[i]!.time;
+    for (const f of Object.values(state.fragments).filter((f) =>
+      f.owners.includes(u.id),
+    ))
+      f.text = u.content.text;
   }
   return { state, gold, units };
 }
@@ -172,7 +176,7 @@ test("diagnostics project only closed metadata and never return generated prose 
     question: null,
     preserveTime: false,
     retention: [],
-    relations: [],
+    relations: [{ kind: "requires", from: "b", toKey: "a", toExisting: null }],
     units: draft.units.map((u) => ({
       ...u,
       existing: null,
@@ -192,9 +196,17 @@ test("diagnostics project only closed metadata and never return generated prose 
       },
     ],
   };
-  const capture = observe("interpret", output, fixture);
+  const capture = observe("interpret", output, fixture, draft.text);
   assert.ok(capture && "expectedMatches" in capture);
   assert.equal(JSON.stringify(capture).includes(sentinel), false);
+  assert.deepEqual(capture.relations, [
+    { kind: "requires", from: 1, to: 0, existing: null },
+  ]);
+  assert.ok(
+    capture.supportMatches?.every((m) =>
+      [...m.normalized, ...m.evidence].every((v) => typeof v === "boolean"),
+    ),
+  );
   const answer = observe(
     "answer",
     { status: "answered", text: sentinel, evidence: [0] },

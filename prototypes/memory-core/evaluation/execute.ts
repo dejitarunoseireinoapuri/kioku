@@ -9,6 +9,7 @@ import type { Scenario, GoldQuery } from "./case.ts";
 import { gradeUnits, gradeAnswer, gradeRelations } from "./grade.ts";
 import type { Check } from "./grade.ts";
 import { CoreError } from "../src/errors.ts";
+import { forgetTargets } from "./forget.ts";
 import { z } from "zod";
 
 export interface CaseResult {
@@ -32,6 +33,18 @@ export interface CaseResult {
     segmentOwners?: number[][];
     polarities?: string[];
     existingIndices?: (number | null)[];
+    supportMatches?: {
+      unitIndex: number;
+      goldIndex: number;
+      normalized: boolean[];
+      evidence: boolean[];
+    }[];
+    relations?: {
+      kind: string;
+      from: number;
+      to: number | null;
+      existing: number | null;
+    }[];
     expectedMatches?: {
       unitIndex: number;
       goldIndex: number;
@@ -80,7 +93,13 @@ export async function executeCase(
         schema,
         outputLimit,
       );
-      const observation = observe(stage, value, fixture);
+      const input = z.object({ text: z.string() }).safeParse(data);
+      const observation = observe(
+        stage,
+        value,
+        fixture,
+        input.success ? input.data.text : undefined,
+      );
       if (observation) result.observations.push(observation);
       return value;
     },
@@ -257,14 +276,12 @@ export async function executeCase(
       await queries("corrected_query", [edit.query]);
     }
     const beforeForget = h.store.read();
-    const targets = fixture.forget.map((label) => mapping.get(label));
-    if (targets.some((u) => !u))
-      throw new InterpretationError("EXPECTED_TARGET_MISSING");
+    const targets = forgetTargets(h, fixture, mapping);
     if (targets.length) {
       const start = performance.now();
-      h.erase(targets.map((u) => ({ id: u!.id, revision: u!.revision })));
+      h.erase(targets);
       result.stages.forget = performance.now() - start;
-      const ids = targets.map((u) => u!.id);
+      const ids = targets.map((u) => u.id);
       record("forget", [
         {
           name: "neighbors_preserved",
@@ -286,7 +303,8 @@ export async function executeCase(
           critical: true,
         },
       ]);
-      expected = expected.filter((u) => !fixture.forget.includes(u.label));
+      const forgotten = [...fixture.forget, ...(fixture.forgetClosure ?? [])];
+      expected = expected.filter((u) => !forgotten.includes(u.label));
       inspect("remaining");
     }
     await queries("after", fixture.after);
