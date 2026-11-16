@@ -2,10 +2,14 @@ import assert from "node:assert/strict";
 import { readFile, writeFile } from "node:fs/promises";
 
 const args = process.argv.slice(2);
-assert.ok(args.length === 0 || (args.length === 1 && args[0] === "--grouping"));
+assert.ok(
+    args.length === 0 ||
+        (args.length === 1 && ["--grouping", "--scope"].includes(args[0])),
+);
 const grouping = args[0] === "--grouping";
-const corpus = grouping ? "grouping-v6" : "independent-v5";
-const prefix = grouping ? "grouping" : "final";
+const scope = args[0] === "--scope";
+const corpus = scope ? "scope-v7" : grouping ? "grouping-v6" : "independent-v5";
+const prefix = scope ? "scope" : grouping ? "grouping" : "final";
 const rounds = await Promise.all(
     [1, 2, 3].map(async (round) =>
         JSON.parse(
@@ -18,7 +22,8 @@ const rounds = await Promise.all(
 );
 const expectedIds = Array.from(
     { length: 60 },
-    (_, i) => `${grouping ? "g" : "f"}${String(i + 1).padStart(2, "0")}`,
+    (_, i) =>
+        `${scope ? "h" : grouping ? "g" : "f"}${String(i + 1).padStart(2, "0")}`,
 );
 const passed = (r) => r.error === null && r.checks.every((c) => c.passed);
 const percentile = (values, p) =>
@@ -165,6 +170,77 @@ if (grouping) {
             },
         ),
     );
+    report.regressions = regressions;
+    report.continuationBaselineSpentUsd = regressions[0].baselineSpentUsd;
+    report.spentWholeContinuationUsd =
+        report.finalSpentUsd - regressions[0].baselineSpentUsd;
+}
+if (scope) {
+    const names = [
+        "followup1-baseline",
+        "followup1-network",
+        "followup1-directed",
+        "followup1-g-full",
+        "followup1-f-full",
+    ];
+    const regressions = [];
+    for (const [index, name] of names.entries()) {
+        const run = JSON.parse(
+            await readFile(`local-data/r2/tuning-${name}.json`, "utf8"),
+        );
+        const targeted = [
+            "g05",
+            "g23",
+            "g24",
+            "g33",
+            "g36",
+            "g38",
+            "g45",
+            "g53",
+            "g58",
+        ];
+        const ids =
+            index < 3
+                ? targeted
+                : Array.from(
+                      { length: 60 },
+                      (_, i) =>
+                          `${index === 3 ? "g" : "f"}${String(i + 1).padStart(2, "0")}`,
+                  );
+        assert.equal(run.complete, true);
+        assert.equal(
+            run.corpus,
+            index === 4 ? "regression-v5" : "regression-v6",
+        );
+        assert.deepEqual(run.profile, rounds[0].profile);
+        assert.ok(
+            run.resolvedModel === rounds[0].resolvedModel ||
+                (index === 0 && run.resolvedModel === null),
+        );
+        assert.deepEqual(run.results.map((r) => r.id).sort(), ids);
+        regressions.push({
+            name,
+            corpus: run.corpus,
+            fingerprint: run.fingerprint,
+            total: run.results.length,
+            passed: run.results.filter(passed).length,
+            calls: run.metrics.length,
+            baselineSpentUsd: run.baseline.spentUsd,
+            spentUsd: run.budget.spentUsd - run.baseline.spentUsd,
+            uncertainReservationDeltaUsd:
+                run.budget.reservedUsd - run.baseline.reservedUsd,
+            queriesReturned: run.results.reduce((n, r) => n + r.queryCount, 0),
+            cases: run.results
+                .toSorted((a, b) => a.id.localeCompare(b.id))
+                .map((r) => ({
+                    id: r.id,
+                    passed: passed(r),
+                    error: r.error,
+                    failures: r.checks.filter((c) => !c.passed),
+                    ...(passed(r) ? {} : { observations: r.observations }),
+                })),
+        });
+    }
     report.regressions = regressions;
     report.continuationBaselineSpentUsd = regressions[0].baselineSpentUsd;
     report.spentWholeContinuationUsd =

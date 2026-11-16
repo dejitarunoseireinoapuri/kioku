@@ -1,6 +1,7 @@
 import type { Unit, Snapshot } from "../src/model.ts";
 import type { GoldUnit, GoldQuery, Scenario } from "./case.ts";
 import type { Answer } from "../ai/contracts.ts";
+import { validAnswerPerspective } from "./perspective.ts";
 export const normalize = (value: string) =>
   value.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
 export const matches = (text: string, pattern: string) =>
@@ -53,7 +54,13 @@ export function gradeUnits(state: Snapshot, gold: GoldUnit[]) {
     const exact = lexical.filter(
       (u) =>
         kinds.includes(u.content.kind) &&
-        JSON.stringify(u.time) === JSON.stringify(expected.time),
+        JSON.stringify(u.time) === JSON.stringify(expected.time) &&
+        u.content.polarity === expected.polarity &&
+        (expected.subject === undefined ||
+          matches(u.content.subject, expected.subject)) &&
+        (expected.attribution === null
+          ? u.content.attribution === null
+          : matches(u.content.attribution ?? "", expected.attribution)),
     );
     const hits = exact.length === 1 ? exact : lexical;
     checks.push({
@@ -91,6 +98,9 @@ export function gradeUnits(state: Snapshot, gold: GoldUnit[]) {
           ? u.content.attribution === null
           : matches(u.content.attribution ?? "", expected.attribution),
       polarity: u.content.polarity === expected.polarity,
+      subject:
+        expected.subject === undefined ||
+        matches(u.content.subject, expected.subject),
       no_old_content: !(expected.forbidden ?? []).some((t) =>
         matches(JSON.stringify(u.content), t),
       ),
@@ -111,6 +121,7 @@ export function gradeUnits(state: Snapshot, gold: GoldUnit[]) {
           "condition",
           "attribution",
           "polarity",
+          "subject",
           "no_old_content",
           "no_old_evidence",
           "no_foreign_fact",
@@ -164,9 +175,7 @@ export function gradeAnswer(
     },
     {
       name: "answer_perspective",
-      passed: !/\b(quiero|prefiero|he comprado|me gusta)\b/u.test(
-        normalize(answer.text),
-      ),
+      passed: validAnswerPerspective(answer, expected, mapping),
       critical: false,
     },
   ];

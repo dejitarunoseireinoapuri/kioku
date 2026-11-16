@@ -20,6 +20,7 @@ export interface GoldUnit {
   polarity: Content["polarity"];
   forbidden?: string[];
   evidenceTerms?: string[];
+  subject?: string;
 }
 export interface GoldQuery {
   contextLabels?: string[];
@@ -29,6 +30,11 @@ export interface GoldQuery {
   forbidden?: string[];
   status?: "answered" | "not_found" | "clarify";
   previous?: string;
+  quotations?: {
+    label: string;
+    literal: string;
+    introduction: string;
+  }[];
 }
 export interface Scenario {
   id: string;
@@ -114,6 +120,13 @@ export function scenario(
     forget: first ? [first.label] : [],
     after: queries.map((q) => ({
       ...q,
+      ...(q.quotations
+        ? {
+            quotations: q.quotations.filter(
+              (quote) => quote.label !== first?.label,
+            ),
+          }
+        : {}),
       contextLabels: (q.contextLabels ?? []).filter(
         (label) => label !== first?.label,
       ),

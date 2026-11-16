@@ -3,7 +3,7 @@ import type { Unit } from "../src/model.ts";
 import { Interpreter } from "../ai/interpreter.ts";
 import { query } from "../ai/query.ts";
 import { InterpretationError } from "../ai/contracts.ts";
-import { indexedInterpretationSchema } from "../ai/indexed-evidence.ts";
+import { observe } from "./observations.ts";
 import type { Input, StructuredModel } from "../ai/contracts.ts";
 import type { Scenario, GoldQuery } from "./case.ts";
 import { gradeUnits, gradeAnswer, gradeRelations } from "./grade.ts";
@@ -30,6 +30,16 @@ export interface CaseResult {
     segmentEnds?: number[];
     segmentRoles?: string[];
     segmentOwners?: number[][];
+    polarities?: string[];
+    existingIndices?: (number | null)[];
+    expectedMatches?: {
+      unitIndex: number;
+      goldIndex: number;
+      terms: boolean;
+      time: boolean;
+      attribution: boolean;
+      polarity: boolean;
+    }[];
   }[];
 }
 function unchangedMeaning(before: Unit, after: Unit | undefined) {
@@ -70,24 +80,8 @@ export async function executeCase(
         schema,
         outputLimit,
       );
-      if (stage === "interpret") {
-        const p = indexedInterpretationSchema.parse(value);
-        result.observations.push({
-          stage,
-          status: p.status,
-          unitCount: p.units.length,
-          kinds: p.units.map((u) => u.content.kind),
-          timePrecisions: p.units.map((u) => u.time.precision),
-          timeMatchesCaptureDay: p.units.map(
-            (u) => u.time.value === fixture.at.slice(0, 10),
-          ),
-          segmentEnds: p.segments.map((s) => s.end),
-          segmentRoles: p.segments.map((s) => s.role),
-          segmentOwners: p.segments.map((s) =>
-            s.owners.map((key) => p.units.findIndex((u) => u.key === key)),
-          ),
-        });
-      }
+      const observation = observe(stage, value, fixture);
+      if (observation) result.observations.push(observation);
       return value;
     },
   };

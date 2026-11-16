@@ -1,0 +1,36 @@
+# R2 · Polaridad, identidad y alcance · continuación 1 de 2
+
+Continuación autorizada del 16 de noviembre de 2026, rama `codex/memory-core-r2`, desde `2d265b1`. Perfil API invariable `gpt-6.1-sol`, razonamiento `medium`. Solo fixtures ficticias y almacenes RAM aislados. Sin Firebase, dispositivos, recuerdos reales, despliegue, integración en main ni correo. Los [resultados anteriores](R2_GROUPING_VALIDATION.md) y su [informe histórico](evidence/r2-grouping-results.json) conservan todos sus fallos y porcentajes.
+
+## Defectos y correcciones
+
+El diagnóstico nuevo previo al ajuste reproduce g23 con dos quotations positivas (la prohibición esperada es negativa), g36 con `existing:null` para la reiteración y una tercera identidad, g45 con fecha compartida y texto del primer plan en ambas fichas, g58 sin coincidencia con la procedencia esperada y g53 con una respuesta propuesta `answered` tras olvidar el primer hecho, rechazada por `coverage`. Son observaciones cerradas, no una explicación del razonamiento interno. No se conserva prosa generada y no se puede adjudicar retrospectivamente el texto histórico.
+
+Las convenciones compartidas de intérprete/revisor ahora distinguen polaridad de la proposición citada frente al acto de comunicarla; la orden citada sigue siendo quotation. Atribución admite procedencia textual explícita sin inventar autor humano. Volver a comunicar el mismo contenido no crea otra intención si no cambia ninguna ancla; otro hecho/ocasión, autor o fecha sigue separado. Un marco de una oración no pasa al plan siguiente por proximidad: requiere vínculo expresado. La consulta comprueba el predicado solicitado además del sujeto, sin completar acciones ausentes con un vecino conservado. Ningún revisor ni validación del motor se elimina.
+
+El comprobador usa polaridad y atribución además de clase/tiempo para resolver coincidencias léxicas; sigue comprobando todos esos campos y, donde se declara, sujeto. Una cita en primera persona solo queda fuera de la prueba de voz cuando coincide con un literal esperado previamente, tiene introducción explícita atribuida y cita la unidad quotation vigente correspondiente. Primera persona fuera de ese literal, autor distinto, cita desconocida o referencia ausente siguen fallando. La regresión g33 admite expresiones explícitas equivalentes de rechazo y rechaza su inversión/sujeto ajeno. Las expectativas originales g se conservan; estas adaptaciones viven en `grouping-regression.ts`. g05 permanece sin ajuste: la evidencia no demuestra qué variante histórica faltó y las ejecuciones nuevas dirigidas pasan su expectativa original.
+
+Las pruebas positivas/negativas llaman al evaluador completo con respuestas y estados sintéticos, no solo a expresiones regulares. También comprueban que el diagnóstico no devuelve texto, descriptor, sujeto ni atribución generados. Los informes guardan enums, índices, contadores y comparaciones booleanas. Ante transporte desconocido se detiene la admisión de casos nuevos; no se reintenta inferencia ni se eliminan reservas inciertas.
+
+## Protocolo fijado antes de la reserva
+
+1. Diagnóstico de los nueve casos expuestos g05/g23/g24/g33/g36/g38/g45/g53/g58 con comprobaciones históricas.
+2. Regresión dirigida de esos nueve ciclos y regresiones completas g y f. No acreditan independencia.
+3. Reserva nueva h01–h60 (`scope-v7`): diez familias de seis, 247 consultas previstas por ronda, cinco ediciones, seis repeticiones, cuatro aclaraciones (dos tardías), una pregunta sin captura, un olvido intermedio y otro total. Se incluyen vínculos temporales explícitos y ausentes, condiciones negativas frente a prohibiciones, autores distintos y consulta de predicados ausentes con vecino conservado.
+4. Congelar y publicar código, fixtures, perfil y oráculo antes de observar h. Tres rondas completas desde RAM vacía, mismos IDs/huella; ningún cambio ni repetición selectiva entre ellas. El ejecutor rechaza sobrescrituras, subconjuntos, cuarta ronda y resultados de otro corpus como precedente.
+
+Se mantiene al menos 95 % global y por familia en **cada** ronda y cero fallos críticos abiertos. Con seis casos por familia exige seis correctos. La evaluación determinista contra expectativas preescritas es independiente del circuito generador/revisor; sus límites léxicos siguen vigentes. Estos casos son nuevos pero elaborados en esta misma tarea, con familias y algunas construcciones deliberadamente relacionadas con los defectos conocidos: no son una auditoría externa ni una muestra aleatoria de lenguaje. Un resultado dirigido o el juicio del mismo modelo no cierra R2.
+
+## Ejecución y presupuesto
+
+Inicio R2: **54,0639425 USD**, reserva incierta anterior **0,6710225 USD**; M0 **21,71988544 USD** intacto. El primer intento de conexión falla en nueve llamadas, sin consumo liquidado conocido, y añade **1,1179275 USD** de reserva incierta; se conserva como tal. El posterior diagnóstico conectado obtiene **2/9**, 82 llamadas y **0,432395 USD**. La regresión dirigida corregida obtiene **9/9**, 100 llamadas, **0,5454 USD**. No se suman estas ejecuciones al denominador de una reserva.
+
+Antes de ampliar las comprobaciones se comunica el aumento autorizado del tope R2 de **65 a 80 USD**, manteniendo **5 USD por ronda/regresión** y todos los contadores. Son estimaciones locales por tokens, no saldo ni factura del proveedor. La clave existente se comprueba por presencia sin mostrarla y se reutiliza; no se crea otra credencial. Resultados completos, versión congelada y costes finales se añadirán tras la ejecución.
+
+Comandos: `node --env-file-if-exists=.env.local prototypes/memory-core/evaluation/run.ts --live --regression-v6 --run <id>` para g adaptado; `--regression-v5` para f. `--cases` selecciona solo regresión conocida. Reserva: `node --env-file-if-exists=.env.local prototypes/memory-core/evaluation/scope-run.ts --live --round 1`, luego `2` y `3`. No acepta texto o rutas externas.
+
+## Límites y relevo
+
+R2 permanece abierta mientras no termine y supere la evaluación correspondiente. No se acredita Firebase, producción, Android/iOS, copias arbitrarias ni rendimiento de la app. Se preserva `gradle/gradle-daemon-jvm.properties`, trabajo local ajeno. Esta es la **primera de dos continuaciones máximas**. Si al terminar quedan defectos solucionables, solo puede abrir una continuación más, secuencial; esa última debe parar, informar y suspender el PC sin cerrar aplicaciones por la fuerza, incluso si quedan fallos. Si no hay segunda, esta tarea asume esa obligación. No suspender mientras quede una continuación activa.
+
+Fuentes consultadas: AGENTS; mapa documental; convenciones, calidad, desarrollo y definición de terminado; núcleo v2 y plan R0–R6; matriz de pruebas; datos/API y seguridad/privacidad en lo relativo al prototipo; protocolo e informe R2 de agrupación; intérprete, consulta, proveedor, ejecutores y pruebas existentes.

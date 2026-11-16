@@ -1,5 +1,7 @@
 # Contrato backend previsto · v1
 
+Refinamiento exclusivamente local R2: intérprete y revisión comparten polaridad del contenido citado, procedencia textual e identidad de reiteración; la consulta exige soporte vigente del predicado pedido, además del sujeto. Se mantienen revisión, materialización, revalidación y confirmación del motor. No modifica DTO HTTP, permisos ni rutas desplegadas. [Alcance y pruebas](../09-planning/R2_SCOPE_VALIDATION.md).
+
 R2 incorpora `queryCatalog` como frontera interna de prueba, sin HTTP nuevo: lectura paginada ligada a cuenta/época, máximo 32 referencias actuales por respuesta y estado de cobertura/truncado. Un pedido exhaustivo truncado pide acotar; una ausencia de coincidencias no demuestra ausencia universal. Las intervenciones de aclaración llevan calendario propio y procedencia de admisión. [Contrato local y límites](../09-planning/R2_INDEXED_VALIDATION.md).
 
 **Contrato v2 aceptado como dirección, sin HTTP disponible:** [núcleo](../02-architecture/MEMORY_CORE_V2.md) y [R1/R3](../09-planning/MEMORY_CORE_REBUILD_PLAN.md) separan detalles por unidad, alcance y confirmación de olvido sin IA. Los DTO/rutas remotos finales siguen pendientes. El prototipo local siguiente no cambia V1; la transición deberá bloquear clientes/trabajadores antiguos por esquema/generación.

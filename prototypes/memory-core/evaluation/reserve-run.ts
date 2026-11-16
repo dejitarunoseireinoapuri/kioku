@@ -91,7 +91,9 @@ export async function runReserve(spec: {
           results.push(result);
           if (
             result.error &&
-            /^(BUDGET_|HTTP_(401|403|429)|LOCAL_WRITE_)/u.test(result.error)
+            /^(BUDGET_|HTTP_(401|403|429)|LOCAL_WRITE_|TRANSPORT_OR_RESPONSE)/u.test(
+              result.error,
+            )
           )
             halted = true;
           if (
