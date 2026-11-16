@@ -9,6 +9,12 @@ import type { IndexedInterpretation } from "../ai/indexed-evidence.ts";
 import type { Input, StructuredModel } from "../ai/contracts.ts";
 import { harness } from "../fixtures/harness.ts";
 import { single, unknownTime } from "../fixtures/scenarios.ts";
+import type { Unit } from "../src/model.ts";
+import {
+  interpretInstructions,
+  reviewInstructions,
+  clarificationReviewInstructions,
+} from "../ai/prompts.ts";
 
 test("additional budget includes parallel and uncertain reservations and survives a new run", async () => {
   const w = parseBudgetWindow({
@@ -43,7 +49,7 @@ test("additional budget includes parallel and uncertain reservations and survive
   await assert.rejects(() => nextRun.reserve(0.5), { message: "BUDGET_LIMIT" });
   await nextRun.reserve(0.3);
   assert.ok(nextRun.ledger.spentUsd + nextRun.ledger.reservedUsd <= w.ceiling);
-  for (const additionalUsd of [0, -1, 16, Infinity])
+  for (const additionalUsd of [0, -1, 21, Infinity])
     assert.throws(() =>
       parseBudgetWindow({
         id: "synthetic",
@@ -52,6 +58,15 @@ test("additional budget includes parallel and uncertain reservations and survive
         additionalUsd,
       }),
     );
+  const extended = parseBudgetWindow({
+    id: "synthetic",
+    baselineSpentUsd: 10,
+    baselineReservedUsd: 2,
+    additionalUsd: 20,
+  });
+  assert.equal(extended.ceiling, 32);
+  assert.equal(extended.baselineSpentUsd, w.baselineSpentUsd);
+  assert.equal(extended.baselineReservedUsd, w.baselineReservedUsd);
 });
 
 function capture() {
@@ -80,10 +95,16 @@ function capture() {
   return { input, wire, draft };
 }
 
-test("simulated capture, clarification and correction reviews retain every semantic input without duplicate token arrays", async () => {
-  for (const mode of ["capture", "clarify", "correction"] as const) {
+test("generation uses candidate context while capture, clarification, repetition and correction keep the complete indexed review", async () => {
+  for (const mode of ["capture", "clarify", "correction", "repeat"] as const) {
     const { input, wire, draft } = capture();
     const h = harness();
+    let candidates: Unit[] = [];
+    if (mode === "repeat") {
+      h.save(draft);
+      candidates = Object.values(h.store.read().units);
+      wire.units[0]!.existing = 0;
+    }
     if (mode === "clarify") {
       wire.status = "clarify";
       wire.question = "¿A qué mapa te refieres?";
@@ -110,32 +131,38 @@ test("simulated capture, clarification and correction reviews retain every seman
     const model: StructuredModel = {
       async call<T>(
         stage: string,
-        _instructions: string,
+        instructions: string,
         data: unknown,
         schema: z.ZodType<T>,
       ) {
         if (stage === "interpret") {
+          if (mode === "repeat")
+            assert.equal(instructions, interpretInstructions);
+          else assert.ok(instructions.length < interpretInstructions.length);
+          assert.equal(
+            instructions.includes("Si no se repite la fecha"),
+            mode === "repeat",
+          );
+          assert.ok(instructions.includes("retention debe enumerar TODOS"));
           generatorData = structuredClone(data) as Record<string, unknown>;
           return schema.parse(wire);
         }
         const review = data as Record<string, unknown>;
-        const expected = structuredClone(generatorData);
-        delete expected.tokens;
-        if (Array.isArray(expected.evidence))
-          for (const entry of expected.evidence) delete entry.tokens;
         const { proposal, ...withoutProposal } = review;
-        assert.deepEqual(withoutProposal, expected);
-        assert.equal(JSON.stringify(review).includes('"tokens":'), false);
-        assert.ok(
-          JSON.stringify(generatorData).length >
-            JSON.stringify(expected).length,
+        assert.deepEqual(withoutProposal, generatorData);
+        assert.equal(
+          instructions,
+          mode === "clarify"
+            ? clarificationReviewInstructions
+            : reviewInstructions,
         );
+        assert.ok(Array.isArray(review.tokens));
         assert.ok(proposal);
         reviewed = true;
         return schema.parse({ accepted: true, issues: [] });
       },
     };
-    const result = await new Interpreter(model).interpret(input, []);
+    const result = await new Interpreter(model).interpret(input, candidates);
     assert.ok(reviewed);
     assert.equal(
       result.proposal.status,
@@ -143,6 +170,8 @@ test("simulated capture, clarification and correction reviews retain every seman
     );
     if (mode === "correction")
       assert.equal(result.retainedEvidence.length, input.evidence!.length);
+    if (mode === "repeat")
+      assert.equal(result.draft!.units[0]!.existing!.id, candidates[0]!.id);
   }
 });
 

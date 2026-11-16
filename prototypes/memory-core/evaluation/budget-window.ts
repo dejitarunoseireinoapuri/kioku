@@ -6,7 +6,7 @@ const windowSchema = z.strictObject({
   id: z.string().regex(/^[a-z0-9-]{1,40}$/u),
   baselineSpentUsd: z.number().finite().nonnegative(),
   baselineReservedUsd: z.number().finite().nonnegative(),
-  additionalUsd: z.number().finite().positive().max(15),
+  additionalUsd: z.number().finite().positive().max(20),
 });
 export function parseBudgetWindow(raw: unknown) {
   const window = windowSchema.parse(raw);

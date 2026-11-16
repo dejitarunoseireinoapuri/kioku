@@ -1,4 +1,6 @@
-# R2 · Simulación local y validación con límite de 15 USD
+# R2 · Simulación local y validación con presupuesto acotado
+
+**Ampliación vigente:** durante la tercera ronda, el propietario eleva el tope de esta continuación a **20 USD en total**, conservando el mismo baseline y los avisos acumulados. No son 20 USD añadidos al gasto ya hecho. La ronda en curso mantiene la versión congelada y su techo anterior; la ampliación se aplica a los pasos posteriores. El protocolo original de 15 USD que sigue se conserva como historial.
 
 Autorización del propietario del 16 de noviembre de 2026: continuar con simulaciones locales primero, Sol alto para llamadas reales, solo casos ficticios y **como máximo 15 USD adicionales**. Si se alcanza el límite se detiene la admisión de llamadas y se documenta lo pendiente. No autoriza recuerdos reales, Firebase, app, despliegue, publicación ni main.
 
@@ -26,4 +28,30 @@ Criterios heredados sin relajar: ≥95 % global y por familia en cada ronda (con
 
 Comandos: `node --env-file-if-exists=.env.local prototypes/memory-core/evaluation/bounded-run.ts --live --round 1`, después `2` y `3`; no sobrescriben reportes. Comprobaciones locales: `node tooling/m0.mjs core:check`, `test`, `format:check` y `pwsh -NoProfile -File tooling/check-docs.ps1`.
 
+Versión congelada: **`898598b53a84f4b58a09d945e0546af8fd207afa`**. Huella de código/corpus **`b1a23691c36e98c04f745f3bd8c872e51bf0c8279646f1001d03ffcb0126dda9`**. Antes de iniciar pasan **236 pruebas raíz / 134 del núcleo**, TypeScript raíz/núcleo, formato y 79 documentos/12 ADR. El corpus se revisa también por conjugaciones equivalentes y fechas propias de cada intervención. El consolidador `node tooling/r2-bounded-report.mjs` no llama a la API y distingue rondas completas, incompletas y no iniciadas.
+
+## Resultados registrados
+
+[Informe consolidado sin prosa generada ni secretos](evidence/r2-bounded-results.json). La primera ronda obtiene **60/60**, 250/250 consultas, 638 llamadas y **3,8748575 USD**, sin fallos críticos ni incertidumbre adicional. Pasa el criterio semántico de esa ronda; aún no son tres rondas. p95 de captura **16,83 s**, corrección **16,84 s**, consulta **7,07 s**, aclaración **45,16 s** (cuatro muestras) y olvido RAM **0,54 ms**. Captura/corrección siguen fuera del objetivo de 15 s. El ajuste no acredita una mejora causal de latencia; no se cambian instrucciones ni se repite selectivamente para obtener otro tiempo.
+
+En la segunda ronda j39 se detiene antes de guardar con `REVIEW_time`. Las observaciones cerradas muestran clases/fechas esperadas y fragmentos temporales propios; no permiten adjudicar la redacción generada ni el motivo interno del revisor. El fallo queda registrado aunque después pase. Se entrega el segundo aviso de 10 USD al observar **20,0497675 USD** desde el contador original, de los que **6,6624775 USD** son de esta autorización de 15.
+
+Las tres rondas terminan con **60/60, 59/60 y 60/60**; 250/250, 246/250 y 250/250 consultas, y 638, 630 y 638 llamadas. Costes respectivos **3,8748575**, **3,83182** y **3,8540125 USD**. El único fallo es j39 en la segunda ronda; ese ciclo no se guarda ni llega a consultas/olvido. No hay comprobaciones críticas fallidas en los ciclos ejecutados. El criterio global supera 95 % en cada ronda, pero la familia de hechos parecidos queda en 5/6 en la segunda: **no se aprueba el criterio por familia ni se cierra R2**. El éxito posterior de j39 no sustituye su rechazo.
+
+El contraste de Git confirma que no hubo cambios de implementación/corpus/perfil durante las tres rondas. p95 de captura **16,83 / 17,83 / 18,01 s**; corrección **16,84 / 17,63 / 16,95 s**; consulta **7,07 / 7,21 / 6,73 s**. Las tres incumplen captura/corrección de 15 s. Las aclaraciones tienen p95 **45,16 / 41,35 / 38,23 s**, con solo cuatro muestras por ronda; el olvido RAM se mantiene por debajo de 1 ms. No son medidas de app/servidor desplegado.
+
+Tras las rondas se aplica la ampliación a **20 USD**, sin reiniciar baseline: techo agregado **114,63075 USD** incluyendo la reserva histórica. La validación local permite el nuevo límite y sigue rechazando una autorización mayor que 20. El gasto al terminar las rondas, incluido el piloto, es **12,0445825 USD** de esta continuación. Solo cambia este límite administrativo después de la congelación, antes del diagnóstico emparejado; no cambia el comportamiento IA evaluado.
+
+### Diagnóstico emparejado previsto antes de observar sus respuestas
+
+Solo después de terminar las tres rondas, `node --env-file-if-exists=.env.local tooling/r2-review-pairs.mjs --live`: seis generaciones nuevas del caso ya expuesto j39 y dos revisiones de CADA misma propuesta, una con la entrada reducida y otra con el payload original indexado. Alterna el orden, tres pares por orden. Ambas usan Sol alto, mismo esquema/instrucciones y misma evidencia expandida. Máximo **0,75 USD dentro de los 20**, sin reintentos ni seleccionar solo éxitos. Sin commit de recuerdos; datos únicamente en RAM, diagnóstico de enums/índices/booleanos/tamaños/tiempos. Conserva todos los rechazos y se detiene ante presupuesto/transporte. Esta comparación limitada puede orientar sobre el payload; seis pares no prueban fiabilidad universal ni recalifican ninguna ronda. Los tiempos de esta prueba aislada no sustituyen p95 de ciclos completos.
+
 Fuentes consultadas: AGENTS, convenciones, calidad, guía de desarrollo, criterios R2 del plan de reconstrucción, validación previa con Sol alto, proveedor/interpretación/presupuesto y pruebas existentes. Se reutiliza la credencial existente sin mostrarla ni copiarla. Sin cambios de producto, contrato desplegado ni UI.
+
+### Resultado emparejado y ajuste posterior
+
+Los seis pares terminan con **5/6 aceptaciones de la revisión reducida y 6/6 de la completa**, 18 llamadas y **0,30498 USD**. En el tercer par la misma propuesta recibe rechazo temporal solo en la revisión reducida. Las seis propuestas tienen las clases y anclas temporales esperadas. No se conserva prosa generada; estos metadatos no adjudican por sí solos toda la semántica. La muestra es demasiado pequeña para establecer causalidad o garantizar que el problema no vuelva a aparecer. La reducción del payload no queda justificada y se **restaura la revisión completa**. El gasto acumulado de esta continuación antes del siguiente piloto es **12,3495625 USD**.
+
+El siguiente ajuste es más limitado: el generador omite tres reglas de reutilización de identidades únicamente cuando la lista confiable de candidatos está vacía. Con candidatos, las instrucciones completas permanecen idénticas. Los revisores mantienen sus instrucciones completas y todos los índices. Las reglas de conservación, corrección, negación, tiempos y propiedad permanecen. La comparación local con la versión anterior confirma que las seis instrucciones completas son idénticas; sin candidatos, la instrucción de generación pasa de 17 663 a 15 894 bytes. Esto no acredita por sí solo una mejora de latencia.
+
+Validación local del ajuste: **236 pruebas raíz / 134 del núcleo**, TypeScript raíz/núcleo y formato correctos. Las simulaciones comprueban captura, aclaración, corrección y repetición, incluidas igualdad de los datos revisados y preservación de las reglas cuando hay candidatos. Se preselecciona un piloto real expuesto j12/j31/j39/j43/j48/j51/j53 y, si pasa, una única regresión completa de j01–j60. Las expectativas no cambian. Se ejecutan con `--regression-v9`: **no son otra ronda independiente**, ni sustituyen los resultados de la versión congelada.

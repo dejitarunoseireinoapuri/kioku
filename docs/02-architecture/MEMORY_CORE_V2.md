@@ -1,6 +1,6 @@
 # Propuesta de núcleo de memoria v2
 
-**Estado vigente:** la [validación con Sol alto](../09-planning/R2_HIGH_VALIDATION.md) continúa R2 por nueva autorización del propietario. Solo cambia el prototipo/evaluador aislado; perfil y resultados del diseño original que siguen son históricos. No modifica contratos ni recursos desplegados.
+**Estado vigente:** la [validación con presupuesto acotado](../09-planning/R2_BOUNDED_VALIDATION.md) mantiene R2 abierta por rechazo temporal y latencia. La reserva obtiene 60/60, 59/60 y 60/60 en la versión congelada; el ajuste posterior se comprueba como regresión expuesta. Solo cambia el prototipo/evaluador aislado. No modifica contratos ni recursos desplegados. Los resultados y perfiles previos que siguen son históricos.
 
 La [continuación final R2](../09-planning/R2_ASSIGNMENT_VALIDATION.md) añade asignación global al comprobador, revisión del soporte propio de todos los campos canónicos y regresión de dependencias con alcance explícito. Son cambios del prototipo/evaluador aislado, sin modificar contratos desplegados. R2 permanece abierta; los resultados históricos siguientes se conservan.
 

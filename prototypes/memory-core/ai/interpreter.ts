@@ -6,7 +6,7 @@ import { InterpretationError, reviewSchema } from "./contracts.ts";
 import type { Input, Interpretation, StructuredModel } from "./contracts.ts";
 import { calendar } from "./calendar.ts";
 import {
-  interpretInstructions,
+  generationInstructions,
   reviewInstructions,
   clarificationReviewInstructions,
 } from "./prompts.ts";
@@ -130,7 +130,7 @@ export class Interpreter {
     };
     const wire = await this.model.call(
       "interpret",
-      interpretInstructions,
+      generationInstructions(candidates.length > 0),
       data,
       indexedInterpretationSchema,
       7000,
@@ -152,24 +152,12 @@ export class Interpreter {
         ? materialize(proposal, input, candidates)
         : null;
     const retainedEvidence = materializeRetention(proposal, input);
-    // The review receives exact expanded literals, not a second copy of token indexes.
-    // Those indexes are only needed by the generator to select spans.
-    const {
-      tokens: ignoredTokens,
-      evidence: indexedEvidence,
-      ...reviewData
-    } = data;
-    void ignoredTokens;
-    const evidence = indexedEvidence?.map(({ tokens: ignored, ...source }) => {
-      void ignored;
-      return source;
-    });
     const review = await this.model.call(
       "interpret_review",
       proposal.status === "clarify"
         ? clarificationReviewInstructions
         : reviewInstructions,
-      { ...reviewData, evidence, proposal },
+      { ...data, proposal },
       reviewSchema,
       1400,
     );

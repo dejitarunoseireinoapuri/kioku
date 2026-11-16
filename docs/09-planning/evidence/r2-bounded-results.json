@@ -1,0 +1,4309 @@
+{
+  "status": "open",
+  "evaluatedCodeCommit": "898598b",
+  "externalAudit": false,
+  "controlledLatencyComparison": false,
+  "authorizedWindow": {
+    "id": "bounded-v9",
+    "baselineSpentUsd": 92.84179999999952,
+    "baselineReservedUsd": 1.7889500000000214,
+    "additionalUsd": 20
+  },
+  "budget": {
+    "spentUsd": 105.73110499999918,
+    "reservedUsd": 1.788950000000022,
+    "calls": 21199,
+    "input": 36381158,
+    "output": 1477821,
+    "previousM0Spent": 21.719885440000006,
+    "previousM0Reserved": 0.20756491999999982
+  },
+  "additionalSpentUsd": 12.889304999999652,
+  "additionalCommittedUsd": 12.88930499999966,
+  "notices": {
+    "additionalSpentUsd": 26.276594999999347,
+    "notifiedIncrements": 2,
+    "intervalUsd": 10
+  },
+  "pilot": {
+    "total": 6,
+    "passed": 6,
+    "calls": 72,
+    "spentUsd": 0.4838925000000245,
+    "fingerprint": "27897c833f810757eddac4f9b781f8bdf3ed097606973e030b9fc099aa9e9f8d"
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "complete": true,
+      "profile": {
+        "model": "gpt-6.1-sol",
+        "reasoning": "high",
+        "inputRate": 0.0000025,
+        "outputRate": 0.00001
+      },
+      "resolvedModel": "gpt-6.1-sol",
+      "fingerprint": "b1a23691c36e98c04f745f3bd8c872e51bf0c8279646f1001d03ffcb0126dda9",
+      "reportSha256": "a72cce974a4f723faca17a220149a07c60601e9c0e45087048dff29c88436241",
+      "total": 60,
+      "passed": 60,
+      "families": [
+        {
+          "family": "ambiguity",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "attribution",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "condition",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "correction",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "duplicate",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "forget",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "independent",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "shared",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "similar",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "time",
+          "total": 6,
+          "passed": 6
+        }
+      ],
+      "criticalChecksFailed": 0,
+      "semanticGatePassed": true,
+      "latency": {
+        "capture": {
+          "attempts": 60,
+          "p50": 10687.717100000009,
+          "p95": 16826.62090000001
+        },
+        "clarification": {
+          "attempts": 4,
+          "p50": 20783.9314,
+          "p95": 45157.43790000002
+        },
+        "correction": {
+          "attempts": 6,
+          "p50": 12645.078200000105,
+          "p95": 16838.071599999967
+        },
+        "query": {
+          "attempts": 250,
+          "p50": 4769.745999999985,
+          "p95": 7070.271900000007
+        },
+        "forget": {
+          "attempts": 59,
+          "p50": 0.31450000000040745,
+          "p95": 0.5425000000395812
+        }
+      },
+      "latencyGatePassed": false,
+      "queriesReturned": 250,
+      "queriesExpected": 250,
+      "calls": 638,
+      "spentUsd": 3.8748575000000187,
+      "uncertainReservationDeltaUsd": 1.1102230246251565e-15,
+      "cases": [
+        {
+          "id": "j01",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 9903.1337,
+            "query0": 5013.056999999999,
+            "query1": 4461.725600000002,
+            "forget": 0.32309999999779393,
+            "after0": 5729.779599999998,
+            "after1": 4278.4179
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j02",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 8790.3301,
+            "query0": 4278.150500000002,
+            "query1": 4861.9396,
+            "forget": 0.5915999999997439,
+            "after0": 4304.260900000001,
+            "after1": 4045.417700000002
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j03",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 10573.8506,
+            "query0": 5175.310100000001,
+            "query1": 3998.4040000000005,
+            "forget": 0.33220000000073924,
+            "after0": 6188.085500000001,
+            "after1": 3776.428799999998
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j04",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 9731.313599999998,
+            "query0": 3844.107100000001,
+            "query1": 4281.195299999999,
+            "forget": 0.325700000001234,
+            "after0": 5147.7664,
+            "after1": 4741.048199999997
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j05",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 8619.229,
+            "query0": 4867.6480999999985,
+            "query1": 5049.852599999998,
+            "forget": 0.31450000000040745,
+            "after0": 5385.270899999996,
+            "after1": 3770.3839000000007
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j06",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 9903.219800000003,
+            "query0": 4317.626799999998,
+            "query1": 4575.004999999997,
+            "forget": 0.30399999999644933,
+            "after0": 4263.806700000001,
+            "after1": 4635.766900000002
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j07",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 12045.848600000005,
+            "query0": 4968.339599999992,
+            "query1": 5228.133300000001,
+            "forget": 0.31939999999303836,
+            "after0": 5834.665900000007,
+            "after1": 6650.015199999994
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j08",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 11244.576500000003,
+            "query0": 5535.863499999992,
+            "query1": 4389.893800000005,
+            "forget": 0.3687999999965541,
+            "after0": 7070.271900000007,
+            "after1": 4975.947199999995
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j09",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 10720.71609999999,
+            "query0": 3851.803700000004,
+            "query1": 3910.991499999989,
+            "forget": 0.33800000000337604,
+            "after0": 7653.712799999994,
+            "after1": 5455.803800000009
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j10",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 14970.6872,
+            "query0": 5276.752099999998,
+            "query1": 5037.4568,
+            "forget": 0.3662999999942258,
+            "after0": 7104.998099999997,
+            "after1": 5851.042200000011
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j11",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 15003.402099999992,
+            "query0": 4398.281400000007,
+            "query1": 6165.1973,
+            "forget": 0.3466000000044005,
+            "after0": 5783.472999999998,
+            "after1": 4237.693800000008
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j12",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "checkCount": 55,
+          "passedChecks": 55,
+          "failures": [],
+          "stages": {
+            "capture": 16826.62090000001,
+            "query0": 5563.420899999997,
+            "query1": 4070.7746999999945,
+            "forget": 0.21650000000954606,
+            "after0": 0.00990000000456348,
+            "after1": 0.006299999993643723
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j13",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 9805.2699,
+            "query0": 4769.745999999985,
+            "query1": 3790.9204000000027,
+            "forget": 0.35519999999087304,
+            "after0": 4891.347799999989,
+            "after1": 5033.773199999996
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j14",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 8738.112399999984,
+            "query0": 5210.349100000021,
+            "query1": 3846.6350000000093,
+            "forget": 0.2686000000103377,
+            "after0": 5591.176199999987,
+            "after1": 3850.1391000000003
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j15",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 10687.717100000009,
+            "query0": 4573.3554,
+            "query1": 4910.011599999998,
+            "forget": 0.2858000000123866,
+            "after0": 5256.43710000001,
+            "after1": 4731.310200000007
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j16",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 8381.68339999998,
+            "query0": 4131.223800000007,
+            "query1": 3676.6615000000165,
+            "forget": 0.28329999998095445,
+            "after0": 4733.033400000015,
+            "after1": 5896.11540000001
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j17",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 18071.146899999992,
+            "query0": 4959.256599999993,
+            "query1": 6762.328500000003,
+            "forget": 0.3095999999786727,
+            "after0": 5001.978199999983,
+            "after1": 4453.090799999976
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j18",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 11172.368100000022,
+            "query0": 4375.018199999991,
+            "query1": 3887.2483000000066,
+            "forget": 0.2871000000159256,
+            "after0": 4864.9538000000175,
+            "after1": 3752.4026000000013
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j19",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 11017.560500000021,
+            "query0": 3652.578200000018,
+            "query1": 3758.7360000000044,
+            "forget": 0.2846999999892432,
+            "after0": 4964.058500000014,
+            "after1": 4040.6063999999897
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j20",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 9881.002899999992,
+            "query0": 4650.0476999999955,
+            "query1": 4211.36970000001,
+            "forget": 0.2663999999931548,
+            "after0": 6045.154399999999,
+            "after1": 3982.4428999999946
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j21",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 9671.212299999985,
+            "query0": 4510.538700000005,
+            "query1": 4500.38989999998,
+            "forget": 0.2780999999959022,
+            "after0": 6337.624199999991,
+            "after1": 5012.093099999998
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j22",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 14534.416800000006,
+            "query0": 5878.964299999992,
+            "query1": 4401.313199999975,
+            "forget": 0.3267999999807216,
+            "after0": 4758.346499999985,
+            "after1": 5361.445599999977
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j23",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 17814.008699999977,
+            "query0": 5118.7895000000135,
+            "query1": 4546.772199999978,
+            "forget": 0.27449999999953434,
+            "after0": 5018.342499999999,
+            "after1": 3951.1149999999907
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j24",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 13689.959200000012,
+            "query0": 5856.949200000003,
+            "query1": 4844.34169999999,
+            "forget": 0.301500000001397,
+            "after0": 6147.301700000011,
+            "after1": 4276.516100000008
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j25",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 9136.338199999998,
+            "query0": 7607.644899999985,
+            "query1": 3628.9305999999924,
+            "forget": 0.2893000000040047,
+            "after0": 5314.3550000000105,
+            "after1": 4319.518299999967
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j26",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 11398.185200000007,
+            "query0": 4103.4458999999915,
+            "query1": 4636.708799999964,
+            "forget": 0.2852000000420958,
+            "after0": 5654.151300000027,
+            "after1": 4343.853200000012
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j27",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 14087.194199999998,
+            "query0": 5228.075899999996,
+            "query1": 3937.7220999999554,
+            "forget": 0.3172999999951571,
+            "after0": 5106.008900000015,
+            "after1": 4563.242900000012
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j28",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 10497.822799999965,
+            "query0": 4959.621400000004,
+            "query1": 4289.598400000017,
+            "forget": 0.3293999999877997,
+            "after0": 5147.144100000034,
+            "after1": 4720.976900000009
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j29",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 13674.369800000044,
+            "query0": 4606.435999999987,
+            "query1": 6156.684799999988,
+            "forget": 0.3936000000103377,
+            "after0": 6803.759400000039,
+            "after1": 5713.580100000021
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j30",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 13880.627700000012,
+            "query0": 4395.917499999981,
+            "query1": 4036.388800000015,
+            "forget": 0.28049999999348074,
+            "after0": 4638.94709999999,
+            "after1": 4896.768499999947
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j31",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "checkCount": 99,
+          "passedChecks": 99,
+          "failures": [],
+          "stages": {
+            "capture": 11102.580200000026,
+            "repeat": 6597.1649000000325,
+            "query0": 4442.485099999991,
+            "query1": 3995.7419999999693,
+            "forget": 0.3475999999791384,
+            "after0": 4032.9690999999875,
+            "after1": 3883.253800000006
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j32",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "checkCount": 99,
+          "passedChecks": 99,
+          "failures": [],
+          "stages": {
+            "capture": 9164.687000000034,
+            "repeat": 7312.001500000013,
+            "query0": 4313.43829999998,
+            "query1": 3673.8698999999906,
+            "forget": 0.30600000004051253,
+            "after0": 5020.2643999999855,
+            "after1": 4085.1973
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j33",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "checkCount": 99,
+          "passedChecks": 99,
+          "failures": [],
+          "stages": {
+            "capture": 9585.910800000012,
+            "repeat": 6811.141699999978,
+            "query0": 4741.586100000015,
+            "query1": 4404.365500000014,
+            "forget": 0.30779999995138496,
+            "after0": 6942.534199999995,
+            "after1": 4565.921499999997
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j34",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "checkCount": 99,
+          "passedChecks": 99,
+          "failures": [],
+          "stages": {
+            "capture": 10282.688999999955,
+            "repeat": 8094.4220000000205,
+            "query0": 4315.663900000043,
+            "query1": 4372.699199999974,
+            "forget": 0.3152000000118278,
+            "after0": 5660.952000000048,
+            "after1": 5086.7304
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j35",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "checkCount": 99,
+          "passedChecks": 99,
+          "failures": [],
+          "stages": {
+            "capture": 10077.31210000004,
+            "repeat": 11141.002700000012,
+            "query0": 4585.887800000026,
+            "query1": 4308.643900000025,
+            "forget": 0.29240000003483146,
+            "after0": 6053.544500000018,
+            "after1": 4995.212799999979
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j36",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "checkCount": 99,
+          "passedChecks": 99,
+          "failures": [],
+          "stages": {
+            "capture": 10679.303599999985,
+            "repeat": 8921.069199999969,
+            "query0": 5110.861999999965,
+            "query1": 4579.065100000007,
+            "forget": 0.3378999999840744,
+            "after0": 6729.137700000021,
+            "after1": 4964.422399999981
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j37",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 8714.417200000025,
+            "query0": 4174.010499999975,
+            "query1": 4493.696999999986,
+            "forget": 0.30679999996209517,
+            "after0": 5897.838600000017,
+            "after1": 4557.511700000032
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j38",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 14842.202500000014,
+            "query0": 7740.587699999975,
+            "query1": 6096.989599999972,
+            "forget": 0.30119999998714775,
+            "after0": 12608.977699999989,
+            "after1": 5137.6963000000105
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j39",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 30611.15460000001,
+            "query0": 5934.161599999992,
+            "query1": 4013.885500000033,
+            "forget": 0.3070000000298023,
+            "after0": 10333.462200000009,
+            "after1": 3881.025499999989
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j40",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 11276.360400000005,
+            "query0": 6272.349199999997,
+            "query1": 6429.212300000014,
+            "forget": 0.3192000000271946,
+            "after0": 7479.348200000008,
+            "after1": 4958.991900000023
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j41",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 11937.939799999993,
+            "query0": 3762.7100999999675,
+            "query1": 4738.021799999988,
+            "forget": 0.2966999999480322,
+            "after0": 6187.853600000031,
+            "after1": 4727.45060000004
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j42",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 14535.347499999974,
+            "query0": 4348.305999999982,
+            "query1": 4260.601699999999,
+            "forget": 0.5425000000395812,
+            "after0": 6694.5300999999745,
+            "after1": 5055.173899999994
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j43",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "checkCount": 103,
+          "passedChecks": 103,
+          "failures": [],
+          "stages": {
+            "capture": 9751.546900000016,
+            "query0": 4351.787000000011,
+            "query1": 5292.960999999952,
+            "correction": 11760.342100000009,
+            "corrected_query0": 5098.886799999978,
+            "forget": 0.3136999999987893,
+            "after0": 5288.323100000038,
+            "after1": 4532.011799999978
+          },
+          "queryCount": 5
+        },
+        {
+          "id": "j44",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "checkCount": 103,
+          "passedChecks": 103,
+          "failures": [],
+          "stages": {
+            "capture": 11701.285399999993,
+            "query0": 5428.589100000041,
+            "query1": 4068.817800000019,
+            "correction": 16023.656600000046,
+            "corrected_query0": 4423.98940000002,
+            "forget": 0.3099999999976717,
+            "after0": 6985.6402000000235,
+            "after1": 3845.8807999999844
+          },
+          "queryCount": 5
+        },
+        {
+          "id": "j45",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "checkCount": 103,
+          "passedChecks": 103,
+          "failures": [],
+          "stages": {
+            "capture": 12179.41359999997,
+            "query0": 5271.8374000000185,
+            "query1": 4867.503599999996,
+            "correction": 16838.071599999967,
+            "corrected_query0": 6973.8946,
+            "forget": 0.3187000000034459,
+            "after0": 5309.566400000011,
+            "after1": 3973.095900000073
+          },
+          "queryCount": 5
+        },
+        {
+          "id": "j46",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "checkCount": 134,
+          "passedChecks": 134,
+          "failures": [],
+          "stages": {
+            "capture": 8403.563400000043,
+            "repeat": 6698.393999999971,
+            "query0": 3647.8011000000406,
+            "query1": 4973.2199000000255,
+            "correction": 14167.04660000006,
+            "corrected_query0": 7443.83620000002,
+            "forget": 0.3591000000014901,
+            "after0": 5550.9836999999825,
+            "after1": 5234.196699999971
+          },
+          "queryCount": 5
+        },
+        {
+          "id": "j47",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "checkCount": 103,
+          "passedChecks": 103,
+          "failures": [],
+          "stages": {
+            "capture": 11089.645699999994,
+            "query0": 3873.8231999999844,
+            "query1": 5624.43339999998,
+            "correction": 12645.078200000105,
+            "corrected_query0": 5457.846800000058,
+            "forget": 0.31809999991673976,
+            "after0": 5296.45570000005,
+            "after1": 4566.056400000001
+          },
+          "queryCount": 5
+        },
+        {
+          "id": "j48",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "checkCount": 103,
+          "passedChecks": 103,
+          "failures": [],
+          "stages": {
+            "capture": 9941.228999999934,
+            "query0": 5695.284299999941,
+            "query1": 4688.31799999997,
+            "correction": 11060.165200000047,
+            "corrected_query0": 6741.126500000013,
+            "forget": 0.3057999999728054,
+            "after0": 7967.363500000094,
+            "after1": 4458.965199999977
+          },
+          "queryCount": 5
+        },
+        {
+          "id": "j49",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "checkCount": 69,
+          "passedChecks": 69,
+          "failures": [],
+          "stages": {
+            "capture": 5277.721999999951,
+            "clarification": 17589.342500000028,
+            "query0": 5618.23470000003,
+            "query1": 4828.364599999972,
+            "forget": 0.5966999999945983,
+            "after0": 4626.225800000015,
+            "after1": 4675.658999999985
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j50",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 12393.548000000068,
+            "query0": 4488.480900000082,
+            "query1": 4655.242599999998,
+            "forget": 0.31660000002011657,
+            "after0": 6276.382299999939,
+            "after1": 3609.5236999999033
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j51",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "checkCount": 69,
+          "passedChecks": 69,
+          "failures": [],
+          "stages": {
+            "capture": 6567.15260000003,
+            "clarification": 20783.9314,
+            "query0": 5850.687900000019,
+            "query1": 6463.894100000034,
+            "forget": 0.31510000000707805,
+            "after0": 5124.341899999999,
+            "after1": 5232.341200000024
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j52",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "checkCount": 69,
+          "passedChecks": 69,
+          "failures": [],
+          "stages": {
+            "capture": 7003.151799999992,
+            "clarification": 27999.546199999982,
+            "query0": 7682.666899999953,
+            "query1": 7638.229799999972,
+            "forget": 0.3074999999953434,
+            "after0": 4784.731900000013,
+            "after1": 6179.536700000055
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j53",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "checkCount": 69,
+          "passedChecks": 69,
+          "failures": [],
+          "stages": {
+            "capture": 7675.094199999934,
+            "clarification": 45157.43790000002,
+            "query0": 5189.833600000013,
+            "query1": 6262.642799999914,
+            "forget": 0.3662999999942258,
+            "after0": 5777.5638000000035,
+            "after1": 5209.055899999919
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j54",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "checkCount": 24,
+          "passedChecks": 24,
+          "failures": [],
+          "stages": {
+            "capture": 3907.8968999999342,
+            "query0": 0.005600000033155084,
+            "query1": 0.0030999999726191163,
+            "after0": 0.0031999999191612005,
+            "after1": 0.00279999990016222
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j55",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 9957.050599999959,
+            "query0": 3978.2062999999616,
+            "query1": 4161.430099999998,
+            "forget": 0.26489999995101243,
+            "after0": 4654.090800000005,
+            "after1": 4057.7981000000145
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j56",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "checkCount": 104,
+          "passedChecks": 104,
+          "failures": [],
+          "stages": {
+            "capture": 12101.082700000028,
+            "query0": 4165.292800000054,
+            "query1": 4554.274300000048,
+            "query2": 3857.1340999999084,
+            "forget": 0.31999999994877726,
+            "after0": 4777.822700000019,
+            "after1": 4743.897099999944,
+            "after2": 6408.463100000052
+          },
+          "queryCount": 6
+        },
+        {
+          "id": "j57",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "checkCount": 55,
+          "passedChecks": 55,
+          "failures": [],
+          "stages": {
+            "capture": 8430.777500000084,
+            "query0": 4097.940100000007,
+            "query1": 3427.418500000029,
+            "forget": 0.40710000006947666,
+            "after0": 0.010599999921396375,
+            "after1": 0.006999999983236194
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j58",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 11330.996700000018,
+            "query0": 5429.710899999947,
+            "query1": 4093.286700000055,
+            "forget": 0.29409999994095415,
+            "after0": 5991.47100000002,
+            "after1": 4313.991100000101
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j59",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 15466.69689999998,
+            "query0": 4625.373099999968,
+            "query1": 3987.988299999968,
+            "forget": 0.33240000007208437,
+            "after0": 7735.674799999921,
+            "after1": 5602.567200000049
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j60",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "checkCount": 78,
+          "passedChecks": 78,
+          "failures": [],
+          "stages": {
+            "capture": 11555.121700000018,
+            "query0": 4091.317599999951,
+            "query1": 4206.9372999999905,
+            "query2": 5435.957300000009,
+            "forget": 0.31140000000596046,
+            "after0": 5244.456200000015,
+            "after1": 6074.80150000006,
+            "after2": 4957.751900000032
+          },
+          "queryCount": 6
+        }
+      ],
+      "modelStages": [
+        {
+          "stage": "answer",
+          "calls": 242,
+          "p50": 2154.3310999999994,
+          "p95": 3773.2293999999965,
+          "input": 337634,
+          "output": 8965
+        },
+        {
+          "stage": "answer_review",
+          "calls": 242,
+          "p50": 2500.0105000000003,
+          "p95": 3858.7712000000174,
+          "input": 313355,
+          "output": 8806
+        },
+        {
+          "stage": "interpret",
+          "calls": 77,
+          "p50": 7980.989200000011,
+          "p95": 14314.622499999998,
+          "input": 372660,
+          "output": 38573
+        },
+        {
+          "stage": "interpret_review",
+          "calls": 77,
+          "p50": 2793.81879999995,
+          "p95": 7067.279899999965,
+          "input": 269218,
+          "output": 7925
+        }
+      ]
+    },
+    {
+      "round": 2,
+      "complete": true,
+      "profile": {
+        "model": "gpt-6.1-sol",
+        "reasoning": "high",
+        "inputRate": 0.0000025,
+        "outputRate": 0.00001
+      },
+      "resolvedModel": "gpt-6.1-sol",
+      "fingerprint": "b1a23691c36e98c04f745f3bd8c872e51bf0c8279646f1001d03ffcb0126dda9",
+      "reportSha256": "3bfd47fe00c7a8311317523a1578c1e6d0798e0cf879457c08db8d62213f09dc",
+      "total": 60,
+      "passed": 59,
+      "families": [
+        {
+          "family": "ambiguity",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "attribution",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "condition",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "correction",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "duplicate",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "forget",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "independent",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "shared",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "similar",
+          "total": 6,
+          "passed": 5
+        },
+        {
+          "family": "time",
+          "total": 6,
+          "passed": 6
+        }
+      ],
+      "criticalChecksFailed": 0,
+      "semanticGatePassed": false,
+      "latency": {
+        "capture": {
+          "attempts": 60,
+          "p50": 11544.239300000016,
+          "p95": 17829.2034
+        },
+        "clarification": {
+          "attempts": 4,
+          "p50": 22932.293900000048,
+          "p95": 41347.93669999996
+        },
+        "correction": {
+          "attempts": 6,
+          "p50": 12667.185200000007,
+          "p95": 17630.152900000045
+        },
+        "query": {
+          "attempts": 246,
+          "p50": 4765.4493,
+          "p95": 7214.831099999952
+        },
+        "forget": {
+          "attempts": 58,
+          "p50": 0.3077999999950407,
+          "p95": 0.6545999998925254
+        }
+      },
+      "latencyGatePassed": false,
+      "queriesReturned": 246,
+      "queriesExpected": 250,
+      "calls": 630,
+      "spentUsd": 3.8318199999998086,
+      "uncertainReservationDeltaUsd": -2.220446049250313e-15,
+      "cases": [
+        {
+          "id": "j01",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 5341.9266,
+            "query0": 4377.249999999999,
+            "query1": 4347.990600000001,
+            "forget": 0.6553999999996449,
+            "after0": 3744.2214000000004,
+            "after1": 4028.1515
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j02",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 9772.6537,
+            "query0": 3906.567000000001,
+            "query1": 4309.552999999998,
+            "forget": 0.29469999999855645,
+            "after0": 4815.1062999999995,
+            "after1": 4985.172900000001
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j03",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 10641.7547,
+            "query0": 3756.070600000001,
+            "query1": 4276.616199999999,
+            "forget": 0.33069999999861466,
+            "after0": 7157.857500000002,
+            "after1": 5738.000899999999
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j04",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 12517.1901,
+            "query0": 3879.6379000000015,
+            "query1": 3598.6704000000027,
+            "forget": 0.34900000000197906,
+            "after0": 4880.1133000000045,
+            "after1": 4114.139000000003
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j05",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 10204.071000000004,
+            "query0": 4496.970299999994,
+            "query1": 4200.420100000003,
+            "forget": 0.6016000000017812,
+            "after0": 5099.329699999995,
+            "after1": 4897.845000000001
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j06",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 10455.986799999999,
+            "query0": 4765.4493,
+            "query1": 4629.376299999996,
+            "forget": 0.29050000000279397,
+            "after0": 5848.020599999996,
+            "after1": 4481.363599999997
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j07",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 12049.104700000004,
+            "query0": 4350.1624999999985,
+            "query1": 4529.3459,
+            "forget": 0.3398999999917578,
+            "after0": 5182.113500000007,
+            "after1": 3981.990699999995
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j08",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 10593.494399999996,
+            "query0": 4060.088699999993,
+            "query1": 4556.811300000001,
+            "forget": 0.3077999999950407,
+            "after0": 7782.731,
+            "after1": 4018.247900000002
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j09",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 11731.897300000004,
+            "query0": 5598.78869999999,
+            "query1": 5223.830299999987,
+            "forget": 0.3224000000045635,
+            "after0": 7277.579299999998,
+            "after1": 3949.2241000000067
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j10",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 14616.9614,
+            "query0": 4540.055000000008,
+            "query1": 4189.760599999994,
+            "forget": 0.332700000013574,
+            "after0": 7935.181799999991,
+            "after1": 4669.406400000007
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j11",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 12660.076000000001,
+            "query0": 4070.842100000009,
+            "query1": 4972.37969999999,
+            "forget": 0.2989999999990687,
+            "after0": 6082.995999999999,
+            "after1": 3649.6684999999998
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j12",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "checkCount": 55,
+          "passedChecks": 55,
+          "failures": [],
+          "stages": {
+            "capture": 17695.225099999996,
+            "query0": 7061.506900000008,
+            "query1": 3277.5552999999927,
+            "forget": 0.2226000000082422,
+            "after0": 0.010699999998905696,
+            "after1": 0.006600000007892959
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j13",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 10807.224100000007,
+            "query0": 6147.529899999994,
+            "query1": 4832.079599999997,
+            "forget": 0.27549999998882413,
+            "after0": 5285.662299999996,
+            "after1": 3938.675099999993
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j14",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 11380.2301,
+            "query0": 5533.432100000005,
+            "query1": 4786.55740000002,
+            "forget": 0.27449999999953434,
+            "after0": 5032.09639999998,
+            "after1": 4127.7598
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j15",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 11423.466100000005,
+            "query0": 4963.769,
+            "query1": 3650.5478000000003,
+            "forget": 0.2833999999857042,
+            "after0": 6473.508999999991,
+            "after1": 4631.643199999991
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j16",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 15392.110199999996,
+            "query0": 6170.857300000003,
+            "query1": 6536.786999999982,
+            "forget": 0.27280000000610016,
+            "after0": 6485.469700000016,
+            "after1": 5002.6408999999985
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j17",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 17121.189000000013,
+            "query0": 4242.3389000000025,
+            "query1": 5967.977499999979,
+            "forget": 0.2761999999929685,
+            "after0": 5517.984299999982,
+            "after1": 4768.886200000008
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j18",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 18826.5619,
+            "query0": 4562.1636,
+            "query1": 4248.429800000013,
+            "forget": 0.3147999999928288,
+            "after0": 5336.684999999998,
+            "after1": 5611.087799999979
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j19",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 15970.749300000025,
+            "query0": 4366.510399999999,
+            "query1": 7041.3591000000015,
+            "forget": 0.37410000001545995,
+            "after0": 5206.887999999977,
+            "after1": 4730.411999999982
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j20",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 18601.295899999997,
+            "query0": 5159.271399999998,
+            "query1": 4136.213400000008,
+            "forget": 0.2639999999955762,
+            "after0": 7072.854100000026,
+            "after1": 4635.288300000015
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j21",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 11928.132299999997,
+            "query0": 4224.398699999991,
+            "query1": 4325.530400000018,
+            "forget": 0.2871000000159256,
+            "after0": 7605.842100000009,
+            "after1": 4442.4533999999985
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j22",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 16284.223700000002,
+            "query0": 4640.006699999998,
+            "query1": 4613.155699999974,
+            "forget": 0.30689999999594875,
+            "after0": 5826.720399999991,
+            "after1": 5965.359800000006
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j23",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 17829.2034,
+            "query0": 5194.611100000009,
+            "query1": 4364.824699999997,
+            "forget": 0.2871000000159256,
+            "after0": 4816.596300000005,
+            "after1": 5267.397199999978
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j24",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 15809.050000000017,
+            "query0": 4181.342200000014,
+            "query1": 4882.070600000006,
+            "forget": 0.2841000000189524,
+            "after0": 6153.381399999984,
+            "after1": 4652.833700000017
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j25",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 13292.4669,
+            "query0": 8778.919500000018,
+            "query1": 4032.190600000031,
+            "forget": 0.3043999999645166,
+            "after0": 5525.4695000000065,
+            "after1": 4725.418099999952
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j26",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 11426.697999999975,
+            "query0": 5084.944000000018,
+            "query1": 5128.660899999959,
+            "forget": 0.3140999999595806,
+            "after0": 4720.260899999994,
+            "after1": 5006.321499999962
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j27",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 17135.740099999995,
+            "query0": 4183.860099999991,
+            "query1": 4168.351099999971,
+            "forget": 0.30019999999785796,
+            "after0": 4760.959299999988,
+            "after1": 4625.1322999999975
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j28",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 9993.368900000001,
+            "query0": 9508.4191,
+            "query1": 4386.022600000026,
+            "forget": 0.3150000000023283,
+            "after0": 9316.982599999988,
+            "after1": 3969.324100000027
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j29",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 17329.990099999995,
+            "query0": 5717.695800000045,
+            "query1": 5672.321800000034,
+            "forget": 0.31999999994877726,
+            "after0": 6140.399800000014,
+            "after1": 4747.257900000026
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j30",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 11552.309899999993,
+            "query0": 5328.091200000024,
+            "query1": 4427.467899999989,
+            "forget": 0.3025999999954365,
+            "after0": 4965.823900000018,
+            "after1": 3944.518299999996
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j31",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "checkCount": 99,
+          "passedChecks": 99,
+          "failures": [],
+          "stages": {
+            "capture": 11985.278500000015,
+            "repeat": 6884.48470000003,
+            "query0": 4345.244700000039,
+            "query1": 3877.0353999999934,
+            "forget": 0.3005000000121072,
+            "after0": 4672.660600000003,
+            "after1": 4990.136500000022
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j32",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "checkCount": 99,
+          "passedChecks": 99,
+          "failures": [],
+          "stages": {
+            "capture": 11288.021999999997,
+            "repeat": 7714.857599999988,
+            "query0": 4212.713899999973,
+            "query1": 4802.831099999952,
+            "forget": 0.31140000000596046,
+            "after0": 5830.830900000001,
+            "after1": 3647.0007000000332
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j33",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "checkCount": 99,
+          "passedChecks": 99,
+          "failures": [],
+          "stages": {
+            "capture": 10044.680900000036,
+            "repeat": 8198.606299999985,
+            "query0": 4370.487699999998,
+            "query1": 4597.988799999992,
+            "forget": 0.2890999999945052,
+            "after0": 5031.545700000017,
+            "after1": 5549.619200000016
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j34",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "checkCount": 99,
+          "passedChecks": 99,
+          "failures": [],
+          "stages": {
+            "capture": 12001.138600000006,
+            "repeat": 8568.74940000003,
+            "query0": 5007.171800000011,
+            "query1": 4738.94180000003,
+            "forget": 0.3346000000019558,
+            "after0": 5482.408999999985,
+            "after1": 4017.0705999999773
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j35",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "checkCount": 99,
+          "passedChecks": 99,
+          "failures": [],
+          "stages": {
+            "capture": 11108.289999999979,
+            "repeat": 9522.135200000019,
+            "query0": 4213.681700000016,
+            "query1": 4813.786699999997,
+            "forget": 0.7184999999590218,
+            "after0": 6752.044399999955,
+            "after1": 4344.704500000051
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j36",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "checkCount": 99,
+          "passedChecks": 99,
+          "failures": [],
+          "stages": {
+            "capture": 9767.5331,
+            "repeat": 10366.07130000001,
+            "query0": 4931.2345000000205,
+            "query1": 5903.149800000014,
+            "forget": 0.3204000000259839,
+            "after0": 5911.229899999977,
+            "after1": 4147.583400000003
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j37",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 8059.3799,
+            "query0": 4092.957400000014,
+            "query1": 4604.216599999985,
+            "forget": 0.2668999999877997,
+            "after0": 6300.1484000000055,
+            "after1": 4066.862299999979
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j38",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 17538.511200000008,
+            "query0": 3724.651300000027,
+            "query1": 4456.920500000007,
+            "forget": 0.3180999999749474,
+            "after0": 6895.451600000029,
+            "after1": 4845.065000000002
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j39",
+          "family": "similar",
+          "passed": false,
+          "error": "REVIEW_time",
+          "checkCount": 1,
+          "passedChecks": 0,
+          "failures": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "stages": {
+            "capture": 20794.1201
+          },
+          "queryCount": 0,
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "fact",
+                "intention"
+              ],
+              "polarities": [
+                "positive",
+                "positive"
+              ],
+              "existingIndices": [
+                null,
+                null
+              ],
+              "supportMatches": [
+                {
+                  "unitIndex": 0,
+                  "goldIndex": 0,
+                  "normalized": [
+                    true,
+                    true,
+                    true,
+                    true
+                  ],
+                  "evidence": [
+                    true,
+                    true,
+                    true,
+                    true
+                  ]
+                },
+                {
+                  "unitIndex": 0,
+                  "goldIndex": 1,
+                  "normalized": [
+                    true,
+                    true,
+                    true,
+                    true
+                  ],
+                  "evidence": [
+                    true,
+                    true,
+                    true,
+                    true
+                  ]
+                },
+                {
+                  "unitIndex": 1,
+                  "goldIndex": 0,
+                  "normalized": [
+                    true,
+                    true,
+                    true,
+                    true
+                  ],
+                  "evidence": [
+                    true,
+                    true,
+                    true,
+                    true
+                  ]
+                },
+                {
+                  "unitIndex": 1,
+                  "goldIndex": 1,
+                  "normalized": [
+                    true,
+                    true,
+                    true,
+                    true
+                  ],
+                  "evidence": [
+                    true,
+                    true,
+                    true,
+                    true
+                  ]
+                }
+              ],
+              "relations": [],
+              "expectedMatches": [
+                {
+                  "unitIndex": 0,
+                  "goldIndex": 0,
+                  "terms": true,
+                  "time": true,
+                  "attribution": true,
+                  "polarity": true
+                },
+                {
+                  "unitIndex": 0,
+                  "goldIndex": 1,
+                  "terms": true,
+                  "time": false,
+                  "attribution": true,
+                  "polarity": true
+                },
+                {
+                  "unitIndex": 1,
+                  "goldIndex": 0,
+                  "terms": true,
+                  "time": false,
+                  "attribution": true,
+                  "polarity": true
+                },
+                {
+                  "unitIndex": 1,
+                  "goldIndex": 1,
+                  "terms": true,
+                  "time": true,
+                  "attribution": true,
+                  "polarity": true
+                }
+              ],
+              "timePrecisions": [
+                "day",
+                "day"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                13,
+                26,
+                28,
+                44,
+                57,
+                58
+              ],
+              "segmentRoles": [
+                "primary",
+                "time",
+                "separator",
+                "primary",
+                "time",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "id": "j40",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 14814.8272,
+            "query0": 5140.816999999981,
+            "query1": 5578.905000000028,
+            "forget": 0.3384999999543652,
+            "after0": 6730.205200000026,
+            "after1": 5388.373399999982
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j41",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 13490.528500000015,
+            "query0": 5092.441700000025,
+            "query1": 5171.448899999959,
+            "forget": 0.2966000000014901,
+            "after0": 4548.927800000005,
+            "after1": 4667.9222999999765
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j42",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 14286.83990000002,
+            "query0": 6180.535099999979,
+            "query1": 4417.090400000045,
+            "forget": 0.3829000000259839,
+            "after0": 7262.158599999966,
+            "after1": 6425.09639999998
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j43",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "checkCount": 103,
+          "passedChecks": 103,
+          "failures": [],
+          "stages": {
+            "capture": 9335.713100000052,
+            "query0": 4444.382800000021,
+            "query1": 4206.143699999957,
+            "correction": 14992.915700000012,
+            "corrected_query0": 3646.6505999999936,
+            "forget": 0.646100000012666,
+            "after0": 5371.363899999997,
+            "after1": 4612.140399999975
+          },
+          "queryCount": 5
+        },
+        {
+          "id": "j44",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "checkCount": 103,
+          "passedChecks": 103,
+          "failures": [],
+          "stages": {
+            "capture": 9741.663500000024,
+            "query0": 5069.90280000004,
+            "query1": 4563.585800000001,
+            "correction": 17630.152900000045,
+            "corrected_query0": 5101.991099999985,
+            "forget": 0.4018000000505708,
+            "after0": 4874.712900000042,
+            "after1": 3779.9023999999627
+          },
+          "queryCount": 5
+        },
+        {
+          "id": "j45",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "checkCount": 103,
+          "passedChecks": 103,
+          "failures": [],
+          "stages": {
+            "capture": 12019.284799999965,
+            "query0": 4851.683600000048,
+            "query1": 4537.920900000026,
+            "correction": 12667.185200000007,
+            "corrected_query0": 5909.565699999977,
+            "forget": 0.33640000002924353,
+            "after0": 6656.774699999951,
+            "after1": 4795.709900000016
+          },
+          "queryCount": 5
+        },
+        {
+          "id": "j46",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "checkCount": 134,
+          "passedChecks": 134,
+          "failures": [],
+          "stages": {
+            "capture": 13083.25469999999,
+            "repeat": 7359.3599000000395,
+            "query0": 4786.331600000034,
+            "query1": 4700.860499999952,
+            "correction": 14119.647999999928,
+            "corrected_query0": 8391.083100000047,
+            "forget": 0.3508000000147149,
+            "after0": 4965.923199999961,
+            "after1": 5146.726900000009
+          },
+          "queryCount": 5
+        },
+        {
+          "id": "j47",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "checkCount": 103,
+          "passedChecks": 103,
+          "failures": [],
+          "stages": {
+            "capture": 11488.077600000019,
+            "query0": 4384.312399999937,
+            "query1": 5219.94590000005,
+            "correction": 11911.811699999962,
+            "corrected_query0": 5235.755299999961,
+            "forget": 0.30520000006072223,
+            "after0": 5330.961100000073,
+            "after1": 4057.7009000000544
+          },
+          "queryCount": 5
+        },
+        {
+          "id": "j48",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "checkCount": 103,
+          "passedChecks": 103,
+          "failures": [],
+          "stages": {
+            "capture": 10502.25450000004,
+            "query0": 6123.835299999919,
+            "query1": 4721.65280000004,
+            "correction": 12269.342699999921,
+            "corrected_query0": 5985.30569999991,
+            "forget": 0.30839999997988343,
+            "after0": 6057.028300000005,
+            "after1": 4270.741499999887
+          },
+          "queryCount": 5
+        },
+        {
+          "id": "j49",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "checkCount": 69,
+          "passedChecks": 69,
+          "failures": [],
+          "stages": {
+            "capture": 6098.717100000009,
+            "clarification": 16348.974300000002,
+            "query0": 4523.039400000009,
+            "query1": 4690.855199999991,
+            "forget": 0.30460000003222376,
+            "after0": 5191.873100000084,
+            "after1": 3910.3519000000088
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j50",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 11544.239300000016,
+            "query0": 4236.612199999974,
+            "query1": 4499.886799999978,
+            "forget": 0.2848999999696389,
+            "after0": 4871.413600000087,
+            "after1": 3833.8672999999253
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j51",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "checkCount": 69,
+          "passedChecks": 69,
+          "failures": [],
+          "stages": {
+            "capture": 8699.396999999997,
+            "clarification": 22932.293900000048,
+            "query0": 5254.347500000033,
+            "query1": 5839.929200000013,
+            "forget": 0.2937000000383705,
+            "after0": 5946.008399999933,
+            "after1": 10310.662499999977
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j52",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "checkCount": 69,
+          "passedChecks": 69,
+          "failures": [],
+          "stages": {
+            "capture": 6597.74589999998,
+            "clarification": 29379.706800000044,
+            "query0": 7802.23609999998,
+            "query1": 5288.340899999952,
+            "forget": 0.33290000003762543,
+            "after0": 5341.487399999984,
+            "after1": 3901.1930000000866
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j53",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "checkCount": 69,
+          "passedChecks": 69,
+          "failures": [],
+          "stages": {
+            "capture": 6304.840700000059,
+            "clarification": 41347.93669999996,
+            "query0": 5087.575100000016,
+            "query1": 4837.46239999996,
+            "forget": 0.3667000000132248,
+            "after0": 6814.8445000000065,
+            "after1": 7214.831099999952
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j54",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "checkCount": 24,
+          "passedChecks": 24,
+          "failures": [],
+          "stages": {
+            "capture": 5590.2351999999955,
+            "query0": 0.005400000023655593,
+            "query1": 0.0030999999726191163,
+            "after0": 0.002800000016577542,
+            "after1": 0.0029999999096617103
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j55",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 9024.038600000087,
+            "query0": 5576.029899999965,
+            "query1": 3487.5494999999646,
+            "forget": 0.2725000000791624,
+            "after0": 4722.567099999986,
+            "after1": 4294.221299999976
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j56",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "checkCount": 104,
+          "passedChecks": 104,
+          "failures": [],
+          "stages": {
+            "capture": 9513.356700000004,
+            "query0": 4086.795400000061,
+            "query1": 4269.193800000008,
+            "query2": 4133.589299999992,
+            "forget": 0.6545999998925254,
+            "after0": 4496.295000000042,
+            "after1": 5143.238200000022,
+            "after2": 4632.531899999944
+          },
+          "queryCount": 6
+        },
+        {
+          "id": "j57",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "checkCount": 55,
+          "passedChecks": 55,
+          "failures": [],
+          "stages": {
+            "capture": 8861.649500000058,
+            "query0": 4198.343600000022,
+            "query1": 3971.710400000098,
+            "forget": 0.23269999993499368,
+            "after0": 0.00809999997727573,
+            "after1": 0.006399999954737723
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j58",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 12126.110100000049,
+            "query0": 4815.828899999964,
+            "query1": 4607.835800000001,
+            "forget": 0.30270000000018626,
+            "after0": 5780.3898000000045,
+            "after1": 4325.8739999999525
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j59",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 17763.68020000006,
+            "query0": 4744.898999999976,
+            "query1": 3626.158400000073,
+            "forget": 0.34330000006593764,
+            "after0": 5529.149600000004,
+            "after1": 5673.72629999998
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j60",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "checkCount": 78,
+          "passedChecks": 78,
+          "failures": [],
+          "stages": {
+            "capture": 10366.9179,
+            "query0": 4649.869100000011,
+            "query1": 3920.635099999956,
+            "query2": 10368.14850000001,
+            "forget": 0.3089000000618398,
+            "after0": 5458.318899999955,
+            "after1": 5453.015000000014,
+            "after2": 5408.383499999996
+          },
+          "queryCount": 6
+        }
+      ],
+      "modelStages": [
+        {
+          "stage": "answer",
+          "calls": 238,
+          "p50": 2174.11050000001,
+          "p95": 3628.2024999999994,
+          "input": 331133,
+          "output": 9019
+        },
+        {
+          "stage": "answer_review",
+          "calls": 238,
+          "p50": 2531.369299999962,
+          "p95": 4098.627600000007,
+          "input": 307241,
+          "output": 8082
+        },
+        {
+          "stage": "interpret",
+          "calls": 77,
+          "p50": 9087.132699999995,
+          "p95": 15709.57070000004,
+          "input": 372692,
+          "output": 38574
+        },
+        {
+          "stage": "interpret_review",
+          "calls": 77,
+          "p50": 2948.387400000007,
+          "p95": 7217.973800000036,
+          "input": 268978,
+          "output": 7496
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "complete": true,
+      "profile": {
+        "model": "gpt-6.1-sol",
+        "reasoning": "high",
+        "inputRate": 0.0000025,
+        "outputRate": 0.00001
+      },
+      "resolvedModel": "gpt-6.1-sol",
+      "fingerprint": "b1a23691c36e98c04f745f3bd8c872e51bf0c8279646f1001d03ffcb0126dda9",
+      "reportSha256": "d512a7fe562b25185b83a0b1446fcc404c3c5843ae349c0999f1327dc7a70e32",
+      "total": 60,
+      "passed": 60,
+      "families": [
+        {
+          "family": "ambiguity",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "attribution",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "condition",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "correction",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "duplicate",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "forget",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "independent",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "shared",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "similar",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "time",
+          "total": 6,
+          "passed": 6
+        }
+      ],
+      "criticalChecksFailed": 0,
+      "semanticGatePassed": true,
+      "latency": {
+        "capture": {
+          "attempts": 60,
+          "p50": 11040.330600000016,
+          "p95": 18007.52720000001
+        },
+        "clarification": {
+          "attempts": 4,
+          "p50": 22041.63009999995,
+          "p95": 38233.245400000014
+        },
+        "correction": {
+          "attempts": 6,
+          "p50": 12661.018700000073,
+          "p95": 16951.79509999999
+        },
+        "query": {
+          "attempts": 250,
+          "p50": 4687.56110000005,
+          "p95": 6734.829499999993
+        },
+        "forget": {
+          "attempts": 59,
+          "p50": 0.3119999999762513,
+          "p95": 0.6739999999990687
+        }
+      },
+      "latencyGatePassed": false,
+      "queriesReturned": 250,
+      "queriesExpected": 250,
+      "calls": 638,
+      "spentUsd": 3.8540124999998255,
+      "uncertainReservationDeltaUsd": -3.1086244689504383e-15,
+      "cases": [
+        {
+          "id": "j01",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 11301.242,
+            "query0": 4729.539299999999,
+            "query1": 5246.167799999999,
+            "forget": 0.3780000000006112,
+            "after0": 4225.617199999997,
+            "after1": 5948.948499999999
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j02",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 10569.7863,
+            "query0": 4062.9542,
+            "query1": 4262.396499999999,
+            "forget": 0.6322000000000116,
+            "after0": 4204.946400000001,
+            "after1": 5031.279699999999
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j03",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 12482.2107,
+            "query0": 3889.711299999999,
+            "query1": 4110.856100000001,
+            "forget": 0.3984999999993306,
+            "after0": 5119.393599999999,
+            "after1": 4882.690000000002
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j04",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 8878.750500000002,
+            "query0": 3975.205900000001,
+            "query1": 3795.1742999999988,
+            "forget": 0.3761999999987893,
+            "after0": 4725.322,
+            "after1": 4354.7402
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j05",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 9458.772800000002,
+            "query0": 5936.7022,
+            "query1": 4228.736199999999,
+            "forget": 0.36920000000100117,
+            "after0": 4142.765800000001,
+            "after1": 4781.968399999998
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j06",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 10131.022699999998,
+            "query0": 4089.4389999999985,
+            "query1": 5131.006199999996,
+            "forget": 0.3092000000033295,
+            "after0": 6258.321600000003,
+            "after1": 4474.3461000000025
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j07",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 13679.426399999997,
+            "query0": 6737.179599999989,
+            "query1": 5755.846099999995,
+            "forget": 0.3551000000006752,
+            "after0": 5746.85100000001,
+            "after1": 4831.655899999998
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j08",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 15904.381400000006,
+            "query0": 3974.5357000000076,
+            "query1": 5449.672900000005,
+            "forget": 0.3289000000077067,
+            "after0": 6808.215100000001,
+            "after1": 4048.577000000005
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j09",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 11996.084400000007,
+            "query0": 4005.0545999999886,
+            "query1": 4542.909799999994,
+            "forget": 0.3407000000006519,
+            "after0": 7335.598200000008,
+            "after1": 4360.755399999995
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j10",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 18007.52720000001,
+            "query0": 4930.344200000007,
+            "query1": 4219.3505000000005,
+            "forget": 0.29320000000006985,
+            "after0": 6382.942999999999,
+            "after1": 5808.678400000004
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j11",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 11637.732600000003,
+            "query0": 4583.876099999994,
+            "query1": 3957.600000000006,
+            "forget": 0.6739999999990687,
+            "after0": 4511.129400000005,
+            "after1": 3398.1382999999914
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j12",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "checkCount": 55,
+          "passedChecks": 55,
+          "failures": [],
+          "stages": {
+            "capture": 25257.73120000001,
+            "query0": 4169.151199999993,
+            "query1": 4119.756099999999,
+            "forget": 0.2180999999982305,
+            "after0": 0.01029999999445863,
+            "after1": 0.006600000007892959
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j13",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 10880.855099999986,
+            "query0": 5566.803599999985,
+            "query1": 4312.159600000014,
+            "forget": 0.3675999999977648,
+            "after0": 5980.03839999999,
+            "after1": 4107.281400000007
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j14",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 9829.977500000008,
+            "query0": 4676.586700000014,
+            "query1": 4681.644100000005,
+            "forget": 0.28800000000046566,
+            "after0": 4656.502900000021,
+            "after1": 4897.969000000012
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j15",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 10043.512599999987,
+            "query0": 4491.724900000001,
+            "query1": 4862.249400000001,
+            "forget": 0.3117999999958556,
+            "after0": 4806.347200000018,
+            "after1": 3689.1831999999995
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j16",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 11156.069400000008,
+            "query0": 4813.667699999991,
+            "query1": 4483.304800000013,
+            "forget": 0.2840999999898486,
+            "after0": 5225.811100000021,
+            "after1": 4001.363400000002
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j17",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 15570.9528,
+            "query0": 5665.119400000025,
+            "query1": 3988.9126000000106,
+            "forget": 0.29839999999967404,
+            "after0": 7355.808599999989,
+            "after1": 4448.938099999999
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j18",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 11040.330600000016,
+            "query0": 4967.6142999999865,
+            "query1": 4374.464899999992,
+            "forget": 0.2718000000168104,
+            "after0": 5393.156300000002,
+            "after1": 3811.1981000000087
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j19",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 9712.1207,
+            "query0": 5023.3908999999985,
+            "query1": 4428.930300000007,
+            "forget": 0.26759999999194406,
+            "after0": 5457.63870000001,
+            "after1": 3850.709200000012
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j20",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 14057.411900000006,
+            "query0": 5223.470600000001,
+            "query1": 6924.487599999993,
+            "forget": 0.26159999999799766,
+            "after0": 5824.333400000003,
+            "after1": 4371.325700000016
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j21",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 10637.494000000006,
+            "query0": 4902.1348,
+            "query1": 4067.8659000000043,
+            "forget": 0.9108999999880325,
+            "after0": 6706.391799999983,
+            "after1": 4002.692299999995
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j22",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 16330.396099999984,
+            "query0": 5596.8208999999915,
+            "query1": 3670.4070000000065,
+            "forget": 0.3336999999883119,
+            "after0": 5038.059999999998,
+            "after1": 3899.2202000000107
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j23",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 11448.700299999997,
+            "query0": 3985.641899999988,
+            "query1": 4063.9432999999844,
+            "forget": 0.2940999999991618,
+            "after0": 5291.695799999987,
+            "after1": 4907.1907000000065
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j24",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 13833.731400000019,
+            "query0": 6697.956999999995,
+            "query1": 4459.2774999999965,
+            "forget": 0.5860000000102445,
+            "after0": 5476.1061000000045,
+            "after1": 4229.327400000009
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j25",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 11644.217600000004,
+            "query0": 7744.416999999987,
+            "query1": 5181.605900000024,
+            "forget": 0.28740000003017485,
+            "after0": 4313.373000000021,
+            "after1": 5522.035899999959
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j26",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 11246.645699999965,
+            "query0": 4416.640700000047,
+            "query1": 4096.357599999988,
+            "forget": 0.28089999995427206,
+            "after0": 6108.347999999998,
+            "after1": 4835.547499999986
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j27",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 20716.055299999978,
+            "query0": 4101.431699999957,
+            "query1": 4589.998800000001,
+            "forget": 0.2974000000394881,
+            "after0": 4709.97080000001,
+            "after1": 5398.66889999999
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j28",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 10062.867099999974,
+            "query0": 3967.473100000003,
+            "query1": 3980.088599999959,
+            "forget": 0.3047000000369735,
+            "after0": 5067.59500000003,
+            "after1": 4769.282899999991
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j29",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 14049.961300000024,
+            "query0": 4573.493999999948,
+            "query1": 5915.59580000001,
+            "forget": 0.658800000033807,
+            "after0": 4626.430799999973,
+            "after1": 5478.7113000000245
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j30",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 12585.309400000027,
+            "query0": 4348.309399999969,
+            "query1": 4509.908700000029,
+            "forget": 0.31609999999636784,
+            "after0": 5085.495700000029,
+            "after1": 4017.252600000007
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j31",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "checkCount": 99,
+          "passedChecks": 99,
+          "failures": [],
+          "stages": {
+            "capture": 8899.673699999985,
+            "repeat": 6345.21729999996,
+            "query0": 4312.116700000013,
+            "query1": 5169.92849999998,
+            "forget": 0.3436000000219792,
+            "after0": 5036.7345000000205,
+            "after1": 4225.653300000005
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j32",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "checkCount": 99,
+          "passedChecks": 99,
+          "failures": [],
+          "stages": {
+            "capture": 10153.001400000008,
+            "repeat": 7634.6632999999565,
+            "query0": 3879.5904000000446,
+            "query1": 4760.887800000026,
+            "forget": 0.311199999996461,
+            "after0": 5348.340800000005,
+            "after1": 4542.795199999993
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j33",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "checkCount": 99,
+          "passedChecks": 99,
+          "failures": [],
+          "stages": {
+            "capture": 11382.85109999997,
+            "repeat": 7985.615800000029,
+            "query0": 5215.499899999995,
+            "query1": 5570.746800000023,
+            "forget": 0.2813000000314787,
+            "after0": 4511.885300000024,
+            "after1": 4679.00059999997
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j34",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "checkCount": 99,
+          "passedChecks": 99,
+          "failures": [],
+          "stages": {
+            "capture": 9850.197900000028,
+            "repeat": 7655.76390000002,
+            "query0": 3919.8413999999757,
+            "query1": 4352.689700000046,
+            "forget": 0.3493000000016764,
+            "after0": 4865.168300000019,
+            "after1": 3953.4823000000324
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j35",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "checkCount": 99,
+          "passedChecks": 99,
+          "failures": [],
+          "stages": {
+            "capture": 9802.502399999998,
+            "repeat": 7619.376199999999,
+            "query0": 4789.330200000026,
+            "query1": 3669.1333999999915,
+            "forget": 0.28649999998742715,
+            "after0": 5199.554600000032,
+            "after1": 4687.56110000005
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j36",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "checkCount": 99,
+          "passedChecks": 99,
+          "failures": [],
+          "stages": {
+            "capture": 11131.317099999986,
+            "repeat": 8764.981099999975,
+            "query0": 5378.466600000043,
+            "query1": 4730.38400000002,
+            "forget": 0.2831000000005588,
+            "after0": 5521.913900000043,
+            "after1": 4177.5004999999655
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j37",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 8384.418200000015,
+            "query0": 4422.199800000002,
+            "query1": 4154.4611999999615,
+            "forget": 0.2731999999959953,
+            "after0": 6105.159999999974,
+            "after1": 4040.3628000000026
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j38",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 15142.137800000026,
+            "query0": 3841.3938999999664,
+            "query1": 3807.6876000000047,
+            "forget": 0.2885000000242144,
+            "after0": 5883.039800000028,
+            "after1": 5019.2027000000235
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j39",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 20964.89559999999,
+            "query0": 4181.500999999989,
+            "query1": 4123.760400000028,
+            "forget": 0.3119999999762513,
+            "after0": 8382.624300000025,
+            "after1": 5016.679400000023
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j40",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 11947.678800000052,
+            "query0": 4465.68590000004,
+            "query1": 4516.093600000022,
+            "forget": 0.3384000000078231,
+            "after0": 7079.176800000016,
+            "after1": 4243.301199999987
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j41",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 12558.51780000003,
+            "query0": 4681.3827000000165,
+            "query1": 4368.752600000007,
+            "forget": 0.30210000002989545,
+            "after0": 5635.742899999954,
+            "after1": 3961.9564000000246
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j42",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 11528.739000000001,
+            "query0": 4115.838400000008,
+            "query1": 4482.540800000017,
+            "forget": 0.44180000002961606,
+            "after0": 6015.944900000002,
+            "after1": 5548.846100000024
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j43",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "checkCount": 103,
+          "passedChecks": 103,
+          "failures": [],
+          "stages": {
+            "capture": 9387.865699999966,
+            "query0": 3711.7334000000264,
+            "query1": 4553.677299999981,
+            "correction": 15720.331599999976,
+            "corrected_query0": 5199.017300000007,
+            "forget": 0.5966999999945983,
+            "after0": 4538.802099999972,
+            "after1": 4753.435500000021
+          },
+          "queryCount": 5
+        },
+        {
+          "id": "j44",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "checkCount": 103,
+          "passedChecks": 103,
+          "failures": [],
+          "stages": {
+            "capture": 11231.631700000027,
+            "query0": 6734.829499999993,
+            "query1": 4484.142799999972,
+            "correction": 12119.81699999998,
+            "corrected_query0": 5861.056900000025,
+            "forget": 0.31390000000828877,
+            "after0": 4661.328200000047,
+            "after1": 6111.988799999992
+          },
+          "queryCount": 5
+        },
+        {
+          "id": "j45",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "checkCount": 103,
+          "passedChecks": 103,
+          "failures": [],
+          "stages": {
+            "capture": 10899.401899999997,
+            "query0": 9191.847699999984,
+            "query1": 5174.183900000004,
+            "correction": 16951.79509999999,
+            "corrected_query0": 5756.844800000021,
+            "forget": 0.34120000002440065,
+            "after0": 5677.238199999963,
+            "after1": 5116.840500000049
+          },
+          "queryCount": 5
+        },
+        {
+          "id": "j46",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "checkCount": 134,
+          "passedChecks": 134,
+          "failures": [],
+          "stages": {
+            "capture": 10520.25569999998,
+            "repeat": 6044.226800000004,
+            "query0": 4147.780399999989,
+            "query1": 4125.134500000044,
+            "correction": 12661.018700000073,
+            "corrected_query0": 5249.3732999999775,
+            "forget": 0.32920000003650784,
+            "after0": 4724.633299999987,
+            "after1": 4802.730800000019
+          },
+          "queryCount": 5
+        },
+        {
+          "id": "j47",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "checkCount": 103,
+          "passedChecks": 103,
+          "failures": [],
+          "stages": {
+            "capture": 9434.514599999995,
+            "query0": 5454.119299999962,
+            "query1": 4594.830300000031,
+            "correction": 12655.272099999944,
+            "corrected_query0": 4034.566899999976,
+            "forget": 0.30839999997988343,
+            "after0": 5230.235899999971,
+            "after1": 4999.895499999984
+          },
+          "queryCount": 5
+        },
+        {
+          "id": "j48",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "checkCount": 103,
+          "passedChecks": 103,
+          "failures": [],
+          "stages": {
+            "capture": 12323.293500000029,
+            "query0": 3993.7506000000285,
+            "query1": 3751.9701999999816,
+            "correction": 13424.979799999972,
+            "corrected_query0": 4210.168299999903,
+            "forget": 0.3124000000534579,
+            "after0": 5946.020499999984,
+            "after1": 5467.382800000021
+          },
+          "queryCount": 5
+        },
+        {
+          "id": "j49",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "checkCount": 69,
+          "passedChecks": 69,
+          "failures": [],
+          "stages": {
+            "capture": 5403.568800000008,
+            "clarification": 15585.525400000042,
+            "query0": 4316.223300000071,
+            "query1": 4416.963800000027,
+            "forget": 0.29630000004544854,
+            "after0": 4245.176100000041,
+            "after1": 5243.568500000052
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j50",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 9078.924899999984,
+            "query0": 4747.011399999959,
+            "query1": 5026.281299999915,
+            "forget": 0.2656000000424683,
+            "after0": 5230.286999999895,
+            "after1": 3710.288600000087
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j51",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "checkCount": 69,
+          "passedChecks": 69,
+          "failures": [],
+          "stages": {
+            "capture": 7536.5493000000715,
+            "clarification": 22041.63009999995,
+            "query0": 6313.979900000035,
+            "query1": 3887.3995000000577,
+            "forget": 0.3144999999785796,
+            "after0": 5147.252399999998,
+            "after1": 4944.112800000003
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j52",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "checkCount": 69,
+          "passedChecks": 69,
+          "failures": [],
+          "stages": {
+            "capture": 7109.435499999905,
+            "clarification": 26496.403199999942,
+            "query0": 7376.024499999941,
+            "query1": 5901.192800000077,
+            "forget": 0.31169999996200204,
+            "after0": 4897.147600000026,
+            "after1": 5948.0029000000795
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j53",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "checkCount": 69,
+          "passedChecks": 69,
+          "failures": [],
+          "stages": {
+            "capture": 6755.915099999984,
+            "clarification": 38233.245400000014,
+            "query0": 4150.44319999998,
+            "query1": 4206.699299999978,
+            "forget": 0.3558000000193715,
+            "after0": 6401.027999999933,
+            "after1": 6584.09879999992
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j54",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "checkCount": 24,
+          "passedChecks": 24,
+          "failures": [],
+          "stages": {
+            "capture": 6937.369999999995,
+            "query0": 0.005200000014156103,
+            "query1": 0.003000000026077032,
+            "after0": 0.0035000001080334187,
+            "after1": 0.0026000000070780516
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j55",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 8840.541599999997,
+            "query0": 4621.514899999951,
+            "query1": 4316.291999999899,
+            "forget": 0.27860000007785857,
+            "after0": 5542.295599999954,
+            "after1": 4617.35149999999
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j56",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "checkCount": 104,
+          "passedChecks": 104,
+          "failures": [],
+          "stages": {
+            "capture": 10256.616900000023,
+            "query0": 4909.90280000004,
+            "query1": 4496.805900000036,
+            "query2": 4645.015999999945,
+            "forget": 0.31679999991320074,
+            "after0": 6871.0775999999605,
+            "after1": 5588.6231999999145,
+            "after2": 6532.832400000072
+          },
+          "queryCount": 6
+        },
+        {
+          "id": "j57",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "checkCount": 55,
+          "passedChecks": 55,
+          "failures": [],
+          "stages": {
+            "capture": 8779.758499999996,
+            "query0": 4407.724599999958,
+            "query1": 4259.755600000033,
+            "forget": 0.22979999997187406,
+            "after0": 0.007699999958276749,
+            "after1": 0.006300000008195639
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j58",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 12757.79859999998,
+            "query0": 4828.940900000045,
+            "query1": 4375.86930000002,
+            "forget": 0.353899999987334,
+            "after0": 4835.084499999997,
+            "after1": 4206.819000000018
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j59",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "checkCount": 68,
+          "passedChecks": 68,
+          "failures": [],
+          "stages": {
+            "capture": 13472.715200000093,
+            "query0": 4742.788700000034,
+            "query1": 4979.457900000038,
+            "forget": 0.7521999999880791,
+            "after0": 5065.837000000058,
+            "after1": 5611.940699999919
+          },
+          "queryCount": 4
+        },
+        {
+          "id": "j60",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "checkCount": 78,
+          "passedChecks": 78,
+          "failures": [],
+          "stages": {
+            "capture": 8758.995099999942,
+            "query0": 4553.775499999989,
+            "query1": 4924.389700000058,
+            "query2": 10164.771999999997,
+            "forget": 0.27670000004582107,
+            "after0": 5075.389300000039,
+            "after1": 5449.745400000014,
+            "after2": 5178.746700000018
+          },
+          "queryCount": 6
+        }
+      ],
+      "modelStages": [
+        {
+          "stage": "answer",
+          "calls": 242,
+          "p50": 2057.1213999999454,
+          "p95": 3230.387399999978,
+          "input": 337135,
+          "output": 8820
+        },
+        {
+          "stage": "answer_review",
+          "calls": 242,
+          "p50": 2589.6720000000205,
+          "p95": 3889.2570000000414,
+          "input": 312866,
+          "output": 8165
+        },
+        {
+          "stage": "interpret",
+          "calls": 77,
+          "p50": 8257.118599999987,
+          "p95": 16384.795999999973,
+          "input": 372692,
+          "output": 37569
+        },
+        {
+          "stage": "interpret_review",
+          "calls": 77,
+          "p50": 2802.5850999999966,
+          "p95": 6251.4231000000145,
+          "input": 269060,
+          "output": 7909
+        }
+      ]
+    }
+  ],
+  "reviewPairs": {
+    "complete": true,
+    "profile": {
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "inputRate": 0.0000025,
+      "outputRate": 0.00001
+    },
+    "fingerprint": "deeef4652433b7fb3f034c0beec436c3249dc656a97c5d3ffdfded9d93b238f9",
+    "reportSha256": "d54320fdce39ae0505b977092197606e8c39563f85c356da01711fc8d6d5d022",
+    "calls": 18,
+    "spentUsd": 0.3049800000000005,
+    "results": [
+      {
+        "pair": 1,
+        "order": [
+          "compact",
+          "indexed"
+        ],
+        "reviews": [
+          {
+            "variant": "compact",
+            "accepted": true,
+            "issues": [],
+            "inputBytes": 2016
+          },
+          {
+            "variant": "indexed",
+            "accepted": true,
+            "issues": [],
+            "inputBytes": 3691
+          }
+        ],
+        "proposal": {
+          "status": "ready",
+          "kinds": [
+            "fact",
+            "intention"
+          ],
+          "timeMatches": [
+            [
+              true,
+              false
+            ],
+            [
+              false,
+              true
+            ]
+          ]
+        },
+        "error": null
+      },
+      {
+        "pair": 2,
+        "order": [
+          "indexed",
+          "compact"
+        ],
+        "reviews": [
+          {
+            "variant": "indexed",
+            "accepted": true,
+            "issues": [],
+            "inputBytes": 3791
+          },
+          {
+            "variant": "compact",
+            "accepted": true,
+            "issues": [],
+            "inputBytes": 2116
+          }
+        ],
+        "proposal": {
+          "status": "ready",
+          "kinds": [
+            "fact",
+            "intention"
+          ],
+          "timeMatches": [
+            [
+              true,
+              false
+            ],
+            [
+              false,
+              true
+            ]
+          ]
+        },
+        "error": null
+      },
+      {
+        "pair": 3,
+        "order": [
+          "compact",
+          "indexed"
+        ],
+        "reviews": [
+          {
+            "variant": "compact",
+            "accepted": false,
+            "issues": [
+              "time"
+            ],
+            "inputBytes": 2011
+          },
+          {
+            "variant": "indexed",
+            "accepted": true,
+            "issues": [],
+            "inputBytes": 3686
+          }
+        ],
+        "proposal": {
+          "status": "ready",
+          "kinds": [
+            "fact",
+            "intention"
+          ],
+          "timeMatches": [
+            [
+              true,
+              false
+            ],
+            [
+              false,
+              true
+            ]
+          ]
+        },
+        "error": "REVIEW_time"
+      },
+      {
+        "pair": 4,
+        "order": [
+          "indexed",
+          "compact"
+        ],
+        "reviews": [
+          {
+            "variant": "indexed",
+            "accepted": true,
+            "issues": [],
+            "inputBytes": 3686
+          },
+          {
+            "variant": "compact",
+            "accepted": true,
+            "issues": [],
+            "inputBytes": 2011
+          }
+        ],
+        "proposal": {
+          "status": "ready",
+          "kinds": [
+            "fact",
+            "intention"
+          ],
+          "timeMatches": [
+            [
+              true,
+              false
+            ],
+            [
+              false,
+              true
+            ]
+          ]
+        },
+        "error": null
+      },
+      {
+        "pair": 5,
+        "order": [
+          "compact",
+          "indexed"
+        ],
+        "reviews": [
+          {
+            "variant": "compact",
+            "accepted": true,
+            "issues": [],
+            "inputBytes": 2096
+          },
+          {
+            "variant": "indexed",
+            "accepted": true,
+            "issues": [],
+            "inputBytes": 3771
+          }
+        ],
+        "proposal": {
+          "status": "ready",
+          "kinds": [
+            "fact",
+            "intention"
+          ],
+          "timeMatches": [
+            [
+              true,
+              false
+            ],
+            [
+              false,
+              true
+            ]
+          ]
+        },
+        "error": null
+      },
+      {
+        "pair": 6,
+        "order": [
+          "indexed",
+          "compact"
+        ],
+        "reviews": [
+          {
+            "variant": "indexed",
+            "accepted": true,
+            "issues": [],
+            "inputBytes": 3686
+          },
+          {
+            "variant": "compact",
+            "accepted": true,
+            "issues": [],
+            "inputBytes": 2011
+          }
+        ],
+        "proposal": {
+          "status": "ready",
+          "kinds": [
+            "fact",
+            "intention"
+          ],
+          "timeMatches": [
+            [
+              true,
+              false
+            ],
+            [
+              false,
+              true
+            ]
+          ]
+        },
+        "error": null
+      }
+    ],
+    "variants": [
+      {
+        "variant": "compact",
+        "attempts": 6,
+        "accepted": 5,
+        "medianInputBytes": 2011,
+        "medianMilliseconds": 11882.5495
+      },
+      {
+        "variant": "indexed",
+        "attempts": 6,
+        "accepted": 6,
+        "medianInputBytes": 3686,
+        "medianMilliseconds": 11698.006499999989
+      }
+    ]
+  },
+  "scopedRegressions": [
+    {
+      "name": "bounded-scoped-pilot",
+      "complete": true,
+      "independent": false,
+      "profile": {
+        "model": "gpt-6.1-sol",
+        "reasoning": "high",
+        "inputRate": 0.0000025,
+        "outputRate": 0.00001
+      },
+      "resolvedModel": "gpt-6.1-sol",
+      "fingerprint": "c1c9b448d146a62d574005a13e2ed1cb1829452a82a9704024adfbd80e545e11",
+      "reportSha256": "3caf9e770120ea27999b7253581190b49bae47094b37cf73bcb2b9658409ac35",
+      "total": 7,
+      "passed": 7,
+      "queriesReturned": 30,
+      "criticalChecksFailed": 0,
+      "latency": {
+        "capture": {
+          "attempts": 7,
+          "p50": 9453.852599999998,
+          "p95": 22630.8613
+        },
+        "clarification": {
+          "attempts": 2,
+          "p50": 13968.2506,
+          "p95": 30170.525600000008
+        },
+        "correction": {
+          "attempts": 2,
+          "p50": 11008.684699999998,
+          "p95": 11747.285200000006
+        },
+        "query": {
+          "attempts": 30,
+          "p50": 4790.482700000008,
+          "p95": 6892.677900000002
+        },
+        "forget": {
+          "attempts": 7,
+          "p50": 0.35570000000006985,
+          "p95": 0.6852000000071712
+        }
+      },
+      "calls": 80,
+      "spentUsd": 0.5397424999999743,
+      "uncertainReservationDeltaUsd": -8.881784197001252e-16,
+      "cases": [
+        {
+          "id": "j12",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j31",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j39",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j43",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 5
+        },
+        {
+          "id": "j48",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 5
+        },
+        {
+          "id": "j51",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        },
+        {
+          "id": "j53",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "failures": [],
+          "queryCount": 4
+        }
+      ]
+    }
+  ]
+}
