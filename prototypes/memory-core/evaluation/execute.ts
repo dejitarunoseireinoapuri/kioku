@@ -6,7 +6,7 @@ import { InterpretationError } from "../ai/contracts.ts";
 import { indexedInterpretationSchema } from "../ai/indexed-evidence.ts";
 import type { Input, StructuredModel } from "../ai/contracts.ts";
 import type { Scenario, GoldQuery } from "./case.ts";
-import { gradeUnits, gradeAnswer } from "./grade.ts";
+import { gradeUnits, gradeAnswer, gradeRelations } from "./grade.ts";
 import type { Check } from "./grade.ts";
 import { CoreError } from "../src/errors.ts";
 import { z } from "zod";
@@ -112,6 +112,11 @@ export async function executeCase(
     const grade = gradeUnits(h.store.read(), expected);
     mapping = grade.mapping;
     record(prefix, grade.checks);
+    if (fixture.expectedRelations)
+      record(
+        prefix,
+        gradeRelations(h.store.read(), fixture.expectedRelations, mapping),
+      );
   }
   async function queries(prefix: string, questions: GoldQuery[]) {
     for (let i = 0; i < questions.length; i++) {

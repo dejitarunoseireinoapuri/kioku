@@ -34,3 +34,4 @@ Las conversaciones previas y los prototipos históricos sirven de evidencia de d
 
 - [R2: evidencia por posiciones, aclaraciones y búsqueda paginada](09-planning/R2_INDEXED_VALIDATION.md).
 - [R2: rechazos y falsas ausencias](09-planning/R2_RELIABILITY_VALIDATION.md).
+- [R2: evaluación independiente final](09-planning/R2_FINAL_VALIDATION.md).

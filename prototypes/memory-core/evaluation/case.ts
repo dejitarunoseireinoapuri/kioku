@@ -51,6 +51,11 @@ export interface Scenario {
   };
   forget: string[];
   after: GoldQuery[];
+  expectedRelations?: {
+    kind: "requires" | "possibleSameAs" | "evolvesFrom";
+    from: string;
+    to: string;
+  }[];
 }
 export const unknown: EventTime = {
   precision: "unknown",

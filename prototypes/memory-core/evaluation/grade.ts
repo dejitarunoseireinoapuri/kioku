@@ -1,5 +1,5 @@
 import type { Unit, Snapshot } from "../src/model.ts";
-import type { GoldUnit, GoldQuery } from "./case.ts";
+import type { GoldUnit, GoldQuery, Scenario } from "./case.ts";
 import type { Answer } from "../ai/contracts.ts";
 export const normalize = (value: string) =>
   value.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
@@ -12,6 +12,26 @@ export interface Check {
   name: string;
   passed: boolean;
   critical: boolean;
+}
+export function gradeRelations(
+  state: Snapshot,
+  gold: NonNullable<Scenario["expectedRelations"]>,
+  mapping: Map<string, Unit>,
+): Check[] {
+  const expected = gold
+    .filter((r) => mapping.has(r.from) && mapping.has(r.to))
+    .map((r) => `${r.kind}:${mapping.get(r.from)!.id}:${mapping.get(r.to)!.id}`)
+    .sort();
+  const actual = Object.values(state.relations)
+    .map((r) => `${r.kind}:${r.from}:${r.to}`)
+    .sort();
+  return [
+    {
+      name: "relations",
+      passed: JSON.stringify(expected) === JSON.stringify(actual),
+      critical: true,
+    },
+  ];
 }
 export function gradeUnits(state: Snapshot, gold: GoldUnit[]) {
   const units = Object.values(state.units);

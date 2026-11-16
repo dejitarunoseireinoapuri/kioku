@@ -1,0 +1,145 @@
+import assert from "node:assert/strict";
+import { readFile, writeFile } from "node:fs/promises";
+
+const rounds = await Promise.all(
+    [1, 2, 3].map(async (round) =>
+        JSON.parse(
+            await readFile(
+                `local-data/r2/reserve-final-independent-${round}.json`,
+                "utf8",
+            ),
+        ),
+    ),
+);
+const expectedIds = Array.from(
+    { length: 60 },
+    (_, i) => `f${String(i + 1).padStart(2, "0")}`,
+);
+const passed = (r) => r.error === null && r.checks.every((c) => c.passed);
+const percentile = (values, p) =>
+    values.toSorted((a, b) => a - b)[Math.ceil(values.length * p) - 1] ?? null;
+function summarize(run, index) {
+    assert.equal(run.complete, true);
+    assert.equal(run.round, index + 1);
+    assert.equal(run.corpus, "independent-v5");
+    assert.equal(run.expectedCases, 60);
+    assert.equal(run.expectedQueries, 247);
+    assert.equal(run.profile.model, "gpt-6.1-sol");
+    assert.equal(run.profile.reasoning, "medium");
+    assert.equal(run.resolvedModel, rounds[0].resolvedModel);
+    assert.equal(run.fingerprint, rounds[0].fingerprint);
+    assert.deepEqual(run.results.map((r) => r.id).sort(), expectedIds);
+    const families = [...new Set(run.results.map((r) => r.family))]
+        .sort()
+        .map((family) => {
+            const cases = run.results.filter((r) => r.family === family);
+            assert.equal(cases.length, 6);
+            return {
+                family,
+                total: cases.length,
+                passed: cases.filter(passed).length,
+            };
+        });
+    assert.equal(families.length, 10);
+    const count = run.results.filter(passed).length;
+    const critical = run.results.flatMap((r) =>
+        r.checks.filter((c) => c.critical && !c.passed),
+    );
+    return {
+        round: run.round,
+        total: 60,
+        passed: count,
+        families,
+        gatePassed:
+            count / 60 >= 0.95 &&
+            families.every((f) => f.passed / f.total >= 0.95) &&
+            critical.length === 0,
+        criticalChecksFailed: critical.length,
+        queriesReturned: run.results.reduce((n, r) => n + r.queryCount, 0),
+        queriesExpected: 247,
+        calls: run.metrics.length,
+        spentUsd: run.budget.spentUsd - run.baseline.spentUsd,
+        latency: Object.fromEntries(
+            ["capture", "clarification", "correction", "query", "forget"].map(
+                (stage) => {
+                    const values = run.results.flatMap((r) =>
+                        Object.entries(r.stages)
+                            .filter(([name]) =>
+                                stage === "query"
+                                    ? /^(query|after|corrected_query)\d+$/u.test(
+                                          name,
+                                      )
+                                    : name === stage,
+                            )
+                            .map(([, ms]) => ms),
+                    );
+                    return [
+                        stage,
+                        {
+                            attempts: values.length,
+                            p50: percentile(values, 0.5),
+                            p95: percentile(values, 0.95),
+                            maximum: values.length ? Math.max(...values) : null,
+                        },
+                    ];
+                },
+            ),
+        ),
+        cases: run.results
+            .toSorted((a, b) => a.id.localeCompare(b.id))
+            .map((r) => ({
+                id: r.id,
+                family: r.family,
+                passed: passed(r),
+                error: r.error,
+                queryCount: r.queryCount,
+                failures: r.checks.filter((c) => !c.passed),
+                ...(passed(r)
+                    ? {}
+                    : { observations: r.observations, stages: r.stages }),
+            })),
+    };
+}
+const summaries = rounds.map(summarize);
+const report = {
+    profile: rounds[0].profile,
+    resolvedModel: rounds[0].resolvedModel,
+    corpus: "independent-v5",
+    fingerprint: rounds[0].fingerprint,
+    scope: "synthetic_only_no_firebase_no_mobile_no_migration",
+    semanticGatePassed: summaries.every((r) => r.gatePassed),
+    baselineSpentUsd: rounds[0].baseline.spentUsd,
+    finalSpentUsd: rounds[2].budget.spentUsd,
+    spentThisEvaluationUsd:
+        rounds[2].budget.spentUsd - rounds[0].baseline.spentUsd,
+    uncertainReservationUsd: rounds[2].budget.reservedUsd,
+    previousM0SpentUsd: rounds[2].budget.previousM0Spent,
+    rounds: summaries,
+};
+function audit(value) {
+    if (typeof value === "string")
+        assert.ok(/^[A-Za-z0-9_:.-]{1,200}$/u.test(value));
+    else if (Array.isArray(value)) value.forEach(audit);
+    else if (value && typeof value === "object")
+        for (const [key, item] of Object.entries(value)) {
+            assert.ok(
+                !/^(text|literal|question|content|prompt|key|authorization|token)$/iu.test(
+                    key,
+                ),
+            );
+            audit(item);
+        }
+}
+audit(report);
+await writeFile(
+    "docs/09-planning/evidence/r2-final-results.json",
+    JSON.stringify(report, null, 2) + "\n",
+);
+console.log(
+    JSON.stringify({
+        passed: summaries.map((r) => r.passed),
+        semanticGatePassed: report.semanticGatePassed,
+        spentUsd: report.spentThisEvaluationUsd,
+        finalSpentUsd: report.finalSpentUsd,
+    }),
+);
