@@ -1,6 +1,7 @@
 {
   "status": "open",
   "evaluatedCodeCommit": "898598b",
+  "latestEvaluatedCodeCommit": "2cfd623",
   "externalAudit": false,
   "controlledLatencyComparison": false,
   "authorizedWindow": {
@@ -15,18 +16,18 @@
     }
   },
   "budget": {
-    "spentUsd": 111.0797274999989,
-    "reservedUsd": 1.7889500000000242,
-    "calls": 22071,
-    "input": 38144387,
-    "output": 1571876,
+    "spentUsd": 115.08261499999887,
+    "reservedUsd": 1.7889500000000207,
+    "calls": 22709,
+    "input": 39493118,
+    "output": 1634982,
     "previousM0Spent": 21.719885440000006,
     "previousM0Reserved": 0.20756491999999982
   },
-  "additionalSpentUsd": 18.237927499999373,
-  "additionalCommittedUsd": 18.23792749999938,
+  "additionalSpentUsd": 22.240814999999344,
+  "additionalCommittedUsd": 22.240814999999337,
   "notices": {
-    "additionalSpentUsd": 31.625217499999067,
+    "additionalSpentUsd": 35.62810499999904,
     "notifiedIncrements": 3,
     "intervalUsd": 10
   },
@@ -5235,6 +5236,7 @@
   "temporalRuns": [
     {
       "name": "bounded-time-baseline",
+      "evaluatedCodeCommit": null,
       "complete": true,
       "independent": false,
       "profile": {
@@ -5665,6 +5667,7 @@
     },
     {
       "name": "bounded-time-fixed",
+      "evaluatedCodeCommit": null,
       "complete": true,
       "independent": false,
       "profile": {
@@ -5759,6 +5762,424 @@
           "failures": []
         }
       ]
+    },
+    {
+      "name": "bounded-time-full",
+      "evaluatedCodeCommit": "2cfd623",
+      "complete": true,
+      "independent": false,
+      "profile": {
+        "model": "gpt-6.1-sol",
+        "reasoning": "high",
+        "inputRate": 0.0000025,
+        "outputRate": 0.00001
+      },
+      "fingerprint": "3c4a0f9b2434470ebfa31cccfa1157e7da237d123459998778f1b657d17f411e",
+      "reportSha256": "3eb6121bc1336758e0fc518b9cb4c62078c25d0647ee3149903d1a0f13cba9a5",
+      "total": 60,
+      "passed": 60,
+      "calls": 638,
+      "spentUsd": 4.0028874999999715,
+      "uncertainReservationDeltaUsd": -3.552713678800501e-15,
+      "queriesReturned": 250,
+      "latency": {
+        "capture": {
+          "attempts": 60,
+          "p50": 10470.708099999989,
+          "p95": 18411.16460000002
+        },
+        "clarification": {
+          "attempts": 4,
+          "p50": 17028.168199999956,
+          "p95": 56429.368800000055
+        },
+        "correction": {
+          "attempts": 6,
+          "p50": 12474.387600000016,
+          "p95": 18432.27389999997
+        },
+        "query": {
+          "attempts": 250,
+          "p50": 3915.883700000006,
+          "p95": 5790.733600000036
+        },
+        "forget": {
+          "attempts": 59,
+          "p50": 0.311199999996461,
+          "p95": 0.5910000000003492
+        }
+      },
+      "criticalChecksFailed": 0,
+      "cases": [
+        {
+          "id": "j01",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j02",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j03",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j04",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j05",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j06",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j07",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j08",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j09",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j10",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j11",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j12",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j13",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j14",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j15",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j16",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j17",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j18",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j19",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j20",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j21",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j22",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j23",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j24",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j25",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j26",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j27",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j28",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j29",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j30",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j31",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j32",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j33",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j34",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j35",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j36",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j37",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j38",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j39",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j40",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j41",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j42",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j43",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j44",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j45",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j46",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j47",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j48",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j49",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j50",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j51",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j52",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j53",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j54",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j55",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j56",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j57",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j58",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j59",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "j60",
+          "passed": true,
+          "error": null,
+          "failures": []
+        }
+      ]
     }
-  ]
+  ],
+  "balanceReference": {
+    "baselineSpentUsd": 110.73268499999888,
+    "reportedBalanceUsd": 15,
+    "minimumBalanceUsd": 5,
+    "estimatedRemainingUsd": 10.650070000000014,
+    "conservativeRemainingIncludingAllReservesUsd": 8.86112,
+    "liveBillingRead": false
+  }
 }

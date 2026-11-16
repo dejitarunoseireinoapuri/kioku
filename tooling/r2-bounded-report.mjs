@@ -313,6 +313,11 @@ for (const name of [
     }
     const r = JSON.parse(bytes);
     assert.equal(r.profile.reasoning, "high");
+    if (name === "bounded-time-full")
+        assert.equal(
+            r.fingerprint,
+            "3c4a0f9b2434470ebfa31cccfa1157e7da237d123459998778f1b657d17f411e",
+        );
     assert.equal(
         r.corpus,
         name.endsWith("-full")
@@ -349,6 +354,7 @@ for (const name of [
     );
     temporalRuns.push({
         name,
+        evaluatedCodeCommit: name === "bounded-time-full" ? "2cfd623" : null,
         complete: r.complete,
         independent: false,
         profile: r.profile,
@@ -379,6 +385,7 @@ for (const name of [
 const result = {
     status: "open",
     evaluatedCodeCommit: "898598b",
+    latestEvaluatedCodeCommit: "2cfd623",
     externalAudit: false,
     controlledLatencyComparison: false,
     authorizedWindow: window,
@@ -406,8 +413,27 @@ const result = {
     scopedRegressions,
     timeRoleAudit,
     temporalRuns,
+    balanceReference: window.balanceReference
+        ? {
+              ...window.balanceReference,
+              estimatedRemainingUsd:
+                  window.balanceReference.reportedBalanceUsd -
+                  (budget.spentUsd - window.balanceReference.baselineSpentUsd),
+              conservativeRemainingIncludingAllReservesUsd:
+                  window.balanceReference.reportedBalanceUsd -
+                  (budget.spentUsd +
+                      budget.reservedUsd -
+                      window.balanceReference.baselineSpentUsd),
+              liveBillingRead: false,
+          }
+        : null,
 };
 assert.ok(result.additionalCommittedUsd <= window.additionalUsd + 1e-8);
+if (result.balanceReference)
+    assert.ok(
+        result.balanceReference.conservativeRemainingIncludingAllReservesUsd >=
+            result.balanceReference.minimumBalanceUsd - 1e-8,
+    );
 await writeFile(
     "docs/09-planning/evidence/r2-bounded-results.json",
     JSON.stringify(result, null, 2) + "\n",

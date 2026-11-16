@@ -77,3 +77,27 @@ El diagnóstico de roles temporales finaliza **6/6 aceptados**, 18 llamadas y **
 Se aclara la instrucción compartida: en compras/reservas, `time` puede anclar una fecha objetivo expresamente indicada si no consta la fecha del acto; si ambas se expresan, ancla el acto y conserva la otra fecha y su papel en contenido/evidencia. Una fecha objetivo futura no convierte el hecho de compra en asistencia futura realizada, ni acredita cuándo se compró. Consulta/revisión exigen soporte propio para CUÁNDO se realizó el acto, distinto de PARA CUÁNDO es la entrada/reserva. No se elimina ninguna revisión ni se fuerza aceptación cuando existe otro defecto. Es una precisión de los roles temporales ya esperados en j39/i39, no una recalificación de sus fallos.
 
 En los contrastes nuevos se detecta además una errata del evaluador: patrones con ñ y tildes frente a texto normalizado. Se corrigen solo los patrones (`castano`, `manana`), con una comprobación local; los relatos mantienen su grafía. No explican ni convierten en éxito los rechazos `REVIEW_time`, anteriores a esa evaluación. Las dos nuevas pruebas verifican roles, conservación de las expectativas j39 y rechazo de fechas de compra inventadas o intercambiadas.
+
+El contraste tras la precisión temporal termina **8/8**, 53 consultas, 126 llamadas y **0,73098 USD**, sin incertidumbre adicional. Los casos de fecha de acto desconocida se abstienen sin inventarla; los casos con fecha explícita/relativa conservan ambas referencias, y la corrección/repetición completan su ciclo. No es reserva independiente ni prueba estadística de eliminación del rechazo intermitente.
+
+La versión para la última regresión completa queda en **`2cfd623`**. Pasan **238 pruebas raíz / 136 del núcleo**, TypeScript raíz/núcleo, formato y el comprobador documental (79 documentos, 12 ADR). Se aplica también el mínimo de saldo en `balanceReference`: cada llamada usa el menor techo entre el presupuesto de la tanda y la referencia de saldo menos 5 USD; todas las reservas cuentan. La prueba local demuestra que una reserva se bloquea al consumir ese margen aunque quedara autorización de la tanda. La última regresión usa `--regression-v9 --run bounded-time-full`; no se modifican fuentes ni expectativas durante ella.
+
+## Resultado final de esta continuación
+
+La regresión completa de **`2cfd623`** termina **60/60**, **250/250 consultas**, 638 llamadas, **4,0028875 USD** y cero comprobaciones críticas fallidas. Huella **`3c4a0f9b2434470ebfa31cccfa1157e7da237d123459998778f1b657d17f411e`**. El contraste de Git confirma que no cambió implementación/corpus durante la pasada. j39 completa el ciclo; sus rechazos anteriores permanecen registrados. Es una regresión expuesta, no otra ronda independiente ni garantía de eliminación universal del rechazo intermitente.
+
+| Etapa | Muestras | p50 | p95 | Objetivo p95 |
+| --- | ---: | ---: | ---: | ---: |
+| Captura | 60 | 10,47 s | 18,41 s | 15 s, no cumplido |
+| Corrección | 6 | 12,47 s | 18,43 s | 15 s, no cumplido |
+| Consulta | 250 | 3,92 s | 5,79 s | 8 s, cumplido |
+| Aclaración | 4 | 17,03 s | 56,43 s | Informada aparte; muestra pequeña |
+| Olvido RAM | 59 | 0,31 ms | 0,59 ms | No acredita servidor/app |
+
+**Gasto final de la continuación: 22,240815 USD**, de 25 autorizados; margen **2,759185 USD**. No hay nueva reserva incierta; los **1,78895 USD** históricos permanecen visibles (las diferencias de unos 1e-15 son redondeo numérico). Desde el saldo de 15 comunicado por el propietario se estiman **4,34993 USD** consumidos: saldo estimado **10,65007 USD**, o **8,86112 USD** descontando además todas las reservas históricas conservadas. Ambas cifras superan los 5 USD solicitados; no son una lectura de facturación ni incorporan uso externo a este contador. Los tres avisos acumulados de 10 USD permanecen registrados; no se reinició el contador en ninguna ampliación.
+
+**R2 sigue abierta.** Pendiente reducir captura/corrección hasta sus objetivos, estudiar la cola de aclaraciones y validar la versión final con una nueva reserva de 60 escenarios y tres rondas completas. Las rondas independientes de esta tanda (60/60, 59/60, 60/60) pertenecen a la versión anterior; no se trasladan a la final. Tres rondas de tamaño comparable cuestan aproximadamente 12 USD según lo observado y no caben en los 2,76 USD restantes. Se termina esta tanda sin gastar el margen en una reserva incompleta ni ampliar la autorización. La integración R3, móvil, voz, migración, activación y validación iOS siguen fuera de esta entrega.
+
+Cambios guardados solo en la rama local. Sin push, despliegue, Firebase, instalación ni acceso a recuerdos reales. Fuentes efectivamente consultadas: AGENTS, CODING_CONVENTIONS, CODE_QUALITY, DEVELOPMENT_GUIDE, criterios R2 de MEMORY_CORE_REBUILD_PLAN, MEMORY_CORE_V2, DATA_MODEL, API_CONTRACT, validaciones R2 previas y código/pruebas del proveedor, interpretación y presupuesto. Comprobaciones finales de código: **238 raíz / 136 núcleo**, TypeScript y formato correctos; validación documental y revisión de coherencia.
+
+Por petición expresa del propietario se prepara suspensión al finalizar, con un segundo intento solo si no se observa suspensión y el equipo sigue despierto. El mecanismo se comprueba sin suspender y conserva el estado local en `local-data/r2/suspend-bounded-final.status`; no fuerza el cierre de aplicaciones. Evita un segundo intento después de una reanudación detectada. La confirmación del estado físico posterior no se sustituye por el simple lanzamiento del proceso.
