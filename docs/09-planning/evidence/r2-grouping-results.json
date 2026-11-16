@@ -1,0 +1,4168 @@
+{
+  "profile": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "inputRate": 0.0000025,
+    "outputRate": 0.00001
+  },
+  "resolvedModel": "gpt-6.1-sol",
+  "corpus": "grouping-v6",
+  "fingerprint": "37e167c733143fbfefe5407d257abc07e447fa5e5d37b46a1d96fc9ba505113a",
+  "scope": "synthetic_only_no_firebase_no_mobile_no_migration",
+  "semanticGatePassed": false,
+  "baselineSpentUsd": 45.32582749999991,
+  "finalSpentUsd": 54.063942500000046,
+  "spentThisEvaluationUsd": 8.738115000000136,
+  "uncertainReservationUsd": 0.6710225000000063,
+  "previousM0SpentUsd": 21.719885440000006,
+  "rounds": [
+    {
+      "round": 1,
+      "total": 60,
+      "passed": 52,
+      "families": [
+        {
+          "family": "ambiguity",
+          "total": 6,
+          "passed": 5
+        },
+        {
+          "family": "attribution",
+          "total": 6,
+          "passed": 4
+        },
+        {
+          "family": "condition",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "correction",
+          "total": 6,
+          "passed": 5
+        },
+        {
+          "family": "duplicate",
+          "total": 6,
+          "passed": 4
+        },
+        {
+          "family": "forget",
+          "total": 6,
+          "passed": 5
+        },
+        {
+          "family": "independent",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "shared",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "similar",
+          "total": 6,
+          "passed": 5
+        },
+        {
+          "family": "time",
+          "total": 6,
+          "passed": 6
+        }
+      ],
+      "gatePassed": false,
+      "criticalChecksFailed": 6,
+      "queriesReturned": 234,
+      "queriesExpected": 247,
+      "calls": 602,
+      "spentUsd": 2.90296500000003,
+      "latency": {
+        "capture": {
+          "attempts": 60,
+          "p50": 6883.358899999999,
+          "p95": 14906.765600000042,
+          "maximum": 21312.255200000014
+        },
+        "clarification": {
+          "attempts": 4,
+          "p50": 14432.416299999983,
+          "p95": 20423.528300000005,
+          "maximum": 20423.528300000005
+        },
+        "correction": {
+          "attempts": 4,
+          "p50": 11450.88910000003,
+          "p95": 13490.35500000004,
+          "maximum": 13490.35500000004
+        },
+        "query": {
+          "attempts": 235,
+          "p50": 4355.978000000003,
+          "p95": 5994.83739999996,
+          "maximum": 13477.863799999992
+        },
+        "forget": {
+          "attempts": 55,
+          "p50": 0.37830000001122244,
+          "p95": 0.6156999999948312,
+          "maximum": 0.6404999999995198
+        }
+      },
+      "cases": [
+        {
+          "id": "g01",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g02",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g03",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g04",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g05",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g06",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g07",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g08",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g09",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g10",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g11",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g12",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g13",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g14",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g15",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g16",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g17",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g18",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g19",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g20",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g21",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g22",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g23",
+          "family": "attribution",
+          "passed": false,
+          "error": "REVIEW_modality",
+          "queryCount": 0,
+          "failures": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "quotation",
+                "quotation"
+              ],
+              "timePrecisions": [
+                "unknown",
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                17,
+                18,
+                34
+              ],
+              "segmentRoles": [
+                "primary",
+                "separator",
+                "primary"
+              ],
+              "segmentOwners": [
+                [
+                  0
+                ],
+                [
+                  0,
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            }
+          ],
+          "stages": {
+            "capture": 15403.836500000005
+          }
+        },
+        {
+          "id": "g24",
+          "family": "attribution",
+          "passed": false,
+          "error": null,
+          "queryCount": 4,
+          "failures": [
+            {
+              "name": "query1:answer_perspective",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "after1:answer_perspective",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "intention",
+                "quotation"
+              ],
+              "timePrecisions": [
+                "unknown",
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                2,
+                3,
+                8,
+                10,
+                34,
+                35
+              ],
+              "segmentRoles": [
+                "context",
+                "separator",
+                "primary",
+                "separator",
+                "primary",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            },
+            {
+              "stage": "query0",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "query1",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "after0",
+              "status": "not_found",
+              "evidenceCount": 0
+            },
+            {
+              "stage": "after1",
+              "status": "answered",
+              "evidenceCount": 1
+            }
+          ],
+          "stages": {
+            "capture": 10263.482300000003,
+            "query0": 4392.920400000003,
+            "query1": 6409.625099999976,
+            "forget": 0.48589999999967404,
+            "after0": 5011.92849999998,
+            "after1": 4795.444400000008
+          }
+        },
+        {
+          "id": "g25",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g26",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g27",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g28",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g29",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g30",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g31",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g32",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g33",
+          "family": "duplicate",
+          "passed": false,
+          "error": null,
+          "queryCount": 4,
+          "failures": [
+            {
+              "name": "query0:answer_details",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "opinion",
+                "opinion"
+              ],
+              "timePrecisions": [
+                "unknown",
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                13,
+                14,
+                26
+              ],
+              "segmentRoles": [
+                "primary",
+                "separator",
+                "primary"
+              ],
+              "segmentOwners": [
+                [
+                  0
+                ],
+                [
+                  0,
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            },
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 1,
+              "kinds": [
+                "opinion"
+              ],
+              "timePrecisions": [
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false
+              ],
+              "segmentEnds": [
+                10,
+                11
+              ],
+              "segmentRoles": [
+                "primary",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0
+                ],
+                [
+                  0
+                ]
+              ]
+            },
+            {
+              "stage": "query0",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "query1",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "after0",
+              "status": "not_found",
+              "evidenceCount": 0
+            },
+            {
+              "stage": "after1",
+              "status": "answered",
+              "evidenceCount": 1
+            }
+          ],
+          "stages": {
+            "capture": 8054.259399999981,
+            "repeat": 5280.2270000000135,
+            "query0": 3759.3125,
+            "query1": 3949.4376999999513,
+            "forget": 0.3147999999928288,
+            "after0": 5787.550600000017,
+            "after1": 6416.516799999983
+          }
+        },
+        {
+          "id": "g34",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g35",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g36",
+          "family": "duplicate",
+          "passed": false,
+          "error": "EXPECTED_TARGET_MISSING",
+          "queryCount": 2,
+          "failures": [
+            {
+              "name": "repeat:count",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "repeat:unit_count",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "repeat:pottery:meaning",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "query0:answer_evidence",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "quotation",
+                "intention"
+              ],
+              "timePrecisions": [
+                "unknown",
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                12,
+                14,
+                25,
+                26
+              ],
+              "segmentRoles": [
+                "primary",
+                "separator",
+                "primary",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            },
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 1,
+              "kinds": [
+                "quotation"
+              ],
+              "timePrecisions": [
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false
+              ],
+              "segmentEnds": [
+                14,
+                15
+              ],
+              "segmentRoles": [
+                "primary",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0
+                ],
+                [
+                  0
+                ]
+              ]
+            },
+            {
+              "stage": "query0",
+              "status": "answered",
+              "evidenceCount": 2
+            },
+            {
+              "stage": "query1",
+              "status": "answered",
+              "evidenceCount": 1
+            }
+          ],
+          "stages": {
+            "capture": 6593.660799999954,
+            "repeat": 13677.043799999985,
+            "query0": 4907.306299999997,
+            "query1": 4569.478399999964
+          }
+        },
+        {
+          "id": "g37",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g38",
+          "family": "similar",
+          "passed": false,
+          "error": "EXPECTED_TARGET_MISSING",
+          "queryCount": 2,
+          "failures": [
+            {
+              "name": "capture:self:meaning",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "query0:answer_evidence",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "intention",
+                "intention"
+              ],
+              "timePrecisions": [
+                "unknown",
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                12,
+                14,
+                31,
+                32
+              ],
+              "segmentRoles": [
+                "primary",
+                "separator",
+                "primary",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            },
+            {
+              "stage": "query0",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "query1",
+              "status": "answered",
+              "evidenceCount": 1
+            }
+          ],
+          "stages": {
+            "capture": 21312.255200000014,
+            "query0": 4304.103099999949,
+            "query1": 4696.160000000033
+          }
+        },
+        {
+          "id": "g39",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g40",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g41",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g42",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g43",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "queryCount": 5,
+          "failures": []
+        },
+        {
+          "id": "g44",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "queryCount": 5,
+          "failures": []
+        },
+        {
+          "id": "g45",
+          "family": "correction",
+          "passed": false,
+          "error": "EXPECTED_TARGET_MISSING",
+          "queryCount": 2,
+          "failures": [
+            {
+              "name": "capture:walk:meaning",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "capture:binoculars:time",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "capture:binoculars:no_foreign_fact",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "query0:answer_evidence",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "intention",
+                "intention"
+              ],
+              "timePrecisions": [
+                "day",
+                "day"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                10,
+                11,
+                12,
+                13,
+                24,
+                26,
+                31,
+                32
+              ],
+              "segmentRoles": [
+                "time",
+                "separator",
+                "primary",
+                "separator",
+                "context",
+                "separator",
+                "primary",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  0,
+                  1
+                ],
+                [
+                  0,
+                  1
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            },
+            {
+              "stage": "query0",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "query1",
+              "status": "answered",
+              "evidenceCount": 1
+            }
+          ],
+          "stages": {
+            "capture": 14906.765600000042,
+            "query0": 4076.250299999956,
+            "query1": 5681.519000000029
+          }
+        },
+        {
+          "id": "g46",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "queryCount": 5,
+          "failures": []
+        },
+        {
+          "id": "g47",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "queryCount": 5,
+          "failures": []
+        },
+        {
+          "id": "g48",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g49",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g50",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g51",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g52",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g53",
+          "family": "ambiguity",
+          "passed": false,
+          "error": "ANSWER_REVIEW_scope",
+          "queryCount": 2,
+          "failures": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "clarify",
+              "unitCount": 0,
+              "kinds": [],
+              "timePrecisions": [],
+              "timeMatchesCaptureDay": [],
+              "segmentEnds": [],
+              "segmentRoles": [],
+              "segmentOwners": []
+            },
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "fact",
+                "fact"
+              ],
+              "timePrecisions": [
+                "unknown",
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                16,
+                18,
+                20,
+                21,
+                22,
+                27,
+                29,
+                46,
+                47
+              ],
+              "segmentRoles": [
+                "primary",
+                "separator",
+                "context",
+                "replaced",
+                "separator",
+                "primary",
+                "separator",
+                "primary",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  1
+                ],
+                [],
+                [
+                  1
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            },
+            {
+              "stage": "query0",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "query1",
+              "status": "answered",
+              "evidenceCount": 1
+            }
+          ],
+          "stages": {
+            "capture": 5072.533699999971,
+            "clarification": 20423.528300000005,
+            "query0": 4859.769899999956,
+            "query1": 3432.7111999999615,
+            "forget": 0.3693999999668449,
+            "after0": 13477.863799999992
+          }
+        },
+        {
+          "id": "g54",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g55",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g56",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g57",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "queryCount": 6,
+          "failures": []
+        },
+        {
+          "id": "g58",
+          "family": "forget",
+          "passed": false,
+          "error": null,
+          "queryCount": 4,
+          "failures": [
+            {
+              "name": "capture:motto:attribution",
+              "passed": false,
+              "critical": true
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "quotation",
+                "fact"
+              ],
+              "timePrecisions": [
+                "unknown",
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                26,
+                28,
+                45,
+                46
+              ],
+              "segmentRoles": [
+                "primary",
+                "separator",
+                "primary",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            },
+            {
+              "stage": "query0",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "query1",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "after0",
+              "status": "not_found",
+              "evidenceCount": 0
+            },
+            {
+              "stage": "after1",
+              "status": "answered",
+              "evidenceCount": 1
+            }
+          ],
+          "stages": {
+            "capture": 6144.887999999977,
+            "query0": 5219.544100000057,
+            "query1": 3909.83189999999,
+            "forget": 0.2807999999495223,
+            "after0": 4105.4375,
+            "after1": 4078.702200000058
+          }
+        },
+        {
+          "id": "g59",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g60",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        }
+      ]
+    },
+    {
+      "round": 2,
+      "total": 60,
+      "passed": 53,
+      "families": [
+        {
+          "family": "ambiguity",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "attribution",
+          "total": 6,
+          "passed": 4
+        },
+        {
+          "family": "condition",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "correction",
+          "total": 6,
+          "passed": 5
+        },
+        {
+          "family": "duplicate",
+          "total": 6,
+          "passed": 5
+        },
+        {
+          "family": "forget",
+          "total": 6,
+          "passed": 5
+        },
+        {
+          "family": "independent",
+          "total": 6,
+          "passed": 5
+        },
+        {
+          "family": "shared",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "similar",
+          "total": 6,
+          "passed": 5
+        },
+        {
+          "family": "time",
+          "total": 6,
+          "passed": 6
+        }
+      ],
+      "gatePassed": false,
+      "criticalChecksFailed": 7,
+      "queriesReturned": 240,
+      "queriesExpected": 247,
+      "calls": 612,
+      "spentUsd": 2.9277175000000426,
+      "latency": {
+        "capture": {
+          "attempts": 60,
+          "p50": 7118.778499999999,
+          "p95": 12576.29879999999,
+          "maximum": 19845.0738
+        },
+        "clarification": {
+          "attempts": 4,
+          "p50": 11894.527200000011,
+          "p95": 15613.877799999958,
+          "maximum": 15613.877799999958
+        },
+        "correction": {
+          "attempts": 4,
+          "p50": 12310.670500000007,
+          "p95": 15177.66830000002,
+          "maximum": 15177.66830000002
+        },
+        "query": {
+          "attempts": 240,
+          "p50": 4405.712699999975,
+          "p95": 6488.2353,
+          "maximum": 17850.592399999965
+        },
+        "forget": {
+          "attempts": 56,
+          "p50": 0.33720000000903383,
+          "p95": 0.5377999999909662,
+          "maximum": 0.6975000000002183
+        }
+      },
+      "cases": [
+        {
+          "id": "g01",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g02",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g03",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g04",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g05",
+          "family": "independent",
+          "passed": false,
+          "error": null,
+          "queryCount": 4,
+          "failures": [
+            {
+              "name": "query1:answer_details",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "fact",
+                "fact"
+              ],
+              "timePrecisions": [
+                "unknown",
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                6,
+                7,
+                10,
+                12,
+                27,
+                28
+              ],
+              "segmentRoles": [
+                "context",
+                "separator",
+                "primary",
+                "separator",
+                "primary",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  0,
+                  1
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            },
+            {
+              "stage": "query0",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "query1",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "after0",
+              "status": "not_found",
+              "evidenceCount": 0
+            },
+            {
+              "stage": "after1",
+              "status": "answered",
+              "evidenceCount": 1
+            }
+          ],
+          "stages": {
+            "capture": 10616.4428,
+            "query0": 5234.243000000002,
+            "query1": 3631.612500000003,
+            "forget": 0.33250000000407454,
+            "after0": 4241.2716,
+            "after1": 4098.549200000001
+          }
+        },
+        {
+          "id": "g06",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g07",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g08",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g09",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g10",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g11",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g12",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g13",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g14",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g15",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g16",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g17",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g18",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g19",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g20",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g21",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g22",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g23",
+          "family": "attribution",
+          "passed": false,
+          "error": null,
+          "queryCount": 4,
+          "failures": [
+            {
+              "name": "capture:front:polarity",
+              "passed": false,
+              "critical": true
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "quotation",
+                "quotation"
+              ],
+              "timePrecisions": [
+                "unknown",
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                17,
+                18,
+                34
+              ],
+              "segmentRoles": [
+                "primary",
+                "separator",
+                "primary"
+              ],
+              "segmentOwners": [
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  1
+                ]
+              ]
+            },
+            {
+              "stage": "query0",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "query1",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "after0",
+              "status": "not_found",
+              "evidenceCount": 0
+            },
+            {
+              "stage": "after1",
+              "status": "answered",
+              "evidenceCount": 1
+            }
+          ],
+          "stages": {
+            "capture": 9998.319199999998,
+            "query0": 3835.8432999999786,
+            "query1": 5349.877000000008,
+            "forget": 0.3759000000136439,
+            "after0": 5533.731299999985,
+            "after1": 3767.7837
+          }
+        },
+        {
+          "id": "g24",
+          "family": "attribution",
+          "passed": false,
+          "error": null,
+          "queryCount": 4,
+          "failures": [
+            {
+              "name": "query1:answer_perspective",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "after1:answer_perspective",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "intention",
+                "quotation"
+              ],
+              "timePrecisions": [
+                "unknown",
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                2,
+                3,
+                8,
+                10,
+                34,
+                35
+              ],
+              "segmentRoles": [
+                "context",
+                "separator",
+                "primary",
+                "separator",
+                "primary",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  0,
+                  1
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            },
+            {
+              "stage": "query0",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "query1",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "after0",
+              "status": "not_found",
+              "evidenceCount": 0
+            },
+            {
+              "stage": "after1",
+              "status": "answered",
+              "evidenceCount": 1
+            }
+          ],
+          "stages": {
+            "capture": 10272.599099999992,
+            "query0": 4389.069099999993,
+            "query1": 3921.4941999999864,
+            "forget": 0.34599999999045394,
+            "after0": 3792.0957000000053,
+            "after1": 4388.4522
+          }
+        },
+        {
+          "id": "g25",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g26",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g27",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g28",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g29",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g30",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g31",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g32",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g33",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g34",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g35",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g36",
+          "family": "duplicate",
+          "passed": false,
+          "error": "EXPECTED_TARGET_MISSING",
+          "queryCount": 2,
+          "failures": [
+            {
+              "name": "repeat:count",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "repeat:unit_count",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "repeat:pottery:meaning",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "query0:answer_evidence",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "quotation",
+                "intention"
+              ],
+              "timePrecisions": [
+                "unknown",
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                12,
+                14,
+                25,
+                26
+              ],
+              "segmentRoles": [
+                "primary",
+                "separator",
+                "primary",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            },
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 1,
+              "kinds": [
+                "quotation"
+              ],
+              "timePrecisions": [
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false
+              ],
+              "segmentEnds": [
+                15
+              ],
+              "segmentRoles": [
+                "primary"
+              ],
+              "segmentOwners": [
+                [
+                  0
+                ]
+              ]
+            },
+            {
+              "stage": "query0",
+              "status": "answered",
+              "evidenceCount": 2
+            },
+            {
+              "stage": "query1",
+              "status": "answered",
+              "evidenceCount": 1
+            }
+          ],
+          "stages": {
+            "capture": 6208.055500000017,
+            "repeat": 12171.422100000025,
+            "query0": 3574.5132999999914,
+            "query1": 3972.706999999995
+          }
+        },
+        {
+          "id": "g37",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g38",
+          "family": "similar",
+          "passed": false,
+          "error": "EXPECTED_TARGET_MISSING",
+          "queryCount": 2,
+          "failures": [
+            {
+              "name": "capture:self:meaning",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "query0:answer_evidence",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "intention",
+                "intention"
+              ],
+              "timePrecisions": [
+                "unknown",
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                12,
+                14,
+                31,
+                32
+              ],
+              "segmentRoles": [
+                "primary",
+                "separator",
+                "primary",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            },
+            {
+              "stage": "query0",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "query1",
+              "status": "answered",
+              "evidenceCount": 1
+            }
+          ],
+          "stages": {
+            "capture": 6278.390000000014,
+            "query0": 4117.046800000011,
+            "query1": 4590.2027000000235
+          }
+        },
+        {
+          "id": "g39",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g40",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g41",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g42",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g43",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "queryCount": 5,
+          "failures": []
+        },
+        {
+          "id": "g44",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "queryCount": 5,
+          "failures": []
+        },
+        {
+          "id": "g45",
+          "family": "correction",
+          "passed": false,
+          "error": "EXPECTED_TARGET_MISSING",
+          "queryCount": 2,
+          "failures": [
+            {
+              "name": "capture:walk:meaning",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "capture:binoculars:time",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "capture:binoculars:no_foreign_fact",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "query0:answer_evidence",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "intention",
+                "intention"
+              ],
+              "timePrecisions": [
+                "day",
+                "day"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                10,
+                11,
+                12,
+                13,
+                24,
+                26,
+                31,
+                32
+              ],
+              "segmentRoles": [
+                "time",
+                "separator",
+                "primary",
+                "separator",
+                "context",
+                "separator",
+                "primary",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0,
+                  1
+                ],
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  0,
+                  1
+                ],
+                [
+                  0,
+                  1
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            },
+            {
+              "stage": "query0",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "query1",
+              "status": "answered",
+              "evidenceCount": 1
+            }
+          ],
+          "stages": {
+            "capture": 12576.29879999999,
+            "query0": 5236.845700000005,
+            "query1": 4004.7973000000347
+          }
+        },
+        {
+          "id": "g46",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "queryCount": 5,
+          "failures": []
+        },
+        {
+          "id": "g47",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "queryCount": 5,
+          "failures": []
+        },
+        {
+          "id": "g48",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g49",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g50",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g51",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g52",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g53",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g54",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g55",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g56",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g57",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "queryCount": 6,
+          "failures": []
+        },
+        {
+          "id": "g58",
+          "family": "forget",
+          "passed": false,
+          "error": null,
+          "queryCount": 4,
+          "failures": [
+            {
+              "name": "capture:motto:attribution",
+              "passed": false,
+              "critical": true
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "quotation",
+                "fact"
+              ],
+              "timePrecisions": [
+                "unknown",
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                26,
+                28,
+                45,
+                46
+              ],
+              "segmentRoles": [
+                "primary",
+                "separator",
+                "primary",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            },
+            {
+              "stage": "query0",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "query1",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "after0",
+              "status": "not_found",
+              "evidenceCount": 0
+            },
+            {
+              "stage": "after1",
+              "status": "answered",
+              "evidenceCount": 1
+            }
+          ],
+          "stages": {
+            "capture": 5912.406100000022,
+            "query0": 4919.471299999976,
+            "query1": 3621.670000000042,
+            "forget": 0.28709999995771796,
+            "after0": 3822.5803000000305,
+            "after1": 3768.933799999999
+          }
+        },
+        {
+          "id": "g59",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g60",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "total": 60,
+      "passed": 53,
+      "families": [
+        {
+          "family": "ambiguity",
+          "total": 6,
+          "passed": 5
+        },
+        {
+          "family": "attribution",
+          "total": 6,
+          "passed": 4
+        },
+        {
+          "family": "condition",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "correction",
+          "total": 6,
+          "passed": 5
+        },
+        {
+          "family": "duplicate",
+          "total": 6,
+          "passed": 5
+        },
+        {
+          "family": "forget",
+          "total": 6,
+          "passed": 5
+        },
+        {
+          "family": "independent",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "shared",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "similar",
+          "total": 6,
+          "passed": 5
+        },
+        {
+          "family": "time",
+          "total": 6,
+          "passed": 6
+        }
+      ],
+      "gatePassed": false,
+      "criticalChecksFailed": 6,
+      "queriesReturned": 234,
+      "queriesExpected": 247,
+      "calls": 602,
+      "spentUsd": 2.9074325000000627,
+      "latency": {
+        "capture": {
+          "attempts": 60,
+          "p50": 6351.5239,
+          "p95": 11983.44750000001,
+          "maximum": 17079.158200000005
+        },
+        "clarification": {
+          "attempts": 4,
+          "p50": 12554.233299999963,
+          "p95": 23560.32150000002,
+          "maximum": 23560.32150000002
+        },
+        "correction": {
+          "attempts": 4,
+          "p50": 9914.835699999996,
+          "p95": 12028.731700000004,
+          "maximum": 12028.731700000004
+        },
+        "query": {
+          "attempts": 235,
+          "p50": 4153.045099999988,
+          "p95": 5966.192700000014,
+          "maximum": 12391.100999999966
+        },
+        "forget": {
+          "attempts": 55,
+          "p50": 0.3291999999783002,
+          "p95": 0.47569999999541324,
+          "maximum": 0.669899999998961
+        }
+      },
+      "cases": [
+        {
+          "id": "g01",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g02",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g03",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g04",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g05",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g06",
+          "family": "independent",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g07",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g08",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g09",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g10",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g11",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g12",
+          "family": "shared",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g13",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g14",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g15",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g16",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g17",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g18",
+          "family": "condition",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g19",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g20",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g21",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g22",
+          "family": "attribution",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g23",
+          "family": "attribution",
+          "passed": false,
+          "error": "REVIEW_modality",
+          "queryCount": 0,
+          "failures": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "quotation",
+                "quotation"
+              ],
+              "timePrecisions": [
+                "unknown",
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                17,
+                18,
+                34
+              ],
+              "segmentRoles": [
+                "primary",
+                "separator",
+                "primary"
+              ],
+              "segmentOwners": [
+                [
+                  0
+                ],
+                [
+                  0,
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            }
+          ],
+          "stages": {
+            "capture": 12321.993399999978
+          }
+        },
+        {
+          "id": "g24",
+          "family": "attribution",
+          "passed": false,
+          "error": null,
+          "queryCount": 4,
+          "failures": [
+            {
+              "name": "query1:answer_perspective",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "after1:answer_perspective",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "intention",
+                "quotation"
+              ],
+              "timePrecisions": [
+                "unknown",
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                2,
+                3,
+                8,
+                10,
+                34,
+                35
+              ],
+              "segmentRoles": [
+                "context",
+                "separator",
+                "primary",
+                "separator",
+                "primary",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            },
+            {
+              "stage": "query0",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "query1",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "after0",
+              "status": "not_found",
+              "evidenceCount": 0
+            },
+            {
+              "stage": "after1",
+              "status": "answered",
+              "evidenceCount": 1
+            }
+          ],
+          "stages": {
+            "capture": 9032.5956,
+            "query0": 4153.045099999988,
+            "query1": 3603.1723000000056,
+            "forget": 0.2973999999812804,
+            "after0": 3626.8618000000133,
+            "after1": 3391.9796999999962
+          }
+        },
+        {
+          "id": "g25",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g26",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g27",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g28",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g29",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g30",
+          "family": "time",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g31",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g32",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g33",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g34",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g35",
+          "family": "duplicate",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g36",
+          "family": "duplicate",
+          "passed": false,
+          "error": "EXPECTED_TARGET_MISSING",
+          "queryCount": 2,
+          "failures": [
+            {
+              "name": "repeat:count",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "repeat:unit_count",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "repeat:pottery:meaning",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "query0:answer_evidence",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "quotation",
+                "intention"
+              ],
+              "timePrecisions": [
+                "unknown",
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                12,
+                14,
+                25,
+                26
+              ],
+              "segmentRoles": [
+                "primary",
+                "separator",
+                "primary",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            },
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 1,
+              "kinds": [
+                "quotation"
+              ],
+              "timePrecisions": [
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false
+              ],
+              "segmentEnds": [
+                15
+              ],
+              "segmentRoles": [
+                "primary"
+              ],
+              "segmentOwners": [
+                [
+                  0
+                ]
+              ]
+            },
+            {
+              "stage": "query0",
+              "status": "answered",
+              "evidenceCount": 2
+            },
+            {
+              "stage": "query1",
+              "status": "answered",
+              "evidenceCount": 1
+            }
+          ],
+          "stages": {
+            "capture": 6156.091399999976,
+            "repeat": 10965.038600000029,
+            "query0": 3463.8446000000113,
+            "query1": 3625.4515000000247
+          }
+        },
+        {
+          "id": "g37",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g38",
+          "family": "similar",
+          "passed": false,
+          "error": "EXPECTED_TARGET_MISSING",
+          "queryCount": 2,
+          "failures": [
+            {
+              "name": "capture:self:meaning",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "query0:answer_evidence",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "intention",
+                "intention"
+              ],
+              "timePrecisions": [
+                "unknown",
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                12,
+                14,
+                31,
+                32
+              ],
+              "segmentRoles": [
+                "primary",
+                "separator",
+                "primary",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            },
+            {
+              "stage": "query0",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "query1",
+              "status": "answered",
+              "evidenceCount": 1
+            }
+          ],
+          "stages": {
+            "capture": 6429.713199999998,
+            "query0": 3735.8636000000406,
+            "query1": 4499.600999999966
+          }
+        },
+        {
+          "id": "g39",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g40",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g41",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g42",
+          "family": "similar",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g43",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "queryCount": 5,
+          "failures": []
+        },
+        {
+          "id": "g44",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "queryCount": 5,
+          "failures": []
+        },
+        {
+          "id": "g45",
+          "family": "correction",
+          "passed": false,
+          "error": "EXPECTED_TARGET_MISSING",
+          "queryCount": 2,
+          "failures": [
+            {
+              "name": "capture:walk:meaning",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "capture:binoculars:time",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "capture:binoculars:no_foreign_fact",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "query0:answer_evidence",
+              "passed": false,
+              "critical": true
+            },
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "intention",
+                "intention"
+              ],
+              "timePrecisions": [
+                "day",
+                "day"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                10,
+                11,
+                12,
+                13,
+                24,
+                26,
+                31,
+                32
+              ],
+              "segmentRoles": [
+                "time",
+                "separator",
+                "primary",
+                "separator",
+                "context",
+                "separator",
+                "primary",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  0,
+                  1
+                ],
+                [
+                  0
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            },
+            {
+              "stage": "query0",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "query1",
+              "status": "answered",
+              "evidenceCount": 1
+            }
+          ],
+          "stages": {
+            "capture": 11056.349199999997,
+            "query0": 4995.023600000015,
+            "query1": 4234.845100000035
+          }
+        },
+        {
+          "id": "g46",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "queryCount": 5,
+          "failures": []
+        },
+        {
+          "id": "g47",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "queryCount": 5,
+          "failures": []
+        },
+        {
+          "id": "g48",
+          "family": "correction",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g49",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g50",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g51",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g52",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g53",
+          "family": "ambiguity",
+          "passed": false,
+          "error": "ANSWER_REVIEW_coverage",
+          "queryCount": 2,
+          "failures": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "clarify",
+              "unitCount": 0,
+              "kinds": [],
+              "timePrecisions": [],
+              "timeMatchesCaptureDay": [],
+              "segmentEnds": [],
+              "segmentRoles": [],
+              "segmentOwners": []
+            },
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "fact",
+                "fact"
+              ],
+              "timePrecisions": [
+                "unknown",
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                16,
+                18,
+                20,
+                21,
+                27,
+                29,
+                46,
+                47
+              ],
+              "segmentRoles": [
+                "primary",
+                "separator",
+                "primary",
+                "replaced",
+                "primary",
+                "separator",
+                "primary",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  1
+                ],
+                [],
+                [
+                  1
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            },
+            {
+              "stage": "query0",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "query1",
+              "status": "answered",
+              "evidenceCount": 1
+            }
+          ],
+          "stages": {
+            "capture": 4206.323100000038,
+            "clarification": 23560.32150000002,
+            "query0": 4607.613199999963,
+            "query1": 6137.6468999999925,
+            "forget": 0.32229999999981374,
+            "after0": 12391.100999999966
+          }
+        },
+        {
+          "id": "g54",
+          "family": "ambiguity",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g55",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g56",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g57",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "queryCount": 6,
+          "failures": []
+        },
+        {
+          "id": "g58",
+          "family": "forget",
+          "passed": false,
+          "error": null,
+          "queryCount": 4,
+          "failures": [
+            {
+              "name": "capture:motto:attribution",
+              "passed": false,
+              "critical": true
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "quotation",
+                "fact"
+              ],
+              "timePrecisions": [
+                "unknown",
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                26,
+                28,
+                45,
+                46
+              ],
+              "segmentRoles": [
+                "primary",
+                "separator",
+                "primary",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0
+                ],
+                [
+                  0
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ]
+              ]
+            },
+            {
+              "stage": "query0",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "query1",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "after0",
+              "status": "not_found",
+              "evidenceCount": 0
+            },
+            {
+              "stage": "after1",
+              "status": "answered",
+              "evidenceCount": 1
+            }
+          ],
+          "stages": {
+            "capture": 5952.200599999982,
+            "query0": 3891.4609000000055,
+            "query1": 3566.686300000001,
+            "forget": 0.2871999999624677,
+            "after0": 3685.9942000000156,
+            "after1": 3805.7987999999896
+          }
+        },
+        {
+          "id": "g59",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        },
+        {
+          "id": "g60",
+          "family": "forget",
+          "passed": true,
+          "error": null,
+          "queryCount": 4,
+          "failures": []
+        }
+      ]
+    }
+  ],
+  "regressions": [
+    {
+      "name": "grouping-diagnostic-1",
+      "corpus": "regression-v5",
+      "fingerprint": "cddc27cba853a90de5bd5e47cd6990b1da82fa5899071d83fe3a377b3698287d",
+      "total": 6,
+      "passed": 6,
+      "calls": 62,
+      "baselineSpentUsd": 42.16253999999993,
+      "spentUsd": 0.2890575000000055,
+      "queriesReturned": 24,
+      "cases": [
+        {
+          "id": "f04",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f21",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f37",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f41",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f49",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f53",
+          "passed": true,
+          "error": null,
+          "failures": []
+        }
+      ]
+    },
+    {
+      "name": "grouping-regression-1",
+      "corpus": "regression-v5",
+      "fingerprint": "702b3b3b0679dd5759351366dd8f6a1ec4168e5e05d81d631e483cc61d52b372",
+      "total": 60,
+      "passed": 60,
+      "calls": 602,
+      "baselineSpentUsd": 42.451597499999934,
+      "spentUsd": 2.874229999999976,
+      "queriesReturned": 247,
+      "cases": [
+        {
+          "id": "f01",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f02",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f03",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f04",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f05",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f06",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f07",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f08",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f09",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f10",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f11",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f12",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f13",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f14",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f15",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f16",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f17",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f18",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f19",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f20",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f21",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f22",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f23",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f24",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f25",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f26",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f27",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f28",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f29",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f30",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f31",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f32",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f33",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f34",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f35",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f36",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f37",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f38",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f39",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f40",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f41",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f42",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f43",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f44",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f45",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f46",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f47",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f48",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f49",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f50",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f51",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f52",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f53",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f54",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f55",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f56",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f57",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f58",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f59",
+          "passed": true,
+          "error": null,
+          "failures": []
+        },
+        {
+          "id": "f60",
+          "passed": true,
+          "error": null,
+          "failures": []
+        }
+      ]
+    }
+  ],
+  "continuationBaselineSpentUsd": 42.16253999999993,
+  "spentWholeContinuationUsd": 11.901402500000117
+}

@@ -1,5 +1,7 @@
 # R2 · Evaluación independiente final
 
+Informe histórico de `independent-v5`, anterior a la [continuación de agrupación y rechazos](R2_GROUPING_VALIDATION.md). Sus resultados no se recalculan: la continuación corrige los casos expuestos y registra otra reserva con sus propios fallos y límites.
+
 Autorizada el 16 de noviembre de 2026. Perfil `gpt-6.1-sol`, razonamiento `medium`, `store:false`. Rama `codex/memory-core-r2`. Solo textos ficticios definidos en el repositorio, almacenes RAM vacíos por escenario y metadatos técnicos en informes locales. Sin Firebase, móviles, recuerdos reales, migración, despliegue ni correo.
 
 ## Protocolo fijado antes de ejecutar

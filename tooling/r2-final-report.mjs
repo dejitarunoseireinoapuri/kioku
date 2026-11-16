@@ -121,6 +121,55 @@ const report = {
     previousM0SpentUsd: rounds[2].budget.previousM0Spent,
     rounds: summaries,
 };
+if (grouping) {
+    const regressions = await Promise.all(
+        ["grouping-diagnostic-1", "grouping-regression-1"].map(
+            async (name, index) => {
+                const run = JSON.parse(
+                    await readFile(`local-data/r2/tuning-${name}.json`, "utf8"),
+                );
+                assert.equal(run.complete, true);
+                assert.equal(run.corpus, "regression-v5");
+                assert.deepEqual(run.profile, rounds[0].profile);
+                assert.equal(run.resolvedModel, rounds[0].resolvedModel);
+                const ids =
+                    index === 0
+                        ? ["f04", "f21", "f37", "f41", "f49", "f53"]
+                        : Array.from(
+                              { length: 60 },
+                              (_, i) => `f${String(i + 1).padStart(2, "0")}`,
+                          );
+                assert.deepEqual(run.results.map((r) => r.id).sort(), ids);
+                return {
+                    name,
+                    corpus: run.corpus,
+                    fingerprint: run.fingerprint,
+                    total: run.results.length,
+                    passed: run.results.filter(passed).length,
+                    calls: run.metrics.length,
+                    baselineSpentUsd: run.baseline.spentUsd,
+                    spentUsd: run.budget.spentUsd - run.baseline.spentUsd,
+                    queriesReturned: run.results.reduce(
+                        (n, r) => n + r.queryCount,
+                        0,
+                    ),
+                    cases: run.results
+                        .toSorted((a, b) => a.id.localeCompare(b.id))
+                        .map((r) => ({
+                            id: r.id,
+                            passed: passed(r),
+                            error: r.error,
+                            failures: r.checks.filter((c) => !c.passed),
+                        })),
+                };
+            },
+        ),
+    );
+    report.regressions = regressions;
+    report.continuationBaselineSpentUsd = regressions[0].baselineSpentUsd;
+    report.spentWholeContinuationUsd =
+        report.finalSpentUsd - regressions[0].baselineSpentUsd;
+}
 function audit(value) {
     if (typeof value === "string")
         assert.ok(/^[A-Za-z0-9_:.-]{1,200}$/u.test(value));

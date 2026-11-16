@@ -1,6 +1,6 @@
 # Reconstrucción del núcleo de memoria · R0–R6
 
-Resultado vigente R2: evaluación independiente terminada con 60 historias nuevas y Sol medio, sin ajustes entre rondas: **55/60, 56/60 y 57/60**. Ninguna supera el criterio completo. Las quince ediciones y los casos de olvido pasan; siguen abiertas agrupación de valoraciones/citas, rechazos de interpretación y un fragmento vacío al aclarar. 104 pruebas locales correctas; [informe, costes y límites](R2_FINAL_VALIDATION.md). **R2 sigue abierta; no se avanza a R3 ni voz.** App, Firebase y recuerdos reales intactos. La regresión anterior 60/60 y las doce historias 12/12 en tres pasadas se conservan como [evidencia histórica](R2_RELIABILITY_VALIDATION.md).
+Resultado vigente R2: corregidas agrupación y aclaración; regresión dirigida 6/6 y completa 60/60. La nueva reserva ficticia con Sol medio obtiene **52/60, 53/60 y 53/60**, sin cambios entre rondas. Quedan incidencias de citas/repetición/contexto y limitaciones del oráculo, conservadas sin recalificar. 110 pruebas locales correctas; [informe, costes y continuaciones autorizadas](R2_GROUPING_VALIDATION.md). **R2 sigue abierta; no se avanza a R3 ni voz.** App, Firebase y recuerdos reales intactos. El propietario autoriza como máximo dos tareas adicionales y suspender el PC al terminar la última.
 
 Evaluaciones anteriores: [rechazos y falsas ausencias](R2_RELIABILITY_VALIDATION.md) y [evidencia indexada](R2_INDEXED_VALIDATION.md). Las cifras de las continuaciones siguientes son históricas; el resultado vigente y los bloqueos de cierre constan arriba.
 
