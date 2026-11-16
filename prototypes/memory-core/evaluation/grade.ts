@@ -78,6 +78,9 @@ export function gradeUnits(state: Snapshot, gold: GoldUnit[]) {
         matches(ownEvidence, t),
       ),
       literal_details: expected.terms.every((t) => matches(ownEvidence, t)),
+      literal_specifics: (expected.evidenceTerms ?? []).every((t) =>
+        matches(ownEvidence, t),
+      ),
       no_foreign_fact: !foreignFact,
     }))
       checks.push({

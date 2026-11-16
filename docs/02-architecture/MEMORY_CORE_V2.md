@@ -44,6 +44,10 @@ Una relación con condición no se convierte en dos hechos independientes para f
 
 Una unidad compuesta no es una salida de emergencia para almacenar como una sola ficha dos asuntos claramente independientes cuando falle el extractor. Si el significado es claro pero la representación no supera las invariantes, corresponde un fallo técnico sin guardado, no pedir aclaraciones lingüísticas irrelevantes.
 
+En una enumeración, un predicado aplicado a todos sus elementos es contexto común, igual que el sustantivo compartido. Se separa de cantidades/colores/valoraciones particulares: cada unidad debe seguir acreditando qué se hizo con su objeto después de olvidar la otra. Un verbo exclusivo de una acción diferente no se comparte. La consulta recibe soportes vigentes agrupados por unidad y procedencia, sin posiciones ni longitud del relato incompleto; esos metadatos se conservan en el motor para validar y editar. Los huecos de otra unidad no invalidan evidencia propia ni permiten reconstruir lo retirado.
+
+«Quedé con X para Y» conserva el acuerdo expresado sin afirmar que se celebró el encuentro o se realizó Y. «Ahora prefiero Y» acredita el estado relatado, pero no fecha su inicio: `time` sigue desconocido salvo fecha explícita del evento/cambio, y `recordedAt` no se convierte en comienzo de la preferencia. Una pregunta cotidiana de ubicación/cantidad puede contestarse con la observación guardada, indicando lo que el propietario contó; una cantidad posterior a un consumo o traslado no registrado sigue desconocida.
+
 ## 4. Modelo lógico propuesto
 
 Todos los IDs son opacos y del propietario autenticado. Los nombres siguientes son conceptos de diseño; rutas físicas y DTO se fijan en R1, sin reutilizar silenciosamente el esquema de snapshots M0.

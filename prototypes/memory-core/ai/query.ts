@@ -7,6 +7,7 @@ import type { StructuredModel } from "./contracts.ts";
 import type { Harness } from "../fixtures/harness.ts";
 import type { MemoryPrototype } from "../src/memory.ts";
 import { calendar } from "./calendar.ts";
+import { answerEvidenceView } from "./answer-evidence.ts";
 import {
   answerInstructions,
   answerReviewInstructions,
@@ -68,7 +69,7 @@ export async function answerEvidence(
     previousQuestion: previousQuestion ?? null,
     calendar: calendar(at, zone),
     coverage: context.ranked ? "ranked_candidates" : "complete_catalog",
-    evidence: items.map((item, index) => ({ index, ...item })),
+    evidence: answerEvidenceView(items),
   };
   const proposed = await model.call(
     "answer",

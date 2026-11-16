@@ -25,6 +25,11 @@ export interface CaseResult {
     evidenceCount?: number;
     unitCount?: number;
     kinds?: string[];
+    timePrecisions?: string[];
+    timeMatchesCaptureDay?: boolean[];
+    segmentEnds?: number[];
+    segmentRoles?: string[];
+    segmentOwners?: number[][];
   }[];
 }
 function unchangedMeaning(before: Unit, after: Unit | undefined) {
@@ -72,6 +77,15 @@ export async function executeCase(
           status: p.status,
           unitCount: p.units.length,
           kinds: p.units.map((u) => u.content.kind),
+          timePrecisions: p.units.map((u) => u.time.precision),
+          timeMatchesCaptureDay: p.units.map(
+            (u) => u.time.value === fixture.at.slice(0, 10),
+          ),
+          segmentEnds: p.segments.map((s) => s.end),
+          segmentRoles: p.segments.map((s) => s.role),
+          segmentOwners: p.segments.map((s) =>
+            s.owners.map((key) => p.units.findIndex((u) => u.key === key)),
+          ),
         });
       }
       return value;
@@ -282,7 +296,7 @@ export async function executeCase(
       error instanceof InterpretationError
         ? error.code
         : error instanceof CoreError
-          ? error.message
+          ? [error.code, error.reason].filter(Boolean).join(":")
           : error instanceof z.ZodError
             ? "EVALUATION_SCHEMA"
             : error instanceof TypeError

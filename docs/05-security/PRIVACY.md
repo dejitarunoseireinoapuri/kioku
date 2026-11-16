@@ -1,5 +1,7 @@
 # Privacidad, datos y permisos
 
+La continuación de fiabilidad R2 minimiza la vista de consulta enviada al proveedor: fragmentos propios vigentes y sus calendarios, sin IDs de almacenamiento, propietarios ni posiciones/longitud de un relato incompleto. Esos metadatos permanecen en el motor para editar y reautorizar. La evaluación registra únicamente motivos cerrados, roles/índices numéricos de fixtures, estados, comprobaciones y costes; no conserva prosa generada. Solo datos ficticios, sin acceso a Firebase ni recuerdos personales. [Alcance y resultados](../09-planning/R2_RELIABILITY_VALIDATION.md).
+
 R2 conserva instantes/zonas de cada intervención admitida sin añadir una copia completa del relato ni archivar la pregunta del asistente. Las palabras sustituidas se excluyen de todas las intervenciones. El índice paginado se deriva solo del contenido/evidencia vigente y se invalida ante cambios; no incorpora el feed. [Límites y evidencia](../09-planning/R2_INDEXED_VALIDATION.md).
 
 La evaluación R2 envía a OpenAI exclusivamente relatos, preguntas y candidatos ficticios definidos en el repositorio; sus almacenes desaparecen al terminar cada escenario. Los informes conservan códigos, IDs ficticios, métricas y verificaciones, nunca el texto generado o fuentes personales. La autorización de esta evaluación no permite reanalizar ni migrar datos del propietario. [R2_VALIDATION](../09-planning/R2_VALIDATION.md).

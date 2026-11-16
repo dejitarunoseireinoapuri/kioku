@@ -71,22 +71,43 @@ export function validateDraft(draft: Draft, correction: boolean): void {
     }
     requireThat(end === draft.text.length);
   }
-  requireThat(keys.size === draft.units.length);
+  requireThat(
+    keys.size === draft.units.length,
+    "evidence_invariant",
+    "duplicate_unit_key",
+  );
   let offset = 0;
   for (const fragment of draft.fragments) {
-    requireThat(fragment.start === offset && fragment.end > offset);
+    requireThat(
+      fragment.start === offset && fragment.end > offset,
+      "evidence_invariant",
+      "fragment_range",
+    );
     requireThat(
       fragment.end <= draft.text.length &&
         unicodeBoundary(draft.text, fragment.end),
     );
     offset = fragment.end;
     const owners = new Set(fragment.owners);
-    requireThat(owners.size === fragment.owners.length);
-    requireThat([...owners].every((key) => keys.has(key)));
+    requireThat(
+      owners.size === fragment.owners.length,
+      "evidence_invariant",
+      "duplicate_owner",
+    );
+    requireThat(
+      [...owners].every((key) => keys.has(key)),
+      "evidence_invariant",
+      "unknown_owner",
+    );
     if (fragment.role === "replaced") {
-      requireThat(correction && owners.size === 0);
-    } else requireThat(owners.size > 0);
-    if (fragment.role === "primary") requireThat(owners.size === 1);
+      requireThat(
+        correction && owners.size === 0,
+        "evidence_invariant",
+        "replacement_ownership",
+      );
+    } else requireThat(owners.size > 0, "evidence_invariant", "missing_owner");
+    if (fragment.role === "primary")
+      requireThat(owners.size === 1, "evidence_invariant", "primary_ownership");
     if (fragment.role === "time" && draft.interventions)
       requireThat(
         draft.interventions.some(
@@ -95,14 +116,24 @@ export function validateDraft(draft: Draft, correction: boolean): void {
         "scope_unresolved",
       );
     if (fragment.role !== "separator")
-      requireThat(draft.text.slice(fragment.start, fragment.end).trim());
+      requireThat(
+        draft.text.slice(fragment.start, fragment.end).trim(),
+        "evidence_invariant",
+        "empty_fragment",
+      );
     if (fragment.role === "separator") {
       requireThat(
         /^[\s\p{P}]+$/u.test(draft.text.slice(fragment.start, fragment.end)),
+        "evidence_invariant",
+        "semantic_separator",
       );
     }
   }
-  requireThat(offset === draft.text.length);
+  requireThat(
+    offset === draft.text.length,
+    "evidence_invariant",
+    "incomplete_coverage",
+  );
   for (const unit of draft.units) validateUnitEvidence(draft, unit);
 }
 
@@ -114,10 +145,16 @@ function validateUnitEvidence(
     draft.fragments.some(
       (f) => f.role === "primary" && f.owners.includes(unit.key),
     ),
+    "evidence_invariant",
+    "missing_primary",
   );
   validateTime(unit.time);
   if (unit.time.precision === "unknown")
-    requireThat(unit.time.fragment === null);
+    requireThat(
+      unit.time.fragment === null,
+      "evidence_invariant",
+      "unknown_time_anchor",
+    );
   else {
     // A reviewed repeat can inherit its identity's temporal evidence; it does not invent a new quote.
     if (unit.existing && unit.time.fragment === null) return;
@@ -127,6 +164,8 @@ function validateUnitEvidence(
         : draft.fragments[unit.time.fragment];
     requireThat(
       fragment?.role === "time" && fragment.owners.includes(unit.key),
+      "evidence_invariant",
+      "invalid_time_anchor",
     );
   }
 }

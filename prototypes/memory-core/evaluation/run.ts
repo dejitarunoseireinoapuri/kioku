@@ -11,6 +11,7 @@ import { reserve } from "./reserve.ts";
 import { fresh } from "./fresh.ts";
 import { adjustment } from "./adjustment.ts";
 import { holdout } from "./holdout.ts";
+import { reliability } from "./reliability.ts";
 
 async function main() {
   const args = process.argv.slice(2);
@@ -57,18 +58,21 @@ async function main() {
         "--regression-v2",
         "--regression",
         "--adjustment",
+        "--reliability",
       ].filter((flag) => args.includes(flag)).length > 1
     )
       throw new InterpretationError("CORPUS_SELECTION");
-    const corpus = args.includes("--regression-v3")
-      ? holdout
-      : args.includes("--adjustment")
-        ? adjustment
-        : args.includes("--regression-v2")
-          ? fresh
-          : args.includes("--regression")
-            ? reserve
-            : tuning;
+    const corpus = args.includes("--reliability")
+      ? reliability
+      : args.includes("--regression-v3")
+        ? holdout
+        : args.includes("--adjustment")
+          ? adjustment
+          : args.includes("--regression-v2")
+            ? fresh
+            : args.includes("--regression")
+              ? reserve
+              : tuning;
     const cases = wanted ? corpus.filter((c) => wanted.includes(c.id)) : corpus;
     if (!cases.length || (wanted && cases.length !== new Set(wanted).size))
       throw new InterpretationError("CASE_SELECTION");
@@ -88,15 +92,17 @@ async function main() {
       runCap,
       run,
       mode,
-      corpus: args.includes("--regression-v3")
-        ? "regression-v3"
-        : args.includes("--adjustment")
-          ? "adjustment-v3"
-          : args.includes("--regression")
-            ? "regression-v1"
-            : args.includes("--regression-v2")
-              ? "regression-v2"
-              : "tuning-v1",
+      corpus: args.includes("--reliability")
+        ? "reliability-v4"
+        : args.includes("--regression-v3")
+          ? "regression-v3"
+          : args.includes("--adjustment")
+            ? "adjustment-v3"
+            : args.includes("--regression")
+              ? "regression-v1"
+              : args.includes("--regression-v2")
+                ? "regression-v2"
+                : "tuning-v1",
       fingerprint,
       baseline,
       budget: budget.ledger,

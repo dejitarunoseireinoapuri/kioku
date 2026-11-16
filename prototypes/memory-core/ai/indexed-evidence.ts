@@ -3,14 +3,52 @@ import { interpretationSchema, InterpretationError } from "./contracts.ts";
 import type { Input, Interpretation } from "./contracts.ts";
 
 const end = z.number().int().nonnegative();
+const owner = interpretationSchema.shape.units.element.shape.key;
+const time = interpretationSchema.shape.units.element.shape.time;
 export const indexedInterpretationSchema = interpretationSchema.extend({
+  units: z
+    .array(
+      interpretationSchema.shape.units.element.extend({
+        time: z.union([
+          z.strictObject({
+            precision: z.literal("unknown"),
+            value: z.null(),
+            end: z.null(),
+            fragment: z.null(),
+          }),
+          time.extend({
+            precision: z.enum([
+              "day",
+              "month",
+              "year",
+              "month_day",
+              "interval",
+            ]),
+            value: z.string().min(1).max(10),
+          }),
+        ]),
+      }),
+    )
+    .max(8),
   segments: z
     .array(
-      z.strictObject({
-        end,
-        role: interpretationSchema.shape.segments.element.shape.role,
-        owners: interpretationSchema.shape.segments.element.shape.owners,
-      }),
+      z.union([
+        z.strictObject({
+          end,
+          role: z.literal("primary"),
+          owners: z.array(owner).length(1),
+        }),
+        z.strictObject({
+          end,
+          role: z.enum(["context", "time", "separator"]),
+          owners: z.array(owner).min(1).max(8),
+        }),
+        z.strictObject({
+          end,
+          role: z.literal("replaced"),
+          owners: z.array(owner).length(0),
+        }),
+      ]),
     )
     .max(128),
   retention: z

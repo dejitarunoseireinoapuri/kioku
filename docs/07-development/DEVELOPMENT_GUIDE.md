@@ -1,5 +1,7 @@
 # Guía de desarrollo
 
+Fiabilidad R2: `core:eval --live --reliability --run <id>` selecciona doce ciclos ficticios dirigidos de captura/edición/olvido y consulta positiva/negativa; son regresión después de su primera ejecución, no una reserva completa. `node tooling/r2-reliability-report.mjs` exporta únicamente métricas/códigos de los intentos concretos documentados, sin llamar a la API. [Resultados y alcance](../09-planning/R2_RELIABILITY_VALIDATION.md).
+
 R2 actual: `core:eval --live --adjustment --run <id>` ejecuta aclaraciones ficticias; `--regression-v2` mantiene los casos expuestos. La tercera reserva ya se ejecutó en `e3d03c2` y queda como `--regression-v3`. `--reserve` se bloquea hasta renovar el corpus; no repetir las historias conocidas como validación independiente. `node --env-file-if-exists=.env.local prototypes/memory-core/evaluation/scale-run.ts --live --run <id>` mide recuperación ficticia a escala. Requiere autorización de API vigente; no admite textos externos. [Topes, protocolo y resultados](../09-planning/R2_INDEXED_VALIDATION.md).
 
 ## Situación inicial

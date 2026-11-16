@@ -1,0 +1,766 @@
+{
+  "profile": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "inputRate": 0.0000025,
+    "outputRate": 0.00001
+  },
+  "phaseGate": "open_fresh_reserve_required",
+  "scope": "synthetic_only_no_firebase_no_mobile_no_migration",
+  "finalFocusedRoundsSameFingerprint": true,
+  "baselineSpentUsd": 28.928000000000022,
+  "finalSpentUsd": 34.30099999999997,
+  "spentThisContinuationUsd": 5.372999999999951,
+  "preservedUncertainReservationUsd": 0.671022500000003,
+  "previousM0SpentUsd": 21.719885440000006,
+  "runs": [
+    {
+      "run": "rejection-diagnosis-1",
+      "corpus": "regression-v3",
+      "fingerprint": "e4289090084cac2e94aef8339f0593308d65ac577197cef4d7b4367fa52301c1",
+      "total": 7,
+      "passed": 4,
+      "queries": 24,
+      "calls": 60,
+      "spentUsd": 0.30123000000000033,
+      "families": [
+        {
+          "family": "independent",
+          "total": 1,
+          "passed": 1
+        },
+        {
+          "family": "similar",
+          "total": 1,
+          "passed": 1
+        },
+        {
+          "family": "shared",
+          "total": 1,
+          "passed": 0
+        },
+        {
+          "family": "correction",
+          "total": 2,
+          "passed": 0
+        },
+        {
+          "family": "ambiguity",
+          "total": 1,
+          "passed": 1
+        },
+        {
+          "family": "forget",
+          "total": 1,
+          "passed": 1
+        }
+      ],
+      "latencyP95": {
+        "capture": 24906.785899999995,
+        "correction": null,
+        "clarification": 10247.759900000005,
+        "query": 8638.47020000001,
+        "forget": 0.6436000000030617
+      },
+      "failures": [
+        {
+          "id": "v12",
+          "family": "shared",
+          "error": null,
+          "checks": [
+            {
+              "name": "after1:answer_status",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "after1:answer_evidence",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "fact",
+                "fact"
+              ],
+              "timePrecisions": [
+                "unknown",
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ]
+            },
+            {
+              "stage": "query0",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "query1",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "after0",
+              "status": "not_found",
+              "evidenceCount": 0
+            },
+            {
+              "stage": "after1",
+              "status": "not_found",
+              "evidenceCount": 0
+            }
+          ]
+        },
+        {
+          "id": "v44",
+          "family": "correction",
+          "error": "REVIEW_clarification",
+          "checks": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "fact",
+                "intention"
+              ],
+              "timePrecisions": [
+                "unknown",
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ]
+            }
+          ]
+        },
+        {
+          "id": "v47",
+          "family": "correction",
+          "error": null,
+          "checks": [
+            {
+              "name": "capture:now:time",
+              "passed": false,
+              "critical": false
+            },
+            {
+              "name": "remaining:now:time",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "opinion",
+                "opinion"
+              ],
+              "timePrecisions": [
+                "unknown",
+                "day"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                true
+              ]
+            },
+            {
+              "stage": "query0",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "query1",
+              "status": "answered",
+              "evidenceCount": 1
+            },
+            {
+              "stage": "after0",
+              "status": "not_found",
+              "evidenceCount": 0
+            },
+            {
+              "stage": "after1",
+              "status": "answered",
+              "evidenceCount": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "run": "reliability-adjustment-1",
+      "corpus": "regression-v3",
+      "fingerprint": "371b7e1bbfa0a71e03cb668b4a2ac2a34edda7a369b88d504916b47760870190",
+      "total": 7,
+      "passed": 6,
+      "queries": 25,
+      "calls": 64,
+      "spentUsd": 0.2936475000000094,
+      "families": [
+        {
+          "family": "shared",
+          "total": 1,
+          "passed": 1
+        },
+        {
+          "family": "independent",
+          "total": 1,
+          "passed": 1
+        },
+        {
+          "family": "similar",
+          "total": 1,
+          "passed": 1
+        },
+        {
+          "family": "correction",
+          "total": 2,
+          "passed": 2
+        },
+        {
+          "family": "ambiguity",
+          "total": 1,
+          "passed": 1
+        },
+        {
+          "family": "forget",
+          "total": 1,
+          "passed": 0
+        }
+      ],
+      "latencyP95": {
+        "capture": 15391.0988,
+        "correction": 10865.5861,
+        "clarification": 11844.2091,
+        "query": 4761.937700000002,
+        "forget": 0.7294999999994616
+      },
+      "failures": [
+        {
+          "id": "v60",
+          "family": "forget",
+          "error": "REVIEW_ownership",
+          "checks": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "fact",
+                "fact"
+              ],
+              "timePrecisions": [
+                "unknown",
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "run": "ownership-diagnosis-1",
+      "corpus": "regression-v3",
+      "fingerprint": "2feea71ede1f34c0847922a1a3d6e164e42fff8e73a68f5e14601d7739739542",
+      "total": 1,
+      "passed": 0,
+      "queries": 0,
+      "calls": 2,
+      "spentUsd": 0.021024999999998073,
+      "families": [
+        {
+          "family": "forget",
+          "total": 1,
+          "passed": 0
+        }
+      ],
+      "latencyP95": {
+        "capture": 19626.104600000002,
+        "correction": null,
+        "clarification": null,
+        "query": null,
+        "forget": null
+      },
+      "failures": [
+        {
+          "id": "v60",
+          "family": "forget",
+          "error": "REVIEW_ownership",
+          "checks": [
+            {
+              "name": "completed_lifecycle",
+              "passed": false,
+              "critical": false
+            }
+          ],
+          "observations": [
+            {
+              "stage": "interpret",
+              "status": "ready",
+              "unitCount": 2,
+              "kinds": [
+                "fact",
+                "fact"
+              ],
+              "timePrecisions": [
+                "unknown",
+                "unknown"
+              ],
+              "timeMatchesCaptureDay": [
+                false,
+                false
+              ],
+              "segmentEnds": [
+                5,
+                9,
+                11,
+                13,
+                15,
+                18,
+                19
+              ],
+              "segmentRoles": [
+                "context",
+                "primary",
+                "context",
+                "primary",
+                "context",
+                "primary",
+                "separator"
+              ],
+              "segmentOwners": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0
+                ],
+                [
+                  0,
+                  1
+                ],
+                [
+                  0
+                ],
+                [
+                  1
+                ],
+                [
+                  1
+                ],
+                [
+                  0,
+                  1
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "run": "reliability-adjustment-2",
+      "corpus": "regression-v3",
+      "fingerprint": "93d079c50ab05ff159e938cb74a2488af03a38fb8754510fff7509f3a120f495",
+      "total": 7,
+      "passed": 7,
+      "queries": 29,
+      "calls": 72,
+      "spentUsd": 0.3197150000000022,
+      "families": [
+        {
+          "family": "independent",
+          "total": 1,
+          "passed": 1
+        },
+        {
+          "family": "shared",
+          "total": 1,
+          "passed": 1
+        },
+        {
+          "family": "similar",
+          "total": 1,
+          "passed": 1
+        },
+        {
+          "family": "correction",
+          "total": 2,
+          "passed": 2
+        },
+        {
+          "family": "ambiguity",
+          "total": 1,
+          "passed": 1
+        },
+        {
+          "family": "forget",
+          "total": 1,
+          "passed": 1
+        }
+      ],
+      "latencyP95": {
+        "capture": 47727.2798,
+        "correction": 9825.986300000004,
+        "clarification": 11546.138900000002,
+        "query": 4779.2112,
+        "forget": 0.653599999999642
+      },
+      "failures": []
+    },
+    {
+      "run": "reliability-new-1",
+      "corpus": "reliability-v4",
+      "fingerprint": "8db4c42a58d2243edfddff2c4efd2cb436090c2d0fe81bd451aad54518dca177",
+      "total": 12,
+      "passed": 12,
+      "queries": 50,
+      "calls": 126,
+      "spentUsd": 0.5470000000000184,
+      "families": [
+        {
+          "family": "similar",
+          "total": 2,
+          "passed": 2
+        },
+        {
+          "family": "shared",
+          "total": 2,
+          "passed": 2
+        },
+        {
+          "family": "independent",
+          "total": 2,
+          "passed": 2
+        },
+        {
+          "family": "time",
+          "total": 2,
+          "passed": 2
+        },
+        {
+          "family": "correction",
+          "total": 3,
+          "passed": 3
+        },
+        {
+          "family": "ambiguity",
+          "total": 1,
+          "passed": 1
+        }
+      ],
+      "latencyP95": {
+        "capture": 10921.169000000002,
+        "correction": 11009.8024,
+        "clarification": 11511.191300000006,
+        "query": 5532.4494,
+        "forget": 0.7261999999991531
+      },
+      "failures": []
+    },
+    {
+      "run": "reliability-regression-1",
+      "corpus": "regression-v3",
+      "fingerprint": "b0a49b1bb94edf6b05697dfd1264c2d08b0de746ffde2bc6b3e88adf412430fa",
+      "total": 60,
+      "passed": 60,
+      "queries": 245,
+      "calls": 546,
+      "spentUsd": 2.434037499999949,
+      "families": [
+        {
+          "family": "independent",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "shared",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "condition",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "attribution",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "time",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "duplicate",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "similar",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "correction",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "ambiguity",
+          "total": 6,
+          "passed": 6
+        },
+        {
+          "family": "forget",
+          "total": 6,
+          "passed": 6
+        }
+      ],
+      "latencyP95": {
+        "capture": 8917.97099999999,
+        "correction": 11574.643300000054,
+        "clarification": 12721.440200000012,
+        "query": 5408.642699999997,
+        "forget": 0.43859999999403954
+      },
+      "failures": []
+    },
+    {
+      "run": "reliability-new-2",
+      "corpus": "reliability-v4",
+      "fingerprint": "25abced9a98a4c5a5163a400c90951adbfcb0a03f6951e9e66bacbb2d730cce9",
+      "total": 12,
+      "passed": 12,
+      "queries": 50,
+      "calls": 126,
+      "spentUsd": 0.5550699999999793,
+      "families": [
+        {
+          "family": "similar",
+          "total": 2,
+          "passed": 2
+        },
+        {
+          "family": "shared",
+          "total": 2,
+          "passed": 2
+        },
+        {
+          "family": "independent",
+          "total": 2,
+          "passed": 2
+        },
+        {
+          "family": "time",
+          "total": 2,
+          "passed": 2
+        },
+        {
+          "family": "correction",
+          "total": 3,
+          "passed": 3
+        },
+        {
+          "family": "ambiguity",
+          "total": 1,
+          "passed": 1
+        }
+      ],
+      "latencyP95": {
+        "capture": 8669.3119,
+        "correction": 12575.436700000006,
+        "clarification": 10346.034500000009,
+        "query": 5107.8916,
+        "forget": 0.700699999999415
+      },
+      "failures": []
+    },
+    {
+      "run": "reliability-new-3",
+      "corpus": "reliability-v4",
+      "fingerprint": "25abced9a98a4c5a5163a400c90951adbfcb0a03f6951e9e66bacbb2d730cce9",
+      "total": 12,
+      "passed": 12,
+      "queries": 50,
+      "calls": 126,
+      "spentUsd": 0.5561425000000142,
+      "families": [
+        {
+          "family": "shared",
+          "total": 2,
+          "passed": 2
+        },
+        {
+          "family": "similar",
+          "total": 2,
+          "passed": 2
+        },
+        {
+          "family": "independent",
+          "total": 2,
+          "passed": 2
+        },
+        {
+          "family": "time",
+          "total": 2,
+          "passed": 2
+        },
+        {
+          "family": "correction",
+          "total": 3,
+          "passed": 3
+        },
+        {
+          "family": "ambiguity",
+          "total": 1,
+          "passed": 1
+        }
+      ],
+      "latencyP95": {
+        "capture": 10138.241999999998,
+        "correction": 14689.113500000007,
+        "clarification": 10753.417700000005,
+        "query": 6107.6122,
+        "forget": 0.6880999999993946
+      },
+      "failures": []
+    }
+  ],
+  "diagnostic": {
+    "captures": [
+      {
+        "round": 1,
+        "id": "v05",
+        "error": null
+      },
+      {
+        "round": 1,
+        "id": "v38",
+        "error": null
+      },
+      {
+        "round": 1,
+        "id": "v47",
+        "error": null
+      },
+      {
+        "round": 1,
+        "id": "v53",
+        "error": null
+      },
+      {
+        "round": 1,
+        "id": "v60",
+        "error": null
+      },
+      {
+        "round": 2,
+        "id": "v05",
+        "error": null
+      },
+      {
+        "round": 2,
+        "id": "v38",
+        "error": null
+      },
+      {
+        "round": 2,
+        "id": "v47",
+        "error": null
+      },
+      {
+        "round": 2,
+        "id": "v53",
+        "error": null
+      },
+      {
+        "round": 2,
+        "id": "v60",
+        "error": null
+      },
+      {
+        "round": 3,
+        "id": "v05",
+        "error": null
+      },
+      {
+        "round": 3,
+        "id": "v38",
+        "error": null
+      },
+      {
+        "round": 3,
+        "id": "v47",
+        "error": null
+      },
+      {
+        "round": 3,
+        "id": "v53",
+        "error": null
+      },
+      {
+        "round": 3,
+        "id": "v60",
+        "error": null
+      }
+    ],
+    "bases": [
+      {
+        "status": "answered",
+        "basis": "direct_support"
+      },
+      {
+        "status": "answered",
+        "basis": "direct_support"
+      },
+      {
+        "status": "not_found",
+        "basis": "different_event"
+      },
+      {
+        "status": "not_found",
+        "basis": "incomplete_literal"
+      }
+    ],
+    "queryPassed": false,
+    "calls": 46,
+    "spentUsd": 0.3451324999999805,
+    "interpretation": "model_basis_is_diagnostic_not_independent_proof"
+  }
+}

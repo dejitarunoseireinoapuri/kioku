@@ -10,7 +10,54 @@ import { EvaluationBudget } from "../evaluation/runtime.ts";
 import { fresh } from "../evaluation/fresh.ts";
 import { holdout } from "../evaluation/holdout.ts";
 import { adjustment } from "../evaluation/adjustment.ts";
+import { reliability } from "../evaluation/reliability.ts";
 import { spawnSync } from "node:child_process";
+
+test("reliability examples are new and include independent quantity, predicate and negative obligations", () => {
+  const used = new Set(
+    [...holdout, ...fresh, ...reserve, ...tuning, ...adjustment].map(
+      (c) => c.text,
+    ),
+  );
+  assert.equal(reliability.length, 12);
+  assert.equal(new Set(reliability.map((c) => c.id)).size, 12);
+  for (const c of reliability) {
+    assert.ok(!used.has(c.text));
+    assert.ok(c.queries.length >= 2 && c.after.length >= 2);
+    assert.ok(
+      [...c.queries, ...c.after].every((q) =>
+        q.labels.every((l) => c.units.some((u) => u.label === l)),
+      ),
+    );
+  }
+  for (const c of reliability.filter((c) => ["w01", "w03"].includes(c.id))) {
+    for (const q of c.queries)
+      assert.equal(
+        matches("No consta en tus recuerdos guardados", q.terms[0]!),
+        false,
+      );
+  }
+  assert.ok(
+    reliability
+      .find((c) => c.id === "w02")!
+      .units.every((u) => u.evidenceTerms?.includes("prepare")),
+  );
+});
+
+test("literal-specific obligations catch a missing action even when the canonical text still contains it", () => {
+  const h = harness();
+  h.save(twoPlans());
+  const state = h.store.read(),
+    u = Object.values(state.units)[0]!;
+  const expected = unit("drawing", ["dibujar"], u.content.kind, u.time, {
+    evidenceTerms: ["absent-predicate"],
+  });
+  assert.ok(
+    gradeUnits(state, [expected]).checks.some(
+      (c) => c.name === "drawing:literal_specifics" && !c.passed,
+    ),
+  );
+});
 
 test("exposed corpus cannot be launched as a new reserve, even with live enabled", () => {
   const result = spawnSync(

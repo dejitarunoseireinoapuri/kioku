@@ -16,6 +16,8 @@ Resultados: `ready` con token, ID de operación, época, alcance y vigencia de c
 
 ### Adaptador R2 de evaluación
 
+La salida interna indexada restringe `primary` a un propietario, `replaced` a ninguno y los demás roles a uno o más; una fecha desconocida exige valor/fin/ancla nulos. Los validadores del motor siguen comprobando referencias, cobertura y fidelidad. `CoreError.reason` añade motivos estructurales enumerados sin texto; no cambia códigos/DTO de producción. La entrada del generador/revisor de consultas usa `answerEvidenceView`: índices locales, contenido/fecha y soportes propios agrupados por calendario de fuente, sin UUIDs ni huecos posicionales del relato. El servidor conserva su mapa índice→ID/revisión y revalida época/versiones antes de entregar la respuesta. [Evidencia local](../09-planning/R2_RELIABILITY_VALIDATION.md).
+
 El adaptador R2 tampoco expone una ruta remota. Sus resultados de interpretación son `ready`, `clarify` o `no_memory`; solo `ready` revisado/materializado entra en R1. La consulta devuelve `answered`, `not_found` o `clarify` con referencias actuales. `not_found` puede citar el mismo plan para explicar que no consta su realización; no puede usar otro recuerdo por parecido. El catálogo de prueba tiene límite explícito de 32 unidades. [Protocolo de evaluación y límites](../09-planning/R2_VALIDATION.md). No trasladar estos tipos de proveedor al dominio móvil ni considerarlos el DTO final de R3.
 
 ## Contrato V1 desplegado e historia

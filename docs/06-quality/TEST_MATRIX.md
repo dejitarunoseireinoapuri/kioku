@@ -1,5 +1,7 @@
 # Matriz de aceptación y evidencia prevista
 
+Fiabilidad R2: contrato de propietarios/fecha desconocida, diagnóstico cerrado, consulta con evidencia propia tras retirar un vecino, ausencia real, realización no acreditada, precisión desconocida, predicado común, registro frente a edición y soporte ajeno/calendario ausente. [Evidencia dirigida y límites de cierre](../09-planning/R2_RELIABILITY_VALIDATION.md). Las pruebas locales y los nuevos relatos no sustituyen la reserva completa del plan.
+
 Continuación R2: cobertura/token Unicode, rechazos de límites, retención de fecha/zona por intervención, consulta paginada a 100/1000/10 000, cuentas/épocas incompatibles, resultado truncado explícito y revocación durante respuesta. [Protocolo y evidencia actual](../09-planning/R2_INDEXED_VALIDATION.md). Estas pruebas no acreditan persistencia ni dispositivos.
 
 ## Revisión del núcleo v2 · evidencia local parcial y casos previstos

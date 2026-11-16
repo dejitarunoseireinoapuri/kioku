@@ -19,6 +19,7 @@ export interface GoldUnit {
   attribution: string | null;
   polarity: Content["polarity"];
   forbidden?: string[];
+  evidenceTerms?: string[];
 }
 export interface GoldQuery {
   contextLabels?: string[];

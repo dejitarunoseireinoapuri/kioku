@@ -1,8 +1,8 @@
 # Reconstrucción del núcleo de memoria · R0–R6
 
-Resultado vigente R2: regresión 60/60 y recuperación ficticia 18/18, pero reserva nueva 55/60, 54/60 y 58/60. R2 sigue abierta; [fallos, costes y siguiente trabajo](R2_INDEXED_VALIDATION.md). No se cambia la app ni producción.
+Resultado vigente R2: corregidos los rechazos reproducidos y la falsa ausencia tras olvidar un vecino. Regresión 60/60, doce historias nuevas 12/12 en tres pasadas y 100 pruebas locales; [protocolo, versiones, costes y límites](R2_RELIABILITY_VALIDATION.md). R2 sigue abierta hasta otra reserva independiente completa. App, Firebase y recuerdos reales permanecen intactos.
 
-Continuación actual: [evidencia por posiciones, aclaraciones y recuperación paginada](R2_INDEXED_VALIDATION.md). Las cifras de la continuación anterior siguientes son históricas; R2 sigue abierta hasta resolver la nueva evaluación.
+Continuación actual: [rechazos y falsas ausencias](R2_RELIABILITY_VALIDATION.md). La [evaluación de evidencia indexada](R2_INDEXED_VALIDATION.md) se conserva como histórica. Las cifras de la continuación anterior siguientes son históricas; R2 sigue abierta hasta resolver la nueva evaluación.
 
 **Continuación autorizada y ejecutada:** R2 con Sol medio corrige conservación literal en ediciones parciales y evalúa otra reserva: 54/60, 55/60 y 54/60. Ajuste final con cuatro regresiones correctas y doce historias nuevas correctas, sin otra reserva completa de esa versión; [protocolo, costes, defectos y resultados](R2_RETENTION_VALIDATION.md). No cambia permisos sobre datos personales/producción ni autoriza avisos por correo. R2 sigue abierta; R3–R6 permanecen pendientes.
 

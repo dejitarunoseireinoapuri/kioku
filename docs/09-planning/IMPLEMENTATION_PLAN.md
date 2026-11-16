@@ -1,6 +1,6 @@
 # Fases de Kioku
 
-Resultado vigente R2: regresión 60/60 y recuperación ficticia 18/18, pero reserva nueva 55/60, 54/60 y 58/60. R2 sigue abierta; [fallos, costes y siguiente trabajo](R2_INDEXED_VALIDATION.md). No se cambia la app ni producción.
+Resultado vigente R2: corregidos los rechazos reproducidos y la falsa ausencia tras olvidar un vecino. Regresión 60/60, doce historias nuevas 12/12 en tres pasadas y 100 pruebas locales; [protocolo, versiones, costes y límites](R2_RELIABILITY_VALIDATION.md). R2 sigue abierta hasta otra reserva independiente completa. App, Firebase y recuerdos reales permanecen intactos.
 
 Continuación R2 ejecutada: selección de evidencia por tokens, procedencia por intervención y búsqueda paginada con fixtures hasta 10 000 unidades; [contratos, evaluación y límites](R2_INDEXED_VALIDATION.md). R2 no se da por cerrada hasta completar la nueva reserva; backend/app/datos reales permanecen sin cambios.
 

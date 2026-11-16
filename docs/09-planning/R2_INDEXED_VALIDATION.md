@@ -1,5 +1,7 @@
 # R2 · Evidencia por posiciones, aclaraciones y recuperación paginada
 
+Informe histórico conservado. La [continuación de fiabilidad](R2_RELIABILITY_VALIDATION.md) documenta las correcciones posteriores y la evaluación vigente; no recalifica las reservas de este documento.
+
 Continuación autorizada el 16 de noviembre de 2026. Rama `codex/memory-core-r2`; perfil API `gpt-6.1-sol`, razonamiento `medium`. Exclusivamente datos ficticios definidos en el repositorio, sin lecturas/escrituras Firebase, móvil, recuerdos personales, despliegues ni correo. Sustituye el estado actual de la [continuación anterior](R2_RETENTION_VALIDATION.md), cuyos resultados se conservan sin recalcular.
 
 ## Contratos que cambian en el prototipo
