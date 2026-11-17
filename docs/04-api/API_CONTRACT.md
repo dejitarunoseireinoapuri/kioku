@@ -1,5 +1,7 @@
 # Contrato backend · memoria v2 y cuenta v1
 
+Voz K5 no añade endpoints, DTO ni audio subido al servidor. La transcripción ocurre localmente y solo su texto final, tras terminar explícitamente, se entrega a los comandos autenticados existentes con las mismas reglas de versión/idempotencia/confirmación. Parciales y cancelaciones no envían. Sin respuestas habladas ni API de voz; el procesamiento posterior del texto mantiene su coste normal. [ADR-014](../02-architecture/ADR/ADR-014-local-voice-input.md).
+
 ## Integración v2 · 17 de noviembre de 2026
 
 Recuperación móvil: un `repeatRequired` terminal de `route` puede provocar una sola renovación del ID de interpretación si aún no hay decisión aplicada; conserva IDs de acción/consulta. Un `repeatRequired` de `query` con plan puramente `ask` puede renovar una sola vez el ID de lectura; el comando actualizado se retiene para comprobar ese ID si vuelve a perderse la respuesta. `processing` conserva el ID, y un error de transporte no inicia por sí solo una renovación. Los cambios/ofertas aceptadas/capturas inciertas mantienen su identidad de escritura. No hay nuevos DTO ni colecciones, caché de respuestas persistida o bucle de reintentos. Una nueva pulsación explícita reutiliza el texto del comando RAM.

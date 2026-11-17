@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Kioku usa el micrófono mientras mantienes el botón pulsado o lo dejas bloqueado.</string>
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>Convertir tu voz en texto en el dispositivo para explicar recuerdos o preguntar.</string>
     <key>CFBundleURLTypes</key>
     <array><dict><key>CFBundleURLSchemes</key><array><string>$(GOOGLE_REVERSED_CLIENT_ID)</string></array></dict></array>
     <key>CFBundleDisplayName</key><string>Kioku</string>

@@ -1,5 +1,7 @@
 # Fases de Kioku
 
+**Decisión posterior vigente · 17 de noviembre:** implementar voz en `codex/k5-voice`, transcripción exclusivamente local, mantener/deslizar para bloquear/tocar para terminar y sin respuestas habladas. Pruebas solo ficticias en Samsung/Honor, sin API pagada. Sustituye las indicaciones anteriores de no iniciar K5 y las salidas habladas del plan original. [Evidencia y pendientes](K5_VALIDATION.md). No autoriza despliegues ni integración en main.
+
 **Petición posterior del 17 de noviembre:** crear `codex/k5-voice` desde el main integrado y resolver primero ajustes de letras cayendo, huecos de ayudas y margen inferior para gestos. La rama queda creada para voz, pero esta entrega no implementa todavía K5 ni autoriza gasto de API. Esta petición sustituye únicamente la indicación anterior de no abrir su rama.
 
 **Decisión vigente del propietario · 17 de noviembre:** integrar `codex/memory-core-r2` en `main` sobre el núcleo v2 ya activado y las correcciones móviles actuales. El propietario aclara que no se empiece con voz: K5 permanece pendiente y no se abre su rama. Se conserva la [evidencia de integración y recuperación](R3_INTEGRATION_VALIDATION.md). El propietario eligió empezar vacío en lugar de migrar: la activación autorizada ya se completó, no se repite. Esta decisión permite avanzar con los pendientes R2 de latencia y reserva independiente todavía abiertos; no los declara superados. iOS sigue sin nueva compilación/validación. Sin nuevas llamadas pagadas a API hasta autorización posterior; no se implementa K5. Las entradas de R2 siguientes describen estados históricos y no revocan esta decisión.
@@ -30,7 +32,7 @@ Este documento define el alcance y el cierre de las fases. Los [requisitos](../0
 | K3 · Preguntar por escrito | Encontrar recuerdos y responder con sus fuentes | Implementada y activada desde `codex/k3-text-query`; pruebas locales/IA real correctas, aceptación móvil pendiente |
 | K4 · Control de memoria | Ofrecer guardar un dato, corregir y olvidar conversando | Activa en `codex/k4-memory-control`; olvido entre relatos validado en Android/backend y Honor real dentro de sus cotas; iOS pendiente |
 | R0–R6 · Revisión del núcleo | Evidencia independiente, corrección/olvido por identidad y activación | V2 integrado/activado por autorización; inicio vacío elegido en vez de migración. Integración en main autorizada con pendientes R2 e iOS conservados; K5 pendiente |
-| K5 · Voz | Contar y preguntar hablando, con pulsación y bloqueo | Pendiente sobre v2; el propietario pide no empezarla todavía |
+| K5 · Voz | Transcripción local con pulsación/bloqueo; respuestas escritas | Implementada en rama de voz; Android con fixtures, iOS y acústica pendientes según K5_VALIDATION |
 | K6 · V1 de uso personal | Recorrido completo comprobado en Android e iOS | Pendiente |
 
 M0 supera el criterio funcional de viabilidad. K0 tiene base y navegación Android comprobadas; requiere validación iOS en Mac antes de declararla validada en ambos sistemas. La primera versión completa para uso personal llega en K6. La velocidad de guardado no se declara validada: se conserva el objetivo p95 de 15 segundos para su mejora y nueva medición al integrar K2. No se fijan fechas sin conocer herramientas, dependencias y resultados.
@@ -170,7 +172,7 @@ Ampliación actual: copias semánticas entre relatos activas y aceptadas en Hono
 
 **Resultado:** contar y preguntar hablando, además de escribir, con los dos modos explícitos.
 
-**Entrega:** micrófono/permisos nativos; mantener para grabar, soltar para terminar, deslizar arriba para bloquear y continuar sin mantener el dedo, acciones explícitas para terminar/cancelar. Alternativa accesible al gesto. No interrumpir antes de terminar ni finalizar por silencio una grabación bloqueada. Audio/transcripción transitorios con limpieza definida; recuerdos en texto. Aclaraciones por voz para entradas habladas; respuestas habladas con texto visible y opción de detener lectura. Corrección y olvido también por voz.
+**Entrega:** micrófono/permisos nativos; mantener para grabar, soltar para terminar, deslizar arriba para bloquear y continuar sin mantener el dedo, acciones explícitas para terminar/cancelar. Alternativa accesible al gesto. No interrumpir antes de terminar ni finalizar por silencio una grabación bloqueada. Audio/transcripción transitorios con limpieza definida; recuerdos en texto. Aclaraciones y respuestas escritas, con posibilidad de responder por voz o texto. Transcripción solo local, sin fallback remoto ni API de voz. Corrección y olvido también por voz.
 
 **Antes de empezar:** K1–K4; decidir modelos, duración/tamaño, transporte, retención, coste y comportamiento ante segundo plano/interrupciones. No deducir autorización para grabación oculta.
 

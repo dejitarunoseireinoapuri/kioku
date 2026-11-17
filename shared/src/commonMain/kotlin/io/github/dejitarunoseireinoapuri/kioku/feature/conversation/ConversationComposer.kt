@@ -40,7 +40,13 @@ import androidx.compose.ui.unit.dp
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
 import io.github.dejitarunoseireinoapuri.kioku.design.MatrixReadingSurface
+import io.github.dejitarunoseireinoapuri.kioku.di.LocalVoiceInput
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
+import io.github.dejitarunoseireinoapuri.kioku.feature.voice.LocalVoiceInteraction
+import io.github.dejitarunoseireinoapuri.kioku.feature.voice.MicrophoneButton
+import io.github.dejitarunoseireinoapuri.kioku.feature.voice.VoiceCaptureHost
+import io.github.dejitarunoseireinoapuri.kioku.feature.voice.VoiceStatus
+import io.github.dejitarunoseireinoapuri.kioku.feature.voice.busy
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.ask
 import io.github.dejitarunoseireinoapuri.kioku.resources.ask_placeholder
@@ -57,8 +63,17 @@ fun ConversationComposer(
     state: ConversationState,
     onEvent: (ConversationEvent) -> Unit,
 ) {
+    VoiceCaptureHost(state, onEvent) { ComposerContent(state, onEvent) }
+}
+
+@Composable
+private fun ComposerContent(
+    state: ConversationState,
+    onEvent: (ConversationEvent) -> Unit,
+) {
     MatrixReadingSurface { scrim ->
-        val enabled = state.canEdit
+        val voiceBusy = LocalVoiceInteraction.current.state.busy
+        val enabled = state.canEdit && !voiceBusy
         val keyboardVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
         val focus = LocalFocusManager.current
         val keyboard = LocalSoftwareKeyboardController.current
@@ -73,11 +88,12 @@ fun ConversationComposer(
             Column {
                 Divider(color = KiokuColors.Rule)
                 Column(Modifier.padding(horizontal = KiokuSpacing.Medium, vertical = KiokuSpacing.Small)) {
+                    VoiceStatus()
                     TextComposer(state, enabled, inputEvent)
                 }
                 if (!keyboardVisible) {
                     Divider(color = KiokuColors.Rule)
-                    IntentControls(state.intent, state.canSwitchIntent, onEvent)
+                    IntentControls(state.intent, state.canSwitchIntent && !voiceBusy, onEvent)
                 }
             }
         }
@@ -151,6 +167,7 @@ private fun TextComposer(
                 },
             )
             SendAction(enabled && state.draft.isNotBlank()) { onEvent(ConversationEvent.Submit) }
+            MicrophoneButton(state.canEdit && LocalVoiceInput.current != null)
         }
     }
 }

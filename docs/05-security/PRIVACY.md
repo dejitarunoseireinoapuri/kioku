@@ -28,11 +28,11 @@ Identidad de acceso, textos que el usuario decide recordar, contexto temporal y 
 
 La clave API se maneja mediante la frontera de secretos. Un relato puede contener datos sensibles: no usarlo para publicidad, analítica de contenido, fixtures o ejemplos publicados.
 
-## Voz y reproducción
+## Transcripción local
 
-Pedir micrófono en contexto al primer uso de voz, con alternativa escrita si se deniega. No solicitar cámara, galería, contactos, ubicación, notificaciones ni escucha en segundo plano para V1. Acceso a internet y reproducción de respuesta respetan controles del sistema.
+Pedir micrófono en contexto al primer uso de voz, con alternativa escrita si se deniega. Conceder permiso requiere otra acción explícita para empezar. No solicitar cámara, galería, contactos, ubicación, notificaciones ni escucha en segundo plano para V1.
 
-Solo el texto constituye el archivo de memoria. La transcripción y la respuesta pueden procesarse en servidores externos: no afirmar que todo ocurre en el dispositivo ni confundir borrar el audio temporal de Kioku con la retención del proveedor.
+La transcripción usa exclusivamente reconocimiento local nativo, sin fallback remoto ni descargas automáticas. El audio de producto permanece en buffers/pipe temporales, sin archivos, y se libera al terminar/cancelar/fallar/pausar. No hay respuestas habladas. Solo el texto final autorizado llega al circuito de memoria existente; su interpretación/respuesta sí puede procesarse en servidor/proveedor, con las retenciones ya descritas. No afirmar que todo Kioku funciona localmente o gratis. Compatibilidad y límites en [ADR-014](../02-architecture/ADR/ADR-014-local-voice-input.md); pruebas ficticias y pendientes en [K5](../09-planning/K5_VALIDATION.md).
 
 ## Controles y retención
 

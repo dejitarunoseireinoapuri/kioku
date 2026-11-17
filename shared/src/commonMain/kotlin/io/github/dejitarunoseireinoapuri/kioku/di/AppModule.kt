@@ -6,10 +6,12 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.AppearanceRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryControlRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.ReadReferencedSource
 import io.github.dejitarunoseireinoapuri.kioku.domain.SourceRepository
+import io.github.dejitarunoseireinoapuri.kioku.domain.VoiceInput
 import io.github.dejitarunoseireinoapuri.kioku.feature.account.AccountViewModel
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.ConversationViewModel
 import io.github.dejitarunoseireinoapuri.kioku.feature.settings.AppearanceViewModel
 import io.github.dejitarunoseireinoapuri.kioku.feature.source.SourceControlViewModel
+import io.github.dejitarunoseireinoapuri.kioku.feature.voice.VoiceViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -31,4 +33,5 @@ fun appModule() =
         }
         viewModel { (account: AccountRepository) -> AccountViewModel(account) }
         viewModel { (appearance: AppearanceRepository) -> AppearanceViewModel(appearance) }
+        viewModel { (voice: VoiceInput) -> VoiceViewModel(voice) }
     }

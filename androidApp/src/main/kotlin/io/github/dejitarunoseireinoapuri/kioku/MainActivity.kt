@@ -12,6 +12,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import io.github.dejitarunoseireinoapuri.kioku.platform.AndroidAppearanceRepository
 import io.github.dejitarunoseireinoapuri.kioku.platform.AndroidRepositories
+import io.github.dejitarunoseireinoapuri.kioku.platform.AndroidVoiceHost
 import io.github.dejitarunoseireinoapuri.kioku.platform.firebaseRepositories
 
 class MainActivity : ComponentActivity() {
@@ -27,14 +28,16 @@ class MainActivity : ComponentActivity() {
         repositories = ViewModelProvider(this, factory)[AndroidRepositories::class.java]
         repositories.attach(this)
         setContent {
-            KiokuApp(
-                repositories.account,
-                repositories.capture,
-                repositories.queries,
-                repositories.controls,
-                repositories.conversation,
-                remember { AndroidAppearanceRepository(applicationContext) },
-            )
+            AndroidVoiceHost {
+                KiokuApp(
+                    repositories.account,
+                    repositories.capture,
+                    repositories.queries,
+                    repositories.controls,
+                    repositories.conversation,
+                    remember { AndroidAppearanceRepository(applicationContext) },
+                )
+            }
         }
     }
 

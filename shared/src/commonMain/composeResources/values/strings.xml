@@ -1,4 +1,20 @@
 <resources>
+    <string name="voice_microphone">Micrófono. Mantén pulsado para hablar y desliza arriba para bloquear. Bloqueado, pulsa para terminar. Con accesibilidad, pulsa para empezar o terminar.</string>
+    <string name="voice_cancel">Cancelar voz</string>
+    <string name="voice_finish">Terminar y enviar</string>
+    <string name="voice_finishing">Terminando la transcripción local...</string>
+    <string name="voice_listening">Escuchando. Suelta para enviar o desliza arriba para bloquear.</string>
+    <string name="voice_locked">Micrófono bloqueado. Pulsa para terminar.</string>
+    <string name="voice_preparing">Preparando el micrófono...</string>
+    <string name="voice_permission">Permite usar el micrófono para transcribir en el dispositivo. También puedes escribir.</string>
+    <string name="voice_permission_action">Permitir micrófono</string>
+    <string name="voice_unsupported">La transcripción local controlada no está disponible en este dispositivo. Puedes escribir.</string>
+    <string name="voice_language_missing">Falta el reconocimiento local en español. Instálalo en los ajustes de voz del sistema; no se enviará audio a internet.</string>
+    <string name="voice_interrupted">La transcripción se ha interrumpido. No se ha enviado el mensaje. Puedes revisar el texto o volver a intentarlo.</string>
+    <string name="voice_no_speech">No se ha reconocido voz. No se ha enviado ningún mensaje.</string>
+    <string name="voice_too_long">Se ha alcanzado el límite de voz: cinco minutos o el máximo de texto. No se ha enviado el mensaje. Puedes revisar la parte recogida o cancelar.</string>
+    <string name="voice_unavailable">No se ha podido iniciar la transcripción local. Puedes volver a intentarlo o escribir.</string>
+    <string name="voice_keep_text">Pasar el texto al editor</string>
     <string name="falling_letters">Katakana cayendo</string>
     <string name="falling_letters_hint">Desactívalo para usar un fondo negro.</string>
     <string name="app_name">Kioku</string>
@@ -17,9 +33,9 @@
     <string name="ask_placeholder">Escribe tu pregunta…</string>
     <string name="clarify_placeholder">Escribe tu respuesta…</string>
     <string name="send">Enviar texto</string>
-    <string name="voice_hint">La voz estará disponible en una próxima versión.</string>
+    <string name="voice_hint">Mantén pulsado el micrófono para hablar; desliza arriba para bloquear.</string>
     <string name="text_preview_notice">El guardado aún no está conectado. El texto sigue en el editor.</string>
-    <string name="voice_preview_notice">El micrófono y el audio todavía no están disponibles.</string>
+    <string name="voice_preview_notice">Las respuestas se muestran por escrito.</string>
     <string name="forget_preview_notice">Este recuerdo ya no está disponible para gestionarlo. Vuelve a consultarlo.</string>
     <string name="examples_heading">Recorridos de ejemplo</string>
     <string name="example_ready">01 · Listo para recordar</string>
@@ -77,7 +93,6 @@
     <string name="offline_hint">Conéctate a internet para contar o consultar recuerdos.</string>
     <string name="offline_composer">Sin conexión a internet</string>
     <string name="retry">Reintentar</string>
-    <string name="read_answer">Escuchar respuesta</string>
     <string name="google_continue">Continuar con Google</string>
     <string name="brand_wordmark">Kioku</string>
     <string name="login_title">Lo que vives, contigo.</string>

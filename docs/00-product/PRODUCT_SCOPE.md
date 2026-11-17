@@ -4,14 +4,14 @@
 
 - Contar por voz o escribir cualquier dato personal que se quiera conservar.
 - Dos intenciones: **Contar un recuerdo** y **Preguntar**.
-- Mantener pulsado para hablar; deslizar arriba para bloquear y continuar con manos libres; terminar o cancelar explícitamente.
-- Aclaraciones posteriores a la intervención, por el mismo canal. Guardado automático al quedar claro el contenido.
+- Mantener pulsado para hablar; soltar para terminar; deslizar arriba para bloquear y continuar con manos libres; tocar de nuevo o Terminar para acabar, o Cancelar para descartar. Transcripción local, sin fallback remoto.
+- Aclaraciones escritas posteriores a la intervención, con respuesta por voz o texto en el editor normal. Guardado automático al quedar claro el contenido.
 - Separación de asuntos y conexiones automáticas sin clasificación manual.
-- Consultas contextuales y temporales, respuesta escrita y voz cuando la pregunta fue hablada, con texto fuente accesible.
+- Consultas contextuales y temporales, respuesta siempre escrita, con gestión de fuentes vigentes accesible.
 - Corrección y borrado por conversación; aclaración de borrado solo si su alcance es ambiguo.
 - Oferta de guardar un dato nuevo surgido durante una consulta, sin cambiar de modo y sin guardarlo antes de aceptar.
 - Configuración inicial y sustitución de la clave API propia desde el PC del propietario; el móvil consulta su estado. Recuperación de recuerdos al cambiar de móvil.
-- Android e iOS, funcionamiento exclusivamente con internet y conservación permanente solo de texto.
+- Android e iOS, operaciones de memoria con internet y conservación permanente solo de texto. Transcribir localmente no crea cola offline. Disponibilidad nativa y estado por plataforma en [K5](../09-planning/K5_VALIDATION.md).
 
 ## Fuera de V1
 

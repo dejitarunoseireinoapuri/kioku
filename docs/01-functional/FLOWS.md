@@ -1,5 +1,9 @@
 # Flujos y salidas
 
+## Voz local
+
+Intención Contar/Preguntar → mantener micrófono → transcripción provisional local → soltar → finalizar → enviar texto al circuito existente. Deslizar arriba bloquea: soltar conserva captura; tocar de nuevo o Terminar cierra el audio y espera el resultado final. Cancelar descarta. Activación accesible inicia bloqueada y la siguiente termina. Pausas no envían; salida/segundo plano cancela. Error o límite no envían y permiten recuperar explícitamente la parte recogida al editor. Permiso concedido necesita un nuevo gesto; sin motor/modelo local se ofrece escribir, sin nube alternativa. Las aclaraciones y respuestas aparecen por escrito; se puede contestar por voz o texto en el mismo editor. [Límites y pruebas](../09-planning/K5_VALIDATION.md).
+
 ## Entrada y comprobación de memoria
 
 La entrada conserva la pantalla de carga de logo/estado durante «Entrando...» y después «Comprobando cambios en tu memoria...». No se intercala el editor ni la conversación mientras la comprobación oculta los datos. La conversación aparece al resolverla; un fallo termina la carga y muestra el resultado disponible de recuperación, sin una espera artificial. La comprobación al volver a primer plano también mantiene esta pantalla si el contenido está oculto. Gestionar conserva su carga propia.

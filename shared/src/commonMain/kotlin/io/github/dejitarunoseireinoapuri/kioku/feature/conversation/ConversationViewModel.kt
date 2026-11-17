@@ -237,17 +237,7 @@ class ConversationViewModel(
                 command = null
                 mutableState.update { it.copy(capture = null) }
             }
-            val limit =
-                if (state.value.capture is CaptureOutcome.Clarification ||
-                    state.value.conversation?.clarification == true
-                ) {
-                    MAX_CLARIFICATION_LENGTH
-                } else if (state.value.intent == MemoryIntent.Ask) {
-                    2000
-                } else {
-                    MAX_DRAFT_LENGTH
-                }
-            mutableState.update { it.copy(draft = text.take(limit), feedback = null, forgottenText = null) }
+            mutableState.update { it.copy(draft = text.take(it.inputLimit), feedback = null, forgottenText = null) }
         }
     }
 
@@ -350,8 +340,6 @@ class ConversationViewModel(
     }
 
     private companion object {
-        const val MAX_DRAFT_LENGTH = 8000
-        const val MAX_CLARIFICATION_LENGTH = 2000
         val QUERY_EXAMPLES = setOf(PreviewScenario.Answer, PreviewScenario.Offer)
     }
 }

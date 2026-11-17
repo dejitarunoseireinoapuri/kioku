@@ -33,6 +33,7 @@ Una fuente por tipo de decisión. Los documentos son el contrato previsto; el es
 | Evidencia de captura | [K2_VALIDATION](09-planning/K2_VALIDATION.md) | Guardado textual, aclaraciones y distinción entre pruebas locales y activación real |
 | Evidencia de consulta | [K3_VALIDATION](09-planning/K3_VALIDATION.md) | Criterios fijados, búsqueda, evidencia vigente y límites de integración |
 | Evidencia de control | [K4_VALIDATION](09-planning/K4_VALIDATION.md) | Retirada interna y límites pendientes del control conversacional |
+| Voz local | [ADR-014](02-architecture/ADR/ADR-014-local-voice-input.md), [K5_VALIDATION](09-planning/K5_VALIDATION.md) | Gestos, límites, pruebas ficticias Android e iOS pendiente |
 
 Las conversaciones previas y los prototipos históricos sirven de evidencia de decisiones, no de segunda especificación vigente.
 

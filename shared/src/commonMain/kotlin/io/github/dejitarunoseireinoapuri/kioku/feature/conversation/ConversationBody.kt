@@ -35,7 +35,6 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.no_audio_archive
 import io.github.dejitarunoseireinoapuri.kioku.resources.offer_accepted_example
 import io.github.dejitarunoseireinoapuri.kioku.resources.offer_declined_example
 import io.github.dejitarunoseireinoapuri.kioku.resources.query_unavailable
-import io.github.dejitarunoseireinoapuri.kioku.resources.read_answer
 import io.github.dejitarunoseireinoapuri.kioku.resources.ready_hint
 import io.github.dejitarunoseireinoapuri.kioku.resources.ready_title
 import io.github.dejitarunoseireinoapuri.kioku.resources.sample_date
@@ -105,7 +104,7 @@ private fun PreviewConversationBody(
             }
 
             PreviewScenario.Answer -> {
-                AnswerExample(onEvent) { onSource("movie-original") }
+                AnswerExample { onSource("movie-original") }
             }
 
             PreviewScenario.Offer -> {
@@ -155,14 +154,10 @@ private fun SavedExample(onSource: () -> Unit) {
 }
 
 @Composable
-private fun AnswerExample(
-    onEvent: (ConversationEvent) -> Unit,
-    onSource: () -> Unit,
-) {
+private fun AnswerExample(onSource: () -> Unit) {
     Panel { Text(stringResource(Res.string.movie_question)) }
     Panel {
         Text(stringResource(Res.string.movie_answer))
-        ActionButton(stringResource(Res.string.read_answer), { onEvent(ConversationEvent.TryVoice) })
     }
     Text(stringResource(Res.string.source_context), color = KiokuColors.Secondary)
     ActionButton(stringResource(Res.string.view_source), onSource)
