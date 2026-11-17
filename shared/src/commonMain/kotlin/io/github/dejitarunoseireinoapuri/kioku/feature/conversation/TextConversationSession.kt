@@ -117,7 +117,7 @@ internal class TextConversationSession(
 
     fun act(action: MessageAction) {
         if (action == MessageAction.Reset) {
-            reset(clearDraft = true)
+            reset(clearDraft = true, preserveHistory = true)
         } else if (action == MessageAction.CancelForget) {
             cancelForget()
         } else {
@@ -280,6 +280,7 @@ internal class TextConversationSession(
         notice: ChangeAction? = null,
         change: MemoryChange.Confirmed? = null,
         description: MemoryChangeDescription? = null,
+        preserveHistory: Boolean = false,
     ) {
         val previous = state
         val snapshots = histories.toMap()
@@ -293,13 +294,21 @@ internal class TextConversationSession(
         recoveryJob?.cancel()
         clarifications = 0
         messageId = pending.maxOfOrNull { it.id } ?: 0
+        if (preserveHistory) {
+            messageId = lastId
+            histories.putAll(snapshots)
+        }
         ownerId = null
         questions.clear()
         references = emptyList()
         var next =
             TextConversationState(
                 messages =
-                    notice?.let { listOf(TextMessage.Notice(++messageId, it, description)) } ?: pending,
+                    if (preserveHistory) {
+                        previous.messages
+                    } else {
+                        notice?.let { listOf(TextMessage.Notice(++messageId, it, description)) } ?: pending
+                    },
             )
         if (change != null) {
             messageId = lastId

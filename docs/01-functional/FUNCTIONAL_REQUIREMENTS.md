@@ -1,5 +1,7 @@
 # Requisitos y aceptación
 
+Refinamiento del 17 de noviembre: una aclaración se responde en el campo habitual sin botón de reinicio y sin vaciar el historial RAM. Debe poder completarse la secuencia consulta → olvido confirmado → nueva pregunta ambigua → aclaración escrita, conservando la conversación visible y excluyendo del contexto los recuerdos retirados. Reformular después de un límite tampoco borra el historial; cerrar sesión, reiniciar la app y caducar la sesión RAM conservan sus reglas de limpieza.
+
 Diseño aceptado el 16 de noviembre: P1–P3 del [núcleo v2](../02-architecture/MEMORY_CORE_V2.md) revisan cómo satisfacer FR-005–FR-012 sin reconstruir relatos compartidos al mutar. Los recorridos se mantienen. [R1](../09-planning/R1_VALIDATION.md) prueba solo sus reglas deterministas con interpretaciones ficticias; las aceptaciones móviles, de IA y de almacenamiento remoto todavía no están verificadas para v2.
 
 Refinamiento de AC-005/AC-011: errores leves inequívocos se interpretan conservando el literal; palabras unidas ambiguas piden reescribir la frase completa. Una aclaración reformulada sustituye el fragmento erróneo sin duplicarlo ni perder otros asuntos. Una edición incierta explica que no se ha modificado el recuerdo y mantiene el editor disponible. Corregir un dato de una frase con varios recuerdos conserva los otros y sus fechas/autores, separando evidencia interna cuando sea seguro. Problemas de red, autorización o formato del proveedor no se presentan como faltas de ortografía.

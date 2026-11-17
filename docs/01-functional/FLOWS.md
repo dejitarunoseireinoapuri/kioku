@@ -1,5 +1,9 @@
 # Flujos y salidas
 
+## Aclaraciones en la conversación
+
+Si Kioku pide concretar una captura, consulta u orden ambigua, presenta su pregunta en el historial y el propietario contesta directamente en el campo habitual, con indicación de aclaración. No aparece un botón de reiniciar o «Volver a explicarlo» en una aclaración normal. La continuación conserva los mensajes de la sesión y el mismo canal; una captura pendiente mantiene su identidad de aclaración. Una reformulación explícita tras un límite reinicia únicamente el intento y su contexto, conservando el historial visible de la sesión. Los datos retirados y los avisos de cambios siguen excluidos de la evidencia y del contexto interpretativo; conservar mensajes no autoriza a reutilizarlos.
+
 ## Entrada y carga
 
 Al pulsar «Gestionar» desde una referencia vigente de la conversación, se abre directamente el destino de gestión en carga. Una sola pantalla con logo y estado debajo cubre la comprobación de acceso/revisión y la lectura de los datos actuales. Cambia el texto, sin intercalar la conversación ni el encabezado/formulario de gestión. Los controles se muestran únicamente cuando termina la lectura autorizada; un fallo ofrece el estado de indisponibilidad y recarga. Se puede cancelar con Atrás del sistema. Revalidar al volver de segundo plano conserva esta misma presentación sin mostrar contenido anterior durante la comprobación.

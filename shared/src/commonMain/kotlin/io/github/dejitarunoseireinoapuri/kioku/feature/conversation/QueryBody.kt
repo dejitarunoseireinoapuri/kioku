@@ -49,12 +49,6 @@ fun QueryBody(
         if (!state.busy && state.outcome != null && last != state.outcome) {
             QueryResultBody(state.outcome, onEvent, AnswerManagement(!state.busy, onManage))
         }
-        if (state.awaitingClarification) {
-            ActionButton(
-                stringResource(Res.string.query_reset),
-                { onEvent(ConversationEvent.Query(QueryAction.Reset)) },
-            )
-        }
     }
 }
 

@@ -62,6 +62,16 @@ APK instalado en Honor conservando instalación/firma/datos. `mobileCheck`, form
 
 Se consultaron convenciones, calidad, flujos, referencia visual y pantalla de Gestionar en Stitch por MCP; no se editó Stitch. Documentación comprobada. **0 llamadas a OpenAI**, sin acceder a recuerdos reales. Sin despliegue de servidor; iOS comparte el código, pero no se compila ni ejecuta desde Windows.
 
+## Aclaración por el editor habitual sin perder historial · 17 de noviembre
+
+El propietario detectó que «Volver a explicarlo», mostrado junto a una pregunta de aclaración, reiniciaba todo el feed. Se retira ese botón de las aclaraciones de la conversación y la consulta. Se contesta directamente en el editor habitual; también la consulta simple muestra la indicación de aclaración. La continuación ya existente combina pregunta e intervención actual, y las aclaraciones de captura mantienen su identidad específica. Una reformulación explícita tras un límite conserva ahora los mensajes RAM y sus IDs, reiniciando el intento y su contexto. Los reinicios por cierre, caducidad o pérdida de sesión conservan la limpieza anterior.
+
+El historial posterior a un olvido sigue siendo solo lectura: sus referencias revocadas y preguntas antiguas no vuelven al contexto. El cambio no hace que «¿Y ahora?» recupere automáticamente un contexto descartado; permite contestar la pregunta de concreción conservando lo visible. No cambia almacenamiento, backend, evidencia o confirmación del olvido.
+
+Validación: **119/119 host tests**, `mobileCheck`, formato, arquitectura, Detekt, Lint y ambos APK correctos. En Honor, **19/19** pruebas físicas ficticias de conversación y consulta; incluye preguntar → confirmar olvido → «¿Y ahora?» → responder por el editor sin botones de reinicio y comprobar que la pregunta original continúa visible. Pruebas locales adicionales verifican referencias retiradas fuera del contexto y reformulación tras límite sin pérdida de mensajes ni IDs duplicados. APK actualizado conservando instalación, firma y datos; el otro dispositivo no se toca.
+
+Fuentes consultadas: convenciones, calidad, requisitos, flujos, privacidad y referencias Aclaración/Gestionar de Stitch por MCP, sin editar Stitch. Documentación comprobada. **0 llamadas a OpenAI**, sin leer ni modificar recuerdos reales; sin despliegue de servidor. iOS comparte el cambio, pero no se compila ni ejecuta desde Windows.
+
 ## Límites conocidos
 
 R2 sigue abierta por latencia y reserva independiente de la última versión. Esta entrega no prueba inferencia real con el adaptador de servidor ni iOS. La app requiere saldo para interpretar, consultar o corregir; no se añade un modo que simule respuestas como si fueran reales.

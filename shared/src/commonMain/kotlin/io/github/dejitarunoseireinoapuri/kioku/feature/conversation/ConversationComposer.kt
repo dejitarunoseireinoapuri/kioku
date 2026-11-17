@@ -201,7 +201,7 @@ private fun IntentButton(
 
 private fun placeholder(state: ConversationState): StringResource =
     when {
-        state.conversation?.clarification == true -> Res.string.clarify_placeholder
+        state.conversation?.clarification == true || state.query.awaitingClarification -> Res.string.clarify_placeholder
         state.capture is CaptureOutcome.Clarification -> Res.string.clarify_placeholder
         state.scenario == PreviewScenario.Offline -> Res.string.offline_composer
         state.scenario == PreviewScenario.Clarification -> Res.string.clarify_placeholder

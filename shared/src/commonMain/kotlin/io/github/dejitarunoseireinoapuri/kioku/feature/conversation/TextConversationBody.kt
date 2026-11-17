@@ -58,7 +58,6 @@ internal fun TextConversationTail(
     state.outcome?.takeIf { !state.busy && it != last }?.let {
         TextOutcomeBody(it, true, onEvent, AnswerManagement(!state.confirmingForget, onManage))
     }
-    if (state.clarification) MessageButton(MessageAction.Reset, stringResource(Res.string.capture_restart), onEvent)
 }
 
 @Composable

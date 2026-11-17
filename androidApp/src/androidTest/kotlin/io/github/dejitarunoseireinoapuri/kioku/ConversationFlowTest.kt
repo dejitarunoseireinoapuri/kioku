@@ -178,6 +178,49 @@ class ConversationFlowTest {
     }
 
     @Test
+    fun clarificationAfterForgettingUsesTheComposerAndKeepsTheSessionHistory() {
+        repository.answer = {
+            TextOutcome.Asked(
+                QueryOutcome.Reply(
+                    AnswerStatus.Answered,
+                    "Quieres visitar el planetario ficticio.",
+                    emptyList(),
+                ),
+            )
+        }
+        send("¿Qué quiero hacer?")
+        visible("Quieres visitar el planetario ficticio.")
+        repository.answer =
+            { TextOutcome.ConfirmForget(ForgetPreview("Visitar el planetario ficticio.", ForgetScope.AllOccurrences)) }
+        send("Olvida ese plan.")
+        visible("¿Borrar este recuerdo?")
+        repository.answer = { TextOutcome.Changed(MemoryChange.Confirmed(ChangeAction.Forget, 1)) }
+        click("Sí, olvidar")
+        visible("He olvidado el recuerdo.")
+        repository.answer = { TextOutcome.Clarification("¿Sobre qué quieres preguntar ahora?") }
+        send("¿Y ahora?")
+        visible("¿Sobre qué quieres preguntar ahora?")
+        compose.onNodeWithText("Volver a explicarlo").assertDoesNotExist()
+        compose.onNodeWithText("Volver a preguntar").assertDoesNotExist()
+        compose.onNodeWithTag("text-composer").assertIsEnabled()
+        repository.answer =
+            { TextOutcome.Asked(QueryOutcome.Reply(AnswerStatus.NotFound, "No consta otro plan.", emptyList())) }
+        send("Qué planes tengo pendientes.")
+        visible("No consta otro plan.")
+        assertEquals("¿Y ahora?\nAclaración: Qué planes tengo pendientes.", repository.commands.last().text)
+        assertTrue(
+            repository.commands
+                .last()
+                .context.sourceIds
+                .isEmpty(),
+        )
+        compose.onNodeWithTag("conversation-messages").performScrollToNode(hasText("¿Qué quiero hacer?"))
+        compose.onNodeWithText("¿Qué quiero hacer?").assertIsDisplayed()
+        compose.onNodeWithTag("conversation-messages").performScrollToNode(hasText("¿Y ahora?"))
+        compose.onNodeWithText("¿Y ahora?").assertIsDisplayed()
+    }
+
+    @Test
     fun followUpUsesThePreviousQuestionAndTheOwnerInputIsClearedAfterSending() {
         repository.answer = { TextOutcome.Asked(QueryOutcome.Reply(AnswerStatus.NotFound, "No consta.", emptyList())) }
         send("¿Qué vi ayer?")
