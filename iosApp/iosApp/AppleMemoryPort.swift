@@ -83,8 +83,21 @@ final class AppleMemoryPort: NSObject, NativeMemoryPort {
     }
 
     private static func issue(_ error: NSError) -> CaptureIssue {
+        var cause: NSError? = error
+        for _ in 0..<8 {
+            guard let current = cause else { break }
+            if current.domain == NSURLErrorDomain {
+                if current.code == NSURLErrorTimedOut { return .timedOut }
+                if [NSURLErrorNotConnectedToInternet, NSURLErrorNetworkConnectionLost,
+                    NSURLErrorCannotFindHost, NSURLErrorCannotConnectToHost, NSURLErrorDNSLookupFailed].contains(current.code) {
+                    return .connection
+                }
+            }
+            cause = current.userInfo[NSUnderlyingErrorKey] as? NSError
+        }
         guard error.domain == FunctionsErrorDomain else { return .unavailable }
         switch error.code {
+        case FunctionsErrorCode.deadlineExceeded.rawValue: return .timedOut
         case FunctionsErrorCode.permissionDenied.rawValue, FunctionsErrorCode.unauthenticated.rawValue: return .denied
         case FunctionsErrorCode.invalidArgument.rawValue: return .invalid
         case FunctionsErrorCode.resourceExhausted.rawValue: return .limited

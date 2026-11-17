@@ -1,5 +1,7 @@
 # Requisitos y aceptación
 
+Recuperación de cobertura del 17 de noviembre: una pregunta fallida permite «Reintentar» con el texto retenido en la sesión, incluso si la respuesta anterior ya terminó y no se conserva en el servidor. Distinguir error nativo de conexión, tiempo de espera, petición aún procesándose y respuesta no recuperable. Una lectura terminada puede renovarse de forma acotada; una escritura incierta conserva su identidad y no se duplica. No atribuir indisponibilidad genérica del servidor o autorización a falta de cobertura. No introducir persistencia local ni ampliar la duración del historial RAM.
+
 Refinamiento adicional del 17 de noviembre: esperar una aclaración no bloquea cambiar entre Preguntar y Explicar. Cada modo conserva su aclaración y contexto por separado; al volver se puede continuarla sin mezclar el texto del otro modo. Las restricciones durante una operación en curso o la confirmación de olvido siguen vigentes.
 
 Refinamiento del 17 de noviembre: una aclaración se responde en el campo habitual sin botón de reinicio y sin vaciar el historial RAM. Debe poder completarse la secuencia consulta → olvido confirmado → nueva pregunta ambigua → aclaración escrita, conservando la conversación visible y excluyendo del contexto los recuerdos retirados. Reformular después de un límite tampoco borra el historial; cerrar sesión, reiniciar la app y caducar la sesión RAM conservan sus reglas de limpieza.

@@ -19,7 +19,7 @@ sealed interface CaptureCommand {
     ) : CaptureCommand
 }
 
-enum class CaptureIssue { Unavailable, Denied, Invalid, Limited, NotConfigured, MoreContext }
+enum class CaptureIssue { Unavailable, Connection, TimedOut, Denied, Invalid, Limited, NotConfigured, MoreContext }
 
 sealed interface CaptureOutcome {
     data class Saved(

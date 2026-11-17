@@ -2,7 +2,6 @@ package io.github.dejitarunoseireinoapuri.kioku.platform
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.functions.FirebaseFunctions
-import com.google.firebase.functions.FirebaseFunctionsException
 import io.github.dejitarunoseireinoapuri.kioku.data.MemoryEndpoint
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeCancellation
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeMemoryPort
@@ -70,7 +69,7 @@ internal class AndroidMemoryPort(
                     generation = uid to requireNotNull(current)
                     completion(current, null)
                 } else {
-                    completion(null, issue(task.exception))
+                    completion(null, memoryTransportIssue(task.exception))
                 }
             }
     }
@@ -95,34 +94,11 @@ internal class AndroidMemoryPort(
                 if (task.isSuccessful && value != null) {
                     NativeMemoryReply.Received(JSONObject(value).toString())
                 } else {
-                    NativeMemoryReply.Failed(issue(task.exception))
+                    NativeMemoryReply.Failed(memoryTransportIssue(task.exception))
                 },
             )
         }
     }
-
-    private fun issue(error: Exception?): CaptureIssue =
-        when ((error as? FirebaseFunctionsException)?.code) {
-            FirebaseFunctionsException.Code.PERMISSION_DENIED, FirebaseFunctionsException.Code.UNAUTHENTICATED -> {
-                CaptureIssue.Denied
-            }
-
-            FirebaseFunctionsException.Code.INVALID_ARGUMENT -> {
-                CaptureIssue.Invalid
-            }
-
-            FirebaseFunctionsException.Code.RESOURCE_EXHAUSTED -> {
-                CaptureIssue.Limited
-            }
-
-            FirebaseFunctionsException.Code.FAILED_PRECONDITION -> {
-                CaptureIssue.NotConfigured
-            }
-
-            else -> {
-                CaptureIssue.Unavailable
-            }
-        }
 }
 
 private fun <T> com.google.android.gms.tasks.Task<T>.resultOrNull(): T? = if (isSuccessful) result else null

@@ -24,6 +24,9 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.offer_accept
 import io.github.dejitarunoseireinoapuri.kioku.resources.offer_decline
 import io.github.dejitarunoseireinoapuri.kioku.resources.offer_title
 import io.github.dejitarunoseireinoapuri.kioku.resources.operation_uncertain
+import io.github.dejitarunoseireinoapuri.kioku.resources.query_processing
+import io.github.dejitarunoseireinoapuri.kioku.resources.query_repeat
+import io.github.dejitarunoseireinoapuri.kioku.resources.retry
 import io.github.dejitarunoseireinoapuri.kioku.resources.text_declined
 import io.github.dejitarunoseireinoapuri.kioku.resources.text_expired
 import io.github.dejitarunoseireinoapuri.kioku.resources.text_failure
@@ -112,11 +115,23 @@ private fun TextOutcomeNotice(
         }
 
         TextOutcome.Expired -> {
-            TextProblem(Res.string.text_expired, MessageAction.Restart, interactive, onEvent)
+            TextProblem(
+                Res.string.text_expired,
+                MessageAction.Restart,
+                interactive,
+                onEvent,
+                buttonLabel = Res.string.retry,
+            )
         }
 
         TextOutcome.RepeatRequired -> {
-            TextProblem(Res.string.text_repeat, MessageAction.Restart, interactive, onEvent)
+            TextProblem(
+                Res.string.text_repeat,
+                MessageAction.Restart,
+                interactive,
+                onEvent,
+                buttonLabel = Res.string.retry,
+            )
         }
 
         TextOutcome.Processing -> {
@@ -139,10 +154,24 @@ private fun FailureReceipt(
 ) {
     val limited = issue == CaptureIssue.MoreContext
     TextProblem(
-        if (limited) Res.string.capture_more_context else Res.string.text_failure,
+        if (issue == CaptureIssue.Connection || issue == CaptureIssue.TimedOut) {
+            queryFailureText(issue)
+        } else if (limited) {
+            Res.string.capture_more_context
+        } else {
+            Res.string.text_failure
+        },
         if (limited) MessageAction.Reset else MessageAction.Retry,
         interactive,
         onEvent,
+        buttonLabel =
+            if (issue == CaptureIssue.Connection ||
+                issue == CaptureIssue.TimedOut
+            ) {
+                Res.string.retry
+            } else {
+                null
+            },
     )
 }
 
@@ -178,7 +207,11 @@ private fun TextAnswer(
         AnswerMemoryMessage(answer, management)
     } else {
         TextProblem(
-            Res.string.text_failure,
+            when (answer) {
+                is QueryOutcome.Failed -> queryFailureText(answer.issue)
+                QueryOutcome.RepeatRequired -> Res.string.query_repeat
+                else -> Res.string.query_processing
+            },
             if (answer ==
                 QueryOutcome.RepeatRequired
             ) {
@@ -188,6 +221,7 @@ private fun TextAnswer(
             },
             interactive,
             onEvent,
+            buttonLabel = Res.string.retry,
         )
     }
 }
@@ -198,13 +232,14 @@ private fun TextProblem(
     action: MessageAction,
     interactive: Boolean,
     onEvent: (ConversationEvent) -> Unit,
+    buttonLabel: org.jetbrains.compose.resources.StringResource? = null,
 ) {
     Text(stringResource(text), color = KiokuColors.Danger)
     if (interactive) {
         MessageButton(
             action,
             stringResource(
-                if (action ==
+                buttonLabel ?: if (action ==
                     MessageAction.Retry
                 ) {
                     Res.string.capture_check

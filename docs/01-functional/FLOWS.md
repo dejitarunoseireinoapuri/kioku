@@ -1,5 +1,11 @@
 # Flujos y salidas
 
+## Recuperación de consultas tras fallos de conexión
+
+Una conexión interrumpida identificada por el transporte muestra un aviso de conexión y «Reintentar»; un tiempo de espera muestra que la respuesta tardó demasiado, sin atribuirlo automáticamente a cobertura. El mensaje enviado permanece en la sesión RAM y el botón reutiliza su texto. Si el servidor confirma que la consulta terminó pero la respuesta se perdió, puede renovar una vez su ID de lectura y consultar de nuevo. Si sigue procesando, comprueba el mismo ID. Una preparación terminada cuya respuesta se perdió puede renovar una vez el ID de interpretación, conservando los IDs de ejecución/consulta; no repite automáticamente una escritura. Ni una preparación caducada ni una respuesta retirada obligan a reescribir el texto mientras siga la sesión.
+
+No hay cola sin conexión ni reintentos periódicos. Un fallo de transporte no implica que un guardado/corrección/olvido no ocurriera: mantiene su identidad y se comprueba, sin afirmar éxito ni reenviar con otra identidad. Cierre/reinicio y 30 minutos en segundo plano conservan las reglas de limpieza RAM; no se recupera texto de sesiones ya cerradas.
+
 ## Aclaraciones en la conversación
 
 Mientras una aclaración espera respuesta, se puede cambiar a Explicar/Preguntar. Cada modo conserva el estado pendiente; una nueva entrada del otro modo no se une a la aclaración anterior. Al regresar se restaura la pregunta pendiente y se responde por el editor normal. Una aclaración de captura conserva su ID/revisión tras salir y volver. No se bloquean por esta espera los ajustes ni la navegación ordinaria.

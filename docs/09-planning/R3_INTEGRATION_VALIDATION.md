@@ -102,6 +102,16 @@ Petición simultánea del propietario: una aclaración pendiente ya no impide se
 
 Consultados convenciones, calidad, flujos, requisitos y referencia Entrando ya inspeccionada en Stitch. Sin cambios de backend ni API OpenAI, sin edición de Stitch ni acceso al contenido de recuerdos reales. La prueba real de arranque solo inicia la app y su transporte de metadatos; no envía turnos ni consultas de memoria. Documentación comprobada; iOS no se compila desde Windows.
 
+## Recuperación tras cobertura insuficiente · 17 de noviembre
+
+No se ha recuperado el error original del metro: la sesión del Samsung ya había caducado. Se reproduce con transporte ficticio un fallo compatible: tras perder una respuesta, el reintento recibía el recibo terminal sin texto y no iniciaba otra lectura. El cliente distingue ahora conexión y tiempo agotado mediante tipos/códigos, conserva el mensaje en RAM y ofrece «Reintentar». Una preparación terminal sin decisión o una consulta de solo lectura terminal renueva únicamente su identidad correspondiente, una vez por ejecución. Los estados en curso conservan identidad; los intentos de escritura mantienen sus IDs y siguen sin confirmar hasta obtener evidencia. No hay cola offline, reintentos periódicos ni conservación después del cierre/caducidad de sesión.
+
+Validación sin OpenAI: **126/126** host tests, formato, `mobileCheck`, arquitectura, Detekt, Lint y compilación de ambos APK correctos. Los casos nuevos cubren respuesta perdida en preparación/consulta, renovación acotada, conservación del nuevo intento después de otra pérdida, procesamiento sin renovación, cancelación por tiempo e identidad de escrituras inciertas. En Samsung: **3/3** pruebas nativas de clasificación de errores y recuperación mediante el ViewModel real con transporte ficticio. Las pruebas de botones en ese dispositivo no pudieron ejecutarse por incompatibilidad de Espresso con `InputManager.getInstance`; no se consideran aprobadas. En Honor: **10/10** pruebas UI de recuperación y navegación, incluyendo pulsar «Reintentar» y obtener la respuesta ficticia sin escribir otra vez. El montaje inicial de la prueba nativa usaba un método interno no compatible; se sustituyó por el proveedor público antes de la ejecución final.
+
+APK actualizado en Samsung y Honor conservando instalación, firma y datos. No se consultaron recuerdos reales ni se desplegó backend. Las pruebas simulan pérdida de transporte; no acreditan cobertura real del metro ni inferencia del proveedor. El adaptador Swift recibe la misma clasificación, pero no se compila ni ejecuta desde Windows. Se mantiene la limpieza de RAM tras 30 minutos en segundo plano.
+
+Consultados convenciones, calidad, guía de desarrollo, contratos existentes y referencia «Sin conexión» de Stitch mediante MCP, sin editar Stitch; comprobada la distinción de códigos en la documentación oficial de Firebase. Se actualizan flujos, requisitos, contrato, seguridad, ADR-013 y referencia visual. **0 llamadas de prueba a OpenAI**.
+
 ## Límites conocidos
 
 R2 sigue abierta por latencia y reserva independiente de la última versión. Esta entrega no prueba inferencia real con el adaptador de servidor ni iOS. La app requiere saldo para interpretar, consultar o corregir; no se añade un modo que simule respuestas como si fueran reales.

@@ -63,9 +63,12 @@
     <string name="text_interpreting">Entendiendo tu mensaje...</string>
     <string name="text_declining">Descartando la propuesta...</string>
     <string name="text_declined">No se ha guardado con esta propuesta.</string>
-    <string name="text_expired">El contexto ha cambiado o ha caducado. Vuelve a explicarlo.</string>
+    <string name="text_expired">El contexto ha cambiado o ha caducado. Pulsa «Reintentar» para revisar el mismo mensaje con los datos actuales.</string>
     <string name="text_failure">No he podido completar la operación. Puedes comprobarla sin duplicar el cambio.</string>
-    <string name="text_repeat">Vuelve a enviar el mensaje para recuperar este recorrido.</string>
+    <string name="connection_error">No se ha podido conectar con Kioku. Comprueba tu conexión y pulsa «Reintentar». Tu mensaje sigue disponible en esta sesión.</string>
+    <string name="request_timeout">La respuesta ha tardado demasiado. Puedes reintentar sin volver a escribir el mensaje.</string>
+    <string name="query_processing">La consulta sigue en curso. Puedes comprobarla de nuevo.</string>
+    <string name="text_repeat">No he podido recuperar el intento anterior. Pulsa «Reintentar» para procesar el mismo mensaje.</string>
     <string name="offer_accepted_example">Ejemplo de oferta aceptada. No se ha guardado ningún dato real.</string>
     <string name="offer_declined_example">Oferta descartada en este ejemplo.</string>
     <string name="offline_title">Necesitas conexión</string>
@@ -95,7 +98,7 @@
     <string name="query_unavailable">La consulta de recuerdos aún no está disponible. Esta pregunta no se ha guardado.</string>
     <string name="query_searching">Buscando en tu memoria...</string>
     <string name="query_error">No he podido recuperar la respuesta. Puedes reintentar; tu pregunta no se ha guardado como recuerdo.</string>
-    <string name="query_repeat">La consulta terminó, pero la respuesta ya no está disponible. Puedes volver a preguntarlo.</string>
+    <string name="query_repeat">No se pudo recuperar la respuesta anterior. Pulsa «Reintentar» para consultar de nuevo con el mismo texto.</string>
     <string name="query_restart">Volver a preguntar</string>
     <string name="query_reset">Empezar otra pregunta</string>
     <string name="query_source">Ver texto original %1$d · %2$s</string>

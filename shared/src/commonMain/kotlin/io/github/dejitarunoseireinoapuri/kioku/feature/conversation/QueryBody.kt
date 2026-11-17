@@ -13,6 +13,7 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.QueryOutcome
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.query_error
 import io.github.dejitarunoseireinoapuri.kioku.resources.query_limit
+import io.github.dejitarunoseireinoapuri.kioku.resources.query_processing
 import io.github.dejitarunoseireinoapuri.kioku.resources.query_repeat
 import io.github.dejitarunoseireinoapuri.kioku.resources.query_reset
 import io.github.dejitarunoseireinoapuri.kioku.resources.query_restart
@@ -67,7 +68,23 @@ private fun QueryResultBody(
         is QueryOutcome.Failed, QueryOutcome.Processing -> {
             val limited = (outcome as? QueryOutcome.Failed)?.issue == CaptureIssue.MoreContext
             Text(
-                stringResource(if (limited) Res.string.query_limit else Res.string.query_error),
+                stringResource(
+                    when (outcome) {
+                        is QueryOutcome.Failed -> {
+                            if (limited) {
+                                Res.string.query_limit
+                            } else {
+                                queryFailureText(
+                                    outcome.issue,
+                                )
+                            }
+                        }
+
+                        else -> {
+                            Res.string.query_processing
+                        }
+                    },
+                ),
                 color = KiokuColors.Danger,
             )
             if (interactive) {
@@ -81,7 +98,7 @@ private fun QueryResultBody(
             Text(stringResource(Res.string.query_repeat))
             if (interactive) {
                 ActionButton(
-                    stringResource(Res.string.query_restart),
+                    stringResource(Res.string.retry),
                     { onEvent(ConversationEvent.Query(QueryAction.Restart)) },
                 )
             }

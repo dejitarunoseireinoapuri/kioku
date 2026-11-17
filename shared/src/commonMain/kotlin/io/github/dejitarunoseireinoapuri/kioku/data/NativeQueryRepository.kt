@@ -59,7 +59,7 @@ class NativeQueryRepository(
                     val request = port.call(endpoint, json) { if (continuation.isActive) continuation.resume(it) }
                     continuation.invokeOnCancellation { request.cancel() }
                 }
-            } ?: NativeMemoryReply.Failed(CaptureIssue.Unavailable)
+            } ?: NativeMemoryReply.Failed(CaptureIssue.TimedOut)
         } catch (error: CancellationException) {
             throw error
         } catch (_: Exception) {

@@ -25,6 +25,8 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.capture_restart
 import io.github.dejitarunoseireinoapuri.kioku.resources.capture_uncertain
 import io.github.dejitarunoseireinoapuri.kioku.resources.clarification_hint
 import io.github.dejitarunoseireinoapuri.kioku.resources.clarification_pending
+import io.github.dejitarunoseireinoapuri.kioku.resources.connection_error
+import io.github.dejitarunoseireinoapuri.kioku.resources.request_timeout
 import io.github.dejitarunoseireinoapuri.kioku.resources.retry
 import org.jetbrains.compose.resources.stringResource
 
@@ -111,5 +113,7 @@ internal fun captureError(issue: CaptureIssue) =
         CaptureIssue.Limited -> Res.string.capture_limited
         CaptureIssue.NotConfigured -> Res.string.capture_configuration
         CaptureIssue.Unavailable -> Res.string.capture_error
+        CaptureIssue.Connection -> Res.string.connection_error
+        CaptureIssue.TimedOut -> Res.string.request_timeout
         CaptureIssue.MoreContext -> Res.string.capture_more_context
     }

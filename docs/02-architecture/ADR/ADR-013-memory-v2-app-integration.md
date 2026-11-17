@@ -24,6 +24,8 @@ Se descarta migrar o archivar recuerdos por la decisión expresa del propietario
 
 ## Consecuencias y límites
 
+El cliente conserva el comando RAM al fallar la conexión. Puede renovar una preparación terminada sin decisión aplicada o una lectura terminal, una sola vez por ejecución; las escrituras inciertas siempre mantienen ID. La renovación sustituye el ID del comando retenido para evitar perder la nueva operación si vuelve a cortarse la conexión. No añade cola offline, almacenamiento persistente ni llamadas periódicas. La evidencia y los permisos siguen bajo autoridad del servidor actual.
+
 La clasificación de intención precede a la carga de contenido canónico. Una puerta determinista acotada para continuaciones aisladas sin contexto puede pedir tema sin crear proveedor; la clasificación semántica restante reutiliza la llamada de intención existente. Solo los cambios necesitan catálogo durante el encaminamiento; las consultas leen evidencia posteriormente. La revisión y autorización se contrastan al terminar incluso cuando no se leyó catálogo. El ajuste v2 no altera prompts ni benchmarks históricos M0.
 
 Refinamiento del 17 de noviembre: las consultas exponen referencias por unidad citada, resueltas como vistas calculadas del canónico y vinculadas a generación/revisiones. No amplían la gestión a otros datos del mismo relato. Los grupos de captura conservan su función desde el guardado. Corrección/olvido revocan y sustituyen también las vistas individuales, dentro del límite compartido de 128 sustituciones. No hay migración ni copia persistida adicional.

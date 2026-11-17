@@ -66,7 +66,7 @@ private fun captureReply(reply: NativeMemoryReply): CaptureOutcome =
         }
 
         is NativeMemoryReply.Failed -> {
-            if (reply.issue == CaptureIssue.Unavailable) {
+            if (reply.issue in setOf(CaptureIssue.Unavailable, CaptureIssue.Connection, CaptureIssue.TimedOut)) {
                 CaptureOutcome.Unconfirmed
             } else {
                 CaptureOutcome.Failed(reply.issue)

@@ -9,6 +9,7 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChange
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChangeDescription
 import io.github.dejitarunoseireinoapuri.kioku.domain.OfferDecision
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryCommand
+import io.github.dejitarunoseireinoapuri.kioku.domain.QueryOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextCommand
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextContext
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextConversationRepository
@@ -81,24 +82,32 @@ class NativeTextConversationRepository(
         val resolved = resolve(command)
         resolved.outcome?.let { return TextExecution(resolved.command, it) }
         onPrepared(resolved.command)
-        val description = describeChange(resolved.command)
+        return if (resolved.command.plan is TextPlan.Ask) {
+            executeQuery(resolved.command, onPrepared)
+        } else {
+            executePrepared(resolved.command)
+        }
+    }
+
+    private suspend fun executePrepared(command: TextCommand): TextExecution {
+        val description = describeChange(command)
         val result =
             try {
-                perform(resolved.command)
+                perform(command)
             } catch (error: CancellationException) {
                 throw error
             } catch (_: Exception) {
                 TextOutcome.Processing
             }
         val outcome =
-            if (result == TextOutcome.Processing && resolved.command.plan is TextPlan.Offer &&
-                resolved.command.decision == OfferDecision.Accept
+            if (result == TextOutcome.Processing && command.plan is TextPlan.Offer &&
+                command.decision == OfferDecision.Accept
             ) {
-                TextOutcome.Captured(captures.recover(resolved.command.ids.action))
+                TextOutcome.Captured(captures.recover(command.ids.action))
             } else {
                 result
             }
-        return TextExecution(resolved.command, outcome, description.takeIf { outcome is TextOutcome.Changed })
+        return TextExecution(command, outcome, description.takeIf { outcome is TextOutcome.Changed })
     }
 
     private suspend fun describeChange(command: TextCommand): MemoryChangeDescription? {
@@ -121,7 +130,22 @@ class NativeTextConversationRepository(
         }
     }
 
-    private suspend fun resolve(command: TextCommand): RoutingResolution {
+    private suspend fun executeQuery(
+        command: TextCommand,
+        onPrepared: (TextCommand) -> Unit,
+    ): TextExecution {
+        val answer = ask(command, requireNotNull(command.plan))
+        if (answer != QueryOutcome.RepeatRequired) return TextExecution(command, TextOutcome.Asked(answer))
+        // The server confirms this read is terminal; only the read ID may be renewed once.
+        val renewed = command.copy(ids = command.ids.copy(query = port.requestId()))
+        onPrepared(renewed)
+        return TextExecution(renewed, TextOutcome.Asked(ask(renewed, requireNotNull(renewed.plan))))
+    }
+
+    private suspend fun resolve(
+        command: TextCommand,
+        renew: Boolean = true,
+    ): RoutingResolution {
         if (command.plan != null) return RoutingResolution(command)
         return when (val reply = request(MemoryEndpoint.RouteMessage, routingPayload(command).toString())) {
             is NativeMemoryReply.Failed -> {
@@ -147,7 +171,11 @@ class NativeTextConversationRepository(
                         }
 
                         RoutingReply.RepeatRequired -> {
-                            RoutingResolution(command, TextOutcome.RepeatRequired)
+                            if (renew && command.decision == null) {
+                                resolve(command.copy(ids = command.ids.copy(route = port.requestId())), renew = false)
+                            } else {
+                                RoutingResolution(command, TextOutcome.RepeatRequired)
+                            }
                         }
                     }
                 } catch (_: Exception) {
@@ -217,7 +245,7 @@ class NativeTextConversationRepository(
         when (val reply = request(MemoryEndpoint.ApplyMessage, decisionPayload(command))) {
             is NativeMemoryReply.Failed -> {
                 when (reply.issue) {
-                    CaptureIssue.Unavailable -> TextOutcome.Processing
+                    CaptureIssue.Unavailable, CaptureIssue.Connection, CaptureIssue.TimedOut -> TextOutcome.Processing
                     CaptureIssue.NotConfigured -> TextOutcome.Expired
                     else -> TextOutcome.Failed(reply.issue)
                 }
@@ -282,7 +310,7 @@ class NativeTextConversationRepository(
                     val handle = port.call(endpoint, json) { if (continuation.isActive) continuation.resume(it) }
                     continuation.invokeOnCancellation { handle.cancel() }
                 }
-            } ?: NativeMemoryReply.Failed(CaptureIssue.Unavailable)
+            } ?: NativeMemoryReply.Failed(CaptureIssue.TimedOut)
         } catch (error: CancellationException) {
             throw error
         } catch (_: Exception) {

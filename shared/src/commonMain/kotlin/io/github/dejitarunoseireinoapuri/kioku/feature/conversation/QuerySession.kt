@@ -84,7 +84,10 @@ internal class QuerySession(
             QueryAction.Restart -> {
                 command =
                     command?.let { previous ->
-                        repository?.prepare(previous.text)?.copy(previousQuestions = previous.previousQuestions)
+                        repository?.prepare(previous.text)?.copy(
+                            previousQuestions = previousQuestions.toList(),
+                            memoryRevision = memoryRevision,
+                        )
                     }
                 execute()
             }

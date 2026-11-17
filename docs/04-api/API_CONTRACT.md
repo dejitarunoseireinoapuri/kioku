@@ -2,6 +2,8 @@
 
 ## Integración v2 · 17 de noviembre de 2026
 
+Recuperación móvil: un `repeatRequired` terminal de `route` puede provocar una sola renovación del ID de interpretación si aún no hay decisión aplicada; conserva IDs de acción/consulta. Un `repeatRequired` de `query` con plan puramente `ask` puede renovar una sola vez el ID de lectura; el comando actualizado se retiene para comprobar ese ID si vuelve a perderse la respuesta. `processing` conserva el ID, y un error de transporte no inicia por sí solo una renovación. Los cambios/ofertas aceptadas/capturas inciertas mantienen su identidad de escritura. No hay nuevos DTO ni colecciones, caché de respuestas persistida o bucle de reintentos. Una nueva pulsación explícita reutiliza el texto del comando RAM.
+
 El contrato de memoria nuevo sustituye las rutas M0 al activar la cuenta: [ADR-013](../02-architecture/ADR/ADR-013-memory-v2-app-integration.md), [estado R3](../09-planning/R3_INTEGRATION_VALIDATION.md). La configuración de cuenta sigue en v1. Las secciones posteriores describen el protocolo anterior.
 
 Callable autenticada y atestada `memoryV2`. Sobre estricto: `{apiVersion:2, operation, generation, payload}`. `state` omite generación/payload y devuelve `{apiVersion:2,generation,memoryEpoch}`; el cliente conserva esa generación y no cambia a otra silenciosamente. Las demás operaciones rechazan generaciones antiguas.
