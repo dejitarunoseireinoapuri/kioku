@@ -1,5 +1,7 @@
 # Flujos y salidas
 
+**Recorrido futuro de fuentes compartidas:** otra app → Compartir → Kioku → sesión/recepción → lectura y preparación por elemento → fuente disponible → pregunta y cita navegable. Cancelación, fallos y lectura parcial tienen resultado explícito; el selector de archivos converge en el mismo flujo. Drive como archivo y como enlace privado tienen recorridos distintos. [Plan, límites y aceptación previstos](../09-planning/SHARED_SOURCES_PLAN.md); sin código o activación en esta entrega.
+
 ## Voz local
 
 Intención Contar/Preguntar → tocar micrófono → X/Stop y transcripción local en el campo → Stop → texto final como borrador editable → enviar manualmente. X descarta parciales y resultados tardíos. El envío desaparece durante dictado/finalización; el micrófono desaparece si hay texto y reaparece al vaciarlo. No hay mantener/bloquear ni envío al parar. Las mismas acciones tienen nombres accesibles. Pausas no envían; salida/segundo plano cancela. Error o límite no envían y permiten recuperar explícitamente la parte recogida al editor. Permiso concedido necesita otro toque; sin motor/modelo local se ofrece escribir, sin nube alternativa. Las aclaraciones y respuestas aparecen por escrito. [ADR-015](../02-architecture/ADR/ADR-015-dictation-draft.md), [límites y pruebas](../09-planning/K5_VALIDATION.md).

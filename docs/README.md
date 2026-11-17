@@ -35,6 +35,7 @@ Una fuente por tipo de decisión. Los documentos son el contrato previsto; el es
 | Evidencia de control | [K4_VALIDATION](09-planning/K4_VALIDATION.md) | Retirada interna y límites pendientes del control conversacional |
 | Voz local | [ADR-014](02-architecture/ADR/ADR-014-local-voice-input.md), [K5_VALIDATION](09-planning/K5_VALIDATION.md) | Gestos, límites, pruebas ficticias Android e iOS pendiente |
 | Dictado y borrador | [ADR-015](02-architecture/ADR/ADR-015-dictation-draft.md) | Toque para empezar, X/Stop, transcripción en el campo y envío manual |
+| Fuentes compartidas | [SHARED_SOURCES_PLAN](09-planning/SHARED_SOURCES_PLAN.md), [ADR-016](02-architecture/ADR/ADR-016-shared-reference-sources.md) | Plan de archivos, Drive y webs mediante Compartir; solo fixtures y cero API; sin implementación/activación |
 
 Las conversaciones previas y los prototipos históricos sirven de evidencia de decisiones, no de segunda especificación vigente.
 

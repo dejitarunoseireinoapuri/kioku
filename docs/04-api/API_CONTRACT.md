@@ -1,5 +1,7 @@
 # Contrato backend · memoria v2 y cuenta v1
 
+**Fuentes compartidas en planificación:** el [plan I0–I7](../09-planning/SHARED_SOURCES_PLAN.md) enumera admisión/subida temporal, estado/cancelación, lectura de evidencia, consulta y actualización/eliminación como contratos lógicos por diseñar. I0 fijará DTO, versión, errores, cotas e idempotencia; no son endpoints disponibles ni payloads nuevos aceptados por `memoryV2`. No hay activación remota o llamadas de prueba a IA en esta entrega.
+
 Voz K5 no añade endpoints, DTO ni audio subido al servidor. La transcripción ocurre localmente; Stop entrega solo un borrador editable, sin peticiones. Únicamente la pulsación posterior de Enviar usa los comandos autenticados existentes con las mismas reglas de versión/idempotencia/confirmación. Parciales y cancelaciones no envían. Sin respuestas habladas ni API de voz; el procesamiento posterior del texto mantiene su coste normal. [ADR-014](../02-architecture/ADR/ADR-014-local-voice-input.md), [refinamiento ADR-015](../02-architecture/ADR/ADR-015-dictation-draft.md).
 
 ## Integración v2 · 17 de noviembre de 2026

@@ -1,5 +1,7 @@
 # Modelo lógico de datos
 
+**Propuesta sin implementar:** fuentes de referencia versionadas para archivos/Drive/web, con texto extraído, procedencia, cobertura, fragmentos/localizadores, operación y revocaciones por cuenta. Se mantienen diferenciadas de las unidades personales; no llenan el catálogo de recuerdos con cada fragmento documental. El [plan I0–I7](../09-planning/SHARED_SOURCES_PLAN.md) contiene el diseño lógico; I0 fijará esquema/cotas antes de persistir. No existen nuevas colecciones, migraciones o datos reales creados por este documento.
+
 Refinamiento de gestión desde consultas: las referencias representan vistas individuales, calculadas desde generación, UUID, revisión y revisión de pertenencia de cada unidad citada. No se guardan como grupos adicionales ni duplican texto. Los grupos del relato siguen disponibles desde la confirmación de guardado. Corregir/olvidar comunica sustituciones de ambos tipos de referencia; el límite de 128 incluye ambas y la capacidad futura de olvido lo contempla. No requiere migrar recuerdos existentes.
 
 ## Almacenamiento v2 de la aplicación

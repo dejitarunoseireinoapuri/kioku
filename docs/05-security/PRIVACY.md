@@ -1,5 +1,7 @@
 # Privacidad, datos y permisos
 
+**Ampliación documental en planificación:** el propietario solicita fuentes de archivos, Drive y webs compartidas para consultarlas. [Plan I0–I7](../09-planning/SHARED_SOURCES_PLAN.md): propone conservar texto extraído/procedencia y limpiar binarios temporales, sin acceso global a Drive o cookies del navegador. Conservar originales y sincronizar se identifican como decisiones pendientes, no autorizaciones implícitas. No hay lectura de documentos/recuerdos personales, credenciales nuevas, llamadas IA o almacenamiento nuevo en esta entrega.
+
 La preferencia «Katakana cayendo» (antes «Letras cayendo») se guarda como un booleano local del dispositivo (preferencias nativas Android/Apple). El cambio de nombre conserva su clave y elección. No contiene texto, identidad ni recuerdos, no se sincroniza con Firebase y no cambia la limpieza del historial RAM. Desactivarla retira la capa de animación, sin afectar al tratamiento de memoria.
 
 El target Apple incorpora un manifiesto de acceso a UserDefaults con motivo CA92.1 para preferencias propias de la app, siguiendo la [documentación oficial de Apple](https://developer.apple.com/documentation/technotes/tn3183-adding-required-reason-api-entries-to-your-privacy-manifest). Su inclusión y validación nativa quedan pendientes de Xcode; no se presenta como una auditoría completa de los manifiestos de dependencias.

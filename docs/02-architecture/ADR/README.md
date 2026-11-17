@@ -19,5 +19,6 @@ Una decisión aceptada define la dirección de implementación, no afirma que es
 | [ADR-013](ADR-013-memory-v2-app-integration.md) | Activada y comprobada en Honor sin inferencia; iOS pendiente | Callable v2, documentos separados, identidades estables y arranque vacío autorizado |
 | [ADR-014](ADR-014-local-voice-input.md) | Android con fixtures; iOS pendiente | Transcripción local, mantener/bloquear y respuestas escritas |
 | [ADR-015](ADR-015-dictation-draft.md) | Implementada en rama de voz | Sustituye mantener/bloquear por toque, X/Stop y borrador antes del envío manual |
+| [ADR-016](ADR-016-shared-reference-sources.md) | Propuesta; planificación autorizada | Fuentes documentales versionadas, recepción por Compartir, Drive/web y consultas con citas; sin API/activación |
 
 Una nueva ADR recoge contexto, decisión, alternativas, consecuencias y estado. No copiar la numeración ni las decisiones de regalos/comercio de Wonderdrop. No modificar retroactivamente una decisión incompatible: sustituirla con otra que la cite.

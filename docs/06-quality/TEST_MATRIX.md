@@ -1,5 +1,7 @@
 # Matriz de aceptación y evidencia prevista
 
+**Fuentes compartidas, pruebas aún no ejecutadas:** la matriz del [plan I0–I7](../09-planning/SHARED_SOURCES_PLAN.md) cubre receptor nativo, formatos/extracción, Drive simulado, fetcher con transporte doble, permisos/cuentas/versiones, reintentos, citas y purga. Todo con corpus ficticio y cero proveedor IA; separar emulador/receptor de integración real y preguntas con IA de dobles deterministas. Este plan no es evidencia de que compartir documentos o consultar su contenido funcione ya en la app.
+
 Revisión ADR-015: K5 comprueba inicio por toque, X/Stop y ausencia de envío durante dictado, parciales en el campo, Stop al borrador sin petición, edición/envío manual, restauración del micrófono al vaciar y cancelación con final tardío. Se exige también parcial antes de Stop al reconocedor real. La cobertura de mantener/bloquear descrita debajo queda histórica.
 
 K5 local: [evidencia](../09-planning/K5_VALIDATION.md) cubre estado/generaciones/límites en host, gestos y cancelación con dobles en Honor, motor local español con audio ficticio y permiso/pipe en ambos teléfonos. No acredita micrófono humano/ruido, gestos Samsung ni iOS. Respuestas siempre escritas según ADR-014.

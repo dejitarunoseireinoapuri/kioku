@@ -1,5 +1,10 @@
 # Cambios
 
+## Fuentes compartidas · planificación · 2026-11-17
+
+- Plan de archivos, Drive y webs mediante Compartir → Kioku, con fuentes de referencia versionadas, citas, eliminación y fases I0–I7. Dirección técnica propuesta en ADR-016; no hay implementación/activación.
+- Preparación sin API ni datos reales: corpus ficticio, extracción/recuperación deterministas y pruebas con emuladores/dobles; evaluación de IA e integración real separadas. [Plan y decisiones pendientes](docs/09-planning/SHARED_SOURCES_PLAN.md).
+
 ## Asignación global y soporte propio · 2026-11-16 · Continuación final R2 2 de 2
 
 - Comprobador con biyección única acotada y soporte propio; rechazo de canónicos contaminados, anclas incorrectas y ambigüedad real. Dependencias con clase/dirección comprobadas y cierre explícitamente autorizado en fixtures. Revisor conservado y reforzado sobre todos los campos normalizados.

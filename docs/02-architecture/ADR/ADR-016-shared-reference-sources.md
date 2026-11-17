@@ -1,0 +1,31 @@
+# ADR-016 · Fuentes de referencia compartidas
+
+- Estado: propuesta para implementación; dirección de archivos/Drive/web aceptada por el propietario. Contratos y límites por concretar en I0; sin código ni activación.
+- Fecha: 2026-11-17.
+- Plan y aceptación: [SHARED_SOURCES_PLAN](../../09-planning/SHARED_SOURCES_PLAN.md).
+
+## Contexto
+
+El propietario quiere elegir Kioku en el menú Compartir de otras apps para guardar archivos o enlaces y preguntar sobre ellos. Amplía la exclusión histórica de documentos de V1. Esta entrega prepara el plan con datos ficticios y cero API; no autoriza acceso a archivos/cuentas reales, infraestructura de pago o despliegues. La voz y el núcleo actuales mantienen sus reglas.
+
+## Dirección propuesta
+
+Modelar el documento/web como fuente de referencia versionada con texto extraído, procedencia y citas. Separar esa evidencia de recuerdos autobiográficos, sin introducir cada fragmento en el catálogo limitado de unidades personales. Las consultas pueden combinar evidencia autorizada conservando atribución y clase; solo las operaciones normales explícitas del propietario modifican su memoria personal.
+
+Recepción nativa Android por intents/URIs y selector de documentos; iOS por Share Extension/NSItemProvider y selector. Adaptadores oficiales confinados al host/Data, dominio portable y ViewModels de estado. La extensión iOS es un proceso separado; su cuenta/atestación y transferencias se verifican sin asumir acceso automático al contenedor o apertura de la app.
+
+El backend admite/importa/publica/revoca; el móvil solo entrega a staging autorizado. Extracción determinista en un proceso aislado, sin SDK IA o red del parser. Para webs, un fetcher específico acepta la URL explícitamente compartida y aplica controles de protocolo, destino, DNS, redirecciones, tiempo y tamaño. Sustituye la prohibición absoluta de destinos externos solo para esta frontera controlada propuesta; una URL en un recuerdo o salida IA nunca inicia descargas.
+
+Propuesta de persistencia inicial: texto extraído y localizadores; binarios/HTML bruto temporales con limpieza. Instantánea textual de web/Drive, actualización explícita y sin sincronización permanente. Mantener el original es una decisión de producto pendiente antes de activar persistencia real; no se atribuye su elección a esta autorización de planificación.
+
+La autorización/revisión se verifica al admitir, publicar, recuperar evidencia y devolver respuesta. Borrar una fuente exige diálogo de alcance y revoca inmediatamente fuentes, fragmentos, índices y trabajos tardíos. Las versiones sustituidas no quedan como evidencia histórica recuperable. La excepción del feed RAM actual sigue siendo solo presentación deshabilitada, nunca un almacén documental.
+
+La implementación local utiliza emuladores, documentos/URLs ficticios y proveedor doble. No construir clientes IA, generar embeddings de pago o reutilizar la interpretación de memoria como atajo de importación. La respuesta semántica real tendrá evaluación y presupuesto autorizados posteriores.
+
+## Alternativas y consecuencias
+
+Reutilizar el guardado de relatos para todos los fragmentos mezclaría afirmaciones ajenas y vivencias, y consumiría las cotas del núcleo. Guardar únicamente un enlace no permite contestar sobre contenido no leído. Se propone una frontera documental explícita para evitar ambos problemas.
+
+Una conexión completa a Drive permite enlaces privados y exportaciones, pero requiere permisos independientes del login de Kioku. Primero se admite el archivo/copia que el proveedor nativo entrega; OAuth/exportación es una subfase, sin dar por probado acceso privado a partir de un URI o URL.
+
+No se incluye OCR, vídeos/redes sociales, ejecución de páginas, sincronización permanente ni archivo binario. Las cotas, retenciones, DTO y versión finales se fijan en I0 y se prueban antes de uso real. Nada de esta ADR cambia rutas, reglas, modelo de datos o recursos actualmente desplegados.

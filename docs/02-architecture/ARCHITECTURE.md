@@ -1,5 +1,7 @@
 # Arquitectura
 
+Propuesta documental nueva: [ADR-016](ADR/ADR-016-shared-reference-sources.md) y [plan I0–I7](../09-planning/SHARED_SOURCES_PLAN.md) separan fuentes de referencia de unidades personales, adaptadores nativos de Compartir, extracción aislada, fetcher web controlado y autoridad de backend. No modifica el grafo o componentes ejecutables actuales; las pruebas de esta ampliación se prepararán sin proveedor IA.
+
 Dictado: [ADR-015](ADR/ADR-015-dictation-draft.md) separa transcripción de envío. `VoiceCaptureHost` entrega solo `EditDraft` al parar; los parciales son presentación y solo el envío manual posterior inicia los casos de memoria. Sustituye el gesto de mantener/bloquear de ADR-014.
 
 Revisión aceptada del 16 de noviembre: [núcleo de memoria v2](MEMORY_CORE_V2.md) y [ADR-012](ADR/ADR-012-independent-memory-units.md). Conserva estas fronteras y replantea evidencia, identidad y mutaciones. El [motor determinista R1](../09-planning/R1_VALIDATION.md) se prueba de forma aislada en RAM; interpretación, adaptación Firebase/app y migración siguen pendientes antes de sustituir K2–K4.

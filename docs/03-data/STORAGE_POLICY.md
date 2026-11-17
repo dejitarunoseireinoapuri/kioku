@@ -1,5 +1,7 @@
 # Persistencia y ciclo de vida
 
+**Propuesta futura de fuentes compartidas:** [SHARED_SOURCES_PLAN](../09-planning/SHARED_SOURCES_PLAN.md) propone staging privado y acotado, texto extraído versionado sin binario permanente, caducidad lógica separada de limpieza física y revocación antes de purga. Los valores son propuestas a verificar en I0/I3; no son una política activada ni crean cola offline o backups. Archivar el original requiere resolver la decisión pendiente antes de persistencia real. Las retenciones de memoria actuales permanecen vigentes.
+
 Diseño aceptado del 16 de noviembre: [núcleo v2](../02-architecture/MEMORY_CORE_V2.md) conserva evidencia literal segmentada y procedencia sin archivo completo paralelo ni historial de valores corregidos. [R1](../09-planning/R1_VALIDATION.md) solo usa RAM y fixtures. El [plan R4–R5](../09-planning/MEMORY_CORE_REBUILD_PLAN.md) mantiene pendientes staging, limpieza y límites de reversión sin backups históricos, con autorización antes de datos reales. No hay cambio de retención remota ni migración activa.
 
 ## Memoria

@@ -15,6 +15,10 @@
 
 ## Fuera de V1
 
-Calendarios y recordatorios externos, avisos programados, importación de fotos/documentos, captura offline con cola, archivo permanente de audios, perfiles sociales, administración multiusuario, compras, planes, monetización, analítica de contenido y publicación automática en tiendas.
+Calendarios y recordatorios externos, avisos programados, importación de fotos/OCR y documentos aún no implementada, captura offline con cola, archivo permanente de audios, perfiles sociales, administración multiusuario, compras, planes, monetización, analítica de contenido y publicación automática en tiendas.
+
+## Ampliación solicitada · fuentes compartidas
+
+El propietario solicita planificar archivos, Drive y webs recibidos mediante Compartir → Kioku y selector de archivos para preguntar sobre su contenido. Se prepara el [plan I0–I7](../09-planning/SHARED_SOURCES_PLAN.md), con fuentes de referencia diferenciadas de los recuerdos personales y citas de procedencia. La planificación incorpora documentos al alcance previsto, sustituyendo su exclusión histórica; todavía no están implementados ni activados. Solo casos ficticios y cero llamadas/gasto de API. Vídeos, redes sociales, OCR, sincronización permanente y archivo de binarios quedan fuera de esta primera ampliación.
 
 La cuenta necesaria para recuperar datos no transforma V1 en un producto abierto al público. Google y el entorno personal están decididos; el [estado por plataforma](../09-planning/KNOWN_LIMITATIONS.md) distingue lo comprobado de lo pendiente. Los mínimos de plataforma siguen la [decisión ADR-001](../02-architecture/ADR/ADR-001-platform-strategy.md).
