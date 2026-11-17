@@ -111,13 +111,9 @@ private fun manageSavedSource(
     dependencies: ConversationDependencies,
     actions: NavigationActions,
 ) {
-    model.checkMemory {
-        val current = model.state.value
-        val known = current.canManage(ids)
-        if (known && dependencies.controls != null) {
-            actions.navigate(Route.Control(ids))
-        } else {
-            model.sourceActionUnavailable()
-        }
+    if (model.state.value.canManage(ids) && dependencies.controls != null) {
+        actions.navigate(Route.Control(ids))
+    } else {
+        model.sourceActionUnavailable()
     }
 }

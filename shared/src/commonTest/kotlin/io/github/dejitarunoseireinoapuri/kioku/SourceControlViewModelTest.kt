@@ -96,11 +96,31 @@ class SourceControlViewModelTest {
         }
 
     @Test
+    fun loadingChecksAccessBeforeReadingAndFailureNeverDisplaysData() =
+        controlTest { repository, model, _ ->
+            val revision = CompletableDeferred<Long?>()
+            var reads = 0
+            repository.revisionRead = { revision.await() }
+            repository.read = {
+                reads++
+                repository.source
+            }
+            model.onEvent(SourceControlEvent.Reload)
+            runCurrent()
+            assertEquals(SourceControlState.Checking, model.state.value)
+            assertEquals(0, reads)
+            revision.complete(null)
+            runCurrent()
+            assertEquals(SourceControlState.Missing, model.state.value)
+            assertEquals(0, reads)
+        }
+
+    @Test
     fun revalidationKeepsDraftOnSameRevisionButRemovesRetiredContent() =
         controlTest { repository, model, _ ->
             edit(model)
             model.check()
-            assertIs<SourceControlState.Loading>(model.state.value)
+            assertIs<SourceControlState.Checking>(model.state.value)
             runCurrent()
             assertEquals("Mi examen es el viernes.", assertIs<SourceControlState.Ready>(model.state.value).draft)
             repository.revisionRead = { 1 }

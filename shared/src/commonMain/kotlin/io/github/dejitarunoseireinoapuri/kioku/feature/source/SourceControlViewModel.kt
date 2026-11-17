@@ -24,7 +24,7 @@ class SourceControlViewModel(
 ) : ViewModel() {
     constructor(repository: MemoryControlRepository, sourceId: String) : this(repository, listOf(sourceId))
 
-    private val mutableState = MutableStateFlow<SourceControlState>(SourceControlState.Loading)
+    private val mutableState = MutableStateFlow<SourceControlState>(SourceControlState.Checking)
     val state = mutableState.asStateFlow()
     private var command: MemoryChangeCommand? = null
     private var job: Job? = null
@@ -53,7 +53,7 @@ class SourceControlViewModel(
         }
         val ready = restored
         val epoch = ++generation
-        mutableState.value = SourceControlState.Loading
+        mutableState.value = SourceControlState.Checking
         job =
             viewModelScope.launch {
                 val revision = repository.revision()
@@ -187,11 +187,20 @@ class SourceControlViewModel(
         job?.cancel()
         command = null
         val waiting =
-            confirmed?.let { SourceControlState.Refreshing(it, changeDescription) } ?: SourceControlState.Loading
+            confirmed?.let { SourceControlState.Refreshing(it, changeDescription) } ?: SourceControlState.Checking
         if (paused != null) paused = waiting
         mutableState.value = waiting
         job =
             viewModelScope.launch {
+                if (confirmed == null) {
+                    val revision = repository.revision()
+                    if (epoch != generation) return@launch
+                    if (revision == null) {
+                        present(SourceControlState.Missing)
+                        return@launch
+                    }
+                    present(SourceControlState.Loading)
+                }
                 refreshContent(epoch)
             }
     }

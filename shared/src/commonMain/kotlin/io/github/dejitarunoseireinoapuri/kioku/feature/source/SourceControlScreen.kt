@@ -21,6 +21,7 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.dejitarunoseireinoapuri.kioku.design.ActionButton
 import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingNotice
+import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingScreen
 import io.github.dejitarunoseireinoapuri.kioku.design.ForgetConfirmationDialog
 import io.github.dejitarunoseireinoapuri.kioku.design.IconAction
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
@@ -35,6 +36,7 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryChangeDescription
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryControlRepository
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.back
+import io.github.dejitarunoseireinoapuri.kioku.resources.control_checking
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_deleted
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_failed
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_loading
@@ -81,6 +83,14 @@ fun SourceControlScreen(
     onEvent: (SourceControlEvent) -> Unit,
     onBack: () -> Unit,
 ) {
+    if (state == SourceControlState.Checking || state == SourceControlState.Loading) {
+        ContentLoadingScreen(
+            stringResource(
+                if (state == SourceControlState.Checking) Res.string.control_checking else Res.string.control_loading,
+            ),
+        )
+        return
+    }
     val scroll = rememberScrollState()
     val working = state is SourceControlState.Working
     val feedback = (state as? SourceControlState.Ready)?.feedback
@@ -118,8 +128,8 @@ private fun ControlScreenContent(
     onEvent: (SourceControlEvent) -> Unit,
 ) {
     when (state) {
-        SourceControlState.Loading -> {
-            ContentLoadingNotice(stringResource(Res.string.control_loading))
+        SourceControlState.Loading, SourceControlState.Checking -> {
+            error("Loading is rendered before the management screen")
         }
 
         SourceControlState.Missing -> {

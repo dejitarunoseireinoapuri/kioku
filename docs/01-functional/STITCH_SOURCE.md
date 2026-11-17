@@ -1,5 +1,7 @@
 # Fuente visual y autoridad
 
+Adaptación del 17 de noviembre: por petición del propietario, la apertura de Gestionar usa la pantalla de carga existente con logo y estado inferior para comprobación y lectura, sin pantallas intermedias. Se consulta por MCP la referencia de Gestionar del proyecto A; no se edita Stitch. Se conservan lluvia continua, superficie de lectura y opacidad del contenido. Es una adaptación funcional del recorrido, no una nueva propuesta visual.
+
 **Refinamiento vigente del 16 de noviembre:** lluvia al 30 % bajo los elementos de lectura y controles propios, conservando el fondo libre y el contraste del contenido. El apartado «Lluvia atenuada bajo los elementos» concreta esta petición, posterior a la transparencia total del día 15.
 
 ## Matrix A · Terminal — elegida (2026-11-15)

@@ -2,6 +2,8 @@
 
 ## Entrada y carga
 
+Al pulsar «Gestionar» desde una referencia vigente de la conversación, se abre directamente el destino de gestión en carga. Una sola pantalla con logo y estado debajo cubre la comprobación de acceso/revisión y la lectura de los datos actuales. Cambia el texto, sin intercalar la conversación ni el encabezado/formulario de gestión. Los controles se muestran únicamente cuando termina la lectura autorizada; un fallo ofrece el estado de indisponibilidad y recarga. Se puede cancelar con Atrás del sistema. Revalidar al volver de segundo plano conserva esta misma presentación sin mostrar contenido anterior durante la comprobación.
+
 El acceso visual usa el logo elegido 憶 y conserva el mecanismo Google existente:
 
 ```mermaid

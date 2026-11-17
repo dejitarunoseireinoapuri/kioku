@@ -17,6 +17,8 @@ sealed interface ControlFeedback {
 }
 
 sealed interface SourceControlState {
+    data object Checking : SourceControlState
+
     data object Loading : SourceControlState
 
     data object Missing : SourceControlState

@@ -1,5 +1,6 @@
 package io.github.dejitarunoseireinoapuri.kioku
 
+import android.view.KeyEvent
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
@@ -24,6 +25,7 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeDown
 import androidx.compose.ui.text.AnnotatedString
+import androidx.test.platform.app.InstrumentationRegistry
 import io.github.dejitarunoseireinoapuri.kioku.domain.AnswerStatus
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureIssue
 import io.github.dejitarunoseireinoapuri.kioku.domain.EditableSource
@@ -63,13 +65,48 @@ class QueryNavigationTest {
     }
 
     @Test
+    fun managementUsesOneLoadingScreenAcrossCheckingAndReading() {
+        send("¿Qué película quiero ver?")
+        visible("Quieres ver la película ficticia Loto.")
+        val revision = CompletableDeferred<Long?>()
+        val source = CompletableDeferred<EditableSource?>()
+        controls.revisionRead = { revision.await() }
+        controls.read = { source.await() }
+        openManagement()
+        visible("Comprobando cambios en tu memoria...")
+        compose.onNodeWithTag("content-loading").assertIsDisplayed()
+        compose.onNodeWithTag("text-composer").assertDoesNotExist()
+        compose.onNodeWithText("Gestionar un recuerdo").assertDoesNotExist()
+        compose.onNodeWithText("Quieres ver la película ficticia Loto.").assertDoesNotExist()
+        revision.complete(0L)
+        visible("Leyendo los datos actuales...")
+        compose.onNodeWithTag("content-loading").assertIsDisplayed()
+        compose.onNodeWithText("Gestionar un recuerdo").assertDoesNotExist()
+        compose.onNodeWithTag("text-composer").assertDoesNotExist()
+        captureBrandScreen(compose.activity, "kioku-management-loading.png") { compose.onRoot().captureToImage() }
+        source.complete(controls.source())
+        visible("Gestionar un recuerdo")
+        compose.onNodeWithText("Quiero ver la película ficticia Loto.").assertIsDisplayed()
+        compose.onNodeWithTag("content-loading").assertDoesNotExist()
+        assertEquals(1, controls.reads)
+    }
+
+    @Test
     fun newMessagesAndInlineLoadingBecomeVisibleWithoutManuallyScrolling() {
         val longAnswer = "Respuesta ficticia extensa.\n".repeat(45)
         queries.answer = { queries.reply().copy(text = longAnswer) }
         send("Primera pregunta de prueba")
-        compose.waitUntil(
-            5000,
-        ) { compose.onAllNodesWithContentDescription("Gestionar este recuerdo").onLast().isDisplayed() }
+        // The menu is at the top of a long answer. Auto-scroll must reach the bottom instead.
+        compose.waitUntil(5000) {
+            val range =
+                compose
+                    .onNodeWithTag("conversation-messages")
+                    .fetchSemanticsNode()
+                    .config[SemanticsProperties.VerticalScrollAxisRange]
+            range.maxValue() > 0f && range.value() == range.maxValue()
+        }
+        compose.onNodeWithText(longAnswer).assertIsDisplayed()
+        compose.onNodeWithContentDescription("Gestionar este recuerdo").assertExists()
         compose.onNodeWithTag("conversation-messages").performTouchInput { swipeDown() }
         val pending = CompletableDeferred<QueryOutcome>()
         queries.answer = { pending.await() }
@@ -104,7 +141,7 @@ class QueryNavigationTest {
         openManagement()
         visible("Leyendo los datos actuales...")
         compose.onNodeWithTag("content-loading").assertIsDisplayed()
-        compose.onNodeWithContentDescription("Volver").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Volver").assertDoesNotExist()
         source.complete(controls.source())
         visible("Quiero ver la película ficticia Loto.")
         compose.onNodeWithText("Lo contaste el 13/11/2026").assertIsDisplayed()
@@ -123,7 +160,7 @@ class QueryNavigationTest {
         visible("Quieres ver la película ficticia Loto.")
         openManagement()
         visible("Leyendo los datos actuales...")
-        compose.onNodeWithContentDescription("Volver").performClick()
+        InstrumentationRegistry.getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_BACK)
         visible("Quieres ver la película ficticia Loto.")
         compose.onNodeWithTag("content-loading").assertDoesNotExist()
         source.complete(controls.source())

@@ -11,6 +11,7 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.MemorySource
 internal class QueryManagementFixture : MemoryControlRepository {
     var reads = 0
     var read: suspend (String) -> EditableSource? = { source(it) }
+    var revisionRead: suspend () -> Long? = { 0L }
 
     fun source(id: String = "fixture-query-source") =
         EditableSource(
@@ -30,7 +31,7 @@ internal class QueryManagementFixture : MemoryControlRepository {
         return read(id)
     }
 
-    override suspend fun revision() = 0L
+    override suspend fun revision() = revisionRead()
 
     override fun prepare(
         source: EditableSource,
