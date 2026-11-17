@@ -44,9 +44,12 @@ fun TextConversationBody(
 ) {
     val presentation = MessageFeedPresentation(state, state.savedMessageSources(), forgottenText)
     Column(verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large)) {
-        state.messages.forEach { message ->
-            TextMessageContent(message, presentation, onEvent, onManage)
-        }
+        state.messages
+            .filter {
+                it !is TextMessage.Result || it.visibleOutcome(presentation.sources)?.hasContent() == true
+            }.forEach { message ->
+                TextMessageContent(message, presentation, onEvent, onManage)
+            }
         TextConversationTail(state, onEvent, onManage)
     }
 }
@@ -57,8 +60,7 @@ internal fun TextConversationTail(
     onEvent: (ConversationEvent) -> Unit,
     onManage: (List<String>) -> Unit,
 ) {
-    val last = (state.messages.lastOrNull() as? TextMessage.Result)?.outcome
-    state.outcome?.takeIf { !state.busy && it != last }?.let {
+    state.tailOutcome()?.let {
         TextOutcomeBody(it, true, onEvent, AnswerManagement(!state.confirmingForget, onManage))
     }
 }

@@ -59,13 +59,7 @@ private fun TextResultContent(
     onManage: (List<String>) -> Unit,
 ) {
     val state = presentation.state
-    val offer = message.outcome as? TextOutcome.Offered
-    val outcome =
-        if (offer != null && message.ownerId in presentation.sources) {
-            offer.answer?.let { TextOutcome.Asked(it) }
-        } else {
-            message.outcome
-        }
+    val outcome = message.visibleOutcome(presentation.sources)
     outcome?.let {
         TextOutcomeBody(
             it,

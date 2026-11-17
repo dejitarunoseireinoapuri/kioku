@@ -28,19 +28,23 @@ internal fun ConversationFeed(
 ) {
     val conversation = requireNotNull(state.conversation)
     val visible = !state.concealingMemory
-    val messages = conversation.messages.takeIf { visible }.orEmpty()
     val presentation =
         MessageFeedPresentation(
             conversation,
             remember(conversation.messages) { conversation.savedMessageSources() },
             state.forgottenText,
         )
+    val messages =
+        conversation.messages.takeIf { visible }.orEmpty().filter {
+            it !is TextMessage.Result || it.visibleOutcome(presentation.sources)?.hasContent() == true
+        }
+    val tail = visible && conversation.tailOutcome() != null
     val scroll = rememberLazyListState()
     val viewport by remember { derivedStateOf { scroll.layoutInfo.viewportEndOffset } }
     val count =
-        messages.size + (if (visible) 1 else 0) + (if (visible && state.feedback != null) 1 else 0) +
+        messages.size + (if (tail) 1 else 0) + (if (visible && state.feedback != null) 1 else 0) +
             (if (loading != null) 1 else 0)
-    LaunchedEffect(messages.lastOrNull()?.id, loading, state.feedback, visible, state.intent, viewport) {
+    LaunchedEffect(messages.lastOrNull()?.id, count, loading, state.feedback, state.intent, viewport) {
         if (count > 0) {
             snapshotFlow { scroll.layoutInfo.totalItemsCount }.first { it == count }
             scroll.animateScrollToItem(count - 1)
@@ -56,7 +60,7 @@ internal fun ConversationFeed(
             it.id
         }) { TextMessageContent(it, presentation, actions.onEvent, actions.onManage) }
         if (visible) {
-            item("status") { TextConversationTail(conversation, actions.onEvent, actions.onManage) }
+            if (tail) item("status") { TextConversationTail(conversation, actions.onEvent, actions.onManage) }
             state.feedback?.let { feedback -> item("feedback") { FeedbackMessage(feedback, state.forgottenText) } }
         }
         if (loading != null) item("loading") { ContentLoadingNotice(stringResource(loading)) }

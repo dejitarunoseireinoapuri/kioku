@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import io.github.dejitarunoseireinoapuri.kioku.feature.settings.LocalAppearanceSettings
 import kotlin.math.PI
 import kotlin.math.sin
 import kotlin.random.Random
@@ -82,8 +83,9 @@ private fun rainColumns(): List<RainColumn> {
 fun MatrixBackdrop(content: @Composable () -> Unit) {
     val lifecycle by LocalLifecycleOwner.current.lifecycle.currentStateFlow
         .collectAsState()
-    Box(Modifier.fillMaxSize().background(KiokuColors.Background)) {
-        MatrixRain(lifecycle.isAtLeast(Lifecycle.State.RESUMED), Modifier.matchParentSize())
+    val enabled = LocalAppearanceSettings.current.fallingLetters
+    Box(Modifier.fillMaxSize().background(if (enabled) KiokuColors.Background else Color.Black)) {
+        if (enabled) MatrixRain(lifecycle.isAtLeast(Lifecycle.State.RESUMED), Modifier.matchParentSize())
         content()
     }
 }

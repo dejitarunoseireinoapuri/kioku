@@ -6,9 +6,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import io.github.dejitarunoseireinoapuri.kioku.platform.AndroidAppearanceRepository
 import io.github.dejitarunoseireinoapuri.kioku.platform.AndroidRepositories
 import io.github.dejitarunoseireinoapuri.kioku.platform.firebaseRepositories
 
@@ -31,6 +33,7 @@ class MainActivity : ComponentActivity() {
                 repositories.queries,
                 repositories.controls,
                 repositories.conversation,
+                remember { AndroidAppearanceRepository(applicationContext) },
             )
         }
     }

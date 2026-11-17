@@ -3,7 +3,6 @@ package io.github.dejitarunoseireinoapuri.kioku
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -20,12 +19,15 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import io.github.dejitarunoseireinoapuri.kioku.data.DisconnectedAccountRepository
+import io.github.dejitarunoseireinoapuri.kioku.data.MemoryAppearanceRepository
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuColors
+import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSafeArea
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuTheme
 import io.github.dejitarunoseireinoapuri.kioku.design.MatrixBackdrop
 import io.github.dejitarunoseireinoapuri.kioku.di.ConversationDependencies
 import io.github.dejitarunoseireinoapuri.kioku.di.appModule
 import io.github.dejitarunoseireinoapuri.kioku.domain.AccountRepository
+import io.github.dejitarunoseireinoapuri.kioku.domain.AppearanceRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryControlRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryRepository
@@ -37,6 +39,9 @@ import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.Conversation
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.ConversationScreen
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.ConversationViewModel
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.contentLoadingStatus
+import io.github.dejitarunoseireinoapuri.kioku.feature.settings.AppearanceSettingsState
+import io.github.dejitarunoseireinoapuri.kioku.feature.settings.AppearanceViewModel
+import io.github.dejitarunoseireinoapuri.kioku.feature.settings.LocalAppearanceSettings
 import io.github.dejitarunoseireinoapuri.kioku.feature.settings.SettingsScreen
 import io.github.dejitarunoseireinoapuri.kioku.feature.source.SourceControlRoute
 import io.github.dejitarunoseireinoapuri.kioku.feature.source.SourceScreen
@@ -55,6 +60,7 @@ fun KiokuApp(
     queryRepository: QueryRepository? = null,
     controlRepository: MemoryControlRepository? = null,
     conversationRepository: TextConversationRepository? = null,
+    appearanceRepository: AppearanceRepository = remember { MemoryAppearanceRepository() },
 ) {
     val platform =
         remember(accountRepository, captureRepository) {
@@ -64,10 +70,10 @@ fun KiokuApp(
         }
     val application = remember { appModule() }
     KoinApplication(configuration = koinConfiguration { modules(application, platform) }) {
-        KiokuTheme {
+        AppAppearance(appearanceRepository) {
             Surface(color = KiokuColors.Background, contentColor = KiokuColors.Text) {
                 MatrixBackdrop {
-                    Column(Modifier.fillMaxSize().safeDrawingPadding()) {
+                    KiokuSafeArea {
                         CompositionViewModels {
                             AccountGate(
                                 accountRepository,
@@ -83,6 +89,21 @@ fun KiokuApp(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun AppAppearance(
+    repository: AppearanceRepository,
+    content: @Composable () -> Unit,
+) {
+    val model = koinViewModel<AppearanceViewModel>(parameters = { parametersOf(repository) })
+    val enabled by model.fallingLetters.collectAsStateWithLifecycle()
+    KiokuTheme {
+        CompositionLocalProvider(
+            LocalAppearanceSettings provides AppearanceSettingsState(enabled, model::setFallingLetters),
+            content = content,
+        )
     }
 }
 

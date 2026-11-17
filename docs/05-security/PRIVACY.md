@@ -1,5 +1,9 @@
 # Privacidad, datos y permisos
 
+La preferencia «Letras cayendo» se guarda como un booleano local del dispositivo (preferencias nativas Android/Apple). No contiene texto, identidad ni recuerdos, no se sincroniza con Firebase y no cambia la limpieza del historial RAM. Desactivarla retira la capa de animación, sin afectar al tratamiento de memoria.
+
+El target Apple incorpora un manifiesto de acceso a UserDefaults con motivo CA92.1 para preferencias propias de la app, siguiendo la [documentación oficial de Apple](https://developer.apple.com/documentation/technotes/tn3183-adding-required-reason-api-entries-to-your-privacy-manifest). Su inclusión y validación nativa quedan pendientes de Xcode; no se presenta como una auditoría completa de los manifiestos de dependencias.
+
 ## Integración v2 y comienzo vacío solicitado
 
 El 17 de noviembre de 2026 el propietario autoriza borrar los recuerdos actuales y comenzar vacío. La [evidencia R3](../09-planning/R3_INTEGRATION_VALIDATION.md) registra la ejecución sin copiar textos. El borrado abarca fuentes anteriores, recuerdos, índices embebidos y pendientes; no crea un archivo paralelo. Conserva cuenta, credencial privada y contadores numéricos.

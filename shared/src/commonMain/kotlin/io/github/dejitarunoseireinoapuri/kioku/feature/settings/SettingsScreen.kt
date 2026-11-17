@@ -51,6 +51,7 @@ fun SettingsScreen(
             verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Large),
         ) {
             AccountSettings(account, onRefresh, onSignOut)
+            AppearanceSettings()
             if (examplesEnabled) {
                 ScreenHeading(stringResource(Res.string.examples_heading))
                 PreviewScenario.entries.forEach { scenario ->

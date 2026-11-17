@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import io.github.dejitarunoseireinoapuri.kioku.feature.settings.LocalAppearanceSettings
 
 private const val RAIN_UNDER_CONTENT_ALPHA = 0.3f
 private val LocalRainCovered = staticCompositionLocalOf { false }
@@ -15,7 +16,9 @@ internal fun MatrixReadingSurface(
     content: @Composable (Color) -> Unit,
 ) {
     val scrim =
-        if (LocalRainCovered.current && !separateWindow) {
+        if (!LocalAppearanceSettings.current.fallingLetters) {
+            if (separateWindow) Color.Black else Color.Transparent
+        } else if (LocalRainCovered.current && !separateWindow) {
             Color.Transparent
         } else {
             KiokuColors.Background.copy(alpha = 1f - RAIN_UNDER_CONTENT_ALPHA)

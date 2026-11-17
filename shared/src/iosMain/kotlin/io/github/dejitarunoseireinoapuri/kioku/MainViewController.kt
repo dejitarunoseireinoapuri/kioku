@@ -1,6 +1,7 @@
 package io.github.dejitarunoseireinoapuri.kioku
 
 import androidx.compose.ui.window.ComposeUIViewController
+import io.github.dejitarunoseireinoapuri.kioku.data.AppleAppearanceRepository
 import io.github.dejitarunoseireinoapuri.kioku.data.DisconnectedAccountRepository
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeAccountPort
 import io.github.dejitarunoseireinoapuri.kioku.data.NativeAccountRepository
@@ -18,5 +19,6 @@ fun mainViewController(
     val queries = memoryPort?.let(::NativeQueryRepository)
     val controls = memoryPort?.let(::NativeMemoryControlRepository)
     val conversation = memoryPort?.let(::NativeTextConversationRepository)
-    ComposeUIViewController { KiokuApp(repository, captures, queries, controls, conversation) }
+    val appearance = AppleAppearanceRepository()
+    ComposeUIViewController { KiokuApp(repository, captures, queries, controls, conversation, appearance) }
 }
