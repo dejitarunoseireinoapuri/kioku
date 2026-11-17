@@ -1,4 +1,37 @@
-# Fuentes compartidas · primera implementación local
+# Fuentes compartidas · evidencia por entrega
+
+**Petición vigente posterior:** el propietario aclara que la entrega instalada en Honor debe usar el backend/Firestore productivos y consultar la API para responder. Cero gasto API se aplica a las pruebas del agente, no al uso manual de la app. El piloto descrito debajo es evidencia intermedia y no satisface por sí solo esa entrega. Integración productiva en curso; no se considera desplegada o validada todavía.
+
+## Continuación · piloto Android conectado · 2026-11-17
+
+Petición posterior: conectar lo pendiente para probarlo en la app, cero API, solo casos ficticios y Honor; entregar instrucciones de prueba. Se instala **Kioku · pruebas**, ID separado terminado en `.references`, y se deja el servidor local en marcha para el recorrido del [manual del Honor](SHARED_SOURCES_PILOT.md). La app habitual, sus recuerdos, firma e instalación se preservan. No hay despliegue o activación productiva, ni claves/cliente de IA. **0 USD de API en esta continuación**.
+
+Conectados: selector nativo, recepción SEND/SEND_MULTIPLE en frío/caliente, cuatro assets generados TXT/MD/PDF/DOCX, lectura/transferencia en RAM, Auth/Firestore Emulator en otro proyecto demo, admisión/lease/huella antes del upload, recuperación de confirmación, lista, texto vigente, selección de fuente, citas textuales y eliminación con diálogo. La URL web única resuelve HTML ficticio en el servidor, sin salir a internet. Las búsquedas no generan respuestas ni acreditan comprensión semántica. No sincroniza ni conserva originales; los binarios empaquetados/caché del proveedor son corpus de pruebas, no un archivo de importaciones.
+
+| Validación de esta continuación | Resultado |
+| --- | --- |
+| TypeScript y Prettier backend | Correctos |
+| Backend Node | 52/52 |
+| Emuladores normales | 147/147, incluidos dos casos nuevos de subida/recuperación y sus rechazos por cuenta/generación/lease/caducidad |
+| Piloto HTTP aislado | 7/7 con Auth/Firestore demo; sin Functions, claves u opciones Live |
+| Host KMP | 150/150, incluidos seis casos nuevos de estado/confirmación/red/callbacks/revocación/reintentos |
+| Android | Formato, arquitectura, Detekt, Lint debug y referencePilot, APK piloto e instrumentado correctos |
+| Honor FNE-NX9 | 17/17: una recepción real en frío, cuatro de recorrido UI/aislamiento, dos de transporte nativo y los diez casos de receptor/pantalla de la base inicial |
+| Documentación | Checker real y diff sin errores; 88 documentos, 16 ADR |
+
+Los dos casos de transporte leen los cuatro formatos mediante ContentResolver real y suben al parser real local; comprueban página 2 del PDF y la web de fixture. La instrumentación fría entrega ACTION_SEND al Activity por la API Android; el recorrido UI entrega el lote por Intent, verifica que conserva la instancia, pregunta y consulta su página, cancela/confirma borrado y consulta el HTML. No es otra app emisora o Drive real: el proveedor de archivos es el APK de fixtures con permisos temporales. No se exploran archivos/cuentas personales.
+
+Las seis pruebas host conservan pregunta tras Connection y reintento explícito, descartan resultado tardío no cooperativo al editar/cancelar, exigen confirmación antes de borrar y mantienen la fuente visible hasta el servidor, retiran citas de revisiones revocadas y preservan resultados/IDs en un lote mixto. La búsqueda oculta teclado y resultados de importación ajenos a la fuente seleccionada; al cambiar de alcance vuelve al inicio de la vista. Dejar de esperar cierra HTTP/lectura y descarta callbacks locales, pero no promete deshacer un commit ya confirmado.
+
+Fallos conservados durante el trabajo: primera instrumentación con conexión inalámbrica obsoleta, respuesta vacía y error de ciclo de vida; después 3/4 UI con fallo al cerrar tras nuevo envío, y una ejecución abortada al investigar singleTask. Se renueva únicamente la depuración del Honor con autorización aceptada en el dispositivo, sin reset/desinstalación; no se manipula Samsung. El adaptador evita proxy/redirecciones, cierra conexiones al cancelar y convierte cuerpo vacío/JSON de respuesta incompleto en Connection. El fallo de ciclo de vida se corrige consumiendo el nuevo envío como evento sin `setIntent`: esa sustitución cambiaba acción/tipo y ActivityScenario dejaba de observarlo. [Código primario de ActivityScenario](https://github.com/android/android-test/blob/main/core/java/androidx/test/core/app/ActivityScenario.java) comprueba esa identidad en sus callbacks. Se conserva singleTop y no se debilita el cierre de pruebas. La nueva prueba en frío y la comprobación de instancia cubren el recorrido final.
+
+El formateador alcanzó el límite de longitud de proceso de Windows: usa rutas relativas manteniendo la lista completa. Kotlin integrado de AGP exige registrar fuentes Kotlin, no Java; se corrige la configuración de la variante según [Android](https://developer.android.com/build/migrate-to-built-in-kotlin). Lint exige gestión pública de ViewModelStore y configuración de red explícita; corregidos sin baselines o suppressions.
+
+**Pendiente para producto:** atestación/transporte remoto desplegado y navegación con memoria habitual, consulta mixta/IA, descarga web real con controles DNS, procedencia URL completa, Drive privado/exportación real, sustitución manual de versiones, retención/barrido operacional, iOS y pruebas completas de accesibilidad/proveedores/proceso. El piloto no los da por cerrados. La compilación iOS sigue requiriendo Mac/Xcode. El PC y el túnel del Honor son necesarios; al reiniciar emuladores se pierde el corpus importado. El manual indica cómo recuperar la conexión sin reescribir preguntas.
+
+Referencias consultadas/actualizadas: plan, requisitos/alcance, arquitectura/ADR-016, datos/API, seguridad/privacidad/retención, calidad/convenciones, guía de desarrollo y Matrix/Stitch. No se editan pantallas remotas. El resto del informe conserva la entrega inicial con sus denominadores y límites históricos.
+
+## Entrega inicial histórica · 01bb4ff
 
 Fecha: 2026-11-17. Rama `codex/shared-sources`, creada desde `5fe1f7a` de voz. Petición del propietario: empezar implementación en rama nueva, solo casos ficticios, cero API, conservar únicamente texto extraído y aplazar sincronización. Autoriza expresamente usar el Honor para pruebas. No se han desplegado recursos, llamado a IA, leído recuerdos/archivos personales o accedido a Drive real. Coste API de esta entrega: **0 USD**.
 

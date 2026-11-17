@@ -1,6 +1,6 @@
 # ADR-016 · Fuentes de referencia compartidas
 
-- Estado: dirección aceptada, implementación local inicial en `codex/shared-sources`; sin activación remota. [Evidencia](../../09-planning/SHARED_SOURCES_VALIDATION.md).
+- Estado: dirección aceptada, piloto Android local conectado en `codex/shared-sources`; sin activación remota. [Evidencia](../../09-planning/SHARED_SOURCES_VALIDATION.md), [cómo probar](../../09-planning/SHARED_SOURCES_PILOT.md).
 - Fecha: 2026-11-17.
 - Plan y aceptación: [SHARED_SOURCES_PLAN](../../09-planning/SHARED_SOURCES_PLAN.md).
 
@@ -20,7 +20,9 @@ Persistencia elegida por el propietario: solo texto extraído y localizadores, s
 
 La autorización/revisión se verifica al admitir, publicar, recuperar evidencia y devolver respuesta. Borrar una fuente exige diálogo de alcance y revoca inmediatamente fuentes, fragmentos, índices y trabajos tardíos. Las versiones sustituidas no quedan como evidencia histórica recuperable. La excepción del feed RAM actual sigue siendo solo presentación deshabilitada, nunca un almacén documental.
 
-La implementación local utiliza emuladores, documentos/URLs ficticios y proveedor doble. No construir clientes IA, generar embeddings de pago o reutilizar la interpretación de memoria como atajo de importación. La respuesta semántica real tendrá evaluación y presupuesto autorizados posteriores.
+La implementación local utiliza emuladores, documentos/URLs ficticios y recuperación literal. No construir clientes IA, generar embeddings de pago o reutilizar la interpretación de memoria como atajo de importación. La respuesta semántica real tendrá evaluación y presupuesto autorizados posteriores.
+
+La continuación instala un ID Android independiente para pruebas: nunca construye los repositorios de memoria/cuenta productivos. Backend HTTP en test/pilot, protegido por identidad de Auth Emulator y guardas demo/loopback; sin atestación real, excluido del despliegue. Admisión de metadatos antes de upload, verificación de huella/lease, catálogo/resolución/consulta textual/olvido conectados. El endpoint web solo sirve un fixture reservado; no es un fetcher. Una única actividad reutilizable recibe nuevos envíos; no abre otra conversación o biblioteca del propietario. Este piloto no es la activación productiva de I1–I6.
 
 ## Alternativas y consecuencias
 

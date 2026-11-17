@@ -1,8 +1,27 @@
 # Contrato backend · memoria v2 y cuenta v1
 
-**Fuentes compartidas, contrato interno local:** `importReference(store, uid, generation, input, signal?)` admite un objeto estricto `{apiVersion:1, requestId:UUID, title:string, format:text|markdown|pdf|docx|html, bytes:base64}`. Máximo 200 caracteres de título y 10 MiB decodificados. UID y generación proceden de la frontera confiable, nunca del documento. Respuestas `started/processing/ready` pertenecen al servicio interno; no hay callable exportado ni transporte móvil conectado. No son payloads aceptados por `memoryV2`.
+**Fuentes compartidas, contrato local:** `importReference(store, uid, generation, input, signal?)` admite un objeto estricto `{apiVersion:1, requestId:UUID, title:string, format:text|markdown|pdf|docx|html, bytes:base64}`. Máximo 200 caracteres de título y 10 MiB decodificados. UID/generación proceden de la frontera confiable. El [piloto Android separado](../09-planning/SHARED_SOURCES_PILOT.md) conecta un transporte HTTP exclusivo de emuladores: no hay callable documental exportado ni modificación de `memoryV2`.
 
-`ReferenceStore.begin/complete/cancel/read/catalog/forget` reautorizan propietario habilitado y generación activa. Replay idéntico conserva resultado; mismo ID con comando distinto falla `conflict`. Lease de 15 minutos; publicación tardía/cancelada/retirada falla. Eliminar exige UUID/revisión exactos; la futura UI debe exigir el diálogo local. Las citas deterministas llevan fuente/revisión/fragmento/localizador/texto y cobertura. No hay respuesta IA ni revalidación final de consulta mixta conectada. Errores seguros: `invalid`, `unsupported`, `no-text`, `too-large`, `interrupted`, `unavailable`, `denied`, `conflict`, `retired`. [Evidencia y límites](../09-planning/SHARED_SOURCES_VALIDATION.md). Transporte autenticado, atestación, estado público, sustitución de versiones y subida admitida antes de transferir siguen pendientes; la base local recibe bytes en RAM, sin staging persistente.
+### Transporte del piloto ficticio
+
+Solo `backend/test/pilot`, excluido del paquete productivo; guardas exactas para `demo-kioku-sources`, Auth 9197 y Firestore 8187 en loopback. Escucha 8787 en `127.0.0.1`, acepta POST con Host exacto y sin Origin. `/session` inicia una identidad Google sintética en Auth Emulator y entrega su token solo en RAM; todas las demás rutas verifican ese token y el UID del propietario ficticio. No acredita atestación/login reales ni autoriza exposición pública.
+
+| Ruta local | Entrada y resultado |
+| --- | --- |
+| `/catalog` | Resúmenes actuales sin texto; época del catálogo |
+| `/admit` | UUID, título, formato, SHA-256 de formato/NUL/bytes; reserva antes de transferir bytes; ready, started con lease o processing |
+| `/operation` | UUID de petición; recupera resultado confirmado o lease pendiente de esa cuenta/generación; retirados/caducados no reviven |
+| `/upload` | Comando v1 anterior y lease; `verifyUpload` coteja admisión, título, formato y huella antes de extraer; `uploadReference` publica solo tras reautorizar |
+| `/cancel` | UUID; cancela pendiente o informa del resultado ya confirmado; no equivale a eliminar una fuente confirmada |
+| `/read` | UUID de fuente; texto/localizadores actuales; el adaptador móvil coteja revisión |
+| `/query` | Pregunta de hasta 2000 caracteres y sourceId opcional; citas literales, hasta 12; revalida época después de seleccionar, sin IA |
+| `/forget` | UUID/revisión exactos; el móvil exige Cancelar/Sí, eliminar antes de enviar; respuesta confirmada sin texto |
+| `/web` | UUID y únicamente `https://kioku.example.test/guia`; HTML ficticio, sin descarga de internet |
+| `/fixture` | Índice 0–3; corpus generado, exclusivamente en este runner de pruebas |
+
+Una sola operación de servidor a la vez acota workers y memoria en este piloto; concurrencia recibe `busy`, sin bucles de reintento. Cuerpo JSON hasta 14 MiB, plazo de petición 45 s; respuesta móvil acotada a 2 MiB. El cliente usa destino fijo, sin proxy/redirecciones, y cierra la conexión al cancelar. Conserva comando/ID en RAM ante fallo de red; reintentar consulta el mismo resultado sin añadir otro documento. «Dejar de esperar» es cancelación de espera local, no promesa de que no hubo commit. La pregunta permanece editable y reenviable. El token sintético se renueva antes de vencer; no se persiste.
+
+`ReferenceStore.begin/complete/cancel/read/catalog/forget/operation/verifyUpload` reautorizan propietario habilitado y generación activa. Replay idéntico conserva resultado; mismo ID con comando distinto falla `conflict`. Lease de 15 minutos; publicación tardía/cancelada/retirada falla. Las citas llevan fuente/revisión/fragmento/localizador/texto y cobertura. Errores seguros: `invalid`, `unsupported`, `no-text`, `too-large`, `interrupted`, `unavailable`, `denied`, `conflict`, `retired`; el piloto añade `busy`. [Evidencia y límites](../09-planning/SHARED_SOURCES_VALIDATION.md). Producción/atestación, respuesta IA/consulta mixta, sustitución de versiones y descarga web arbitraria siguen pendientes. Bytes solo en RAM, sin staging binario persistente.
 
 Voz K5 no añade endpoints, DTO ni audio subido al servidor. La transcripción ocurre localmente; Stop entrega solo un borrador editable, sin peticiones. Únicamente la pulsación posterior de Enviar usa los comandos autenticados existentes con las mismas reglas de versión/idempotencia/confirmación. Parciales y cancelaciones no envían. Sin respuestas habladas ni API de voz; el procesamiento posterior del texto mantiene su coste normal. [ADR-014](../02-architecture/ADR/ADR-014-local-voice-input.md), [refinamiento ADR-015](../02-architecture/ADR/ADR-015-dictation-draft.md).
 

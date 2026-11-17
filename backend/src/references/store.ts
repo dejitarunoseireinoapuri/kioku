@@ -261,6 +261,54 @@ export class ReferenceStore {
     });
   }
 
+  async operation(uid: string, generation: string, requestId: string) {
+    z.uuid().parse(requestId);
+    return this.db.runTransaction(async (tx) => {
+      const { refs } = await this.state(tx, uid, generation);
+      const entry = await tx.get(refs.operations.doc(requestId));
+      if (!entry.exists) throw new SourceError("invalid");
+      const op = operationSchema.parse(entry.data());
+      if (op.stage === "ready")
+        return {
+          state: "ready" as const,
+          source: await this.current(
+            tx,
+            refs.sources.doc(op.sourceId!),
+            generation,
+          ),
+        };
+      if (op.stage !== "pending" || op.expiresAt <= this.now())
+        throw new SourceError("retired");
+      return { state: "processing" as const, lease: op.lease };
+    });
+  }
+
+  async verifyUpload(
+    uid: string,
+    generation: string,
+    command: Prepared,
+    lease: string,
+  ) {
+    z.uuid().parse(command.requestId);
+    z.uuid().parse(lease);
+    await this.db.runTransaction(async (tx) => {
+      const { refs } = await this.state(tx, uid, generation);
+      const entry = await tx.get(refs.operations.doc(command.requestId));
+      const parsed = operationSchema.safeParse(entry.data());
+      if (!parsed.success) throw new SourceError("denied");
+      const op = parsed.data;
+      if (op.lease !== lease) throw new SourceError("denied");
+      if (op.stage !== "pending" || op.expiresAt <= this.now())
+        throw new SourceError("retired");
+      if (
+        op.title !== command.title ||
+        op.format !== command.format ||
+        op.checksum !== command.checksum
+      )
+        throw new SourceError("conflict");
+    });
+  }
+
   async catalog(uid: string, generation: string) {
     return this.db.runTransaction(async (tx) => {
       const { refs, state } = await this.state(tx, uid, generation);

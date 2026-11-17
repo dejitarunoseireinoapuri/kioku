@@ -2,7 +2,9 @@
 
 ## Estado, autorización y resultado
 
-Implementación iniciada por petición del propietario en `codex/shared-sources`, desde el dictado aceptado. Hay extractores deterministas, almacenamiento protegido probado en emuladores, contratos/estado/pantalla KMP y recepción/lectura Android de fixtures. Es una primera base local: no hay transporte autenticado nuevo, selector conectado, descarga web, integración con preguntas o despliegue. El receptor permanece deshabilitado para datos del propietario. [Evidencia y pendientes](SHARED_SOURCES_VALIDATION.md).
+**Aclaración vigente del propietario:** instalar en Honor la función productiva de Kioku, con archivos/texto extraído en Firestore real y respuestas mediante API. «Sin gastar API» limita las pruebas del agente; no bloquea las llamadas que el propietario haga al utilizar la app. El piloto separado sirve para validación local, no como entrega final. Integrar sesión/atestación y proveedor actuales sin cambiar la clave, sin acceder a recuerdos personales durante pruebas y sin migraciones/borrados de la memoria existente.
+
+Implementación en `codex/shared-sources`, desde el dictado aceptado. La continuación conecta el [piloto separado Kioku · pruebas](SHARED_SOURCES_PILOT.md): selector/recepción Android, extracción, transporte con Auth Emulator, texto canónico en Firestore Emulator, consulta de fragmentos y diálogo de eliminación. Solo fixtures y servidor local, sin IA. Web limitada a una página ficticia, sin internet; Drive privado, descarga web arbitraria, integración de memoria/IA, producción e iOS pendientes. El receptor de Kioku habitual permanece deshabilitado. [Evidencia y pendientes](SHARED_SOURCES_VALIDATION.md).
 
 La preparación e implementación local se diseñan con **cero llamadas de IA, cero gasto de API y solo casos ficticios**. No se cargan claves, recuerdos, archivos, enlaces privados ni cuentas documentales reales. Consultar documentación pública no implica usar la API de esos servicios. Las pruebas de respuestas con dobles no acreditan comprensión real. El coste de almacenamiento/CPU remoto tampoco se considera gratuito: cualquier activación remota se separa de este plan.
 

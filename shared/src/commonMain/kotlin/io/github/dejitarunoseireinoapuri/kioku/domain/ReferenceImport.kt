@@ -12,6 +12,9 @@ enum class ReferenceIssue {
     Interrupted,
     Busy,
     DriveLink,
+    Connection,
+    NoText,
+    Conflict,
 }
 
 data class ReferenceInput(

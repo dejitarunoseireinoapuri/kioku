@@ -2,6 +2,8 @@
 
 ## Fuentes compartidas · base local
 
+Continuación: [piloto Android conectado](../docs/09-planning/SHARED_SOURCES_PILOT.md). `tooling/reference-pilot.ps1` arranca solo Auth/Firestore en otro proyecto demo y servidor loopback; `-Verify` ejecuta siete pruebas HTTP y cierra los emuladores. Test/pilot queda excluido del despliegue. Token sintético de emulador, sin App Check productivo, SDK IA, claves o red web; no exponer el servidor fuera del PC. La ruta web sirve únicamente un fixture reservado. El flujo de upload separado y recuperación usa `verifyUpload/operation` reautorizados en el almacén.
+
 `src/references` contiene extractores deterministas, servicio interno y almacén por generación; ningún endpoint nuevo se exporta desde index. Solo texto extraído, sin staging binario persistente o IA. `node tooling/backend.mjs build`, `node tooling/backend.mjs test` y `pwsh -NoProfile -File tooling/backend-emulators.ps1`, desde la raíz, incluyen los fixtures documentales. Ejecutar sin opciones Live ni claves. El runner de emuladores conserva sus guardas demo/loopback. [Evidencia, versiones de parsers y pendientes](../docs/09-planning/SHARED_SOURCES_VALIDATION.md). No desplegar esta base o activar entradas reales por seguir estos comandos.
 
 Integración nueva: callable `memoryV2`, núcleo de unidades estables, almacenamiento por documentos y protección de generación. [ADR-013](../docs/02-architecture/ADR/ADR-013-memory-v2-app-integration.md) describe el contrato; [R3](../docs/09-planning/R3_INTEGRATION_VALIDATION.md) registra pruebas y activación. Las secciones K1–K4 siguientes conservan la historia del backend anterior. La configuración de cuenta mantiene v1.

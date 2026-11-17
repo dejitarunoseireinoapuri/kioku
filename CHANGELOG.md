@@ -1,5 +1,11 @@
 # Cambios
 
+## Fuentes compartidas · piloto conectado sin IA · 2026-11-17
+
+- Instalación separada Kioku · pruebas en la rama documental: cuenta ficticia, servidor local/Auth/Firestore Emulator y ninguna construcción del cliente de memoria productivo. Configuración productiva vacía y permiso de micrófono retirado en la variante.
+- Recepción/selector de archivos, admisión/transferencia vinculadas por huella/lease, recuperación de confirmación, citas literales, lectura y eliminación con diálogo. Pregunta y comandos se conservan para reintentar tras fallar la conexión; callbacks/versiones retirados no se reutilizan. Web limitada a un HTML ficticio, sin descarga de internet o sincronización.
+- [Guía para probarlo en Honor](docs/09-planning/SHARED_SOURCES_PILOT.md), [evidencia y límites](docs/09-planning/SHARED_SOURCES_VALIDATION.md). Cero API y solo casos ficticios; sin despliegue, acceso a recuerdos personales o activación en la app habitual.
+
 ## Fuentes compartidas · primera base local · 2026-11-17
 
 - Rama `codex/shared-sources`: extractores deterministas TXT/MD/PDF/DOCX/HTML, localizadores y cobertura; solo texto extraído, sin conservar binarios o sincronizar.

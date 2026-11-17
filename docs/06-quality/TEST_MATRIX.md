@@ -1,5 +1,7 @@
 # Matriz de aceptación y evidencia prevista
 
+Continuación documental: [piloto manual del Honor](../09-planning/SHARED_SOURCES_PILOT.md) y [resultados separados por entrega](../09-planning/SHARED_SOURCES_VALIDATION.md). Suite HTTP con Auth/Firestore demo y bytes reales de fixtures, recuperación de confirmación, lease/huella, cancelación, citas y eliminación. Host comprueba fallo de conexión conservando pregunta, descarte de callbacks tardíos, confirmación no optimista, revocación y replay de lote. Instrumentación separa transporte nativo, entrada real ACTION_SEND en frío y controles UI; no trasladar esos resultados a Drive privado, red web o IA reales.
+
 **Fuentes compartidas:** [evidencia ejecutada](../09-planning/SHARED_SOURCES_VALIDATION.md) de extractores, persistencia protegida, estado KMP y receptor/pantalla Android con fixtures. La matriz del [plan I0–I7](../09-planning/SHARED_SOURCES_PLAN.md) conserva los casos aún pendientes de transporte integrado, Drive real, fetcher, consultas, sustitución y iOS. Cero proveedor IA; emuladores/receptor no acreditan esos recorridos reales. No hay importación activada para el propietario.
 
 Revisión ADR-015: K5 comprueba inicio por toque, X/Stop y ausencia de envío durante dictado, parciales en el campo, Stop al borrador sin petición, edición/envío manual, restauración del micrófono al vaciar y cancelación con final tardío. Se exige también parcial antes de Stop al reconocedor real. La cobertura de mantener/bloquear descrita debajo queda histórica.

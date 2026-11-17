@@ -98,6 +98,8 @@ Para entrar en un iPhone físico, registrar App Attest con el ID de equipo Apple
 
 ## Trabajo por caso de uso
 
+Piloto documental conectado: [preparación y pruebas del Honor](../09-planning/SHARED_SOURCES_PILOT.md). Usar la variante `referencePilot` y `-PkiokuReferencePilot=true` para su APK instrumentado; el debug habitual conserva su selector de tests por defecto. El servidor local usa únicamente Auth/Firestore demo en puertos separados, sin Functions o IA. No instalar encima de Kioku, cambiar firma, desactivar atestación del producto o ejecutar opciones Live para validar este recorrido.
+
 Fuentes compartidas: [evidencia local](../09-planning/SHARED_SOURCES_VALIDATION.md). Las suites normales backend y emuladores incluyen documentos generados; no usar opciones Live. `tooling/mobile.ps1 mobileCheck :androidApp:assembleDebug :androidApp:assembleDebugAndroidTest` compila el receptor y sus pruebas. Instrumentar únicamente `ReferenceReceiverTest` y `ReferenceImportUiTest` usa el proveedor debug y pantalla ficticios, sin abrir la cuenta real; preservar instalación/datos mediante actualización, nunca reset. El componente de importación del producto sigue deshabilitado hasta conectar transporte y aceptación integrada.
 
 Trazar FR/BR → UC → contrato/datos → comportamiento → prueba. Para operaciones protegidas, diseñar y probar backend/reglas antes de confiar en un cliente. Usar proveedores fake para pruebas aisladas. La credencial y su tratamiento se deciden antes de tocar código que llame a OpenAI; no se necesita una clave para preparar esta documentación.

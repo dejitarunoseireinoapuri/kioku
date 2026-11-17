@@ -21,6 +21,9 @@ import io.github.dejitarunoseireinoapuri.kioku.design.Panel
 import io.github.dejitarunoseireinoapuri.kioku.domain.ReferenceImportResult
 import io.github.dejitarunoseireinoapuri.kioku.domain.ReferenceIssue
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
+import io.github.dejitarunoseireinoapuri.kioku.resources.reference_conflict
+import io.github.dejitarunoseireinoapuri.kioku.resources.reference_connection
+import io.github.dejitarunoseireinoapuri.kioku.resources.reference_no_text
 import io.github.dejitarunoseireinoapuri.kioku.resources.references_busy
 import io.github.dejitarunoseireinoapuri.kioku.resources.references_cancel
 import io.github.dejitarunoseireinoapuri.kioku.resources.references_drive_link
@@ -102,4 +105,12 @@ internal fun referenceIssueText(issue: ReferenceIssue): StringResource =
         ReferenceIssue.Interrupted -> Res.string.references_interrupted
         ReferenceIssue.Busy -> Res.string.references_busy
         ReferenceIssue.DriveLink -> Res.string.references_drive_link
+        ReferenceIssue.Connection, ReferenceIssue.NoText, ReferenceIssue.Conflict -> workspaceIssueText(issue)
+    }
+
+private fun workspaceIssueText(issue: ReferenceIssue): StringResource =
+    when (issue) {
+        ReferenceIssue.Connection -> Res.string.reference_connection
+        ReferenceIssue.NoText -> Res.string.reference_no_text
+        else -> Res.string.reference_conflict
     }

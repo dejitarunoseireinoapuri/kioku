@@ -40,7 +40,20 @@ android {
     }
     buildTypes {
         debug { applicationIdSuffix = ".dev" }
+        create("referencePilot") {
+            initWith(getByName("debug"))
+            applicationIdSuffix = ".references"
+            matchingFallbacks += listOf("debug")
+            buildConfigField("String", "FIREBASE_APP_ID", "\"\"")
+            buildConfigField("String", "FIREBASE_API_KEY", "\"\"")
+            buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"\"")
+        }
     }
+    testBuildType = if (providers.gradleProperty("kiokuReferencePilot").orNull == "true") "referencePilot" else "debug"
+    sourceSets
+        .getByName("referencePilot")
+        .kotlin.directories
+        .add("src/debug/kotlin")
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -78,4 +91,6 @@ dependencies {
     androidTestImplementation(libs.compose.foundation)
     androidTestImplementation(libs.compose.material)
     debugImplementation(libs.compose.test.manifest)
+    add("referencePilotImplementation", libs.compose.test.manifest)
+    add("referencePilotImplementation", libs.koin.viewmodel)
 }

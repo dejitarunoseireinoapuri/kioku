@@ -4,7 +4,10 @@ import { beforeEach, after, test } from "node:test";
 import { deleteApp } from "firebase-admin/app";
 import { adminApp, db } from "./helpers.js";
 import { ReferenceStore } from "../../src/references/store.js";
-import { importReference } from "../../src/references/service.js";
+import {
+  importReference,
+  uploadReference,
+} from "../../src/references/service.js";
 import { extractIsolated } from "../../src/references/isolated-extractor.js";
 import { retrieveReferences } from "../../src/references/retrieve.js";
 import { SourceError } from "../../src/references/contracts.js";
@@ -209,6 +212,89 @@ test("a fresh explicit share after deletion receives new identities instead of u
   assert.notEqual(next.source.id, first.source.id);
   await assert.rejects(
     store.read(uid, generation, first.source.id),
+    issue("retired"),
+  );
+});
+
+test("split admission binds bytes and lease before extraction and recovers an uncertain confirmation", async () => {
+  const input = command();
+  const checksum = createHash("sha256")
+    .update(input.format)
+    .update("\0")
+    .update(Buffer.from(input.bytes, "base64"))
+    .digest("hex");
+  const prepared = {
+    requestId: input.requestId,
+    title: input.title,
+    format: "text" as const,
+    checksum,
+  };
+  await assert.rejects(
+    uploadReference(store, uid, generation, input, randomUUID()),
+    issue("denied"),
+  );
+  const admission = await store.begin(uid, generation, prepared);
+  if (admission.state !== "started")
+    throw new Error("Fixture admission failed");
+  await assert.rejects(
+    store.verifyUpload(uid, generation, prepared, randomUUID()),
+    issue("denied"),
+  );
+  await assert.rejects(
+    uploadReference(
+      store,
+      uid,
+      generation,
+      {
+        ...input,
+        bytes: Buffer.from("Otro texto ficticio").toString("base64"),
+      },
+      admission.lease,
+    ),
+    issue("conflict"),
+  );
+  assert.deepEqual(await store.operation(uid, generation, input.requestId), {
+    state: "processing",
+    lease: admission.lease,
+  });
+  const saved = await uploadReference(
+    store,
+    uid,
+    generation,
+    input,
+    admission.lease,
+  );
+  assert.deepEqual(
+    await store.operation(uid, generation, input.requestId),
+    saved,
+  );
+  assert.deepEqual(await store.begin(uid, generation, prepared), saved);
+});
+
+test("operation recovery and upload verification remain scoped to owner generation and expiry", async () => {
+  const preparedInput = prepared();
+  const admission = await store.begin(uid, generation, preparedInput);
+  if (admission.state !== "started")
+    throw new Error("Fixture admission failed");
+  await assert.rejects(
+    store.operation(
+      "other-fictional-account",
+      generation,
+      preparedInput.requestId,
+    ),
+    (error) => error instanceof AccountError,
+  );
+  await assert.rejects(
+    store.verifyUpload(uid, randomUUID(), preparedInput, admission.lease),
+    (error) => error instanceof AccountError,
+  );
+  now += 16 * 60_000;
+  await assert.rejects(
+    store.operation(uid, generation, preparedInput.requestId),
+    issue("retired"),
+  );
+  await assert.rejects(
+    store.verifyUpload(uid, generation, preparedInput, admission.lease),
     issue("retired"),
   );
 });

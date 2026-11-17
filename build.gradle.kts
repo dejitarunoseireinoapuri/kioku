@@ -42,7 +42,8 @@ val kotlinFormatFiles =
     )
 
 val kotlinFormatArguments =
-    CommandLineArgumentProvider { kotlinFormatFiles.files.sortedBy { it.path }.map { it.absolutePath } }
+    // Relative arguments keep the complete source list below Windows' process command-line limit.
+    CommandLineArgumentProvider { kotlinFormatFiles.files.sortedBy { it.path }.map { it.relativeTo(rootDir).path } }
 
 tasks.register<JavaExec>("formatCheck") {
     group = "verification"
