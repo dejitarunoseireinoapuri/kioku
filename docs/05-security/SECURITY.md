@@ -1,5 +1,7 @@
 # Seguridad técnica
 
+Las referencias individuales de gestión procedentes de consultas son vistas calculadas de unidades actuales, ligadas a generación y revisiones. Conocer un UUID no concede permisos: propietario, cuenta y generación se validan antes de resolverlo. La selección de cambio debe pertenecer exactamente a la vista mostrada; añadir el ID de otro dato del mismo relato falla. Corregir/olvidar retira la referencia anterior. No se persiste texto adicional ni se permite que el contexto conversacional amplíe la unidad seleccionada.
+
 ## Frontera de memoria v2
 
 La [integración R3](../09-planning/R3_INTEGRATION_VALIDATION.md) mantiene Google revalidado, App Check y propietario habilitado. Cada operación exige la generación del servidor. Las rutas v1 rechazan la activación v2 en sus comprobaciones transaccionales, incluidas confirmaciones tardías. Ningún cliente puede leer/escribir directamente las nuevas colecciones.

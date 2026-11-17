@@ -17,7 +17,7 @@ export function checkStorageCapacity(state: Snapshot, groups: MemoryGroup[]) {
     forget(removed, ids, "capacity-check");
     const size = changeSize(state, removed);
     if (
-      affected.length > 128 ||
+      affected.length + ids.length > 128 ||
       size.writes + affected.length * 2 + 20 > 400 ||
       size.bytes + 64_000 > 2 * 1024 * 1024
     )

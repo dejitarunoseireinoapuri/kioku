@@ -11,6 +11,7 @@ import { AccountError } from "../account/contracts.js";
 import { V2Reader } from "./reader.js";
 import { V2WorkStore } from "./work-store.js";
 import { presentGroup, presentSaved } from "./presentation.js";
+import { managementGroup } from "./management.js";
 import { issuePlan, bindPlan } from "./plan-store.js";
 import { V2Capture } from "./capture.js";
 import { changeV2 } from "./change.js";
@@ -97,9 +98,9 @@ export async function routeV2(
       let units = Object.values(loaded.state.units);
       if (intent.useContext) {
         const ids = new Set(
-          loaded.groups
-            .filter((g) => context.sourceIds.includes(g.id))
-            .flatMap((g) => g.unitIds),
+          context.sourceIds.flatMap(
+            (id) => managementGroup(loaded, id)?.unitIds ?? [],
+          ),
         );
         units = units.filter((u) => ids.has(u.id));
       } else

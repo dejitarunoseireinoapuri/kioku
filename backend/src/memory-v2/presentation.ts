@@ -5,9 +5,10 @@ import { AccountError } from "../account/contracts.js";
 import { loadV2State, privateDigest } from "./state-store.js";
 import type { LoadedState } from "./state-store.js";
 import type { V2Reply } from "./contracts.js";
+import { managementGroup, unitGroup } from "./management.js";
 
 export function presentGroup(loaded: LoadedState, id: string) {
-  const group = loaded.groups.find((g) => g.id === id);
+  const group = managementGroup(loaded, id);
   if (!group) throw new AccountError("failed-precondition");
   const units = group.unitIds.map((id) => loaded.state.units[id]!);
   return {
@@ -97,8 +98,7 @@ export async function presentSaved(
 export function groupsForUnits(loaded: LoadedState, ids: string[]) {
   const selected = new Map<string, { sourceId: string; receivedAt: string }>();
   for (const id of ids) {
-    const group = loaded.groups.find((g) => g.unitIds.includes(id));
-    if (!group) throw new AccountError("failed-precondition");
+    const group = unitGroup(loaded, id);
     selected.set(group.id, {
       sourceId: group.id,
       receivedAt: new Date(group.recordedAt).toISOString(),

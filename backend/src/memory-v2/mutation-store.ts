@@ -16,6 +16,7 @@ import {
 import { V2WorkStore } from "./work-store.js";
 import { checkStorageCapacity } from "./capacity.js";
 import type { V2Reply, WorkLease } from "./contracts.js";
+import { managementGroup, unitReplacements } from "./management.js";
 
 export class V2MutationStore {
   readonly db: Firestore;
@@ -106,6 +107,20 @@ export class V2MutationStore {
           if (retired.some((d) => d.exists))
             throw new AccountError("failed-precondition");
         }
+        const current = { ...loaded, state: transition.next, groups };
+        const unitChanges = unitReplacements(loaded, current);
+        if (!created && affected.length + unitChanges.length > 128)
+          throw new AccountError("resource-exhausted");
+        const selectedUnitChange = unitChanges.find(
+          (change) => change.sourceId === sourceId,
+        );
+        const responseGroups = selectedUnitChange
+          ? selectedUnitChange.sourceIds.map(
+              (id) => managementGroup(current, id)!,
+            )
+          : groups.filter(
+              (g) => g.id === (replacements.get(sourceId ?? "") ?? sourceId),
+            );
         const reply: V2Reply = created
           ? {
               apiVersion: 2,
@@ -124,23 +139,21 @@ export class V2MutationStore {
                   ? "Recuerdo olvidado."
                   : "Recuerdo corregido.",
               memoryEpoch: transition.next.epoch,
-              sources: groups
-                .filter(
-                  (g) =>
-                    g.id === (replacements.get(sourceId ?? "") ?? sourceId),
-                )
-                .map((g) => ({
-                  sourceId: g.id,
-                  receivedAt: new Date(g.recordedAt).toISOString(),
-                })),
-              changes: affected.map((g) => ({
+              sources: responseGroups.map((g) => ({
                 sourceId: g.id,
-                sourceIds: groups.some(
-                  (current) => current.id === replacements.get(g.id),
-                )
-                  ? [replacements.get(g.id)!]
-                  : [],
+                receivedAt: new Date(g.recordedAt).toISOString(),
               })),
+              changes: [
+                ...affected.map((g) => ({
+                  sourceId: g.id,
+                  sourceIds: groups.some(
+                    (current) => current.id === replacements.get(g.id),
+                  )
+                    ? [replacements.get(g.id)!]
+                    : [],
+                })),
+                ...unitChanges,
+              ],
             };
         persistV2State(
           tx,

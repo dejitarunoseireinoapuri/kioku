@@ -24,6 +24,8 @@ Se descarta migrar o archivar recuerdos por la decisión expresa del propietario
 
 ## Consecuencias y límites
 
+Refinamiento del 17 de noviembre: las consultas exponen referencias por unidad citada, resueltas como vistas calculadas del canónico y vinculadas a generación/revisiones. No amplían la gestión a otros datos del mismo relato. Los grupos de captura conservan su función desde el guardado. Corrección/olvido revocan y sustituyen también las vistas individuales, dentro del límite compartido de 128 sustituciones. No hay migración ni copia persistida adicional.
+
 El límite operativo inicial es 256 unidades y 4096 documentos canónicos, además de las comprobaciones de capacidad de borrado. Recuperación léxica con expansión del modelo y hasta 32 candidatos; una lista exhaustiva truncada pide acotar. No demuestra mutaciones a escala de 10 000 unidades ni aceptación independiente nueva de IA.
 
 El arranque vacío usa mantenimiento y eliminación paginada de las colecciones anteriores. Cuenta, identidad, firma, configuración de clave y uso permanecen. La operación administrativa no se exporta como callable. Las pruebas con proveedor doble no prueban inferencia real; iOS requiere Mac/Xcode.

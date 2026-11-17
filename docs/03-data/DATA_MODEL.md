@@ -1,5 +1,7 @@
 # Modelo lógico de datos
 
+Refinamiento de gestión desde consultas: las referencias representan vistas individuales, calculadas desde generación, UUID, revisión y revisión de pertenencia de cada unidad citada. No se guardan como grupos adicionales ni duplican texto. Los grupos del relato siguen disponibles desde la confirmación de guardado. Corregir/olvidar comunica sustituciones de ambos tipos de referencia; el límite de 128 incluye ambas y la capacidad futura de olvido lo contempla. No requiere migrar recuerdos existentes.
+
 ## Almacenamiento v2 de la aplicación
 
 [ADR-013](../02-architecture/ADR/ADR-013-memory-v2-app-integration.md) integra el [modelo de unidades](../02-architecture/MEMORY_CORE_V2.md). El [estado R3](../09-planning/R3_INTEGRATION_VALIDATION.md) determina su activación. Bajo `accounts/{uid}`: `memoryV2Units`, `memoryV2Sources`, `memoryV2Fragments`, `memoryV2Occurrences`, `memoryV2Relations` y `memoryV2Projections` son documentos individuales; Sources guarda sobres, nunca texto completo.

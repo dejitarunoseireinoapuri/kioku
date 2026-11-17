@@ -15,7 +15,10 @@ import {
   applySchema,
   routeSchema,
 } from "../../src/memory-v2/route-contracts.js";
-import { presentGroup } from "../../src/memory-v2/presentation.js";
+import {
+  presentGroup,
+  groupsForUnits,
+} from "../../src/memory-v2/presentation.js";
 import { FirestoreCaptureStore } from "../../src/firebase/capture-store.js";
 import type { Submit, Change } from "../../src/memory-v2/contracts.js";
 import { adminApp, db, signInGoogle } from "./helpers.js";
@@ -99,6 +102,53 @@ const model: StructuredModel = {
   },
 };
 const factory = async () => model;
+const pairedText =
+  "El robot ficticio Loto es verde. El robot ficticio Iris es rojo.";
+async function savePair() {
+  const paired: StructuredModel = {
+    call: async (stage, instructions, data, schema, limit) => {
+      if (stage !== "interpret")
+        return model.call(stage, instructions, data, schema, limit);
+      return schema.parse({
+        status: "ready",
+        question: null,
+        preserveTime: false,
+        units: [
+          "El robot ficticio Loto es verde.",
+          "El robot ficticio Iris es rojo.",
+        ].map((text, index) => ({
+          key: `fact${index}`,
+          content: {
+            ...content(text),
+            subject: index === 0 ? "robot Loto" : "robot Iris",
+          },
+          time: {
+            precision: "unknown",
+            value: null,
+            end: null,
+            fragment: null,
+          },
+          existing: null,
+        })),
+        segments: [
+          {
+            end: indexedText("El robot ficticio Loto es verde. ").length - 1,
+            role: "primary",
+            owners: ["fact0"],
+          },
+          {
+            end: indexedText(pairedText).length - 1,
+            role: "primary",
+            owners: ["fact1"],
+          },
+        ],
+        relations: [],
+        retention: [],
+      });
+    },
+  };
+  return save(input(pairedText), async () => paired);
+}
 const noModel = async (): Promise<StructuredModel> => {
   throw Error("Provider must not run");
 };
@@ -208,7 +258,7 @@ test("v2 correction preserves identity across repetitions and revokes all obsole
       (f) => !f.text.includes("verde"),
     ),
   );
-  assert.equal((result.changes as unknown[]).length, 2);
+  assert.equal((result.changes as unknown[]).length, 3);
 });
 
 test("v2 forget removes all supports and blocks a delayed capture and repeated original request", async () => {
@@ -322,6 +372,172 @@ test("v2 leaves a neighboring unit intact on deletion", async () => {
   assert.equal(
     presentGroup(loaded, String(second.sourceId)).items[0]?.text,
     "El robot ficticio Iris es rojo.",
+  );
+});
+
+test("a query manages only the cited unit from a paired capture and forgetting preserves its neighbor", async () => {
+  await savePair();
+  const loaded = await reader().load();
+  const first = Object.values(loaded.state.units).find(
+    (u) => u.content.subject === "robot Loto",
+  )!;
+  const neighbor = Object.values(loaded.state.units).find(
+    (u) => u.content.subject === "robot Iris",
+  )!;
+  const answerModel: StructuredModel = {
+    call: async (stage, instructions, data, schema, limit) => {
+      if (stage === "answer") {
+        const wire = data as { evidence: { content: { subject: string } }[] };
+        // Use the evidence index supplied by the actual query pipeline.
+        const index = wire.evidence.findIndex(
+          (item) => item.content.subject === "robot Loto",
+        );
+        assert.ok(index >= 0);
+        return schema.parse({
+          status: "answered",
+          text: first.content.text,
+          evidence: [index],
+        });
+      }
+      return model.call(stage, instructions, data, schema, limit);
+    },
+  };
+  const answer = await queryV2(
+    db,
+    uid,
+    generation,
+    {
+      apiVersion: 2,
+      requestId: randomUUID(),
+      text: "¿De qué color es Loto?",
+      zone: "UTC",
+    },
+    async () => answerModel,
+    allowed,
+  );
+  const refs = answer.sources as { sourceId: string }[];
+  assert.equal(refs.length, 1);
+  const detail = presentGroup(await reader().load(), refs[0]!.sourceId);
+  assert.deepEqual(
+    detail.items.map((i) => i.id),
+    [first.id],
+  );
+  assert.equal(detail.text, first.content.text);
+  assert.ok(!detail.text.includes("Iris"));
+  await assert.rejects(
+    changeV2(
+      db,
+      uid,
+      generation,
+      {
+        apiVersion: 2,
+        requestId: randomUUID(),
+        sourceId: detail.sourceId,
+        expectedVersion: detail.version,
+        memoryIds: [neighbor.id],
+        action: "forget",
+        correction: null,
+        zone: "UTC",
+        forgetScope: "allOccurrences",
+      },
+      noModel,
+      allowed,
+    ),
+  );
+  const contextual: StructuredModel = {
+    call: async (stage, _instructions, data, schema) => {
+      if (stage === "message_intent")
+        return schema.parse({
+          action: "forget",
+          fact: null,
+          alsoAsk: false,
+          useContext: true,
+          question: null,
+          forgetScope: "allOccurrences",
+        });
+      assert.equal(stage, "message_target");
+      const candidates = (data as { candidates: { id: string }[] }).candidates;
+      assert.deepEqual(
+        candidates.map((u) => u.id),
+        [first.id],
+      );
+      return schema.parse({
+        memoryIds: [],
+        correction: null,
+        question: "¿Confirmas el alcance ficticio?",
+      });
+    },
+  };
+  assert.equal(
+    (
+      await routeV2(
+        db,
+        uid,
+        generation,
+        {
+          apiVersion: 2,
+          requestId: randomUUID(),
+          mode: "ask",
+          text: "Olvida ese dato.",
+          zone: "UTC",
+          memoryEpoch: loaded.state.epoch,
+          context: { questions: [], sourceIds: [detail.sourceId] },
+        },
+        async () => contextual,
+        allowed,
+      )
+    ).status,
+    "needsClarification",
+  );
+  const both = groupsForUnits(loaded, [first.id, neighbor.id]);
+  assert.equal(both.length, 2);
+  assert.ok(
+    both.every((r) => presentGroup(loaded, r.sourceId).items.length === 1),
+  );
+  const { result } = await change(detail.sourceId, "forget");
+  assert.equal(result.status, "forgotten");
+  const current = await reader().load();
+  assert.equal(Object.keys(current.state.units).length, 1);
+  assert.equal(
+    current.state.units[neighbor.id]?.content.text,
+    neighbor.content.text,
+  );
+  assert.throws(() => presentGroup(current, detail.sourceId));
+  assert.equal(
+    presentGroup(current, both[1]!.sourceId).items[0]!.id,
+    neighbor.id,
+  );
+});
+
+test("unit management correction returns only that unit and revokes its old alias", async () => {
+  await savePair();
+  const before = await reader().load();
+  const target = Object.values(before.state.units).find(
+    (u) => u.content.subject === "robot Loto",
+  )!;
+  const source = groupsForUnits(before, [target.id])[0]!;
+  const { result } = await change(
+    source.sourceId,
+    "correct",
+    "El robot ficticio Loto es azul.",
+  );
+  const after = await reader().load();
+  assert.throws(() => presentGroup(after, source.sourceId));
+  const refs = result.sources as { sourceId: string }[];
+  assert.equal(refs.length, 1);
+  assert.equal(presentGroup(after, refs[0]!.sourceId).items.length, 1);
+  assert.equal(presentGroup(after, refs[0]!.sourceId).items[0]!.id, target.id);
+  assert.equal(
+    Object.values(after.state.units).find((u) => u.id !== target.id)?.content
+      .subject,
+    "robot Iris",
+  );
+  assert.throws(() => presentGroup(after, randomUUID()));
+  assert.throws(() =>
+    presentGroup(
+      { ...after, runtime: { ...after.runtime, generation: randomUUID() } },
+      refs[0]!.sourceId,
+    ),
   );
 });
 

@@ -46,6 +46,14 @@ Fuentes consultadas para la corrección: convenciones, política de calidad, gu�
 
 Corrección publicada únicamente en `memoryV2`, dentro de la autorización de despliegue vigente. Estado remoto comprobado **ACTIVE**, actualización `2026-11-17T08:27:26Z` e identidad de ejecución esperada. No se modifican las otras nueve funciones, credenciales ni configuración de memoria.
 
+## Gestión individual desde consultas · 17 de noviembre
+
+El propietario detectó que al consultar un dato aparecían también otros contados en el mismo relato. La respuesta devuelve ahora una referencia de gestión por unidad citada; detalles y fuente muestran solo esa unidad. Si una respuesta utiliza varias, cada una conserva su gestión independiente. Los grupos de captura siguen accesibles desde el guardado. La corrección/retirada reemplaza también las referencias individuales y el contexto conversacional resuelve su alcance exacto. Sin migración ni nuevas copias de recuerdos. Las respuestas que ya estaban en RAM conservan sus referencias anteriores: para ver el nuevo alcance hay que repetir la consulta.
+
+Publicado únicamente `memoryV2`, con autorización de despliegue vigente. Estado remoto **ACTIVE** comprobado, actualización `2026-11-17T08:44:03Z` e identidad esperada. Las otras funciones mantienen su versión; no se ejecuta vaciado, lectura de contenido ni migración de producción.
+
+Pruebas ficticias sin OpenAI: **18/18** emuladores v2, **40/40** unitarias backend, compilación TypeScript y formato correctos. Incluyen dos datos del mismo relato, consulta de uno solo, corrección y olvido conservando el vecino, rechazo de selección ajena, referencia retirada/generación distinta y contexto «ese dato» limitado a la unidad citada. No hay cambios de código móvil o diseño, ni necesidad de reinstalar APK; no se repiten pruebas nativas ni se acredita inferencia real. Fuentes consultadas: convenciones, calidad, referencia visual, contrato API, modelo de datos, seguridad y ADR-013. **0 llamadas de prueba a OpenAI**, sin leer ni modificar recuerdos reales.
+
 ## Límites conocidos
 
 R2 sigue abierta por latencia y reserva independiente de la última versión. Esta entrega no prueba inferencia real con el adaptador de servidor ni iOS. La app requiere saldo para interpretar, consultar o corregir; no se añade un modo que simule respuestas como si fueran reales.
