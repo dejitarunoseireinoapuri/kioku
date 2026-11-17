@@ -30,7 +30,7 @@ class ReferenceWorkspaceViewModel(
             MAX_QUESTION
         ) {
             mutableState.value =
-                state.value.copy(question = text, searched = false, citations = emptyList())
+                state.value.copy(question = text, searched = false, answer = null, citations = emptyList())
         }
     }
 
@@ -60,17 +60,26 @@ class ReferenceWorkspaceViewModel(
         }
     }
 
-    fun importWeb(requestId: String) =
+    fun importWeb(requestId: String) {
+        val url = state.value.web.trim()
+        if (url.isEmpty()) return report(ReferenceIssue.Invalid)
         run(ReferenceWork.Importing) { epoch ->
-            val result = repository.importWeb(state.value.web, requestId)
+            val result = repository.importWeb(url, requestId)
             if (result is ReferenceImportResult.Failed) throw ReferenceFailure(result.issue)
             load(epoch)
         }
+    }
 
     fun select(source: ReferenceSummary?) {
         interrupt()
         mutableState.value =
-            state.value.copy(selected = source, citations = emptyList(), detail = emptyList(), searched = false)
+            state.value.copy(
+                selected = source,
+                answer = null,
+                citations = emptyList(),
+                detail = emptyList(),
+                searched = false,
+            )
     }
 
     fun read() {
@@ -85,10 +94,16 @@ class ReferenceWorkspaceViewModel(
         val question = state.value.question.trim()
         val source = state.value.selected?.id
         if (question.isEmpty()) return
-        if (state.value.work == null) mutableState.value = state.value.copy(citations = emptyList(), searched = false)
+        if (state.value.work ==
+            null
+        ) {
+            mutableState.value = state.value.copy(answer = null, citations = emptyList(), searched = false)
+        }
         run(ReferenceWork.Searching) { epoch ->
-            val citations = repository.query(question, source)
-            commit(epoch) { it.copy(citations = citations, searched = true, detail = emptyList()) }
+            val answer = repository.query(question, source)
+            commit(
+                epoch,
+            ) { it.copy(citations = answer.citations, answer = answer.text, searched = true, detail = emptyList()) }
         }
     }
 
@@ -104,6 +119,7 @@ class ReferenceWorkspaceViewModel(
             commit(epoch) {
                 it.copy(
                     selected = null,
+                    answer = null,
                     citations = emptyList(),
                     detail = emptyList(),
                     searched = false,
@@ -132,6 +148,8 @@ class ReferenceWorkspaceViewModel(
         commit(epoch) { current ->
             current.copy(
                 sources = sources,
+                answer = null,
+                searched = false,
                 citations =
                     current.citations.filter { citation ->
                         sources.any {

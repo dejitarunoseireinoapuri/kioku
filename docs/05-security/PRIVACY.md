@@ -1,5 +1,12 @@
 # Privacidad, datos y permisos
 
+## Revisión productiva preparada después del piloto
+
+El propietario pide texto en Firestore real y respuestas mediante la API del servidor. Se prepara esa conexión con su cuenta actual, sin claves nuevas o gasto API en pruebas. Solo la evidencia documental vigente seleccionada se entrega al proveedor; no se guardan preguntas/respuestas en servidor o binarios. Web guarda URL solicitada/final y fecha junto al texto, sin cookies/credenciales ni sincronización. Eliminar una fuente retira texto/procedencia recuperables de Kioku, no el original externo.
+
+Sin despliegue o instalación de esta revisión. Los párrafos del piloto siguientes describen evidencia histórica local; no sustituyen esta elección productiva. No se han usado recuerdos o archivos reales durante la preparación. [Estado](../09-planning/SHARED_SOURCES_VALIDATION.md).
+
+
 **Piloto documental separado:** [Kioku · pruebas](../09-planning/SHARED_SOURCES_PILOT.md) usa cuenta de Auth Emulator, otro ID de aplicación y texto únicamente en Firestore Emulator. No lee la sesión, recuerdos o credenciales de Kioku habitual. Token de prueba y payload de reintento viven solo en RAM; salir del proceso limpia esos datos locales, y reiniciar los emuladores pierde sus fuentes ficticias. Solo fixtures en la validación. Los cuatro binarios del APK y sus copias privadas son corpus generado para pruebas, no archivo de documentos del propietario. Las importaciones conservan solo texto extraído. No hay sincronización, solicitudes IA o descarga de enlaces arbitrarios; ni acceso a Drive personal. La base del producto descrita debajo continúa sin activación.
 
 **Ampliación documental local:** el propietario autoriza implementar fuentes compartidas y elige conservar solo texto extraído, dejando sincronización para después. No hay archivo permanente de originales, acceso global a Drive, cookies del navegador o permisos persistentes nuevos. La [primera evidencia](../09-planning/SHARED_SOURCES_VALIDATION.md) usa exclusivamente documentos generados y cuentas ficticias en emuladores; sin lectura de recuerdos/documentos personales, credenciales nuevas o llamadas IA. El texto extraído solo se ha persistido en el emulador; el receptor del producto sigue deshabilitado. Las operaciones terminadas vacían título/huella, y olvidar elimina el texto canónico. Limpieza programada y activación real siguen pendientes.

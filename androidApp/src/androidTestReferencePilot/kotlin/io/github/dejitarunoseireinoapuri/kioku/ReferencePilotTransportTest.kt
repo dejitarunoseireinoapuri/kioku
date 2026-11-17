@@ -40,7 +40,7 @@ class ReferencePilotTransportTest {
                 assertEquals(FILE_COUNT, results.size)
                 assertTrue(results.all { it is ReferenceImportResult.Stored })
                 val pdf = results[2] as ReferenceImportResult.Stored
-                val evidence = repository.query("violet notebook", pdf.id)
+                val evidence = repository.query("violet notebook", pdf.id).citations
                 assertTrue(evidence.any { it.location == "page" && it.number == 2 })
                 val web =
                     http.post(

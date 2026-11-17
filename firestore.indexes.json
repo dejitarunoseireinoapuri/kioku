@@ -112,6 +112,11 @@
       "collectionGroup": "memoryV2Projections",
       "fieldPath": "terms",
       "indexes": []
+    },
+    {
+      "collectionGroup": "sources",
+      "fieldPath": "document",
+      "indexes": []
     }
   ]
 }

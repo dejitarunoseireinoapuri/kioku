@@ -78,6 +78,7 @@ kotlin {
 dependencies {
     implementation(project(":shared"))
     implementation(libs.android.activity)
+    implementation(libs.android.fragment)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.functions)
@@ -92,5 +93,5 @@ dependencies {
     androidTestImplementation(libs.compose.material)
     debugImplementation(libs.compose.test.manifest)
     add("referencePilotImplementation", libs.compose.test.manifest)
-    add("referencePilotImplementation", libs.koin.viewmodel)
+    implementation(libs.koin.core)
 }

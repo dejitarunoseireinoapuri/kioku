@@ -11,6 +11,7 @@ export async function v2Provider(
   uid: string,
   generation: string,
   epoch: number,
+  validate?: () => Promise<void>,
 ) {
   const record = await new FirestoreCredentialStore(db).current(uid);
   if (!record) throw new AccountError("failed-precondition");
@@ -28,6 +29,7 @@ export async function v2Provider(
       {
         reserve: async (amount) => {
           await reader.assertCurrent(epoch);
+          await validate?.();
           await budget.reserve(amount);
         },
         settle: (reservation, input, output) =>

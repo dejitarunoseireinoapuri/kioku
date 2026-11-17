@@ -99,7 +99,7 @@ async function dispatch(path: string, input: unknown) {
         generation,
         upload.command,
         upload.lease,
-        AbortSignal.timeout(35_000),
+        { signal: AbortSignal.timeout(35_000) },
       );
     }
     case "/web": {

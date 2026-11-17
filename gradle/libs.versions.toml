@@ -15,6 +15,7 @@ credentials = "1.6.0"
 googleid = "1.2.1"
 
 [libraries]
+android-fragment = { module = "androidx.fragment:fragment", version = "1.8.9" }
 compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose" }
 compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose" }
 compose-material = { module = "org.jetbrains.compose.material:material", version.ref = "compose" }
@@ -33,6 +34,7 @@ credentials-core = { module = "androidx.credentials:credentials", version.ref = 
 credentials-google = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
 googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
 serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
 koin-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
 android-activity = { module = "androidx.activity:activity-compose", version.ref = "activity" }

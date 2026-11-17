@@ -12,6 +12,10 @@ import { extractIsolated } from "../../src/references/isolated-extractor.js";
 import { retrieveReferences } from "../../src/references/retrieve.js";
 import { SourceError } from "../../src/references/contracts.js";
 import { AccountError } from "../../src/account/contracts.js";
+import { operationsCollection } from "../../src/memory-v2/state-store.js";
+import { questionReferences } from "../../src/references/question.js";
+import { importWebReference } from "../../src/references/web-import.js";
+import type { StructuredModel } from "#memory-v2/ai/contracts";
 
 const uid = "references-fictional-owner";
 let generation = randomUUID(),
@@ -44,6 +48,185 @@ beforeEach(async () => {
 });
 after(async () => {
   await deleteApp(adminApp);
+});
+
+test("production question orchestration stores no question/answer and replay makes no model call", async () => {
+  await importReference(store, uid, generation, command());
+  let calls = 0;
+  const model: StructuredModel = {
+    async call(stage, _instructions, _data, schema) {
+      calls++;
+      return schema.parse(
+        stage === "reference_review"
+          ? { accepted: true }
+          : {
+              status: "answered",
+              text: "Según el itinerario ficticio, Nara visita el planetario.",
+              evidence: [0],
+            },
+      );
+    },
+  };
+  const input = { requestId: randomUUID(), question: "¿Qué visita Nara?" };
+  const result = await questionReferences(
+    db,
+    { uid, generation },
+    input,
+    async () => model,
+    async () => {},
+  );
+  assert.equal(result.status, "answered");
+  const replay = await questionReferences(
+    db,
+    { uid, generation },
+    input,
+    async () => {
+      throw new Error("No model on replay");
+    },
+    async () => {},
+  );
+  assert.equal(replay.status, "repeatRequired");
+  assert.equal(calls, 2);
+  const record = await db
+    .doc(`accounts/${uid}/${operationsCollection}/${input.requestId}`)
+    .get();
+  const serialized = JSON.stringify(record.data());
+  assert.equal(serialized.includes(input.question), false);
+  assert.equal(serialized.includes("Según el itinerario"), false);
+  await assert.rejects(
+    questionReferences(
+      db,
+      { uid: "another-fictional-owner", generation },
+      { ...input, requestId: randomUUID() },
+      async () => model,
+      async () => {},
+    ),
+    (error) => error instanceof AccountError,
+  );
+});
+
+test("forgetting during a model answer prevents disclosure and revokes its evidence", async () => {
+  const saved = await importReference(store, uid, generation, command());
+  if (saved.state !== "ready") throw new Error("Fixture import failed");
+  const model: StructuredModel = {
+    async call(stage, _instructions, _data, schema) {
+      if (stage === "reference_review")
+        await store.forget(
+          uid,
+          generation,
+          saved.source.id,
+          saved.source.revision,
+        );
+      return schema.parse(
+        stage === "reference_review"
+          ? { accepted: true }
+          : {
+              status: "answered",
+              text: "Según el itinerario ficticio, Nara visita el planetario.",
+              evidence: [0],
+            },
+      );
+    },
+  };
+  await assert.rejects(
+    questionReferences(
+      db,
+      { uid, generation },
+      { requestId: randomUUID(), question: "¿Qué visita Nara?" },
+      async () => model,
+      async () => {},
+    ),
+    issue("conflict"),
+  );
+  assert.equal((await store.catalog(uid, generation)).sources.length, 0);
+});
+
+test("revocation after parsing prevents a split upload from publishing extracted text", async () => {
+  const input = command();
+  const checksum = createHash("sha256")
+    .update("text\0")
+    .update(Buffer.from(input.bytes, "base64"))
+    .digest("hex");
+  const admission = await store.begin(uid, generation, {
+    requestId: input.requestId,
+    title: input.title,
+    format: "text",
+    checksum,
+  });
+  if (admission.state !== "started")
+    throw new Error("Fixture admission failed");
+  await assert.rejects(
+    uploadReference(store, uid, generation, input, admission.lease, {
+      reauthorize: async () => {
+        throw new AccountError("permission-denied");
+      },
+    }),
+    (error) => error instanceof AccountError,
+  );
+  assert.equal((await store.catalog(uid, generation)).sources.length, 0);
+});
+
+test("web import preserves provenance, replays without a download and forgetting revokes the snapshot", async () => {
+  const input = {
+    requestId: randomUUID(),
+    url: "https://example.com/manual-ficticio",
+  };
+  let downloads = 0;
+  const download = async () => {
+    downloads++;
+    return {
+      url: input.url,
+      format: "html" as const,
+      bytes: Buffer.from(
+        "<main><p>Lira usa un cuaderno violeta ficticio.</p></main>",
+      ),
+    };
+  };
+  const result = await importWebReference(
+    store,
+    { uid, generation },
+    input,
+    async () => {},
+    download,
+  );
+  if (result.state !== "ready") throw new Error("Fixture web import failed");
+  assert.equal(result.source.origin?.url, input.url);
+  assert.ok(result.source.origin?.readAt);
+  assert.equal(
+    (
+      await importWebReference(
+        store,
+        { uid, generation },
+        input,
+        async () => {},
+        download,
+      )
+    ).state,
+    "ready",
+  );
+  assert.equal(downloads, 1);
+  await store.forget(uid, generation, result.source.id, result.source.revision);
+  await assert.rejects(
+    importWebReference(
+      store,
+      { uid, generation },
+      input,
+      async () => {},
+      download,
+    ),
+  );
+  assert.equal(downloads, 1);
+  await assert.rejects(
+    importWebReference(
+      store,
+      { uid: "foreign-fictional-owner", generation },
+      { ...input, requestId: randomUUID() },
+      async () => {},
+      download,
+    ),
+    (error) => error instanceof AccountError,
+  );
+  assert.equal(downloads, 1);
 });
 
 test("file bytes are never persisted; only extracted text and versioned citations are stored", async () => {

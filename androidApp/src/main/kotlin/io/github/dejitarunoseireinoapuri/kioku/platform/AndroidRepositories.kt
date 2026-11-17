@@ -16,6 +16,7 @@ internal class AndroidRepositories(
     val queries: QueryRepository? = null,
     val controls: MemoryControlRepository? = null,
     val conversation: TextConversationRepository? = null,
+    val references: (() -> ReferenceRpc)? = null,
 ) : ViewModel() {
     fun attach(activity: ComponentActivity) = accountPort?.attach(activity)
 

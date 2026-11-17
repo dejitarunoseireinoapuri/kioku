@@ -47,6 +47,7 @@ export function retrieveReferences(
           sourceId: source.id,
           revision: source.revision,
           title: source.title,
+          ...(source.origin ? { origin: source.origin } : {}),
           index: chunk.index,
           locator: chunk.locator,
           text: chunk.text,

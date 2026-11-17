@@ -31,6 +31,7 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.reference_partial
 import io.github.dejitarunoseireinoapuri.kioku.resources.reference_pick
 import io.github.dejitarunoseireinoapuri.kioku.resources.reference_pilot_notice
 import io.github.dejitarunoseireinoapuri.kioku.resources.reference_pilot_title
+import io.github.dejitarunoseireinoapuri.kioku.resources.reference_production_title
 import io.github.dejitarunoseireinoapuri.kioku.resources.reference_reading
 import io.github.dejitarunoseireinoapuri.kioku.resources.reference_receiving
 import io.github.dejitarunoseireinoapuri.kioku.resources.reference_refresh
@@ -43,10 +44,11 @@ import org.jetbrains.compose.resources.stringResource
 fun ReferenceWorkspaceApp(
     state: ReferenceWorkspaceState,
     actions: ReferenceWorkspaceActions,
+    pilot: Boolean = true,
 ) {
     KiokuTheme {
         Surface(color = KiokuColors.Background, contentColor = KiokuColors.Text) {
-            MatrixBackdrop { KiokuSafeArea { WorkspaceContent(state, actions) } }
+            MatrixBackdrop { KiokuSafeArea { WorkspaceContent(state, actions, pilot) } }
         }
     }
 }
@@ -55,6 +57,7 @@ fun ReferenceWorkspaceApp(
 private fun WorkspaceContent(
     state: ReferenceWorkspaceState,
     actions: ReferenceWorkspaceActions,
+    pilot: Boolean,
 ) {
     val scroll = rememberScrollState()
     LaunchedEffect(state.selected?.id) { scroll.scrollTo(0) }
@@ -62,11 +65,13 @@ private fun WorkspaceContent(
         Modifier.fillMaxSize().verticalScroll(scroll).padding(KiokuSpacing.Medium),
         verticalArrangement = Arrangement.spacedBy(KiokuSpacing.Medium),
     ) {
-        ScreenHeading(stringResource(Res.string.reference_pilot_title))
-        Panel { Text(stringResource(Res.string.reference_pilot_notice), color = KiokuColors.Secondary) }
+        ScreenHeading(
+            stringResource(if (pilot) Res.string.reference_pilot_title else Res.string.reference_production_title),
+        )
+        if (pilot) Panel { Text(stringResource(Res.string.reference_pilot_notice), color = KiokuColors.Secondary) }
         WorkspaceProgress(state, actions)
         if (state.selected == null) WorkspaceImportResults(state, actions)
-        if (state.selected == null) WorkspaceLibrary(state, actions) else WorkspaceSelection(state, actions)
+        if (state.selected == null) WorkspaceLibrary(state, actions, pilot) else WorkspaceSelection(state, actions)
         WorkspaceQuery(state, actions)
     }
     state.forgetTarget?.let { WorkspaceForgetDialog(it, actions) }
@@ -105,10 +110,11 @@ private fun WorkspaceProgress(
 private fun WorkspaceLibrary(
     state: ReferenceWorkspaceState,
     actions: ReferenceWorkspaceActions,
+    pilot: Boolean,
 ) {
     val enabled = state.work == null
     ActionButton(stringResource(Res.string.reference_pick), actions::pick, enabled = enabled)
-    ActionButton(stringResource(Res.string.reference_example), actions::example, enabled = enabled)
+    if (pilot) ActionButton(stringResource(Res.string.reference_example), actions::example, enabled = enabled)
     ActionButton(stringResource(Res.string.reference_refresh), actions::refresh, enabled = enabled)
     WorkspaceWeb(state, actions)
     if (state.sources.isEmpty() && enabled) Text(stringResource(Res.string.reference_empty))

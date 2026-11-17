@@ -1,4 +1,4 @@
 <resources>
     <!-- Enable only after authenticated transport/remote activation, never to route users into fixtures. -->
-    <bool name="reference_import_enabled">false</bool>
+    <bool name="reference_import_enabled">true</bool>
 </resources>

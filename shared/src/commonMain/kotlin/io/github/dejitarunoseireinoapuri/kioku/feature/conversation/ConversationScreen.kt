@@ -4,12 +4,16 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -23,9 +27,11 @@ import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
 import io.github.dejitarunoseireinoapuri.kioku.design.SettingsAction
 import io.github.dejitarunoseireinoapuri.kioku.design.TopBar
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextOutcome
+import io.github.dejitarunoseireinoapuri.kioku.feature.references.LocalReferenceEntry
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.app_name
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_checking
+import io.github.dejitarunoseireinoapuri.kioku.resources.reference_production_title
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -140,7 +146,21 @@ private fun ConversationHeader(onSettings: () -> Unit) {
         if (!keyboardVisible || maxHeight >= KiokuSpacing.CompactContentHeight) {
             TopBar(
                 title = stringResource(Res.string.app_name),
-                trailing = { SettingsAction(onSettings) },
+                trailing = {
+                    Row {
+                        LocalReferenceEntry.current?.let { open ->
+                            TextButton(
+                                onClick = open,
+                                modifier =
+                                    Modifier.sizeIn(
+                                        minWidth = KiokuSpacing.TouchTarget,
+                                        minHeight = KiokuSpacing.TouchTarget,
+                                    ),
+                            ) { Text(stringResource(Res.string.reference_production_title)) }
+                        }
+                        SettingsAction(onSettings)
+                    }
+                },
             )
         }
     }

@@ -12,3 +12,5 @@
 *.xcconfig text eol=lf
 *.xml text eol=lf
 *.bat text eol=crlf
+*.pdf binary
+*.docx binary

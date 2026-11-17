@@ -44,5 +44,6 @@ internal fun firebaseRepositories(activity: ComponentActivity): AndroidRepositor
         NativeQueryRepository(memoryPort),
         NativeMemoryControlRepository(memoryPort),
         NativeTextConversationRepository(memoryPort),
+        { FirebaseReferenceRpc(FirebaseAuth.getInstance(app), FirebaseFunctions.getInstance(app, "europe-west1")) },
     )
 }

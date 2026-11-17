@@ -20,6 +20,7 @@
         <provider android:name="com.google.firebase.provider.FirebaseInitProvider" tools:node="remove" />
         <activity
             android:name=".ReferenceImportActivity"
+            android:launchMode="singleTop"
             android:enabled="@bool/reference_import_enabled"
             android:exported="true">
             <intent-filter>

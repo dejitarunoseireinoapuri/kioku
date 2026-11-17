@@ -8,6 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.window.Dialog
 import io.github.dejitarunoseireinoapuri.kioku.design.ActionButton
@@ -26,6 +27,7 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.reference_found
 import io.github.dejitarunoseireinoapuri.kioku.resources.reference_import_web
 import io.github.dejitarunoseireinoapuri.kioku.resources.reference_line
 import io.github.dejitarunoseireinoapuri.kioku.resources.reference_no_matches
+import io.github.dejitarunoseireinoapuri.kioku.resources.reference_open_web
 import io.github.dejitarunoseireinoapuri.kioku.resources.reference_page
 import io.github.dejitarunoseireinoapuri.kioku.resources.reference_paragraph
 import io.github.dejitarunoseireinoapuri.kioku.resources.reference_partial
@@ -107,7 +109,8 @@ internal fun WorkspaceQuery(
             },
             enabled = state.work == null && state.question.isNotBlank(),
         )
-        if (state.searched) {
+        state.answer?.let { Text(it, Modifier.testTag("reference-answer")) }
+        if (state.searched && state.answer == null) {
             Text(
                 stringResource(
                     if (state.citations.isEmpty()) Res.string.reference_no_matches else Res.string.reference_found,
@@ -133,6 +136,7 @@ internal fun WorkspaceSource(
 
 @Composable
 internal fun WorkspaceCitation(citation: ReferenceCitation) {
+    val uriHandler = LocalUriHandler.current
     val label =
         when (citation.location) {
             "page" -> Res.string.reference_page
@@ -144,6 +148,9 @@ internal fun WorkspaceCitation(citation: ReferenceCitation) {
         Text(citation.title)
         Text(stringResource(label, citation.number))
         Text(citation.text, Modifier.testTag("reference-citation"))
+        citation.url?.takeIf { it.startsWith("https://") }?.let { url ->
+            ActionButton(stringResource(Res.string.reference_open_web), { uriHandler.openUri(url) })
+        }
     }
 }
 

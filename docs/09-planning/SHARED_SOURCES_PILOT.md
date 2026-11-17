@@ -1,5 +1,21 @@
 # Probar documentos ficticios en el Honor
 
+## Versión productiva preparada
+
+**Todavía no está instalada en Honor ni desplegada en el servidor.** APK normal: `androidApp/build/outputs/apk/debug/androidApp-debug.apk`; identificador habitual registrado, conexión productiva de Kioku y sin emuladores. Antes de instalar hay que activar `referenceSources` y su configuración de índices. Actualizar sin desinstalar ni borrar datos. Las preguntas reales gastarán API; pruebas del agente: cero API.
+
+Una vez activada e instalada:
+
+1. Crear PDF con texto ficticio: «Lira usa un cuaderno violeta. Nara visita el planetario el sábado». Compartir → **Kioku** desde Archivos. Desde Drive: **Enviar una copia** en PDF/DOCX o proveedor del selector; un enlace privado no basta.
+2. Esperar **Texto guardado en Kioku**. En **Documentos**, abrirlo y preguntar «¿Qué cuaderno usa Lira?». Debe responder y citar página/línea/párrafo real. **Ver texto extraído** muestra lo leído; no se conserva el PDF original.
+3. TXT/Markdown/DOCX: Compartir o **Documentos → Abrir archivos**. Hasta 6 MiB por archivo, cinco archivos y 25 MiB por lote; sin PDF escaneado/cifrado.
+4. Web: compartir enlace HTTPS público o **Enlace web público → Importar web**. Solo guarda texto y procedencia, sin vídeo, sesión o sincronización. **Abrir web original** abre la página externa actual; puede haber cambiado desde la lectura.
+5. **Eliminar fuente → Cancelar** conserva datos; **Sí, eliminar** retira el texto de Kioku. Preguntar después no debe usarlo. El original externo permanece intacto.
+6. Con mala cobertura, la pregunta queda escrita. Pulsar **Preguntar** al recuperar conexión; recupera la misma operación antes de permitir otra consulta. **Dejar de esperar** cancela la espera local; **Actualizar lista** comprueba qué confirmó el servidor.
+
+Se pregunta en **Documentos**, sobre un archivo o **Todas las fuentes**. El chat habitual sigue consultando recuerdos; búsqueda conjunta pendiente. Las siguientes instrucciones son del piloto histórico, no requisitos de producción.
+
+
 **Guía del piloto intermedio:** el propietario ha pedido después instalar la integración productiva con Firestore real y respuestas por API. Este recorrido local se conserva para reproducción de pruebas; no es la entrega final solicitada. Las pruebas del agente siguen sin llamadas API y usan solo fixtures.
 
 El piloto se instala como **Kioku · pruebas**, separado de Kioku y de sus recuerdos. Solo usa una cuenta ficticia y un servidor local del PC. No incorpora cliente de IA, interpretación de recuerdos, embeddings o respuestas generadas. El servidor guarda texto extraído, nunca los archivos originales. No hay sincronización.

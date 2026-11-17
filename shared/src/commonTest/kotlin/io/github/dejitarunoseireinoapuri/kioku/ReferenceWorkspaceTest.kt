@@ -29,6 +29,29 @@ import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ReferenceWorkspaceTest {
+    @Test fun naturalAnswerIsClearedWhenQuestionOrCurrentEvidenceChanges() =
+        fixture { repository, model ->
+            model.refresh()
+            runCurrent()
+            model.editQuestion("¿Qué cuaderno usa Lira?")
+            model.ask()
+            runCurrent()
+            assertEquals("Respuesta ficticia", model.state.value.answer)
+            model.editQuestion("¿Y Nara?")
+            assertNull(model.state.value.answer)
+            model.ask()
+            runCurrent()
+            repository.sources = emptyList()
+            model.refresh()
+            runCurrent()
+            assertNull(model.state.value.answer)
+            assertTrue(
+                model.state.value.citations
+                    .isEmpty(),
+            )
+            assertFalse(model.state.value.searched)
+        }
+
     @Test fun failedQueryKeepsTheQuestionForExplicitRetry() =
         fixture { repository, model ->
             model.editQuestion("¿Qué cuaderno usa Lira?")
@@ -182,7 +205,8 @@ private class WorkspaceFixture : ReferenceWorkspaceRepository {
     override suspend fun query(
         question: String,
         sourceId: String?,
-    ) = answer()
+    ) = io.github.dejitarunoseireinoapuri.kioku.domain
+        .ReferenceAnswer("Respuesta ficticia", answer())
 
     override suspend fun read(source: ReferenceSummary) = answer()
 

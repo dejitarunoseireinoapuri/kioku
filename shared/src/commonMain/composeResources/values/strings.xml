@@ -176,4 +176,5 @@
     <string name="control_edit_help">Sustituye un dato erróneo.</string>
     <string name="control_forget_help">También borra sus copias.</string>
     <string name="control_new_fact_help">Si algo ha cambiado con el tiempo, cuéntalo como un recuerdo nuevo.</string>
+    <string name="reference_production_title">Documentos</string>
 </resources>

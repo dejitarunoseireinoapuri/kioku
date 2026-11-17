@@ -15,11 +15,17 @@ data class ReferenceCitation(
     val location: String,
     val number: Int,
     val text: String,
+    val url: String? = null,
 )
 
 class ReferenceFailure(
     val issue: ReferenceIssue,
 ) : RuntimeException(issue.name)
+
+data class ReferenceAnswer(
+    val text: String?,
+    val citations: List<ReferenceCitation>,
+)
 
 /** Server-confirmed text sources only. Pilot and production composition are separate. */
 interface ReferenceWorkspaceRepository {
@@ -37,7 +43,7 @@ interface ReferenceWorkspaceRepository {
     suspend fun query(
         question: String,
         sourceId: String?,
-    ): List<ReferenceCitation>
+    ): ReferenceAnswer
 
     suspend fun forget(source: ReferenceSummary)
 }

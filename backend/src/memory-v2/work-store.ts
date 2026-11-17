@@ -245,6 +245,7 @@ export class V2WorkStore {
     state: WorkRecord["state"],
     reply: V2Reply,
     question?: string,
+    validate?: (tx: Transaction) => Promise<void>,
   ): Promise<void> {
     await this.db.runTransaction(
       async (tx) => {
@@ -252,6 +253,7 @@ export class V2WorkStore {
         const record = await this.current(tx, uid, lease);
         if (runtime.revision !== lease.epoch)
           throw new AccountError("failed-precondition");
+        await validate?.(tx);
         const revision = record.revision + (question ? 1 : 0);
         if (revision > 3) throw new AccountError("resource-exhausted");
         tx.set(this.ref(uid, lease.requestId), {

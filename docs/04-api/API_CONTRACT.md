@@ -1,5 +1,14 @@
 # Contrato backend · memoria v2 y cuenta v1
 
+## Fuentes compartidas: contrato productivo preparado
+
+Sin despliegue. Callable `referenceSources` en europe-west1: sobre estricto `{apiVersion:1,generation:UUID,operation,payload}`, cuenta Google del propietario, token revalidado, generación activa y App Check registrado. No admite UID/rutas/modelo/clave elegidos por el cliente. Operaciones: catálogo; admisión `{requestId,title,format,checksum}`; subida `{command:{apiVersion:1,requestId,title,format,bytes},lease}`; estado/cancelación `{requestId}`; lectura `{id}`; olvido `{id,revision}`; web `{requestId,url}`; consulta `{requestId,question,sourceId?}`. Bytes base64 solo RAM. Producción: 6 MiB binarios/archivo y cuerpo HTTP hasta 9 MiB; parser interno 10 MiB. Sin escrituras Firestore del cliente.
+
+Consulta: `{status:answered|notFound|needsClarification,text,citations,referenceEpoch}`. Citas literales del servidor: sourceId/revision/title/index/locator/text/coverage y origin opcional; no son IDs de memoria personal. Ledger sin pregunta/respuesta; replay: processing o repeatRequired. Solo tras repeatRequired confirmado el cliente permite como máximo una consulta nueva en ese reintento, sin repetir un trabajo activo. No repite IA automáticamente ante un fallo de transporte. Errores propios con `details.referenceIssue` cerrado; nunca errores SDK/proveedor sin filtrar. Perfil Sol alto y clave resueltos en servidor.
+
+Web: HTTPS/DNS/IP/TLS por salto; HTML/TXT/PDF público, hasta tres redirecciones/25 s/6 MiB. Sin login/cookies, Drive privado, vídeo o URLs propuestas por IA. Activación y calidad real pendientes; [evidencia](../09-planning/SHARED_SOURCES_VALIDATION.md).
+
+
 **Fuentes compartidas, contrato local:** `importReference(store, uid, generation, input, signal?)` admite un objeto estricto `{apiVersion:1, requestId:UUID, title:string, format:text|markdown|pdf|docx|html, bytes:base64}`. Máximo 200 caracteres de título y 10 MiB decodificados. UID/generación proceden de la frontera confiable. El [piloto Android separado](../09-planning/SHARED_SOURCES_PILOT.md) conecta un transporte HTTP exclusivo de emuladores: no hay callable documental exportado ni modificación de `memoryV2`.
 
 ### Transporte del piloto ficticio

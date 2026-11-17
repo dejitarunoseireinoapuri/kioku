@@ -1,5 +1,34 @@
 # Fuentes compartidas · evidencia por entrega
 
+## Preparación productiva posterior, sin instalar en Honor
+
+Kioku habitual prepara **Documentos**, Compartir y selector con su misma cuenta Google/App Check. El callable `referenceSources` admite catálogo, admisión/subida, estado/cancelación, lectura, olvido, consulta y web. Extraer no usa IA. Preguntar usa el proveedor protegido existente, Sol alto, respuesta y revisión independiente; con más de doce fragmentos añade expansión de búsqueda. Los emuladores no construyen ese proveedor: los tests inyectan dobles. No se persisten preguntas/respuestas; las citas se derivan en servidor. La época documental se comprueba antes de reservar IA, después de responder y en el cierre transaccional. Reautorizar tras extraer impide publicar después de revocar la sesión.
+
+Web preparada: HTTPS público compartido explícitamente; valida todas las IP DNS, fija el socket conservando TLS del hostname, revalida cada salto y limita a tres redirecciones, 25 segundos, 6 MiB y HTML/TXT/PDF. Sin scripts, cookies o descarga de vínculos encontrados en texto/IA. Guarda URL solicitada/final y fecha junto al texto, sin binario. Pruebas con red/HTML ficticios, sin acreditar sitios reales.
+
+Producción: **6 MiB por archivo**, cinco por lote y 25 MiB totales. Parser/piloto: 10 MiB internos. Hasta 200 páginas PDF, 200 000 caracteres, 128 fragmentos y 100 fuentes. Sin OCR/cifrados. **Preguntar del chat aún no mezcla documentos y recuerdos**; las preguntas documentales se hacen en Documentos. Los dobles no prueban comprensión real.
+
+Estado remoto: código/artefactos preparados; **sin despliegue del callable/índices ni instalación de esta revisión**. Sin claves nuevas, recuerdos personales o llamadas a OpenAI. Después de la orden de dejar el Honor bloqueado no se instala ni ejecuta nada en él. Activación, instalación conservando datos, cuenta/atestación, Drive real y respuesta real del proveedor quedan pendientes. La instrumentación del Honor descrita debajo pertenece al piloto anterior.
+
+### Comprobaciones de la revisión preparada
+
+| Comprobación | Resultado |
+| --- | --- |
+| Backend TypeScript y formato | Correctos; 60/60 pruebas Node |
+| Auth/Functions/Firestore aislados | 153/153; permisos, subida real al parser, replay, borrado, revocación durante respuesta y procedencia web con transporte ficticio |
+| KMP host | 151/151; incluye invalidación de respuesta natural/citas al cambiar pregunta o catálogo |
+| Android | mobileCheck: arquitectura, formato, Detekt, host y Lint debug; APK normal, instrumentado y piloto generados |
+| Dispositivos de esta revisión | No ejecutados; no se ha instalado en Honor/Samsung |
+| Documentación | Checker: 88 documentos, 16 ADR, enlaces/mapa/identificadores correctos |
+| Coste OpenAI de estas pruebas | 0; sin claves nuevas ni opciones Live |
+
+Registros locales: reference-production-unit.log, reference-production-emulators-verified.log y reference-production-mobile-accepted-final.log dentro de local-data. APK normal: androidApp/build/outputs/apk/debug/androidApp-debug.apk. Son compilaciones y tests locales, no aceptación remota, calidad real de Sol ni validación visual de esta revisión. Los fallos iniciales de cierre asíncrono/fixture/dependencias se corrigieron antes de estos resultados; no se redujeron checks.
+
+Documentos consultados y actualizados: convenciones/calidad, plan/evidencia/guía documental, ADR-016, contrato API/modelo de datos, seguridad/privacidad, requisitos, limitaciones y fuente visual. Se conservan intactos los recuerdos reales y el archivo local gradle-daemon-jvm.properties ajeno a este cambio.
+
+El propietario exige detenerse y suspender si queda solo 1 % semanal. Se consulta el indicador de Codex sin canjear reinicios. Al terminar se guarda el trabajo y se preparan dos intentos acotados de suspensión, evitando otra suspensión tras reanudar al día siguiente.
+
+
 **Petición vigente posterior:** el propietario aclara que la entrega instalada en Honor debe usar el backend/Firestore productivos y consultar la API para responder. Cero gasto API se aplica a las pruebas del agente, no al uso manual de la app. El piloto descrito debajo es evidencia intermedia y no satisface por sí solo esa entrega. Integración productiva en curso; no se considera desplegada o validada todavía.
 
 ## Continuación · piloto Android conectado · 2026-11-17

@@ -30,6 +30,13 @@ export const referenceSchema = z.strictObject({
   generation: z.uuid(),
   checksum: z.string(),
   document: documentSchema,
+  origin: z
+    .strictObject({
+      url: z.url().max(4096),
+      requestedUrl: z.url().max(4096).optional(),
+      readAt: z.int().nonnegative(),
+    })
+    .optional(),
 });
 export type ReferenceSource = z.infer<typeof referenceSchema>;
 export type Admission =
@@ -49,6 +56,12 @@ export class ReferenceStore {
   constructor(db: Firestore, now: () => number = Date.now) {
     this.db = db;
     this.now = now;
+  }
+
+  async epoch(uid: string, generation: string): Promise<number> {
+    return this.db.runTransaction(
+      async (tx) => (await this.state(tx, uid, generation)).state.epoch,
+    );
   }
 
   private refs(uid: string, generation: string) {
@@ -154,6 +167,7 @@ export class ReferenceStore {
     requestId: string,
     lease: string,
     document: ExtractedDocument,
+    origin?: { url: string; requestedUrl?: string; readAt: number },
   ): Promise<ReferenceSource> {
     z.uuid().parse(requestId);
     z.uuid().parse(lease);
@@ -189,6 +203,7 @@ export class ReferenceStore {
           generation,
           checksum: op.checksum,
           document,
+          ...(origin ? { origin } : {}),
         });
       if (!existing) {
         tx.create(refs.sources.doc(source.id), source);
@@ -234,13 +249,13 @@ export class ReferenceStore {
     await this.db.runTransaction(async (tx) => {
       const { refs, state } = await this.state(tx, uid, generation);
       const pending = await tx.get(
-        refs.operations
-          .where("stage", "==", "pending")
-          .where("expiresAt", "<=", this.now())
-          .limit(limits.sources),
+        refs.operations.where("stage", "==", "pending").limit(limits.sources),
       );
-      if (pending.empty) return;
-      for (const entry of pending.docs) {
+      const expired = pending.docs.filter(
+        (entry) => operationSchema.parse(entry.data()).expiresAt <= this.now(),
+      );
+      if (!expired.length) return;
+      for (const entry of expired) {
         const op = operationSchema.parse(entry.data());
         tx.set(entry.ref, {
           ...op,
@@ -249,7 +264,7 @@ export class ReferenceStore {
           stage: "cancelled",
         });
       }
-      tx.set(refs.root, { ...state, pending: state.pending - pending.size });
+      tx.set(refs.root, { ...state, pending: state.pending - expired.length });
     });
   }
 
@@ -319,6 +334,22 @@ export class ReferenceStore {
         sources: entries.docs.map((doc) => referenceSchema.parse(doc.data())),
       };
     });
+  }
+
+  async validate(
+    tx: Transaction,
+    uid: string,
+    generation: string,
+    epoch: number,
+  ) {
+    const current = await this.state(tx, uid, generation);
+    if (current.state.epoch !== epoch) throw new SourceError("conflict");
+  }
+
+  async assertCurrent(uid: string, generation: string, epoch: number) {
+    await this.db.runTransaction((tx) =>
+      this.validate(tx, uid, generation, epoch),
+    );
   }
 
   async forget(uid: string, generation: string, id: string, revision: string) {

@@ -1,5 +1,12 @@
 # Modelo lógico de datos
 
+## Preparación productiva de fuentes compartidas
+
+Catálogo separado `accounts/{uid}/referenceCatalogs/{generation}`: texto/versiones y revocaciones sin contenido. El original solo transita en RAM. Web añade `origin:{url,requestedUrl?,readAt}` validado y permite devolver esa procedencia en citas. La instantánea no se sincroniza con web/Drive. No introduce unidades personales, vectores o copias de recuerdos.
+
+Consultas documentales: ledger v2 con turn nulo, huella privada y respuesta terminal sin prosa, nunca historial. La transacción terminal comprueba la época documental. Se prepara excluir de índices `sources.document`. Expirar importaciones recorre hasta cien pendientes por estado, sin consultar expiresAt excluido de índices. La limpieza es al admitir nuevas operaciones; no se afirma limpieza programada activa. Sin migraciones o escrituras de datos reales. [Evidencia](../09-planning/SHARED_SOURCES_VALIDATION.md).
+
+
 El [piloto documental conectado](../09-planning/SHARED_SOURCES_PILOT.md) utiliza el catálogo de fuentes descrito debajo en Firestore Emulator, sin nuevas colecciones productivas. `operation` recupera únicamente el estado/lease o la fuente vigente autorizados; `verifyUpload` comprueba título/formato/huella y lease antes del parser. El móvil usa resúmenes sin texto para la lista y citas tipadas en RAM, con fuente/revisión/localizador; tras refrescar retira versiones que ya no estén en el catálogo. Las preguntas y sus coincidencias no se persisten.
 
 **Base local de fuentes de referencia:** texto extraído diferenciado de unidades personales, probado solo en emuladores. Bajo `accounts/{uid}/referenceCatalogs/{generation}`, la raíz contiene `epoch/count/pending`; `sources/{uuid}` guarda revisión UUID, título, fecha de importación, generación, huella y documento con formato/cobertura/fragmentos/localizadores. `content/{checksum}` deduplica dentro de la cuenta; `operations/{requestId}` conserva admisión/lease/estado/vencimiento y una huella opaca del comando. Al terminar/cancelar/expirar se vacían título y checksum de la operación. No guarda bytes, preguntas, respuestas o embeddings. Olvidar elimina fuente y deduplicación, aumenta época y crea `revocations/{uuid}` sin texto. Máximo 100 fuentes más pendientes. La consulta del catálogo es acotada; el piloto usa transporte local con emuladores, sin migración o transporte productivos. Procedencia URL, sustitución de versiones, índices/purga de generaciones y consulta mixta final pendientes. [Evidencia](../09-planning/SHARED_SOURCES_VALIDATION.md).

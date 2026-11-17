@@ -10,6 +10,7 @@ data class ReferenceWorkspaceState(
     val sources: List<ReferenceSummary> = emptyList(),
     val selected: ReferenceSummary? = null,
     val citations: List<ReferenceCitation> = emptyList(),
+    val answer: String? = null,
     val detail: List<ReferenceCitation> = emptyList(),
     val question: String = "",
     val web: String = "https://kioku.example.test/guia",

@@ -1,5 +1,7 @@
 # Archivos, Drive y webs compartidos con Kioku
 
+**Revisión productiva preparada:** la petición posterior exige Firestore real y respuestas por API al usar Kioku. El código añade Documentos/Compartir/selector, fuentes separadas, citas y borrado confirmado; web HTTPS pública con límites y sesión actual. Las pruebas del agente siguen usando solo fixtures/dobles y cero API. La activación remota queda pendiente; por la instrucción nocturna no se instala en Honor. Consulta conjunta con recuerdos, Drive privado, sincronización e iOS siguen pendientes. [Estado y pruebas](SHARED_SOURCES_VALIDATION.md).
+
 ## Estado, autorización y resultado
 
 **Aclaración vigente del propietario:** instalar en Honor la función productiva de Kioku, con archivos/texto extraído en Firestore real y respuestas mediante API. «Sin gastar API» limita las pruebas del agente; no bloquea las llamadas que el propietario haga al utilizar la app. El piloto separado sirve para validación local, no como entrega final. Integrar sesión/atestación y proveedor actuales sin cambiar la clave, sin acceder a recuerdos personales durante pruebas y sin migraciones/borrados de la memoria existente.

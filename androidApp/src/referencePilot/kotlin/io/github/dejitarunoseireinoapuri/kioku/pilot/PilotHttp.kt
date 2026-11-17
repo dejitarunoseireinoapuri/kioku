@@ -3,6 +3,7 @@ package io.github.dejitarunoseireinoapuri.kioku.pilot
 import android.os.SystemClock
 import io.github.dejitarunoseireinoapuri.kioku.domain.ReferenceFailure
 import io.github.dejitarunoseireinoapuri.kioku.domain.ReferenceIssue
+import io.github.dejitarunoseireinoapuri.kioku.platform.ReferenceRpc
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
@@ -13,13 +14,13 @@ import java.net.Proxy
 import java.net.URL
 
 /** This adapter has no configurable host, production credentials or AI endpoint. */
-internal class PilotHttp {
+internal class PilotHttp : ReferenceRpc {
     private var token: String? = null
     private var signedInAt = 0L
 
-    suspend fun post(
+    override suspend fun post(
         path: String,
-        payload: JSONObject = JSONObject(),
+        payload: JSONObject,
     ): JSONObject =
         withPilotCall { call ->
             try {

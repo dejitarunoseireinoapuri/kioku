@@ -9,7 +9,7 @@ export async function uploadReference(
   generation: string,
   input: unknown,
   lease: string,
-  signal?: AbortSignal,
+  options: { signal?: AbortSignal; reauthorize?: () => Promise<void> } = {},
 ) {
   const command = importSchema.parse(input);
   const bytes = decodeSource(command);
@@ -19,7 +19,8 @@ export async function uploadReference(
     .update(bytes)
     .digest("hex");
   await store.verifyUpload(uid, generation, { ...command, checksum }, lease);
-  const document = await extractIsolated(command.format, bytes, signal);
+  const document = await extractIsolated(command.format, bytes, options.signal);
+  await options.reauthorize?.();
   return {
     state: "ready" as const,
     source: await store.complete(
