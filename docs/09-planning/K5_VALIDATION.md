@@ -1,5 +1,23 @@
 # K5 · Voz local · 17 de noviembre de 2026
 
+## Revisión posterior · dictado en el editor
+
+El propietario sustituye mantener/bloquear por un toque para empezar, iconos X/Stop durante dictado y transcripción provisional en el campo. Stop deja borrador editable; no se interpreta ni envía hasta pulsar el envío normal. Escribir oculta el micrófono; borrar todo lo restaura. [ADR-015](../02-architecture/ADR/ADR-015-dictation-draft.md). Las evidencias siguientes de gestos de ADR-014 son históricas y no validan por sí solas esta revisión.
+
+Controles locales: `mobileCheck` y APK de app/tests correctos, 137 host tests sin fallos. Los once casos de estado se adaptan al nuevo contrato, manteniendo protección ante permisos, límites, resultado anticipado y callbacks tardíos. La batería UI comprueba texto provisional, X/Stop en lugar de micrófono/envío, edición del final sin petición y envío manual en el modo seleccionado; escritura/vaciado, accesibilidad, cancelación, interrupción, navegación y segundo plano. Solo repositorios/identidades ficticios, cero API y datos reales intactos.
+
+Se refuerza `LocalVoiceDeviceTest` para exigir texto provisional antes de Stop en el motor real de ambos teléfonos. No se simulan parciales para atribuirlos al reconocedor. Samsung: 1/1 en 17,565 s, parcial recibido antes de Stop y ambas frases conservadas. Honor: 11/11 en 60,774 s (ocho recorridos UI nuevos, dos de editor/teclado y el reconocedor reforzado). No hay envío al parar en las pruebas de UI; solo el envío manual posterior llega al repositorio ficticio.
+
+Ambos recibieron el APK con la nueva interacción. El Samsung se desconectó después de su prueba nativa y volvió a conectarse; entonces se actualizó también al APK definitivo (incluido el aviso de error acotado a cuatro líneas). Datos e instalaciones conservados. iOS y la automatización táctil Samsung siguen pendientes; no se reejecuta el puente ya conocido como incompatible.
+
+Pasada UI final Honor: 9/9, 35,838 s, con exportación de capturas ficticias. Incluye el caso adicional de Stop pendiente → X → resultado tardío: no restaura borrador ni envía. APK definitivo instalado conservando datos. Compilación, 137 host tests, formato/capas/Detekt/Lint y comprobador documental correctos (84 documentos, 15 ADR). No hay llamadas API ni despliegues. Se consultaron convenciones/calidad, requisitos/reglas, flujo de voz, privacidad, ADR-014 y referencia Stitch para esta adaptación.
+
+La exportación Compose del segundo estado produjo una imagen incompleta aunque las aserciones de UI pasaban; una repetición dirigida 1/1 (7,77 s) no resolvió esa limitación. No se presenta esa imagen como aceptación visual completa ni se altera la app para ocultarla. Un arnés con callback de fotograma quedó atascado y se detuvo expresamente el proceso ficticio; su salida «Process crashed» es una ejecución abortada, no una pasada. La captura se simplifica a la ventana de la Activity ficticia mediante [PixelCopy](https://developer.android.com/reference/android/view/PixelCopy) en el siguiente callback de animación, sin capturar otras aplicaciones ni añadir esperas arbitrarias. La hipótesis de reciclado del bitmap no resolvió la exportación y se descarta, restaurando el helper previo sin cambios.
+
+Revisión visual final: caso dirigido con PixelCopy 1/1 en 12,4 s. Se conserva la captura Compose completa de [dictado con X/Stop y parcial](../assets/branding/kioku-voice-inline-recording-honor.png) y la captura PixelCopy completa de [borrador editable con envío](../assets/branding/kioku-voice-inline-draft-honor.png). Cabecera, contenido, borde/prefijo del editor e iconos presentes en esas imágenes; micrófono/envío alternan según el estado solicitado. Otras exportaciones omitieron partes estáticas (también la primera ventana PixelCopy): se descartan como evidencia visual completa, sin atribuirles un borrado funcional o una garantía de renderizado continuo. Ambos teléfonos quedan con el APK definitivo; no se afirma auditoría de accesibilidad completa ni compilación iOS.
+
+## Evidencia histórica · mantener/bloquear
+
 ## Alcance
 
 Rama `codex/k5-voice`, sobre el núcleo v2 existente. Petición expresa: mantener para hablar, deslizar arriba para bloquear y tocar/Terminar para acabar; Cancelar descarta. Transcripción estrictamente local, respuestas escritas, sin gasto de API y solo fixtures. [Decisión técnica](../02-architecture/ADR/ADR-014-local-voice-input.md).

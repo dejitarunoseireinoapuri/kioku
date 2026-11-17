@@ -45,7 +45,9 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
 import io.github.dejitarunoseireinoapuri.kioku.feature.voice.LocalVoiceInteraction
 import io.github.dejitarunoseireinoapuri.kioku.feature.voice.MicrophoneButton
 import io.github.dejitarunoseireinoapuri.kioku.feature.voice.VoiceCaptureHost
+import io.github.dejitarunoseireinoapuri.kioku.feature.voice.VoiceControls
 import io.github.dejitarunoseireinoapuri.kioku.feature.voice.VoiceStatus
+import io.github.dejitarunoseireinoapuri.kioku.feature.voice.VoiceTranscriptField
 import io.github.dejitarunoseireinoapuri.kioku.feature.voice.busy
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.ask
@@ -54,7 +56,6 @@ import io.github.dejitarunoseireinoapuri.kioku.resources.clarify_placeholder
 import io.github.dejitarunoseireinoapuri.kioku.resources.offline_composer
 import io.github.dejitarunoseireinoapuri.kioku.resources.tell_action
 import io.github.dejitarunoseireinoapuri.kioku.resources.tell_placeholder
-import io.github.dejitarunoseireinoapuri.kioku.resources.voice_hint
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -144,32 +145,52 @@ private fun TextComposer(
                 modifier = Modifier.padding(end = KiokuSpacing.Small).clearAndSetSemantics {},
                 color = KiokuColors.Secondary,
             )
-            BasicTextField(
-                value = state.draft,
-                onValueChange = { onEvent(ConversationEvent.EditDraft(it)) },
-                modifier = Modifier.weight(1f).padding(vertical = 12.dp).testTag("text-composer"),
-                enabled = enabled,
-                maxLines = 4,
-                textStyle = MaterialTheme.typography.body1.copy(color = KiokuColors.Text),
-                cursorBrush = SolidColor(KiokuColors.Accent),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
-                keyboardActions = KeyboardActions(onSend = { onEvent(ConversationEvent.Submit) }),
-                decorationBox = { field ->
-                    Box {
-                        if (state.draft.isEmpty()) {
-                            Text(
-                                stringResource(placeholder(state)),
-                                color = KiokuColors.Secondary,
-                            )
-                        }
-                        field()
-                    }
-                },
-            )
-            SendAction(enabled && state.draft.isNotBlank()) { onEvent(ConversationEvent.Submit) }
-            MicrophoneButton(state.canEdit && LocalVoiceInput.current != null)
+            val editorModifier = Modifier.weight(1f).padding(vertical = 12.dp).testTag("text-composer")
+            if (LocalVoiceInteraction.current.state.busy) {
+                VoiceTranscriptField(editorModifier)
+            } else {
+                ComposerEditor(state, enabled, editorModifier, onEvent)
+            }
+            if (LocalVoiceInteraction.current.state.busy) {
+                VoiceControls()
+            } else if (state.draft.isEmpty()) {
+                MicrophoneButton(state.canEdit && LocalVoiceInput.current != null)
+            } else {
+                SendAction(enabled && state.draft.isNotBlank()) { onEvent(ConversationEvent.Submit) }
+            }
         }
     }
+}
+
+@Composable
+private fun ComposerEditor(
+    state: ConversationState,
+    enabled: Boolean,
+    modifier: Modifier,
+    onEvent: (ConversationEvent) -> Unit,
+) {
+    BasicTextField(
+        value = state.draft,
+        onValueChange = { onEvent(ConversationEvent.EditDraft(it)) },
+        modifier = modifier,
+        enabled = enabled,
+        maxLines = 4,
+        textStyle = MaterialTheme.typography.body1.copy(color = KiokuColors.Text),
+        cursorBrush = SolidColor(KiokuColors.Accent),
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
+        keyboardActions = KeyboardActions(onSend = { onEvent(ConversationEvent.Submit) }),
+        decorationBox = { field ->
+            Box {
+                if (state.draft.isEmpty()) {
+                    Text(
+                        stringResource(placeholder(state)),
+                        color = KiokuColors.Secondary,
+                    )
+                }
+                field()
+            }
+        },
+    )
 }
 
 @Composable

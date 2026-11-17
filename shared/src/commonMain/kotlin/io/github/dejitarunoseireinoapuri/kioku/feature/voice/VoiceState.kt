@@ -5,13 +5,10 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.VoiceIssue
 sealed interface VoiceState {
     data object Idle : VoiceState
 
-    data class Preparing(
-        val locked: Boolean = false,
-    ) : VoiceState
+    data object Preparing : VoiceState
 
     data class Listening(
         val text: String = "",
-        val locked: Boolean = false,
     ) : VoiceState
 
     data class Finishing(
@@ -25,15 +22,11 @@ sealed interface VoiceState {
 
     data class Completed(
         val text: String,
-        val submit: Boolean = true,
     ) : VoiceState
 }
 
 val VoiceState.busy: Boolean
     get() = this is VoiceState.Preparing || this is VoiceState.Listening || this is VoiceState.Finishing
-
-val VoiceState.locked: Boolean
-    get() = (this as? VoiceState.Listening)?.locked == true || (this as? VoiceState.Preparing)?.locked == true
 
 val VoiceState.transcript: String
     get() =
@@ -45,4 +38,4 @@ val VoiceState.transcript: String
             else -> ""
         }
 
-enum class VoiceAction { Press, Release, Lock, Finish, Cancel, Permission, KeepText, AccessibleToggle }
+enum class VoiceAction { Start, Finish, Cancel, Permission, KeepText }

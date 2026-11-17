@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
     <key>NSMicrophoneUsageDescription</key>
-    <string>Kioku usa el micrófono mientras mantienes el botón pulsado o lo dejas bloqueado.</string>
+    <string>Kioku usa el micrófono desde que inicias el dictado hasta que lo paras o cancelas.</string>
     <key>NSSpeechRecognitionUsageDescription</key>
     <string>Convertir tu voz en texto en el dispositivo para explicar recuerdos o preguntar.</string>
     <key>CFBundleURLTypes</key>

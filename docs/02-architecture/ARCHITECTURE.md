@@ -1,5 +1,7 @@
 # Arquitectura
 
+Dictado: [ADR-015](ADR/ADR-015-dictation-draft.md) separa transcripción de envío. `VoiceCaptureHost` entrega solo `EditDraft` al parar; los parciales son presentación y solo el envío manual posterior inicia los casos de memoria. Sustituye el gesto de mantener/bloquear de ADR-014.
+
 Revisión aceptada del 16 de noviembre: [núcleo de memoria v2](MEMORY_CORE_V2.md) y [ADR-012](ADR/ADR-012-independent-memory-units.md). Conserva estas fronteras y replantea evidencia, identidad y mutaciones. El [motor determinista R1](../09-planning/R1_VALIDATION.md) se prueba de forma aislada en RAM; interpretación, adaptación Firebase/app y migración siguen pendientes antes de sustituir K2–K4.
 
 La evaluación [R2](../09-planning/R2_VALIDATION.md) añade un adaptador aislado de interpretación/revisión con Sol medio y materialización literal antes de R1. Su consulta usa un catálogo RAM completo acotado a 32 unidades: no constituye todavía el buscador escalable ni un servidor activable. No se importa desde el backend actual. Captura/corrección proponen datos; el modelo nunca decide el delta del olvido confirmado ni las precondiciones de escritura.

@@ -14,24 +14,25 @@ class VoiceViewModelTest {
     private val input = VoiceFixture()
     private val model = VoiceViewModel(input)
 
-    @Test fun heldSpeechOnlyCompletesAfterRelease() {
-        model.act(VoiceAction.Press)
+    @Test fun dictationOnlyCompletesAfterExplicitStop() {
+        model.act(VoiceAction.Start)
         input.observer.ready()
         input.observer.partial("Plan ficticio")
         assertIs<VoiceState.Listening>(model.state.value)
         assertEquals(0, input.finishes)
-        model.act(VoiceAction.Release)
+        model.act(VoiceAction.Finish)
         assertIs<VoiceState.Finishing>(model.state.value)
         input.observer.completed("Plan ficticio")
         assertEquals(VoiceState.Completed("Plan ficticio"), model.state.value)
     }
 
-    @Test fun lockedSpeechSurvivesReleaseAndOnlyFinishesOnce() {
-        model.act(VoiceAction.Press)
-        model.act(VoiceAction.Lock)
+    @Test fun repeatedStartNeverRestartsOrFinishesDictation() {
+        model.act(VoiceAction.Start)
+        model.act(VoiceAction.Start)
         input.observer.ready()
-        model.act(VoiceAction.Release)
-        assertEquals(VoiceState.Listening(locked = true), model.state.value)
+        model.act(VoiceAction.Start)
+        assertEquals(VoiceState.Listening(), model.state.value)
+        assertEquals(1, input.begins)
         assertEquals(0, input.finishes)
         model.act(VoiceAction.Finish)
         model.act(VoiceAction.Finish)
@@ -39,37 +40,37 @@ class VoiceViewModelTest {
     }
 
     @Test fun cancellationRejectsLateAndPreviousSessionEvents() {
-        model.act(VoiceAction.Press)
+        model.act(VoiceAction.Start)
         val obsolete = input.observer
         model.cancel()
         obsolete.completed("Dato ficticio descartado")
         assertEquals(VoiceState.Idle, model.state.value)
-        model.act(VoiceAction.Press)
+        model.act(VoiceAction.Start)
         obsolete.ready()
         obsolete.failed(VoiceIssue.Interrupted)
         assertIs<VoiceState.Preparing>(model.state.value)
     }
 
     @Test fun earlyNativeCompletionNeverBecomesASubmittedMessage() {
-        model.act(VoiceAction.Press)
+        model.act(VoiceAction.Start)
         input.observer.ready()
         input.observer.completed("Intervención ficticia cortada")
         assertEquals(VoiceState.Failed(VoiceIssue.Interrupted, "Intervención ficticia cortada"), model.state.value)
     }
 
     @Test fun failureRetainsTextOnlyForExplicitEditingWithoutAutomaticSubmission() {
-        model.act(VoiceAction.Press)
+        model.act(VoiceAction.Start)
         input.observer.ready()
         input.observer.partial("Texto ficticio parcial")
         input.observer.failed(VoiceIssue.Interrupted)
         model.act(VoiceAction.KeepText)
-        assertEquals(VoiceState.Completed("Texto ficticio parcial", submit = false), model.state.value)
+        assertEquals(VoiceState.Completed("Texto ficticio parcial"), model.state.value)
         model.consume()
         assertEquals(VoiceState.Idle, model.state.value)
     }
 
     @Test fun missingPermissionDoesNotStartAgainUntilAnotherGesture() {
-        model.act(VoiceAction.Press)
+        model.act(VoiceAction.Start)
         input.observer.failed(VoiceIssue.Permission)
         model.act(VoiceAction.Permission)
         assertEquals(1, input.permissions)
@@ -78,25 +79,25 @@ class VoiceViewModelTest {
     }
 
     @Test fun blankFinalTextDoesNotProduceAMessage() {
-        model.act(VoiceAction.Press)
+        model.act(VoiceAction.Start)
         input.observer.ready()
-        model.act(VoiceAction.Release)
+        model.act(VoiceAction.Finish)
         input.observer.completed("  ")
         assertEquals(VoiceState.Failed(VoiceIssue.NoSpeech), model.state.value)
     }
 
-    @Test fun accessibilityStartsLockedAndStopsOnTheNextActivation() {
-        model.act(VoiceAction.AccessibleToggle)
+    @Test fun aStartActionWaitsForTheSeparateStopAction() {
+        model.act(VoiceAction.Start)
         input.observer.ready()
-        assertEquals(VoiceState.Listening(locked = true), model.state.value)
-        model.act(VoiceAction.AccessibleToggle)
+        assertEquals(VoiceState.Listening(), model.state.value)
+        model.act(VoiceAction.Finish)
         assertIs<VoiceState.Finishing>(model.state.value)
         assertEquals(1, input.finishes)
     }
 
-    @Test fun quickReleaseAndLateReadyNeverReopenTheMicrophoneState() {
-        model.act(VoiceAction.Press)
-        model.act(VoiceAction.Release)
+    @Test fun quickStopAndLateReadyNeverReopenTheMicrophoneState() {
+        model.act(VoiceAction.Start)
+        model.act(VoiceAction.Finish)
         input.observer.ready()
         assertIs<VoiceState.Finishing>(model.state.value)
         input.observer.completed("Prueba ficticia")
@@ -106,18 +107,18 @@ class VoiceViewModelTest {
 
     @Test fun oversizedFinalTextNeverSubmitsATruncatedMessage() {
         model.setTextLimit(5)
-        model.act(VoiceAction.Press)
+        model.act(VoiceAction.Start)
         input.observer.ready()
-        model.act(VoiceAction.Release)
+        model.act(VoiceAction.Finish)
         input.observer.completed("Nara ficticia")
         assertEquals(VoiceState.Failed(VoiceIssue.TooLong, "Nara "), model.state.value)
         model.act(VoiceAction.KeepText)
-        assertEquals(VoiceState.Completed("Nara ", submit = false), model.state.value)
+        assertEquals(VoiceState.Completed("Nara "), model.state.value)
     }
 
     @Test fun oversizedPartialStopsAndRejectsLateFinal() {
         model.setTextLimit(5)
-        model.act(VoiceAction.Press)
+        model.act(VoiceAction.Start)
         input.observer.ready()
         input.observer.partial("Nara ficticia")
         input.observer.completed("Nara ficticia")

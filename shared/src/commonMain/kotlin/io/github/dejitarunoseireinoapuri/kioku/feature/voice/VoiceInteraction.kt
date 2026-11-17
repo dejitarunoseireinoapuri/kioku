@@ -60,11 +60,12 @@ private fun NativeVoiceHost(
         if (conversation.canEdit) {
             val text = listOf(initialDraft, result.text).filter(String::isNotBlank).joinToString(" ")
             onEvent(ConversationEvent.EditDraft(text))
-            if (result.submit) onEvent(ConversationEvent.Submit)
         }
     }
-    val action: (VoiceAction) -> Unit = { event ->
-        if ((event == VoiceAction.Press || event == VoiceAction.AccessibleToggle) && !state.busy) {
+    val canStart = conversation.canEdit && conversation.draft.isEmpty()
+    val action: (VoiceAction) -> Unit = act@{ event ->
+        if (event == VoiceAction.Start) {
+            if (!canStart || state.busy) return@act
             initialDraft = conversation.draft
             model.setTextLimit(conversation.inputLimit - initialDraft.length - if (initialDraft.isBlank()) 0 else 1)
             focus.clearFocus(force = true)

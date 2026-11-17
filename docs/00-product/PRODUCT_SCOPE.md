@@ -4,7 +4,7 @@
 
 - Contar por voz o escribir cualquier dato personal que se quiera conservar.
 - Dos intenciones: **Contar un recuerdo** y **Preguntar**.
-- Mantener pulsado para hablar; soltar para terminar; deslizar arriba para bloquear y continuar con manos libres; tocar de nuevo o Terminar para acabar, o Cancelar para descartar. Transcripción local, sin fallback remoto.
+- Tocar el micrófono para dictar localmente; X cancela y Stop deja el texto como borrador editable para envío manual. Transcripción visible en el campo mientras se habla, sin fallback remoto. Escribir oculta el micrófono; vaciar el campo lo restaura.
 - Aclaraciones escritas posteriores a la intervención, con respuesta por voz o texto en el editor normal. Guardado automático al quedar claro el contenido.
 - Separación de asuntos y conexiones automáticas sin clasificación manual.
 - Consultas contextuales y temporales, respuesta siempre escrita, con gestión de fuentes vigentes accesible.

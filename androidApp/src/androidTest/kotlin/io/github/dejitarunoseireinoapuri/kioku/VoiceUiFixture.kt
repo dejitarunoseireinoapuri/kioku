@@ -20,6 +20,7 @@ internal class VoiceUiFixture : VoiceInput {
     var cancels = 0
     var permissions = 0
     var issue: VoiceIssue? = null
+    var completesImmediately = true
     val finalText = "¿Qué plan ficticio tiene Nara?"
 
     override fun begin(observer: VoiceObserver) {
@@ -31,7 +32,7 @@ internal class VoiceUiFixture : VoiceInput {
 
     override fun finish() {
         finishes++
-        observer.completed(finalText)
+        if (completesImmediately) observer.completed(finalText)
     }
 
     override fun cancel() {

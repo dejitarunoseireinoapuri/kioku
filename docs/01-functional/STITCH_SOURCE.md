@@ -1,5 +1,7 @@
 # Fuente visual y autoridad
 
+Refinamiento posterior de dictado: se reinspecciona por MCP la referencia K5 `626d38e8dc564645b4e6b00a77a27d33` y su HTML, sin editar Stitch. La petición nueva sustituye su panel por controles compactos X/Stop en el campo, parciales en ese mismo campo y borrador editable tras parar; no hay envío automático. Vacío muestra micrófono; con texto aparece envío. Mantiene Matrix, transparencia, atenuación y objetivos de 48 dp. [ADR-015](../02-architecture/ADR/ADR-015-dictation-draft.md).
+
 Voz K5, 17 de noviembre: inspeccionada por MCP la pantalla bloqueada `626d38e8dc564645b4e6b00a77a27d33` del proyecto `9967462127248946713`, sin editar Stitch. Se adaptan micrófono, estado, cancelar/terminar y transcripción al Matrix A Terminal vigente, con lectura atenuada una sola vez y controles transparentes. No se copia una onda o temporizador ficticios. La petición posterior elimina respuestas habladas: no se muestra Escuchar respuesta. [Decisión y límites](../02-architecture/ADR/ADR-014-local-voice-input.md).
 
 Petición posterior del 17 de noviembre: «Letras cayendo» pasa a «Katakana cayendo». La pantalla existente de logo/estado continúa durante la comprobación de memoria de entrada y al reanudar con contenido oculto; solo cambia el texto bajo el icono y después se abre la conversación. Las referencias «02 Entrando» y «09 Ajustes» de A se consultan de nuevo por MCP, esta vez disponibles; no se edita Stitch. No se modifica el splash del sistema ni se añade tiempo artificial.

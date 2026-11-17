@@ -11,13 +11,11 @@ import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
 import io.github.dejitarunoseireinoapuri.kioku.domain.VoiceIssue
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.voice_cancel
-import io.github.dejitarunoseireinoapuri.kioku.resources.voice_finish
 import io.github.dejitarunoseireinoapuri.kioku.resources.voice_finishing
 import io.github.dejitarunoseireinoapuri.kioku.resources.voice_interrupted
 import io.github.dejitarunoseireinoapuri.kioku.resources.voice_keep_text
 import io.github.dejitarunoseireinoapuri.kioku.resources.voice_language_missing
 import io.github.dejitarunoseireinoapuri.kioku.resources.voice_listening
-import io.github.dejitarunoseireinoapuri.kioku.resources.voice_locked
 import io.github.dejitarunoseireinoapuri.kioku.resources.voice_no_speech
 import io.github.dejitarunoseireinoapuri.kioku.resources.voice_permission
 import io.github.dejitarunoseireinoapuri.kioku.resources.voice_permission_action
@@ -39,8 +37,6 @@ fun VoiceStatus() {
             ),
             color = KiokuColors.Accent,
         )
-        if (state.transcript.isNotBlank()) Text(state.transcript, maxLines = 4, overflow = TextOverflow.Ellipsis)
-        if (state.locked) ActionButton(stringResource(Res.string.voice_finish), { interaction.act(VoiceAction.Finish) })
         if (state is VoiceState.Failed && state.issue == VoiceIssue.Permission) {
             ActionButton(
                 stringResource(Res.string.voice_permission_action),
@@ -50,14 +46,17 @@ fun VoiceStatus() {
         if (state is VoiceState.Failed && state.text.isNotBlank()) {
             ActionButton(stringResource(Res.string.voice_keep_text), { interaction.act(VoiceAction.KeepText) })
         }
-        ActionButton(stringResource(Res.string.voice_cancel), { interaction.act(VoiceAction.Cancel) })
+        if (state is VoiceState.Failed) {
+            if (state.text.isNotBlank()) Text(state.text, maxLines = 4, overflow = TextOverflow.Ellipsis)
+            ActionButton(stringResource(Res.string.voice_cancel), { interaction.act(VoiceAction.Cancel) })
+        }
     }
 }
 
 private fun voiceStatusText(state: VoiceState) =
     when (state) {
         is VoiceState.Preparing -> Res.string.voice_preparing
-        is VoiceState.Listening -> if (state.locked) Res.string.voice_locked else Res.string.voice_listening
+        is VoiceState.Listening -> Res.string.voice_listening
         is VoiceState.Finishing -> Res.string.voice_finishing
         is VoiceState.Failed -> voiceIssueText(state.issue)
         else -> Res.string.voice_unavailable

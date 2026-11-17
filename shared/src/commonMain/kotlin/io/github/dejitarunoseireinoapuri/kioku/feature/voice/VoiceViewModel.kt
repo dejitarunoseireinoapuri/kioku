@@ -21,16 +21,8 @@ class VoiceViewModel(
 
     fun act(action: VoiceAction) {
         when (action) {
-            VoiceAction.Press -> {
+            VoiceAction.Start -> {
                 begin()
-            }
-
-            VoiceAction.Release -> {
-                if (!state.value.locked) finish()
-            }
-
-            VoiceAction.Lock -> {
-                lock()
             }
 
             VoiceAction.Finish -> {
@@ -48,30 +40,19 @@ class VoiceViewModel(
             VoiceAction.KeepText -> {
                 keepText()
             }
-
-            VoiceAction.AccessibleToggle -> {
-                if (state.value.busy) {
-                    finish()
-                } else {
-                    begin()
-                    lock()
-                }
-            }
         }
     }
 
     private fun begin() {
         if (state.value.busy || state.value is VoiceState.Completed) return
         val epoch = ++generation
-        mutableState.value = VoiceState.Preparing()
+        mutableState.value = VoiceState.Preparing
         input.begin(
             object : VoiceObserver {
                 override fun ready() {
                     if (epoch != generation) return
-                    val current = state.value
-                    if (current is VoiceState.Preparing) {
-                        mutableState.value =
-                            VoiceState.Listening(locked = current.locked)
+                    if (state.value is VoiceState.Preparing) {
+                        mutableState.value = VoiceState.Listening()
                     }
                 }
 
@@ -110,15 +91,6 @@ class VoiceViewModel(
         )
     }
 
-    private fun lock() {
-        mutableState.value =
-            when (val current = state.value) {
-                is VoiceState.Preparing -> current.copy(locked = true)
-                is VoiceState.Listening -> current.copy(locked = true)
-                else -> current
-            }
-    }
-
     private fun rejectOversized(text: String): Boolean {
         if (text.length <= textLimit) return false
         generation++
@@ -135,7 +107,7 @@ class VoiceViewModel(
 
     private fun keepText() {
         val current = state.value as? VoiceState.Failed ?: return
-        if (current.text.isNotBlank()) mutableState.value = VoiceState.Completed(current.text, submit = false)
+        if (current.text.isNotBlank()) mutableState.value = VoiceState.Completed(current.text)
     }
 
     fun consume() {

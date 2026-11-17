@@ -1,5 +1,7 @@
 # ADR-014 · Entrada de voz local y respuestas escritas
 
+**Sustitución posterior:** [ADR-015](ADR-015-dictation-draft.md) retira mantener/bloquear y el envío al terminar, por petición expresa del propietario. Conserva las decisiones de reconocimiento local, limpieza, límites y compatibilidad de esta ADR. La evidencia de gestos de esta versión permanece histórica.
+
 - Estado: implementada en `codex/k5-voice`; Android probado con fixtures; iOS pendiente de macOS.
 - Fecha: 2026-11-17.
 

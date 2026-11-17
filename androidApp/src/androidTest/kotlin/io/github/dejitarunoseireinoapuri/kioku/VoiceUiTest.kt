@@ -1,27 +1,21 @@
 package io.github.dejitarunoseireinoapuri.kioku
 
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextContains
-import androidx.compose.ui.test.captureToImage
-import androidx.compose.ui.test.click
-import androidx.compose.ui.test.down
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
-import androidx.compose.ui.test.moveBy
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performSemanticsAction
+import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
-import androidx.compose.ui.test.performTouchInput
-import androidx.compose.ui.test.up
+import androidx.compose.ui.test.performTextReplacement
 import androidx.lifecycle.Lifecycle
 import io.github.dejitarunoseireinoapuri.kioku.di.LocalVoiceInput
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextIntent
@@ -56,59 +50,84 @@ class VoiceUiTest {
         compose.runOnUiThread { LifecycleTestActivity.content = null }
     }
 
-    @Test fun holdAndReleaseSendsOnlyTheFinalLocalTranscriptInTheSelectedMode() {
-        compose.onNodeWithTag("voice-microphone").performTouchInput { down(center) }
+    @Test fun tapShowsLiveTextAndStopOnlyCreatesAnEditableDraft() {
+        compose.onNodeWithTag("send-action").assertDoesNotExist()
+        compose.onNodeWithTag("voice-microphone").performClick()
+        compose.onNodeWithTag("voice-microphone").assertDoesNotExist()
+        compose.onNodeWithTag("voice-cancel").assertIsDisplayed()
+        compose.onNodeWithTag("voice-stop").assertIsDisplayed()
+        compose.runOnIdle { voice.observer.partial("Plan ficticio provisional") }
+        compose.onNodeWithTag("text-composer").assertIsNotEnabled().assertTextContains("Plan ficticio provisional")
+        compose.onNodeWithTag("send-action").assertDoesNotExist()
+        captureVoiceWindow(compose.activity, "kioku-voice-inline-recording.png")
+        compose.onNodeWithTag("voice-stop").performClick()
+        compose.onNodeWithTag("text-composer").assertIsEnabled().assertTextContains(voice.finalText)
+        compose.onNodeWithTag("voice-cancel").assertDoesNotExist()
+        compose.onNodeWithTag("voice-stop").assertDoesNotExist()
+        compose.onNodeWithTag("voice-microphone").assertDoesNotExist()
         compose.runOnIdle {
-            voice.observer.partial("Texto provisional ficticio")
             assertEquals(0, messages.commands.size)
-        }
-        compose.onNodeWithTag("text-composer").assertIsNotEnabled()
-        compose.onNodeWithTag("voice-microphone").performTouchInput { up() }
-        compose.waitUntil(5000) { messages.commands.size == 1 }
-        compose.runOnIdle {
-            assertEquals(voice.finalText, messages.commands.single().text)
-            assertEquals(TextIntent.Ask, messages.commands.single().intent)
             assertEquals(1, voice.finishes)
         }
-    }
-
-    @Test fun upwardLockSurvivesReleaseUntilTheMicrophoneIsTapped() {
-        val distance = 80 * compose.activity.resources.displayMetrics.density
-        compose.onNodeWithTag("voice-microphone").performTouchInput {
-            down(center)
-            moveBy(Offset(0f, -distance))
-            up()
-        }
-        compose.onNodeWithText("Micrófono bloqueado. Pulsa para terminar.").assertIsDisplayed()
-        compose.runOnIdle {
-            voice.observer.partial("Intervención ficticia bloqueada")
-            assertEquals(0, voice.finishes)
-        }
-        captureBrandScreen(compose.activity, "kioku-local-voice-locked.png") { compose.onRoot().captureToImage() }
-        compose.onNodeWithTag("voice-microphone").performTouchInput { click() }
+        captureVoiceWindow(compose.activity, "kioku-voice-inline-draft.png")
+        compose.onNodeWithTag("text-composer").performTextReplacement("¿Qué plan ficticio tiene Lira?")
+        compose.onNodeWithTag("send-action").performClick()
         compose.waitUntil(5000) { messages.commands.size == 1 }
-        compose.runOnIdle { assertEquals(1, voice.finishes) }
+        compose.runOnIdle {
+            assertEquals("¿Qué plan ficticio tiene Lira?", messages.commands.single().text)
+            assertEquals(TextIntent.Ask, messages.commands.single().intent)
+        }
     }
 
-    @Test fun cancellationDiscardsSpeechAndLateResults() {
-        accessibleMicrophone()
-        compose.onNodeWithText("Cancelar voz").performClick()
-        compose.runOnIdle { voice.observer.completed("Dato ficticio cancelado") }
+    @Test fun typingHidesMicrophoneAndClearingEverythingRestoresIt() {
+        compose.onNodeWithTag("text-composer").performTextInput("Texto ficticio")
+        compose.onNodeWithTag("voice-microphone").assertDoesNotExist()
+        compose.onNodeWithTag("send-action").assertIsEnabled()
+        compose.onNodeWithTag("text-composer").performTextClearance()
+        compose.onNodeWithTag("send-action").assertDoesNotExist()
+        compose.onNodeWithTag("voice-microphone").assertIsDisplayed()
+        compose.runOnIdle { assertEquals(0, voice.begins) }
+    }
+
+    @Test fun cancellationDiscardsPartialSpeechAndLateResults() {
+        startAccessibly()
+        compose.runOnIdle { voice.observer.partial("Dato ficticio descartado") }
+        compose.onNodeWithTag("voice-cancel").performClick()
+        compose.runOnIdle { voice.observer.completed("Dato ficticio tardío") }
         compose.onNodeWithTag("text-composer").assertTextContains("")
+        compose.onNodeWithTag("voice-microphone").assertIsDisplayed()
+        compose.onNodeWithTag("send-action").assertDoesNotExist()
         compose.runOnIdle { assertEquals(0, messages.commands.size) }
     }
 
-    @Test fun accessibleTogglePreservesAnExistingDraftAndEndsOnTheSecondActivation() {
-        compose.onNodeWithTag("text-composer").performTextInput("Contexto ficticio.")
-        accessibleMicrophone()
-        compose.onNodeWithText("Micrófono bloqueado. Pulsa para terminar.").assertIsDisplayed()
-        accessibleMicrophone()
-        compose.waitUntil(5000) { messages.commands.size == 1 }
-        compose.runOnIdle { assertEquals("Contexto ficticio. ${voice.finalText}", messages.commands.single().text) }
+    @Test fun cancellingWhileWaitingForFinalTextCannotRestoreTheDraftLater() {
+        voice.completesImmediately = false
+        startAccessibly()
+        compose.runOnIdle { voice.observer.partial("Texto ficticio provisional") }
+        compose.onNodeWithTag("voice-stop").performClick()
+        compose.onNodeWithTag("voice-stop").assertIsNotEnabled()
+        compose.onNodeWithTag("send-action").assertDoesNotExist()
+        compose.onNodeWithTag("voice-cancel").performClick()
+        compose.runOnIdle { voice.observer.completed("Texto ficticio final tardío") }
+        compose.onNodeWithTag("text-composer").assertTextContains("")
+        compose.onNodeWithTag("voice-microphone").assertIsDisplayed()
+        compose.runOnIdle { assertEquals(0, messages.commands.size) }
+    }
+
+    @Test fun accessibleStartAndStopUseSeparateNamedIconActions() {
+        startAccessibly()
+        compose.onNodeWithContentDescription("Cancelar voz").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Parar dictado").performSemanticsAction(SemanticsActions.OnClick) { it() }
+        compose.onNodeWithTag("text-composer").assertTextContains(voice.finalText)
+        compose.runOnIdle {
+            assertEquals(1, voice.begins)
+            assertEquals(1, voice.finishes)
+            assertEquals(0, messages.commands.size)
+        }
     }
 
     @Test fun interruptedSpeechCanBeEditedButNeverAutomaticallySubmitted() {
-        accessibleMicrophone()
+        startAccessibly()
         compose.runOnIdle {
             voice.observer.partial("Texto ficticio incompleto")
             voice.observer.failed(VoiceIssue.Interrupted)
@@ -119,7 +138,7 @@ class VoiceUiTest {
     }
 
     @Test fun navigatingAwayCancelsTheMicrophoneAndRejectsLateCallbacks() {
-        accessibleMicrophone()
+        startAccessibly()
         compose.onNodeWithContentDescription("Ajustes").performClick()
         compose.runOnIdle {
             assertTrue(voice.cancels > 0)
@@ -131,7 +150,7 @@ class VoiceUiTest {
     }
 
     @Test fun backgroundStopsTheSessionWithoutSubmittingOrRestartingIt() {
-        accessibleMicrophone()
+        startAccessibly()
         compose.activityRule.scenario.moveToState(Lifecycle.State.STARTED)
         compose.runOnUiThread { voice.observer.completed("Dato ficticio tras salir") }
         compose.activityRule.scenario.moveToState(Lifecycle.State.RESUMED)
@@ -142,19 +161,19 @@ class VoiceUiTest {
         }
     }
 
-    @Test fun deniedPermissionKeepsTextEntryAvailableAndRequiresANewGestureAfterGrant() {
+    @Test fun deniedPermissionKeepsTextEntryAvailableAndRequiresAnotherTap() {
         voice.issue = VoiceIssue.Permission
-        accessibleMicrophone()
+        startAccessibly()
         compose.onNodeWithText("Permitir micrófono").performClick()
         compose.onNodeWithTag("text-composer").assertIsEnabled()
         compose.runOnIdle {
             assertEquals(1, voice.permissions)
             assertEquals(1, voice.begins)
+            assertEquals(0, messages.commands.size)
         }
-        compose.runOnIdle { assertEquals(0, messages.commands.size) }
     }
 
-    private fun accessibleMicrophone() {
+    private fun startAccessibly() {
         compose.onNodeWithTag("voice-microphone").performSemanticsAction(SemanticsActions.OnClick) { it() }
     }
 }

@@ -30,6 +30,8 @@ La clave API se maneja mediante la frontera de secretos. Un relato puede contene
 
 ## Transcripción local
 
+El flujo posterior de [ADR-015](../02-architecture/ADR/ADR-015-dictation-draft.md) inicia al tocar el micrófono y termina con X/Stop. Stop conserva únicamente el texto final en el borrador RAM; no lo manda al servidor. Solo Enviar, después de revisar/editar si se desea, inicia el procesamiento normal de memoria. Los parciales visibles nunca son evidencia ni un comando pendiente.
+
 Pedir micrófono en contexto al primer uso de voz, con alternativa escrita si se deniega. Conceder permiso requiere otra acción explícita para empezar. No solicitar cámara, galería, contactos, ubicación, notificaciones ni escucha en segundo plano para V1.
 
 La transcripción usa exclusivamente reconocimiento local nativo, sin fallback remoto ni descargas automáticas. El audio de producto permanece en buffers/pipe temporales, sin archivos, y se libera al terminar/cancelar/fallar/pausar. No hay respuestas habladas. Solo el texto final autorizado llega al circuito de memoria existente; su interpretación/respuesta sí puede procesarse en servidor/proveedor, con las retenciones ya descritas. No afirmar que todo Kioku funciona localmente o gratis. Compatibilidad y límites en [ADR-014](../02-architecture/ADR/ADR-014-local-voice-input.md); pruebas ficticias y pendientes en [K5](../09-planning/K5_VALIDATION.md).

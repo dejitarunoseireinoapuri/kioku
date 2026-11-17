@@ -2,7 +2,7 @@
 
 ## Voz local
 
-Intención Contar/Preguntar → mantener micrófono → transcripción provisional local → soltar → finalizar → enviar texto al circuito existente. Deslizar arriba bloquea: soltar conserva captura; tocar de nuevo o Terminar cierra el audio y espera el resultado final. Cancelar descarta. Activación accesible inicia bloqueada y la siguiente termina. Pausas no envían; salida/segundo plano cancela. Error o límite no envían y permiten recuperar explícitamente la parte recogida al editor. Permiso concedido necesita un nuevo gesto; sin motor/modelo local se ofrece escribir, sin nube alternativa. Las aclaraciones y respuestas aparecen por escrito; se puede contestar por voz o texto en el mismo editor. [Límites y pruebas](../09-planning/K5_VALIDATION.md).
+Intención Contar/Preguntar → tocar micrófono → X/Stop y transcripción local en el campo → Stop → texto final como borrador editable → enviar manualmente. X descarta parciales y resultados tardíos. El envío desaparece durante dictado/finalización; el micrófono desaparece si hay texto y reaparece al vaciarlo. No hay mantener/bloquear ni envío al parar. Las mismas acciones tienen nombres accesibles. Pausas no envían; salida/segundo plano cancela. Error o límite no envían y permiten recuperar explícitamente la parte recogida al editor. Permiso concedido necesita otro toque; sin motor/modelo local se ofrece escribir, sin nube alternativa. Las aclaraciones y respuestas aparecen por escrito. [ADR-015](../02-architecture/ADR/ADR-015-dictation-draft.md), [límites y pruebas](../09-planning/K5_VALIDATION.md).
 
 ## Entrada y comprobación de memoria
 

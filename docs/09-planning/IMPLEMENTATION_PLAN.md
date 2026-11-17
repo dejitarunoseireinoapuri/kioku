@@ -1,5 +1,7 @@
 # Fases de Kioku
 
+**Último refinamiento vigente:** el propietario sustituye mantener/bloquear y el panel de botones por toque → X/Stop en el campo, transcripción provisional visible y borrador editable al parar. Escribir oculta el micrófono; vaciar lo restaura. Solo Enviar inicia memoria. [ADR-015](../02-architecture/ADR/ADR-015-dictation-draft.md) prevalece sobre el gesto histórico de K5 descrito debajo; continúan solo pruebas ficticias sin API.
+
 **Decisión posterior vigente · 17 de noviembre:** implementar voz en `codex/k5-voice`, transcripción exclusivamente local, mantener/deslizar para bloquear/tocar para terminar y sin respuestas habladas. Pruebas solo ficticias en Samsung/Honor, sin API pagada. Sustituye las indicaciones anteriores de no iniciar K5 y las salidas habladas del plan original. [Evidencia y pendientes](K5_VALIDATION.md). No autoriza despliegues ni integración en main.
 
 **Petición posterior del 17 de noviembre:** crear `codex/k5-voice` desde el main integrado y resolver primero ajustes de letras cayendo, huecos de ayudas y margen inferior para gestos. La rama queda creada para voz, pero esta entrega no implementa todavía K5 ni autoriza gasto de API. Esta petición sustituye únicamente la indicación anterior de no abrir su rama.

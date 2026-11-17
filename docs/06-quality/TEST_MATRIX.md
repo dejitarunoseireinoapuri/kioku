@@ -1,5 +1,7 @@
 # Matriz de aceptación y evidencia prevista
 
+Revisión ADR-015: K5 comprueba inicio por toque, X/Stop y ausencia de envío durante dictado, parciales en el campo, Stop al borrador sin petición, edición/envío manual, restauración del micrófono al vaciar y cancelación con final tardío. Se exige también parcial antes de Stop al reconocedor real. La cobertura de mantener/bloquear descrita debajo queda histórica.
+
 K5 local: [evidencia](../09-planning/K5_VALIDATION.md) cubre estado/generaciones/límites en host, gestos y cancelación con dobles en Honor, motor local español con audio ficticio y permiso/pipe en ambos teléfonos. No acredita micrófono humano/ruido, gestos Samsung ni iOS. Respuestas siempre escritas según ADR-014.
 
 Continuación final R2: asignación global única acotada, 512 grafos de control, rechazo de anclas/evidencia incorrectas, canónicos contaminados, tipos/dirección de relaciones y cierre de dependencias explícitamente autorizado en fixtures. 122 pruebas del núcleo y 224 raíz correctas. Las regresiones expuestas y sus límites constan en la [evidencia final](../09-planning/R2_ASSIGNMENT_VALIDATION.md); R2 sigue abierta y los resultados históricos siguientes no se recalifican.

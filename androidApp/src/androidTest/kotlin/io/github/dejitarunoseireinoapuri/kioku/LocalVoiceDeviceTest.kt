@@ -28,6 +28,7 @@ class LocalVoiceDeviceTest {
             val first = fixtures.create("El personaje ficticio Nara quiere visitar el planetario el martes.")
             val second = fixtures.create("También quiere comprar un cuaderno de color violeta.")
             val completed = CountDownLatch(1)
+            val provisional = CountDownLatch(1)
             val completions = AtomicInteger()
             var failure: VoiceIssue? = null
             var finalText = ""
@@ -43,7 +44,7 @@ class LocalVoiceDeviceTest {
                         override fun ready() = Unit
 
                         override fun partial(text: String) {
-                            // Provisional results may be delayed by the platform; final evidence is checked below.
+                            if ("planetario" in text.lowercase()) provisional.countDown()
                         }
 
                         override fun completed(text: String) {
@@ -65,7 +66,8 @@ class LocalVoiceDeviceTest {
                     audio.fed.await(40, TimeUnit.SECONDS),
                 )
                 assertNull("No local engine failure", failure)
-                assertEquals("No submission before release/unlock", 0, completions.get())
+                assertTrue("Live transcription must arrive before Stop", provisional.await(10, TimeUnit.SECONDS))
+                assertEquals("No completion before Stop", 0, completions.get())
                 instrumentation.runOnMainSync { input.finish() }
                 assertTrue("Explicit finish must return final text", completed.await(20, TimeUnit.SECONDS))
                 assertNull(failure)

@@ -76,7 +76,7 @@ class ComposerInteractionTest {
 
     @Test
     fun sendUsesAnAccentOutlineOnlyForNonBlankTextAndRemainsAnAccessibleTarget() {
-        compose.onNodeWithTag("send-action").assertIsNotEnabled()
+        compose.onNodeWithTag("send-action").assertDoesNotExist()
         compose.onNodeWithTag("text-composer").performTextInput("   ")
         compose.onNodeWithTag("send-action").assertIsNotEnabled()
         compose.onNodeWithTag("text-composer").performTextClearance()

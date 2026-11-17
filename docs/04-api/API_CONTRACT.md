@@ -1,6 +1,6 @@
 # Contrato backend · memoria v2 y cuenta v1
 
-Voz K5 no añade endpoints, DTO ni audio subido al servidor. La transcripción ocurre localmente y solo su texto final, tras terminar explícitamente, se entrega a los comandos autenticados existentes con las mismas reglas de versión/idempotencia/confirmación. Parciales y cancelaciones no envían. Sin respuestas habladas ni API de voz; el procesamiento posterior del texto mantiene su coste normal. [ADR-014](../02-architecture/ADR/ADR-014-local-voice-input.md).
+Voz K5 no añade endpoints, DTO ni audio subido al servidor. La transcripción ocurre localmente; Stop entrega solo un borrador editable, sin peticiones. Únicamente la pulsación posterior de Enviar usa los comandos autenticados existentes con las mismas reglas de versión/idempotencia/confirmación. Parciales y cancelaciones no envían. Sin respuestas habladas ni API de voz; el procesamiento posterior del texto mantiene su coste normal. [ADR-014](../02-architecture/ADR/ADR-014-local-voice-input.md), [refinamiento ADR-015](../02-architecture/ADR/ADR-015-dictation-draft.md).
 
 ## Integración v2 · 17 de noviembre de 2026
 

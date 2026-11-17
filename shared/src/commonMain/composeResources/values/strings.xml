@@ -1,10 +1,9 @@
 <resources>
-    <string name="voice_microphone">Micrófono. Mantén pulsado para hablar y desliza arriba para bloquear. Bloqueado, pulsa para terminar. Con accesibilidad, pulsa para empezar o terminar.</string>
+    <string name="voice_microphone">Iniciar dictado</string>
     <string name="voice_cancel">Cancelar voz</string>
-    <string name="voice_finish">Terminar y enviar</string>
+    <string name="voice_finish">Parar dictado</string>
     <string name="voice_finishing">Terminando la transcripción local...</string>
-    <string name="voice_listening">Escuchando. Suelta para enviar o desliza arriba para bloquear.</string>
-    <string name="voice_locked">Micrófono bloqueado. Pulsa para terminar.</string>
+    <string name="voice_listening">Escuchando...</string>
     <string name="voice_preparing">Preparando el micrófono...</string>
     <string name="voice_permission">Permite usar el micrófono para transcribir en el dispositivo. También puedes escribir.</string>
     <string name="voice_permission_action">Permitir micrófono</string>
@@ -33,7 +32,7 @@
     <string name="ask_placeholder">Escribe tu pregunta…</string>
     <string name="clarify_placeholder">Escribe tu respuesta…</string>
     <string name="send">Enviar texto</string>
-    <string name="voice_hint">Mantén pulsado el micrófono para hablar; desliza arriba para bloquear.</string>
+    <string name="voice_hint">Pulsa el micrófono para dictar.</string>
     <string name="text_preview_notice">El guardado aún no está conectado. El texto sigue en el editor.</string>
     <string name="voice_preview_notice">Las respuestas se muestran por escrito.</string>
     <string name="forget_preview_notice">Este recuerdo ya no está disponible para gestionarlo. Vuelve a consultarlo.</string>
