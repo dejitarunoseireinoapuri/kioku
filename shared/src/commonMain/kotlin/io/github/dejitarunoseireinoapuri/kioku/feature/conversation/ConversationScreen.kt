@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingNotice
+import io.github.dejitarunoseireinoapuri.kioku.design.ContentLoadingScreen
 import io.github.dejitarunoseireinoapuri.kioku.design.ForgetConfirmationDialog
 import io.github.dejitarunoseireinoapuri.kioku.design.KiokuSpacing
 import io.github.dejitarunoseireinoapuri.kioku.design.SettingsAction
@@ -24,6 +25,7 @@ import io.github.dejitarunoseireinoapuri.kioku.design.TopBar
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextOutcome
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.app_name
+import io.github.dejitarunoseireinoapuri.kioku.resources.control_checking
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -34,6 +36,22 @@ fun ConversationScreen(
     onSettings: () -> Unit,
     loading: StringResource? = null,
     onManage: ((List<String>) -> Unit)? = null,
+    onSource: (String) -> Unit,
+) {
+    if (state.concealingMemory) {
+        ContentLoadingScreen(stringResource(Res.string.control_checking), tag = "memory-loading")
+    } else {
+        ConversationContent(state, onEvent, onSettings, loading, onManage, onSource)
+    }
+}
+
+@Composable
+private fun ConversationContent(
+    state: ConversationState,
+    onEvent: (ConversationEvent) -> Unit,
+    onSettings: () -> Unit,
+    loading: StringResource?,
+    onManage: ((List<String>) -> Unit)?,
     onSource: (String) -> Unit,
 ) {
     val scroll = conversationScroll(state, loading)

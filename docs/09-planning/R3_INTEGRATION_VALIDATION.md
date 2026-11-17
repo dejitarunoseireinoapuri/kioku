@@ -130,6 +130,14 @@ Actualización instalada en Samsung y Honor conservando firma, cuenta y datos. S
 
 Captura de Ajustes con fondo negro y cuenta ficticia inspeccionada en Honor; el caso de apariencia se repite **1/1** para generar ese artefacto. El test comprueba negro por píxel, retirada y reaparición de la capa, restauración de Ajustes y lectura de la preferencia desde otra instancia. XML del manifiesto Apple comprobado estáticamente; no sustituye el empaquetado nativo.
 
+## Katakana y carga continua de entrada · 17 de noviembre
+
+En `codex/k5-voice`, el propietario pide renombrar el ajuste a «Katakana cayendo» y mantener la pantalla inicial durante la comprobación de memoria. Se conserva la clave de preferencia, su elección y la animación existente. Cuando la memoria permanece oculta al entrar/reanudar, la conversación usa el mismo componente de logo/estado de acceso: «Entrando...» pasa a «Comprobando cambios en tu memoria...» antes de mostrar editor, historial y Ajustes. No hay espera artificial, nuevas consultas, cambio del splash Android ni alteración de los estados/contratos de memoria. Un resultado fallido termina la carga según la recuperación existente.
+
+Comprobaciones: formato, arquitectura, Detekt, Lint, `mobileCheck`, ambos APK y **126/126** host tests correctos. Honor: **16/16** pruebas físicas ficticias de entrada, apariencia, acceso y navegación de consultas. Las dos nuevas retienen configuración y revisión con respuestas diferidas, verifican ausencia de conversación/controles entre fases, muestran el estado correcto y resuelven tanto éxito como fallo sin carga interminable. Captura ficticia de carga inspeccionada; nombre nuevo y persistencia comprobados por UI. APK actualizado en Samsung y Honor conservando firma y datos; la instrumentación de esta entrega se ejecuta en Honor, sin atribuir nueva validación UI Samsung/iOS.
+
+Consultados convenciones, calidad, flujos y referencias Entrando/Ajustes de A mediante MCP, esta vez accesibles, sin editar Stitch. Flujos, requisitos, referencia visual, privacidad y esta evidencia actualizados; documentación comprobada. Sin API OpenAI, backend, datos reales ni implementación de voz. iOS queda pendiente de compilación/ejecución nativa.
+
 ## Límites conocidos
 
 R2 sigue abierta por latencia y reserva independiente de la última versión. Esta entrega no prueba inferencia real con el adaptador de servidor ni iOS. La app requiere saldo para interpretar, consultar o corregir; no se añade un modo que simule respuestas como si fueran reales.

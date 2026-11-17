@@ -1,5 +1,7 @@
 # Requisitos y aceptación
 
+Refinamiento posterior del 17 de noviembre: el ajuste pasa a llamarse «Katakana cayendo» sin cambiar la preferencia guardada ni la animación. Al entrar, la pantalla del logo continúa durante la comprobación de memoria, actualizando el estado bajo el icono. La conversación/editor no aparecen bloqueados entre «Entrando...» y la resolución de la comprobación; no se añaden retardos artificiales.
+
 Refinamiento de interfaz del 17 de noviembre: Ajustes ofrece «Letras cayendo», activadas por defecto, con elección persistente solo en el dispositivo. Al desactivarlas desaparecen los símbolos y su animación sobre un fondo negro. Retirar ayudas y estados sin contenido elimina también sus filas/separadores, sin alterar el historial en RAM. El editor y los controles inferiores quedan fuera del área de gestos/navegación del sistema y del teclado, con 8 dp de margen adicional.
 
 Recuperación de cobertura del 17 de noviembre: una pregunta fallida permite «Reintentar» con el texto retenido en la sesión, incluso si la respuesta anterior ya terminó y no se conserva en el servidor. Distinguir error nativo de conexión, tiempo de espera, petición aún procesándose y respuesta no recuperable. Una lectura terminada puede renovarse de forma acotada; una escritura incierta conserva su identidad y no se duplica. No atribuir indisponibilidad genérica del servidor o autorización a falta de cobertura. No introducir persistencia local ni ampliar la duración del historial RAM.

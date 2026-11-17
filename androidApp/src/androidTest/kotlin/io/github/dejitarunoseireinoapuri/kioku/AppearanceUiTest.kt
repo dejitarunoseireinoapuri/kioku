@@ -1,11 +1,13 @@
 package io.github.dejitarunoseireinoapuri.kioku
 
 import androidx.compose.ui.graphics.toPixelMap
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -55,6 +57,7 @@ class AppearanceUiTest {
     @Test fun fallingLettersCanBeDisabledAndRemainDisabledAfterRecreation() {
         compose.onNodeWithTag("matrix-rain", useUnmergedTree = true).assertExists()
         compose.onNodeWithContentDescription("Ajustes").performClick()
+        compose.onNodeWithText("Katakana cayendo").performScrollTo().assertIsDisplayed()
         compose.onNodeWithTag("falling-letters-setting").performScrollTo().performClick()
         compose.onNodeWithTag("matrix-rain", useUnmergedTree = true).assertDoesNotExist()
         val pixels = compose.onRoot().captureToImage().toPixelMap()

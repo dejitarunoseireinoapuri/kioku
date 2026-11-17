@@ -1,5 +1,9 @@
 # Flujos y salidas
 
+## Entrada y comprobación de memoria
+
+La entrada conserva la pantalla de carga de logo/estado durante «Entrando...» y después «Comprobando cambios en tu memoria...». No se intercala el editor ni la conversación mientras la comprobación oculta los datos. La conversación aparece al resolverla; un fallo termina la carga y muestra el resultado disponible de recuperación, sin una espera artificial. La comprobación al volver a primer plano también mantiene esta pantalla si el contenido está oculto. Gestionar conserva su carga propia.
+
 ## Recuperación de consultas tras fallos de conexión
 
 Una conexión interrumpida identificada por el transporte muestra un aviso de conexión y «Reintentar»; un tiempo de espera muestra que la respuesta tardó demasiado, sin atribuirlo automáticamente a cobertura. El mensaje enviado permanece en la sesión RAM y el botón reutiliza su texto. Si el servidor confirma que la consulta terminó pero la respuesta se perdió, puede renovar una vez su ID de lectura y consultar de nuevo. Si sigue procesando, comprueba el mismo ID. Una preparación terminada cuya respuesta se perdió puede renovar una vez el ID de interpretación, conservando los IDs de ejecución/consulta; no repite automáticamente una escritura. Ni una preparación caducada ni una respuesta retirada obligan a reescribir el texto mientras siga la sesión.
