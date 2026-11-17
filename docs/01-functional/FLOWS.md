@@ -2,6 +2,8 @@
 
 ## Aclaraciones en la conversación
 
+Antes de buscar recuerdos, Kioku comprueba si la pregunta especifica un tema o tiene un antecedente en el contexto vigente. Una continuación aislada reconocida como «¿Y ahora?» sin ese antecedente pregunta qué se quiere consultar; no busca para adivinar el tema. Una pregunta completa como «¿Qué quiero hacer?» o una continuación resoluble sigue a consulta. El contexto anterior a una corrección/olvido no se utiliza para evitar la aclaración. Si la ambigüedad solo se descubre al examinar evidencia, la consulta puede pedir concreción después.
+
 Si Kioku pide concretar una captura, consulta u orden ambigua, presenta su pregunta en el historial y el propietario contesta directamente en el campo habitual, con indicación de aclaración. No aparece un botón de reiniciar o «Volver a explicarlo» en una aclaración normal. La continuación conserva los mensajes de la sesión y el mismo canal; una captura pendiente mantiene su identidad de aclaración. Una reformulación explícita tras un límite reinicia únicamente el intento y su contexto, conservando el historial visible de la sesión. Los datos retirados y los avisos de cambios siguen excluidos de la evidencia y del contexto interpretativo; conservar mensajes no autoriza a reutilizarlos.
 
 ## Entrada y carga

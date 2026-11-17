@@ -19,6 +19,10 @@ import { changeSchema } from "./contracts.js";
 import type { ModelFactory } from "./capture.js";
 import type { Route, Plan, Apply } from "./route-contracts.js";
 import type { V2Reply } from "./contracts.js";
+import {
+  unanchoredQuestion,
+  clarificationInstructions,
+} from "./intent-clarification.js";
 
 export async function routeV2(
   db: Firestore,
@@ -39,10 +43,21 @@ export async function routeV2(
     };
   const lease = pending.lease;
   try {
-    const reader = new V2Reader(db, uid, generation),
-      loaded = await reader.load();
-    if (loaded.state.epoch !== lease.epoch)
-      throw new AccountError("failed-precondition");
+    const earlyQuestion = unanchoredQuestion(input, lease.epoch);
+    if (earlyQuestion) {
+      await reauthorize();
+      await work.finish(uid, lease, "ignored", {
+        apiVersion: 2,
+        operationId: input.requestId,
+        status: "repeatRequired",
+      });
+      return {
+        apiVersion: 2,
+        operationId: input.requestId,
+        status: "needsClarification",
+        text: earlyQuestion,
+      };
+    }
     const provider = await model(lease.epoch);
     const context =
       input.memoryEpoch === lease.epoch
@@ -57,7 +72,7 @@ export async function routeV2(
     };
     const intent = await provider.call(
       "message_intent",
-      messageIntentInstructions,
+      `${messageIntentInstructions}\n${clarificationInstructions}`,
       message,
       messageIntentSchema,
       1400,
@@ -95,6 +110,10 @@ export async function routeV2(
       question =
         "¿Quieres olvidar el dato en todos tus recuerdos o retirar solo este relato?";
     } else if (intent.action === "correct" || intent.action === "forget") {
+      const reader = new V2Reader(db, uid, generation),
+        loaded = await reader.load();
+      if (loaded.state.epoch !== lease.epoch)
+        throw new AccountError("failed-precondition");
       let units = Object.values(loaded.state.units);
       if (intent.useContext) {
         const ids = new Set(

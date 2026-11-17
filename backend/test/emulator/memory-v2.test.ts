@@ -836,3 +836,142 @@ test("v2 callable state and empty query need authentication and no AI credential
     400,
   );
 });
+
+test("unanchored follow-up clarifies before loading canonical memories or creating a provider", async () => {
+  // Any canonical load would fail parsing this sentinel. No real content is used.
+  await db
+    .doc(`accounts/${uid}/memoryV2Units/${randomUUID()}`)
+    .set({ sentinel: true });
+  const turn = routeSchema.parse({
+    apiVersion: 2,
+    requestId: randomUUID(),
+    mode: "ask",
+    text: "¿Y ahora?",
+    zone: "UTC",
+    memoryEpoch: 0,
+    context: { questions: [], sourceIds: [] },
+  });
+  assert.equal(
+    (await routeV2(db, uid, generation, turn, noModel, allowed)).status,
+    "needsClarification",
+  );
+  assert.equal(
+    (await routeV2(db, uid, generation, turn, noModel, allowed)).status,
+    "repeatRequired",
+  );
+  const stored = (
+    await db.doc(`accounts/${uid}/memoryV2Operations/${turn.requestId}`).get()
+  ).data();
+  assert.ok(!JSON.stringify(stored).includes("ahora"));
+  assert.equal(
+    (await db.collection(`accounts/${uid}/memoryV2Plans`).get()).size,
+    0,
+  );
+  await db.doc(`accounts/${uid}/runtime/memory`).update({ revision: 1 });
+  assert.equal(
+    (
+      await routeV2(
+        db,
+        uid,
+        generation,
+        {
+          ...turn,
+          requestId: randomUUID(),
+          context: { questions: ["¿Qué planes tengo?"], sourceIds: [] },
+        },
+        noModel,
+        allowed,
+      )
+    ).status,
+    "needsClarification",
+  );
+  await assert.rejects(
+    routeV2(
+      db,
+      "foreign-owner",
+      generation,
+      { ...turn, requestId: randomUUID() },
+      noModel,
+      allowed,
+    ),
+  );
+  await assert.rejects(
+    routeV2(
+      db,
+      uid,
+      randomUUID(),
+      { ...turn, requestId: randomUUID() },
+      noModel,
+      allowed,
+    ),
+  );
+  await assert.rejects(
+    routeV2(
+      db,
+      uid,
+      generation,
+      { ...turn, requestId: randomUUID() },
+      noModel,
+      async () => {
+        await db.doc("privateConfiguration/owner").update({ enabled: false });
+      },
+    ),
+  );
+});
+
+test("intent interpretation precedes canonical reads for ambiguity and complete or contextual questions", async () => {
+  await db
+    .doc(`accounts/${uid}/memoryV2Units/${randomUUID()}`)
+    .set({ sentinel: true });
+  for (const text of [
+    "¿Y lo de esa persona?",
+    "¿Qué quiero hacer?",
+    "¿Y ahora?",
+    "¿Y ahora?\nAclaración: Qué planes tengo pendientes.",
+  ]) {
+    let calls = 0;
+    const clarify = text.includes("persona");
+    const interpreter: StructuredModel = {
+      call: async (stage, _instructions, data, schema) => {
+        assert.equal(stage, "message_intent");
+        assert.equal((data as { text: string }).text, text);
+        calls++;
+        return schema.parse({
+          action: clarify ? "clarify" : "ask",
+          fact: null,
+          alsoAsk: false,
+          useContext: false,
+          question: clarify ? "¿A qué persona te refieres?" : null,
+          forgetScope: null,
+        });
+      },
+    };
+    const result = await routeV2(
+      db,
+      uid,
+      generation,
+      routeSchema.parse({
+        apiVersion: 2,
+        requestId: randomUUID(),
+        mode: "ask",
+        text,
+        zone: "UTC",
+        memoryEpoch: 0,
+        context: {
+          questions: text === "¿Y ahora?" ? ["¿Qué planes tengo?"] : [],
+          sourceIds: [],
+        },
+      }),
+      async () => interpreter,
+      allowed,
+    );
+    assert.equal(result.status, clarify ? "needsClarification" : "ready");
+    assert.equal(calls, 1);
+    assert.equal(
+      Object.keys(
+        (await db.collection(`accounts/${uid}/memoryV2Groups`).get()).docs,
+      ).length,
+      0,
+    );
+  }
+});

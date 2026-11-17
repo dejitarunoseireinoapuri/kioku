@@ -72,6 +72,16 @@ Validación: **119/119 host tests**, `mobileCheck`, formato, arquitectura, Detek
 
 Fuentes consultadas: convenciones, calidad, requisitos, flujos, privacidad y referencias Aclaración/Gestionar de Stitch por MCP, sin editar Stitch. Documentación comprobada. **0 llamadas a OpenAI**, sin leer ni modificar recuerdos reales; sin despliegue de servidor. iOS comparte el cambio, pero no se compila ni ejecuta desde Windows.
 
+## Aclaración de intención antes de buscar · 17 de noviembre
+
+El propietario pide evitar buscar recuerdos cuando aún no está claro el tema. `route` admite la operación y valida acceso/generación/revisión por metadatos; después una puerta determinista acotada reconoce continuaciones aisladas sin contexto vigente, como «¿Y ahora?», y solicita tema sin crear proveedor ni cargar el catálogo. El resto reutiliza la interpretación de intención existente con una instrucción v2 específica para aclarar referencias sin antecedente. Las preguntas completas y continuaciones con contexto siguen a consulta. El catálogo solo se carga durante el encaminamiento si hay que resolver corrección/olvido; la consulta de evidencia continúa en `query`. No se altera el prototipo/prompt histórico M0, el perfil API ni los DTO.
+
+Publicado únicamente `memoryV2` con autorización vigente. Comprobado **ACTIVE**, actualización `2026-11-17T09:19:48Z` e identidad de ejecución esperada. Sin migración, vaciado ni lectura de contenido de producción.
+
+Validación sin OpenAI: **43/43** unitarias backend y **20/20** emuladores v2, TypeScript/formato correctos. Las pruebas colocan un documento canónico ficticio inválido que haría fallar cualquier carga y verifican que las aclaraciones y decisiones de consulta se completan antes de leerlo; comprueban proveedor no creado en el atajo, contexto obsoleto descartado, continuación válida, pregunta amplia, respuesta a aclaración, idempotencia, recibos sin texto, propietario/generación ajenos y revocación durante la operación. Los dobles semánticos prueban el flujo y contrato, no garantizan la clasificación real del modelo en toda frase ambigua. No hay llamadas adicionales de interpretación ni nuevas pruebas pagadas.
+
+Fuentes consultadas: convenciones, calidad, flujos, contrato API, seguridad y ADR-013. Documentación comprobada; **0 llamadas de prueba a OpenAI**, sin leer ni modificar recuerdos reales. Sin cambios móviles, de almacenamiento o de diseño; no requiere reinstalar APK. Las pruebas nativas anteriores no se repiten; no hay nueva evidencia de inferencia real o iOS.
+
 ## Límites conocidos
 
 R2 sigue abierta por latencia y reserva independiente de la última versión. Esta entrega no prueba inferencia real con el adaptador de servidor ni iOS. La app requiere saldo para interpretar, consultar o corregir; no se añade un modo que simule respuestas como si fueran reales.

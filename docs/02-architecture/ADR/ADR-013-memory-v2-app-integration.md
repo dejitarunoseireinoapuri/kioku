@@ -24,6 +24,8 @@ Se descarta migrar o archivar recuerdos por la decisión expresa del propietario
 
 ## Consecuencias y límites
 
+La clasificación de intención precede a la carga de contenido canónico. Una puerta determinista acotada para continuaciones aisladas sin contexto puede pedir tema sin crear proveedor; la clasificación semántica restante reutiliza la llamada de intención existente. Solo los cambios necesitan catálogo durante el encaminamiento; las consultas leen evidencia posteriormente. La revisión y autorización se contrastan al terminar incluso cuando no se leyó catálogo. El ajuste v2 no altera prompts ni benchmarks históricos M0.
+
 Refinamiento del 17 de noviembre: las consultas exponen referencias por unidad citada, resueltas como vistas calculadas del canónico y vinculadas a generación/revisiones. No amplían la gestión a otros datos del mismo relato. Los grupos de captura conservan su función desde el guardado. Corrección/olvido revocan y sustituyen también las vistas individuales, dentro del límite compartido de 128 sustituciones. No hay migración ni copia persistida adicional.
 
 El límite operativo inicial es 256 unidades y 4096 documentos canónicos, además de las comprobaciones de capacidad de borrado. Recuperación léxica con expansión del modelo y hasta 32 candidatos; una lista exhaustiva truncada pide acotar. No demuestra mutaciones a escala de 10 000 unidades ni aceptación independiente nueva de IA.

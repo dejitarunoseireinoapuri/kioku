@@ -4,6 +4,8 @@ Las referencias individuales de gestión procedentes de consultas son vistas cal
 
 ## Frontera de memoria v2
 
+La aclaración previa de intención no necesita leer recuerdos: mensaje y contexto de revisión vigente bastan para pedir un tema ausente. La admisión y confirmación siguen verificando propietario, generación y época. El atajo determinista no crea proveedor ni guarda texto de pregunta/respuesta; las otras decisiones reutilizan la interpretación existente y no acceden al catálogo salvo para resolver cambios. Contexto obsoleto nunca habilita por sí solo una continuación.
+
 La [integración R3](../09-planning/R3_INTEGRATION_VALIDATION.md) mantiene Google revalidado, App Check y propietario habilitado. Cada operación exige la generación del servidor. Las rutas v1 rechazan la activación v2 en sus comprobaciones transaccionales, incluidas confirmaciones tardías. Ningún cliente puede leer/escribir directamente las nuevas colecciones.
 
 Interpretación y respuesta se verifican fuera de transacciones; antes de confirmar se comprueban permisos, revisión y evidencia. Los IDs generados no pueden coincidir con revocaciones. Los olvidos necesitan selección exacta y versión actual, después del diálogo local. Las ofertas requieren aceptación ligada a la huella del plan original y no se convierten en capturas por replay.
