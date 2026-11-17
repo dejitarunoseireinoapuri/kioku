@@ -90,6 +90,18 @@ Compilación de app y tests, `mobileCheck`, formato, arquitectura, Detekt y Lint
 
 Consultados convenciones, calidad, referencia «02 Entrando» en Stitch y documentación oficial Android de splash. Documentación comprobada; sin edición de Stitch, sin OpenAI y sin acceso a recuerdos reales.
 
+## Rectificación de splash real, aclaraciones libres y prefijo · 17 de noviembre
+
+La captura indicada por el propietario mostró que el recurso anterior seguía enorme y recortado en el splash real del Honor, aunque pasara el renderizado aislado. Se reemplaza el contenedor por un vector directo con viewport 288 y símbolo de 64 unidades centrado; tamaño intrínseco 192 dp para evitar rasterizado grande advertido por Lint. Se retira el recurso anterior sin uso y se adapta el generador de marca para reproducir el splash sin alterar el icono del lanzador.
+
+`ActualSplashTest` abre MainActivity y captura el splash real del sistema. La primera toma no sincronizada no capturó un fotograma útil al endurecer la validación; se conecta entonces al evento nativo de salida, reteniendo su vista solo durante la prueba, sin pausas ni modificación del arranque de producción. Se comprueba el PNG decodificado y la ocupación de color para descartar fotogramas vacíos/de transición; medidas compactas, proporción del símbolo y ausencia de recorte. **1/1** final correcto e imagen real inspeccionada. La prueba aislada de recurso también pasa; ninguna de esas pruebas por sí sola sustituye la inspección del arranque real.
+
+Petición simultánea del propietario: una aclaración pendiente ya no impide seleccionar Explicar/Preguntar. Las sesiones de cada intención conservan la pregunta pendiente y sus contextos independientes; captura y consulta simples permiten salir y volver sin perder sus identidades. Se conserva el bloqueo de trabajo real en curso y de confirmación explícita de olvido. El «>» comparte margen superior con el cuerpo para alinearse con su primera línea, sin centrarlo contra todo un mensaje multilínea. Captura ficticia de mensajes inspeccionada.
+
+`mobileCheck`, formato, arquitectura, Detekt, Lint y ambos APK correctos; **120/120** host tests. En la ejecución física conjunta: **12/12** casos ConversationFlow y **1/1** SplashIcon correctos; la toma inicial ActualSplash no obtuvo fotograma y se corrigió con la sincronización indicada, pasando después **1/1**. No se presenta como una repetición conjunta de 14/14. La prueba de cambio de modo confirma que se puede explicar un dato y volver a resolver la pregunta anterior sin mezclar textos. APK actualizado en Honor sin restablecer ni desinstalar; otros dispositivos intactos.
+
+Consultados convenciones, calidad, flujos, requisitos y referencia Entrando ya inspeccionada en Stitch. Sin cambios de backend ni API OpenAI, sin edición de Stitch ni acceso al contenido de recuerdos reales. La prueba real de arranque solo inicia la app y su transporte de metadatos; no envía turnos ni consultas de memoria. Documentación comprobada; iOS no se compila desde Windows.
+
 ## Límites conocidos
 
 R2 sigue abierta por latencia y reserva independiente de la última versión. Esta entrega no prueba inferencia real con el adaptador de servidor ni iOS. La app requiere saldo para interpretar, consultar o corregir; no se añade un modo que simule respuestas como si fueran reales.

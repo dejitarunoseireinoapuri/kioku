@@ -32,6 +32,39 @@ import kotlin.test.assertTrue
 @OptIn(ExperimentalCoroutinesApi::class)
 class ClarificationHistoryTest {
     @Test
+    fun aPendingClarificationDoesNotLockTheOtherIntentOrMixTheirCommands() =
+        sessionTest { repo, model ->
+            repo.reply = { TextOutcome.Clarification("¿Qué planes quieres consultar?") }
+            send(model, "¿Y ahora?")
+            runCurrent()
+            val pending =
+                model.state.value.conversation!!
+                    .messages
+            assertTrue(model.state.value.canSwitchIntent)
+            model.onEvent(ConversationEvent.SelectIntent(MemoryIntent.Tell))
+            repo.reply = { TextOutcome.Clarification("¿Quién hizo ese plan ficticio?") }
+            send(model, "Alguien quiere ir al cine ficticio.")
+            runCurrent()
+            assertEquals("Alguien quiere ir al cine ficticio.", repo.commands.last().text)
+            model.onEvent(ConversationEvent.SelectIntent(MemoryIntent.Ask))
+            assertEquals(
+                pending,
+                model.state.value.conversation!!
+                    .messages,
+            )
+            repo.reply = { TextOutcome.Asked(QueryOutcome.Reply(AnswerStatus.NotFound, "No consta.", emptyList())) }
+            send(model, "Mis planes pendientes.")
+            runCurrent()
+            assertEquals("¿Y ahora?\nAclaración: Mis planes pendientes.", repo.commands.last().text)
+            assertTrue(
+                !repo.commands
+                    .last()
+                    .text
+                    .contains("cine"),
+            )
+        }
+
+    @Test
     fun clarificationAfterForgetKeepsReadOnlyHistoryButNeverReusesRevokedEvidence() =
         sessionTest { repo, model ->
             repo.reply = { answerBeforeForget() }

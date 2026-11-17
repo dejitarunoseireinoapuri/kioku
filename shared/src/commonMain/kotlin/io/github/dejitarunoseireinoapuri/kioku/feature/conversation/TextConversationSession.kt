@@ -335,7 +335,7 @@ internal class TextConversationSession(
 
     fun selectIntent(next: TextIntent) {
         if (intent == next) return
-        if (state.busy || state.confirmingForget || state.clarification) return
+        if (state.busy || state.confirmingForget) return
         val clean = state.copy(source = null, sourceLoading = false, checkingCapture = null)
         histories[intent] = TextSessionSnapshot(clean, questions.toList(), references, ownerId, clarifications)
         generation++

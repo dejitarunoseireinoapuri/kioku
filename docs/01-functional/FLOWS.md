@@ -2,6 +2,8 @@
 
 ## Aclaraciones en la conversación
 
+Mientras una aclaración espera respuesta, se puede cambiar a Explicar/Preguntar. Cada modo conserva el estado pendiente; una nueva entrada del otro modo no se une a la aclaración anterior. Al regresar se restaura la pregunta pendiente y se responde por el editor normal. Una aclaración de captura conserva su ID/revisión tras salir y volver. No se bloquean por esta espera los ajustes ni la navegación ordinaria.
+
 Antes de buscar recuerdos, Kioku comprueba si la pregunta especifica un tema o tiene un antecedente en el contexto vigente. Una continuación aislada reconocida como «¿Y ahora?» sin ese antecedente pregunta qué se quiere consultar; no busca para adivinar el tema. Una pregunta completa como «¿Qué quiero hacer?» o una continuación resoluble sigue a consulta. El contexto anterior a una corrección/olvido no se utiliza para evitar la aclaración. Si la ambigüedad solo se descubre al examinar evidencia, la consulta puede pedir concreción después.
 
 Si Kioku pide concretar una captura, consulta u orden ambigua, presenta su pregunta en el historial y el propietario contesta directamente en el campo habitual, con indicación de aclaración. No aparece un botón de reiniciar o «Volver a explicarlo» en una aclaración normal. La continuación conserva los mensajes de la sesión y el mismo canal; una captura pendiente mantiene su identidad de aclaración. Una reformulación explícita tras un límite reinicia únicamente el intento y su contexto, conservando el historial visible de la sesión. Los datos retirados y los avisos de cambios siguen excluidos de la evidencia y del contexto interpretativo; conservar mensajes no autoriza a reutilizarlos.

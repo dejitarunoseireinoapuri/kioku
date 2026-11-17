@@ -46,18 +46,13 @@ data class ConversationState(
         get() = scenario != PreviewScenario.Offline && !operationLocked && !checkingMemory
 
     val canSwitchIntent: Boolean
-        get() = canEdit && !awaitingClarification
+        get() = canEdit
 
     private val operationLocked: Boolean
         get() = captureLocked || query.busy || textLocked
 
     private val textLocked: Boolean
         get() = conversation?.busy == true || conversation?.processing == true || conversation?.confirmingForget == true
-
-    private val awaitingClarification: Boolean
-        get() =
-            capture is CaptureOutcome.Clarification || query.awaitingClarification ||
-                conversation?.clarification == true
 
     val showingConversation: Boolean
         get() = scenario == PreviewScenario.Ready && conversation?.messages?.isNotEmpty() == true

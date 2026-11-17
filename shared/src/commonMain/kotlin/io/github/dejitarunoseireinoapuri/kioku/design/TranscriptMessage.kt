@@ -31,7 +31,7 @@ fun TranscriptMessage(
             if (owner) {
                 Text(
                     ">",
-                    modifier = Modifier.clearAndSetSemantics {},
+                    modifier = Modifier.padding(top = 4.dp).clearAndSetSemantics {},
                     color = KiokuColors.Secondary,
                     style = MaterialTheme.typography.body1,
                 )

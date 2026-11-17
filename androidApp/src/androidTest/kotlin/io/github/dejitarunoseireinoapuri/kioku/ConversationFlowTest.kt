@@ -178,6 +178,24 @@ class ConversationFlowTest {
     }
 
     @Test
+    fun aPendingClarificationAllowsExplainingAndReturningToTheQuestion() {
+        repository.answer = { TextOutcome.Clarification("¿Qué planes quieres consultar?") }
+        send("¿Y ahora?")
+        visible("¿Qué planes quieres consultar?")
+        compose.onNodeWithTag("intent-Tell").assertIsEnabled().performClick()
+        repository.answer = { TextOutcome.Captured(repository.saved()) }
+        send("Dato ficticio nuevo.")
+        savedVisible()
+        assertEquals("Dato ficticio nuevo.", repository.commands.last().text)
+        compose.onNodeWithTag("intent-Ask").performClick()
+        visible("¿Qué planes quieres consultar?")
+        repository.answer = { TextOutcome.Asked(QueryOutcome.Reply(AnswerStatus.NotFound, "No consta.", emptyList())) }
+        send("Mis planes pendientes.")
+        visible("No consta.")
+        assertEquals("¿Y ahora?\nAclaración: Mis planes pendientes.", repository.commands.last().text)
+    }
+
+    @Test
     fun clarificationAfterForgettingUsesTheComposerAndKeepsTheSessionHistory() {
         repository.answer = {
             TextOutcome.Asked(
@@ -254,7 +272,7 @@ class ConversationFlowTest {
         repository.answer = { TextOutcome.Clarification("¿Qué Pablo?") }
         send("Olvida lo del examen de Pablo.")
         visible("¿Qué Pablo?")
-        compose.onNodeWithTag("intent-Ask").assertIsNotEnabled()
+        compose.onNodeWithTag("intent-Ask").assertIsEnabled()
         repository.answer = {
             TextOutcome.ConfirmForget(ForgetPreview("Examen de mi primo Pablo.", ForgetScope.AllOccurrences))
         }

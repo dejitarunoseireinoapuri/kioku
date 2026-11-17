@@ -45,8 +45,8 @@ const vector = (
     fill,
     group = "",
 ) => `<?xml version="1.0" encoding="utf-8"?>
-<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="${size}dp" android:height="${size}dp" android:viewportWidth="${group ? 108 : 1000}" android:viewportHeight="${group ? 108 : 1000}">
-${group ? `<group android:translateX="30" android:translateY="30" android:scaleX="0.048" android:scaleY="0.048">` : ""}
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="${size}dp" android:height="${size}dp" android:viewportWidth="${group === "splash" ? 288 : group ? 108 : 1000}" android:viewportHeight="${group === "splash" ? 288 : group ? 108 : 1000}">
+${group === "splash" ? `<group android:translateX="112" android:translateY="112" android:scaleX="0.064" android:scaleY="0.064">` : group ? `<group android:translateX="30" android:translateY="30" android:scaleX="0.048" android:scaleY="0.048">` : ""}
     <path android:fillColor="${fill}" android:pathData="${path}" />
 ${group ? "</group>" : ""}
 </vector>\n`;
@@ -55,8 +55,8 @@ await save(
     vector(112, "#55FF89"),
 );
 await save(
-    "androidApp/src/main/res/drawable/ic_kioku.xml",
-    vector(108, "#55FF89", true),
+    "androidApp/src/main/res/drawable/ic_splash.xml",
+    vector(192, "#55FF89", "splash"),
 );
 await save(
     "androidApp/src/main/res/drawable/ic_launcher_foreground.xml",

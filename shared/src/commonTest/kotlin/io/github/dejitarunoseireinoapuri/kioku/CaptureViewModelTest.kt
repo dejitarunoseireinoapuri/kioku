@@ -58,6 +58,8 @@ class CaptureViewModelTest {
             runCurrent()
             assertEquals("", model.state.value.draft)
             model.onEvent(ConversationEvent.SelectIntent(MemoryIntent.Ask))
+            assertEquals(MemoryIntent.Ask, model.state.value.intent)
+            model.onEvent(ConversationEvent.SelectIntent(MemoryIntent.Tell))
             assertEquals(MemoryIntent.Tell, model.state.value.intent)
             repo.onExecute = { saved() }
             send(model, "De noviembre de 2026")

@@ -61,6 +61,8 @@ class QueryViewModelTest {
             send(model, "¿Qué película dijo Pablo?")
             runCurrent()
             model.onEvent(ConversationEvent.SelectIntent(MemoryIntent.Tell))
+            assertEquals(MemoryIntent.Tell, model.state.value.intent)
+            model.onEvent(ConversationEvent.SelectIntent(MemoryIntent.Ask))
             assertEquals(MemoryIntent.Ask, model.state.value.intent)
             repo.answer = { repo.reply() }
             send(model, "Mi compañero de japonés.")

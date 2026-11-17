@@ -1,5 +1,7 @@
 # Requisitos y aceptación
 
+Refinamiento adicional del 17 de noviembre: esperar una aclaración no bloquea cambiar entre Preguntar y Explicar. Cada modo conserva su aclaración y contexto por separado; al volver se puede continuarla sin mezclar el texto del otro modo. Las restricciones durante una operación en curso o la confirmación de olvido siguen vigentes.
+
 Refinamiento del 17 de noviembre: una aclaración se responde en el campo habitual sin botón de reinicio y sin vaciar el historial RAM. Debe poder completarse la secuencia consulta → olvido confirmado → nueva pregunta ambigua → aclaración escrita, conservando la conversación visible y excluyendo del contexto los recuerdos retirados. Reformular después de un límite tampoco borra el historial; cerrar sesión, reiniciar la app y caducar la sesión RAM conservan sus reglas de limpieza.
 
 Diseño aceptado el 16 de noviembre: P1–P3 del [núcleo v2](../02-architecture/MEMORY_CORE_V2.md) revisan cómo satisfacer FR-005–FR-012 sin reconstruir relatos compartidos al mutar. Los recorridos se mantienen. [R1](../09-planning/R1_VALIDATION.md) prueba solo sus reglas deterministas con interpretaciones ficticias; las aceptaciones móviles, de IA y de almacenamiento remoto todavía no están verificadas para v2.
