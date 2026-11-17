@@ -112,6 +112,12 @@ APK actualizado en Samsung y Honor conservando instalación, firma y datos. No s
 
 Consultados convenciones, calidad, guía de desarrollo, contratos existentes y referencia «Sin conexión» de Stitch mediante MCP, sin editar Stitch; comprobada la distinción de códigos en la documentación oficial de Firebase. Se actualizan flujos, requisitos, contrato, seguridad, ADR-013 y referencia visual. **0 llamadas de prueba a OpenAI**.
 
+## Integración en main autorizada · 17 de noviembre
+
+El propietario pide integrar la rama actual y aclara que no se empiece todavía con voz. Se integra la entrega v2 y sus correcciones conservando el historial, sin implementar K5 ni abrir otra rama. R2 mantiene sus pendientes de latencia y reserva independiente; iOS no recibe una nueva validación. Esta integración no ejecuta despliegues, vaciados ni llamadas a OpenAI.
+
+Comprobación previa: **238/238** pruebas raíz, **43/43** unitarias backend y **137/137** emuladores Auth/Functions/Firestore con fixtures ficticios; TypeScript y formato correctos. `mobileCheck` y ambos APK correctos; Gradle reutiliza las tareas de compilación/análisis y los **126 host tests** ya actualizados, sin atribuirles una nueva ejecución. La instrumentación física conserva la evidencia de las entregas anteriores y no se repite para esta integración sin cambios de código. Documentación, enlaces y diff comprobados. Consultados convenciones, calidad, guía de desarrollo, definición de terminado, flujo Git y planes vigentes.
+
 ## Límites conocidos
 
 R2 sigue abierta por latencia y reserva independiente de la última versión. Esta entrega no prueba inferencia real con el adaptador de servidor ni iOS. La app requiere saldo para interpretar, consultar o corregir; no se añade un modo que simule respuestas como si fueran reales.
