@@ -82,6 +82,14 @@ Validación sin OpenAI: **43/43** unitarias backend y **20/20** emuladores v2, T
 
 Fuentes consultadas: convenciones, calidad, flujos, contrato API, seguridad y ADR-013. Documentación comprobada; **0 llamadas de prueba a OpenAI**, sin leer ni modificar recuerdos reales. Sin cambios móviles, de almacenamiento o de diseño; no requiere reinstalar APK. Las pruebas nativas anteriores no se repiten; no hay nueva evidencia de inferencia real o iOS.
 
+## Tamaño del splash Android · 17 de noviembre
+
+Por petición del propietario se sustituye la reutilización directa de `ic_kioku` en el splash Android 12+ por `ic_splash`, que añade un contenedor centrado con margen. El símbolo conserva su geometría/color y pasa de aproximadamente 128 dp a 64 dp visibles en el lienzo estándar de 288 dp. No se modifica el icono del lanzador, la carga de Compose, el backend ni iOS. Android 10/11 conserva su arranque existente.
+
+Compilación de app y tests, `mobileCheck`, formato, arquitectura, Detekt y Lint correctos; host tests **119** reutilizados por Gradle como actualizados, sin nueva ejecución. **1/1** prueba nativa `SplashIconTest` en Honor: resuelve el drawable desde el tema real, lo renderiza al tamaño de splash y mide por píxeles ancho/alto compactos y centrado. Imagen del recurso renderizado inspeccionada; no se presenta como una captura de la animación de arranque del sistema ni como validación en todos los fabricantes. APK instalado con actualización conservando firma y datos; ningún otro dispositivo modificado.
+
+Consultados convenciones, calidad, referencia «02 Entrando» en Stitch y documentación oficial Android de splash. Documentación comprobada; sin edición de Stitch, sin OpenAI y sin acceso a recuerdos reales.
+
 ## Límites conocidos
 
 R2 sigue abierta por latencia y reserva independiente de la última versión. Esta entrega no prueba inferencia real con el adaptador de servidor ni iOS. La app requiere saldo para interpretar, consultar o corregir; no se añade un modo que simule respuestas como si fueran reales.
