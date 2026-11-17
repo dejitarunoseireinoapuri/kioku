@@ -1,5 +1,13 @@
 # Seguridad técnica
 
+## Frontera de memoria v2
+
+La [integración R3](../09-planning/R3_INTEGRATION_VALIDATION.md) mantiene Google revalidado, App Check y propietario habilitado. Cada operación exige la generación del servidor. Las rutas v1 rechazan la activación v2 en sus comprobaciones transaccionales, incluidas confirmaciones tardías. Ningún cliente puede leer/escribir directamente las nuevas colecciones.
+
+Interpretación y respuesta se verifican fuera de transacciones; antes de confirmar se comprueban permisos, revisión y evidencia. Los IDs generados no pueden coincidir con revocaciones. Los olvidos necesitan selección exacta y versión actual, después del diálogo local. Las ofertas requieren aceptación ligada a la huella del plan original y no se convierten en capturas por replay.
+
+Se excluyen texto de fragmentos, contenido canónico y pendientes de índices automáticos innecesarios. El índice RAM se forma desde documentos autorizados de una única revisión y se descarta al acabar. Preguntas, respuestas y avisos con nombres no se persisten. La clave continúa detrás del límite privado de Secret Manager, sin credencial en móvil/dominio.
+
 R2 indexa exclusivamente proyecciones ficticias paginadas bajo una cuenta/época comprobadas. Índice parcial, mezcla de cuentas/versiones o evidencia hidratada distinta se rechazan; después de IA se revalida la generación. Los límites de tokens seleccionados no otorgan autoridad sobre IDs, instantes o escrituras. [Alcance y pruebas](../09-planning/R2_INDEXED_VALIDATION.md).
 
 R2 usa únicamente el corpus ficticio versionado, con consentimiento del propietario y la credencial ya autorizada cargada solo por la ejecución local explícita. Endpoint OpenAI fijo, `store:false`, sin herramientas externas, sin reintentos de inferencia, presupuesto duradero antes de solicitar y errores cerrados sin eco del proveedor. No hay acceso Firebase, lectura de fuentes personales ni permisos nuevos. Los informes locales/Git contienen solo metadatos de evaluación. [Alcance y evidencia R2](../09-planning/R2_VALIDATION.md).

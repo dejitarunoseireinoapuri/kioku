@@ -32,7 +32,7 @@ class NativeCaptureRepository(
         request(
             MemoryEndpoint.Operation,
             buildJsonObject {
-                put("apiVersion", 1)
+                put("apiVersion", 2)
                 put("requestId", requestId)
             }.toString(),
         )

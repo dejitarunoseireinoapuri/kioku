@@ -14,7 +14,7 @@ data class EditableSource(
 
 enum class ChangeAction { Correct, Forget }
 
-const val MAX_MANAGEMENT_SOURCES = 6
+const val MAX_MANAGEMENT_SOURCES = 32
 
 /** Selected values for local feedback only; never serialized as evidence or a command. */
 data class MemoryChangeDescription(

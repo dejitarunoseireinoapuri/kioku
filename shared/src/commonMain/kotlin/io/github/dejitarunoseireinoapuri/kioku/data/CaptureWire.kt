@@ -14,7 +14,7 @@ import kotlinx.serialization.json.put
 
 internal fun capturePayload(command: CaptureCommand): String =
     buildJsonObject {
-        put("apiVersion", 1)
+        put("apiVersion", 2)
         put("requestId", command.requestId)
         put("text", command.text)
         when (command) {
@@ -22,6 +22,7 @@ internal fun capturePayload(command: CaptureCommand): String =
                 put("mode", "tell")
                 put("channel", "text")
                 put("zone", command.zone)
+                command.expectedRevision?.let { put("expectedEpoch", it) }
             }
 
             is CaptureCommand.Clarify -> {
@@ -34,7 +35,7 @@ internal fun capturePayload(command: CaptureCommand): String =
 internal fun parseCapture(json: String): CaptureOutcome {
     require(json.length <= MAX_RESPONSE_LENGTH)
     val value = Json.parseToJsonElement(json).jsonObject
-    require(value.integer("apiVersion") == 1)
+    require(value.integer("apiVersion") == 2)
     require(value.text("operationId").matches(UUID_PATTERN))
     return when (value.text("status")) {
         "saved" -> {
@@ -106,7 +107,7 @@ private fun JsonObject.integer(key: String): Int? {
 
 private val UUID_PATTERN = Regex("[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}")
 private const val MAX_RESPONSE_LENGTH = 40_000
-private const val MAX_SOURCE_LENGTH = 10_020
+private const val MAX_SOURCE_LENGTH = 16_007
 private const val MAX_QUESTION_LENGTH = 500
 private const val MAX_MEMORY_COUNT = 8
 private const val MAX_CLARIFICATION_REVISION = 3

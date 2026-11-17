@@ -4,10 +4,16 @@
       "collectionGroup": "memories",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "__name__", "order": "ASCENDING" },
+        {
+          "fieldPath": "__name__",
+          "order": "ASCENDING"
+        },
         {
           "fieldPath": "searchVector",
-          "vectorConfig": { "dimension": 512, "flat": {} }
+          "vectorConfig": {
+            "dimension": 512,
+            "flat": {}
+          }
         }
       ]
     }
@@ -25,20 +31,86 @@
       "ttl": true,
       "indexes": []
     },
-    { "collectionGroup": "operations", "fieldPath": "pending", "indexes": [] },
+    {
+      "collectionGroup": "operations",
+      "fieldPath": "pending",
+      "indexes": []
+    },
     {
       "collectionGroup": "operations",
       "fieldPath": "pending.turn.id",
-      "indexes": [{ "order": "ASCENDING", "queryScope": "COLLECTION" }]
+      "indexes": [
+        {
+          "order": "ASCENDING",
+          "queryScope": "COLLECTION"
+        }
+      ]
     },
-    { "collectionGroup": "operations", "fieldPath": "question", "indexes": [] },
-    { "collectionGroup": "sources", "fieldPath": "text", "indexes": [] },
-    { "collectionGroup": "memories", "fieldPath": "vector", "indexes": [] },
-    { "collectionGroup": "memories", "fieldPath": "text", "indexes": [] },
-    { "collectionGroup": "memories", "fieldPath": "quote", "indexes": [] },
+    {
+      "collectionGroup": "operations",
+      "fieldPath": "question",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "sources",
+      "fieldPath": "text",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "memories",
+      "fieldPath": "vector",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "memories",
+      "fieldPath": "text",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "memories",
+      "fieldPath": "quote",
+      "indexes": []
+    },
     {
       "collectionGroup": "memories",
       "fieldPath": "attributionEvidence",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "memoryV2Operations",
+      "fieldPath": "expiresAt",
+      "ttl": true,
+      "indexes": []
+    },
+    {
+      "collectionGroup": "memoryV2Plans",
+      "fieldPath": "expiresAt",
+      "ttl": true,
+      "indexes": []
+    },
+    {
+      "collectionGroup": "memoryV2Operations",
+      "fieldPath": "turn",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "memoryV2Operations",
+      "fieldPath": "reply",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "memoryV2Fragments",
+      "fieldPath": "text",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "memoryV2Units",
+      "fieldPath": "content",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "memoryV2Projections",
+      "fieldPath": "terms",
       "indexes": []
     }
   ]

@@ -26,7 +26,7 @@ class NativeMemoryControlRepository(
             request(
                 MemoryEndpoint.SourceDetails,
                 buildJsonObject {
-                    put("apiVersion", 1)
+                    put("apiVersion", 2)
                     put("sourceId", id)
                 }.toString(),
             ),
@@ -34,7 +34,7 @@ class NativeMemoryControlRepository(
 
     override suspend fun revision(): Long? =
         received(
-            request(MemoryEndpoint.SourceDetails, "{\"apiVersion\":1}"),
+            request(MemoryEndpoint.SourceDetails, "{\"apiVersion\":2}"),
         ) { parseMemoryRevision(it) }
 
     override fun prepare(
@@ -55,7 +55,7 @@ class NativeMemoryControlRepository(
     override suspend fun execute(command: MemoryChangeCommand): MemoryChange {
         val payload =
             buildJsonObject {
-                put("apiVersion", 1)
+                put("apiVersion", 2)
                 put("requestId", command.requestId)
                 put("sourceId", command.sourceId)
                 put("expectedVersion", command.expectedVersion)

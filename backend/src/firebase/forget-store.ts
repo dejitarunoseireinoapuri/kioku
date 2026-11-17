@@ -1,3 +1,4 @@
+import { requireLegacyMemory } from "../memory-v2/access.js";
 import { createHash } from "node:crypto";
 import { Timestamp } from "firebase-admin/firestore";
 import type {
@@ -30,6 +31,7 @@ export class FirestoreForgetStore {
     if (!/^[A-Za-z0-9_-]{1,128}$/u.test(uid))
       throw new AccountError("invalid-argument");
     const root = this.db.doc(`accounts/${uid}`);
+    await requireLegacyMemory(tx, this.db, uid);
     const [owner, operation, lock] = await tx.getAll(
       this.db.doc("privateConfiguration/owner"),
       root.collection("operations").doc(work.requestId),

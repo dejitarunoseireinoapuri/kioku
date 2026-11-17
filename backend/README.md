@@ -1,5 +1,7 @@
 # Backend de cuenta y configuración K1
 
+Integración nueva: callable `memoryV2`, núcleo de unidades estables, almacenamiento por documentos y protección de generación. [ADR-013](../docs/02-architecture/ADR/ADR-013-memory-v2-app-integration.md) describe el contrato; [R3](../docs/09-planning/R3_INTEGRATION_VALIDATION.md) registra pruebas y activación. Las secciones K1–K4 siguientes conservan la historia del backend anterior. La configuración de cuenta mantiene v1.
+
 K4 en curso: retirada/corrección selectivas con nuevos `getSourceDetails` y `changeMemory`, controles compartidos desde fuente y revisión global del contexto. Activados con autorización y comprobados en Honor real; índice READY. Guardado/consulta consultan revocaciones para rechazar replays y evidencia retirada. [Alcance y pruebas](../docs/09-planning/K4_VALIDATION.md); órdenes naturales y ofertas aún pendientes. Los comandos normales siguientes incluyen sus pruebas locales sin claves.
 
 `getConfiguration` v1: Google personal, vinculación de UID, estado seguro de IA y revisión. Producción exige App Check/proyecto/apps exactos; las mutaciones de clave son administrativas, sin endpoint móvil. [Decisión](../docs/02-architecture/ADR/ADR-008-k1-native-access-and-credentials.md), [contrato](../docs/04-api/API_CONTRACT.md) y [evidencia actual](../docs/09-planning/K1_INTEGRATION_VALIDATION.md). K1 sigue abierta hasta las comprobaciones reales e iOS.

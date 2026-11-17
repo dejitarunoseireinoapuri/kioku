@@ -1,3 +1,4 @@
+import { requireLegacyMemory } from "../memory-v2/access.js";
 import { createHash, randomUUID } from "node:crypto";
 import { Timestamp } from "firebase-admin/firestore";
 import type {
@@ -42,6 +43,7 @@ export class FirestoreQueryStore implements QueryStore {
     return this.db.doc(`accounts/${uid}`);
   }
   private async owner(tx: Transaction, uid: string) {
+    await requireLegacyMemory(tx, this.db, uid);
     const owner = await tx.get(this.db.doc("privateConfiguration/owner"));
     if (owner.get("uid") !== uid || owner.get("enabled") !== true)
       throw new AccountError("permission-denied");

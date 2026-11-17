@@ -1,3 +1,4 @@
+import { requireLegacyMemory } from "../memory-v2/access.js";
 import { randomUUID } from "node:crypto";
 import { Timestamp } from "firebase-admin/firestore";
 import type { Firestore, Transaction } from "firebase-admin/firestore";
@@ -41,6 +42,7 @@ export class FirestoreCaptureStore implements CaptureStore {
     return this.db.doc(`accounts/${uid}`);
   }
   private async owner(tx: Transaction, uid: string): Promise<void> {
+    await requireLegacyMemory(tx, this.db, uid);
     const owner = await tx.get(this.db.doc("privateConfiguration/owner"));
     if (owner.get("uid") !== uid || owner.get("enabled") !== true)
       throw new AccountError("permission-denied");

@@ -37,7 +37,7 @@ internal sealed interface RoutingReply {
 
 internal fun routingPayload(command: TextCommand): JsonObject =
     buildJsonObject {
-        put("apiVersion", 1)
+        put("apiVersion", 2)
         put("requestId", command.ids.route)
         put("mode", if (command.intent == TextIntent.Ask) "ask" else "tell")
         put("text", command.text)
@@ -54,7 +54,7 @@ internal fun routingPayload(command: TextCommand): JsonObject =
 
 internal fun decisionPayload(command: TextCommand): String =
     buildJsonObject {
-        put("apiVersion", 1)
+        put("apiVersion", 2)
         put("requestId", command.ids.action)
         put("turn", routingPayload(command))
         put("plan", planPayload(requireNotNull(command.plan)))
@@ -109,7 +109,7 @@ internal fun parseRouting(
 ): RoutingReply {
     require(json.length <= MAX_ROUTING_REPLY)
     val value = Json.parseToJsonElement(json).jsonObject
-    require(value.number("apiVersion") == 1L && value.text("operationId") == command.ids.route)
+    require(value.number("apiVersion") == 2L && value.text("operationId") == command.ids.route)
     val fields = setOf("apiVersion", "operationId", "status")
     return when (value.text("status")) {
         "ready" -> {
@@ -188,7 +188,7 @@ private fun parseChange(
     val ids =
         value.getValue("memoryIds").jsonArray.map {
             require(it is JsonPrimitive && it.isString)
-            it.content.also { candidate -> require(candidate in (1..MAX_ROUTE_ITEMS).map { index -> "$id-$index" }) }
+            it.content.also { candidate -> require(candidate.matches(ROUTE_UUID)) }
         }
     require(ids.size in 1..MAX_ROUTE_ITEMS && ids.distinct().size == ids.size)
     val correction =

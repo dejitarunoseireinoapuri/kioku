@@ -1,4 +1,16 @@
-# Contrato backend previsto · v1
+# Contrato backend · memoria v2 y cuenta v1
+
+## Integración v2 · 17 de noviembre de 2026
+
+El contrato de memoria nuevo sustituye las rutas M0 al activar la cuenta: [ADR-013](../02-architecture/ADR/ADR-013-memory-v2-app-integration.md), [estado R3](../09-planning/R3_INTEGRATION_VALIDATION.md). La configuración de cuenta sigue en v1. Las secciones posteriores describen el protocolo anterior.
+
+Callable autenticada y atestada `memoryV2`. Sobre estricto: `{apiVersion:2, operation, generation, payload}`. `state` omite generación/payload y devuelve `{apiVersion:2,generation,memoryEpoch}`; el cliente conserva esa generación y no cambia a otra silenciosamente. Las demás operaciones rechazan generaciones antiguas.
+
+Operaciones: `submit`, `clarify`, `operation`, `source`, `details`, `query`, `change`, `route` y `apply`. Sus payloads conservan los campos funcionales de sus equivalentes anteriores con `apiVersion:2`. `query` exige zona IANA. `submit` admite `expectedEpoch`; la app lo envía al ejecutar un plan Contar. Las ofertas y cambios aplicados verifican la huella exacta del plan, texto, decisión y revisión. No se puede reutilizar un ID de operación con contenido distinto.
+
+Los IDs de elementos son UUID estables, sin sufijo de posición. `sourceId` identifica un grupo de gestión de hasta ocho unidades. `source` y `details` muestran solo su contenido actual con `sourceKind:retained`. Máximo 2000 caracteres por unidad, 16 007 por grupo, 32 referencias de consulta y 128 sustituciones de grupos por cambio. `details` sin sourceId devuelve solo la revisión. Una corrección u olvido sustituye los grupos afectados; sus IDs viejos dejan de servir como evidencia.
+
+`change` exige versión y selección exactas. El móvil confirma localmente todo olvido antes de enviarlo. No se amplía automáticamente el alcance a dependencias. Olvido por identidad elimina todas sus ocurrencias; retirar exclusivamente un relato compartido pide concretar. Las respuestas no se almacenan: repetir una consulta pide repetirla con una nueva operación. Un guardado repetido recupera solo una fuente todavía vigente.
 
 Precisión experimental R2: en compras/reservas `time` distingue por el contenido y soporte la fecha del acto y la fecha objetivo. Si solo consta la segunda puede anclarla, sin afirmar cuándo se realizó la compra ni que hubo asistencia; si constan ambas ancla la del acto y preserva también la objetivo. Consultar la fecha del acto exige su propia evidencia. Sin nuevos campos, colecciones, migración ni modificación de rutas activas. [Reglas y evaluación](../09-planning/R2_BOUNDED_VALIDATION.md).
 

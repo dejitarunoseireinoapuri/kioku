@@ -8,6 +8,7 @@ sealed interface CaptureCommand {
         override val requestId: String,
         override val text: String,
         val zone: String,
+        val expectedRevision: Long? = null,
     ) : CaptureCommand
 
     data class Clarify(

@@ -4,7 +4,7 @@ import {
   InterpretationError,
 } from "./contracts.ts";
 import type { StructuredModel } from "./contracts.ts";
-import type { Harness } from "../fixtures/harness.ts";
+import type { MemoryStore } from "../src/model.ts";
 import type { MemoryPrototype } from "../src/memory.ts";
 import { calendar } from "./calendar.ts";
 import { answerEvidenceView } from "./answer-evidence.ts";
@@ -16,7 +16,11 @@ import {
 
 export async function query(
   model: StructuredModel,
-  h: Harness,
+  h: {
+    store: Pick<MemoryStore, "read">;
+    engine: MemoryPrototype;
+    owner: string;
+  },
   question: string,
   at: string,
   zone: string,

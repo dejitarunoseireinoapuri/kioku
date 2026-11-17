@@ -5,13 +5,14 @@
   "type": "module",
   "main": "lib/src/index.js",
   "imports": {
-    "#memory-core/*": "./lib/memory-core/*.js"
+    "#memory-core/*": "./lib/memory-core/*.js",
+    "#memory-v2/*": "./lib/memory-v2/*.js"
   },
   "engines": {
     "node": ">=22 <25"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.memory-core.json && tsc",
+    "build": "tsc -p tsconfig.memory-core.json && tsc -p tsconfig.memory-v2.json && tsc",
     "gcp-build": "",
     "test": "node --test lib/test/unit/*.test.js",
     "test:emulator": "node --test --test-concurrency=1 lib/test/emulator/*.test.js",

@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "verbatimModuleSyntax": true,
+    "rewriteRelativeImportExtensions": true,
+    "declaration": true,
+    "rootDir": "../prototypes/memory-core",
+    "outDir": "lib/memory-v2",
+    "types": ["node"]
+  },
+  "files": [
+    "../prototypes/memory-core/src/memory.ts",
+    "../prototypes/memory-core/ai/interpreter.ts",
+    "../prototypes/memory-core/ai/provider.ts",
+    "../prototypes/memory-core/ai/catalog-query.ts"
+  ]
+}

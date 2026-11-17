@@ -78,7 +78,7 @@ private fun queryObject(json: String): JsonObject {
     require(json.length <= MAX_QUERY_RESPONSE_LENGTH)
     val value = Json.parseToJsonElement(json).jsonObject
     val version = value["apiVersion"] as? JsonPrimitive
-    require(version != null && !version.isString && version.doubleOrNull == 1.0)
+    require(version != null && !version.isString && version.doubleOrNull == 2.0)
     return value
 }
 
@@ -91,7 +91,7 @@ private fun JsonObject.queryText(key: String): String {
 private val QUERY_UUID = Regex("[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}")
 private val QUERY_DATE = Regex("\\d{4}-\\d{2}-\\d{2}T.+Z")
 private const val QUERY_DATE_LENGTH = 10
-private const val MAX_QUERY_SOURCES = 6
+private const val MAX_QUERY_SOURCES = 32
 private const val MAX_ANSWER_LENGTH = 2400
-private const val MAX_QUERY_SOURCE_LENGTH = 10_020
+private const val MAX_QUERY_SOURCE_LENGTH = 16_007
 private const val MAX_QUERY_RESPONSE_LENGTH = 40_000

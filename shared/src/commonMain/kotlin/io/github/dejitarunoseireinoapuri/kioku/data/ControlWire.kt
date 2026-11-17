@@ -34,7 +34,7 @@ internal fun parseEditableSource(
             require(item.keys == setOf("id", "text"))
             val itemId = item.controlText("id")
             val itemText = item.controlText("text")
-            require(itemId in (1..MAX_CONTROL_ITEMS).map { "$id-$it" } && itemText.length in 1..MAX_CONTROL_ITEM_TEXT)
+            require(itemId.matches(CONTROL_UUID) && itemText.length in 1..MAX_CONTROL_ITEM_TEXT)
             MemoryItem(itemId, itemText)
         }
     require(items.size in 1..MAX_CONTROL_ITEMS && items.distinctBy { it.id }.size == items.size)
@@ -127,7 +127,7 @@ private fun controlObject(json: String): JsonObject {
     require(json.length <= MAX_CONTROL_PAYLOAD)
     val value = Json.parseToJsonElement(json).jsonObject
     val version = value["apiVersion"] as? JsonPrimitive
-    require(version != null && !version.isString && version.doubleOrNull == 1.0)
+    require(version != null && !version.isString && version.doubleOrNull == 2.0)
     return value
 }
 
@@ -148,11 +148,11 @@ private fun controlRevision(value: JsonObject): Long {
 private val CONTROL_UUID = Regex("[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}")
 private val CONTROL_DATE = Regex("\\d{4}-\\d{2}-\\d{2}T.+Z")
 
-private const val MAX_CONTROL_SOURCE = 10020
-private const val MAX_CONTROL_ITEM_TEXT = 1600
+private const val MAX_CONTROL_SOURCE = 16007
+private const val MAX_CONTROL_ITEM_TEXT = 2000
 private const val MAX_CONTROL_ITEMS = 8
 private const val CONTROL_DATE_LENGTH = 10
 private const val MAX_CONTROL_ANSWER = 2400
 private const val MAX_CONTROL_PAYLOAD = 80000
-private const val MAX_CONTROL_CHANGES = 32
+private const val MAX_CONTROL_CHANGES = 128
 private const val MAX_CONTROL_REVISION = 9007199254740991.0

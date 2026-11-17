@@ -50,7 +50,7 @@ class NativeCaptureRepositoryTest {
             val repository = NativeCaptureRepository(port)
             val result = async { repository.execute(repository.tell("Dato ficticio")) }
             runCurrent()
-            port.completion?.invoke(NativeMemoryReply.Received("""{"apiVersion":1,"status":"saved"}"""))
+            port.completion?.invoke(NativeMemoryReply.Received("""{"apiVersion":2,"status":"saved"}"""))
             assertEquals(CaptureOutcome.Unconfirmed, result.await())
         }
 
@@ -78,7 +78,7 @@ class NativeCaptureRepositoryTest {
                         NativeMemoryReply.Failed(CaptureIssue.Unavailable)
                     } else {
                         NativeMemoryReply.Received(
-                            """{"apiVersion":1,"operationId":"00000000-0000-4000-8000-000000000001",
+                            """{"apiVersion":2,"operationId":"00000000-0000-4000-8000-000000000001",
                     "status":"$status"}""",
                         )
                     }
@@ -117,7 +117,7 @@ class NativeCaptureRepositoryTest {
 
     private fun savedPayload(count: String): String {
         val id = "00000000-0000-4000-8000-000000000001"
-        return """{"apiVersion":1e0,"operationId":"$id","status":"saved","sourceId":"$id",
+        return """{"apiVersion":2e0,"operationId":"$id","status":"saved","sourceId":"$id",
             "memoryCount":$count,"source":{"sourceId":"$id","text":"Dato ficticio",
             "receivedAt":"2026-11-13T17:00:00.000Z"}}"""
     }

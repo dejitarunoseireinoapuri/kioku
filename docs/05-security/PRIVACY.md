@@ -1,5 +1,13 @@
 # Privacidad, datos y permisos
 
+## Integración v2 y comienzo vacío solicitado
+
+El 17 de noviembre de 2026 el propietario autoriza borrar los recuerdos actuales y comenzar vacío. La [evidencia R3](../09-planning/R3_INTEGRATION_VALIDATION.md) registra la ejecución sin copiar textos. El borrado abarca fuentes anteriores, recuerdos, índices embebidos y pendientes; no crea un archivo paralelo. Conserva cuenta, credencial privada y contadores numéricos.
+
+V2 conserva evidencia segmentada vinculada a unidades actuales. Corregir sustituye la evidencia afectada; olvidar elimina todas las ocurrencias de las identidades confirmadas y sus proyecciones. La evidencia compartida permanece únicamente para sus propietarios vigentes. El historial original visible sigue siendo RAM de sesión con mensajes afectados deshabilitados, nunca fuente recuperable ni historial del servidor.
+
+Las aclaraciones tienen validez de 15 minutos y hasta tres revisiones; su texto se retira al terminar, fallar o cambiar la memoria. Los planes caducan a los cinco minutos y guardan huellas, no texto. TTL es limpieza eventual, no eliminación física garantizada al expirar. Las admisiones y revocaciones sin contenido impiden reaparición por solicitudes repetidas. Respuestas y avisos con nombres no se persisten.
+
 La continuación de fiabilidad R2 minimiza la vista de consulta enviada al proveedor: fragmentos propios vigentes y sus calendarios, sin IDs de almacenamiento, propietarios ni posiciones/longitud de un relato incompleto. Esos metadatos permanecen en el motor para editar y reautorizar. La evaluación registra únicamente motivos cerrados, roles/índices numéricos de fixtures, estados, comprobaciones y costes; no conserva prosa generada. Solo datos ficticios, sin acceso a Firebase ni recuerdos personales. [Alcance y resultados](../09-planning/R2_RELIABILITY_VALIDATION.md).
 
 R2 conserva instantes/zonas de cada intervención admitida sin añadir una copia completa del relato ni archivar la pregunta del asistente. Las palabras sustituidas se excluyen de todas las intervenciones. El índice paginado se deriva solo del contenido/evidencia vigente y se invalida ante cambios; no incorpora el feed. [Límites y evidencia](../09-planning/R2_INDEXED_VALIDATION.md).

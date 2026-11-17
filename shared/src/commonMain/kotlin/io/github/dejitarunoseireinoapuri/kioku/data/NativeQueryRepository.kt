@@ -71,9 +71,12 @@ class NativeQueryRepository(
         id: String,
         text: String? = null,
     ) = buildJsonObject {
-        put("apiVersion", 1)
+        put("apiVersion", 2)
         put(key, id)
-        if (text != null) put("text", text)
+        if (text != null) {
+            put("text", text)
+            put("zone", port.timeZone())
+        }
     }.toString()
 }
 

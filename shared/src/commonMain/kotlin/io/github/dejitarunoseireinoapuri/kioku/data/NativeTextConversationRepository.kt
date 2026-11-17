@@ -165,7 +165,9 @@ class NativeTextConversationRepository(
 
             is TextPlan.Tell -> {
                 TextOutcome.Captured(
-                    captures.execute(CaptureCommand.Tell(command.ids.action, command.text, command.zone)),
+                    captures.execute(
+                        CaptureCommand.Tell(command.ids.action, command.text, command.zone, plan.stamp.revision),
+                    ),
                 )
             }
 
@@ -237,7 +239,7 @@ class NativeTextConversationRepository(
             require(command.plan is TextPlan.Offer && command.decision == OfferDecision.Reject)
             require(value.keys == setOf("apiVersion", "operationId", "status"))
             val version = value["apiVersion"] as? JsonPrimitive
-            require(version != null && !version.isString && version.doubleOrNull == 1.0)
+            require(version != null && !version.isString && version.doubleOrNull == 2.0)
             return TextOutcome.Declined
         }
         return if (command.plan is TextPlan.Change) {

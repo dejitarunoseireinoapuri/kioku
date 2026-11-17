@@ -1,5 +1,7 @@
 # Mapa documental
 
+Integración solicitada el 17 de noviembre: [núcleo nuevo en la app, inicio vacío y sin pruebas API de pago](09-planning/R3_INTEGRATION_VALIDATION.md). El propietario autoriza borrar los recuerdos actuales al activar la nueva versión; cuenta y acceso se conservan. R2 mantiene sus pendientes históricos.
+
 Estado R2 vigente: [simulación y validación con presupuesto acotado](09-planning/R2_BOUNDED_VALIDATION.md), autorizado inicialmente en 15 USD adicionales y ampliado primero a 20 y después a 25 sin reiniciar el contador. Conserva la [validación previa con Sol alto](09-planning/R2_HIGH_VALIDATION.md), los informes de [asignación/soporte propio](09-planning/R2_ASSIGNMENT_VALIDATION.md) y la [reserva h histórica](09-planning/R2_SCOPE_VALIDATION.md), sin recalificarlos. R2 permanece abierta hasta cumplir sus criterios.
 
 Una fuente por tipo de decisión. Los documentos son el contrato previsto; el estado real se registra en [KNOWN_LIMITATIONS.md](09-planning/KNOWN_LIMITATIONS.md). La evidencia ejecutable se añade al implementar cada fase. Una descripción de pruebas no equivale a una prueba superada.

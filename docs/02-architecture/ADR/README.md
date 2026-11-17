@@ -16,5 +16,6 @@ Una decisión aceptada define la dirección de implementación, no afirma que es
 | [ADR-010](ADR-010-text-query.md) | Implementada y activada; aceptación móvil pendiente | Consulta híbrida, evidencia vigente y preguntas solo de sesión |
 | [ADR-011](ADR-011-memory-control.md) | Control conversacional y olvido entre relatos activos y aceptados en Honor; iOS pendiente | Revocación, cambios selectivos, tickets y retirada conjunta de copias |
 | [ADR-012](ADR-012-independent-memory-units.md) | P1–P3 aceptadas; motor R1 ficticio probado, integración pendiente | Unidades con identidad estable, evidencia segmentada y cambios deterministas; sustituye la dirección de ADR-005/011 |
+| [ADR-013](ADR-013-memory-v2-app-integration.md) | Activada y comprobada en Honor sin inferencia; iOS pendiente | Callable v2, documentos separados, identidades estables y arranque vacío autorizado |
 
 Una nueva ADR recoge contexto, decisión, alternativas, consecuencias y estado. No copiar la numeración ni las decisiones de regalos/comercio de Wonderdrop. No modificar retroactivamente una decisión incompatible: sustituirla con otra que la cite.

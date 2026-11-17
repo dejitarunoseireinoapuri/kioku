@@ -12,9 +12,11 @@ import { memoryCallables } from "./memory/callables.js";
 import { queryCallable } from "./query/callable.js";
 import { controlCallables } from "./memory-control/callables.js";
 import { conversationCallables } from "./conversation/callables.js";
+import { memoryV2Callable } from "./memory-v2/callable.js";
 
 const runtime = backendRuntime(process.env);
 const app = initializeApp({ projectId: runtime.projectId });
+export const memoryV2 = memoryV2Callable(app, getFirestore(app), runtime);
 export const { routeMessage, applyMessage } = conversationCallables(
   app,
   getFirestore(app),

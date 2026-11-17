@@ -1,3 +1,4 @@
+import { requireLegacyMemory } from "../memory-v2/access.js";
 import type {
   DocumentSnapshot,
   Firestore,
@@ -48,6 +49,7 @@ export class FirestoreSourceControlStore implements SourceControlStore {
   private async owner(tx: Transaction, uid: string): Promise<void> {
     if (!/^[A-Za-z0-9_-]{1,128}$/u.test(uid))
       throw new AccountError("invalid-argument");
+    await requireLegacyMemory(tx, this.db, uid);
     const owner = await tx.get(this.db.doc("privateConfiguration/owner"));
     if (owner.get("uid") !== uid || owner.get("enabled") !== true)
       throw new AccountError("permission-denied");

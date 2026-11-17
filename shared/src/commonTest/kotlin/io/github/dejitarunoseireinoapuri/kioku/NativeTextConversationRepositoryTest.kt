@@ -39,7 +39,9 @@ class NativeTextConversationRepositoryTest {
                 val source = "8e65fd01-d6b7-4cd4-9000-000000000001"
                 val fields =
                     "\"action\":\"forget\",\"sourceId\":\"$source\"," +
-                        "\"expectedVersion\":\"${"a".repeat(64)}\",\"memoryIds\":[\"$source-1\"]," +
+                        "\"expectedVersion\":\"${"a".repeat(
+                            64,
+                        )}\",\"memoryIds\":[\"00000000-0000-4000-8000-000000000081\"]," +
                         "\"correction\":null,\"forgetScope\":$scope"
                 port.reply = { _, _ -> ready(command.ids.route, fields) }
                 assertIs<TextOutcome.Failed>(repository.execute(command).outcome)
@@ -61,7 +63,7 @@ class NativeTextConversationRepositoryTest {
                     }
 
                     MemoryEndpoint.ApplyMessage -> {
-                        """{"apiVersion":1,"operationId":"${command.ids.action}","status":"forgotten",
+                        """{"apiVersion":2,"operationId":"${command.ids.action}","status":"forgotten",
                         "text":"Cambio confirmado","sources":[],"memoryEpoch":1}"""
                     }
 
@@ -70,7 +72,7 @@ class NativeTextConversationRepositoryTest {
                             command.ids.route,
                             """
                             "action":"forget","sourceId":"$source","expectedVersion":"${"a".repeat(64)}",
-                            "memoryIds":["$source-1"],"correction":null,"forgetScope":"allOccurrences"
+                            "memoryIds":["00000000-0000-4000-8000-000000000081"],"correction":null,"forgetScope":"allOccurrences"
                             """.trimIndent(),
                         )
                     }
@@ -106,15 +108,30 @@ class NativeTextConversationRepositoryTest {
                             command.ids.route,
                             """
                             "action":"forget","sourceId":"$source","expectedVersion":"${"a".repeat(64)}",
-                            "memoryIds":["$source-1"],"correction":null,"forgetScope":"allOccurrences"
+                            "memoryIds":["00000000-0000-4000-8000-000000000081"],"correction":null,"forgetScope":"allOccurrences"
                             """.trimIndent(),
                         )
                     } else {
                         when (mutation) {
-                            "version" -> sourceDetails(source).replace("a".repeat(64), "b".repeat(64))
-                            "epoch" -> sourceDetails(source, 1)
-                            "missing" -> sourceDetails(source).replace("$source-1", "$source-2")
-                            else -> null
+                            "version" -> {
+                                sourceDetails(source).replace("a".repeat(64), "b".repeat(64))
+                            }
+
+                            "epoch" -> {
+                                sourceDetails(source, 1)
+                            }
+
+                            "missing" -> {
+                                sourceDetails(source)
+                                    .replace(
+                                        "00000000-0000-4000-8000-000000000081",
+                                        "00000000-0000-4000-8000-000000000082",
+                                    )
+                            }
+
+                            else -> {
+                                null
+                            }
                         }
                     }
                 }
@@ -194,7 +211,7 @@ class NativeTextConversationRepositoryTest {
                     ) {
                         ready(command.ids.route, "\"action\":\"ask\"", 2)
                     } else {
-                        """{"apiVersion":1,"operationId":"${command.ids.query}","status":"notFound",
+                        """{"apiVersion":2,"operationId":"${command.ids.query}","status":"notFound",
                 "text":"No consta.","sources":[]}"""
                     }
                 }
@@ -252,7 +269,7 @@ class NativeTextConversationRepositoryTest {
             val prepared = repository.execute(command).command.copy(decision = OfferDecision.Accept)
             port.reply = { _, body -> declined(body) }
             assertEquals(TextOutcome.Captured(CaptureOutcome.Unconfirmed), repository.execute(prepared).outcome)
-            port.reply = { _, _ -> """{"apiVersion":1,"operationId":"${command.ids.query}","status":"declined"}""" }
+            port.reply = { _, _ -> """{"apiVersion":2,"operationId":"${command.ids.query}","status":"declined"}""" }
             assertEquals(
                 TextOutcome.Processing,
                 repository.execute(prepared.copy(decision = OfferDecision.Reject)).outcome,
@@ -285,21 +302,21 @@ class NativeTextConversationRepositoryTest {
     private fun sourceDetails(
         source: String,
         epoch: Int = 0,
-    ) = """{"apiVersion":1,"sourceId":"$source","version":"${"a".repeat(64)}",
+    ) = """{"apiVersion":2,"sourceId":"$source","version":"${"a".repeat(64)}",
         "text":"Película Loto.","receivedAt":"2026-11-14T12:00:00Z","memoryEpoch":$epoch,
-        "items":[{"id":"$source-1","text":"Película Loto."}]}"""
+        "items":[{"id":"00000000-0000-4000-8000-000000000081","text":"Película Loto."}]}"""
 
     private fun ready(
         id: String,
         fields: String,
         epoch: Int = 0,
-    ) = """{"apiVersion":1,"operationId":"$id","status":"ready","plan":{
+    ) = """{"apiVersion":2,"operationId":"$id","status":"ready","plan":{
             "memoryEpoch":$epoch,"receivedAt":"2026-11-14T12:00:00Z","expiresAtMs":1794657900000,$fields}}"""
 
     private fun declined(body: String): String {
         val input = Json.parseToJsonElement(body).jsonObject
         return buildJsonObject {
-            put("apiVersion", 1)
+            put("apiVersion", 2)
             put("operationId", input.getValue("requestId"))
             put("status", "declined")
         }.toString()

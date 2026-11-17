@@ -14,7 +14,7 @@ class QueryWireTest {
     @Test
     fun validAnswerRequiresBoundedDistinctReferencesAndTheMatchingOperation() {
         assertIs<QueryOutcome.Reply>(parseQuery(payload(), id))
-        assertFails { parseQuery(payload().replace("1.0", "1.5"), id) }
+        assertFails { parseQuery(payload().replace("2.0", "2.5"), id) }
         assertFails { parseQuery(payload(), "different") }
         assertIs<QueryOutcome.Reply>(parseQuery(payload().replace("answered", "needsClarification"), id))
         assertFails { parseQuery(payload().replace("answered", "unknown"), id) }
@@ -24,20 +24,20 @@ class QueryWireTest {
 
     @Test
     fun sourceCannotReturnAnotherReferenceOrExtraProviderFields() {
-        val source = """{"apiVersion":1,"sourceId":"$id","text":"Fuente ficticia",
+        val source = """{"apiVersion":2,"sourceId":"$id","text":"Fuente ficticia",
             "receivedAt":"2026-11-13T12:00:00Z"}"""
         assertEquals("2026-11-13T12:00:00Z", parseQuerySource(source, id).receivedAt)
         assertFails { parseQuerySource(source, "foreign") }
         assertFails {
             parseQuerySource(
-                source.replace("\"apiVersion\":1", "\"apiVersion\":1,\"rawProvider\":\"private\""),
+                source.replace("\"apiVersion\":2", "\"apiVersion\":2,\"rawProvider\":\"private\""),
                 id,
             )
         }
     }
 
     private fun payload() =
-        """{"apiVersion":1.0,"operationId":"$id","status":"answered","text":"Respuesta ficticia","sources":[${reference()}]}"""
+        """{"apiVersion":2.0,"operationId":"$id","status":"answered","text":"Respuesta ficticia","sources":[${reference()}]}"""
 
     private fun reference() = """{"sourceId":"$id","receivedAt":"2026-11-13T12:00:00Z"}"""
 }

@@ -17,6 +17,8 @@ internal class AndroidMemoryPort(
     private val auth: FirebaseAuth,
     private val functions: FirebaseFunctions,
 ) : NativeMemoryPort {
+    private var generation: Pair<String, String>? = null
+
     override fun requestId(): String = UUID.randomUUID().toString()
 
     override fun timeZone(): String = TimeZone.getDefault().id
@@ -31,24 +33,72 @@ internal class AndroidMemoryPort(
                 completion(NativeMemoryReply.Failed(CaptureIssue.Denied))
                 return NativeCancellation {}
             }
-        val name = endpoint.callableName()
         var cancelled = false
         val objectValue = JSONObject(json)
         val payload = objectValue.keys().asSequence().associateWith { objectValue.get(it) }
-        val callable = functions.getHttpsCallable(name).apply { setTimeout(185, TimeUnit.SECONDS) }
-        callable.call(payload).addOnCompleteListener { task ->
-            if (!cancelled && auth.currentUser?.uid == uid) {
-                val value = task.resultOrNull()?.data as? Map<*, *>
-                val reply =
-                    if (task.isSuccessful && value != null) {
-                        NativeMemoryReply.Received(JSONObject(value).toString())
-                    } else {
-                        NativeMemoryReply.Failed(issue(task.exception))
-                    }
-                completion(reply)
+        val active = { !cancelled && auth.currentUser?.uid == uid }
+        resolveGeneration(uid) { current, failure ->
+            if (active()) {
+                if (current == null) {
+                    completion(NativeMemoryReply.Failed(failure ?: CaptureIssue.Unavailable))
+                } else {
+                    send(endpoint, payload, current) { reply -> if (active()) completion(reply) }
+                }
             }
         }
         return NativeCancellation { cancelled = true }
+    }
+
+    private fun resolveGeneration(
+        uid: String,
+        completion: (String?, CaptureIssue?) -> Unit,
+    ) {
+        generation?.takeIf { it.first == uid }?.let {
+            completion(it.second, null)
+            return
+        }
+        functions
+            .getHttpsCallable("memoryV2")
+            .call(mapOf("apiVersion" to 2, "operation" to "state"))
+            .addOnCompleteListener { task ->
+                val value = task.resultOrNull()?.data as? Map<*, *>
+                val current = value?.get("generation") as? String
+                val valid =
+                    (value?.get("apiVersion") as? Number)?.toDouble() == 2.0 &&
+                        current?.matches(MEMORY_GENERATION) == true
+                if (task.isSuccessful && valid && auth.currentUser?.uid == uid) {
+                    generation = uid to requireNotNull(current)
+                    completion(current, null)
+                } else {
+                    completion(null, issue(task.exception))
+                }
+            }
+    }
+
+    private fun send(
+        endpoint: MemoryEndpoint,
+        payload: Map<String, Any>,
+        current: String,
+        completion: (NativeMemoryReply) -> Unit,
+    ) {
+        val envelope =
+            mapOf(
+                "apiVersion" to 2,
+                "operation" to endpoint.operation(),
+                "generation" to current,
+                "payload" to payload,
+            )
+        val callable = functions.getHttpsCallable("memoryV2").apply { setTimeout(185, TimeUnit.SECONDS) }
+        callable.call(envelope).addOnCompleteListener { task ->
+            val value = task.resultOrNull()?.data as? Map<*, *>
+            completion(
+                if (task.isSuccessful && value != null) {
+                    NativeMemoryReply.Received(JSONObject(value).toString())
+                } else {
+                    NativeMemoryReply.Failed(issue(task.exception))
+                },
+            )
+        }
     }
 
     private fun issue(error: Exception?): CaptureIssue =
@@ -77,15 +127,17 @@ internal class AndroidMemoryPort(
 
 private fun <T> com.google.android.gms.tasks.Task<T>.resultOrNull(): T? = if (isSuccessful) result else null
 
-private fun MemoryEndpoint.callableName(): String =
+private fun MemoryEndpoint.operation(): String =
     when (this) {
-        MemoryEndpoint.Submit -> "submitTurn"
-        MemoryEndpoint.Clarify -> "resolveClarification"
-        MemoryEndpoint.Operation -> "getOperation"
-        MemoryEndpoint.Query -> "queryMemory"
-        MemoryEndpoint.Source -> "getSource"
-        MemoryEndpoint.SourceDetails -> "getSourceDetails"
-        MemoryEndpoint.Change -> "changeMemory"
-        MemoryEndpoint.RouteMessage -> "routeMessage"
-        MemoryEndpoint.ApplyMessage -> "applyMessage"
+        MemoryEndpoint.Submit -> "submit"
+        MemoryEndpoint.Clarify -> "clarify"
+        MemoryEndpoint.Operation -> "operation"
+        MemoryEndpoint.Query -> "query"
+        MemoryEndpoint.Source -> "source"
+        MemoryEndpoint.SourceDetails -> "details"
+        MemoryEndpoint.Change -> "change"
+        MemoryEndpoint.RouteMessage -> "route"
+        MemoryEndpoint.ApplyMessage -> "apply"
     }
+
+private val MEMORY_GENERATION = Regex("[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}")

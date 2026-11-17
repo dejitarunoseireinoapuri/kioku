@@ -1,5 +1,15 @@
 # Modelo lógico de datos
 
+## Almacenamiento v2 de la aplicación
+
+[ADR-013](../02-architecture/ADR/ADR-013-memory-v2-app-integration.md) integra el [modelo de unidades](../02-architecture/MEMORY_CORE_V2.md). El [estado R3](../09-planning/R3_INTEGRATION_VALIDATION.md) determina su activación. Bajo `accounts/{uid}`: `memoryV2Units`, `memoryV2Sources`, `memoryV2Fragments`, `memoryV2Occurrences`, `memoryV2Relations` y `memoryV2Projections` son documentos individuales; Sources guarda sobres, nunca texto completo.
+
+`memoryV2Groups` guarda IDs de unidades y fecha, sin texto. `memoryV2Revocations` conserva revocaciones sin contenido; `memoryV2Admissions`, `memoryV2RequestIds` y `memoryV2Applied` impiden reutilizar operaciones aun después de caducar recibos. `memoryV2Receipts` contiene metadatos de resultado. `memoryV2Operations` conserva trabajo y aclaraciones temporales; tras confirmar/fallar se retira el texto. `memoryV2Plans` contiene huellas, generación, revisión y vínculo de aceptación. Operations y Plans tienen TTL; un registro caducado es inutilizable aunque la limpieza física se retrase.
+
+`runtime/memory`: schemaVersion 2, generación UUID, estado active/maintenance y revisión. Toda confirmación valida propietario, generación, revisión y lease. Escribe diferencias y purga pendientes/planes anteriores. Catálogo acotado a 256 unidades y 4096 documentos canónicos; la admisión incluye documentos de gestión en el cálculo de capacidad para futuros olvidos.
+
+El propietario eligió borrar los datos anteriores sin migración ni archivo. El activador administrativo elimina sources/memories/operations/revocations antiguos y el lock de captura bajo mantenimiento; conserva cuenta, configuración privada y usage. El modelo anterior se mantiene documentado a continuación como referencia histórica.
+
 Precisión experimental R2: en compras/reservas `time` distingue por el contenido y soporte la fecha del acto y la fecha objetivo. Si solo consta la segunda puede anclarla, sin afirmar cuándo se realizó la compra ni que hubo asistencia; si constan ambas ancla la del acto y preserva también la objetivo. Consultar la fecha del acto exige su propia evidencia. Sin nuevos campos, colecciones, migración ni modificación de rutas activas. [Reglas y evaluación](../09-planning/R2_BOUNDED_VALIDATION.md).
 
 Precisión del prototipo R2: en `quotation`, `polarity` describe la proposición citada (incluida una prohibición), no el hecho afirmativo de comunicarla. `attribution` conserva emisor o procedencia textual expresada aunque el autor humano sea desconocido. Reiterar ese mismo contenido mantiene identidad; otra ocasión del hecho comunicado no. Una fecha no pasa a otro plan por proximidad sin vínculo expresado. No añade campos, colecciones ni migración. [Contrato y validación local](../09-planning/R2_SCOPE_VALIDATION.md).
