@@ -18,7 +18,7 @@
     <string name="voice_hint">La voz estará disponible en una próxima versión.</string>
     <string name="text_preview_notice">El guardado aún no está conectado. El texto sigue en el editor.</string>
     <string name="voice_preview_notice">El micrófono y el audio todavía no están disponibles.</string>
-    <string name="forget_preview_notice">El borrado de recuerdos todavía no está conectado.</string>
+    <string name="forget_preview_notice">Este recuerdo ya no está disponible para gestionarlo. Vuelve a consultarlo.</string>
     <string name="examples_heading">Recorridos de ejemplo</string>
     <string name="example_ready">01 · Listo para recordar</string>
     <string name="example_locked">02 · Grabación bloqueada</string>

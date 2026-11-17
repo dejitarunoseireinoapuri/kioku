@@ -37,6 +37,13 @@ internal class MemoryVisibilitySession(
         }
     }
 
+    fun acceptCapture(value: Long) {
+        val previous = revision
+        if (previous != null && value <= previous) return
+        accept(value)
+        onResolved(VisibilityResult(value, previous != null && value != previous + 1, false))
+    }
+
     fun beforeSubmit(
         state: ConversationState,
         onReady: () -> Unit,

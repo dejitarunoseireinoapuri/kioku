@@ -113,6 +113,7 @@ export class V2MutationStore {
               operationId: lease.requestId,
               sourceId: created.id,
               memoryCount: created.unitIds.length,
+              memoryEpoch: transition.next.epoch,
             }
           : {
               apiVersion: 2,

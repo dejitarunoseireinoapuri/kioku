@@ -65,8 +65,12 @@ export async function presentSaved(
   if (reply.status !== "saved") return reply;
   return db.runTransaction(
     async (tx) => {
-      const loaded = await loadV2State(tx, db, uid, generation);
+      const requestId = String(reply.operationId);
+      const loaded = await loadV2State(tx, db, uid, generation, requestId);
+      const receipt = loaded.state.receipts[requestId];
       if (
+        !receipt ||
+        receipt.kind !== "capture" ||
         typeof reply.sourceId !== "string" ||
         !loaded.groups.some((g) => g.id === reply.sourceId)
       )
@@ -78,6 +82,7 @@ export async function presentSaved(
       const group = presentGroup(loaded, reply.sourceId);
       return {
         ...reply,
+        memoryEpoch: receipt.epoch,
         source: {
           sourceId: group.sourceId,
           text: group.text,

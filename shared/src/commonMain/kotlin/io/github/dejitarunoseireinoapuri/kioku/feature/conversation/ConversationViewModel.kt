@@ -295,6 +295,7 @@ class ConversationViewModel(
             viewModelScope.launch {
                 val result = if (recover) repository.recover(pending.requestId) else repository.execute(pending)
                 if (generation != operationGeneration) return@launch
+                (result as? CaptureOutcome.Saved)?.memoryRevision?.let(visibility::acceptCapture)
                 val clearDraft =
                     result is CaptureOutcome.Saved || result is CaptureOutcome.Clarification ||
                         result == CaptureOutcome.Ignored || result == CaptureOutcome.Expired

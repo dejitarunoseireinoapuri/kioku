@@ -4,6 +4,9 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.CaptureOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextCommand
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextOutcome
 
+internal val TextOutcome.savedRevision: Long?
+    get() = ((this as? TextOutcome.Captured)?.capture as? CaptureOutcome.Saved)?.memoryRevision
+
 internal fun CaptureOutcome?.isUnresolvedCapture(): Boolean =
     this == CaptureOutcome.Processing || this == CaptureOutcome.Unconfirmed
 

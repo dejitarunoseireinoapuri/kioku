@@ -63,7 +63,9 @@ internal fun parseCapture(json: String): CaptureOutcome {
 }
 
 private fun saved(value: JsonObject): CaptureOutcome.Saved {
-    require(value.keys == setOf("apiVersion", "status", "operationId", "sourceId", "memoryCount", "source"))
+    require(
+        value.keys == setOf("apiVersion", "status", "operationId", "sourceId", "memoryCount", "source", "memoryEpoch"),
+    )
     val source = value.getValue("source").jsonObject
     require(source.keys == setOf("sourceId", "text", "receivedAt"))
     val id = source.text("sourceId")
@@ -75,7 +77,15 @@ private fun saved(value: JsonObject): CaptureOutcome.Saved {
     return CaptureOutcome.Saved(
         MemorySource(id, text, date.take(DATE_LENGTH), receivedAt = date),
         requireNotNull(count),
+        value.memoryRevision(),
     )
+}
+
+private fun JsonObject.memoryRevision(): Long {
+    val primitive = get("memoryEpoch") as? JsonPrimitive
+    val number = primitive?.takeUnless { it.isString }?.doubleOrNull
+    require(number != null && number.isFinite() && number in 1.0..MAX_SAFE_INTEGER && number % 1.0 == 0.0)
+    return number.toLong()
 }
 
 private fun terminal(value: JsonObject): CaptureOutcome {
@@ -112,3 +122,4 @@ private const val MAX_QUESTION_LENGTH = 500
 private const val MAX_MEMORY_COUNT = 8
 private const val MAX_CLARIFICATION_REVISION = 3
 private const val DATE_LENGTH = 10
+private const val MAX_SAFE_INTEGER = 9_007_199_254_740_991.0

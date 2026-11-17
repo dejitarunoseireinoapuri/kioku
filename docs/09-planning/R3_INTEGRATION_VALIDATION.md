@@ -34,6 +34,18 @@ Comprobación física `ActivatedMemoryV2Test`: **1/1**, sesión existente y cone
 - Comprobador documental correcto: enlaces, mapa y 13 ADR. Fuentes funcionales y de privacidad revisadas para el nuevo contrato. No hay cambio visual ni modificación de Stitch.
 - **0 llamadas de prueba a OpenAI**, sin cargar la clave local ni alterar presupuestos anteriores. La verificación física consultó únicamente revisión/generación, sin captura, consulta de recuerdos ni corrección.
 
+## Corrección de acceso a Gestionar tras guardar · 17 de noviembre
+
+El propietario detectó el aviso incorrecto «El borrado de recuerdos todavía no está conectado». La ruta de borrado estaba integrada, pero `saved` no comunicaba el avance de revisión propio de v2. Al revalidar antes de navegar, el móvil interpretaba ese guardado como un cambio externo, retiraba las referencias RAM y terminaba en un aviso antiguo de ejemplo.
+
+La confirmación de guardado y su recuperación incluyen ahora la revisión del commit original; los recibos anteriores se completan desde el registro canónico, sin atribuirles cambios posteriores. La app acepta ese avance propio y conserva las referencias y el historial. Los saltos con cambios intermedios y las revalidaciones externas siguen invalidando el contenido anterior. El aviso residual indica que el recuerdo no está disponible para gestionarlo. No se cambian el diálogo de confirmación ni el alcance de olvido.
+
+Validación de la corrección: **116/116** host tests Android, **40/40** unitarios backend, **16/16** emuladores v2; compilación, formato, arquitectura, Detekt y Android Lint correctos. Incluye guardados sucesivos, recuperación, revisión original de recibos anteriores, rechazo de revisiones inválidas y retirada de referencias ante cambios externos. **1/1** prueba física `SavedMemoryManagementTest` en Honor: guardar, abrir Gestionar, cancelar sin ejecutar y confirmar una sola eliminación. Cuenta y repositorios de esta prueba son ficticios y no acceden a Firebase/OpenAI. APK actualizado conservando instalación y firma. No se repite el vaciado de la cuenta ni se leen/modifican recuerdos reales.
+
+Fuentes consultadas para la corrección: convenciones, política de calidad, guía de desarrollo, contrato API y evidencia R3; pantalla Gestionar de Stitch consultada sin editarla. **0 llamadas de prueba a OpenAI**. La prueba física no acredita inferencia real ni iOS.
+
+Corrección publicada únicamente en `memoryV2`, dentro de la autorización de despliegue vigente. Estado remoto comprobado **ACTIVE**, actualización `2026-11-17T08:27:26Z` e identidad de ejecución esperada. No se modifican las otras nueve funciones, credenciales ni configuración de memoria.
+
 ## Límites conocidos
 
 R2 sigue abierta por latencia y reserva independiente de la última versión. Esta entrega no prueba inferencia real con el adaptador de servidor ni iOS. La app requiere saldo para interpretar, consultar o corregir; no se añade un modo que simule respuestas como si fueran reales.

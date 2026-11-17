@@ -153,6 +153,7 @@ test("v2 capture persists individual reviewed fragments and replay does not call
     result = await save(command),
     loaded = await reader().load();
   assert.equal(result.status, "saved");
+  assert.equal(result.memoryEpoch, 1);
   assert.equal(Object.keys(loaded.state.units).length, 1);
   assert.equal(Object.values(loaded.state.fragments)[0]?.text, command.text);
   assert.ok(Object.values(loaded.state.sources).every((s) => !("text" in s)));
@@ -165,6 +166,22 @@ test("v2 capture persists individual reviewed fragments and replay does not call
     ).get("turn"),
     null,
   );
+});
+
+test("saved replay reports its own commit epoch even for an older receipt", async () => {
+  const command = input();
+  const first = await save(command);
+  await save(input("El robot ficticio Iris es rojo."));
+  assert.equal((await save(command, noModel)).memoryEpoch, 1);
+  const { memoryEpoch: _epoch, source: _source, ...oldReply } = first;
+  await db
+    .doc(`accounts/${uid}/memoryV2Operations/${command.requestId}`)
+    .update({ reply: oldReply });
+  assert.equal((await save(command, noModel)).memoryEpoch, 1);
+  await db
+    .doc(`accounts/${uid}/memoryV2Receipts/${command.requestId}`)
+    .delete();
+  assert.equal((await save(command, noModel)).status, "expired");
 });
 
 test("v2 correction preserves identity across repetitions and revokes all obsolete management aliases", async () => {

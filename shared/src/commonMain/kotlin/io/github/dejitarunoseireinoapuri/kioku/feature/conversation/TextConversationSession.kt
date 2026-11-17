@@ -148,7 +148,10 @@ internal class TextConversationSession(
                     } catch (_: Exception) {
                         CaptureOutcome.Unconfirmed
                     }
-                if (epoch == generation) publish(state.recoveredCapture(messageId, command, result))
+                if (epoch == generation) {
+                    alignRevision((result as? CaptureOutcome.Saved)?.memoryRevision, ownCapture = true)
+                    publish(state.recoveredCapture(messageId, command, result))
+                }
             }
     }
 
@@ -185,7 +188,7 @@ internal class TextConversationSession(
                 val execution =
                     repository.execute(command) { prepared ->
                         if (epoch == generation) {
-                            alignRevision(prepared)
+                            alignRevision(prepared.plan?.stamp?.revision)
                             publish(state.copy(status = TextStatus.Working(prepared)))
                         }
                     }
@@ -199,7 +202,12 @@ internal class TextConversationSession(
                     onChanged(outcome.result, description)
                     return@launch
                 }
-                alignRevision(execution.command)
+                alignRevision(
+                    execution.command.plan
+                        ?.stamp
+                        ?.revision,
+                )
+                alignRevision(outcome.savedRevision, ownCapture = true)
                 references = outcome.references()
                 rememberQuestion(command.text, outcome)
                 if (outcome !is TextOutcome.ConfirmForget) {
@@ -210,14 +218,19 @@ internal class TextConversationSession(
             }
     }
 
-    private fun alignRevision(command: TextCommand) {
-        command.plan?.stamp?.revision?.takeIf { it > revision }?.let { value ->
-            val last = state.messages.filterIsInstance<TextMessage.Owner>().lastOrNull()
-            state = state.copy(messages = listOfNotNull(last), source = null)
-            histories.clear()
-            ownerId = last?.id
-            questions.clear()
-            references = emptyList()
+    private fun alignRevision(
+        value: Long?,
+        ownCapture: Boolean = false,
+    ) {
+        if (value != null && value > revision) {
+            if (!ownCapture || value != revision + 1) {
+                val last = state.messages.filterIsInstance<TextMessage.Owner>().lastOrNull()
+                state = state.copy(messages = listOfNotNull(last), source = null)
+                histories.clear()
+                ownerId = last?.id
+                questions.clear()
+                references = emptyList()
+            }
             revision = value
             onRevision(value)
         }

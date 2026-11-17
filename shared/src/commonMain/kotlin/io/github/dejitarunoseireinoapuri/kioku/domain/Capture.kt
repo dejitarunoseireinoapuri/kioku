@@ -25,6 +25,7 @@ sealed interface CaptureOutcome {
     data class Saved(
         val source: MemorySource,
         val memoryCount: Int,
+        val memoryRevision: Long? = null,
     ) : CaptureOutcome
 
     data class Clarification(
