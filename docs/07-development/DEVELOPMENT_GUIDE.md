@@ -98,6 +98,8 @@ Para entrar en un iPhone físico, registrar App Attest con el ID de equipo Apple
 
 ## Trabajo por caso de uso
 
+Fuentes compartidas: [evidencia local](../09-planning/SHARED_SOURCES_VALIDATION.md). Las suites normales backend y emuladores incluyen documentos generados; no usar opciones Live. `tooling/mobile.ps1 mobileCheck :androidApp:assembleDebug :androidApp:assembleDebugAndroidTest` compila el receptor y sus pruebas. Instrumentar únicamente `ReferenceReceiverTest` y `ReferenceImportUiTest` usa el proveedor debug y pantalla ficticios, sin abrir la cuenta real; preservar instalación/datos mediante actualización, nunca reset. El componente de importación del producto sigue deshabilitado hasta conectar transporte y aceptación integrada.
+
 Trazar FR/BR → UC → contrato/datos → comportamiento → prueba. Para operaciones protegidas, diseñar y probar backend/reglas antes de confiar en un cliente. Usar proveedores fake para pruebas aisladas. La credencial y su tratamiento se deciden antes de tocar código que llame a OpenAI; no se necesita una clave para preparar esta documentación.
 
 Registrar evidencia acotada, sin contenido privado. No desinstalar ni borrar datos de dispositivos personales por rutina. Mantener sesión y firma de instalaciones de prueba compatibles.

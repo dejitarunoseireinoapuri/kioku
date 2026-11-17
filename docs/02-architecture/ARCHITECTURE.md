@@ -1,6 +1,6 @@
 # Arquitectura
 
-Propuesta documental nueva: [ADR-016](ADR/ADR-016-shared-reference-sources.md) y [plan I0–I7](../09-planning/SHARED_SOURCES_PLAN.md) separan fuentes de referencia de unidades personales, adaptadores nativos de Compartir, extracción aislada, fetcher web controlado y autoridad de backend. No modifica el grafo o componentes ejecutables actuales; las pruebas de esta ampliación se prepararán sin proveedor IA.
+Primera base documental local: [ADR-016](ADR/ADR-016-shared-reference-sources.md) y [evidencia](../09-planning/SHARED_SOURCES_VALIDATION.md). `ReferenceImportRepository` es portable; el ViewModel controla estados/generaciones y el adaptador Android controla Intent/URI/lectura. `backend/src/references` implementa extracción determinista en worker y autoridad transaccional separada de la memoria personal. No hay proveedor IA, transporte autenticado nuevo o descarga web; el receptor queda deshabilitado hasta conectar esas fronteras. No cambia el grafo activo de la app ni el servidor desplegado.
 
 Dictado: [ADR-015](ADR/ADR-015-dictation-draft.md) separa transcripción de envío. `VoiceCaptureHost` entrega solo `EditDraft` al parar; los parciales son presentación y solo el envío manual posterior inicia los casos de memoria. Sustituye el gesto de mantener/bloquear de ADR-014.
 

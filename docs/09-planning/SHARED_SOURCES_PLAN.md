@@ -2,7 +2,7 @@
 
 ## Estado, autorización y resultado
 
-Plan preparado por petición del propietario: incorporar archivos, Drive y páginas web mediante el menú **Compartir** del sistema, además de seleccionar archivos dentro de Kioku. Solo planificación en esta entrega: no hay código de importación, recursos nuevos, acceso a Drive, despliegues o pruebas nativas ejecutadas.
+Implementación iniciada por petición del propietario en `codex/shared-sources`, desde el dictado aceptado. Hay extractores deterministas, almacenamiento protegido probado en emuladores, contratos/estado/pantalla KMP y recepción/lectura Android de fixtures. Es una primera base local: no hay transporte autenticado nuevo, selector conectado, descarga web, integración con preguntas o despliegue. El receptor permanece deshabilitado para datos del propietario. [Evidencia y pendientes](SHARED_SOURCES_VALIDATION.md).
 
 La preparación e implementación local se diseñan con **cero llamadas de IA, cero gasto de API y solo casos ficticios**. No se cargan claves, recuerdos, archivos, enlaces privados ni cuentas documentales reales. Consultar documentación pública no implica usar la API de esos servicios. Las pruebas de respuestas con dobles no acreditan comprensión real. El coste de almacenamiento/CPU remoto tampoco se considera gratuito: cualquier activación remota se separa de este plan.
 
@@ -38,7 +38,7 @@ Compartir mientras Kioku está cerrada, abierta, preguntando, mostrando gestión
 
 - El contenido importado se conserva como **fuente de referencia** con título, procedencia, versión y fragmentos. No se convierte automáticamente en experiencias/preferencias del propietario. «El documento recomienda…» y «Tú contaste…» mantienen atribuciones distintas.
 - Guardar una web conserva una instantánea textual con fecha de obtención; preguntar usa esa versión, sin releer internet silenciosamente. Una actualización explícita crea una versión nueva y retira citas de la anterior al confirmar. Cambiar el archivo original tampoco cambia lo importado automáticamente.
-- La propuesta inicial conserva texto extraído y localizadores, no una biblioteca permanente de binarios/HTML bruto. El enlace original sirve para volver al proveedor; que desaparezca después no invalida por sí mismo la copia textual importada. No se promete reconstruir el PDF original desde esa copia.
+- Decisión del propietario del 17 de noviembre: conservar solo texto extraído y localizadores, sin biblioteca de binarios/HTML bruto; sincronización aplazada. El enlace original sirve para volver al proveedor; que desaparezca después no invalida por sí mismo la copia textual importada. No se promete reconstruir el PDF original desde esa copia.
 - No reescribir el contenido ajeno mediante Corregir un recuerdo. La sustitución del documento es una nueva versión; una nota personal sobre él sigue las reglas de Contar/ofertas y cita la fuente cuando corresponda.
 - Duplicados idénticos de la misma cuenta y versión se reconocen con huella de contenido y versión de extracción; el título o URL solos no prueban igualdad. Otra cuenta no puede deducir que el documento existe. Un reintento no reimporta; un nuevo compartir explícito tras eliminar es una operación nueva, sin rehabilitar IDs retirados.
 - La revisión/época autoriza cada consulta y su respuesta final. Olvidar revoca inmediatamente la recuperabilidad, cancela trabajos, retira fragmentos/índices y desactiva citas/contextos anteriores. El feed RAM histórico conserva únicamente la excepción de presentación ya elegida por el propietario; nunca vuelve a ser evidencia.
@@ -71,6 +71,8 @@ Durante el tramo sin API: extracción determinista, búsqueda textual acotada y 
 ## Límites y retención propuestos para el primer piloto
 
 Estos valores son propuestas conservadoras para I0, no capacidad acreditada ni autorización de almacenamiento remoto. Ajustarlos exige justificarlo y repetir casos de límites; no recortar sin aviso.
+
+La primera base aplica los límites de archivos/texto/catálogo y plazo/heap por worker; el lector Android usa RAM, sin copia binaria persistente, y plazo de 15 s. Operaciones remotas locales vencen a los 15 minutos, con barrido al admitir, todavía sin job programado. Las cotas de fetcher/cola/retención operacional de esta tabla siguen pendientes. El detalle ejecutado y sus límites prevalece en [SHARED_SOURCES_VALIDATION](SHARED_SOURCES_VALIDATION.md); no interpretar la tabla prevista como cierre integrado.
 
 | Recurso | Propuesta inicial |
 | --- | --- |
@@ -113,7 +115,7 @@ Los contratos/backend se preparan antes de que la UI anuncie guardado. I1 puede 
 
 La prueba temprana de iOS debe resolver el traspaso temporal y la identidad entre extensión/contenedor (App Groups/Keychain y atestación por verificar). No se resuelve deshabilitando App Check, dejando tokens en archivos de intercambio o prometiendo que el login del contenedor autoriza directamente la extensión. Una subfase de Drive por fichero terminada tampoco acredita enlaces privados: el cierre de esa capacidad exige el recorrido de autorización/exportación I4 correspondiente.
 
-Crear una rama independiente propuesta `codex/shared-sources` al iniciar implementación desde el punto que incluya el dictado aceptado. No integrar voz en main, cambiar de rama, desplegar, activar recursos o modificar código por preparar este documento. Conservar los pendientes R2/K5/K6; esta ampliación no los cierra.
+Rama independiente `codex/shared-sources` creada desde el dictado aceptado. Esta implementación local está autorizada; no integra voz en main, despliega o activa recursos. Conservar los pendientes R2/K5/K6; esta ampliación no los cierra.
 
 ## Matriz mínima de casos ficticios
 
@@ -140,8 +142,8 @@ Separar en un informe futuro: casos previstos, ejecutados, fallidos y pendientes
 
 ## Decisiones propuestas no bloqueantes para preparar el plan
 
-- [PENDING DECISION] Conservar solo texto extraído (recomendado para el primer piloto) o archivar también el original. Archivar cambia almacenamiento, coste, privacidad y borrado; no se presupone autorizado. Resolver antes de I3 real.
-- [PENDING DECISION] Actualizar documentos manualmente mediante reimportación/versionado (propuesta inicial) o sincronizar Drive/web. Sincronización introduce permisos persistentes y trabajos recurrentes y queda fuera de esta entrega.
+- Resuelto por el propietario: conservar solo texto extraído. No archivar originales.
+- Resuelto por el propietario: dejar la sincronización para más adelante. Recompartir es explícito; la sustitución manual atómica de una versión aún no está implementada.
 - [PENDING DECISION] Aceptar las cotas/formatos iniciales propuestos o ajustarlos en I0 con casos medidos. La elección no bloquea redactar contratos ni crear fixtures; sí debe quedar fijada antes de aceptar entradas reales.
 
 ## Fuentes consultadas

@@ -1,5 +1,9 @@
 # Backend de cuenta y configuración K1
 
+## Fuentes compartidas · base local
+
+`src/references` contiene extractores deterministas, servicio interno y almacén por generación; ningún endpoint nuevo se exporta desde index. Solo texto extraído, sin staging binario persistente o IA. `node tooling/backend.mjs build`, `node tooling/backend.mjs test` y `pwsh -NoProfile -File tooling/backend-emulators.ps1`, desde la raíz, incluyen los fixtures documentales. Ejecutar sin opciones Live ni claves. El runner de emuladores conserva sus guardas demo/loopback. [Evidencia, versiones de parsers y pendientes](../docs/09-planning/SHARED_SOURCES_VALIDATION.md). No desplegar esta base o activar entradas reales por seguir estos comandos.
+
 Integración nueva: callable `memoryV2`, núcleo de unidades estables, almacenamiento por documentos y protección de generación. [ADR-013](../docs/02-architecture/ADR/ADR-013-memory-v2-app-integration.md) describe el contrato; [R3](../docs/09-planning/R3_INTEGRATION_VALIDATION.md) registra pruebas y activación. Las secciones K1–K4 siguientes conservan la historia del backend anterior. La configuración de cuenta mantiene v1.
 
 K4 en curso: retirada/corrección selectivas con nuevos `getSourceDetails` y `changeMemory`, controles compartidos desde fuente y revisión global del contexto. Activados con autorización y comprobados en Honor real; índice READY. Guardado/consulta consultan revocaciones para rechazar replays y evidencia retirada. [Alcance y pruebas](../docs/09-planning/K4_VALIDATION.md); órdenes naturales y ofertas aún pendientes. Los comandos normales siguientes incluyen sus pruebas locales sin claves.

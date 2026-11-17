@@ -21,8 +21,13 @@
   },
   "dependencies": {
     "@google-cloud/secret-manager": "8.0.0",
+    "fast-xml-parser": "5.12.1",
+    "fflate": "0.8.3",
     "firebase-admin": "14.5.1",
     "firebase-functions": "7.4.0",
+    "ipaddr.js": "2.5.0",
+    "parse5": "8.1.1",
+    "pdfjs-dist": "6.5.438",
     "zod": "4.6.7"
   },
   "devDependencies": {

@@ -1,5 +1,11 @@
 # Cambios
 
+## Fuentes compartidas · primera base local · 2026-11-17
+
+- Rama `codex/shared-sources`: extractores deterministas TXT/MD/PDF/DOCX/HTML, localizadores y cobertura; solo texto extraído, sin conservar binarios o sincronizar.
+- Almacén por cuenta/generación con replay, deduplicación, cancelación, caducidad y retirada; recuperación textual con citas. Pruebas solo en emuladores, sin nuevos endpoints exportados.
+- Contratos/estado/pantalla KMP y recepción/lectura Android con fixtures. Receptor deshabilitado hasta completar transporte autenticado e integración; descarga web, Drive privado, preguntas e iOS pendientes. [Evidencia y límites](docs/09-planning/SHARED_SOURCES_VALIDATION.md). Cero API y ningún recuerdo real utilizado.
+
 ## Fuentes compartidas · planificación · 2026-11-17
 
 - Plan de archivos, Drive y webs mediante Compartir → Kioku, con fuentes de referencia versionadas, citas, eliminación y fases I0–I7. Dirección técnica propuesta en ADR-016; no hay implementación/activación.

@@ -1,0 +1,16 @@
+<resources>
+    <string name="references_title">Compartir con Kioku</string>
+    <string name="references_reading">Leyendo el archivo...</string>
+    <string name="references_stored">Texto guardado. Consultas con IA pendientes de activar.</string>
+    <string name="references_partial">Texto parcial guardado. El documento no se ha leído completo.</string>
+    <string name="references_cancel">Cerrar importación</string>
+    <string name="references_unavailable">La importación de documentos todavía no está activada.</string>
+    <string name="references_sign_in">Accede a Kioku y vuelve a compartir el archivo.</string>
+    <string name="references_permission">No se puede leer este archivo. Vuelve a compartirlo con permiso de lectura.</string>
+    <string name="references_unsupported">Este formato todavía no está admitido. Puedes compartir TXT, Markdown, PDF con texto o DOCX.</string>
+    <string name="references_too_large">El envío supera el límite de archivos o tamaño.</string>
+    <string name="references_invalid">No se ha podido reconocer el archivo o enlace compartido.</string>
+    <string name="references_interrupted">La importación se ha interrumpido. No se ha confirmado el guardado.</string>
+    <string name="references_busy">Hay una importación en curso. Termínala y vuelve a compartir el nuevo archivo.</string>
+    <string name="references_drive_link">Para importar desde Drive, comparte el archivo con «Enviar una copia». El acceso mediante enlaces privados todavía no está conectado.</string>
+</resources>

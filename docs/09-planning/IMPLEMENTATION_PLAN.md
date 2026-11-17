@@ -1,6 +1,6 @@
 # Fases de Kioku
 
-**Ampliación solicitada posteriormente:** planificar recepción de archivos, Drive y webs desde Compartir → Kioku, con consultas sobre fuentes. [SHARED_SOURCES_PLAN](SHARED_SOURCES_PLAN.md) define I0–I7, corpus ficticio, contratos/retenciones propuestos, pruebas y separación del cierre sin API frente a la evaluación IA posterior. Plan preparado; implementación, rama independiente, integración y activación pendientes. No autoriza API, datos reales ni despliegue y no cierra R2/K5/K6. Amplía la exclusión documental histórica de V1.
+**Ampliación iniciada:** `codex/shared-sources` incorpora la primera base local de archivos/Drive/web del [plan I0–I7](SHARED_SOURCES_PLAN.md): extractores, almacén en emuladores y receptor/estado/pantalla Android sin activar. [Evidencia y pendientes](SHARED_SOURCES_VALIDATION.md). Solo texto extraído; sincronización aplazada por el propietario. Transporte integrado, selector, descarga web, consultas, Drive real e iOS pendientes. No autoriza API, datos reales ni despliegue y no cierra R2/K5/K6.
 
 **Último refinamiento vigente:** el propietario sustituye mantener/bloquear y el panel de botones por toque → X/Stop en el campo, transcripción provisional visible y borrador editable al parar. Escribir oculta el micrófono; vaciar lo restaura. Solo Enviar inicia memoria. [ADR-015](../02-architecture/ADR/ADR-015-dictation-draft.md) prevalece sobre el gesto histórico de K5 descrito debajo; continúan solo pruebas ficticias sin API.
 
