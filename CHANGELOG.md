@@ -1,5 +1,11 @@
 # Cambios
 
+## Chat único y Fuentes · activado en Honor · 2026-11-18
+
+- Despliegue autorizado de memoryV2/referenceSources, revisiones ACTIVE y rechazo anónimo 401 comprobados; sin cambios IAM/índices/secretos o datos personales.
+- Kioku habitual actualizado en Honor conservando firma/cuenta/datos. 1/1 prueba real de PDF generado, Compartir al chat, confirmación Firestore y lectura/cita desde Fuentes. Sin preguntas o gasto API en las pruebas; inferencia real pendiente de la prueba manual del propietario.
+- [Evidencia e instrucciones](docs/09-planning/UNIFIED_SOURCES_VALIDATION.md). Samsung sin modificar.
+
 ## Chat único y Fuentes · preparado en rama · 2026-11-18
 
 - Preguntar combina recuerdos y texto documental con citas y atribución separadas; compatibilidad opt-in con clientes anteriores y revocación de ambas clases de evidencia.

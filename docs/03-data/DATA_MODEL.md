@@ -1,8 +1,8 @@
 # Modelo lógico de datos
 
-## Chat único preparado en rama
+## Chat único activo
 
-La consulta conjunta no añade colecciones ni convierte fragmentos de documentos en unidades personales. Las citas viven en la respuesta y el feed RAM, con versión/localizador; nunca en recibos o historial del servidor. Al olvidar una fuente, una única transacción elimina fuente/deduplicación, incrementa la época documental y también `accounts/{uid}/runtime/memory.revision`. Ese sello ahora invalida contexto/acciones para ambas clases de evidencia, sin cambiar unidades, grupos o apoyos personales. Los clientes antiguos siguen pudiendo leer el sello numérico. [Decisión y alcance](../02-architecture/ADR/ADR-017-unified-source-chat.md). Este cambio aún no está desplegado; la sección siguiente conserva el estado de activación anterior.
+La consulta conjunta no añade colecciones ni convierte fragmentos de documentos en unidades personales. Las citas viven en la respuesta y el feed RAM, con versión/localizador; nunca en recibos o historial del servidor. Al olvidar una fuente, una única transacción elimina fuente/deduplicación, incrementa la época documental y también `accounts/{uid}/runtime/memory.revision`. Ese sello ahora invalida contexto/acciones para ambas clases de evidencia, sin cambiar unidades, grupos o apoyos personales. Los clientes antiguos siguen pudiendo leer el sello numérico. [Decisión y alcance](../02-architecture/ADR/ADR-017-unified-source-chat.md). Cambio desplegado el 18 de noviembre; la sección siguiente conserva el estado de activación anterior.
 
 ## Fuentes compartidas activas en producción
 

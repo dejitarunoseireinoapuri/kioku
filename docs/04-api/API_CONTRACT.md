@@ -1,10 +1,10 @@
 # Contrato backend · memoria v2 y cuenta v1
 
-## Consulta conjunta en rama · activación pendiente
+## Consulta conjunta activa en producción
 
 La nueva app envía `includeReferences:true` opcional en el payload estricto de `memoryV2.query`. Sin ese campo se conserva el contrato personal anterior, incluso con documentos guardados. La consulta conjunta devuelve `sources` solo para vistas de gestión personal y `citations` opcional con hasta doce objetos estrictos `{sourceId:UUID,revision:UUID,title,location:page|paragraph|line|section,number,text,url?}`. Máximos: título 200, cita 2000, URL HTTPS 4096; localizador entero 1–200000. Son literales/versiones derivados por servidor, nunca elegidos por el proveedor. `answered` exige evidencia personal o documental; los otros estados no llevan citas. Respuesta móvil acotada a 100000 caracteres.
 
-El proveedor recibe índices separados de recuerdos/documentos y una revisión independiente valida la atribución. Se comprueban épocas personal/documental durante las llamadas y en el commit terminal. El olvido documental incrementa el sello de contexto compartido. Los recibos siguen sin guardar preguntas/respuestas, y los replays no vuelven a generar. Con catálogo vacío se conserva el circuito personal. No cambia el callable documental de importación/gestión. [ADR-017](../02-architecture/ADR/ADR-017-unified-source-chat.md), [estado y pruebas](../09-planning/UNIFIED_SOURCES_VALIDATION.md). Las secciones siguientes describen versiones previas activadas.
+El proveedor recibe índices separados de recuerdos/documentos y una revisión independiente valida la atribución. Se comprueban épocas personal/documental durante las llamadas y en el commit terminal. El olvido documental incrementa el sello de contexto compartido. Los recibos siguen sin guardar preguntas/respuestas, y los replays no vuelven a generar. Con catálogo vacío se conserva el circuito personal. No cambia el callable documental de importación/gestión. [ADR-017](../02-architecture/ADR/ADR-017-unified-source-chat.md), [estado y pruebas](../09-planning/UNIFIED_SOURCES_VALIDATION.md). Servidor y Honor actualizados el 18 de noviembre; PDF ficticio comprobado sin IA. Las secciones siguientes describen versiones previas activadas.
 
 ## Fuentes compartidas: contrato productivo activo
 

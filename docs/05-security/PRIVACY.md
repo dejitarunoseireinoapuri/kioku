@@ -1,8 +1,8 @@
 # Privacidad, datos y permisos
 
-## Consulta conjunta preparada en rama
+## Consulta conjunta activa
 
-El chat habitual puede enviar al proveedor protegido evidencia personal y documental pertinente en un mismo paquete, con clases y atribución separadas. Las respuestas y citas permanecen solo en RAM de sesión; los avisos de importación no forman parte del historial ni del contexto enviado. No se archivan binarios ni se sincronizan originales. Las fuentes se eliminan con confirmación y su revocación retira también el contexto anterior. La revisión se valida con casos ficticios/emuladores y cero API, sin acceder a recuerdos reales. Aún no desplegada/instalada: [estado de chat único](../09-planning/UNIFIED_SOURCES_VALIDATION.md).
+El chat habitual puede enviar al proveedor protegido evidencia personal y documental pertinente en un mismo paquete, con clases y atribución separadas. Las respuestas y citas permanecen solo en RAM de sesión; los avisos de importación no forman parte del historial ni del contexto enviado. No se archivan binarios ni se sincronizan originales. Las fuentes se eliminan con confirmación y su revocación retira también el contexto anterior. La revisión se valida con casos ficticios/emuladores y cero API, sin acceder a recuerdos reales. Desplegada e instalada en Honor con PDF ficticio comprobado sin inferencia: [estado de chat único](../09-planning/UNIFIED_SOURCES_VALIDATION.md).
 
 ## Revisión productiva activada después del piloto
 

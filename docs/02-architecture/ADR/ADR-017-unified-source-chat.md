@@ -1,6 +1,6 @@
 # ADR-017 · Chat único para recuerdos y fuentes
 
-- Estado: aceptada e implementada en `codex/shared-sources`; validación local, sin nueva activación remota o instalación.
+- Estado: aceptada, implementada en `codex/shared-sources` y activada en servidor/Honor con autorización del propietario; PDF ficticio comprobado sin API, inferencia real pendiente.
 - Fecha: 2026-11-18.
 - Sustituye el recorrido de biblioteca con preguntas y selector de [ADR-016](ADR-016-shared-reference-sources.md). Conserva extracción, almacenamiento y seguridad.
 - Evidencia: [validación de chat único](../../09-planning/UNIFIED_SOURCES_VALIDATION.md).

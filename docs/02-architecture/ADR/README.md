@@ -20,6 +20,6 @@ Una decisión aceptada define la dirección de implementación, no afirma que es
 | [ADR-014](ADR-014-local-voice-input.md) | Android con fixtures; iOS pendiente | Transcripción local, mantener/bloquear y respuestas escritas |
 | [ADR-015](ADR-015-dictation-draft.md) | Implementada en rama de voz | Sustituye mantener/bloquear por toque, X/Stop y borrador antes del envío manual |
 | [ADR-016](ADR-016-shared-reference-sources.md) | Dirección aceptada; piloto separado conectado | Recepción, extracción, citas y olvido con emuladores/fixtures; solo texto, sincronización aplazada; sin API/producción |
-| [ADR-017](ADR-017-unified-source-chat.md) | Implementada en rama; activación pendiente | Chat único mixto, Fuentes con URL/gestión y archivos solo desde Compartir |
+| [ADR-017](ADR-017-unified-source-chat.md) | Activada en servidor/Honor; prueba de PDF sin IA correcta | Chat único mixto, Fuentes con URL/gestión y archivos solo desde Compartir; inferencia real pendiente |
 
 Una nueva ADR recoge contexto, decisión, alternativas, consecuencias y estado. No copiar la numeración ni las decisiones de regalos/comercio de Wonderdrop. No modificar retroactivamente una decisión incompatible: sustituirla con otra que la cite.

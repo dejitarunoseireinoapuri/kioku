@@ -1,6 +1,6 @@
 # Mapa documental
 
-Revisión vigente de fuentes: [chat único y Fuentes con URL/gestión](02-architecture/ADR/ADR-017-unified-source-chat.md), archivos solo desde Compartir. [Validación local, límites y cómo probar tras activarla](09-planning/UNIFIED_SOURCES_VALIDATION.md). Preparada en rama; no confundir con la activación anterior de Documentos en Honor.
+Revisión vigente de fuentes: [chat único y Fuentes con URL/gestión](02-architecture/ADR/ADR-017-unified-source-chat.md), archivos solo desde Compartir. [Validación local, activación en Honor y cómo probar](09-planning/UNIFIED_SOURCES_VALIDATION.md). Desplegada e instalada en Honor con prueba de PDF ficticio correcta, sin API; sustituye la activación anterior de Documentos.
 
 Integración solicitada el 17 de noviembre: [núcleo nuevo en la app, inicio vacío y sin pruebas API de pago](09-planning/R3_INTEGRATION_VALIDATION.md). El propietario autoriza borrar los recuerdos actuales al activar la nueva versión; cuenta y acceso se conservan. R2 mantiene sus pendientes históricos.
 

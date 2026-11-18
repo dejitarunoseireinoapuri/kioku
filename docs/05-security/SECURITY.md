@@ -1,8 +1,8 @@
 # Seguridad técnica
 
-## Chat mixto preparado, sin nueva activación
+## Chat mixto activo
 
-El opt-in de consulta conjunta mantiene autorización por cuenta/generación y separa referencias de gestión personal y citas documentales. Solo el servidor traduce índices del modelo a IDs vigentes. Rechaza evidencia ajena/duplicada, respuestas sin respaldo y revisión negativa; texto documental e IA nunca autoriza acciones. Antes de cada llamada se validan ambas épocas, también al terminar y dentro de la transacción final. Olvidar una fuente retira el sello contextual del chat; abrir una cita exige releer su revisión actual. No se muestra su literal almacenado en RAM si esa lectura falla. Los clientes sin opt-in conservan el contrato previo. [ADR-017](../02-architecture/ADR/ADR-017-unified-source-chat.md), [pruebas y límites](../09-planning/UNIFIED_SOURCES_VALIDATION.md). No se amplía el permiso HTTP ni el acceso a Drive/redes sociales.
+El opt-in de consulta conjunta mantiene autorización por cuenta/generación y separa referencias de gestión personal y citas documentales. Solo el servidor traduce índices del modelo a IDs vigentes. Rechaza evidencia ajena/duplicada, respuestas sin respaldo y revisión negativa; texto documental e IA nunca autoriza acciones. Antes de cada llamada se validan ambas épocas, también al terminar y dentro de la transacción final. Olvidar una fuente retira el sello contextual del chat; abrir una cita exige releer su revisión actual. No se muestra su literal almacenado en RAM si esa lectura falla. Los clientes sin opt-in conservan el contrato previo. [ADR-017](../02-architecture/ADR/ADR-017-unified-source-chat.md), [pruebas y límites](../09-planning/UNIFIED_SOURCES_VALIDATION.md). Despliegue/Honor actualizados y rechazo anónimo 401 comprobado en ambos servicios. No se amplía el permiso HTTP ni el acceso a Drive/redes sociales.
 
 ## Documentos y web activos en producción
 
