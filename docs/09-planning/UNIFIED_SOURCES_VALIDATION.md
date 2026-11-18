@@ -1,5 +1,15 @@
 # Chat único y Fuentes · validación local
 
+## Pausa y pendientes para retomar la rama · 18 de noviembre de 2026
+
+El propietario pide conservar `codex/shared-sources` y volver al desarrollo en `main`. La rama documental incluye voz y fuentes; `main` conserva el núcleo de memoria por texto anterior a ambas ampliaciones. Cambiar el checkout no revierte la instalación del Honor, los servicios desplegados ni los datos: cualquier reversión productiva es una acción separada.
+
+Incidencia posterior a la activación: al compartir un artículo de Xataka se muestra el aviso genérico de límite de archivos/tamaño. No se inspecciona ese artículo ni se atribuye una causa exacta sin evidencia de su ejecución. Se reproduce una causa plausible solo con HTML ficticio: cien párrafos breves/3445 bytes generan cien fragmentos y se aceptan; 129 párrafos/4431 bytes devuelven `too-large`. El extractor crea un fragmento por bloque y el límite es 128 aunque el texto sea pequeño. Pendientes agrupar bloques preservando sus localizadores y distinguir el límite concreto en el error; no basta aumentar la cota ni truncar texto silenciosamente.
+
+Revisión estática de escala: `ReferenceStore.catalog` carga el texto de todas las fuentes vigentes antes de seleccionar fragmentos para una pregunta conjunta. El límite de cien fuentes y 200000 caracteres por fuente acota el volumen, pero las lecturas y el procesamiento crecen con el catálogo. Pendientes recuperación selectiva, límite total de espacio comprensible y medición de latencia/coste con fixtures antes de ampliar formatos o redes sociales. No se guardan binarios y solo se entregan al modelo los fragmentos seleccionados; eso no elimina la lectura previa del catálogo completo.
+
+Esta investigación no modifica código, límites, servidor o datos, y no llama a OpenAI. Los resultados positivos de la activación siguientes conservan su alcance; no acreditan resolución de estos pendientes.
+
 Revisión del 18 de noviembre de 2026 en `codex/shared-sources`, solicitada después de probar la biblioteca documental. [ADR-017](../02-architecture/ADR/ADR-017-unified-source-chat.md) recoge la decisión. **Desplegada e instalada en Honor con nueva autorización expresa del propietario**, sustituyendo el recorrido Documentos de la [activación anterior](SHARED_SOURCES_VALIDATION.md).
 
 ## Activación productiva e instalación · 18 de noviembre de 2026
