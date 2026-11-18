@@ -34,6 +34,10 @@ import io.github.dejitarunoseireinoapuri.kioku.platform.firebaseRepositories
 class ReferenceImportActivity : ComponentActivity() {
     private lateinit var session: ReferenceSessionHost
     private lateinit var repositories: AndroidRepositories
+    internal val referenceState get() =
+        session.host.value
+            ?.model
+            ?.state
     private val picker =
         registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { uris ->
             if (uris.isNotEmpty()) {

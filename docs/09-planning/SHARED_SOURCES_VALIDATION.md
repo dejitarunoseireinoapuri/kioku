@@ -1,5 +1,26 @@
 # Fuentes compartidas · evidencia por entrega
 
+## Activación productiva · 18 de noviembre de 2026
+
+Autorización del propietario: activar lo pendiente e instalar en Honor, manteniendo cero gasto API en las pruebas. referenceSources desplegado en kioku-9454f/europe-west1, estado ACTIVE, Node 22, runtime de Kioku y máximo una instancia. Configuración sources.document aplicada de forma acotada, sin sustituir otros índices o modificar recuerdos. El primer build remoto rechazó el lock por picomatch ausente; se normaliza con npm 10.9.9 y se comprueba npm ci --omit=dev --ignore-scripts --dry-run en carpeta aislada antes del despliegue aceptado. Versiones declaradas sin cambios.
+
+Tras el build faltaba el permiso de transporte del callable. La revisión automática rechazó habilitarlo, incluso después de verificar que memoryV2 ya lo usa. Se solicita y obtiene autorización expresa del propietario para roles/run.invoker a allUsers exclusivamente en referenceSources. No se cambia App Check, el control de app/Google/propietario o las reglas Firestore. Petición anónima real: 401 UNAUTHENTICATED. Metadatos de despliegue/permiso verificados sin leer recuerdos o credenciales privadas.
+
+Honor FNE-NX9: actualización in situ de Kioku habitual, sin desinstalar, restablecer datos o modificar firma. Se abre solo Documentos. Prueba nativa opt-in con PDF generado, recepción ACTION_SEND, extracción/guardado y lectura de cita; no pulsa Preguntar ni usa el endpoint query. La primera recepción no terminó antes del plazo; después se confirma el aviso de guardado real. La apertura automatizada posterior se corrige para esperar al catálogo, y el bloqueo automático del teléfono interrumpe la comprobación restante. La prueba posterior mantiene la pantalla encendida únicamente durante su actividad, sin modificar ajustes de bloqueo. Resultado final se registra al terminar, sin presentar los intentos interrumpidos como correctos.
+
+No se prueba una respuesta real de IA por la prohibición de gasto del agente. El propietario podrá hacerlo manualmente desde Documentos. Consulta conjunta del chat con recuerdos, Drive privado, OCR, sincronización e iOS siguen pendientes. La evidencia local y la preparación del día anterior que siguen conservan su alcance histórico.
+
+
+### Cierre de comprobaciones de activación
+
+- referenceSources ACTIVE; identidad/Node 22/región/máximo una instancia comprobados. Transporte autorizado y petición anónima rechazada con 401. Exclusión de índice documental aplicada sin sustituir otros índices.
+- Lock npm 10.9.9 normalizado y clean-install de producción comprobado en carpeta aislada. Backend: 60/60 y Prettier correctos. No cambian versiones declaradas o el perfil Sol alto.
+- mobileCheck, APK normal e instrumentado correctos; 151 host tests, arquitectura, Detekt, formato y Lint. La prueba opt-in de producción no forma parte de la suite offline ni llama a query/IA.
+- Honor actualizado correctamente conservando firma/cuenta/datos. La recepción real del PDF generado obtiene el aviso de guardado. La lectura/cita automatizada final queda pendiente porque el Honor se bloqueó; no se cuenta como test superado. El comprobador espera el catálogo y liga la cita al ID exacto devuelto al subir, para distinguir nombres duplicados. Mantiene pantalla encendida solo en su actividad de prueba, sin cambiar ajustes.
+- Samsung no modificado. Cero llamadas OpenAI y cero gasto API en estas pruebas. Sin recuerdos o documentos personales utilizados. Las preguntas reales del propietario usarán la API y quedan sin evaluar por el agente.
+
+Registros locales: reference-production-activation-verified.log, reference-production-server-verification.json, reference-production-field-activation.json, reference-production-final-mobile-check.log y los intentos instrumentados diferenciados. Checker documental: 88 documentos/16 ADR y enlaces/mapa/identificadores correctos. El archivo local ajeno gradle-daemon-jvm.properties se conserva sin incluir en el cambio.
+
 ## Preparación productiva posterior, sin instalar en Honor
 
 Kioku habitual prepara **Documentos**, Compartir y selector con su misma cuenta Google/App Check. El callable `referenceSources` admite catálogo, admisión/subida, estado/cancelación, lectura, olvido, consulta y web. Extraer no usa IA. Preguntar usa el proveedor protegido existente, Sol alto, respuesta y revisión independiente; con más de doce fragmentos añade expansión de búsqueda. Los emuladores no construyen ese proveedor: los tests inyectan dobles. No se persisten preguntas/respuestas; las citas se derivan en servidor. La época documental se comprueba antes de reservar IA, después de responder y en el cierre transaccional. Reautorizar tras extraer impide publicar después de revocar la sesión.

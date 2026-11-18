@@ -1,5 +1,18 @@
 # Probar documentos ficticios en el Honor
 
+## Versión productiva activada en Honor · 18 de noviembre
+
+Servidor referenceSources activo y Kioku habitual actualizado en Honor, conservando datos. Usar **Kioku**, no **Kioku · pruebas**. Las preguntas documentales se hacen en **Documentos**; las pruebas del agente no llaman al modelo. El propietario sí consultará la API al pulsar Preguntar.
+
+1. Desde Archivos: compartir un **PDF con texto** → **Kioku**. Desde Drive: **Enviar una copia** y elegir PDF/DOCX; un enlace privado no concede lectura.
+2. Esperar **Texto guardado en Kioku**, abrir el documento de la lista y escribir una pregunta, por ejemplo «¿Qué dice sobre…?». Pulsar **Preguntar**. La respuesta debe citar la página o fragmento utilizado.
+3. También se puede entrar en **Documentos → Abrir archivos** desde Kioku. **Ver texto extraído** muestra lo que se leyó sin gastar IA. El original no se archiva en Kioku; se conserva el texto en Firestore.
+4. Límite de 6 MiB por archivo, cinco archivos y 25 MiB por lote. Sin OCR, PDF escaneado o cifrado. Si falla la conexión, conservar el texto y reintentar desde la misma pantalla.
+5. Eliminar una fuente requiere **Eliminar fuente → Sí, eliminar** y no borra el PDF original. El chat de recuerdos todavía no busca en documentos: usar Documentos.
+
+Los apartados siguientes explican estados anteriores de preparación y piloto; ya no es necesario mantener un servidor local para usar la versión productiva.
+
+
 ## Versión productiva preparada
 
 **Todavía no está instalada en Honor ni desplegada en el servidor.** APK normal: `androidApp/build/outputs/apk/debug/androidApp-debug.apk`; identificador habitual registrado, conexión productiva de Kioku y sin emuladores. Antes de instalar hay que activar `referenceSources` y su configuración de índices. Actualizar sin desinstalar ni borrar datos. Las preguntas reales gastarán API; pruebas del agente: cero API.

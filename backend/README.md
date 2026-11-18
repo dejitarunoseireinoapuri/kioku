@@ -1,5 +1,9 @@
 # Backend de cuenta y configuración K1
 
+## Documentos productivos activos
+
+referenceSources está exportado y desplegado en Kioku desde el 18 de noviembre de 2026: importación determinista, Firestore por generación y consulta mediante proveedor protegido. Pruebas del agente sin IA; el SDK móvil requiere la entrada callable autorizada y después App Check/Google/propietario. [Estado y evidencia](../docs/09-planning/SHARED_SOURCES_VALIDATION.md). Las secciones de base/piloto siguientes son históricas; los comandos normales de tests siguen sin usar API.
+
 ## Fuentes compartidas · base local
 
 Continuación: [piloto Android conectado](../docs/09-planning/SHARED_SOURCES_PILOT.md). `tooling/reference-pilot.ps1` arranca solo Auth/Firestore en otro proyecto demo y servidor loopback; `-Verify` ejecuta siete pruebas HTTP y cierra los emuladores. Test/pilot queda excluido del despliegue. Token sintético de emulador, sin App Check productivo, SDK IA, claves o red web; no exponer el servidor fuera del PC. La ruta web sirve únicamente un fixture reservado. El flujo de upload separado y recuperación usa `verifyUpload/operation` reautorizados en el almacén.

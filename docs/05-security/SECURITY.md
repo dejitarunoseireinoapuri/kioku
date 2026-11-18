@@ -1,8 +1,8 @@
 # Seguridad técnica
 
-## Preparación productiva de documentos y web
+## Documentos y web activos en producción
 
-El receptor habitual se prepara con cuenta Google/App Check existente. Solo el servidor escribe texto canónico: comprueba propietario/generación al admitir, leer, publicar, consultar y olvidar. Reautoriza después de extraer y comprueba época antes de devolver respuestas y dentro de la transacción final. Documentos/preguntas/salidas IA no autorizan acciones. El endpoint documental no modifica recuerdos personales. Pruebas solo con fixtures/dobles, sin API o cuentas reales.
+Desde el 18 de noviembre de 2026 el receptor habitual utiliza la cuenta Google/App Check existente. El propietario autoriza expresamente roles/run.invoker a allUsers solo para el transporte HTTP de referenceSources, igual que el callable previo; no autoriza acceso anónimo a datos. El servicio real rechaza una petición sin autenticar con 401 UNAUTHENTICATED. Solo el servidor escribe texto canónico: comprueba propietario/generación al admitir, leer, publicar, consultar y olvidar. Reautoriza después de extraer y comprueba época antes de devolver respuestas y dentro de la transacción final. Documentos/preguntas/salidas IA no autorizan acciones. El endpoint documental no modifica recuerdos personales. Pruebas solo con fixtures/dobles, sin API o cuentas reales.
 
 Excepción acotada de red: URL HTTPS que el propietario comparte expresamente. Bloquea credenciales en URL, parámetros sensibles, destinos privados/especiales, DNS con cualquier IP no pública, Drive privado y plataformas de vídeo. Revalida cada salto; el socket fija una IP validada y TLS verifica el hostname. Sin proxy/cookies/scripts ni vínculos descubiertos en documentos/IA. Tres saltos, 25 s y 6 MiB; solo HTML/TXT/PDF y extractor aislado. Los dobles no acreditan compatibilidad real de red. [Límites](../09-planning/SHARED_SOURCES_VALIDATION.md).
 

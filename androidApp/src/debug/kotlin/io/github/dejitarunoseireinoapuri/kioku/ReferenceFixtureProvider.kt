@@ -4,6 +4,9 @@ import android.content.ContentProvider
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.MatrixCursor
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.pdf.PdfDocument
 import android.net.Uri
 import android.os.ParcelFileDescriptor
 import android.provider.OpenableColumns
@@ -13,7 +16,12 @@ import java.io.File
 class ReferenceFixtureProvider : ContentProvider() {
     override fun onCreate() = true
 
-    override fun getType(uri: Uri): String = if (key(uri) == "markdown") "text/markdown" else "text/plain"
+    override fun getType(uri: Uri): String =
+        when (key(uri)) {
+            "markdown" -> "text/markdown"
+            "pdf" -> "application/pdf"
+            else -> "text/plain"
+        }
 
     override fun query(
         uri: Uri,
@@ -24,8 +32,14 @@ class ReferenceFixtureProvider : ContentProvider() {
     ): Cursor {
         val item = key(uri)
         if (item == "denied") throw SecurityException("Synthetic denied fixture")
+        val title =
+            when (item) {
+                "markdown" -> "Manual ficticio.md"
+                "pdf" -> "PDF ficticio de prueba.pdf"
+                else -> "Itinerario ficticio.txt"
+            }
         return MatrixCursor(arrayOf(OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE)).apply {
-            addRow(arrayOf<Any>(if (item == "markdown") "Manual ficticio.md" else "Itinerario ficticio.txt", 0L))
+            addRow(arrayOf<Any>(title, 0L))
         }
     }
 
@@ -35,8 +49,10 @@ class ReferenceFixtureProvider : ContentProvider() {
     ): ParcelFileDescriptor {
         if (mode != "r") throw SecurityException("Read-only fixture")
         val item = key(uri)
-        val file = File(requireNotNull(context).cacheDir, "kioku-reference-fixture-$item.txt")
-        if (item ==
+        val file = fixtureFile(item)
+        if (item == "pdf") {
+            createPdf(file)
+        } else if (item ==
             "oversize"
         ) {
             file.outputStream().use { output -> repeat(OVERSIZE_BLOCKS) { output.write(ByteArray(BLOCK)) } }
@@ -51,7 +67,7 @@ class ReferenceFixtureProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<out String>?,
     ): Int {
-        val file = File(requireNotNull(context).cacheDir, "kioku-reference-fixture-${key(uri)}.txt")
+        val file = fixtureFile(key(uri))
         return if (file.delete()) 1 else 0
     }
 
@@ -69,12 +85,43 @@ class ReferenceFixtureProvider : ContentProvider() {
 
     private fun key(uri: Uri): String {
         val item = uri.lastPathSegment.orEmpty()
-        if (item !in setOf("note", "markdown", "oversize", "denied")) throw SecurityException("Unknown fixture")
+        if (item !in setOf("note", "markdown", "oversize", "denied", "pdf")) {
+            throw SecurityException("Unknown fixture")
+        }
         return item
+    }
+
+    private fun fixtureFile(item: String): File {
+        val extension = if (item == "pdf") "pdf" else "txt"
+        return File(requireNotNull(context).cacheDir, "kioku-reference-fixture-$item.$extension")
+    }
+
+    private fun createPdf(file: File) {
+        val document = PdfDocument()
+        try {
+            val page = document.startPage(PdfDocument.PageInfo.Builder(PDF_WIDTH, PDF_HEIGHT, 1).create())
+            val paint =
+                Paint().apply {
+                    color = Color.BLACK
+                    textSize = PDF_FONT_SIZE
+                }
+            page.canvas.drawText("Documento ficticio de Kioku.", PDF_LEFT, PDF_TITLE_Y, paint)
+            page.canvas.drawText("Lira usa un cuaderno violeta.", PDF_LEFT, PDF_BODY_Y, paint)
+            document.finishPage(page)
+            file.outputStream().use { document.writeTo(it) }
+        } finally {
+            document.close()
+        }
     }
 
     private companion object {
         const val BLOCK = 8192
         const val OVERSIZE_BLOCKS = 1281
+        const val PDF_WIDTH = 320
+        const val PDF_HEIGHT = 480
+        const val PDF_FONT_SIZE = 14f
+        const val PDF_LEFT = 24f
+        const val PDF_TITLE_Y = 42f
+        const val PDF_BODY_Y = 64f
     }
 }
