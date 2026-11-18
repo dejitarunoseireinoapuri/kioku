@@ -1,5 +1,21 @@
 # K5 · Voz local · 17 de noviembre de 2026
 
+## Integración en main y restauración anterior a Fuentes · 18 de noviembre de 2026
+
+El propietario precisa que quiere **todo lo anterior a Fuentes**, incluida voz y la carga inicial durante la comprobación de memoria. Se avanza `main` desde `bc092ab` hasta `2064e5f` por fast-forward: cuatro commits originales (`d7b510e`, `0632bb5`, `a1b4b1f`, `2064e5f`), sin reescribir historia o incorporar el plan/implementación documental posteriores. El código Android/shared/backend coincide exactamente con ese punto. `codex/shared-sources` permanece guardada y subida en `1d8ca1b`, con la incidencia de fragmentación web y los pendientes de escala documentados en esa rama.
+
+Incluye: memoria v2 por texto y sus correcciones previas; dictado local por toque, X/Stop, parciales y borrador editable antes de enviar; entrada con logo/estado que continúa desde Entrando hasta **Comprobando cambios en tu memoria...**; opción Katakana cayendo; retirada de filas de ayuda vacías y separación normal; área segura inferior con margen adicional. La app no incorpora Fuentes, citas documentales, importación URL o filtros de Compartir.
+
+APK habitual e instrumentado compilados y actualizados in situ en Honor FNE-NX9, conservando firma/cuenta/datos. `mobileCheck` correcto: formato, arquitectura, Detekt, Android Lint y **137/137 host tests**, sin errores/fallos. **15/15 casos físicos correctos en 46,449 s**: EntryLoadingTest (2), AppearanceUiTest (1), ConversationSpacingTest (1), GestureSafeAreaTest (1), VoiceUiTest (9) y LocalVoiceDeviceTest (1). El último sintetiza PCM ficticio con voz instalada offline y comprueba parciales antes de Stop y ambos segmentos después, sin grabar conversación real ni enviar al backend. El resto usa cuentas/repositorios ficticios. Logs ignorados: `local-data/pre-sources-restore-mobile.log` y `pre-sources-restore-honor.log`.
+
+**Cero API**, ningún recuerdo o documento personal leído/modificado y ningún vaciado/migración. Samsung no se modifica en esta restauración. Las respuestas de memoria con proveedor real no se repiten en esta comprobación; no se cierran por ello los pendientes R2/iOS ni se acredita reconocimiento acústico con ruido.
+
+El servidor productivo conserva sus revisiones ya desplegadas: esta operación no lo revierte ni elimina el servicio/texto documental. La app restaurada omite el opt-in `includeReferences`, y el servidor compatible mantiene el circuito personal para ese cliente; no consulta el catálogo documental. Se instala la app anterior a Fuentes sin modificar secretos, permisos, Firestore o datos existentes.
+
+PackageManager del Honor confirma cero actividades de Kioku para ACTION_SEND tanto de PDF como de text/plain. Se deja abierto MainActivity para el uso normal, sin introducir o enviar mensajes.
+
+Documentación consultada: convenciones/calidad, evidencia K5 y R3, limitaciones, ADR-015 y STITCH_SOURCE. Se reinspecciona por MCP la pantalla de voz K5 `626d38e8dc564645b4e6b00a77a27d33` y su HTML, sin editar Stitch ni rediseñar: se restaura la adaptación por toque previamente aceptada.
+
 ## Revisión posterior · dictado en el editor
 
 El propietario sustituye mantener/bloquear por un toque para empezar, iconos X/Stop durante dictado y transcripción provisional en el campo. Stop deja borrador editable; no se interpreta ni envía hasta pulsar el envío normal. Escribir oculta el micrófono; borrar todo lo restaura. [ADR-015](../02-architecture/ADR/ADR-015-dictation-draft.md). Las evidencias siguientes de gestos de ADR-014 son históricas y no validan por sí solas esta revisión.

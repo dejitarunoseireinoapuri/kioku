@@ -1,5 +1,11 @@
 # Cambios
 
+## Restauración completa anterior a Fuentes · 2026-11-18
+
+- Main incorpora los cuatro commits originales hasta `2064e5f`: dictado local por toque/X/Stop, carga inicial continua durante la comprobación de memoria, Katakana cayendo, espaciado de ayudas y margen inferior seguro.
+- Honor actualizado conservando instalación/cuenta/datos; 137 host tests y 15/15 pruebas físicas ficticias correctas, cero API. [Evidencia](docs/09-planning/K5_VALIDATION.md). Sin nuevo despliegue de backend, borrado de documentos/recuerdos o cambios en Samsung.
+- La rama de Fuentes queda guardada/subida por separado, incluidos sus pendientes, y no se integra en esta app.
+
 ## Asignación global y soporte propio · 2026-11-16 · Continuación final R2 2 de 2
 
 - Comprobador con biyección única acotada y soporte propio; rechazo de canónicos contaminados, anclas incorrectas y ambigüedad real. Dependencias con clase/dirección comprobadas y cierre explícitamente autorizado en fixtures. Revisor conservado y reforzado sobre todos los campos normalizados.

@@ -1,6 +1,6 @@
 # ADR-015 · Dictado por toque y revisión en el editor
 
-- Estado: implementada en la rama de voz; validación en [K5](../../09-planning/K5_VALIDATION.md).
+- Estado: implementada e integrada en main con la restauración previa a Fuentes; Honor actualizado y validado sin API. Evidencia en [K5](../../09-planning/K5_VALIDATION.md).
 - Fecha: 2026-11-17.
 
 ## Contexto y decisión
