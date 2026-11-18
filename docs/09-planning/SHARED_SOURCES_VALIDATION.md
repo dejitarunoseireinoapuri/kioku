@@ -1,5 +1,11 @@
 # Fuentes compartidas · evidencia por entrega
 
+## Comprobación final en Honor desbloqueado · 18 de noviembre de 2026
+
+**1/1 caso nativo superado**, 5,409 s, registro local reference-production-honor-unlocked.log. Con la pantalla desbloqueada se ejecuta la prueba opt-in ProductionReferenceImportTest: ACTION_SEND con PDF generado, aviso de guardado confirmado en Firestore productivo, apertura por el ID exacto recibido, lectura del texto ficticio «Lira usa un cuaderno violeta.» y localizador **Página 1**. Se elimina únicamente el binario temporal del proveedor de fixtures; el texto documental ficticio queda disponible para la prueba manual del propietario.
+
+No se pulsa Preguntar ni se invoca query/IA. **Cero llamadas OpenAI y cero gasto API**. No se leen o modifican recuerdos/documentos personales. El bloqueo del teléfono y las esperas de los intentos previos no se cuentan como aprobados. Este resultado cierra el pendiente de recepción/lectura/cita señalado debajo; las respuestas reales del modelo siguen reservadas a la prueba manual del propietario para respetar la prohibición de gasto del agente.
+
 ## Activación productiva · 18 de noviembre de 2026
 
 Autorización del propietario: activar lo pendiente e instalar en Honor, manteniendo cero gasto API en las pruebas. referenceSources desplegado en kioku-9454f/europe-west1, estado ACTIVE, Node 22, runtime de Kioku y máximo una instancia. Configuración sources.document aplicada de forma acotada, sin sustituir otros índices o modificar recuerdos. El primer build remoto rechazó el lock por picomatch ausente; se normaliza con npm 10.9.9 y se comprueba npm ci --omit=dev --ignore-scripts --dry-run en carpeta aislada antes del despliegue aceptado. Versiones declaradas sin cambios.
@@ -16,7 +22,7 @@ No se prueba una respuesta real de IA por la prohibición de gasto del agente. E
 - referenceSources ACTIVE; identidad/Node 22/región/máximo una instancia comprobados. Transporte autorizado y petición anónima rechazada con 401. Exclusión de índice documental aplicada sin sustituir otros índices.
 - Lock npm 10.9.9 normalizado y clean-install de producción comprobado en carpeta aislada. Backend: 60/60 y Prettier correctos. No cambian versiones declaradas o el perfil Sol alto.
 - mobileCheck, APK normal e instrumentado correctos; 151 host tests, arquitectura, Detekt, formato y Lint. La prueba opt-in de producción no forma parte de la suite offline ni llama a query/IA.
-- Honor actualizado correctamente conservando firma/cuenta/datos. La recepción real del PDF generado obtiene el aviso de guardado. La lectura/cita automatizada final queda pendiente porque el Honor se bloqueó; no se cuenta como test superado. El comprobador espera el catálogo y liga la cita al ID exacto devuelto al subir, para distinguir nombres duplicados. Mantiene pantalla encendida solo en su actividad de prueba, sin cambiar ajustes.
+- Honor actualizado correctamente conservando firma/cuenta/datos. La recepción real del PDF generado obtiene el aviso de guardado. La lectura/cita automatizada se interrumpió al bloquearse el Honor; la ejecución final desbloqueada, documentada arriba, sí supera el caso completo. El comprobador espera el catálogo y liga la cita al ID exacto devuelto al subir, para distinguir nombres duplicados. Mantiene pantalla encendida solo en su actividad de prueba, sin cambiar ajustes.
 - Samsung no modificado. Cero llamadas OpenAI y cero gasto API en estas pruebas. Sin recuerdos o documentos personales utilizados. Las preguntas reales del propietario usarán la API y quedan sin evaluar por el agente.
 
 Registros locales: reference-production-activation-verified.log, reference-production-server-verification.json, reference-production-field-activation.json, reference-production-final-mobile-check.log y los intentos instrumentados diferenciados. Checker documental: 88 documentos/16 ADR y enlaces/mapa/identificadores correctos. El archivo local ajeno gradle-daemon-jvm.properties se conserva sin incluir en el cambio.
