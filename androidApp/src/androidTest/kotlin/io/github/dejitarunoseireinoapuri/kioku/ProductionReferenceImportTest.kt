@@ -32,7 +32,7 @@ class ProductionReferenceImportTest {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val uri = Uri.parse("content://${context.packageName}.reference-fixtures/pdf")
         val intent =
-            Intent(context, ReferenceImportActivity::class.java).apply {
+            Intent(context, MainActivity::class.java).apply {
                 action = Intent.ACTION_SEND
                 type = "application/pdf"
                 putExtra(Intent.EXTRA_STREAM, uri)
@@ -42,7 +42,7 @@ class ProductionReferenceImportTest {
                 )
             }
         try {
-            ActivityScenario.launch<ReferenceImportActivity>(intent).use { scenario ->
+            ActivityScenario.launch<MainActivity>(intent).use { scenario ->
                 scenario.onActivity { it.window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
                 awaitStored()
                 var storedId: String? = null
@@ -58,6 +58,7 @@ class ProductionReferenceImportTest {
                         )?.id
                 }
                 val source = hasTestTag("reference-source-${requireNotNull(storedId)}") and isEnabled()
+                compose.onNodeWithText("Fuentes").performClick()
                 compose.waitUntil(TIMEOUT_MS) {
                     compose.onAllNodes(source).fetchSemanticsNodes().size == 1
                 }

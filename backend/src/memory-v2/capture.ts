@@ -8,7 +8,10 @@ import { V2MutationStore } from "./mutation-store.js";
 import { presentSaved } from "./presentation.js";
 import type { Submit, Clarify, WorkLease, V2Reply } from "./contracts.js";
 
-export type ModelFactory = (epoch: number) => Promise<StructuredModel>;
+export type ModelFactory = (
+  epoch: number,
+  validate?: () => Promise<void>,
+) => Promise<StructuredModel>;
 export class V2Capture {
   readonly db: Firestore;
   readonly work: V2WorkStore;

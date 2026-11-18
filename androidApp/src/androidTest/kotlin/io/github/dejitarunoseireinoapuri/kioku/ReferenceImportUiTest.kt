@@ -55,7 +55,11 @@ class ReferenceImportUiTest {
 
     @Test fun unavailableFeatureDoesNotClaimAnyFileWasStored() {
         open(ReferenceImportState(issue = ReferenceIssue.Unavailable))
-        compose.onNodeWithText("La importación de documentos todavía no está activada.").assertIsDisplayed()
+        compose
+            .onNodeWithText(
+                "No se ha podido completar la operación. Vuelve a intentarlo; " +
+                    "si persiste, comprueba la disponibilidad del servicio.",
+            ).assertIsDisplayed()
         compose.onNodeWithTag("reference-reading").assertDoesNotExist()
         compose.onNodeWithText("Cerrar importación").assertIsDisplayed()
     }

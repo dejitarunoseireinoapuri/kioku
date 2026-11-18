@@ -91,6 +91,7 @@ dependencies {
     androidTestImplementation(libs.compose.test)
     androidTestImplementation(libs.compose.foundation)
     androidTestImplementation(libs.compose.material)
+    androidTestImplementation(libs.koin.compose)
     debugImplementation(libs.compose.test.manifest)
     add("referencePilotImplementation", libs.compose.test.manifest)
     implementation(libs.koin.core)

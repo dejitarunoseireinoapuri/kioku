@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
@@ -39,6 +40,7 @@ import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.Conversation
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.ConversationScreen
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.ConversationViewModel
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.contentLoadingStatus
+import io.github.dejitarunoseireinoapuri.kioku.feature.references.LocalSourceDelivery
 import io.github.dejitarunoseireinoapuri.kioku.feature.settings.AppearanceSettingsState
 import io.github.dejitarunoseireinoapuri.kioku.feature.settings.AppearanceViewModel
 import io.github.dejitarunoseireinoapuri.kioku.feature.settings.LocalAppearanceSettings
@@ -152,6 +154,20 @@ private fun KiokuNavigation(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val backStack = rememberNavBackStack(navigationConfiguration, Route.Conversation)
+    val sharedSource = LocalSourceDelivery.current
+    val handledSource =
+        androidx.compose.runtime.saveable.rememberSaveable {
+            androidx.compose.runtime.mutableStateOf(
+                0L,
+            )
+        }
+    LaunchedEffect(sharedSource) {
+        if (sharedSource > handledSource.value) {
+            backStack.clear()
+            backStack.add(Route.Conversation)
+            handledSource.value = sharedSource
+        }
+    }
     val controlChanged =
         androidx.compose.runtime.saveable.rememberSaveable {
             androidx.compose.runtime.mutableStateOf(false)

@@ -1,5 +1,9 @@
 # Privacidad, datos y permisos
 
+## Consulta conjunta preparada en rama
+
+El chat habitual puede enviar al proveedor protegido evidencia personal y documental pertinente en un mismo paquete, con clases y atribución separadas. Las respuestas y citas permanecen solo en RAM de sesión; los avisos de importación no forman parte del historial ni del contexto enviado. No se archivan binarios ni se sincronizan originales. Las fuentes se eliminan con confirmación y su revocación retira también el contexto anterior. La revisión se valida con casos ficticios/emuladores y cero API, sin acceder a recuerdos reales. Aún no desplegada/instalada: [estado de chat único](../09-planning/UNIFIED_SOURCES_VALIDATION.md).
+
 ## Revisión productiva activada después del piloto
 
 El propietario pide texto en Firestore real y respuestas mediante la API del servidor. Se activa esa conexión con su cuenta actual, sin claves nuevas o gasto API en pruebas. Solo la evidencia documental vigente seleccionada se entrega al proveedor; no se guardan preguntas/respuestas en servidor o binarios. Web guarda URL solicitada/final y fecha junto al texto, sin cookies/credenciales ni sincronización. Eliminar una fuente retira texto/procedencia recuperables de Kioku, no el original externo.

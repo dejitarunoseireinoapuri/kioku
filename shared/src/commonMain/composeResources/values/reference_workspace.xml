@@ -4,8 +4,8 @@
     <string name="reference_pick">Abrir archivos</string>
     <string name="reference_example">Cargar ejemplos ficticios</string>
     <string name="reference_refresh">Actualizar lista</string>
-    <string name="reference_web">Enlace web público</string>
-    <string name="reference_import_web">Importar web</string>
+    <string name="reference_web">URL</string>
+    <string name="reference_import_web">Importar fuente</string>
     <string name="reference_question">Pregunta sobre los documentos</string>
     <string name="reference_search">Preguntar</string>
     <string name="reference_all">Todas las fuentes</string>
@@ -15,7 +15,7 @@
     <string name="reference_forget_notice">Se eliminará su texto de Kioku. El archivo o web original no se borra.</string>
     <string name="reference_confirm">Sí, eliminar</string>
     <string name="reference_cancel">Cancelar</string>
-    <string name="reference_empty">Todavía no hay documentos. Comparte un archivo con Kioku o ábrelo aquí.</string>
+    <string name="reference_empty">Todavía no hay fuentes. Comparte un archivo con Kioku o importa una URL.</string>
     <string name="reference_found">Fragmentos encontrados, sin respuesta generada por IA:</string>
     <string name="reference_no_matches">No hay coincidencias textuales. Prueba palabras que aparezcan en la fuente; la búsqueda semántica todavía no está activada.</string>
     <string name="reference_loading">Comprobando los documentos...</string>

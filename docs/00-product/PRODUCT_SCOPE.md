@@ -1,5 +1,7 @@
 # Alcance de V1
 
+**Dirección vigente de fuentes, 18 de noviembre:** un único chat para recuerdos y fuentes. La sección **Fuentes** solo admite URL y gestión; los archivos llegan exclusivamente mediante Compartir desde Drive u otras apps. Se conserva únicamente texto extraído, con citas y atribución diferenciada, sin sincronización automática. [ADR-017](../02-architecture/ADR/ADR-017-unified-source-chat.md) sustituye el selector y chat documental anteriores. Implementado en rama y pendiente de activación: [estado](../09-planning/UNIFIED_SOURCES_VALIDATION.md). TikTok/Instagram/YouTube, OCR y acceso privado OAuth quedan fuera; compartir un enlace no garantiza leer un vídeo. Las descripciones del piloto siguientes son históricas.
+
 ## Incluido
 
 - Contar por voz o escribir cualquier dato personal que se quiera conservar.

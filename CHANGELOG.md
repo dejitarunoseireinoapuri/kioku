@@ -1,5 +1,11 @@
 # Cambios
 
+## Chat único y Fuentes · preparado en rama · 2026-11-18
+
+- Preguntar combina recuerdos y texto documental con citas y atribución separadas; compatibilidad opt-in con clientes anteriores y revocación de ambas clases de evidencia.
+- Fuentes sustituye Documentos: solo URL/gestión, archivos exclusivamente desde Compartir al chat existente. Avisos transitorios con errores/reintento y cobertura parcial; citas abiertas tras lectura vigente.
+- [ADR-017](docs/02-architecture/ADR/ADR-017-unified-source-chat.md), [pruebas locales y activación pendiente](docs/09-planning/UNIFIED_SOURCES_VALIDATION.md). Sin API en validación, datos personales, despliegue nuevo ni instalación de esta revisión en Honor.
+
 ## Fuentes compartidas · piloto conectado sin IA · 2026-11-17
 
 - Instalación separada Kioku · pruebas en la rama documental: cuenta ficticia, servidor local/Auth/Firestore Emulator y ninguna construcción del cliente de memoria productivo. Configuración productiva vacía y permiso de micrófono retirado en la variante.

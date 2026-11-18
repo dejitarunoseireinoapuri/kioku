@@ -42,7 +42,7 @@ class ReferenceWorkspaceViewModel(
         if (state.value.work != null) return report(ReferenceIssue.Busy)
         if (inputs.isEmpty() || inputs.size > MAX_FILES) return report(ReferenceIssue.TooLarge)
         val snapshot = inputs.toList()
-        mutableState.value = state.value.copy(items = snapshot.map { ReferenceImportItem(it) })
+        mutableState.value = state.value.copy(items = snapshot.map { ReferenceImportItem(it) }, webReceipt = null)
         run(ReferenceWork.Importing) { epoch ->
             for (input in snapshot) {
                 val result = repository.importFile(input)
@@ -66,6 +66,7 @@ class ReferenceWorkspaceViewModel(
         run(ReferenceWork.Importing) { epoch ->
             val result = repository.importWeb(url, requestId)
             if (result is ReferenceImportResult.Failed) throw ReferenceFailure(result.issue)
+            commit(epoch) { it.copy(webReceipt = result as ReferenceImportResult.Stored) }
             load(epoch)
         }
     }
@@ -133,8 +134,13 @@ class ReferenceWorkspaceViewModel(
         }
     }
 
-    fun report(issue: ReferenceIssue) {
-        mutableState.value = state.value.copy(issue = issue)
+    fun report(issue: ReferenceIssue?) {
+        mutableState.value =
+            state.value.copy(
+                issue = issue,
+                items = if (issue == null) emptyList() else state.value.items,
+                webReceipt = if (issue == null) null else state.value.webReceipt,
+            )
     }
 
     fun interrupt() {

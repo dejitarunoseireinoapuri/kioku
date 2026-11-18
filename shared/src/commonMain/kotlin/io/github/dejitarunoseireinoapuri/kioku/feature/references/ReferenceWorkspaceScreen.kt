@@ -72,7 +72,7 @@ private fun WorkspaceContent(
         WorkspaceProgress(state, actions)
         if (state.selected == null) WorkspaceImportResults(state, actions)
         if (state.selected == null) WorkspaceLibrary(state, actions, pilot) else WorkspaceSelection(state, actions)
-        WorkspaceQuery(state, actions)
+        if (pilot) WorkspaceQuery(state, actions)
     }
     state.forgetTarget?.let { WorkspaceForgetDialog(it, actions) }
 }
@@ -113,7 +113,7 @@ private fun WorkspaceLibrary(
     pilot: Boolean,
 ) {
     val enabled = state.work == null
-    ActionButton(stringResource(Res.string.reference_pick), actions::pick, enabled = enabled)
+    if (pilot) ActionButton(stringResource(Res.string.reference_pick), actions::pick, enabled = enabled)
     if (pilot) ActionButton(stringResource(Res.string.reference_example), actions::example, enabled = enabled)
     ActionButton(stringResource(Res.string.reference_refresh), actions::refresh, enabled = enabled)
     WorkspaceWeb(state, actions)

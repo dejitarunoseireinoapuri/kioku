@@ -19,6 +19,7 @@ sealed interface QueryOutcome {
         val status: AnswerStatus,
         val text: String,
         val sources: List<QueryReference>,
+        val citations: List<ReferenceCitation> = emptyList(),
     ) : QueryOutcome
 
     data class Failed(

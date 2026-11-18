@@ -22,6 +22,11 @@
             android:name=".ReferenceImportActivity"
             android:launchMode="singleTop"
             android:enabled="@bool/reference_import_enabled"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTask"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -39,10 +44,6 @@
                 <data android:mimeType="application/pdf" />
                 <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

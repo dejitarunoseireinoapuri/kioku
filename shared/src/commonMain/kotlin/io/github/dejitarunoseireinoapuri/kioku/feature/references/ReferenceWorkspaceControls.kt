@@ -50,7 +50,7 @@ internal fun WorkspaceWeb(
             state.web,
             actions::web,
             Modifier.fillMaxWidth().testTag("reference-web"),
-            label = { Text(stringResource(Res.string.reference_web)) },
+            placeholder = { Text(stringResource(Res.string.reference_web)) },
         )
         ActionButton(stringResource(Res.string.reference_import_web), actions::importWeb, enabled = state.work == null)
     }

@@ -1,6 +1,8 @@
 package io.github.dejitarunoseireinoapuri.kioku
 
 import android.view.KeyEvent
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
@@ -34,6 +36,7 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.QueryCommand
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryReference
 import io.github.dejitarunoseireinoapuri.kioku.domain.QueryRepository
+import io.github.dejitarunoseireinoapuri.kioku.feature.references.LocalSourceDelivery
 import kotlinx.coroutines.CompletableDeferred
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -47,12 +50,17 @@ class QueryNavigationTest {
     private val account = FixtureAccount()
     private val queries = QueryNavigationFixture()
     private val controls = QueryManagementFixture()
+    private val sourceDelivery = mutableLongStateOf(0L)
 
     @Before
     fun openQueries() {
         compose.runOnUiThread {
             LifecycleTestActivity.content =
-                { KiokuApp(account, queryRepository = queries, controlRepository = controls) }
+                {
+                    CompositionLocalProvider(LocalSourceDelivery provides sourceDelivery.longValue) {
+                        KiokuApp(account, queryRepository = queries, controlRepository = controls)
+                    }
+                }
         }
         compose.activityRule.scenario.recreate()
         compose.waitUntil(5000) { compose.onNodeWithTag("intent-Ask").isDisplayed() }
@@ -62,6 +70,18 @@ class QueryNavigationTest {
     @After
     fun clearHost() {
         compose.runOnUiThread { LifecycleTestActivity.content = null }
+    }
+
+    @Test
+    fun sharingReturnsToTheChatAndPreservesItsEarlierMessages() {
+        send("¿Qué película quiero ver?")
+        visible("Quieres ver la película ficticia Loto.")
+        compose.onNodeWithContentDescription("Ajustes").performClick()
+        compose.onNodeWithTag("text-composer").assertDoesNotExist()
+        compose.runOnUiThread { sourceDelivery.longValue++ }
+        visible("Quieres ver la película ficticia Loto.")
+        compose.onNodeWithTag("text-composer").assertIsDisplayed()
+        compose.onNodeWithText("¿Qué película quiero ver?").assertExists()
     }
 
     @Test

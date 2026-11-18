@@ -8,6 +8,8 @@ import { indexedText } from "#memory-v2/ai/indexed-evidence";
 import { V2Capture } from "../../src/memory-v2/capture.js";
 import { V2Reader } from "../../src/memory-v2/reader.js";
 import { V2WorkStore } from "../../src/memory-v2/work-store.js";
+import { ReferenceStore } from "../../src/references/store.js";
+import { importReference } from "../../src/references/service.js";
 import { changeV2 } from "../../src/memory-v2/change.js";
 import { queryV2 } from "../../src/memory-v2/query.js";
 import { routeV2, applyV2 } from "../../src/memory-v2/route.js";
@@ -974,4 +976,182 @@ test("intent interpretation precedes canonical reads for ambiguity and complete 
       0,
     );
   }
+});
+
+async function fictionalReference() {
+  const result = await importReference(
+    new ReferenceStore(db),
+    uid,
+    generation,
+    {
+      apiVersion: 1,
+      requestId: randomUUID(),
+      title: "Manual ficticio",
+      format: "text",
+      bytes: Buffer.from(
+        "El manual ficticio recomienda un cuaderno violeta.",
+      ).toString("base64"),
+    },
+  );
+  if (result.state !== "ready")
+    throw new Error("Synthetic source did not save");
+  return result.source;
+}
+
+test("older query clients ignore documentary sources and keep the original reply shape", async () => {
+  await fictionalReference();
+  const reply = await queryV2(
+    db,
+    uid,
+    generation,
+    {
+      apiVersion: 2,
+      requestId: randomUUID(),
+      text: "¿Qué recomienda el manual?",
+      zone: "UTC",
+    },
+    noModel,
+    allowed,
+  );
+  assert.equal(reply.status, "notFound");
+  assert.deepEqual(reply.sources, []);
+  assert.equal("citations" in reply, false);
+});
+
+test("normal chat answers jointly with separately attributed memory and documentary evidence", async () => {
+  await save();
+  const reference = await fictionalReference();
+  const mixed: StructuredModel = {
+    async call(stage, _instructions, data, schema) {
+      if (stage === "knowledge_review") return schema.parse({ accepted: true });
+      assert.equal(stage, "knowledge_answer");
+      const packet = data as { memories: unknown[]; references: unknown[] };
+      assert.equal(packet.memories.length, 1);
+      assert.equal(packet.references.length, 1);
+      return schema.parse({
+        status: "answered",
+        text: "Me contaste que Loto es verde. Según Manual ficticio se recomienda un cuaderno violeta.",
+        memories: [0],
+        references: [0],
+      });
+    },
+  };
+  const answer = await queryV2(
+    db,
+    uid,
+    generation,
+    {
+      apiVersion: 2,
+      requestId: randomUUID(),
+      text: "Relaciona mi recuerdo con el manual ficticio",
+      includeReferences: true,
+      zone: "Europe/Madrid",
+    },
+    async () => mixed,
+    allowed,
+  );
+  assert.equal(answer.status, "answered");
+  const citations = answer.citations as {
+    sourceId: string;
+    location: string;
+    text: string;
+  }[];
+  assert.equal(citations[0]?.sourceId, reference.id);
+  assert.equal(citations[0]?.location, "line");
+  const personal = answer.sources as { sourceId: string }[];
+  assert.equal(personal.length, 1);
+  assert.ok(personal.every((item) => item.sourceId !== reference.id));
+  assert.equal(Object.keys((await reader().load()).state.units).length, 1);
+});
+
+test("normal chat can answer from a shared file when no personal memories exist", async () => {
+  const reference = await fictionalReference();
+  const mixed: StructuredModel = {
+    async call(stage, _instructions, _data, schema) {
+      return schema.parse(
+        stage === "knowledge_review"
+          ? { accepted: true }
+          : {
+              status: "answered",
+              text: "Según Manual ficticio se recomienda un cuaderno violeta.",
+              memories: [],
+              references: [0],
+            },
+      );
+    },
+  };
+  const command = {
+    apiVersion: 2 as const,
+    requestId: randomUUID(),
+    text: "¿Qué recomienda el manual?",
+    includeReferences: true,
+    zone: "Europe/Madrid",
+  };
+  const answer = await queryV2(
+    db,
+    uid,
+    generation,
+    command,
+    async () => mixed,
+    allowed,
+  );
+  assert.equal(answer.status, "answered");
+  assert.deepEqual(answer.sources, []);
+  assert.equal(
+    (answer.citations as { sourceId: string }[])[0]?.sourceId,
+    reference.id,
+  );
+  assert.equal(Object.keys((await reader().load()).state.units).length, 0);
+  assert.equal(
+    (await queryV2(db, uid, generation, command, noModel, allowed)).status,
+    "repeatRequired",
+  );
+});
+
+test("forgetting a source retires pending mixed answers and the chat stamp without deleting personal facts", async () => {
+  await save();
+  const reference = await fictionalReference();
+  const before = await reader().load();
+  const mixed: StructuredModel = {
+    async call(stage, _instructions, _data, schema) {
+      if (stage === "knowledge_review") {
+        await new ReferenceStore(db).forget(
+          uid,
+          generation,
+          reference.id,
+          reference.revision,
+        );
+        return schema.parse({ accepted: true });
+      }
+      return schema.parse({
+        status: "answered",
+        text: "Según Manual ficticio se recomienda un cuaderno violeta.",
+        memories: [],
+        references: [0],
+      });
+    },
+  };
+  await assert.rejects(
+    queryV2(
+      db,
+      uid,
+      generation,
+      {
+        apiVersion: 2,
+        requestId: randomUUID(),
+        text: "¿Qué recomienda el manual?",
+        includeReferences: true,
+        zone: "Europe/Madrid",
+      },
+      async () => mixed,
+      allowed,
+    ),
+  );
+  const after = await reader().load();
+  assert.equal(after.state.epoch, before.state.epoch + 1);
+  assert.deepEqual(after.state.units, before.state.units);
+  assert.equal(
+    (await new ReferenceStore(db).catalog(uid, generation)).sources.length,
+    0,
+  );
 });

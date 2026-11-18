@@ -1,13 +1,11 @@
 package io.github.dejitarunoseireinoapuri.kioku
 
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -30,7 +28,7 @@ import io.github.dejitarunoseireinoapuri.kioku.platform.AndroidRepositories
 import io.github.dejitarunoseireinoapuri.kioku.platform.ReferenceSessionHost
 import io.github.dejitarunoseireinoapuri.kioku.platform.firebaseRepositories
 
-/** Production share entry using the same Google account and backend as Kioku. */
+/** Private source management using the same Google account and backend as Kioku. */
 class ReferenceImportActivity : ComponentActivity() {
     private lateinit var session: ReferenceSessionHost
     private lateinit var repositories: AndroidRepositories
@@ -38,17 +36,6 @@ class ReferenceImportActivity : ComponentActivity() {
         session.host.value
             ?.model
             ?.state
-    private val picker =
-        registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { uris ->
-            if (uris.isNotEmpty()) {
-                session.receive(
-                    Intent(Intent.ACTION_SEND_MULTIPLE).apply {
-                        putParcelableArrayListExtra(Intent.EXTRA_STREAM, ArrayList(uris))
-                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    },
-                )
-            }
-        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,9 +47,6 @@ class ReferenceImportActivity : ComponentActivity() {
         val factory = viewModelFactory { initializer { ReferenceSessionHost(repositories, contentResolver) } }
         session = ViewModelProvider(this, factory)[ReferenceSessionHost::class.java]
         setContent { Content() }
-        if (savedInstanceState == null && intent.action in setOf(Intent.ACTION_SEND, Intent.ACTION_SEND_MULTIPLE)) {
-            session.receive(intent)
-        }
     }
 
     @androidx.compose.runtime.Composable
@@ -100,12 +84,6 @@ class ReferenceImportActivity : ComponentActivity() {
         }
     }
 
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        // Consume this delivery as an event; the original launch intent remains the task's identity.
-        session.receive(intent)
-    }
-
     override fun onDestroy() {
         repositories.detach(this)
         super.onDestroy()
@@ -113,15 +91,7 @@ class ReferenceImportActivity : ComponentActivity() {
 
     private fun actions(host: AndroidReferenceHost): ReferenceWorkspaceActions =
         object : ReferenceWorkspaceActions {
-            override fun pick() =
-                picker.launch(
-                    arrayOf(
-                        "text/plain",
-                        "text/markdown",
-                        "application/pdf",
-                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                    ),
-                )
+            override fun pick() = Unit
 
             override fun example() = Unit
 

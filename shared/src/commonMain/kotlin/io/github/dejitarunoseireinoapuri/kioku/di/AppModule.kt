@@ -5,10 +5,12 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.AccountRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.AppearanceRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.MemoryControlRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.ReadReferencedSource
+import io.github.dejitarunoseireinoapuri.kioku.domain.ReferenceWorkspaceRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.SourceRepository
 import io.github.dejitarunoseireinoapuri.kioku.domain.VoiceInput
 import io.github.dejitarunoseireinoapuri.kioku.feature.account.AccountViewModel
 import io.github.dejitarunoseireinoapuri.kioku.feature.conversation.ConversationViewModel
+import io.github.dejitarunoseireinoapuri.kioku.feature.references.ReferenceWorkspaceViewModel
 import io.github.dejitarunoseireinoapuri.kioku.feature.settings.AppearanceViewModel
 import io.github.dejitarunoseireinoapuri.kioku.feature.source.SourceControlViewModel
 import io.github.dejitarunoseireinoapuri.kioku.feature.voice.VoiceViewModel
@@ -19,6 +21,7 @@ fun appModule() =
     module {
         single<SourceRepository> { DemoSourceRepository() }
         factory { ReadReferencedSource(get()) }
+        viewModel { (repository: ReferenceWorkspaceRepository) -> ReferenceWorkspaceViewModel(repository) }
         viewModel { (dependencies: ConversationDependencies) ->
             ConversationViewModel(
                 get(),

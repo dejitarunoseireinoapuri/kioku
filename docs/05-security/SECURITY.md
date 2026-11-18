@@ -1,5 +1,9 @@
 # Seguridad técnica
 
+## Chat mixto preparado, sin nueva activación
+
+El opt-in de consulta conjunta mantiene autorización por cuenta/generación y separa referencias de gestión personal y citas documentales. Solo el servidor traduce índices del modelo a IDs vigentes. Rechaza evidencia ajena/duplicada, respuestas sin respaldo y revisión negativa; texto documental e IA nunca autoriza acciones. Antes de cada llamada se validan ambas épocas, también al terminar y dentro de la transacción final. Olvidar una fuente retira el sello contextual del chat; abrir una cita exige releer su revisión actual. No se muestra su literal almacenado en RAM si esa lectura falla. Los clientes sin opt-in conservan el contrato previo. [ADR-017](../02-architecture/ADR/ADR-017-unified-source-chat.md), [pruebas y límites](../09-planning/UNIFIED_SOURCES_VALIDATION.md). No se amplía el permiso HTTP ni el acceso a Drive/redes sociales.
+
 ## Documentos y web activos en producción
 
 Desde el 18 de noviembre de 2026 el receptor habitual utiliza la cuenta Google/App Check existente. El propietario autoriza expresamente roles/run.invoker a allUsers solo para el transporte HTTP de referenceSources, igual que el callable previo; no autoriza acceso anónimo a datos. El servicio real rechaza una petición sin autenticar con 401 UNAUTHENTICATED. Solo el servidor escribe texto canónico: comprueba propietario/generación al admitir, leer, publicar, consultar y olvidar. Reautoriza después de extraer y comprueba época antes de devolver respuestas y dentro de la transacción final. Documentos/preguntas/salidas IA no autorizan acciones. El endpoint documental no modifica recuerdos personales. Pruebas solo con fixtures/dobles, sin API o cuentas reales.

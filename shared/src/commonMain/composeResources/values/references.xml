@@ -7,7 +7,7 @@
     <string name="references_unavailable">No se ha podido completar la operación. Vuelve a intentarlo; si persiste, comprueba la disponibilidad del servicio.</string>
     <string name="references_sign_in">Accede a Kioku y vuelve a compartir el archivo.</string>
     <string name="references_permission">No se puede leer este archivo. Vuelve a compartirlo con permiso de lectura.</string>
-    <string name="references_unsupported">Este formato todavía no está admitido. Puedes compartir TXT, Markdown, PDF con texto o DOCX.</string>
+    <string name="references_unsupported">Esta fuente no es compatible. Admite archivos con texto y webs públicas legibles. Los vídeos todavía no están disponibles.</string>
     <string name="references_too_large">El envío supera el límite de archivos o tamaño.</string>
     <string name="references_invalid">No se ha podido reconocer el archivo o enlace compartido.</string>
     <string name="references_interrupted">La operación se ha interrumpido. Puedes volver a intentarlo con el texto actual.</string>

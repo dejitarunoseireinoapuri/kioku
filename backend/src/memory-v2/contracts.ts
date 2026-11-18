@@ -64,6 +64,7 @@ export const querySchema = z.strictObject({
   requestId: id,
   text: safeText.max(2000),
   zone: legacyCapture.shape.zone,
+  includeReferences: z.boolean().optional(),
 });
 export const changeSchema = z
   .strictObject({

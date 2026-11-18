@@ -20,7 +20,7 @@ import {
   changeSchema,
 } from "./contracts.js";
 import { routeSchema, applySchema } from "./route-contracts.js";
-import { V2Capture } from "./capture.js";
+import { V2Capture, type ModelFactory } from "./capture.js";
 import { V2WorkStore } from "./work-store.js";
 import { V2Reader } from "./reader.js";
 import { presentGroup, presentSaved } from "./presentation.js";
@@ -92,7 +92,8 @@ export function memoryV2Callable(
           );
         const payload = envelope.payload,
           reader = new V2Reader(db, uid, generation),
-          model = (epoch: number) => v2Provider(db, uid, generation, epoch);
+          model: ModelFactory = (epoch, validate) =>
+            v2Provider(db, uid, generation, epoch, validate);
         switch (envelope.operation) {
           case "submit":
             return await new V2Capture(db).execute(

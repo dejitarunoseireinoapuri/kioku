@@ -17,7 +17,8 @@ internal fun parseQuery(
     requestId: String,
 ): QueryOutcome {
     val value = queryObject(json)
-    require(value.keys == setOf("apiVersion", "operationId", "status", "text", "sources"))
+    val fields = setOf("apiVersion", "operationId", "status", "text", "sources")
+    require(value.keys == fields || value.keys == fields + "citations")
     require(value.queryText("operationId") == requestId)
     val status = value.queryText("status")
     val text = value.queryText("text")
@@ -31,12 +32,22 @@ internal fun parseQuery(
             QueryReference(id, date.take(QUERY_DATE_LENGTH))
         }
     require(sources.size <= MAX_QUERY_SOURCES && sources.distinctBy { it.sourceId }.size == sources.size)
+    val citations = parseQueryCitations(value)
     if (status == "processing" || status == "repeatRequired") {
-        require(text.isEmpty() && sources.isEmpty())
+        require(text.isEmpty() && sources.isEmpty() && citations.isEmpty())
         return if (status == "processing") QueryOutcome.Processing else QueryOutcome.RepeatRequired
     }
+    return queryReply(status, text, sources, citations)
+}
+
+private fun queryReply(
+    status: String,
+    text: String,
+    sources: List<QueryReference>,
+    citations: List<io.github.dejitarunoseireinoapuri.kioku.domain.ReferenceCitation>,
+): QueryOutcome.Reply {
     require(text.length in 1..MAX_ANSWER_LENGTH)
-    require(status != "answered" || sources.isNotEmpty())
+    require(status != "answered" || sources.isNotEmpty() || citations.isNotEmpty())
     val answerStatus =
         when (status) {
             "answered" -> AnswerStatus.Answered
@@ -44,7 +55,8 @@ internal fun parseQuery(
             "needsClarification" -> AnswerStatus.Clarification
             else -> error("Invalid query response")
         }
-    return QueryOutcome.Reply(answerStatus, text, sources)
+    require(status == "answered" || citations.isEmpty())
+    return QueryOutcome.Reply(answerStatus, text, sources, citations)
 }
 
 internal fun parseQuerySource(
@@ -94,4 +106,4 @@ private const val QUERY_DATE_LENGTH = 10
 private const val MAX_QUERY_SOURCES = 32
 private const val MAX_ANSWER_LENGTH = 2400
 private const val MAX_QUERY_SOURCE_LENGTH = 16_007
-private const val MAX_QUERY_RESPONSE_LENGTH = 40_000
+private const val MAX_QUERY_RESPONSE_LENGTH = 100_000

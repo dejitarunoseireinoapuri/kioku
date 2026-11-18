@@ -105,15 +105,23 @@ class ReferenceReceiverTest {
         )
     }
 
-    @Test fun incompleteImportIsNotEnabledForOwnerDataOrPresentedAsAWorkingService() {
+    @Test fun sharingTargetsTheReusableChatWhileSourceManagementStaysPrivate() {
         val component = ComponentName(context, ReferenceImportActivity::class.java)
         val info =
             context.packageManager.getActivityInfo(
                 component,
                 android.content.pm.PackageManager.MATCH_DISABLED_COMPONENTS,
             )
-        assertTrue(info.exported)
-        assertEquals(false, info.enabled)
+        assertEquals(false, info.exported)
+        assertTrue(info.enabled)
+        val receiver =
+            context.packageManager
+                .resolveActivity(
+                    single().setPackage(context.packageName),
+                    android.content.pm.PackageManager.MATCH_DEFAULT_ONLY,
+                )?.activityInfo
+        assertEquals(MainActivity::class.java.name, receiver?.name)
+        assertEquals(android.content.pm.ActivityInfo.LAUNCH_SINGLE_TASK, receiver?.launchMode)
     }
 
     private suspend fun assertReadIssue(

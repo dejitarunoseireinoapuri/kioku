@@ -1,5 +1,7 @@
 # Fuentes compartidas · evidencia por entrega
 
+**Revisión posterior en rama:** el propietario sustituye esta biblioteca por un chat único y **Fuentes** solo con URL/gestión; archivos exclusivamente desde Compartir. [Nueva evidencia y pendientes de activación](UNIFIED_SOURCES_VALIDATION.md). Los resultados productivos de este documento pertenecen a la versión anterior y no acreditan el rediseño instalado.
+
 ## Comprobación final en Honor desbloqueado · 18 de noviembre de 2026
 
 **1/1 caso nativo superado**, 5,409 s, registro local reference-production-honor-unlocked.log. Con la pantalla desbloqueada se ejecuta la prueba opt-in ProductionReferenceImportTest: ACTION_SEND con PDF generado, aviso de guardado confirmado en Firestore productivo, apertura por el ID exacto recibido, lectura del texto ficticio «Lira usa un cuaderno violeta.» y localizador **Página 1**. Se elimina únicamente el binario temporal del proveedor de fixtures; el texto documental ficticio queda disponible para la prueba manual del propietario.

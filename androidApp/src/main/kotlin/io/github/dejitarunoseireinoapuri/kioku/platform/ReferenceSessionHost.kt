@@ -26,6 +26,8 @@ internal class ReferenceSessionHost(
     val account = ViewModelProvider(this, factory)[AccountViewModel::class.java]
     private val mutableHost = MutableStateFlow<AndroidReferenceHost?>(null)
     val host = mutableHost.asStateFlow()
+    private val mutableDelivery = MutableStateFlow(0L)
+    val delivery = mutableDelivery.asStateFlow()
     private var identity: Pair<String, Long>? = null
     private var pending: Intent? = null
 
@@ -53,6 +55,7 @@ internal class ReferenceSessionHost(
     }
 
     fun receive(intent: Intent) {
+        mutableDelivery.value++
         val current = host.value
         if (current == null) pending = intent else current.receive(intent)
     }

@@ -80,11 +80,12 @@ export class ReferenceStore {
   }
 
   private async state(tx: Transaction, uid: string, generation: string) {
-    await authorizeV2(tx, this.db, uid, generation);
+    const runtime = await authorizeV2(tx, this.db, uid, generation);
     const refs = this.refs(uid, generation);
     const state = await tx.get(refs.root);
     return {
       refs,
+      runtime,
       state: state.exists
         ? stateSchema.parse(state.data())
         : { epoch: 0, count: 0, pending: 0 },
@@ -356,10 +357,14 @@ export class ReferenceStore {
     z.uuid().parse(id);
     z.uuid().parse(revision);
     await this.db.runTransaction(async (tx) => {
-      const { refs, state } = await this.state(tx, uid, generation);
+      const { refs, state, runtime } = await this.state(tx, uid, generation);
       const ref = refs.sources.doc(id),
         source = await this.current(tx, ref, generation);
       if (source.revision !== revision) throw new SourceError("conflict");
+      // One authority stamp invalidates RAM query context when a documentary support is revoked.
+      tx.update(this.db.doc(`accounts/${uid}/runtime/memory`), {
+        revision: runtime.revision + 1,
+      });
       tx.delete(ref);
       tx.delete(refs.content.doc(source.checksum));
       tx.create(refs.root.collection("revocations").doc(id), {

@@ -28,6 +28,7 @@ import io.github.dejitarunoseireinoapuri.kioku.design.SettingsAction
 import io.github.dejitarunoseireinoapuri.kioku.design.TopBar
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextOutcome
 import io.github.dejitarunoseireinoapuri.kioku.feature.references.LocalReferenceEntry
+import io.github.dejitarunoseireinoapuri.kioku.feature.references.LocalSharedSourceNotice
 import io.github.dejitarunoseireinoapuri.kioku.resources.Res
 import io.github.dejitarunoseireinoapuri.kioku.resources.app_name
 import io.github.dejitarunoseireinoapuri.kioku.resources.control_checking
@@ -141,27 +142,30 @@ private fun conversationScroll(
 
 @Composable
 private fun ConversationHeader(onSettings: () -> Unit) {
-    BoxWithConstraints {
-        val keyboardVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
-        if (!keyboardVisible || maxHeight >= KiokuSpacing.CompactContentHeight) {
-            TopBar(
-                title = stringResource(Res.string.app_name),
-                trailing = {
-                    Row {
-                        LocalReferenceEntry.current?.let { open ->
-                            TextButton(
-                                onClick = open,
-                                modifier =
-                                    Modifier.sizeIn(
-                                        minWidth = KiokuSpacing.TouchTarget,
-                                        minHeight = KiokuSpacing.TouchTarget,
-                                    ),
-                            ) { Text(stringResource(Res.string.reference_production_title)) }
+    Column {
+        BoxWithConstraints {
+            val keyboardVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
+            if (!keyboardVisible || maxHeight >= KiokuSpacing.CompactContentHeight) {
+                TopBar(
+                    title = stringResource(Res.string.app_name),
+                    trailing = {
+                        Row {
+                            LocalReferenceEntry.current?.let { open ->
+                                TextButton(
+                                    onClick = open,
+                                    modifier =
+                                        Modifier.sizeIn(
+                                            minWidth = KiokuSpacing.TouchTarget,
+                                            minHeight = KiokuSpacing.TouchTarget,
+                                        ),
+                                ) { Text(stringResource(Res.string.reference_production_title)) }
+                            }
+                            SettingsAction(onSettings)
                         }
-                        SettingsAction(onSettings)
-                    }
-                },
-            )
+                    },
+                )
+            }
         }
+        LocalSharedSourceNotice.current()
     }
 }

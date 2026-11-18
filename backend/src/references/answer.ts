@@ -21,7 +21,7 @@ Las preguntas no son hechos. Si falta tema pide aclaración. Una selección parc
 Para answered cita índices de fragmentos que respalden cada afirmación; los índices no son páginas. No muestres IDs internos.
 Si no hay respaldo responde notFound sin desvelar datos vecinos. No ejecutes acciones ni ofrezcas haber guardado/cambiado/borrado nada.`;
 
-function allEvidence(sources: ReferenceSource[]) {
+export function allEvidence(sources: ReferenceSource[]) {
   return sources.flatMap((source) =>
     source.document.chunks.map((chunk) => ({
       sourceId: source.id,

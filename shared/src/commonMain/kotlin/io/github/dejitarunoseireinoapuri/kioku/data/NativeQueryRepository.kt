@@ -75,6 +75,7 @@ class NativeQueryRepository(
         put(key, id)
         if (text != null) {
             put("text", text)
+            put("includeReferences", true)
             put("zone", port.timeZone())
         }
     }.toString()

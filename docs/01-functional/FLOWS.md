@@ -1,5 +1,9 @@
 # Flujos y salidas
 
+## Fuentes · recorrido vigente preparado
+
+Otra app → Compartir archivo → Kioku/chat existente → recepción/extracción/confirmación transitorias → Preguntar habitual → respuesta con recuerdos y fuentes atribuidos → cita → lectura de revisión vigente en diálogo. Un fallo de archivo conserva la operación para reintentar; la cobertura parcial se declara. Fuentes → pegar URL → Importar fuente → lista/lectura/eliminación con confirmación. No hay selector ni chat documental en producción. [ADR-017](../02-architecture/ADR/ADR-017-unified-source-chat.md), [pruebas locales y activación pendiente](../09-planning/UNIFIED_SOURCES_VALIDATION.md). El recorrido futuro descrito debajo es histórico y queda sustituido en estos puntos.
+
 **Recorrido futuro de fuentes compartidas:** otra app → Compartir → Kioku → sesión/recepción → lectura y preparación por elemento → fuente disponible → pregunta y cita navegable. Cancelación, fallos y lectura parcial tienen resultado explícito; el selector de archivos converge en el mismo flujo. Drive como archivo y como enlace privado tienen recorridos distintos. [Plan, límites y aceptación previstos](../09-planning/SHARED_SOURCES_PLAN.md); sin código o activación en esta entrega.
 
 ## Voz local

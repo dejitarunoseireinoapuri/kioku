@@ -8,6 +8,8 @@ import { V2WorkStore } from "./work-store.js";
 import { groupsForUnits, presentEvidence } from "./presentation.js";
 import type { querySchema, V2Reply } from "./contracts.js";
 import type { ModelFactory } from "./capture.js";
+import { ReferenceStore } from "../references/store.js";
+import { queryKnowledge } from "../references/query-context.js";
 
 export async function queryV2(
   db: Firestore,
@@ -34,13 +36,38 @@ export async function queryV2(
       lease = pending.lease;
     if (loaded.state.epoch !== lease.epoch)
       throw new AccountError("failed-precondition");
+    const references = new ReferenceStore(db);
+    const catalog = input.includeReferences
+      ? await references.catalog(uid, generation)
+      : null;
+    const validate = async () => {
+      await reader.assertCurrent(lease.epoch);
+      if (catalog)
+        await references.assertCurrent(uid, generation, catalog.epoch);
+    };
     let reply: V2Reply = {
       ...base,
       status: "notFound",
       text: "Todavía no hay recuerdos guardados.",
       sources: [],
     };
-    if (Object.keys(loaded.state.units).length) {
+    if (catalog?.sources.length) {
+      const provider = await model(lease.epoch, validate);
+      reply = {
+        ...base,
+        ...(await queryKnowledge(
+          reader,
+          loaded,
+          provider,
+          catalog.sources,
+          {
+            question: currentQueryText(input.text, lease.epoch),
+            zone: input.zone,
+          },
+          validate,
+        )),
+      };
+    } else if (Object.keys(loaded.state.units).length) {
       const provider = await model(lease.epoch),
         at = new Date().toISOString();
       const found = await reader.candidates(
@@ -93,12 +120,22 @@ export async function queryV2(
         };
     }
     await reauthorize();
-    await work.finish(uid, pending.lease, "committed", {
-      ...base,
-      status: "repeatRequired",
-      text: "",
-      sources: [],
-    });
+    await validate();
+    await work.finish(
+      uid,
+      pending.lease,
+      "committed",
+      {
+        ...base,
+        status: "repeatRequired",
+        text: "",
+        sources: [],
+      },
+      undefined,
+      catalog
+        ? (tx) => references.validate(tx, uid, generation, catalog.epoch)
+        : undefined,
+    );
     return reply;
   } catch (error) {
     await work.fail(uid, pending.lease).catch(() => undefined);

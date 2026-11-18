@@ -54,6 +54,7 @@ internal class AndroidReferenceHost(
         // A new delivery supersedes a read-only startup refresh, never a pending import or deletion.
         if (model.state.value.work == ReferenceWork.Loading) model.interrupt()
         if (model.state.value.work != null || receiving.value) return model.report(ReferenceIssue.Busy)
+        model.report(null)
         when (val delivery = receiveReferences(intent)) {
             is ReferenceDelivery.Failed -> {
                 model.report(delivery.issue)

@@ -29,6 +29,7 @@ export function retrieveReferences(
   sources: ReferenceSource[],
   question: string,
   sourceId?: string,
+  includePartial = false,
 ) {
   if (!question.trim() || question.length > 2000 || sources.length > 100)
     throw new SourceError("invalid");
@@ -36,7 +37,7 @@ export function retrieveReferences(
   const candidates = sources.filter(
     (source) =>
       (!sourceId || source.id === sourceId) &&
-      (sourceId || source.document.coverage !== "partial"),
+      (includePartial || sourceId || source.document.coverage !== "partial"),
   );
   return candidates
     .flatMap((source) =>
