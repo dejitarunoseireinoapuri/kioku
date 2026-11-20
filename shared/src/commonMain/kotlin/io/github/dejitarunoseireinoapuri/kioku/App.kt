@@ -1,8 +1,6 @@
 package io.github.dejitarunoseireinoapuri.kioku
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -120,14 +118,12 @@ private fun AccountGate(
     } else {
         key(authorized.session.id, authorized.session.generation) {
             CompositionViewModels {
-                Column(Modifier.fillMaxSize().imePadding()) {
-                    KiokuNavigation(
-                        authorized,
-                        viewModel::signOut,
-                        viewModel::refresh,
-                        dependencies,
-                    )
-                }
+                KiokuNavigation(
+                    authorized,
+                    viewModel::signOut,
+                    viewModel::refresh,
+                    dependencies,
+                )
             }
         }
     }
@@ -179,6 +175,7 @@ private fun KiokuNavigation(
         }, backStack.lastOrNull(), { controlChanged.value = true })
     NavDisplay(
         backStack = backStack,
+        modifier = Modifier.fillMaxSize(),
         onBack = back,
         entryProvider = kiokuEntries(state, account, viewModel, dependencies, actions),
     )

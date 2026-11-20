@@ -1,5 +1,6 @@
 package io.github.dejitarunoseireinoapuri.kioku
 
+import android.content.ComponentName
 import android.graphics.Bitmap
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
@@ -10,6 +11,7 @@ import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.click
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
@@ -17,6 +19,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTouchInput
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.test.platform.app.InstrumentationRegistry
@@ -33,7 +36,12 @@ class ComposerInteractionTest {
 
     @Before
     fun openApp() {
-        compose.runOnUiThread { compose.activity.enableEdgeToEdge() }
+        compose.runOnUiThread {
+            val activity = compose.activity
+            val main = ComponentName(activity, MainActivity::class.java)
+            activity.enableEdgeToEdge()
+            activity.window.setSoftInputMode(activity.packageManager.getActivityInfo(main, 0).softInputMode)
+        }
         compose.setContent { KiokuApp(FixtureAccount()) }
         compose.waitUntil(5000) { compose.onNodeWithTag("intent-Ask").isDisplayed() }
         compose.onNodeWithTag("intent-Ask").performClick()
@@ -41,37 +49,39 @@ class ComposerInteractionTest {
 
     @Test
     fun keyboardKeepsOnlyTheComposerAboveItAndRestoresTheSelectedModeOnClosing() {
-        compose.onNodeWithTag("text-composer").performClick().performTextInput("Pregunta ficticia sin enviar")
-        compose.runOnUiThread {
-            val window = compose.activity.window
-            WindowCompat.getInsetsController(window, window.decorView).show(WindowInsetsCompat.Type.ime())
-        }
+        val editor = compose.onNodeWithTag("text-composer")
+        editor.performTouchInput { click() }
+        editor.performTextInput("Pregunta ficticia sin enviar")
+        val maxGap = 8 * compose.activity.resources.displayMetrics.density + 1
         compose.waitUntil(5000) {
             imeVisible() && compose.onAllNodesWithTag("intent-Ask").fetchSemanticsNodes().isEmpty()
         }
+        compose.waitUntil("composer directly above the keyboard", 5000) {
+            val gap = keyboardGap()
+            gap in -1f..maxGap
+        }
+        captureKeyboard()
+        editor.assertIsDisplayed()
         compose.onNodeWithTag("intent-Ask").assertDoesNotExist()
         compose.onNodeWithTag("intent-Tell").assertDoesNotExist()
-        val bottom =
-            compose
-                .onNodeWithTag(
-                    "text-composer",
-                ).assertIsDisplayed()
-                .fetchSemanticsNode()
-                .boundsInWindow.bottom
         val view = compose.activity.window.decorView
-        val imeBottom =
-            WindowInsetsCompat
-                .toWindowInsetsCompat(view.rootWindowInsets, view)
-                .getInsets(WindowInsetsCompat.Type.ime())
-                .bottom
-        assertTrue("The composer must sit above the software keyboard", bottom <= view.height - imeBottom + 1)
-        captureKeyboard()
         compose.runOnUiThread {
             WindowCompat.getInsetsController(compose.activity.window, view).hide(WindowInsetsCompat.Type.ime())
         }
         compose.waitUntil(5000) { !imeVisible() && compose.onNodeWithTag("intent-Ask").isDisplayed() }
         compose.onNodeWithTag("intent-Ask").assertIsSelected()
         compose.onNodeWithTag("text-composer").assertTextContains("Pregunta ficticia sin enviar")
+    }
+
+    private fun keyboardGap(): Float {
+        val composerBottom =
+            compose
+                .onNodeWithTag("composer-frame")
+                .fetchSemanticsNode()
+                .boundsInWindow.bottom
+        val view = compose.activity.window.decorView
+        val insets = WindowInsetsCompat.toWindowInsetsCompat(view.rootWindowInsets, view)
+        return view.height - insets.getInsets(WindowInsetsCompat.Type.ime()).bottom - composerBottom
     }
 
     @Test
