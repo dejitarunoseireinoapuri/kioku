@@ -1,6 +1,6 @@
 # Estado real y decisiones pendientes
 
-**Menos espera al contar y preguntar:** revisión de servidor preparada. Evita una fase de IA al contar y en algunas preguntas, y dos fases al contar ubicaciones sencillas reconocidas. Seis capturas ficticias y cinco consultas correctas vía suscripción, con dos recorridos completos de guardar y recuperar. Perfil Sol alto y verificación independiente conservados. Pendiente activación y medición en la app. [Mediciones y alcance](QUERY_RELIABILITY_VALIDATION.md#menos-llamadas-al-contar-y-preguntar).
+**Menos espera al contar y preguntar:** revisión `memoryv2-00008-vug` activa. Evita una fase de IA al contar y en algunas preguntas, y dos fases al contar ubicaciones sencillas reconocidas. Seis capturas ficticias y cinco consultas correctas vía suscripción, con dos recorridos completos de guardar y recuperar. Perfil Sol alto y verificación independiente conservados. Pendiente medir la latencia total en la app. [Mediciones y alcance](QUERY_RELIABILITY_VALIDATION.md#menos-llamadas-al-contar-y-preguntar).
 
 **Velocidad de consultas y arranque:** optimización de lecturas del servidor validada con datos ficticios y activa en `memoryV2` (`memoryv2-00007-jip`). La comparación mediante suscripción entre razonamiento alto y medio no acredita una ventaja consistente. Se mantiene el perfil alto. Falta medir la latencia completa en la app con el proveedor real. [Mediciones y alcance](QUERY_RELIABILITY_VALIDATION.md#seguimiento-de-velocidad).
 
