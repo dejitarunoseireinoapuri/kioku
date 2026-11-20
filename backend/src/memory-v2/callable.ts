@@ -8,6 +8,7 @@ import { GetConfiguration } from "../account/get-configuration.js";
 import { FirestoreOwnerAccess } from "../firebase/owner-access.js";
 import { verifyIdentity } from "../firebase/verify-identity.js";
 import type { BackendRuntime } from "../firebase/runtime.js";
+import { LOCAL_PROJECT } from "../firebase/runtime.js";
 import { authorizeV2 } from "./access.js";
 import {
   envelopeSchema,
@@ -34,6 +35,8 @@ export function memoryV2Callable(
   db: Firestore,
   runtime: BackendRuntime,
 ) {
+  const locationPrototype =
+    !runtime.production && runtime.projectId === LOCAL_PROJECT;
   const access = new GetConfiguration(
     runtime.allowedEmail,
     new FirestoreOwnerAccess(db),
@@ -95,7 +98,11 @@ export function memoryV2Callable(
           model = (epoch: number) => v2Provider(db, uid, generation, epoch);
         switch (envelope.operation) {
           case "submit":
-            return await new V2Capture(db).execute(
+            return await new V2Capture(
+              db,
+              undefined,
+              locationPrototype,
+            ).execute(
               uid,
               generation,
               submitSchema.parse(payload),
@@ -151,6 +158,7 @@ export function memoryV2Callable(
               querySchema.parse(payload),
               model,
               reauthorize,
+              locationPrototype,
             );
           case "change":
             return await changeV2(
@@ -160,6 +168,8 @@ export function memoryV2Callable(
               changeSchema.parse(payload),
               model,
               reauthorize,
+              undefined,
+              locationPrototype,
             );
           case "route":
             return await routeV2(

@@ -9,6 +9,7 @@ import { V2MutationStore } from "./mutation-store.js";
 import { presentEvidence, presentGroup } from "./presentation.js";
 import type { ModelFactory } from "./capture.js";
 import type { Change, V2Reply } from "./contracts.js";
+import { directLocationCorrection } from "./location-prototype.js";
 
 export async function changeV2(
   db: Firestore,
@@ -18,6 +19,7 @@ export async function changeV2(
   model: ModelFactory,
   reauthorize: () => Promise<void>,
   receivedAt = new Date().toISOString(),
+  locationPrototype = false,
 ): Promise<V2Reply> {
   const work = new V2WorkStore(db);
   const pending = await work.begin(
@@ -92,23 +94,35 @@ export async function changeV2(
       };
     } else {
       const target = loaded.state.units[input.memoryIds[0]!]!;
+      const directDraft = locationPrototype
+        ? directLocationCorrection(
+            loaded.state,
+            target.id,
+            input.correction!,
+            input.zone,
+          )
+        : null;
       const packet = presentEvidence(loaded, [targets[0]!])[0]!;
-      const interpreted = await new Interpreter(
-        await model(lease.epoch),
-      ).interpret(
-        {
-          text: input.correction!,
-          at: receivedAt,
-          zone: input.zone,
-          mode: "correction",
-          target,
-          evidence: packet.fragments.map((fragment) => ({
-            fragment,
-            source: loaded.state.sources[fragment.sourceId]!,
-          })),
-        },
-        [],
-      );
+      const interpreted = directDraft
+        ? {
+            draft: directDraft,
+            proposal: { question: null, preserveTime: false },
+            retainedEvidence: [],
+          }
+        : await new Interpreter(await model(lease.epoch)).interpret(
+            {
+              text: input.correction!,
+              at: receivedAt,
+              zone: input.zone,
+              mode: "correction",
+              target,
+              evidence: packet.fragments.map((fragment) => ({
+                fragment,
+                source: loaded.state.sources[fragment.sourceId]!,
+              })),
+            },
+            [],
+          );
       if (!interpreted.draft)
         return clarify(
           interpreted.proposal.question ??

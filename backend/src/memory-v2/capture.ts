@@ -6,17 +6,31 @@ import { V2Reader } from "./reader.js";
 import { V2WorkStore, operationReply } from "./work-store.js";
 import { V2MutationStore } from "./mutation-store.js";
 import { presentSaved } from "./presentation.js";
-import type { Submit, Clarify, WorkLease, V2Reply } from "./contracts.js";
+import { directLocationCapture } from "./location-prototype.js";
+import type { LoadedState } from "./state-store.js";
+import type {
+  Submit,
+  Clarify,
+  PendingTurn,
+  WorkLease,
+  V2Reply,
+} from "./contracts.js";
 
 export type ModelFactory = (epoch: number) => Promise<StructuredModel>;
 export class V2Capture {
   readonly db: Firestore;
   readonly work: V2WorkStore;
   readonly now: () => number;
-  constructor(db: Firestore, now: () => number = Date.now) {
+  private readonly locationPrototype: boolean;
+  constructor(
+    db: Firestore,
+    now: () => number = Date.now,
+    locationPrototype = false,
+  ) {
     this.db = db;
     this.now = now;
     this.work = new V2WorkStore(db, now);
+    this.locationPrototype = locationPrototype;
   }
   async execute(
     uid: string,
@@ -63,37 +77,23 @@ export class V2Capture {
         loaded = await reader.load();
       if (loaded.state.epoch !== lease.epoch)
         throw new AccountError("failed-precondition");
-      const provider = await model(lease.epoch),
-        turn = lease.turn;
-      const found = await reader.candidates(
-        loaded,
-        provider,
-        turn.text,
-        turn.at,
-        turn.zone,
-      );
-      if (found.truncated) throw new AccountError("resource-exhausted");
-      const interpreted = await new Interpreter(provider).interpret(
-        { ...turn, mode: "capture" },
-        found.units,
-        { verifyCaptureIntent: true },
-      );
+      const turn = lease.turn;
+      const directDraft =
+        this.locationPrototype && "zone" in input
+          ? directLocationCapture(loaded.state, turn.text, turn.zone)
+          : null;
+      const { draft, question } = directDraft
+        ? { draft: directDraft, question: null }
+        : await this.interpret(reader, loaded, turn, await model(lease.epoch));
       await reauthorize();
-      if (!interpreted.draft) {
-        const reply = await this.finishUnstored(
-          uid,
-          lease,
-          interpreted.proposal.question,
-        );
-        return reply;
-      }
+      if (!draft) return await this.finishUnstored(uid, lease, question);
       const reply = await new V2MutationStore(this.db, this.now).commit(
         uid,
         lease,
         {
           kind: "capture",
           requestId: lease.requestId,
-          draft: interpreted.draft,
+          draft,
         },
       );
       return presentSaved(this.db, uid, generation, reply);
@@ -101,6 +101,30 @@ export class V2Capture {
       await this.work.fail(uid, pending.lease).catch(() => undefined);
       throw error;
     }
+  }
+  private async interpret(
+    reader: V2Reader,
+    loaded: LoadedState,
+    turn: PendingTurn,
+    provider: StructuredModel,
+  ) {
+    const found = await reader.candidates(
+      loaded,
+      provider,
+      turn.text,
+      turn.at,
+      turn.zone,
+    );
+    if (found.truncated) throw new AccountError("resource-exhausted");
+    const interpreted = await new Interpreter(provider).interpret(
+      { ...turn, mode: "capture" },
+      found.units,
+      { verifyCaptureIntent: true },
+    );
+    return {
+      draft: interpreted.draft,
+      question: interpreted.proposal.question,
+    };
   }
   private async finishUnstored(
     uid: string,

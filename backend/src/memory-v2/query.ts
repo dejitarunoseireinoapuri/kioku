@@ -9,6 +9,7 @@ import { V2WorkStore } from "./work-store.js";
 import { groupsForUnits, presentEvidence } from "./presentation.js";
 import type { querySchema, V2Reply } from "./contracts.js";
 import type { ModelFactory } from "./capture.js";
+import { directLocationAnswer } from "./location-prototype.js";
 
 export async function queryV2(
   db: Firestore,
@@ -17,6 +18,7 @@ export async function queryV2(
   input: z.infer<typeof querySchema>,
   model: ModelFactory,
   reauthorize: () => Promise<void>,
+  locationPrototype = false,
 ): Promise<V2Reply> {
   const work = new V2WorkStore(db),
     pending = await work.begin(uid, generation, input.requestId, input, null);
@@ -41,10 +43,38 @@ export async function queryV2(
       text: "Todavía no hay recuerdos guardados.",
       sources: [],
     };
-    if (Object.keys(loaded.state.units).length) {
+    const question = currentQueryText(input.text, lease.epoch);
+    const resolved = queryInput(question);
+    const direct = locationPrototype
+      ? directLocationAnswer(loaded.state, resolved.question)
+      : null;
+    if (direct?.kind === "match") {
+      reply = {
+        ...base,
+        status: "answered",
+        text: `Está en ${direct.place}.`,
+        sources: groupsForUnits(loaded, [direct.unitId]),
+      };
+    } else if (direct?.kind === "ambiguous") {
+      reply = {
+        ...base,
+        status: "needsClarification",
+        text: "No puedo distinguir qué objeto o ubicación buscas. ¿Puedes concretarlo?",
+        sources: [],
+      };
+    } else if (
+      Object.keys(loaded.state.units).length &&
+      direct?.kind === "absent"
+    ) {
+      reply = {
+        ...base,
+        status: "notFound",
+        text: "No encuentro la ubicación de ese objeto en tus recuerdos guardados.",
+        sources: [],
+      };
+    } else if (Object.keys(loaded.state.units).length) {
       const provider = await model(lease.epoch),
         at = new Date().toISOString();
-      const resolved = queryInput(currentQueryText(input.text, lease.epoch));
       const found = await reader.candidates(
         loaded,
         provider,
@@ -71,7 +101,7 @@ export async function queryV2(
           provider,
           items,
           {
-            question: currentQueryText(input.text, lease.epoch),
+            question,
             at,
             zone: input.zone,
             ranked: found.ranked,
