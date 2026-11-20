@@ -130,6 +130,72 @@ test("an exhaustive truncated search cannot be presented as a complete list", as
   assert.deepEqual(result.ids, []);
 });
 
+test("large-catalog retrieval receives the current query separately from its elliptical context", async () => {
+  const catalog = new LargeCatalog(100),
+    index = await SearchIndex.load(catalog, catalog.owner);
+  const previous = "¿Qué objeto es granate?";
+  const model: StructuredModel = {
+    async call(stage, _instructions, raw, schema) {
+      if (stage === "search_plan") {
+        const data = raw as { text: string; previous: string };
+        assert.equal(data.text, "¿Dónde está?");
+        assert.equal(data.previous, previous);
+        return schema.parse({ terms: ["granate"], exhaustive: false });
+      }
+      const data = raw as { question: string; previousQuestions: string[] };
+      assert.equal(data.question, "¿Dónde está?");
+      assert.deepEqual(data.previousQuestions, [previous]);
+      return schema.parse(
+        stage === "answer"
+          ? {
+              status: "answered",
+              text: "Dato ficticio del objeto granate.",
+              evidence: [0],
+            }
+          : { accepted: true, issues: [] },
+      );
+    },
+  };
+  const result = await queryCatalog(model, catalog, index, {
+    actor: catalog.owner,
+    text: JSON.stringify({
+      pregunta_actual: "¿Dónde está?",
+      preguntas_anteriores_solo_contexto: [previous],
+    }),
+    at: "2026-11-20T11:00:00Z",
+    zone: "Europe/Madrid",
+  });
+  assert.equal(result.status, "answered");
+  assert.deepEqual(result.ids, [syntheticId(1)]);
+});
+
+test("an explicit empty query context cannot inherit a legacy previous question during search", async () => {
+  const catalog = new LargeCatalog(100),
+    index = await SearchIndex.load(catalog, catalog.owner);
+  let calls = 0;
+  const model: StructuredModel = {
+    async call(stage, _instructions, raw, schema) {
+      calls++;
+      assert.equal(stage, "search_plan");
+      assert.equal((raw as { previous: unknown }).previous, null);
+      return schema.parse({ terms: ["objeto-inexistente"], exhaustive: false });
+    },
+  };
+  const result = await queryCatalog(model, catalog, index, {
+    actor: catalog.owner,
+    text: JSON.stringify({
+      pregunta_actual: "¿Dónde está?",
+      preguntas_anteriores_solo_contexto: [],
+    }),
+    previous: "¿Qué objeto es granate?",
+    at: "2026-11-20T11:00:00Z",
+    zone: "Europe/Madrid",
+  });
+  assert.equal(calls, 1);
+  assert.equal(result.status, "not_found");
+  assert.deepEqual(result.ids, []);
+});
+
 test("an index with too many short pages is rejected, never returned as a partial catalog", async () => {
   const catalog = new LargeCatalog(100);
   const reader: CatalogReader = {

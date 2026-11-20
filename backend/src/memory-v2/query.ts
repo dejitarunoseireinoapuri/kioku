@@ -1,4 +1,5 @@
 import { answerEvidence } from "#memory-v2/ai/query";
+import { queryInput } from "#memory-v2/ai/query-input";
 import type { Firestore } from "firebase-admin/firestore";
 import type { z } from "zod";
 import { AccountError } from "../account/contracts.js";
@@ -43,12 +44,16 @@ export async function queryV2(
     if (Object.keys(loaded.state.units).length) {
       const provider = await model(lease.epoch),
         at = new Date().toISOString();
+      const resolved = queryInput(currentQueryText(input.text, lease.epoch));
       const found = await reader.candidates(
         loaded,
         provider,
-        currentQueryText(input.text, lease.epoch),
+        resolved.question,
         at,
         input.zone,
+        resolved.previousQuestions.length
+          ? resolved.previousQuestions.join("\n")
+          : undefined,
       );
       if (found.exhaustiveRequested && found.truncated) {
         reply = {

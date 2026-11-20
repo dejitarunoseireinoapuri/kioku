@@ -1,5 +1,7 @@
 # Mapa documental
 
+Revisión del 20 de noviembre: [fiabilidad de consultas](09-planning/QUERY_RELIABILITY_VALIDATION.md), preparada en `codex/query-reliability`, sin desplegar. Evaluación ficticia mediante la suscripción, cero API de pago; conserva los límites del incidente no reproducido y las pruebas de captura no completadas.
+
 Estado del 18 de noviembre: `main` recupera **todo lo anterior a Fuentes**, incluida voz local, carga inicial continua, ajuste de katakana, espaciado y márgenes. Honor actualizado y validado con casos ficticios sin API. Fuentes sigue guardado en `codex/shared-sources`; no se borran datos ni se revierte el servidor. [Evidencia y límites](09-planning/K5_VALIDATION.md).
 
 Integración solicitada el 17 de noviembre: [núcleo nuevo en la app, inicio vacío y sin pruebas API de pago](09-planning/R3_INTEGRATION_VALIDATION.md). El propietario autoriza borrar los recuerdos actuales al activar la nueva versión; cuenta y acceso se conservan. R2 mantiene sus pendientes históricos.

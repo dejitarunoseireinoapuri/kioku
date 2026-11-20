@@ -1,0 +1,64 @@
+# Fiabilidad de consultas · 20 de noviembre de 2026
+
+Rama `codex/query-reliability`, basada en `main` (`c3b5d77`), sin incorporar Fuentes. Revisión local preparada; servidor y teléfonos sin actualizar en esta entrega. No se han consultado recuerdos reales ni hecho llamadas a la API de pago.
+
+## Incidente y correcciones
+
+El propietario notificó respuestas distintas a una petición imperativa y su pregunta equivalente. El equivalente ficticio con una profesora y una recomendación musical respondió correctamente en ambas formas antes del cambio: **no se ha reproducido ni establecido la causa exacta del incidente original**. No se copiaron su pregunta ni su contenido personal a pruebas.
+
+La evaluación dirigida sí detectó dos problemas distintos:
+
+- Una consulta por ubicación y marca de un paraguas, con ubicación conocida y marca ausente, era rechazada por desacuerdo entre respuesta y revisión (`ANSWER_REVIEW_coverage`). Ahora ambas fases exigen responder la parte respaldada y señalar expresamente lo desconocido. Preguntar solo por la marca sigue dando ausencia, sin divulgar recuerdos vecinos.
+- «He olvidado lo que me dijo Ada. ¿Me recuerdas qué me recomendó ayer?» se clasificaba como oferta de guardar un hecho. La intención distingue ahora expresar falta de recuerdo de contar que se dejó un objeto en algún sitio o de ordenar borrar recuerdos. No añade otra inferencia ni omite la confirmación de olvido.
+
+Se refuerzan además tres fronteras: normalización limitada de peticiones inequívocas sin reescribir nombres, negación, fechas o citas; separación explícita de pregunta actual y preguntas anteriores; y distinción entre fecha de una comunicación y fecha de la actividad recomendada. Se descarta el contexto de una revisión obsoleta **antes** de normalizar y recuperar. El contexto interpretativo nunca acredita hechos y una pregunta actual completa prevalece.
+
+Los paquetes de búsqueda, respuesta y revisión usan la misma pregunta normalizada. Las consultas grandes mantienen el contexto para resolver elipsis, conservando paginación, cotas, precisión y restricciones de exhaustividad. No cambian DTO públicos, almacenamiento, autorización, evidencia vigente, revalidación final ni número de inferencias productivas.
+
+## Evaluación semántica mediante la suscripción
+
+Se empleó la CLI oficial de Codex autenticada con ChatGPT, modelo `gpt-6.1-sol`, razonamiento `high`, herramientas deshabilitadas y salida estructurada validada. El adaptador de evaluación elimina variables de claves/proveedores, ignora configuración de usuario, exige login ChatGPT y rechaza eventos de herramientas. No carga `.env`, no usa el proveedor API ni accede a Firebase. Todo el corpus es ficticio. Los informes locales contienen IDs, estados, huellas y contadores, no respuestas ni preguntas personales.
+
+| Serie | Resultado | Inferencias de suscripción | API de pago |
+| --- | ---: | ---: | ---: |
+| Consulta inicial, 9 casos dirigidos | 8/9 | 18 | 0 |
+| Consulta ajustada, 17 casos | 17/17 | 32 | 0 |
+| Intención inicial, 6 casos | 5/6 | 6 | 0 |
+| Intención ajustada, 8 casos | 8/8 | 8 | 0 |
+
+Una comprobación inicial del adaptador utilizó otra inferencia de suscripción. Los casos de consulta cubren seis formulaciones equivalentes, contexto útil y ajeno, fechas de intervención/registro/actividad futura, elipsis, respuesta parcial, ausencia, memoria vacía y un recuerdo olvidado que no debe reaparecer. La serie de intención incluye controles de hecho nuevo y de olvido total. Las métricas originales se conservan sin recalificar fallos en `local-data/query-reliability/`, ignorado por Git, y en una [copia de métricas sin contenido](evidence/query-reliability-20261120.json) versionada para revisión.
+
+Se intentó adicionalmente el recorrido de interpretación de una captura ficticia y consulta con `query-capture-run.ts`. Dos ejecuciones no completaron la primera inferencia de la CLI (`SUBSCRIPTION_INFERENCE_FAILED`, una invocación cada una); no alcanzaron guardado ni consulta. No se ha determinado la causa de esa indisponibilidad y no se cuenta como fallo semántico ni como prueba superada. Queda pendiente acreditar ese recorrido completo con inferencia de suscripción. No se recurrió a la API de pago para sortearlo. Total: 67 solicitudes de inferencia a la CLI, incluidas prueba inicial y estos dos intentos; no es un contador de inferencias completadas ni de tokens facturados.
+
+**Límites:** estas series son regresiones dirigidas y expuestas al desarrollo, no una reserva independiente ni una estimación de tasa de acierto general. La CLI aporta su propio entorno e instrucciones y no reproduce los límites de salida de la API productiva; `productionEquivalent:false` queda explícito en cada informe. No acredita latencia productiva, el incidente original, audio, iOS ni comportamiento remoto. No se ha sustituido la configuración del proveedor de producción.
+
+## Comprobaciones deterministas
+
+TypeScript raíz y backend correctos; 245 pruebas raíz, 44 pruebas unitarias backend y 138 de emuladores Auth/Functions/Firestore correctas. Se eliminaron únicamente artefactos generados de `backend/lib` antes de compilar: una ejecución inicial incluía tests compilados obsoletos de Fuentes y no se contabiliza como evidencia de esta rama. El emulador emplea modelos simulados y datos ficticios, sin API.
+
+Las nuevas pruebas comprueban equivalencia del paquete normalizado, JSON no reconocido conservado como dato, separación del contexto, búsqueda en catálogo grande, descarte de revisión antigua y el servicio de consulta v2 con sus dos fases simuladas. Los 138 casos incluyen controles positivos y negativos existentes de cuenta, autorización y revocación. No se modificaron código móvil ni contratos de red; no se presentan pruebas Android/iOS como ejecutadas en esta revisión.
+
+## Reproducción sin API
+
+Desde la raíz con las herramientas ya preparadas:
+
+```powershell
+node tooling/m0.mjs check
+node tooling/m0.mjs test
+node tooling/m0.mjs format:check
+node tooling/backend.mjs build
+node tooling/backend.mjs test
+node tooling/backend.mjs format:check
+pwsh -NoProfile -File tooling/backend-emulators.ps1
+pwsh -NoProfile -File tooling/check-docs.ps1
+```
+
+Solo cuando se autorice gastar cuota de suscripción, y comprobando su disponibilidad, las pruebas semánticas se ejecutan directamente, sin comandos `--live` ni variables de API:
+
+```powershell
+$env:KIOKU_CODEX_EXECUTABLE = (Get-Command codex).Source
+node prototypes/memory-core/evaluation/query-reliability-run.ts --run nueva-serie-consultas
+node prototypes/memory-core/evaluation/query-intent-run.ts nueva-serie-intencion
+```
+
+Cada identificador debe ser nuevo; no se sobrescriben resultados. El proveedor limita cada ejecución a 48 inferencias, 120 segundos por proceso y salida acotada. Las claves permanecen fuera de este flujo. Las pruebas no sustituyen la autorización específica para desplegar: la activación de `memoryV2` queda pendiente y no requiere un APK nuevo para esta revisión.

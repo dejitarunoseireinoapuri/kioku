@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
-import { beforeEach, after, test } from "node:test";
+import { beforeEach, after, test, mock } from "node:test";
 import { deleteApp } from "firebase-admin/app";
 import type { z } from "zod";
 import type { StructuredModel } from "#memory-v2/ai/contracts";
@@ -917,6 +917,62 @@ test("unanchored follow-up clarifies before loading canonical memories or creati
       },
     ),
   );
+});
+
+test("query normalizes equivalent requests and separates current context before retrieval and review", async () => {
+  await save();
+  const epoch = (await reader().load()).state.epoch;
+  const original = V2Reader.prototype.candidates;
+  let expectedPrevious: string[] = [];
+  const spy = mock.method(
+    V2Reader.prototype,
+    "candidates",
+    function (this: V2Reader, ...args: Parameters<V2Reader["candidates"]>) {
+      assert.equal(args[2], "¿De qué color es Loto?");
+      assert.equal(
+        args[5],
+        expectedPrevious.length ? expectedPrevious.join("\n") : undefined,
+      );
+      return original.apply(this, args);
+    },
+  );
+  let calls = 0;
+  const provider: StructuredModel = {
+    async call(stage, instructions, raw, schema, limit) {
+      const data = raw as { question: string; previousQuestions: string[] };
+      assert.equal(data.question, "¿De qué color es Loto?");
+      assert.deepEqual(data.previousQuestions, expectedPrevious);
+      calls++;
+      return model.call(stage, instructions, raw, schema, limit);
+    },
+  };
+  try {
+    for (const contextEpoch of [null, epoch, epoch - 1]) {
+      expectedPrevious = contextEpoch === epoch ? ["¿Dónde está Iris?"] : [];
+      const text =
+        contextEpoch === null
+          ? "Dime de qué color es Loto"
+          : JSON.stringify({
+              pregunta_actual: "¿De qué color es Loto?",
+              preguntas_anteriores_solo_contexto: ["¿Dónde está Iris?"],
+              memory_revision: contextEpoch,
+            });
+      const answer = await queryV2(
+        db,
+        uid,
+        generation,
+        { apiVersion: 2, requestId: randomUUID(), text, zone: "UTC" },
+        async () => provider,
+        allowed,
+      );
+      assert.equal(answer.status, "answered");
+      assert.equal((answer.sources as unknown[]).length, 1);
+    }
+    assert.equal(calls, 6);
+    assert.equal(spy.mock.callCount(), 3);
+  } finally {
+    spy.mock.restore();
+  }
 });
 
 test("intent interpretation precedes canonical reads for ambiguity and complete or contextual questions", async () => {

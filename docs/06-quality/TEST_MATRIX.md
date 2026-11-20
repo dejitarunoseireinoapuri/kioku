@@ -1,5 +1,7 @@
 # Matriz de aceptación y evidencia prevista
 
+Consultas del 20 de noviembre: equivalencia de petición/pregunta, contexto vigente/obsoleto, fechas de comunicación y actividad, elipsis, respuesta parcial, ausencia y contenido olvidado. Corpus ficticio 17/17 e intención 8/8 mediante suscripción; comprobaciones deterministas raíz/backend/emuladores y límites del incidente/captura en [QUERY_RELIABILITY_VALIDATION](../09-planning/QUERY_RELIABILITY_VALIDATION.md). No acredita producción ni sustituye una reserva independiente.
+
 Revisión ADR-015: K5 comprueba inicio por toque, X/Stop y ausencia de envío durante dictado, parciales en el campo, Stop al borrador sin petición, edición/envío manual, restauración del micrófono al vaciar y cancelación con final tardío. Se exige también parcial antes de Stop al reconocedor real. La cobertura de mantener/bloquear descrita debajo queda histórica.
 
 K5 local: [evidencia](../09-planning/K5_VALIDATION.md) cubre estado/generaciones/límites en host, gestos y cancelación con dobles en Honor, motor local español con audio ficticio y permiso/pipe en ambos teléfonos. No acredita micrófono humano/ruido, gestos Samsung ni iOS. Respuestas siempre escritas según ADR-014.

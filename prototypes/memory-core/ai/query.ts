@@ -8,6 +8,7 @@ import type { MemoryStore } from "../src/model.ts";
 import type { MemoryPrototype } from "../src/memory.ts";
 import { calendar } from "./calendar.ts";
 import { answerEvidenceView } from "./answer-evidence.ts";
+import { queryInput } from "./query-input.ts";
 import {
   answerInstructions,
   answerReviewInstructions,
@@ -69,8 +70,7 @@ export async function answerEvidence(
   const ids = items.map((item) => item.unit.id);
   const { question, at, zone, previousQuestion } = context;
   const input = {
-    question,
-    previousQuestion: previousQuestion ?? null,
+    ...queryInput(question, previousQuestion),
     calendar: calendar(at, zone),
     coverage: context.ranked ? "ranked_candidates" : "complete_catalog",
     evidence: answerEvidenceView(items),

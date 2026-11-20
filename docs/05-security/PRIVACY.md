@@ -1,5 +1,7 @@
 # Privacidad, datos y permisos
 
+La [revisión de consultas del 20 de noviembre](../09-planning/QUERY_RELIABILITY_VALIDATION.md) no añade historial, colecciones ni telemetría de texto. La pregunta actual y su contexto autorizado siguen siendo datos transitorios; una corrección/olvido invalida el contexto anterior antes de recuperar. Las evaluaciones de esta revisión utilizan exclusivamente casos ficticios mediante la suscripción y conservan métricas sin contenido personal; no acceden a recuerdos reales ni a claves de API.
+
 La preferencia «Katakana cayendo» (antes «Letras cayendo») se guarda como un booleano local del dispositivo (preferencias nativas Android/Apple). El cambio de nombre conserva su clave y elección. No contiene texto, identidad ni recuerdos, no se sincroniza con Firebase y no cambia la limpieza del historial RAM. Desactivarla retira la capa de animación, sin afectar al tratamiento de memoria.
 
 El target Apple incorpora un manifiesto de acceso a UserDefaults con motivo CA92.1 para preferencias propias de la app, siguiendo la [documentación oficial de Apple](https://developer.apple.com/documentation/technotes/tn3183-adding-required-reason-api-entries-to-your-privacy-manifest). Su inclusión y validación nativa quedan pendientes de Xcode; no se presenta como una auditoría completa de los manifiestos de dependencias.

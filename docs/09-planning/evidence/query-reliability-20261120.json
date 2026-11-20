@@ -1,0 +1,443 @@
+{
+  "syntheticOnly": true,
+  "productionEquivalent": false,
+  "reports": [
+    {
+      "run": "baseline-20261120-a",
+      "provider": "Codex CLI / ChatGPT subscription",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "productionEquivalent": false,
+      "codeAndCorpusHash": "666cbe4ccb26dd9b0e5ebb5f165248cf22327a7f8fc5dd6b9a6f4bc07e72d7ca",
+      "apiCalls": 0,
+      "casesHash": "5037ed46c46734f3625a1da288dcb80faaee73bcaa711a4c0cc04c6875ec8260",
+      "passed": 8,
+      "total": 9,
+      "subscriptionCalls": 18,
+      "results": [
+        {
+          "id": "speech-1",
+          "family": "request-paraphrase",
+          "pass": true,
+          "expected": "answered",
+          "actual": "answered",
+          "evidenceMatches": true,
+          "calls": 2,
+          "elapsedMs": 24692
+        },
+        {
+          "id": "speech-2",
+          "family": "request-paraphrase",
+          "pass": true,
+          "expected": "answered",
+          "actual": "answered",
+          "evidenceMatches": true,
+          "calls": 2,
+          "elapsedMs": 40180
+        },
+        {
+          "id": "speech-context",
+          "family": "context",
+          "pass": true,
+          "expected": "answered",
+          "actual": "answered",
+          "evidenceMatches": true,
+          "calls": 2,
+          "elapsedMs": 32021
+        },
+        {
+          "id": "speech-unrelated-context",
+          "family": "context",
+          "pass": true,
+          "expected": "answered",
+          "actual": "answered",
+          "evidenceMatches": true,
+          "calls": 2,
+          "elapsedMs": 24495
+        },
+        {
+          "id": "speech-future-advice",
+          "family": "dates",
+          "pass": true,
+          "expected": "answered",
+          "actual": "answered",
+          "evidenceMatches": true,
+          "calls": 2,
+          "elapsedMs": 55248
+        },
+        {
+          "id": "umbrella-partial",
+          "family": "partial-answer",
+          "pass": false,
+          "expected": "answered",
+          "issue": "ANSWER_REVIEW_coverage",
+          "calls": 2,
+          "elapsedMs": 15778
+        },
+        {
+          "id": "umbrella-brand-absent",
+          "family": "true-absence",
+          "pass": true,
+          "expected": "not_found",
+          "actual": "not_found",
+          "evidenceMatches": true,
+          "calls": 2,
+          "elapsedMs": 15193
+        },
+        {
+          "id": "umbrella-ellipsis",
+          "family": "context",
+          "pass": true,
+          "expected": "answered",
+          "actual": "answered",
+          "evidenceMatches": true,
+          "calls": 2,
+          "elapsedMs": 14412
+        },
+        {
+          "id": "forgotten-not-restored",
+          "family": "forget",
+          "pass": true,
+          "expected": "not_found",
+          "actual": "not_found",
+          "evidenceMatches": true,
+          "calls": 2,
+          "elapsedMs": 25421
+        }
+      ]
+    },
+    {
+      "run": "adjusted-20261120-a",
+      "provider": "Codex CLI / ChatGPT subscription",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "productionEquivalent": false,
+      "codeAndCorpusHash": "9c511f211881a8790591c5468ea960ea0521138a6f0911e848f37b81ff48f50d",
+      "apiCalls": 0,
+      "casesHash": "b7a4492785e6a50a5ebf9d5682f78da93839cf92fd1c578ae845198b1b30347c",
+      "passed": 17,
+      "total": 17,
+      "subscriptionCalls": 32,
+      "results": [
+        {
+          "id": "speech-1",
+          "family": "request-paraphrase",
+          "pass": true,
+          "expected": "answered",
+          "actual": "answered",
+          "evidenceMatches": true,
+          "calls": 2,
+          "elapsedMs": 45940
+        },
+        {
+          "id": "speech-2",
+          "family": "request-paraphrase",
+          "pass": true,
+          "expected": "answered",
+          "actual": "answered",
+          "evidenceMatches": true,
+          "calls": 2,
+          "elapsedMs": 20492
+        },
+        {
+          "id": "speech-3",
+          "family": "request-paraphrase",
+          "pass": true,
+          "expected": "answered",
+          "actual": "answered",
+          "evidenceMatches": true,
+          "calls": 2,
+          "elapsedMs": 24993
+        },
+        {
+          "id": "speech-4",
+          "family": "request-paraphrase",
+          "pass": true,
+          "expected": "answered",
+          "actual": "answered",
+          "evidenceMatches": true,
+          "calls": 2,
+          "elapsedMs": 26910
+        },
+        {
+          "id": "speech-5",
+          "family": "request-paraphrase",
+          "pass": true,
+          "expected": "answered",
+          "actual": "answered",
+          "evidenceMatches": true,
+          "calls": 2,
+          "elapsedMs": 29057
+        },
+        {
+          "id": "speech-6",
+          "family": "request-paraphrase",
+          "pass": true,
+          "expected": "answered",
+          "actual": "answered",
+          "evidenceMatches": true,
+          "calls": 2,
+          "elapsedMs": 18385
+        },
+        {
+          "id": "speech-context",
+          "family": "context",
+          "pass": true,
+          "expected": "answered",
+          "actual": "answered",
+          "evidenceMatches": true,
+          "calls": 2,
+          "elapsedMs": 15291
+        },
+        {
+          "id": "speech-unrelated-context",
+          "family": "context",
+          "pass": true,
+          "expected": "answered",
+          "actual": "answered",
+          "evidenceMatches": true,
+          "calls": 2,
+          "elapsedMs": 19199
+        },
+        {
+          "id": "speech-event-vs-record",
+          "family": "dates",
+          "pass": true,
+          "expected": "not_found",
+          "actual": "not_found",
+          "evidenceMatches": true,
+          "calls": 2,
+          "elapsedMs": 12523
+        },
+        {
+          "id": "speech-future-advice",
+          "family": "dates",
+          "pass": true,
+          "expected": "answered",
+          "actual": "answered",
+          "evidenceMatches": true,
+          "calls": 2,
+          "elapsedMs": 26836
+        },
+        {
+          "id": "umbrella-imperative",
+          "family": "location",
+          "pass": true,
+          "expected": "answered",
+          "actual": "answered",
+          "evidenceMatches": true,
+          "calls": 2,
+          "elapsedMs": 20210
+        },
+        {
+          "id": "umbrella-interrogative",
+          "family": "location",
+          "pass": true,
+          "expected": "answered",
+          "actual": "answered",
+          "evidenceMatches": true,
+          "calls": 2,
+          "elapsedMs": 20420
+        },
+        {
+          "id": "umbrella-partial",
+          "family": "partial-answer",
+          "pass": true,
+          "expected": "answered",
+          "actual": "answered",
+          "evidenceMatches": true,
+          "calls": 2,
+          "elapsedMs": 12638
+        },
+        {
+          "id": "umbrella-brand-absent",
+          "family": "true-absence",
+          "pass": true,
+          "expected": "not_found",
+          "actual": "not_found",
+          "evidenceMatches": true,
+          "calls": 2,
+          "elapsedMs": 24460
+        },
+        {
+          "id": "umbrella-ellipsis",
+          "family": "context",
+          "pass": true,
+          "expected": "answered",
+          "actual": "answered",
+          "evidenceMatches": true,
+          "calls": 2,
+          "elapsedMs": 24701
+        },
+        {
+          "id": "empty-context-not-fact",
+          "family": "true-absence",
+          "pass": true,
+          "expected": "not_found",
+          "actual": "not_found",
+          "evidenceMatches": true,
+          "calls": 0,
+          "elapsedMs": 0
+        },
+        {
+          "id": "forgotten-not-restored",
+          "family": "forget",
+          "pass": true,
+          "expected": "not_found",
+          "actual": "not_found",
+          "evidenceMatches": true,
+          "calls": 2,
+          "elapsedMs": 28882
+        }
+      ]
+    },
+    {
+      "run": "intent-20261120-a",
+      "provider": "Codex CLI / ChatGPT subscription",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "productionEquivalent": false,
+      "apiCalls": 0,
+      "subscriptionCalls": 6,
+      "instructionsHash": "362c24c810e3289ae7ad14c1b0971d4dcfd3e5c289e2b269dce54fc49e465c36",
+      "passed": 5,
+      "total": 6,
+      "results": [
+        {
+          "id": "intent-imperative",
+          "pass": true,
+          "expected": "ask",
+          "actual": "ask"
+        },
+        {
+          "id": "intent-question",
+          "pass": true,
+          "expected": "ask",
+          "actual": "ask"
+        },
+        {
+          "id": "intent-forgot-myself",
+          "pass": false,
+          "expected": "ask",
+          "actual": "offer"
+        },
+        {
+          "id": "intent-cannot-recall",
+          "pass": true,
+          "expected": "ask",
+          "actual": "ask"
+        },
+        {
+          "id": "intent-remind-me",
+          "pass": true,
+          "expected": "ask",
+          "actual": "ask"
+        },
+        {
+          "id": "intent-forget-all",
+          "pass": true,
+          "expected": "forgetAll",
+          "actual": "forgetAll"
+        }
+      ]
+    },
+    {
+      "run": "intent-20261120-b",
+      "provider": "Codex CLI / ChatGPT subscription",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "productionEquivalent": false,
+      "apiCalls": 0,
+      "subscriptionCalls": 8,
+      "instructionsHash": "675b7a392196c089dd1fb4dc1b231ab0469d4c84d04841e0c9b587dda758c199",
+      "passed": 8,
+      "total": 8,
+      "results": [
+        {
+          "id": "intent-imperative",
+          "pass": true,
+          "expected": "ask",
+          "actual": "ask"
+        },
+        {
+          "id": "intent-question",
+          "pass": true,
+          "expected": "ask",
+          "actual": "ask"
+        },
+        {
+          "id": "intent-forgot-myself",
+          "pass": true,
+          "expected": "ask",
+          "actual": "ask"
+        },
+        {
+          "id": "intent-cannot-recall",
+          "pass": true,
+          "expected": "ask",
+          "actual": "ask"
+        },
+        {
+          "id": "intent-remind-me",
+          "pass": true,
+          "expected": "ask",
+          "actual": "ask"
+        },
+        {
+          "id": "intent-forgot-recommendation",
+          "pass": true,
+          "expected": "ask",
+          "actual": "ask"
+        },
+        {
+          "id": "intent-real-new-fact",
+          "pass": true,
+          "expected": "offer",
+          "actual": "offer"
+        },
+        {
+          "id": "intent-forget-all",
+          "pass": true,
+          "expected": "forgetAll",
+          "actual": "forgetAll"
+        }
+      ]
+    },
+    {
+      "run": "capture-20261120-a",
+      "provider": "Codex CLI / ChatGPT subscription",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "productionEquivalent": false,
+      "apiCalls": 0,
+      "subscriptionCalls": 1,
+      "codeAndCorpusHash": "826c4f6087012cb23e6d0cc3f9ef9c7649685f2f6aff9c0f8e66cae209c33d39",
+      "passed": 0,
+      "results": [
+        {
+          "id": "capture-query-pipeline",
+          "pass": false,
+          "issue": "SUBSCRIPTION_INFERENCE_FAILED"
+        }
+      ]
+    },
+    {
+      "run": "capture-20261120-b",
+      "provider": "Codex CLI / ChatGPT subscription",
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "productionEquivalent": false,
+      "apiCalls": 0,
+      "subscriptionCalls": 1,
+      "codeAndCorpusHash": "3227d4a9b88524a43d363141f91ae82d38f8d2f42ea71664796479319ac3a32e",
+      "passed": 0,
+      "results": [
+        {
+          "id": "capture-query-pipeline",
+          "pass": false,
+          "issue": "SUBSCRIPTION_INFERENCE_FAILED"
+        }
+      ]
+    }
+  ]
+}

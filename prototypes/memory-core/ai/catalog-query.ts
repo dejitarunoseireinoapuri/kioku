@@ -5,6 +5,7 @@ import type { MemoryPrototype } from "../src/memory.ts";
 import { InterpretationError } from "./contracts.ts";
 import { answerEvidence } from "./query.ts";
 import { retrieve } from "./search.ts";
+import { queryInput } from "./query-input.ts";
 
 export interface EvidenceReader extends CatalogReader {
   evidence(
@@ -26,7 +27,16 @@ export async function queryCatalog(
     previous?: string;
   },
 ) {
-  const found = await retrieve(model, reader, index, input);
+  const resolved = queryInput(input.text, input.previous);
+  const found = await retrieve(model, reader, index, {
+    actor: input.actor,
+    text: resolved.question,
+    at: input.at,
+    zone: input.zone,
+    ...(resolved.previousQuestions.length
+      ? { previous: resolved.previousQuestions.join("\n") }
+      : {}),
+  });
   if (found.exhaustiveRequested && found.truncated)
     return {
       status: "clarify" as const,
