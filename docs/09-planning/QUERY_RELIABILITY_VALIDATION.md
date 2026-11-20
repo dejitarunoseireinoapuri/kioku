@@ -70,3 +70,24 @@ El propietario autorizó expresamente publicar la rama y actualizar únicamente 
 Comparación de metadatos antes/después: las otras **once funciones** conservan sus revisiones y fechas. No se desplegaron reglas, índices, otros servicios ni APK; no se leyó, migró o borró memoria. La app vigente sigue en el alcance anterior a Fuentes; `referenceSources` conserva su revisión. Una petición ficticia sin autenticación devuelve **401** antes de acceder a datos o crear proveedor. Esto comprueba el rechazo anónimo, no el acceso de una cuenta válida, la calidad de respuestas productivas ni el incidente original. Comprobaciones y activación: **cero llamadas de IA/API**.
 
 La primera consulta de metadatos con gcloud no pudo autenticarse; se utilizó la sesión Firebase existente mediante su biblioteca oficial, sin exportar credenciales ni solicitar otras. El rechazo de subida de la entrega anterior quedó resuelto mediante la autorización expresa del propietario. Los pendientes semánticos y del recorrido de captura descritos arriba se mantienen.
+
+## Seguimiento de velocidad
+
+Revisión de servidor preparada sobre `4fa86b6`. El cliente llama primero a `route` y después a `query`. Una pregunta ordinaria con recuerdos hace tres inferencias secuenciales: intención, respuesta y revisión. Con más de 32 unidades, la búsqueda añade una inferencia de términos. La prueba conserva estas fases y verifica las referencias de la respuesta.
+
+El servidor agrupa lecturas de documentos independientes y consulta el catálogo por pares dentro de una transacción de solo lectura. Conserva el límite conjunto de documentos, las comprobaciones de revocación y la revisión final. Al abrir la app, `details` sin identificador lee únicamente el propietario y el estado de la memoria, suficiente para comprobar su revisión. El cliente de Secret Manager se reutiliza mientras la instancia esté activa. Cada solicitud vuelve a leer la referencia vigente y pide esa versión al gestor; la conexión compartida no conserva la clave entre solicitudes.
+
+Comparación en el mismo emulador con el backend desplegado (`4fa86b6`, con el código de `f388c52`) y la revisión propuesta. Por combinación de catálogo y versión, se hicieron cinco ejecuciones de calentamiento y 30 medidas, alternando el orden. El modelo simulado devolvió la misma respuesta, referencia y secuencia de fases. Se midieron `route` y `query` desde su entrada al servidor, y por separado la lectura de revisión del arranque. Los tiempos son milisegundos con percentiles por rango más próximo.
+
+| Camino | Unidades | p50 anterior → nuevo | p95 anterior → nuevo |
+| --- | ---: | ---: | ---: |
+| Interpretación y consulta | 1 | 426 → 298 | 441 → 315 |
+| Interpretación y consulta | 40 | 517 → 357 | 532 → 362 |
+| Lectura de revisión | 1 | 144 → 14 | 158 → 15 |
+| Lectura de revisión | 40 | 156 → 14 | 160 → 16 |
+
+La mediana de la consulta en el servidor baja un 30–31 %. La medición no incluye el viaje del móvil, autenticación HTTP, Secret Manager, ni la espera por el proveedor real. El ahorro de reutilizar la conexión al gestor de claves queda sin cuantificar; el porcentaje no estima la mejora total que verá el usuario en producción.
+
+Se comparó la redacción con razonamiento alto y medio en seis casos ficticios del corpus de consultas. Se alternó el orden y la revisión mantuvo Sol alto. Ambos perfiles pasaron 6/6, incluidos una consulta parcial y un recuerdo retirado. Mediana de redacción de **4,82 s** en alto y **4,58 s** en medio. Medio fue más rápido en tres casos y más lento en tres. La diferencia no acredita una mejora repetible y se conserva el perfil actual. Las 24 inferencias completadas se ejecutaron mediante la suscripción a ChatGPT. Los tiempos incluyen el proceso de la CLI y no representan la latencia de producción. Reproducción con una sesión de ChatGPT preparada como arriba: `node prototypes/memory-core/evaluation/query-speed-run.ts`.
+
+Pruebas finales: 245 raíz, 44 unitarias de servidor y 138 de emuladores correctas. El caso de arranque comprueba que se devuelve la revisión aunque exista un documento de catálogo inválido, y verifica el rechazo anónimo y de generación obsoleta. Las pruebas de consulta siguen cubriendo la invalidación de evidencia durante la generación. Cero llamadas a la API de pago. Activación pendiente de autorización para esta revisión; el cambio de servidor es compatible con el cliente actual.

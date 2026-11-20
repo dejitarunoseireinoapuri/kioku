@@ -79,12 +79,13 @@ export class V2WorkStore {
     return this.db.runTransaction(
       async (tx) => {
         const runtime = await authorizeV2(tx, this.db, uid, generation);
-        const reference = this.ref(uid, requestId),
-          existing = await tx.get(reference);
+        const reference = this.ref(uid, requestId);
         const admissionRef = this.db.doc(
           `accounts/${uid}/memoryV2RequestIds/${requestId}`,
         );
-        const admission = await tx.get(admissionRef);
+        const [existing, admission] = await tx.getAll(reference, admissionRef);
+        if (!existing || !admission)
+          throw new AccountError("failed-precondition");
         if (
           admission.exists &&
           (admission.get("hash") !== hash ||

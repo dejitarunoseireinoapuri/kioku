@@ -831,6 +831,27 @@ test("v2 callable state and empty query need authentication and no AI credential
     ((await empty.json()) as { result: { status: string } }).result.status,
     "notFound",
   );
+  // Startup only asks for the revision. It must not read or parse the catalog.
+  await db
+    .doc(`accounts/${owner.localId}/memoryV2Units/${randomUUID()}`)
+    .set({ sentinel: true });
+  const detailsRequest = {
+    apiVersion: 2,
+    operation: "details",
+    generation,
+    payload: { apiVersion: 2 },
+  };
+  const revision = await call(detailsRequest, owner.idToken);
+  assert.equal(revision.status, 200);
+  assert.deepEqual(await revision.json(), {
+    result: { apiVersion: 2, memoryEpoch: 0 },
+  });
+  assert.equal(
+    (await call({ ...detailsRequest, generation: randomUUID() }, owner.idToken))
+      .status,
+    400,
+  );
+  assert.equal((await call(detailsRequest)).status, 401);
   assert.equal(
     (await call({ apiVersion: 1, operation: "state" }, owner.idToken)).status,
     400,

@@ -10,15 +10,20 @@ import type { StructuredModel } from "../ai/contracts.ts";
 export class SubscriptionModel implements StructuredModel {
   calls = 0;
   readonly model = "gpt-6.1-sol";
-  readonly reasoning = "high";
+  readonly reasoning: "high" | "medium";
   private readonly executable: string;
   private readonly directory: string;
-  private constructor(executable: string, directory: string) {
+  private constructor(
+    executable: string,
+    directory: string,
+    reasoning: "high" | "medium",
+  ) {
     this.executable = executable;
     this.directory = directory;
+    this.reasoning = reasoning;
   }
 
-  static async open() {
+  static async open(reasoning: "high" | "medium" = "high") {
     if (
       ["DEBUG", "NODE_DEBUG", "GRPC_TRACE", "GOOGLE_SDK_NODE_LOGGING"].some(
         (name) => process.env[name],
@@ -31,6 +36,7 @@ export class SubscriptionModel implements StructuredModel {
     const model = new SubscriptionModel(
       executable,
       await mkdtemp(join(tmpdir(), "kioku-subscription-eval-")),
+      reasoning,
     );
     const status = await model.run(["login", "status"]);
     if (!/Logged in using ChatGPT/u.test(status.stderr + status.stdout))
@@ -70,7 +76,7 @@ export class SubscriptionModel implements StructuredModel {
         "-c",
         'web_search="disabled"',
         "-c",
-        'model_reasoning_effort="high"',
+        `model_reasoning_effort="${this.reasoning}"`,
         "--model",
         this.model,
         "--output-schema",

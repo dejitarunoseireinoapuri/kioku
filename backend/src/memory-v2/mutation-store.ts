@@ -38,13 +38,9 @@ export class V2MutationStore {
       throw new AccountError("invalid-argument");
     return this.db.runTransaction(
       async (tx) => {
-        const loaded = await loadV2State(
-          tx,
-          this.db,
-          uid,
-          lease.generation,
-          lease.requestId,
-        );
+        const loaded = await loadV2State(tx, this.db, uid, lease.generation, {
+          requestId: lease.requestId,
+        });
         if (loaded.state.epoch !== lease.epoch)
           throw new AccountError("failed-precondition");
         const work = await this.work.current(tx, uid, lease);

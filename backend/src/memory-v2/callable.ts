@@ -122,11 +122,13 @@ export function memoryV2Callable(
               ),
             );
           case "details": {
-            const input = detailsSchema.parse(payload),
-              loaded = await reader.load();
-            return input.sourceId
-              ? presentGroup(loaded, input.sourceId)
-              : { apiVersion: 2, memoryEpoch: loaded.state.epoch };
+            const input = detailsSchema.parse(payload);
+            if (input.sourceId)
+              return presentGroup(await reader.load(), input.sourceId);
+            return {
+              apiVersion: 2,
+              memoryEpoch: (await reader.readRuntime()).revision,
+            };
           }
           case "source": {
             const source = presentGroup(

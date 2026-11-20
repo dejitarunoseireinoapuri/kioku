@@ -18,24 +18,22 @@ export class V2Reader {
   }
   async load() {
     return this.db.runTransaction(
-      (tx) => loadV2State(tx, this.db, this.uid, this.generation),
-      { maxAttempts: 3 },
+      (tx) =>
+        loadV2State(tx, this.db, this.uid, this.generation, {
+          concurrentReads: true,
+        }),
+      { readOnly: true },
+    );
+  }
+  async readRuntime() {
+    return this.db.runTransaction(
+      (tx) => authorizeV2(tx, this.db, this.uid, this.generation),
+      { readOnly: true },
     );
   }
   async assertCurrent(epoch: number) {
-    await this.db.runTransaction(
-      async (tx) => {
-        const runtime = await authorizeV2(
-          tx,
-          this.db,
-          this.uid,
-          this.generation,
-        );
-        if (runtime.revision !== epoch)
-          throw new AccountError("failed-precondition");
-      },
-      { maxAttempts: 3 },
-    );
+    if ((await this.readRuntime()).revision !== epoch)
+      throw new AccountError("failed-precondition");
   }
   async candidates(
     loaded: LoadedState,

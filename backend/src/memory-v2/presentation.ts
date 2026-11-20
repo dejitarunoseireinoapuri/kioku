@@ -67,7 +67,7 @@ export async function presentSaved(
   return db.runTransaction(
     async (tx) => {
       const requestId = String(reply.operationId);
-      const loaded = await loadV2State(tx, db, uid, generation, requestId);
+      const loaded = await loadV2State(tx, db, uid, generation, { requestId });
       const receipt = loaded.state.receipts[requestId];
       if (
         !receipt ||

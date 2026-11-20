@@ -6,6 +6,9 @@ import { FirestoreCredentialStore } from "../firebase/credential-store.js";
 import { FirestoreMemoryBudget } from "../firebase/memory-budget.js";
 import { V2Reader } from "./reader.js";
 
+// Reuse the transport in a warm instance. The selected version and key are read per request.
+let secretManager: SecretManagerServiceClient | undefined;
+
 export async function v2Provider(
   db: Firestore,
   uid: string,
@@ -14,8 +17,8 @@ export async function v2Provider(
 ) {
   const record = await new FirestoreCredentialStore(db).current(uid);
   if (!record) throw new AccountError("failed-precondition");
-  const client = new SecretManagerServiceClient();
   try {
+    const client = (secretManager ??= new SecretManagerServiceClient());
     const [version] = await client.accessSecretVersion(
       { name: record.secretVersion },
       { timeout: 10_000 },
@@ -38,7 +41,5 @@ export async function v2Provider(
   } catch (error) {
     if (error instanceof AccountError) throw error;
     throw new AccountError("unavailable");
-  } finally {
-    await client.close();
   }
 }

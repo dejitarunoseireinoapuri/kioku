@@ -31,31 +31,48 @@ export async function loadV2State(
   db: Firestore,
   uid: string,
   generation: string,
-  requestId?: string,
+  {
+    requestId,
+    concurrentReads = false,
+  }: {
+    requestId?: string;
+    concurrentReads?: boolean;
+  } = {},
 ): Promise<LoadedState> {
   const runtime = await authorizeV2(tx, db, uid, generation);
   const state = emptySnapshot(uid);
   state.epoch = runtime.revision;
   const root = db.doc(`accounts/${uid}`);
   let remaining = 4096;
-  for (const table of canonicalTables) {
-    const records = await tx.get(
-      root
-        .collection(collectionNames[table])
-        .limit(Math.min(remaining + 1, table === "units" ? 257 : 4097)),
+  const width = concurrentReads ? 2 : 1;
+  for (let start = 0; start < canonicalTables.length; start += width) {
+    // Bounded pairs overlap independent reads. The cumulative document cap still applies.
+    const batch = await Promise.all(
+      canonicalTables.slice(start, start + width).map(async (table) => ({
+        table,
+        records: await tx.get(
+          root
+            .collection(collectionNames[table])
+            .limit(Math.min(remaining + 1, table === "units" ? 257 : 4097)),
+        ),
+      })),
     );
-    if (records.size > remaining || (table === "units" && records.size > 256))
-      throw new AccountError("resource-exhausted");
-    remaining -= records.size;
-    for (const document of records.docs) {
-      const value = recordSchemas[table].parse(document.data());
-      if (("id" in value ? value.id : value.unitId) !== document.id)
-        throw new AccountError("failed-precondition");
-      Object.assign(state[table], { [document.id]: value });
+    for (const { table, records } of batch) {
+      if (records.size > remaining || (table === "units" && records.size > 256))
+        throw new AccountError("resource-exhausted");
+      remaining -= records.size;
+      for (const document of records.docs) {
+        const value = recordSchemas[table].parse(document.data());
+        if (("id" in value ? value.id : value.unitId) !== document.id)
+          throw new AccountError("failed-precondition");
+        Object.assign(state[table], { [document.id]: value });
+      }
     }
   }
   const unitIds = Object.keys(state.units);
-  if (unitIds.length) {
+  const readGroups = () => tx.get(root.collection(groupCollection).limit(4097));
+  const checkRevocations = async () => {
+    if (!unitIds.length) return;
     const revoked = await tx.getAll(
       ...unitIds.map((id) =>
         root.collection(collectionNames.revocations).doc(id),
@@ -63,19 +80,27 @@ export async function loadV2State(
     );
     if (revoked.some((d) => d.exists))
       throw new AccountError("failed-precondition");
-  }
+  };
+  const groupsTogether = concurrentReads
+    ? await Promise.all([readGroups(), checkRevocations()])
+    : null;
+  if (!groupsTogether) await checkRevocations();
   if (requestId) {
-    for (const table of ["admissions", "receipts"] as const) {
-      const document = await tx.get(
+    const metadata = ["admissions", "receipts"] as const;
+    const documents = await tx.getAll(
+      ...metadata.map((table) =>
         root.collection(collectionNames[table]).doc(requestId),
-      );
+      ),
+    );
+    for (const [index, table] of metadata.entries()) {
+      const document = documents[index]!;
       if (document.exists)
         Object.assign(state[table], {
           [requestId]: recordSchemas[table].parse(document.data()),
         });
     }
   }
-  const groups = await tx.get(root.collection(groupCollection).limit(4097));
+  const groups = groupsTogether?.[0] ?? (await readGroups());
   if (groups.size > 4096) throw new AccountError("resource-exhausted");
   const parsed = groups.docs.map((document) => {
     const group = groupSchema.parse(document.data());
