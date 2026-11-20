@@ -76,6 +76,7 @@ export class V2Capture {
       const interpreted = await new Interpreter(provider).interpret(
         { ...turn, mode: "capture" },
         found.units,
+        { verifyCaptureIntent: true },
       );
       await reauthorize();
       if (!interpreted.draft) {

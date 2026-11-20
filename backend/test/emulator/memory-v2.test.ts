@@ -996,18 +996,20 @@ test("query normalizes equivalent requests and separates current context before 
   }
 });
 
-test("intent interpretation precedes canonical reads for ambiguity and complete or contextual questions", async () => {
+test("question routing resolves direct, ambiguous and contextual questions before reading the catalog", async () => {
   await db
     .doc(`accounts/${uid}/memoryV2Units/${randomUUID()}`)
     .set({ sentinel: true });
   for (const text of [
     "¿Y lo de esa persona?",
     "¿Qué quiero hacer?",
+    "Dime lo que me dijo ayer la profesora ficticia Ada",
     "¿Y ahora?",
     "¿Y ahora?\nAclaración: Qué planes tengo pendientes.",
   ]) {
     let calls = 0;
     const clarify = text.includes("persona");
+    const direct = text === "¿Qué quiero hacer?" || text.startsWith("Dime");
     const interpreter: StructuredModel = {
       call: async (stage, _instructions, data, schema) => {
         assert.equal(stage, "message_intent");
@@ -1039,11 +1041,11 @@ test("intent interpretation precedes canonical reads for ambiguity and complete 
           sourceIds: [],
         },
       }),
-      async () => interpreter,
+      direct ? noModel : async () => interpreter,
       allowed,
     );
     assert.equal(result.status, clarify ? "needsClarification" : "ready");
-    assert.equal(calls, 1);
+    assert.equal(calls, direct ? 0 : 1);
     assert.equal(
       Object.keys(
         (await db.collection(`accounts/${uid}/memoryV2Groups`).get()).docs,
@@ -1051,4 +1053,110 @@ test("intent interpretation precedes canonical reads for ambiguity and complete 
       0,
     );
   }
+});
+
+test("a tell plan makes one routing call and checks intent again in the capture review before writing", async () => {
+  const text = "El robot ficticio Loto es verde.";
+  const turn = routeSchema.parse({
+    apiVersion: 2,
+    requestId: randomUUID(),
+    mode: "tell",
+    text,
+    zone: "UTC",
+    memoryEpoch: 0,
+    context: { questions: [], sourceIds: [] },
+  });
+  const stages: string[] = [];
+  let accept = false;
+  const provider: StructuredModel = {
+    async call(stage, instructions, data, schema, limit) {
+      stages.push(stage);
+      if (stage === "message_intent")
+        return schema.parse({
+          action: "tell",
+          fact: null,
+          question: null,
+          useContext: false,
+          forgetScope: null,
+          alsoAsk: false,
+        });
+      if (stage === "interpret_review") {
+        assert.match(
+          instructions,
+          /Control independiente de intención de Contar/u,
+        );
+        return schema.parse(
+          accept
+            ? { accepted: true, issues: [] }
+            : { accepted: false, issues: ["instruction"] },
+        );
+      }
+      return model.call(stage, instructions, data, schema, limit);
+    },
+  };
+  const routed = await routeV2(
+    db,
+    uid,
+    generation,
+    turn,
+    async () => provider,
+    allowed,
+  );
+  assert.equal(routed.status, "ready");
+  assert.deepEqual(stages, ["message_intent"]);
+  assert.equal(Object.keys((await reader().load()).state.units).length, 0);
+  const capture = (id: string) =>
+    save(
+      { ...input(text), requestId: id, expectedEpoch: 0 },
+      async () => provider,
+    );
+  await assert.rejects(capture(randomUUID()), {
+    message: "REVIEW_instruction",
+  });
+  assert.equal(Object.keys((await reader().load()).state.units).length, 0);
+  accept = true;
+  assert.equal((await capture(randomUUID())).status, "saved");
+  assert.deepEqual(stages, [
+    "message_intent",
+    "interpret",
+    "interpret_review",
+    "interpret",
+    "interpret_review",
+  ]);
+});
+
+test("a direct location in tell mode still requires an authorized capture and its independent review", async () => {
+  const text = "Mi brújula está en el cajón azul.";
+  const turn = routeSchema.parse({
+    apiVersion: 2,
+    requestId: randomUUID(),
+    mode: "tell",
+    text,
+    zone: "UTC",
+    memoryEpoch: 0,
+    context: { questions: [], sourceIds: [] },
+  });
+  const routed = await routeV2(db, uid, generation, turn, noModel, allowed);
+  assert.equal(routed.status, "ready");
+  assert.ok(
+    routed.plan && typeof routed.plan === "object" && "action" in routed.plan,
+  );
+  assert.equal(routed.plan.action, "tell");
+  assert.equal(Object.keys((await reader().load()).state.units).length, 0);
+  const stages: string[] = [];
+  const tracking: StructuredModel = {
+    async call(stage, instructions, data, schema, limit) {
+      stages.push(stage);
+      return model.call(stage, instructions, data, schema, limit);
+    },
+  };
+  const saved = await save(
+    { ...input(text), expectedEpoch: 0 },
+    async () => tracking,
+  );
+  assert.equal(saved.status, "saved");
+  assert.deepEqual(stages, ["interpret", "interpret_review"]);
+  const current = Object.values((await reader().load()).state.units);
+  assert.equal(current.length, 1);
+  assert.equal(current[0]?.content.text, text);
 });

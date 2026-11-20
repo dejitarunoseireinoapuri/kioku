@@ -19,6 +19,7 @@ import { changeSchema } from "./contracts.js";
 import type { ModelFactory } from "./capture.js";
 import type { Route, Plan, Apply } from "./route-contracts.js";
 import type { V2Reply } from "./contracts.js";
+import { directIntent } from "./direct-intent.js";
 import {
   unanchoredQuestion,
   clarificationInstructions,
@@ -58,7 +59,8 @@ export async function routeV2(
         text: earlyQuestion,
       };
     }
-    const provider = await model(lease.epoch);
+    let provider: ReturnType<ModelFactory> | undefined;
+    const getProvider = () => (provider ??= model(lease.epoch));
     const context =
       input.memoryEpoch === lease.epoch
         ? input.context
@@ -70,13 +72,18 @@ export async function routeV2(
       receivedAt: new Date().toISOString(),
       zone: input.zone,
     };
-    const intent = await provider.call(
-      "message_intent",
-      `${messageIntentInstructions}\n${clarificationInstructions}`,
-      message,
-      messageIntentSchema,
-      1400,
-    );
+    const direct = directIntent(input);
+    const intent = direct
+      ? { action: direct, fact: null, question: null }
+      : await (
+          await getProvider()
+        ).call(
+          "message_intent",
+          `${messageIntentInstructions}\n${clarificationInstructions}`,
+          message,
+          messageIntentSchema,
+          1400,
+        );
     const base = {
       memoryEpoch: lease.epoch,
       receivedAt: message.receivedAt,
@@ -126,7 +133,7 @@ export async function routeV2(
         units = (
           await reader.candidates(
             loaded,
-            provider,
+            await getProvider(),
             input.text,
             message.receivedAt,
             input.zone,
@@ -138,7 +145,9 @@ export async function routeV2(
           ...u.content,
           sourceId: loaded.groups.find((g) => g.unitIds.includes(u.id))!.id,
         }));
-        const selected = await provider.call(
+        const selected = await (
+          await getProvider()
+        ).call(
           "message_target",
           `${targetSelectionInstructions}\nLos IDs son UUID estables de recuerdos. No inventes sufijos ni selecciones una copia arbitraria de unidades distintas.`,
           { ...message, action: intent.action, candidates },
@@ -177,8 +186,11 @@ export async function routeV2(
     } else if (intent.action === "forgetAll")
       question =
         "Indica el recuerdo concreto que quieres olvidar para poder confirmar su alcance.";
-    if (plan && plan.action !== "ask") {
-      const reviewed = await provider.call(
+    // A tell proposal cannot write. Its intent is reviewed in the independent capture review.
+    if (plan && plan.action !== "ask" && plan.action !== "tell") {
+      const reviewed = await (
+        await getProvider()
+      ).call(
         "message_review",
         messagePlanReviewInstructions,
         { ...message, plan, candidates },

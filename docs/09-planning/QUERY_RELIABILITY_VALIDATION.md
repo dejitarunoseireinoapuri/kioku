@@ -93,3 +93,24 @@ Se comparó la redacción con razonamiento alto y medio en seis casos ficticios 
 Pruebas finales: 245 raíz, 44 unitarias de servidor y 138 de emuladores correctas. El caso de arranque comprueba que se devuelve la revisión aunque exista un documento de catálogo inválido, y verifica el rechazo anónimo y de generación obsoleta. Las pruebas de consulta siguen cubriendo la invalidación de evidencia durante la generación. Cero llamadas a la API de pago.
 
 Con autorización expresa, el commit `0e708cd` se publicó y activó de forma parcial en `kioku:memoryV2`. El servicio está **ACTIVE** en la revisión `memoryv2-00007-jip` desde el `2026-11-20T09:46:08.816107457Z`. Conserva Node 22, la cuenta de ejecución prevista y el máximo de una instancia. Los metadatos confirman las mismas revisiones y fechas para las otras once funciones. La petición ficticia `details` sin autenticar recibió HTTP 401 antes de acceder a datos o IA. El despliegue y la comprobación consumieron cero llamadas de IA. La nueva versión sirve al cliente ya instalado. La latencia completa desde el móvil con el proveedor de producción queda pendiente de medida.
+
+## Menos llamadas al contar y preguntar
+
+Revisión de servidor preparada sobre `3945b6d`. Con el modo explícito ya seleccionado, el servidor puede resolver la intención de enunciados completos de una sola cláusula. En Contar se admiten ubicaciones afirmativas de objetos del conjunto reconocido. En Preguntar se admiten formas cerradas sobre planes, ubicación o color de objetos y comunicaciones de hoy o ayer. Se aplica la normalización de peticiones existente, conservando el mensaje original en el recorrido. El reconocimiento exige que coincida toda la frase. Las negaciones, dudas, citas, mensajes mixtos, referencias sin antecedente y órdenes que queden fuera del conjunto siguen la interpretación existente.
+
+En Contar, un plan `tell` propone pasar al guardado. Ahora la revisión independiente que precede a la escritura comprueba en la misma llamada la fidelidad y la intención de aportar contenido. La interpretación genera aclaración ante una pregunta sin hechos, una orden de cambio o una ambigüedad real. La revisión rechaza una ficha engañosa aunque el clasificador inicial haya propuesto `tell`. La corrección, el olvido y las ofertas conservan su revisión en la ruta. Se mantienen las comprobaciones de generación/época, alcance, autorización final y recibos de operación. El DTO móvil y el modelo `gpt-6.1-sol` alto se conservan.
+
+| Recorrido sin búsqueda adicional de catálogo | Llamadas antes → ahora | Fases evitadas en la muestra de suscripción |
+| --- | ---: | ---: |
+| Contar un relato que requiere interpretación de intención | 4 → 3 | Revisión de la ruta, 4,88 s |
+| Contar una ubicación sencilla reconocida | 4 → 2 | Interpretación y revisión de la ruta, 9,98 s combinados |
+| Preguntar con una forma reconocida | 3 → 2 | Interpretación de la ruta, 4,87–5,01 s |
+| Preguntar con una forma fuera del conjunto | 3 → 3 | Sin cambio en fases de inferencia |
+
+Los recuentos corresponden a recorridos sin aclaración y con evidencia suficiente para llegar a las fases indicadas. La búsqueda de un catálogo de más de 32 unidades puede añadir una inferencia. Los tiempos miden aisladamente las fases antiguas que ya no se necesitan, con el mismo perfil alto mediante la CLI de suscripción y casos ficticios. Incluyen el proceso de la CLI; no son una comparación desde el móvil ni garantizan ahorros iguales en producción. La revisión automática bloqueó el ensayo con razonamiento bajo por la política vigente del proyecto. No se ejecutó.
+
+En la suscripción pasaron seis pruebas de captura y cinco consultas independientes del corpus conocido. En dos de esas seis capturas se verificó además la cadena completa de interpretar, guardar en el almacén de prueba y preguntar con la referencia correcta. Se comprobaron una cita literal con una orden dentro, una pregunta, una petición de corrección y una de olvido introducidas en el recorrido de guardado. Las tres últimas pidieron aclaración sin ficha. Fueron 26 inferencias de validación y 7 de medición de las fases previas. Cero API de pago, datos exclusivamente ficticios y ninguna lectura remota de memoria. Reproducción semántica bajo las condiciones de suscripción ya documentadas: `node prototypes/memory-core/evaluation/turn-speed-run.ts`.
+
+Verificación local: 245 pruebas raíz, 46 unitarias de servidor y 140 de emuladores correctas. Las pruebas verifican que un plan directo no escriba por sí solo, que un rechazo de la revisión impida el guardado, que una captura revisada confirme una sola unidad, y que las preguntas ambiguas y las que presentan dos intenciones deriven al recorrido previsto. TypeScript, formato y comprobación documental correctos.
+
+El cambio conserva la compatibilidad con la app instalada. La activación en `memoryV2` requiere autorización para esta revisión y la latencia total de producción queda pendiente de medir.

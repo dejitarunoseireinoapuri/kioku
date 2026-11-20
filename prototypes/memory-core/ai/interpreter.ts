@@ -9,6 +9,9 @@ import {
   generationInstructions,
   reviewInstructions,
   clarificationReviewInstructions,
+  captureIntentInstructions,
+  captureIntentReviewInstructions,
+  captureIntentClarificationInstructions,
 } from "./prompts.ts";
 import { materializeRetention } from "./retention.ts";
 import { interventions } from "./interventions.ts";
@@ -105,7 +108,11 @@ export class Interpreter {
   constructor(model: StructuredModel) {
     this.model = model;
   }
-  async interpret(input: Input, candidates: Unit[]) {
+  async interpret(
+    input: Input,
+    candidates: Unit[],
+    options: { verifyCaptureIntent?: boolean } = {},
+  ) {
     if (input.text.length > 8000 || candidates.length > 32)
       throw new InterpretationError("INPUT_LIMIT");
     if (
@@ -128,9 +135,14 @@ export class Interpreter {
         zone: source.zone,
       })),
     };
+    const verifyIntent =
+      options.verifyCaptureIntent &&
+      input.mode === "capture" &&
+      !input.clarification;
     const wire = await this.model.call(
       "interpret",
-      generationInstructions(candidates.length > 0),
+      generationInstructions(candidates.length > 0) +
+        (verifyIntent ? captureIntentInstructions : ""),
       data,
       indexedInterpretationSchema,
       7000,
@@ -152,11 +164,15 @@ export class Interpreter {
         ? materialize(proposal, input, candidates)
         : null;
     const retainedEvidence = materializeRetention(proposal, input);
+    const clarify = proposal.status === "clarify";
     const review = await this.model.call(
       "interpret_review",
-      proposal.status === "clarify"
-        ? clarificationReviewInstructions
-        : reviewInstructions,
+      (clarify ? clarificationReviewInstructions : reviewInstructions) +
+        (verifyIntent
+          ? clarify
+            ? captureIntentClarificationInstructions
+            : captureIntentReviewInstructions
+          : ""),
       { ...data, proposal },
       reviewSchema,
       1400,
