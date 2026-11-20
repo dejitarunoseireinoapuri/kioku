@@ -439,5 +439,21 @@
         }
       ]
     }
-  ]
+  ],
+  "productionActivation": {
+    "sourceCommit": "f388c52",
+    "project": "kioku-9454f",
+    "region": "europe-west1",
+    "name": "memoryV2",
+    "state": "ACTIVE",
+    "updateTime": "2026-11-20T09:08:35.822185828Z",
+    "revision": "memoryv2-00006-seq",
+    "runtime": "nodejs22",
+    "runtimeIdentityMatches": true,
+    "maxInstances": 1,
+    "previousRevision": "memoryv2-00005-viz",
+    "otherFunctionsUnchanged": true,
+    "anonymousStatus": 401,
+    "apiCalls": 0
+  }
 }

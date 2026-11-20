@@ -1,6 +1,6 @@
 # Fiabilidad de consultas · 20 de noviembre de 2026
 
-Rama `codex/query-reliability`, basada en `main` (`c3b5d77`), sin incorporar Fuentes. Revisión local preparada; servidor y teléfonos sin actualizar en esta entrega. No se han consultado recuerdos reales ni hecho llamadas a la API de pago.
+Rama `codex/query-reliability`, basada en `main` (`c3b5d77`), sin incorporar Fuentes. Revisión publicada y activada únicamente en `memoryV2` con autorización expresa posterior; teléfonos sin reinstalar. No se han consultado recuerdos reales ni hecho llamadas a la API de pago.
 
 ## Incidente y correcciones
 
@@ -61,4 +61,12 @@ node prototypes/memory-core/evaluation/query-reliability-run.ts --run nueva-seri
 node prototypes/memory-core/evaluation/query-intent-run.ts nueva-serie-intencion
 ```
 
-Cada identificador debe ser nuevo; no se sobrescriben resultados. El proveedor limita cada ejecución a 48 inferencias, 120 segundos por proceso y salida acotada. Las claves permanecen fuera de este flujo. Las pruebas no sustituyen la autorización específica para desplegar: la activación de `memoryV2` queda pendiente y no requiere un APK nuevo para esta revisión.
+Cada identificador debe ser nuevo; no se sobrescriben resultados. El proveedor limita cada ejecución a 48 inferencias, 120 segundos por proceso y salida acotada. Las claves permanecen fuera de este flujo. Las pruebas no sustituyen la autorización específica para desplegar: el propietario autorizó después su subida y activación exclusivamente en `memoryV2`, sin un APK nuevo.
+
+## Activación autorizada
+
+El propietario autorizó expresamente publicar la rama y actualizar únicamente el servicio de memoria. Subida confirmada a `dejitarunoseireinoapuri/kioku`; código desplegado `f388c52`. Despliegue parcial `functions:kioku:memoryV2`, proyecto `kioku-9454f`, región `europe-west1`. Estado remoto **ACTIVE**, revisión **memoryv2-00006-seq**, actualización `2026-11-20T09:08:35.822185828Z`, Node 22, identidad de ejecución esperada y máximo una instancia. Compilación y formato del predespliegue correctos.
+
+Comparación de metadatos antes/después: las otras **once funciones** conservan sus revisiones y fechas. No se desplegaron reglas, índices, otros servicios ni APK; no se leyó, migró o borró memoria. La app vigente sigue en el alcance anterior a Fuentes; `referenceSources` conserva su revisión. Una petición ficticia sin autenticación devuelve **401** antes de acceder a datos o crear proveedor. Esto comprueba el rechazo anónimo, no el acceso de una cuenta válida, la calidad de respuestas productivas ni el incidente original. Comprobaciones y activación: **cero llamadas de IA/API**.
+
+La primera consulta de metadatos con gcloud no pudo autenticarse; se utilizó la sesión Firebase existente mediante su biblioteca oficial, sin exportar credenciales ni solicitar otras. El rechazo de subida de la entrega anterior quedó resuelto mediante la autorización expresa del propietario. Los pendientes semánticos y del recorrido de captura descritos arriba se mantienen.
