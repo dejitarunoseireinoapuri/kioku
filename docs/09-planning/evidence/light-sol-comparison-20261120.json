@@ -1,0 +1,499 @@
+{
+  "date": "2026-11-20",
+  "sourceBase": "582b6a1",
+  "syntheticOnly": true,
+  "apiCalls": 0,
+  "productionEquivalent": false,
+  "baseline": [
+    "gpt-6.1-sol",
+    "high"
+  ],
+  "candidate": [
+    "gpt-6.2-sol",
+    "low"
+  ],
+  "review": [
+    "gpt-6.1-sol",
+    "high"
+  ],
+  "results": [
+    {
+      "id": "location",
+      "operation": "capture",
+      "variant": "current",
+      "pass": true,
+      "totalMs": 14437,
+      "phases": [
+        {
+          "stage": "interpret",
+          "ms": 8948
+        },
+        {
+          "stage": "interpret_review",
+          "ms": 5473
+        }
+      ]
+    },
+    {
+      "id": "location",
+      "operation": "capture",
+      "variant": "light",
+      "pass": true,
+      "totalMs": 13702,
+      "phases": [
+        {
+          "stage": "interpret",
+          "ms": 8922
+        },
+        {
+          "stage": "interpret_review",
+          "ms": 4778
+        }
+      ]
+    },
+    {
+      "id": "attributed",
+      "operation": "capture",
+      "variant": "light",
+      "pass": true,
+      "totalMs": 16160,
+      "phases": [
+        {
+          "stage": "interpret",
+          "ms": 9931
+        },
+        {
+          "stage": "interpret_review",
+          "ms": 6228
+        }
+      ]
+    },
+    {
+      "id": "attributed",
+      "operation": "capture",
+      "variant": "current",
+      "pass": true,
+      "totalMs": 18336,
+      "phases": [
+        {
+          "stage": "interpret",
+          "ms": 11917
+        },
+        {
+          "stage": "interpret_review",
+          "ms": 6417
+        }
+      ]
+    },
+    {
+      "id": "separate-dates",
+      "operation": "capture",
+      "variant": "current",
+      "pass": true,
+      "totalMs": 18068,
+      "phases": [
+        {
+          "stage": "interpret",
+          "ms": 13235
+        },
+        {
+          "stage": "interpret_review",
+          "ms": 4830
+        }
+      ]
+    },
+    {
+      "id": "separate-dates",
+      "operation": "capture",
+      "variant": "light",
+      "pass": true,
+      "totalMs": 19560,
+      "phases": [
+        {
+          "stage": "interpret",
+          "ms": 14905
+        },
+        {
+          "stage": "interpret_review",
+          "ms": 4653
+        }
+      ]
+    },
+    {
+      "id": "negated-plan",
+      "operation": "capture",
+      "variant": "light",
+      "pass": true,
+      "totalMs": 14655,
+      "phases": [
+        {
+          "stage": "interpret",
+          "ms": 8752
+        },
+        {
+          "stage": "interpret_review",
+          "ms": 5901
+        }
+      ]
+    },
+    {
+      "id": "negated-plan",
+      "operation": "capture",
+      "variant": "current",
+      "pass": true,
+      "totalMs": 16017,
+      "phases": [
+        {
+          "stage": "interpret",
+          "ms": 8149
+        },
+        {
+          "stage": "interpret_review",
+          "ms": 7867
+        }
+      ]
+    },
+    {
+      "id": "quoted-command",
+      "operation": "capture",
+      "variant": "current",
+      "pass": true,
+      "totalMs": 16466,
+      "phases": [
+        {
+          "stage": "interpret",
+          "ms": 11480
+        },
+        {
+          "stage": "interpret_review",
+          "ms": 4985
+        }
+      ]
+    },
+    {
+      "id": "quoted-command",
+      "operation": "capture",
+      "variant": "light",
+      "pass": true,
+      "totalMs": 16794,
+      "phases": [
+        {
+          "stage": "interpret",
+          "ms": 10717
+        },
+        {
+          "stage": "interpret_review",
+          "ms": 6076
+        }
+      ]
+    },
+    {
+      "id": "ambiguous-date",
+      "operation": "capture",
+      "variant": "light",
+      "pass": true,
+      "totalMs": 12134,
+      "phases": [
+        {
+          "stage": "interpret",
+          "ms": 4970
+        },
+        {
+          "stage": "interpret_review",
+          "ms": 7164
+        }
+      ]
+    },
+    {
+      "id": "ambiguous-date",
+      "operation": "capture",
+      "variant": "current",
+      "pass": true,
+      "totalMs": 11537,
+      "phases": [
+        {
+          "stage": "interpret",
+          "ms": 5919
+        },
+        {
+          "stage": "interpret_review",
+          "ms": 5617
+        }
+      ]
+    },
+    {
+      "id": "forget-is-not-capture",
+      "operation": "capture",
+      "variant": "current",
+      "pass": true,
+      "totalMs": 20397,
+      "phases": [
+        {
+          "stage": "interpret",
+          "ms": 7738
+        },
+        {
+          "stage": "interpret_review",
+          "ms": 12659
+        }
+      ]
+    },
+    {
+      "id": "forget-is-not-capture",
+      "operation": "capture",
+      "variant": "light",
+      "pass": true,
+      "totalMs": 14735,
+      "phases": [
+        {
+          "stage": "interpret",
+          "ms": 5685
+        },
+        {
+          "stage": "interpret_review",
+          "ms": 9050
+        }
+      ]
+    },
+    {
+      "id": "speech-1",
+      "operation": "query",
+      "variant": "light",
+      "pass": true,
+      "totalMs": 8954,
+      "phases": [
+        {
+          "stage": "answer",
+          "ms": 4687
+        },
+        {
+          "stage": "answer_review",
+          "ms": 4264
+        }
+      ]
+    },
+    {
+      "id": "speech-1",
+      "operation": "query",
+      "variant": "current",
+      "pass": true,
+      "totalMs": 9657,
+      "phases": [
+        {
+          "stage": "answer",
+          "ms": 4899
+        },
+        {
+          "stage": "answer_review",
+          "ms": 4756
+        }
+      ]
+    },
+    {
+      "id": "speech-unrelated-context",
+      "operation": "query",
+      "variant": "current",
+      "pass": true,
+      "totalMs": 9053,
+      "phases": [
+        {
+          "stage": "answer",
+          "ms": 4460
+        },
+        {
+          "stage": "answer_review",
+          "ms": 4591
+        }
+      ]
+    },
+    {
+      "id": "speech-unrelated-context",
+      "operation": "query",
+      "variant": "light",
+      "pass": true,
+      "totalMs": 11012,
+      "phases": [
+        {
+          "stage": "answer",
+          "ms": 5737
+        },
+        {
+          "stage": "answer_review",
+          "ms": 5274
+        }
+      ]
+    },
+    {
+      "id": "speech-event-vs-record",
+      "operation": "query",
+      "variant": "light",
+      "pass": true,
+      "totalMs": 10855,
+      "phases": [
+        {
+          "stage": "answer",
+          "ms": 4599
+        },
+        {
+          "stage": "answer_review",
+          "ms": 6254
+        }
+      ]
+    },
+    {
+      "id": "speech-event-vs-record",
+      "operation": "query",
+      "variant": "current",
+      "pass": true,
+      "totalMs": 11163,
+      "phases": [
+        {
+          "stage": "answer",
+          "ms": 6657
+        },
+        {
+          "stage": "answer_review",
+          "ms": 4505
+        }
+      ]
+    },
+    {
+      "id": "speech-future-advice",
+      "operation": "query",
+      "variant": "current",
+      "pass": true,
+      "totalMs": 10787,
+      "phases": [
+        {
+          "stage": "answer",
+          "ms": 6124
+        },
+        {
+          "stage": "answer_review",
+          "ms": 4661
+        }
+      ]
+    },
+    {
+      "id": "speech-future-advice",
+      "operation": "query",
+      "variant": "light",
+      "pass": true,
+      "totalMs": 10185,
+      "phases": [
+        {
+          "stage": "answer",
+          "ms": 4897
+        },
+        {
+          "stage": "answer_review",
+          "ms": 5287
+        }
+      ]
+    },
+    {
+      "id": "umbrella-partial",
+      "operation": "query",
+      "variant": "light",
+      "pass": true,
+      "totalMs": 9705,
+      "phases": [
+        {
+          "stage": "answer",
+          "ms": 4711
+        },
+        {
+          "stage": "answer_review",
+          "ms": 4992
+        }
+      ]
+    },
+    {
+      "id": "umbrella-partial",
+      "operation": "query",
+      "variant": "current",
+      "pass": true,
+      "totalMs": 10026,
+      "phases": [
+        {
+          "stage": "answer",
+          "ms": 4998
+        },
+        {
+          "stage": "answer_review",
+          "ms": 5027
+        }
+      ]
+    },
+    {
+      "id": "umbrella-ellipsis",
+      "operation": "query",
+      "variant": "current",
+      "pass": true,
+      "totalMs": 9489,
+      "phases": [
+        {
+          "stage": "answer",
+          "ms": 5166
+        },
+        {
+          "stage": "answer_review",
+          "ms": 4322
+        }
+      ]
+    },
+    {
+      "id": "umbrella-ellipsis",
+      "operation": "query",
+      "variant": "light",
+      "pass": true,
+      "totalMs": 8635,
+      "phases": [
+        {
+          "stage": "answer",
+          "ms": 4515
+        },
+        {
+          "stage": "answer_review",
+          "ms": 4119
+        }
+      ]
+    },
+    {
+      "id": "forgotten-not-restored",
+      "operation": "query",
+      "variant": "light",
+      "pass": true,
+      "totalMs": 8693,
+      "phases": [
+        {
+          "stage": "answer",
+          "ms": 4316
+        },
+        {
+          "stage": "answer_review",
+          "ms": 4374
+        }
+      ]
+    },
+    {
+      "id": "forgotten-not-restored",
+      "operation": "query",
+      "variant": "current",
+      "pass": true,
+      "totalMs": 10582,
+      "phases": [
+        {
+          "stage": "answer",
+          "ms": 5969
+        },
+        {
+          "stage": "answer_review",
+          "ms": 4611
+        }
+      ]
+    }
+  ],
+  "currentProfileCalls": 42,
+  "lightProfileCalls": 14
+}

@@ -114,3 +114,20 @@ En la suscripción pasaron seis pruebas de captura y cinco consultas independien
 Verificación local: 245 pruebas raíz, 46 unitarias de servidor y 140 de emuladores correctas. Las pruebas verifican que un plan directo no escriba por sí solo, que un rechazo de la revisión impida el guardado, que una captura revisada confirme una sola unidad, y que las preguntas ambiguas y las que presentan dos intenciones deriven al recorrido previsto. TypeScript, formato y comprobación documental correctos.
 
 El propietario autorizó publicar `8af38e3` y activar exclusivamente `memoryV2`. El servicio está **ACTIVE** en `memoryv2-00008-vug` desde `2026-11-20T10:22:39.983108234Z`, con Node 22, la identidad de ejecución prevista y el máximo de una instancia. La comparación de metadatos confirma que las otras once funciones conservan su revisión. Una petición ficticia `route` sin autenticar recibió HTTP 401 antes de leer recuerdos o llamar a IA. Activación y comprobación consumieron cero llamadas de IA. La app instalada es compatible y la latencia total de producción queda pendiente de medir.
+
+## Comparación con GPT-6.2 Sol ligero
+
+El propietario autorizó probar GPT-6.2 Sol con razonamiento `low` de forma aislada. El catálogo de la suscripción confirmó ese modelo y esfuerzo. El control sigue siendo GPT-6.1 Sol `high`. La variante sustituye únicamente la preparación de la captura y la redacción de respuestas. La revisión independiente usa GPT-6.1 Sol `high` en ambos recorridos. Cada variante recibe las mismas instrucciones, evidencia y esquema, con orden alternado entre pares.
+
+El ensayo mide la generación por separado y el recorrido con revisión. Los casos de Contar validan ubicación, atribución, fechas de dos asuntos separados, negación, preservación de una cita, aclaración de un dato incompleto y rechazo de un olvido como captura. Para los guardados aceptados se prueba también el almacén RAM. Las consultas contrastan exactitud y referencias actuales: expresiones equivalentes, contexto ajeno o elíptico, fecha de comunicación distinta de fecha de registro o de actividad, respuesta parcial y contenido retirado. Se comprueban campos y referencias frente a oráculos separados de los paquetes enviados al modelo.
+
+Reproducción con la sesión de ChatGPT y `KIOKU_CODEX_EXECUTABLE` preparados como arriba: `node prototypes/memory-core/evaluation/light-sol-run.ts`. Solo se prueban fixtures ficticias, con modelos de la suscripción y sin claves de API. Los tiempos incluyen la CLI y no incluyen autenticación móvil, Firestore, el paso previo de intención ni el transporte a la API productiva. Por sí solo el ensayo no valida límites de salida o latencia de producción.
+
+| Recorrido con revisión | Correctos actual / ligero | Mediana actual | Mediana ligero | Mediana del ahorro por par | Pares más rápidos con ligero |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Guardar o aclarar | 7/7 · 7/7 | 16,47 s | 14,74 s | 0,74 s | 4/7 |
+| Responder | 7/7 · 7/7 | 10,03 s | 9,71 s | 0,60 s | 6/7 |
+
+La mediana del ahorro se calcula sobre las diferencias de cada caso, por lo que puede diferir de restar las dos medianas de tiempo. En la fase de generación por separado, el ligero ganó 5/7 pares de captura y 6/7 de consulta, con ahorros medianos por par de 0,76 y 0,65 s. Se completaron 56 inferencias de suscripción, 42 con el perfil actual y 14 con el ligero, con cero llamadas a la API de pago. El [registro de tiempos y resultados](evidence/light-sol-comparison-20261120.json) conserva cada par sin contenido de preguntas, recuerdos o respuestas.
+
+Decisión de esta prueba: el ligero mantuvo los resultados de los 14 casos, pero el ahorro típico en el recorrido medido fue menor de un segundo. Se conserva el perfil actual de producción. Este resultado es una comparación dirigida, con una muestra por caso y variación entre ejecuciones. Las 245 pruebas Node, TypeScript, formato y documentación pasaron. La integración y la latencia completa de la app siguen pendientes de validación si se decide cambiar de perfil.

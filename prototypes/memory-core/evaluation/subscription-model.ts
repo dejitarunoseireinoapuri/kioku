@@ -6,24 +6,37 @@ import { z } from "zod";
 import { InterpretationError } from "../ai/contracts.ts";
 import type { StructuredModel } from "../ai/contracts.ts";
 
+type SubscriptionProfile =
+  | { model: "gpt-6.1-sol"; reasoning: "high" | "medium" }
+  | { model: "gpt-6.2-sol"; reasoning: "low" };
+
 /** Evaluation only: official Codex CLI, ChatGPT login, no tools, no API key/provider config. */
 export class SubscriptionModel implements StructuredModel {
   calls = 0;
-  readonly model = "gpt-6.1-sol";
-  readonly reasoning: "high" | "medium";
+  readonly model: SubscriptionProfile["model"];
+  readonly reasoning: SubscriptionProfile["reasoning"];
   private readonly executable: string;
   private readonly directory: string;
   private constructor(
     executable: string,
     directory: string,
-    reasoning: "high" | "medium",
+    profile: SubscriptionProfile,
   ) {
     this.executable = executable;
     this.directory = directory;
-    this.reasoning = reasoning;
+    this.model = profile.model;
+    this.reasoning = profile.reasoning;
   }
 
   static async open(reasoning: "high" | "medium" = "high") {
+    return this.openProfile({ model: "gpt-6.1-sol", reasoning });
+  }
+
+  static async openLightSol() {
+    return this.openProfile({ model: "gpt-6.2-sol", reasoning: "low" });
+  }
+
+  private static async openProfile(profile: SubscriptionProfile) {
     if (
       ["DEBUG", "NODE_DEBUG", "GRPC_TRACE", "GOOGLE_SDK_NODE_LOGGING"].some(
         (name) => process.env[name],
@@ -36,7 +49,7 @@ export class SubscriptionModel implements StructuredModel {
     const model = new SubscriptionModel(
       executable,
       await mkdtemp(join(tmpdir(), "kioku-subscription-eval-")),
-      reasoning,
+      profile,
     );
     const status = await model.run(["login", "status"]);
     if (!/Logged in using ChatGPT/u.test(status.stderr + status.stdout))
