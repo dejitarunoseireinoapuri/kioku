@@ -150,6 +150,15 @@ test("production requires complete project/app identity and refuses any emulator
     KIOKU_IOS_APP_ID: "1:1008044927836:ios:abcd",
   };
   assert.equal(backendRuntime(env).production, true);
+  assert.equal(backendRuntime(env).directLocations, false);
+  assert.equal(
+    backendRuntime({ ...env, KIOKU_DIRECT_LOCATIONS: "true" }).directLocations,
+    true,
+  );
+  assert.equal(
+    backendRuntime({ ...env, KIOKU_DIRECT_LOCATIONS: "True" }).directLocations,
+    false,
+  );
   for (const patch of [
     { KIOKU_ALLOWED_EMAIL: "" },
     { KIOKU_ANDROID_APP_ID: "other" },

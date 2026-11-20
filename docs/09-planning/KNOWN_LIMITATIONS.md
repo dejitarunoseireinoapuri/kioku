@@ -1,5 +1,7 @@
 # Estado real y decisiones pendientes
 
+**Ubicaciones con API habitual:** opción del servidor preparada, desactivada en producción. Permite que la app instalada use la vía directa solo cuando pueda verificarla y el proveedor habitual para los demás casos. Se comprobó en local con la API simulada. El APK separado de prueba se instaló, pero el Honor no completó el acceso al emulador. [Alcance, compatibilidad y estado](QUERY_RELIABILITY_VALIDATION.md#preparación-de-ubicaciones-con-la-api-habitual).
+
 **Ubicaciones sin IA:** prototipo limitado al emulador con casos ficticios. Usa evidencia canónica literal y transacciones existentes para guardar, consultar, corregir y olvidar. Cinco casos nuevos de emulador correctos y medianas locales de 647 ms al contar y 357 ms al preguntar, con cero API. Omite la vía rápida si queda algún recuerdo vigente sin verificar o no se reconoce la forma de la frase. No está activo en la app de producción. [Alcance y pruebas](QUERY_RELIABILITY_VALIDATION.md#prototipo-de-ubicaciones-sin-ia).
 
 **GPT-6.2 Sol ligero:** ambos perfiles superaron siete casos ficticios de captura y siete de consulta con la revisión actual. El ahorro mediano por par fue de 0,74 s al guardar o aclarar y de 0,60 s al responder. Prueba mediante suscripción, cero API y perfil de producción conservado. [Metodología y resultados](QUERY_RELIABILITY_VALIDATION.md#comparación-con-gpt-62-sol-ligero).

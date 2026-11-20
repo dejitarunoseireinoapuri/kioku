@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
 import { after, afterEach, beforeEach, test } from "node:test";
 import { deleteApp } from "firebase-admin/app";
+import type { StructuredModel } from "#memory-v2/ai/contracts";
 import { V2Capture } from "../../src/memory-v2/capture.js";
 import { changeV2 } from "../../src/memory-v2/change.js";
 import type { Change } from "../../src/memory-v2/contracts.js";
@@ -398,4 +399,88 @@ test("an opaque canonical memory forces the normal search and capture paths", as
     presentGroup(await reader().load(), saved.sourceId).text,
     firstLocation,
   );
+
+  const stages: string[] = [];
+  const simulatedProvider: StructuredModel = {
+    async call(stage, _instructions, data, schema) {
+      stages.push(stage);
+      if (stage === "answer") {
+        const { evidence } = data as {
+          evidence: { index: number; content: { text: string } }[];
+        };
+        const record = evidence.find(
+          (item) => item.content.text === firstLocation,
+        );
+        assert.ok(record);
+        return schema.parse({
+          status: "answered",
+          text: "Está en el cajón azul.",
+          evidence: [record.index],
+        });
+      }
+      if (stage === "answer_review" || stage === "interpret_review") {
+        return schema.parse({ accepted: true, issues: [] });
+      }
+      assert.equal(stage, "interpret");
+      const { tokens } = data as { tokens: unknown[] };
+      return schema.parse({
+        status: "ready",
+        question: null,
+        preserveTime: false,
+        retention: [],
+        relations: [],
+        units: [
+          {
+            key: "location",
+            content: {
+              text: newLocation,
+              proposition: newLocation,
+              subject: "brujula",
+              kind: "fact",
+              polarity: "positive",
+              attribution: null,
+              condition: null,
+            },
+            time: {
+              precision: "unknown",
+              value: null,
+              end: null,
+              fragment: null,
+            },
+            existing: null,
+          },
+        ],
+        segments: [
+          { end: tokens.length - 1, role: "primary", owners: ["location"] },
+        ],
+      });
+    },
+  };
+  const simulate = async () => simulatedProvider;
+  const answer = await queryV2(
+    db,
+    uid,
+    generation,
+    ask(compassQuestion),
+    simulate,
+    reauthorize,
+    true,
+  );
+  assert.equal(answer.status, "answered");
+  assert.equal(answer.text, "Está en el cajón azul.");
+  assert.equal((answer as WireReply).sources?.length, 1);
+  const captured = await new V2Capture(db, undefined, true).execute(
+    uid,
+    generation,
+    submit(newLocation),
+    simulate,
+    reauthorize,
+  );
+  assert.equal(captured.status, "saved");
+  assert.deepEqual(stages, [
+    "answer",
+    "answer_review",
+    "interpret",
+    "interpret_review",
+  ]);
 });

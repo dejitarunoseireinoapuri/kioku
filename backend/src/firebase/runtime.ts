@@ -9,6 +9,7 @@ export interface BackendRuntime {
   readonly projectId: string;
   readonly allowedEmail: string;
   readonly appIds: readonly string[];
+  readonly directLocations: boolean;
 }
 
 export function backendRuntime(env: NodeJS.ProcessEnv): BackendRuntime {
@@ -19,6 +20,7 @@ export function backendRuntime(env: NodeJS.ProcessEnv): BackendRuntime {
       projectId: LOCAL_PROJECT,
       allowedEmail: LOCAL_EMAIL,
       appIds: [],
+      directLocations: true,
     };
   }
   const android = env.KIOKU_ANDROID_APP_ID;
@@ -41,6 +43,7 @@ export function backendRuntime(env: NodeJS.ProcessEnv): BackendRuntime {
     projectId: "kioku-9454f",
     allowedEmail: env.KIOKU_ALLOWED_EMAIL!,
     appIds: [android, ios],
+    directLocations: env.KIOKU_DIRECT_LOCATIONS === "true",
   };
 }
 
