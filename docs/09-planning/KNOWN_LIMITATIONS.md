@@ -1,6 +1,6 @@
 # Estado real y decisiones pendientes
 
-**Ubicaciones con API habitual:** opción activa en `memoryV2` (`memoryv2-00009-ziw`). La app habitual del Honor usa la vía directa cuando puede verificarla y el proveedor habitual en los demás casos. Se comprobó en local con proveedor simulado, y en producción se verificaron metadatos y el rechazo anónimo con cero API. El APK separado no completó el acceso al emulador. Pendiente medir cobertura y latencia con la app en producción. [Alcance, compatibilidad y estado](QUERY_RELIABILITY_VALIDATION.md#preparación-de-ubicaciones-con-la-api-habitual).
+**Envío unificado en producción.** La revisión `memoryv2-00010-lig` y la app habitual actualizada en el Honor admiten una sola petición por turno ordinario. Las ubicaciones y preguntas de color compatibles tienen respuesta directa cuando hay evidencia suficiente. Los casos que necesitan interpretación conservan el recorrido con IA y revisión. Queda pendiente medir la latencia con una sesión autenticada en producción. [Despliegue y comprobaciones](QUERY_RELIABILITY_VALIDATION.md#activación-en-producción-y-en-el-honor).
 
 **Primera prueba de ubicaciones sin IA:** el ensayo del prototipo se hizo en el emulador con casos ficticios. Cinco casos nuevos de emulador correctos y medianas locales de 647 ms al contar y 357 ms al preguntar, con cero API. La vía rápida omite casos si queda algún recuerdo vigente sin verificar o no se reconoce la forma de la frase. [Alcance y pruebas](QUERY_RELIABILITY_VALIDATION.md#prototipo-de-ubicaciones-sin-ia).
 

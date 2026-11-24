@@ -189,3 +189,9 @@ Se reevaluaron los 14 pares ficticios de la [comparación de perfiles](evidence/
 La prueba local de equivalencia compara el texto de la respuesta, la referencia citada y el catálogo antes y después de preguntar. También cubre la coexistencia de dos colores contradictorios y la consulta posterior al olvido de uno de ellos. Los ejemplos y las cuentas de emulador son ficticios. Para comprobar qué fases requieren IA se usa un proveedor simulado.
 
 Antes del cambio, la prueba reprodujo el fallo de reconocimiento con «¿Qué color tiene mi cartera?». Tras el cambio pasaron 50 pruebas unitarias y 148 de emuladores. Las dos mediciones opcionales de velocidad se omitieron en esta pasada de funcionalidad. Compilación TypeScript, formato y comprobación de documentación correctos. Gasto de API de IA en las pruebas: cero.
+
+### Activación en producción y en el Honor
+
+El 24 de noviembre se desplegó `737e835` en `memoryV2`. Producción confirmó la revisión `memoryv2-00010-lig` activa a las 17:39 UTC, con la opción de ubicaciones directas habilitada. Sustituye a `memoryv2-00009-ziw`. Se verificaron las revisiones de las otras once funciones y el rechazo HTTP 401 de una petición ficticia sin sesión antes del acceso a memoria o IA. Durante el despliegue también pasaron seis pruebas locales de interpretación directa con ejemplos ficticios.
+
+La app habitual se actualizó sobre la instalación existente del Honor. Se comprobó que la fecha de primera instalación se conservó y que la huella SHA-256 del APK en el teléfono coincide con la compilación (`F8FC390989BC623133A1DD69A689CFA0E169ADB150D5320214A8DDE77DCEBB49`). El teléfono estaba bloqueado durante la comprobación. El recorrido autenticado en la pantalla del Honor y su latencia en producción quedan pendientes de prueba. Gasto de API de IA durante estas comprobaciones: cero.
