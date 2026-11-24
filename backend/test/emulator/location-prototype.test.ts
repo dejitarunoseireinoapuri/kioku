@@ -249,6 +249,112 @@ test("unified turns bind both IDs, replay saves, cite colors and withhold retire
   );
 });
 
+test("color paraphrases return the same current evidence and never change the catalog", async () => {
+  for (const fact of ["Mi cartera es roja.", "Mi cuaderno es verde."]) {
+    assert.equal((await request("submit", submit(fact))).status, "saved");
+  }
+  const before = await reader().load();
+  const askColor = async (text: string) => {
+    const reply = await request("route", turn("ask", text, before.state.epoch));
+    assert.equal(reply.plan?.action, "ask");
+    assert.ok(reply.result);
+    return reply.result;
+  };
+  const baseline = await askColor("¿De qué color es mi cartera?");
+  assert.equal(baseline.status, "answered");
+  assert.equal(baseline.text, "Es de color rojo.");
+  assert.equal(baseline.sources?.length, 1);
+  assert.equal(
+    (await request("details", { sourceId: source(baseline) })).text,
+    "Mi cartera es roja.",
+  );
+  for (const wording of [
+    "¿Qué color tiene mi cartera?",
+    "Dime cuál es el color de mi cartera",
+    "¿Me puedes decir qué color tiene mi cartera?",
+  ]) {
+    const reply = await askColor(wording);
+    assert.equal(reply.status, baseline.status);
+    assert.equal(reply.text, baseline.text);
+    assert.deepEqual(reply.sources, baseline.sources);
+  }
+  assert.deepEqual(await reader().load(), before);
+
+  assert.equal(
+    (await request("submit", submit("Mi cartera es azul."))).status,
+    "saved",
+  );
+  const conflicting = await reader().load();
+  const unclear = await askColor("¿Qué color tiene mi cartera?");
+  assert.equal(unclear.status, "needsClarification");
+  assert.deepEqual(unclear.sources, []);
+  assert.deepEqual(await reader().load(), conflicting);
+
+  assert.equal(
+    (await request("change", await commandFor(source(baseline)))).status,
+    "forgotten",
+  );
+  const current = await askColor("¿Qué color tiene mi cartera?");
+  assert.equal(current.text, "Es de color azul.");
+  assert.notEqual(source(current), source(baseline));
+});
+
+test("a place's color cannot answer a question about the object, and historical wording reaches review", async () => {
+  await request("submit", submit("Mi cartera está en el cajón azul."));
+  const before = await reader().load();
+  for (const question of [
+    "¿Qué color tiene mi cartera?",
+    "¿Qué color tenía mi cartera ayer?",
+  ]) {
+    const stages: string[] = [];
+    const model: StructuredModel = {
+      async call(stage, _instructions, input, schema) {
+        stages.push(stage);
+        if (stage === "message_intent") {
+          assert.equal((input as { text: string }).text, question);
+          return schema.parse({
+            action: "ask",
+            fact: null,
+            alsoAsk: false,
+            useContext: false,
+            question: null,
+            forgetScope: null,
+          });
+        }
+        if (stage === "answer") {
+          assert.equal((input as { question: string }).question, question);
+          return schema.parse({
+            status: "not_found",
+            text: "No consta.",
+            evidence: [],
+          });
+        }
+        assert.equal(stage, "answer_review");
+        return schema.parse({ accepted: true, issues: [] });
+      },
+    };
+    const reply = await dispatchTurn(
+      db,
+      uid,
+      generation,
+      { ...turn("ask", question, before.state.epoch), apiVersion: 2 },
+      async () => model,
+      reauthorize,
+      true,
+    );
+    const result = reply.result as WireReply;
+    assert.equal(result.status, "notFound");
+    assert.deepEqual(result.sources, []);
+    assert.deepEqual(
+      stages,
+      question.includes("ayer")
+        ? ["message_intent", "answer", "answer_review"]
+        : ["answer", "answer_review"],
+    );
+  }
+  assert.deepEqual(await reader().load(), before);
+});
+
 async function commandFor(
   sourceId: string,
   correction?: string,

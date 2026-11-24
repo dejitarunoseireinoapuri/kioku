@@ -181,3 +181,11 @@ Reproducción con `KIOKU_TIMING_TURNS=1` y `tooling/backend-emulators.ps1` en mo
 ### Elección del modelo por interacción
 
 Se reevaluaron los 14 pares ficticios de la [comparación de perfiles](evidence/light-sol-comparison-20261120.json). Con la misma revisión, el modelo ligero ganó en seis de siete consultas, con un ahorro mediano por par de 0,60 s. En capturas ganó en cuatro de siete, con un ahorro mediano de 0,74 s. En la consulta con contexto ajeno, el ligero tardó 1,96 s más. Una muestra por caso permite comparar los recorridos, pero deja abierta la variabilidad de cada caso. Se eligió resolver directamente las peticiones con prueba suficiente y mantener el perfil revisado para las demás. Elegir un modelo mediante una llamada adicional introduciría otra espera antes de contestar.
+
+### Equivalencia de preguntas sobre el color
+
+«¿Qué color tiene mi cartera?», «¿De qué color es mi cartera?» y «¿Cuál es el color de mi cartera?» consultan el mismo atributo actual del mismo objeto. La interpretación de la pregunta y la búsqueda directa comparten el patrón. Las preguntas en pasado, con otro propietario o con una segunda petición siguen el recorrido de interpretación. Si la evidencia solo indica que la cartera está en un cajón azul, la consulta pasa a redacción y revisión con su texto original.
+
+La prueba local de equivalencia compara el texto de la respuesta, la referencia citada y el catálogo antes y después de preguntar. También cubre la coexistencia de dos colores contradictorios y la consulta posterior al olvido de uno de ellos. Los ejemplos y las cuentas de emulador son ficticios. Para comprobar qué fases requieren IA se usa un proveedor simulado.
+
+Antes del cambio, la prueba reprodujo el fallo de reconocimiento con «¿Qué color tiene mi cartera?». Tras el cambio pasaron 50 pruebas unitarias y 148 de emuladores. Las dos mediciones opcionales de velocidad se omitieron en esta pasada de funcionalidad. Compilación TypeScript, formato y comprobación de documentación correctos. Gasto de API de IA en las pruebas: cero.

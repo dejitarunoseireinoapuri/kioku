@@ -31,7 +31,8 @@ const colorFact = new RegExp(
   "iu",
 );
 const colorQuestion = new RegExp(
-  `^¿de qu[eé] color es mi (?<object>${object})\\?$`,
+  `^¿?(?:(?:me puedes decir|puedes decirme|podr[ií]as decirme) )?` +
+    `(?:de qu[eé] color es|qu[eé] color tiene|cu[aá]l es el color de) mi (?<object>${object})\\??$`,
   "iu",
 );
 
@@ -102,8 +103,9 @@ export function directIntent(
   if (!text) return null;
   if (input.mode === "tell")
     return itemLocation.test(text) || colorFact.test(text) ? "tell" : null;
-  if (requestedLiteral(text)) return "ask";
-  const question = normalizeQuestion(text).match(/^¿([^¿?]+)\?$/u)?.[1];
+  const normalized = normalizeQuestion(text);
+  if (requestedLiteral(text) || colorQuestion.test(normalized)) return "ask";
+  const question = normalized.match(/^¿([^¿?]+)\?$/u)?.[1];
   if (!question) return null;
   return personalPlans.test(question) ||
     objectQuestion.test(question) ||
