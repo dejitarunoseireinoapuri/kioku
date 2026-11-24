@@ -19,7 +19,7 @@ import {
   querySchema,
   changeSchema,
 } from "./contracts.js";
-import { routeSchema, applySchema } from "./route-contracts.js";
+import { dispatchSchema, applySchema } from "./route-contracts.js";
 import { V2Capture } from "./capture.js";
 import { V2WorkStore } from "./work-store.js";
 import { V2Reader } from "./reader.js";
@@ -27,7 +27,8 @@ import { presentGroup, presentSaved } from "./presentation.js";
 import { v2Provider } from "./provider.js";
 import { queryV2 } from "./query.js";
 import { changeV2 } from "./change.js";
-import { routeV2, applyV2 } from "./route.js";
+import { applyV2 } from "./route.js";
+import { dispatchTurn } from "./dispatch.js";
 
 export function memoryV2Callable(
   app: App,
@@ -87,13 +88,21 @@ export function memoryV2Callable(
                 apiVersion: 2,
                 generation: state.generation,
                 memoryEpoch: state.revision,
+                unifiedTurns: true,
               };
             },
             { maxAttempts: 3 },
           );
         const payload = envelope.payload,
-          reader = new V2Reader(db, uid, generation),
-          model = (epoch: number) => v2Provider(db, uid, generation, epoch);
+          reader = new V2Reader(db, uid, generation);
+        let provider:
+          | { epoch: number; value: ReturnType<typeof v2Provider> }
+          | undefined;
+        const model = (epoch: number) => {
+          if (provider?.epoch !== epoch)
+            provider = { epoch, value: v2Provider(db, uid, generation, epoch) };
+          return provider.value;
+        };
         switch (envelope.operation) {
           case "submit":
             return await new V2Capture(db, undefined, directLocations).execute(
@@ -166,13 +175,14 @@ export function memoryV2Callable(
               directLocations,
             );
           case "route":
-            return await routeV2(
+            return await dispatchTurn(
               db,
               uid,
               generation,
-              routeSchema.parse(payload),
+              dispatchSchema.parse(payload),
               model,
               reauthorize,
+              directLocations,
             );
           case "apply":
             return await applyV2(

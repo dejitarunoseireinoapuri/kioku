@@ -40,6 +40,7 @@ export class V2Capture {
     reauthorize: () => Promise<void>,
     expectedEpoch?: number,
     receivedAt?: string,
+    startBefore?: number,
   ): Promise<V2Reply> {
     const turn =
       "zone" in input
@@ -62,6 +63,7 @@ export class V2Capture {
             text: input.text,
           }
         : undefined,
+      startBefore,
     );
     if ("reply" in pending)
       return presentSaved(this.db, uid, generation, pending.reply);

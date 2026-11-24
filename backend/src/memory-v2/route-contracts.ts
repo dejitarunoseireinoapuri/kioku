@@ -23,6 +23,11 @@ export const applySchema = z.strictObject({
   decision: z.enum(["apply", "accept", "reject"]),
   continueManagement: z.boolean().optional(),
 });
+export const dispatchSchema = routeSchema
+  .safeExtend({
+    executionId: z.uuid().optional(),
+  })
+  .refine((input) => input.executionId !== input.requestId);
 export type Route = z.infer<typeof routeSchema>;
 export type Apply = z.infer<typeof applySchema>;
 export type Plan = z.infer<typeof routingPlan>;

@@ -2,18 +2,36 @@ import type { Draft } from "#memory-v2/src/contracts";
 import type { Snapshot, Unit } from "#memory-v2/src/model";
 import {
   locationKey,
+  parseObjectFact,
+  parseColorQuestion,
   parseCurrentLocation,
   parseLocationQuestion,
 } from "./direct-intent.js";
 import type { LocationObject } from "./direct-intent.js";
 
-type LocationFact = LocationObject & { place: string; unit: Unit };
+type LocationFact = LocationObject & { place: string | null; unit: Unit };
 type LocationAnswer =
-  | { kind: "match"; place: string; unitId: string }
+  | { kind: "match"; text: string; unitId: string }
   | { kind: "ambiguous" | "absent" };
 
 function sameObject(a: LocationObject, b: LocationObject) {
   return a.object === b.object && a.color === b.color;
+}
+
+// A phone can also be called a mobile, and a passport can be the document in question.
+const overlappingNames = [
+  ["movil", "telefono"],
+  ["pasaporte", "documento"],
+];
+
+function hasCompetingName(catalog: LocationFact[], object: string) {
+  const names = overlappingNames.find((group) => group.includes(object));
+  return (
+    names !== undefined &&
+    catalog.some(
+      (entry) => entry.object !== object && names.includes(entry.object),
+    )
+  );
 }
 
 function locationSubject(object: LocationObject) {
@@ -39,7 +57,7 @@ function verifiedLocations(state: Snapshot): LocationFact[] | null {
       unit.timeEvidenceId !== null
     )
       return null;
-    const location = parseCurrentLocation(content.text);
+    const location = parseObjectFact(content.text);
     if (
       !location ||
       content.subject !== locationSubject(location) ||
@@ -65,11 +83,11 @@ function verifiedLocations(state: Snapshot): LocationFact[] | null {
           fragment.text.length !== source.length
         )
           return false;
-        const literal = parseCurrentLocation(fragment.text);
+        const literal = parseObjectFact(fragment.text);
         return (
           literal !== null &&
           sameObject(literal, location) &&
-          locationKey(literal.place) === locationKey(location.place)
+          locationKey(literal.place ?? "") === locationKey(location.place ?? "")
         );
       })
     )
@@ -118,10 +136,10 @@ export function directLocationCapture(
   text: string,
   zone: string,
 ): Draft | null {
-  const location = parseCurrentLocation(text);
+  const location = parseObjectFact(text);
   if (!location) return null;
   const catalog = verifiedLocations(state);
-  if (!catalog) return null;
+  if (!catalog || hasCompetingName(catalog, location.object)) return null;
   const similar = catalog.filter((entry) => entry.object === location.object);
   if (
     similar.some(
@@ -133,7 +151,7 @@ export function directLocationCapture(
   const samePlaces = similar.filter(
     (entry) =>
       sameObject(entry, location) &&
-      locationKey(entry.place) === locationKey(location.place),
+      locationKey(entry.place ?? "") === locationKey(location.place ?? ""),
   );
   if (samePlaces.length > 1) return null;
   return literalDraft(text, zone, location, samePlaces[0]?.unit);
@@ -143,15 +161,28 @@ export function directLocationAnswer(
   state: Snapshot,
   question: string,
 ): LocationAnswer | null {
-  const target = parseLocationQuestion(question);
+  const colorTarget = parseColorQuestion(question);
+  const target = colorTarget ?? parseLocationQuestion(question);
   if (!target) return null;
   const catalog = verifiedLocations(state);
-  if (!catalog) return null;
+  if (!catalog || hasCompetingName(catalog, target.object)) return null;
   const matches = catalog.filter(
     (entry) =>
       entry.object === target.object &&
+      (colorTarget !== null || entry.place !== null) &&
       (!target.color || !entry.color || entry.color === target.color),
   );
+  if (colorTarget) {
+    if (!matches.length || matches.some((entry) => !entry.color)) return null;
+    if (new Set(matches.map((entry) => entry.color)).size !== 1)
+      return { kind: "ambiguous" };
+    const first = matches[0]!;
+    return {
+      kind: "match",
+      text: `Es de color ${first.color}.`,
+      unitId: first.unit.id,
+    };
+  }
   if (!matches.length) return { kind: "absent" };
   if (
     matches.length !== 1 ||
@@ -159,7 +190,11 @@ export function directLocationAnswer(
   )
     return { kind: "ambiguous" };
   const [result] = matches;
-  return { kind: "match", place: result!.place, unitId: result!.unit.id };
+  return {
+    kind: "match",
+    text: `Está en ${result!.place}.`,
+    unitId: result!.unit.id,
+  };
 }
 
 export function directLocationCorrection(
@@ -173,7 +208,7 @@ export function directLocationCorrection(
   const catalog = verifiedLocations(state);
   if (!catalog) return null;
   const target = catalog.find((entry) => entry.unit.id === targetId);
-  if (!target || !sameObject(target, replacement)) return null;
+  if (!target?.place || !sameObject(target, replacement)) return null;
   if (
     catalog.some(
       (entry) =>

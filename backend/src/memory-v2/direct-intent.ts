@@ -1,5 +1,6 @@
 import { normalizeQuestion } from "#memory-v2/ai/query-input";
 import type { Route } from "./route-contracts.js";
+import { requestedLiteral } from "./literal-query.js";
 
 const personalPlans =
   /^(?:qu[eé] (?:quiero hacer|tengo que hacer|tengo pendiente|planes tengo|citas tengo|tareas tengo))(?: para (?:hoy|ma[nñ]ana|esta semana|la pr[oó]xima semana))?$/iu;
@@ -19,14 +20,20 @@ const itemLocation = new RegExp(
   `^(?:${item} (?:est[aá]|se encuentra)|(?:guard[eé]|dej[eé]|he guardado|he dejado) ${item}) en (?:mi|el|la) ${place}(?: ${modifier})?[.]?$`,
   "iu",
 );
-const prototypeObject =
-  "(?:paraguas|br[uú]jula|llave|mochila|bicicleta|pasaporte|reloj)";
-const ownObject = `mi (?<object>${prototypeObject})(?: (?<color>${color}))?`;
+const ownObject = `mi (?<object>${object})(?: (?<color>${color}))?`;
 const currentLocation = new RegExp(
   `^${ownObject} (?:est[aá]|se encuentra) en (?<place>(?:el|la) ${place}(?: ${modifier})?)[.]?$`,
   "iu",
 );
 const whereIs = new RegExp(`^¿d[oó]nde est[aá] ${ownObject}\\?$`, "iu");
+const colorFact = new RegExp(
+  `^mi (?<object>${object}) es (?:de color )?(?<color>${color})[.]?$`,
+  "iu",
+);
+const colorQuestion = new RegExp(
+  `^¿de qu[eé] color es mi (?<object>${object})\\?$`,
+  "iu",
+);
 
 export interface LocationObject {
   object: string;
@@ -64,6 +71,21 @@ export function parseLocationQuestion(text: string): LocationObject | null {
   return match ? objectFromMatch(match) : null;
 }
 
+export function parseObjectFact(text: string) {
+  const colorMatch = boundedClause(text)?.match(colorFact)?.groups;
+  return colorMatch
+    ? { ...objectFromMatch(colorMatch), place: null }
+    : parseCurrentLocation(text);
+}
+
+export function parseColorQuestion(text: string): LocationObject | null {
+  const clause = boundedClause(text);
+  const match = clause
+    ? normalizeQuestion(clause).match(colorQuestion)?.groups
+    : null;
+  return match ? objectFromMatch(match) : null;
+}
+
 function boundedClause(text: string) {
   return text.length <= 160 && !/[\r\n\t]/u.test(text)
     ? text.normalize("NFC").trim()
@@ -78,7 +100,9 @@ export function directIntent(
 ): "ask" | "tell" | null {
   const text = boundedClause(input.text);
   if (!text) return null;
-  if (input.mode === "tell") return itemLocation.test(text) ? "tell" : null;
+  if (input.mode === "tell")
+    return itemLocation.test(text) || colorFact.test(text) ? "tell" : null;
+  if (requestedLiteral(text)) return "ask";
   const question = normalizeQuestion(text).match(/^¿([^¿?]+)\?$/u)?.[1];
   if (!question) return null;
   return personalPlans.test(question) ||

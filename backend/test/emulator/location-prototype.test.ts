@@ -8,6 +8,7 @@ import { changeV2 } from "../../src/memory-v2/change.js";
 import type { Change } from "../../src/memory-v2/contracts.js";
 import { presentGroup } from "../../src/memory-v2/presentation.js";
 import { queryV2 } from "../../src/memory-v2/query.js";
+import { dispatchTurn } from "../../src/memory-v2/dispatch.js";
 import { V2Reader } from "../../src/memory-v2/reader.js";
 import { V2WorkStore } from "../../src/memory-v2/work-store.js";
 import { V2MutationStore } from "../../src/memory-v2/mutation-store.js";
@@ -29,6 +30,7 @@ const source = (reply: WireReply) => reply.sources?.[0]?.sourceId ?? "";
 const reader = () => new V2Reader(db, uid, generation);
 
 interface WireReply {
+  result?: WireReply;
   status?: string;
   text?: string;
   memoryEpoch?: number;
@@ -138,6 +140,114 @@ const route = (mode: "tell" | "ask", text: string, memoryEpoch: number) =>
     memoryEpoch,
     context: { questions: [], sourceIds: [] },
   });
+
+const turn = (mode: "tell" | "ask", text: string, memoryEpoch: number) => ({
+  apiVersion: 2,
+  requestId: randomUUID(),
+  executionId: randomUUID(),
+  mode,
+  text,
+  zone,
+  memoryEpoch,
+  context: { questions: [], sourceIds: [] },
+});
+
+for (const mode of ["tell", "ask"] as const)
+  test(
+    `compare local authenticated ${mode} latency`,
+    { skip: process.env.KIOKU_TIMING_TURNS !== "1" },
+    async (t) => {
+      if (mode === "ask")
+        assert.equal(
+          (await request("submit", submit(firstLocation))).status,
+          "saved",
+        );
+      const times: Record<"legacy" | "unified", number[]> = {
+        legacy: [],
+        unified: [],
+      };
+      const text = mode === "tell" ? firstLocation : compassQuestion;
+      for (let index = 0; index < 7; index++) {
+        const order = ["legacy", "unified"] as const;
+        for (const protocol of index % 2 ? order : [...order].reverse()) {
+          const start = performance.now();
+          let reply: WireReply | undefined;
+          if (protocol === "unified") {
+            reply = (await request("route", turn(mode, text, 0))).result;
+          } else {
+            const routing = await route(mode, text, 0);
+            assert.equal(routing.plan?.action, mode);
+            reply =
+              mode === "tell"
+                ? await request(
+                    "submit",
+                    submit(text, randomUUID(), routing.plan.memoryEpoch),
+                  )
+                : await request("query", ask(text));
+          }
+          assert.equal(reply?.status, mode === "tell" ? "saved" : "answered");
+          if (index > 0)
+            times[protocol].push(Math.round(performance.now() - start));
+        }
+      }
+      t.diagnostic(`synthetic turn ms ${mode} ${JSON.stringify(times)}`);
+    },
+  );
+
+test("unified turns bind both IDs, replay saves, cite colors and withhold retired evidence", async () => {
+  const remember = turn("tell", "Mi cartera es roja.", 0);
+  const saved = await request("route", remember);
+  assert.equal(saved.result?.status, "saved");
+  assert.deepEqual(await request("route", remember), saved);
+  assert.deepEqual(
+    await request("submit", submit(remember.text, remember.executionId, 0)),
+    saved.result,
+  );
+  assert.equal(Object.keys((await reader().load()).state.units).length, 1);
+  assert.equal(
+    (await call("route", { ...remember, executionId: randomUUID() })).body.error
+      ?.status,
+    "FAILED_PRECONDITION",
+  );
+  assert.equal(
+    (await call("route", { ...remember, executionId: remember.requestId }))
+      .status,
+    400,
+  );
+  assert.equal((await call("route", remember, "")).status, 401);
+  assert.equal(
+    (await call("route", remember, token, randomUUID())).body.error?.status,
+    "FAILED_PRECONDITION",
+  );
+  const question = turn("ask", "¿De qué color es mi cartera?", 1);
+  const response = (await request("route", question)).result!;
+  assert.equal(response.text, "Es de color rojo.");
+  assert.equal(response.sources?.length, 1);
+  assert.equal(
+    (await request("route", question)).result?.status,
+    "repeatRequired",
+  );
+  const phrase = turn("ask", "¿En qué recuerdo aparece «cartera es roja»?", 1);
+  assert.equal(
+    source((await request("route", phrase)).result!),
+    source(response),
+  );
+  assert.equal(
+    (await request("change", await commandFor(source(response)))).status,
+    "forgotten",
+  );
+  assert.equal((await request("route", remember)).result?.status, "expired");
+  assert.equal(
+    (
+      await request("route", {
+        ...phrase,
+        requestId: randomUUID(),
+        executionId: randomUUID(),
+      })
+    ).result?.status,
+    "notFound",
+  );
+});
 
 async function commandFor(
   sourceId: string,
@@ -457,25 +567,34 @@ test("an opaque canonical memory forces the normal search and capture paths", as
     },
   };
   const simulate = async () => simulatedProvider;
-  const answer = await queryV2(
-    db,
-    uid,
-    generation,
-    ask(compassQuestion),
-    simulate,
-    reauthorize,
-    true,
+  const quoted = (
+    await request(
+      "route",
+      turn("ask", "¿En qué recuerdo aparece «cuando vuelva»?", 2),
+    )
+  ).result!;
+  assert.equal(quoted.status, "answered");
+  assert.equal(
+    (await request("details", { sourceId: source(quoted) })).text,
+    text,
   );
+  const reviewedTurn = (mode: "ask" | "tell", text: string) =>
+    dispatchTurn(
+      db,
+      uid,
+      generation,
+      { ...turn(mode, text, 2), apiVersion: 2 },
+      simulate,
+      reauthorize,
+      true,
+    );
+  const answer = (await reviewedTurn("ask", compassQuestion))
+    .result as WireReply;
   assert.equal(answer.status, "answered");
   assert.equal(answer.text, "Está en el cajón azul.");
-  assert.equal((answer as WireReply).sources?.length, 1);
-  const captured = await new V2Capture(db, undefined, true).execute(
-    uid,
-    generation,
-    submit(newLocation),
-    simulate,
-    reauthorize,
-  );
+  assert.equal(answer.sources?.length, 1);
+  const captured = (await reviewedTurn("tell", newLocation))
+    .result as WireReply;
   assert.equal(captured.status, "saved");
   assert.deepEqual(stages, [
     "answer",

@@ -17,6 +17,7 @@ internal class AndroidMemoryPort(
     private val functions: FirebaseFunctions,
 ) : NativeMemoryPort {
     private var generation: Pair<String, String>? = null
+    private var unifiedTurns = false
 
     override fun requestId(): String = UUID.randomUUID().toString()
 
@@ -67,6 +68,7 @@ internal class AndroidMemoryPort(
                         current?.matches(MEMORY_GENERATION) == true
                 if (task.isSuccessful && valid && auth.currentUser?.uid == uid) {
                     generation = uid to requireNotNull(current)
+                    unifiedTurns = value["unifiedTurns"] == true
                     completion(current, null)
                 } else {
                     completion(null, memoryTransportIssue(task.exception))
@@ -85,7 +87,8 @@ internal class AndroidMemoryPort(
                 "apiVersion" to 2,
                 "operation" to endpoint.operation(),
                 "generation" to current,
-                "payload" to payload,
+                "payload" to
+                    if (endpoint == MemoryEndpoint.RouteMessage && !unifiedTurns) payload - "executionId" else payload,
             )
         val callable = functions.getHttpsCallable("memoryV2").apply { setTimeout(185, TimeUnit.SECONDS) }
         callable.call(envelope).addOnCompleteListener { task ->

@@ -80,12 +80,24 @@ class NativeTextConversationRepository(
         onPrepared: (TextCommand) -> Unit,
     ): TextExecution {
         val resolved = resolve(command)
-        resolved.outcome?.let { return TextExecution(resolved.command, it) }
-        onPrepared(resolved.command)
-        return if (resolved.command.plan is TextPlan.Ask) {
-            executeQuery(resolved.command, onPrepared)
-        } else {
-            executePrepared(resolved.command)
+        if (resolved.command.plan != null) onPrepared(resolved.command)
+        val outcome = resolved.outcome
+        return when {
+            outcome is TextOutcome.Asked && outcome.answer == QueryOutcome.RepeatRequired -> {
+                renewQuery(resolved.command, onPrepared)
+            }
+
+            outcome != null -> {
+                TextExecution(resolved.command, outcome)
+            }
+
+            resolved.command.plan is TextPlan.Ask -> {
+                executeQuery(resolved.command, onPrepared)
+            }
+
+            else -> {
+                executePrepared(resolved.command)
+            }
         }
     }
 
@@ -136,6 +148,13 @@ class NativeTextConversationRepository(
     ): TextExecution {
         val answer = ask(command, requireNotNull(command.plan))
         if (answer != QueryOutcome.RepeatRequired) return TextExecution(command, TextOutcome.Asked(answer))
+        return renewQuery(command, onPrepared)
+    }
+
+    private suspend fun renewQuery(
+        command: TextCommand,
+        onPrepared: (TextCommand) -> Unit,
+    ): TextExecution {
         // The server confirms this read is terminal; only the read ID may be renewed once.
         val renewed = command.copy(ids = command.ids.copy(query = port.requestId()))
         onPrepared(renewed)
@@ -147,39 +166,44 @@ class NativeTextConversationRepository(
         renew: Boolean = true,
     ): RoutingResolution {
         if (command.plan != null) return RoutingResolution(command)
-        return when (val reply = request(MemoryEndpoint.RouteMessage, routingPayload(command).toString())) {
+        return when (val reply = request(MemoryEndpoint.RouteMessage, dispatchPayload(command))) {
             is NativeMemoryReply.Failed -> {
                 RoutingResolution(command, TextOutcome.Failed(reply.issue))
             }
 
             is NativeMemoryReply.Received -> {
-                try {
-                    when (val route = parseRouting(reply.json, command)) {
-                        is RoutingReply.Ready -> {
-                            RoutingResolution(command.copy(plan = route.plan))
-                        }
+                val route = runCatching { parseRouting(reply.json, command) }.getOrNull()
+                when (route) {
+                    null -> {
+                        RoutingResolution(command, TextOutcome.Failed(CaptureIssue.Unavailable))
+                    }
 
-                        is RoutingReply.Clarification -> {
-                            RoutingResolution(
-                                command,
-                                TextOutcome.Clarification(route.question),
-                            )
-                        }
+                    is RoutingReply.Ready -> {
+                        RoutingResolution(command.copy(plan = route.plan), route.outcome)
+                    }
 
-                        RoutingReply.Processing -> {
-                            RoutingResolution(command, TextOutcome.Processing)
-                        }
+                    is RoutingReply.Clarification -> {
+                        RoutingResolution(
+                            command,
+                            TextOutcome.Clarification(route.question),
+                        )
+                    }
 
-                        RoutingReply.RepeatRequired -> {
-                            if (renew && command.decision == null) {
-                                resolve(command.copy(ids = command.ids.copy(route = port.requestId())), renew = false)
-                            } else {
-                                RoutingResolution(command, TextOutcome.RepeatRequired)
-                            }
+                    RoutingReply.Processing -> {
+                        RoutingResolution(command, TextOutcome.Processing)
+                    }
+
+                    RoutingReply.Expired -> {
+                        RoutingResolution(command, TextOutcome.Captured(captures.recover(command.ids.action)))
+                    }
+
+                    RoutingReply.RepeatRequired -> {
+                        if (renew && command.decision == null) {
+                            resolve(command.copy(ids = command.ids.copy(route = port.requestId())), renew = false)
+                        } else {
+                            RoutingResolution(command, TextOutcome.RepeatRequired)
                         }
                     }
-                } catch (_: Exception) {
-                    RoutingResolution(command, TextOutcome.Failed(CaptureIssue.Unavailable))
                 }
             }
         }

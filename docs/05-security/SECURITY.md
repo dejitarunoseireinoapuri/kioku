@@ -1,5 +1,7 @@
 # Seguridad técnica
 
+El envío unificado valida por separado los identificadores de ruta y ejecución. Una repetición de escritura usa el mismo contenido y revisión, y solo presenta un guardado cuya fuente sigue vigente. Las búsquedas literales directas exigen una coincidencia en un fragmento primario ligado a su ocurrencia y a una única unidad vigente. La comprobación transaccional de revisión precede a la entrega de la respuesta.
+
 Los adaptadores clasifican fallos de conexión y tiempos de espera mediante tipos/códigos y cadenas de causas acotadas, sin registrar mensajes de excepción ni errores brutos. Un `unavailable` de servidor sin causa de red no se etiqueta como cobertura. La renovación acotada de lecturas confirmadas como terminadas no se aplica a identidades de escritura ni convierte un error de transporte en prueba de ausencia de commit. [Códigos de referencia del SDK Firebase](https://firebase.google.com/docs/reference/android/com/google/firebase/functions/FirebaseFunctionsException.Code).
 
 Las referencias individuales de gestión procedentes de consultas son vistas calculadas de unidades actuales, ligadas a generación y revisiones. Conocer un UUID no concede permisos: propietario, cuenta y generación se validan antes de resolverlo. La selección de cambio debe pertenecer exactamente a la vista mostrada; añadir el ID de otro dato del mismo relato falla. Corregir/olvidar retira la referencia anterior. No se persiste texto adicional ni se permite que el contexto conversacional amplíe la unidad seleccionada.

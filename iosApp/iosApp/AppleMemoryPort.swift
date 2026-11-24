@@ -7,6 +7,7 @@ final class AppleMemoryPort: NSObject, NativeMemoryPort {
     private let auth: Auth
     private let functions: Functions
     private var generation: (uid: String, value: String)?
+    private var unifiedTurns = false
 
     init(auth: Auth, functions: Functions) {
         self.auth = auth
@@ -47,7 +48,9 @@ final class AppleMemoryPort: NSObject, NativeMemoryPort {
             }
             let callable = self.functions.httpsCallable("memoryV2")
             callable.timeoutInterval = 185
-            callable.call(["apiVersion": 2, "operation": name, "generation": current, "payload": payload]) { [weak self] result, error in
+            var supportedPayload = payload
+            if name == "route" && !self.unifiedTurns { supportedPayload.removeValue(forKey: "executionId") }
+            callable.call(["apiVersion": 2, "operation": name, "generation": current, "payload": supportedPayload]) { [weak self] result, error in
                 guard !cancelled, self?.auth.currentUser?.uid == uid else { return }
                 if let error = error as NSError? {
                     _ = completion(NativeMemoryReplyFailed(issue: Self.issue(error)))
@@ -75,6 +78,7 @@ final class AppleMemoryPort: NSObject, NativeMemoryPort {
             } else if let value = result?.data as? [String: Any], value["apiVersion"] as? Int == 2,
                       let current = value["generation"] as? String, UUID(uuidString: current) != nil {
                 self.generation = (uid, current)
+                self.unifiedTurns = value["unifiedTurns"] as? Bool == true
                 completion(current, nil)
             } else {
                 completion(nil, .unavailable)

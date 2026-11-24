@@ -160,3 +160,24 @@ El propietario pidió probar también el comportamiento con la API real. La opci
 La comprobación local del recorrido con proveedor simulado verifica tanto una captura confirmada como una consulta con referencia en un catálogo mixto, incluidos los controles de revisión. Pasan 47 pruebas unitarias del servidor y 145 de emuladores. La comprobación conserva modelos, permisos y credenciales. Las operaciones hechas desde la app son recuerdos normales de esa cuenta y las que usan IA consumen saldo. Un catálogo mixto puede seguir usando la API incluso para una frase con formato de ubicación.
 
 El propietario autorizó activar `54ca4c3` únicamente en `memoryV2`. Producción está **ACTIVE** en la revisión `memoryv2-00009-ziw` desde `2026-11-20T11:41:54.482331147Z`, con `KIOKU_DIRECT_LOCATIONS=true` verificado en los metadatos. Se confirmaron Node 22, la identidad de ejecución existente y el límite de una instancia. Las otras once funciones conservan sus revisiones. Una petición ficticia sin autenticar recibió HTTP 401 antes de acceder a memoria o IA. El despliegue y su comprobación no consumieron API. La prueba del propietario se hace en la app **Kioku** habitual del Honor, sin USB ni reinstalación. La latencia y la cobertura con la memoria real quedan por medir.
+
+## Envío unificado y respuestas directas del 24 de noviembre
+
+La versión local devuelve el resultado de un turno ordinario en una petición móvil autenticada. La consulta y el guardado conservan sus identificadores y recibos. Las órdenes de gestión y las ofertas siguen por su flujo de decisión. Android e iOS consultan la capacidad anunciada por el servidor durante la apertura de la sesión. La comprobación de capacidad aprovecha la petición de estado existente.
+
+El guardado directo admite más objetos cotidianos y afirmaciones de color. La consulta de color exige evidencia primaria vigente en un catálogo que se pueda interpretar por completo. Las denominaciones que podrían solaparse, como móvil y teléfono, pasan a revisión cuando hay una posible identidad competidora. Una búsqueda explícita como `¿En qué recuerdo aparece «cuando vuelva»?` también funciona en un catálogo mixto si la frase entre comillas rectas o angulares coincide literalmente en el texto primario de un único recuerdo. En la prueba de catálogo mixto, una pregunta semántica y una captura libre conservaron sus dos fases simuladas de generación y revisión.
+
+### Mediciones en emuladores
+
+Se compararon los dos protocolos con la misma ubicación ficticia y con el servidor ya iniciado. Por operación y protocolo se excluyó un calentamiento y se cronometraron seis turnos, alternando el orden de cada par. La latencia incluye autenticación y transacciones locales, y el guardado espera confirmación. En el primer ensayo se alcanzó el límite de 30 peticiones por minuto al encadenar las dos series en la misma cuenta. La comparación final aísla cada serie con su propia preparación ficticia, conservando el límite habitual.
+
+| Operación | Antes, mediana | Envío unificado, mediana | Peticiones desde la app |
+| --- | ---: | ---: | ---: |
+| Guardar ubicación | 660 ms | 610,5 ms | 2 → 1 |
+| Preguntar ubicación | 358,5 ms | 314,5 ms | 2 → 1 |
+
+Reproducción con `KIOKU_TIMING_TURNS=1` y `tooling/backend-emulators.ps1` en modo local. Pasaron 48 pruebas unitarias de servidor, 148 de emuladores y 140 de lógica móvil. Android compiló y pasó formato, arquitectura, Detekt y Lint. Se verificaron la repetición de un guardado con la respuesta perdida, la recuperación con el protocolo anterior, el rechazo de identificadores incompatibles, la retirada de evidencia tras olvidar y una cita literal en una cuenta mixta. Cero llamadas a la API de IA. Quedan por medir los tiempos en un teléfono contra producción y por compilar iOS en macOS.
+
+### Elección del modelo por interacción
+
+Se reevaluaron los 14 pares ficticios de la [comparación de perfiles](evidence/light-sol-comparison-20261120.json). Con la misma revisión, el modelo ligero ganó en seis de siete consultas, con un ahorro mediano por par de 0,60 s. En capturas ganó en cuatro de siete, con un ahorro mediano de 0,74 s. En la consulta con contexto ajeno, el ligero tardó 1,96 s más. Una muestra por caso permite comparar los recorridos, pero deja abierta la variabilidad de cada caso. Se eligió resolver directamente las peticiones con prueba suficiente y mantener el perfil revisado para las demás. Elegir un modelo mediante una llamada adicional introduciría otra espera antes de contestar.

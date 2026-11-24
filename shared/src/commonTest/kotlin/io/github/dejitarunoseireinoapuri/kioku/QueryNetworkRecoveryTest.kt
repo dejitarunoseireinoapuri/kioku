@@ -26,6 +26,69 @@ import kotlin.test.assertTrue
 
 class QueryNetworkRecoveryTest {
     @Test
+    fun expiredTellRoutingChecksTheOriginalWriteReceipt() =
+        runTest {
+            val port = RecoveryPort()
+            val repo = NativeTextConversationRepository(port)
+            val command = repo.prepare("Dato ficticio.", TextIntent.Tell, TextContext())
+            port.reply = { endpoint, id ->
+                port.terminal(id, false, if (endpoint == MemoryEndpoint.RouteMessage) "expired" else "processing")
+            }
+            val result = repo.execute(command)
+            assertIs<TextOutcome.Captured>(result.outcome)
+            assertEquals(
+                listOf(
+                    MemoryEndpoint.RouteMessage to command.ids.route,
+                    MemoryEndpoint.Operation to command.ids.action,
+                ),
+                port.calls,
+            )
+        }
+
+    @Test
+    fun lostUnifiedCaptureResponseRetriesWithBothOriginalIds() =
+        runTest {
+            val port = RecoveryPort()
+            val repo = NativeTextConversationRepository(port)
+            val command = repo.prepare("Mi cartera ficticia es roja.", TextIntent.Tell, TextContext())
+            port.reply = { _, _ -> NativeMemoryReply.Failed(CaptureIssue.Connection) }
+            val failed = repo.execute(command)
+            assertIs<TextOutcome.Failed>(failed.outcome)
+            port.reply = { _, routeId ->
+                val stamp = """"memoryEpoch":0,"receivedAt":"2026-11-20T12:00:00Z","expiresAtMs":4000000000000"""
+                val result = """{"apiVersion":2,"operationId":"${command.ids.action}","status":"ignored"}"""
+                NativeMemoryReply.Received(
+                    """{"apiVersion":2,"operationId":"$routeId","status":"ready",
+                    "plan":{"action":"tell",$stamp},"result":$result}""",
+                )
+            }
+            val recovered = repo.execute(failed.command)
+            assertEquals(TextOutcome.Captured(CaptureOutcome.Ignored), recovered.outcome)
+            assertEquals(command.ids, recovered.command.ids)
+            assertEquals(List(2) { MemoryEndpoint.RouteMessage to command.ids.route }, port.calls)
+        }
+
+    @Test
+    fun unifiedAnswerUsesOneRequestAndValidatesTheNestedOperation() =
+        runTest {
+            val port = RecoveryPort()
+            val repo = NativeTextConversationRepository(port)
+            val command = repo.prepare("¿De qué color es mi cartera?", TextIntent.Ask, TextContext())
+
+            fun respondWith(queryId: String) {
+                port.reply = { _, id ->
+                    val route = port.route(id).json.dropLast(1)
+                    NativeMemoryReply.Received("""$route,"result":${port.answer(queryId).json}}""")
+                }
+            }
+            respondWith(command.ids.query)
+            assertIs<QueryOutcome.Reply>(assertIs<TextOutcome.Asked>(repo.execute(command).outcome).answer)
+            assertEquals(listOf(MemoryEndpoint.RouteMessage to command.ids.route), port.calls)
+            respondWith(command.ids.action)
+            assertIs<TextOutcome.Failed>(repo.execute(command).outcome)
+        }
+
+    @Test
     fun lostRoutingReplyCanRenewOnlyTheRouteAndKeepTheOwnersQuestion() =
         runTest {
             val port = RecoveryPort()

@@ -18,6 +18,8 @@ El olvido de IDs ya resueltos no usa IA. La petición sale después del diálogo
 
 Planes conversacionales firmados mediante huellas de contenido y generación, aceptación vinculada a una petición, aclaraciones temporales y revisión final impiden replays y trabajo obsoleto. Las preguntas y respuestas no se guardan. Cualquier mutación purga las operaciones pendientes y los planes anteriores. La clave sigue exclusivamente en Secret Manager, con el perfil Sol alto del prototipo activado para este núcleo.
 
+La revisión del 24 de noviembre permite que una sola llamada móvil clasifique y ejecute un turno normal. Se conservan las admisiones separadas de ruta y ejecución para recuperar de forma independiente una lectura o una escritura. El servidor puede construir una respuesta directamente con evidencia verificable, y deriva el lenguaje libre al modelo con revisión independiente. [Contrato](../../04-api/API_CONTRACT.md) y [pruebas de rendimiento](../../09-planning/QUERY_RELIABILITY_VALIDATION.md).
+
 ## Alternativas
 
 Se descarta migrar o archivar recuerdos por la decisión expresa del propietario. También se descartan ejecutar el prototipo como almacén RAM, introducir un snapshot monolítico o conservar M0 como fallback silencioso.

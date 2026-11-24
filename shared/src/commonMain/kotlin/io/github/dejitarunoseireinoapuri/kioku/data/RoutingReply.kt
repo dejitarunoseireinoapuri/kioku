@@ -6,6 +6,7 @@ import io.github.dejitarunoseireinoapuri.kioku.domain.OfferDecision
 import io.github.dejitarunoseireinoapuri.kioku.domain.PlanStamp
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextCommand
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextIntent
+import io.github.dejitarunoseireinoapuri.kioku.domain.TextOutcome
 import io.github.dejitarunoseireinoapuri.kioku.domain.TextPlan
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNull
@@ -24,6 +25,7 @@ import kotlinx.serialization.json.putJsonArray
 internal sealed interface RoutingReply {
     data class Ready(
         val plan: TextPlan,
+        val outcome: TextOutcome? = null,
     ) : RoutingReply
 
     data class Clarification(
@@ -33,6 +35,8 @@ internal sealed interface RoutingReply {
     data object Processing : RoutingReply
 
     data object RepeatRequired : RoutingReply
+
+    data object Expired : RoutingReply
 }
 
 internal fun routingPayload(command: TextCommand): JsonObject =
@@ -51,6 +55,12 @@ internal fun routingPayload(command: TextCommand): JsonObject =
             },
         )
     }
+
+internal fun dispatchPayload(command: TextCommand): String =
+    buildJsonObject {
+        routingPayload(command).forEach { (key, value) -> put(key, value) }
+        put("executionId", if (command.intent == TextIntent.Ask) command.ids.query else command.ids.action)
+    }.toString()
 
 internal fun decisionPayload(command: TextCommand): String =
     buildJsonObject {
@@ -113,8 +123,10 @@ internal fun parseRouting(
     val fields = setOf("apiVersion", "operationId", "status")
     return when (value.text("status")) {
         "ready" -> {
-            require(value.keys == fields + "plan")
-            RoutingReply.Ready(parsePlan(value.getValue("plan").jsonObject, command))
+            require(value.keys == fields + "plan" || value.keys == fields + setOf("plan", "result"))
+            val plan = parsePlan(value.getValue("plan").jsonObject, command)
+            val outcome = value["result"]?.let { executedTurn(plan, it.jsonObject, command) }
+            RoutingReply.Ready(plan, outcome)
         }
 
         "needsClarification" -> {
@@ -132,11 +144,36 @@ internal fun parseRouting(
             RoutingReply.RepeatRequired
         }
 
+        "expired" -> {
+            require(value.keys == fields && command.intent == TextIntent.Tell)
+            RoutingReply.Expired
+        }
+
         else -> {
             error("Invalid routing response")
         }
     }
 }
+
+private fun executedTurn(
+    plan: TextPlan,
+    result: JsonObject,
+    command: TextCommand,
+): TextOutcome =
+    when (plan) {
+        is TextPlan.Ask -> {
+            TextOutcome.Asked(parseQuery(result.toString(), command.ids.query))
+        }
+
+        is TextPlan.Tell -> {
+            require(result.text("operationId") == command.ids.action)
+            TextOutcome.Captured(parseCapture(result.toString()))
+        }
+
+        else -> {
+            error("Unexpected execution for a management plan")
+        }
+    }
 
 private fun parsePlan(
     value: JsonObject,
@@ -233,7 +270,7 @@ private fun JsonObject.number(key: String): Long {
 
 private val ROUTE_UUID = Regex("[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}")
 private val ROUTE_DATE = Regex("\\d{4}-\\d{2}-\\d{2}T.+Z")
-private const val MAX_ROUTING_REPLY = 20000
+private const val MAX_ROUTING_REPLY = 42000
 private const val MAX_ROUTING_INTEGER = 9007199254740991.0
 private const val MAX_ROUTE_CORRECTION = 2000
 private const val MAX_ROUTE_QUESTION = 500

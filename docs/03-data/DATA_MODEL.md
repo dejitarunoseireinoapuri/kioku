@@ -1,5 +1,7 @@
 # Modelo lógico de datos
 
+El envío unificado liga el UUID de ejecución y el turno al resumen criptográfico de la petición de ruta. Para un turno ordinario guarda en su recibo temporal solo la acción `ask` o `tell`, la revisión y los tiempos del plan. Así puede verificar un reintento aunque la respuesta inicial se haya perdido. El resultado procede de la operación hija con su propio recibo.
+
 Refinamiento de gestión desde consultas: las referencias representan vistas individuales, calculadas desde generación, UUID, revisión y revisión de pertenencia de cada unidad citada. No se guardan como grupos adicionales ni duplican texto. Los grupos del relato siguen disponibles desde la confirmación de guardado. Corregir/olvidar comunica sustituciones de ambos tipos de referencia; el límite de 128 incluye ambas y la capacidad futura de olvido lo contempla. No requiere migrar recuerdos existentes.
 
 ## Almacenamiento v2 de la aplicación

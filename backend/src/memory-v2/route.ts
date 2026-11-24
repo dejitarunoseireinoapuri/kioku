@@ -32,16 +32,31 @@ export async function routeV2(
   input: Route,
   model: ModelFactory,
   reauthorize: () => Promise<void>,
+  executionId?: string,
 ): Promise<V2Reply> {
   const work = new V2WorkStore(db),
-    pending = await work.begin(uid, generation, input.requestId, input, null);
-  if ("reply" in pending)
+    pending = await work.begin(
+      uid,
+      generation,
+      input.requestId,
+      executionId ? { ...input, executionId } : input,
+      null,
+    );
+  if ("reply" in pending) {
+    if (executionId && pending.reply.status === "ready") return pending.reply;
+    if (
+      executionId &&
+      input.mode === "tell" &&
+      pending.reply.status === "expired"
+    )
+      return { apiVersion: 2, operationId: input.requestId, status: "expired" };
     return {
       apiVersion: 2,
       operationId: input.requestId,
       status:
         pending.reply.status === "processing" ? "processing" : "repeatRequired",
     };
+  }
   const lease = pending.lease;
   try {
     const earlyQuestion = unanchoredQuestion(input, lease.epoch);
@@ -201,19 +216,27 @@ export async function routeV2(
     }
     await reauthorize();
     if (plan) {
-      if (plan.action === "ask" || plan.action === "tell")
-        await work.finish(uid, lease, "committed", {
-          apiVersion: 2,
-          operationId: input.requestId,
-          status: "repeatRequired",
-        });
-      else await issuePlan(db, uid, lease, input, plan);
-      return {
+      const ready = {
         apiVersion: 2,
         operationId: input.requestId,
         status: "ready",
         plan,
       };
+      if (plan.action === "ask" || plan.action === "tell")
+        await work.finish(
+          uid,
+          lease,
+          "committed",
+          executionId
+            ? ready
+            : {
+                apiVersion: 2,
+                operationId: input.requestId,
+                status: "repeatRequired",
+              },
+        );
+      else await issuePlan(db, uid, lease, input, plan);
+      return ready;
     }
     await work.finish(uid, lease, "ignored", {
       apiVersion: 2,

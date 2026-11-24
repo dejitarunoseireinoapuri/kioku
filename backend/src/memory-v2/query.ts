@@ -10,6 +10,7 @@ import { groupsForUnits, presentEvidence } from "./presentation.js";
 import type { querySchema, V2Reply } from "./contracts.js";
 import type { ModelFactory } from "./capture.js";
 import { directLocationAnswer } from "./location-prototype.js";
+import { findLiteral } from "./literal-query.js";
 
 export async function queryV2(
   db: Firestore,
@@ -46,13 +47,14 @@ export async function queryV2(
     const question = currentQueryText(input.text, lease.epoch);
     const resolved = queryInput(question);
     const direct = locationPrototype
-      ? directLocationAnswer(loaded.state, resolved.question)
+      ? (findLiteral(loaded.state, resolved.question) ??
+        directLocationAnswer(loaded.state, resolved.question))
       : null;
     if (direct?.kind === "match") {
       reply = {
         ...base,
         status: "answered",
-        text: `Está en ${direct.place}.`,
+        text: direct.text,
         sources: groupsForUnits(loaded, [direct.unitId]),
       };
     } else if (direct?.kind === "ambiguous") {

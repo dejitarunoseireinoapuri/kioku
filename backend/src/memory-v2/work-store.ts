@@ -74,6 +74,7 @@ export class V2WorkStore {
     input: unknown,
     turn: PendingTurn | null,
     clarification?: { id: string; revision: number; text: string },
+    startBefore?: number,
   ): Promise<{ lease: WorkLease } | { reply: V2Reply }> {
     const hash = privateDigest([uid, generation, input]);
     return this.db.runTransaction(
@@ -114,7 +115,10 @@ export class V2WorkStore {
             reply: record.reply ?? operationReply(requestId, "needsRetelling"),
           };
         }
-        if (admission.exists)
+        if (
+          admission.exists ||
+          (startBefore !== undefined && this.now() >= startBefore)
+        )
           return { reply: operationReply(requestId, "expired") };
         const active = await tx.get(
           this.db
