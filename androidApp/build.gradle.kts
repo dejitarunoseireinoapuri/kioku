@@ -73,6 +73,7 @@ kotlin {
 dependencies {
     implementation(project(":shared"))
     implementation(libs.android.activity)
+    implementation(libs.lifecycle.runtime)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.functions)
