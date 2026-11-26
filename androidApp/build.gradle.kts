@@ -40,6 +40,14 @@ android {
     }
     buildTypes {
         debug { applicationIdSuffix = ".dev" }
+        create("locationTrial") {
+            initWith(getByName("debug"))
+            matchingFallbacks.add("debug")
+            applicationIdSuffix = ".locationtrial"
+            buildConfigField("String", "FIREBASE_APP_ID", "\"\"")
+            buildConfigField("String", "FIREBASE_API_KEY", "\"\"")
+            buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"\"")
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

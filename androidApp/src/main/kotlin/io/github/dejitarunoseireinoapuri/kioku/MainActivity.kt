@@ -15,8 +15,10 @@ import io.github.dejitarunoseireinoapuri.kioku.platform.AndroidRepositories
 import io.github.dejitarunoseireinoapuri.kioku.platform.AndroidVoiceHost
 import io.github.dejitarunoseireinoapuri.kioku.platform.firebaseRepositories
 
-class MainActivity : ComponentActivity() {
+open class MainActivity : ComponentActivity() {
     private lateinit var repositories: AndroidRepositories
+
+    internal open fun createRepositories(): AndroidRepositories = firebaseRepositories(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +26,7 @@ class MainActivity : ComponentActivity() {
             statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),
             navigationBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),
         )
-        val factory = viewModelFactory { initializer { firebaseRepositories(this@MainActivity) } }
+        val factory = viewModelFactory { initializer { createRepositories() } }
         repositories = ViewModelProvider(this, factory)[AndroidRepositories::class.java]
         repositories.attach(this)
         setContent {
